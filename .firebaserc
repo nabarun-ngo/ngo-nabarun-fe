@@ -1,14 +1,15 @@
 {
+  "projects": {
+    "staging": "nabarun-test"
+  },
   "targets": {
     "nabarun-test": {
       "hosting": {
-        "ngo-nabarun-fe": [
-          "nabarun-staging"
+        "nabarun-test": [
+          "dist/ngo-nabarun-fe"
         ]
       }
     }
   },
-  "projects": {
-    "default": "nabarun-test"
-  }
+  "etags": {}
 }
