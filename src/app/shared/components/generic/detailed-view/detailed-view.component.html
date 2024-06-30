@@ -1,0 +1,45 @@
+<div *ngFor="let view of detailedViews">
+    <form [formGroup]="view.section_form!">
+        <div class="py-4">
+            <div class="bg-white p-3 shadow-lg rounded-sm">
+                <div class="flex items-center space-x-2 font-semibold text-gray-900 leading-8" *ngIf="view.section_name">
+                    <span clas="text-green-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                    </svg>
+                </span>
+                    <span class="tracking-wide">{{view.section_name}}</span>
+                </div>
+                <div class="text-gray-700 my-2 mx-4">
+                    <div class="grid md:grid-cols-2 text-sm">
+                        <ng-container *ngFor="let field of view.content">
+                            <div class="grid grid-cols-2" *ngIf="field.hide_field == undefined || !field.hide_field">
+                                <div class="px-2 py-2 font-semibold">{{field.field_name}}</div>
+                                <div class="px-2 py-2" *ngIf="!(field.editable && view.show_form)">{{field.field_value | replaceNull}}</div>
+
+                                <div class="px-2 dense-3" *ngIf="field.editable && view.show_form">
+                                    <app-universal-input formControlName="{{field.form_control_name}}" [inputModel]="field.form_input!" />
+                                </div>
+                            </div>
+                        </ng-container>
+                        <!-- <div class="grid grid-cols-2" *ngFor="let field of view.content">
+                            <ng-container *ngIf="field.hide_field == undefined || !field.hide_field">
+                                <div class="px-2 py-2 font-semibold">{{field.field_name}}</div>
+                                <div class="px-2 py-2" *ngIf="!(field.editable && viewForm)">{{field.field_value | replaceNull}}</div>
+                                <div class="px-2 dense-3" *ngIf="field.editable && viewForm">
+                                    <app-universal-input formControlName="{{field.form_control_name}}" [inputModel]="field.form_input!" />
+                                </div>
+                            </ng-container>
+                        </div> -->
+                    </div>
+                    <!-- <div class="m-2" *ngIf="(mode == 'edit' && dfControl['status'].value == donationStatus.Paid && dfControl['paymentMethod'].value && dfControl['paymentMethod'].value != paymentMethod.Cash)">
+                        <div class="py-2 font-semibold">Upload document(s)</div>
+                        <app-file-upload (files)="docChange.emit($event)"></app-file-upload>
+                    </div> -->
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>

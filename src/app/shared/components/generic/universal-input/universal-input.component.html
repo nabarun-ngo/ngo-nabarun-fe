@@ -1,0 +1,29 @@
+<!-- {{inputModel | json}} -->
+
+<mat-form-field *ngIf="inputModel.tagName == 'select'" [appearance]="inputModel.appearance ? inputModel.appearance :'outline'" [style]="inputModel.style? inputModel.style : ''">
+    <mat-select [formControl]="ngControl.control" [ngClass]="inputModel.cssClass ? inputModel.cssClass : ''">
+        <mat-option *ngFor="let opt of inputModel.selectList" [value]="opt.key">{{opt.displayValue}}</mat-option>
+    </mat-select>
+    <mat-error>{{ errorMessage(ngControl.control.errors,inputModel.labelName)}}</mat-error>
+</mat-form-field>
+
+<!-- input other than date-->
+<mat-form-field *ngIf="inputModel.tagName == 'input' && inputModel.inputType != 'date'" [appearance]="inputModel.appearance ? inputModel.appearance :'outline'" [style]="inputModel.style? inputModel.style : ''">
+    <input *ngIf="inputModel.tagName == 'input'" [type]="inputModel.inputType" matInput [placeholder]="inputModel.placeholder!" [formControl]="ngControl.control" [ngClass]="inputModel.cssClass ? inputModel.cssClass : ''">
+    <mat-error>{{ errorMessage(ngControl.control.errors,inputModel.labelName)}}</mat-error>
+</mat-form-field>
+
+<!-- textarea -->
+<mat-form-field *ngIf="inputModel.tagName == 'textarea'" [appearance]="inputModel.appearance ? inputModel.appearance :'outline'" [style]="inputModel.style? inputModel.style : ''">
+    <textarea matInput [placeholder]="inputModel.placeholder!" [formControl]="ngControl.control" [ngClass]="inputModel.cssClass ? inputModel.cssClass : ''"></textarea>
+    <mat-error>{{ errorMessage(ngControl.control.errors,inputModel.labelName)}}</mat-error>
+</mat-form-field>
+
+<!-- input with date-->
+<mat-form-field *ngIf="inputModel.tagName == 'input' && inputModel.inputType == 'date'" [appearance]="inputModel.appearance ? inputModel.appearance :'outline'" [style]="inputModel.style? inputModel.style : ''">
+    <input [formControl]="ngControl.control" matInput [matDatepicker]="date" [placeholder]="inputModel.placeholder!" [ngClass]="inputModel.cssClass ? inputModel.cssClass : ''" readonly>
+    <mat-datepicker-toggle matIconSuffix [for]="date">
+    </mat-datepicker-toggle>
+    <mat-datepicker #date></mat-datepicker>
+    <mat-error>{{ errorMessage(ngControl.control.errors,inputModel.labelName)}}</mat-error>
+</mat-form-field>

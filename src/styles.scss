@@ -1,0 +1,26 @@
+
+@use "@material/dialog";
+@use '@angular/material' as mat;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+//@import '~@angular/cdk/overlay-prebuilt.css';
+@import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
+@import 'styles/loader.scss';
+//@include dialog.core-styles;
+
+/* Datepicker width issue */
+
+.dense-2 {
+    @include mat.all-component-densities(-2);
+}
+
+.dense-3 {
+    @include mat.all-component-densities(-3);
+}
+
+.mat-mdc-paginator {
+    background-color: unset;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

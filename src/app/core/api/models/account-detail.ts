@@ -1,0 +1,16 @@
+/* tslint:disable */
+/* eslint-disable */
+import { BankDetail } from '../models/bank-detail';
+import { UpiDetail } from '../models/upi-detail';
+import { UserDetail } from '../models/user-detail';
+export interface AccountDetail {
+  accountHolder?: UserDetail;
+  accountHolderName?: string;
+  accountStatus?: 'ACTIVE' | 'INACTIVE';
+  accountType?: 'PRINCIPAL' | 'GENERAL' | 'DONATION' | 'PUBLIC_DONATION';
+  activatedOn?: string;
+  bankDetail?: BankDetail;
+  currentBalance?: number;
+  id?: string;
+  upiDetail?: UpiDetail;
+}

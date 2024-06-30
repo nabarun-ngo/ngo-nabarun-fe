@@ -1,0 +1,61 @@
+<section class="text-gray-600 body-font bg-gray-50">
+    <div class="container ">
+        <div class="h-screen w-screen bg-gray-400">
+
+            <!-- modal -->
+            <div class="fixed grid place-items-center backdrop-blur-sm top-0 right-0 left-0 z-50 w-full inset-0 h-modal h-full justify-center items-center">
+                <div class="relative container m-auto px-6">
+                    <div class="m-auto md:w-7/12">
+                        <div class="rounded-xl bg-white dark:bg-gray-800 shadow-xl">
+                            <div class="p-8">
+                                <div class="space-y-4">
+                                    <div class="flex w-full justify-center items-center">
+                                        <img src="/assets/logo.png" loading="lazy" width="150" height="300">
+                                    </div>
+                                    <div class="text-center" style="max-width:500px;">
+                                        <p class="mb-3 text-2xl font-semibold text-slate-900">
+                                            {{ isCodeError ? 'Login Failed' : 'Welcome to Nabarun'}}
+                                        </p>
+                                        <div *ngIf="!isCodeError && !isAuthenticated" class="p-4 mb-4 text-sm font-medium text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
+                                            You must be logged in to access digital portal of Nabarun.
+                                        </div>
+                                        <div *ngIf="isCodeError" class="p-4 mb-4 text-sm font-medium capitalize-first text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert" [innerHtml]="(codeErrorDescription | htmlSanitizer)">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="!isAuthenticated" class="mt-10 grid space-y-4">
+                                    <button (click)="loginWithoutPassword()" class="group h-12 px-6 border-2 border-gray-300 rounded-full transition duration-300 hover:border-blue-400 focus:bg-blue-50 active:bg-blue-100">
+                                        <div class="relative flex items-center space-x-4 justify-center">
+                                            <span 
+                                                class="block w-max font-semibold tracking-wide text-gray-700 text-sm transition dark:text-white duration-300 group-hover:text-blue-600 sm:text-base">Continue
+                                                with Email
+                                            </span>
+                                        </div>
+                                    </button>
+                                    <button (click)="loginWithPassword()" class="group h-12 px-6 border-2 border-gray-300 rounded-full transition duration-300 hover:border-blue-400 focus:bg-blue-50 active:bg-blue-100">
+                                        <div class="relative flex items-center space-x-4 justify-center">
+                                            <span
+                                                class="block w-max font-semibold tracking-wide text-gray-700 dark:text-white text-sm transition duration-300 group-hover:text-blue-600 sm:text-base">Continue
+                                                with Password
+                                            </span>
+                                        </div>
+                                    </button>
+
+                                </div>
+                                <div class="mt-14 space-y-4 py-3 text-gray-600 dark:text-gray-400 text-center">
+                                    <p class="text-xs">By proceeding, you agree to our
+                                        <a href="/privacy-policy/" class="underline">Privacy Policy</a> and redirected to our
+                                        <a class="underline">authorization screen</a>.
+                                    </p>
+                                </div>
+
+                            </div>
+                        </div>
+                        {{env}}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

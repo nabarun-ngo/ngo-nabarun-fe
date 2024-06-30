@@ -1,0 +1,47 @@
+<div class="bg-white p-3 shadow-lg rounded-sm">
+    <form [formGroup]="memberForm" *ngIf="memberForm">
+
+        <div class="flex items-center space-x-2 font-semibold text-gray-900 leading-8">
+            <span clas="text-green-500">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                </svg>
+            </span>
+            <span class="tracking-wide">Donor Details</span>
+        </div>
+        <div class="text-gray-700">
+            <div class="grid md:grid-cols-2 text-sm" *ngIf="profile">
+                <div class="grid grid-cols-2">
+                    <div class="px-2 py-2 font-semibold">Name</div>
+                    <div class="px-2 py-2" *ngIf="mode == 'view'">{{profile.fullName| replaceNull}}</div>
+                    <div class="px-2 dense-3" *ngIf="mode == 'create'">
+                        <mat-form-field appearance="outline">
+                            <input type="text" matInput placeholder="Ex. John" formControlName="fullName">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2">
+                    <div class="px-2 py-2 font-semibold">Email address</div>
+                    <div class="px-2 py-2" *ngIf="mode == 'view'">
+                        <a class="text-blue-800 break-all" [href]="'mailto:'+profile.email">{{profile.email | replaceNull}}</a>
+                    </div>
+                    <div class="px-2 dense-3" *ngIf="mode == 'create'">
+                        <mat-form-field appearance="outline">
+                            <input type="email" matInput placeholder="Ex. John@gmail.com" formControlName="email">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2">
+                    <div class="px-2 py-2 font-semibold">Contact number</div>
+                    <div class="px-2 py-2" *ngIf="mode == 'view'">{{profile.primaryNumber | replaceNull}}</div>
+                    <div class="px-2 dense-3" *ngIf="mode == 'create'">
+                        <mat-form-field appearance="outline">
+                            <input type="number" matInput placeholder="Ex. +919874563210" formControlName="primaryNumber">
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

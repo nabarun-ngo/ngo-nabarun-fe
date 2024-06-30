@@ -1,0 +1,15 @@
+<mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" (selectedTabChange)="onClickOrChange($event)" [(selectedIndex)]="selectedTabIndex">
+    <mat-tab *ngFor="let segment of segments" [id]="segment.segment_html_id" [label]="segment.segment_name" [hidden]="segment.hide_segment">
+        <ng-content select="[segment1]"></ng-content>
+        <!-- <ng-content select="[segment2]"></ng-content>
+        <ng-content select="[segment3]"></ng-content>
+        <ng-content select="[segment4]"></ng-content>
+        <ng-content select="[segment5]"></ng-content>
+        <ng-content select="[segment6]"></ng-content>
+        <ng-content select="[segment7]"></ng-content>
+        <ng-content select="[segment8]"></ng-content>
+        <ng-content select="[segment9]"></ng-content>
+        <ng-content select="[segment10]"></ng-content> -->
+    </mat-tab>
+
+</mat-tab-group>

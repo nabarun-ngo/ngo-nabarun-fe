@@ -1,0 +1,106 @@
+<mat-accordion class="mat-table" multi>
+    <section class="mat-elevation-z2 bg-white py-3">
+        <div class="px-6">
+            <div class="grid grid-cols-4 gap-10 w-full text-center">
+                <div class="ml-2 col-span-1" *ngIf="tabName === 'guest_donation'">
+                    <span class="px-4 py-1 inline-flex leading-5 font-bold rounded-full bg-purple-100 uppercase">
+                       Donor Name
+                    </span>
+                </div>
+                <div class="col-span-1">
+                    <span class="px-4 py-1 inline-flex leading-5 font-bold rounded-full bg-purple-100 uppercase ">
+                        Donation Type
+                    </span>
+                </div>
+                <div class="col-span-1">
+                    <span class="px-4 py-1 inline-flex leading-5 font-bold rounded-full bg-purple-100 uppercase ">
+                        Donation Amount
+                    </span>
+                </div>
+
+                <div class="col-span-1" *ngIf="tabName !== 'guest_donation'">
+                    <span class="px-4 py-1 inline-flex leading-5 font-bold rounded-full bg-purple-100 uppercase ">
+                       Donation Period
+                    </span>
+                </div>
+                <div class="col-span-1">
+                    <span class="px-4 py-1 inline-flex leading-5 font-bold rounded-full bg-purple-100 uppercase ">
+                       Donation Status 
+                    </span>
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+    <mat-expansion-panel class="m-2" [expanded]="true" *ngIf="createDonation">
+        <mat-expansion-panel-header style="pointer-events: none;">
+            <mat-panel-description>
+                <ng-container *ngTemplateOutlet="headerTemplate;context:{donation:createDonationData.donation}"></ng-container>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+        <app-detailed-profile [mode]="'create'" [member]="{}" *ngIf="tabName == 'guest_donation'" (profileChange)="onProfileChange($event)" [triggerEvent]="createDonationData.eventSubject.asObservable()"></app-detailed-profile>
+        <app-detailed-donation [mode]="'create'" [tab]="tabName!" (donationChange)="onDonationChange($event)" [triggerEvent]="createDonationData.eventSubject.asObservable()"></app-detailed-donation>
+        <mat-action-row>
+            <button mat-button color="primary" class="text-green-600" (click)="addDonation(false)">Cancel</button>
+            <button mat-button color="primary" class="text-green-600" (click)="addDonation(true)">Create</button>
+        </mat-action-row>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel class="m-2" *ngFor="let don of donations" (opened)="accordionOpened(don.donation!)">
+        <mat-expansion-panel-header>
+            <mat-panel-description>
+                <ng-container *ngTemplateOutlet="headerTemplate;context:{donation:don.donation}"></ng-container>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+        <app-detailed-profile [mode]="'view'" *ngIf="tabName == 'guest_donation'" [member]="don.donation?.donorDetails!" [triggerEvent]="don.eventSubject.asObservable()"></app-detailed-profile>
+        <app-detailed-donation [tab]="tabName!" [donation]="don.donation!" [documents]="don.documents!" [mode]="don.action" [triggerEvent]="don.eventSubject.asObservable()" (donationChange)="don.update=$event" (docChange)="don.upload=$event"></app-detailed-donation>
+        <mat-action-row>
+            <div *ngIf="tabName == 'self_donation'" class="mx-4">
+                <button mat-button color="primary" class="text-green-600">Show changes</button>
+                <button mat-button color="primary" class="text-green-600">Pay now</button>
+                <button mat-button color="primary" class="text-purple-600" *ngIf="don.donation?.status == donationStatus.Raised || don.donation?.status == donationStatus.Pending" (click)="saveAndUpload(don.donation!)">Save</button>
+            </div>
+            <div *ngIf="tabName !== 'self_donation'" class="mx-4">
+                <button mat-button color="primary" class="text-green-600">Show changes</button>
+                <button *ngIf="don.action == 'edit'" mat-button color="primary" class="text-green-600" (click)="donationEdit(don.donation!,false)">Cancel</button>
+                <button mat-button color="primary" class="text-green-600" (click)="donationEdit(don.donation!,true)">{{don.action == 'edit' ? 'Confirm':'Update'}}</button>
+            </div>
+        </mat-action-row>
+    </mat-expansion-panel>
+    <mat-card class="border-2" *ngIf="donations && donations.length == 0">
+        <div class="m-2 p-2 text-center">No records found.</div>
+    </mat-card>
+</mat-accordion>
+
+
+<ng-template #headerTemplate let-donation="donation">
+    <div class="grid grid-cols-4 gap-10 w-full text-center">
+        <div class="ml-2 col-span-1" *ngIf="tabName === 'guest_donation'">
+            <span class="px-2 inline-flex leading-5 font-medium rounded-full bg-purple-100 text-purple-800 uppercase ">
+               {{donation?.donorDetails?.fullName}}
+            </span>
+        </div>
+        <div class="col-span-1">
+            <span class="px-2 inline-flex leading-5 font-medium rounded-full bg-purple-100 text-purple-800 uppercase ">
+               {{displayDonationType(donation?.type) | replaceNull}}
+            </span>
+        </div>
+        <div class="col-span-1">
+            <span class="text-sm font-medium text-gray-900">
+                ₹ {{donation?.amount}}
+            </span>
+        </div>
+
+        <div class="col-span-1" *ngIf="tabName !== 'guest_donation'">
+            <span class="text-sm font-medium text-gray-900">
+                {{donation?.startDate | date:'d MMM y' }} - {{donation?.endDate | date:'d MMM y' }}
+            </span>
+        </div>
+        <div class="col-span-1">
+            <span class="px-2 inline-flex leading-5 font-medium rounded-full bg-purple-100 uppercase">
+                {{displayDonationStatus(donation?.status) | replaceNull}} 
+            </span>
+        </div>
+    </div>
+</ng-template>

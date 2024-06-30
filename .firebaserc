@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "nabarun-test": {
+      "hosting": {
+        "ngo-nabarun-fe": [
+          "nabarun-staging"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "nabarun-test"
+  }
+}
