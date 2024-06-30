@@ -35,11 +35,13 @@ const firebaseConfig = {
   measurementId: "G-PT9V4XMXWY"
 };
 
+
+
 export const environment = {
   production: false,
   name:'STAGE-WEB',
   max_idle_time_in_sec: 10,
-  api_base_url: 'https://ngonabarun.appspot.com/',
+  api_base_url: 'https://ngonabarun.appspot.com',
   auth_config: authConfig,
   firebase_config: firebaseConfig,
   firebase_vapidKey:'BBDkLXhO325xFYbQ9v2yDhAlxRCBwB-MERVALRhUsiPjKWNAFiR1LVxgdxB8M8VVXD6ZBMQllGFdfjmIG0CGvig',

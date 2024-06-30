@@ -19,12 +19,26 @@ const authConfig: AuthConfig = {
   customQueryParams: { audience: 'https://nabarun.resourceserver.api' },
   redirectUri: window.location.origin + '/callback'
 }
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD-kDzvTziMDGsDh40GJS3XVuL8A9_riQo",
+  authDomain: "wengonabarun.firebaseapp.com",
+  projectId: "wengonabarun",
+  storageBucket: "wengonabarun.appspot.com",
+  messagingSenderId: "496110742871",
+  appId: "1:496110742871:web:ac779b109599ae719ae212",
+  measurementId: "G-DY3169JJ99"
+};
+
 export const environment = {
-  production: false,
+  production: true,
   name:'',
   max_idle_time_in_sec: 10,
-  api_base_url: 'http://localhost:8082',
-  auth_config: authConfig
+  api_base_url: 'https://ngonabarun.appspot.com',
+  auth_config: authConfig,
+  firebase_config: firebaseConfig,
+  firebase_vapidKey:'BG5qo111TmZDK1avMtzLlbzw3w5lsN6-iAyrg-giZ7RSAmm9xh9CvapLAdTmz4JXLboiQ8_c9toYK7PDxHDWzSs',
+  inactivityTimeOut: 15*60
 };
 
 
