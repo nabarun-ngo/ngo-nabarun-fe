@@ -2,7 +2,6 @@
   "hosting": [
     {
       "target": "ngo-nabarun-fe",
-      "source": ".",
       "frameworksBackend": {},
       "public": "dist/ngo-nabarun-fe",
       "ignore": [
