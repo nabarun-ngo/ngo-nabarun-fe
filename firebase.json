@@ -1,9 +1,10 @@
 {
   "hosting": [
     {
-      "target": "dist/ngo-nabarun-fe",
+      "target": "ngo-nabarun-fe",
       "source": ".",
       "frameworksBackend": {},
+      "public": "dist/ngo-nabarun-fe",
       "ignore": [
             "firebase.json",
             "**/.*",

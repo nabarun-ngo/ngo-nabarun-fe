@@ -5,8 +5,8 @@
   "targets": {
     "nabarun-test": {
       "hosting": {
-        "nabarun-test": [
-          "dist/ngo-nabarun-fe"
+        "ngo-nabarun-fe": [
+          "nabarun-test"
         ]
       }
     }
