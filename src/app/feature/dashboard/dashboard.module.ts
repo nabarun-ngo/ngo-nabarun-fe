@@ -6,7 +6,6 @@ import { SecuredDashboardComponent } from './secured-dashboard/secured-dashboard
 import { SharedModule } from 'src/app/shared/shared.module';
 
 
-
 @NgModule({
   declarations: [
     SecuredDashboardComponent,

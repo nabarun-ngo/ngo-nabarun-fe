@@ -34,18 +34,14 @@ export class HeaderComponent implements OnInit {
     this.notificationService.liveNotifications$.subscribe(data=>{
       this.notifications.push(new AppNotification(data));
     });
-    this.notificationService.fetchNotification().subscribe(data=>{
-      data?.content?.forEach(f=>{
-        this.notifications.push(new AppNotification(f));
-      })
-    });
+      // data?.content?.forEach(f=>{
+      //   this.notifications.push(new AppNotification(f));
+      // })
+    //});
 
   }
 
   logout() {
-    this.modalService.openNotificationModal(AppDialog.logout_dialog,'confirmation','warning').onAccept$.subscribe(data=>{
-      this.identityService.logout();
-    });
   }
 
   sound(){

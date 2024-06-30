@@ -51,7 +51,6 @@ import { DateDiffPipe } from './pipe/date-diff.pipe';
     RouterModule,
   ],
   exports:[
-    HeaderComponent,
     FooterComponent,
     PageTitleComponent,
     NotificationModalComponent,
