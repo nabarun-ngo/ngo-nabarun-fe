@@ -97,6 +97,9 @@
             "production": {
               "browserTarget": "ngo-nabarun-fe:build:production"
             },
+            "stage": {
+              "browserTarget": "ngo-nabarun-fe:build:stage"
+            },
             "development": {
               "browserTarget": "ngo-nabarun-fe:build:development"
             }
