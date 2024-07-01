@@ -42,6 +42,9 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
+    this.modalService.openNotificationModal(AppDialog.logout_dialog,'confirmation','warning').onAccept$.subscribe(data=>{
+      this.identityService.logout();
+    })
   }
 
   sound(){
