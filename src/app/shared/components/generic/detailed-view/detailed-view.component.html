@@ -1,4 +1,4 @@
-<div *ngFor="let view of detailedViews">
+<div *ngFor="let view of detailed_views">
     <form [formGroup]="view.section_form!">
         <div class="py-4">
             <div class="bg-white p-3 shadow-lg rounded-sm">
@@ -19,7 +19,7 @@
                                 <div class="px-2 py-2" *ngIf="!(field.editable && view.show_form)">{{field.field_value | replaceNull}}</div>
 
                                 <div class="px-2 dense-3" *ngIf="field.editable && view.show_form">
-                                    <app-universal-input formControlName="{{field.form_control_name}}" [inputModel]="field.form_input!" />
+                                    <app-universal-input [formControlName]="field.form_control_name!" [inputModel]="field.form_input!" />
                                 </div>
                             </div>
                         </ng-container>

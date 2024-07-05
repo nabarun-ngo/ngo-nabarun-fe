@@ -1,4 +1,4 @@
-import { FormGroup } from "@angular/forms";
+import { FormGroup, ValidatorFn } from "@angular/forms";
 import { UniversalInputModel, inputType } from "../universal-input/universal-input.model";
 
 export interface DetailedView {
@@ -16,7 +16,9 @@ export interface DetailedViewField {
     field_name: string;
     field_value: string;
     hide_field?: boolean;
-    editable?:boolean;
+    editable:boolean;
     form_control_name?: string;
-    form_input?: UniversalInputModel
+    form_input?: UniversalInputModel;
+    form_input_validation?: ValidatorFn[]
+
 }

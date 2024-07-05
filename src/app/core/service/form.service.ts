@@ -18,7 +18,7 @@ class NoopValueAccessor implements ControlValueAccessor {
       ngControl instanceof NgModel
     ) {
       ngControl.valueAccessor = new NoopValueAccessor();
-
+      //console.log(ngControl)
       return ngControl;
     }
   
@@ -40,7 +40,7 @@ class NoopValueAccessor implements ControlValueAccessor {
     if(!arg0){
       return;
     }
-    console.log(arg0)
+    //console.log(arg0)
     if(arg0 && arg0['required']){
       return (fieldName ? fieldName : 'This field')+' is required.';
     }
