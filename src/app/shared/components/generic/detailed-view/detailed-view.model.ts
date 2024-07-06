@@ -7,7 +7,7 @@ export interface DetailedView {
     section_type: 'key_value' | 'doc_list' | 'custom';
     hide_section?: boolean;
     content?: DetailedViewField[];
-    section_form?:FormGroup;
+    section_form:FormGroup;
     show_form?: boolean;
 }
 

@@ -1,5 +1,6 @@
-import { inject } from "@angular/core";
+import { ElementRef, inject } from "@angular/core";
 import { AbstractControl, ControlValueAccessor, FormControlDirective, FormControlName, NgControl, NgModel, ValidationErrors, ValidatorFn } from "@angular/forms";
+import { debounceTime, fromEvent, take } from "rxjs";
 
 class NoopValueAccessor implements ControlValueAccessor {
     writeValue() {}
@@ -69,4 +70,29 @@ class NoopValueAccessor implements ControlValueAccessor {
     // Validators.nullValidator
     // Validators.requiredTrue
     return;
+  }
+
+
+  export function scrollToFirstInvalidControl(el: HTMLElement) {
+    const firstInvalidControl: HTMLElement = el.querySelector(
+      ".ng-invalid"
+    )!;
+
+    window.scroll({
+      top: getTopOffset(firstInvalidControl),
+      left: 0,
+      behavior: "smooth"
+    });
+
+    fromEvent(window, "scroll")
+      .pipe(
+        debounceTime(100),
+        take(1)
+      )
+      .subscribe(() => firstInvalidControl.focus());
+  }
+
+  function getTopOffset(controlEl: HTMLElement): number {
+    const labelOffset = 50;
+    return controlEl.getBoundingClientRect().top + window.scrollY - labelOffset;
   }
