@@ -56,19 +56,40 @@ export const AppRoute = {
     feature: 'request',
     path: 'list',
   },
-  secured_request_workflow_page: {
-    id: 'secured_request_workflow_page',
-    url: '/secured/request/workflows',
+  // secured_request_workflow_page: {
+  //   id: 'secured_request_workflow_page',
+  //   url: '/secured/request/workflows',
+  //   parent: 'secured',
+  //   feature: 'request',
+  //   path: 'workflows',
+  // },
+  // secured_request_create_page: {
+  //   id: 'secured_request_create_page',
+  //   url: '/secured/request/create',
+  //   parent: 'secured',
+  //   feature: 'request',
+  //   path: 'create',
+  // },
+  secured_task_list_page: {
+    id: 'secured_task_list_page',
+    url: '/secured/task/list',
     parent: 'secured',
-    feature: 'request',
-    path: 'workflows',
+    feature: 'task',
+    path: 'list',
   },
-  secured_request_create_page: {
-    id: 'secured_request_create_page',
-    url: '/secured/request/create',
+  secured_account_list_page: {
+    id: 'secured_account_list_page',
+    url: '/secured/account/list',
     parent: 'secured',
-    feature: 'request',
-    path: 'create',
+    feature: 'account',
+    path: 'list',
+  },
+  secured_account_transaction_page: {
+    id: 'secured_account_transaction_page',
+    url: '/secured/account/transactions',
+    parent: 'secured',
+    feature: 'account',
+    path: 'transactions',
   },
 }
 

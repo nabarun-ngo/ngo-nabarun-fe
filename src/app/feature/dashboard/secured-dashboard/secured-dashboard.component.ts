@@ -96,7 +96,7 @@ export class SecuredDashboardComponent implements OnInit {
         tile_html_id: 'accountTile',
         tile_name: 'Accounting',
         tile_icon: 'icon_book',
-        tile_link: '',
+        tile_link:  this.route.secured_account_list_page.url,
         additional_info: {
           tile_label: 'Available amount',
           tile_show_badge: true,
@@ -118,7 +118,7 @@ export class SecuredDashboardComponent implements OnInit {
         tile_html_id: 'worklistTile',
         tile_name: 'My Worklist',
         tile_icon: 'icon_group',
-        tile_link: this.route.secured_request_workflow_page.url,
+        tile_link: this.route.secured_task_list_page.url,
         additional_info: {
           tile_label: 'Pending work',
           tile_show_badge: true,

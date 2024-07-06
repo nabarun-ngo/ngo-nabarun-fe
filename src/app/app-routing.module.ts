@@ -42,6 +42,14 @@ const routes: Routes = [
         path:route_data.secured_request_list_page.feature,
         loadChildren: () => import('./feature/request/request.module').then(m => m.RequestModule),
       },
+      {
+        path:route_data.secured_task_list_page.feature,
+        loadChildren: () => import('./feature/task/task.module').then(m => m.TaskModule),
+      },
+      {
+        path:route_data.secured_account_list_page.feature,
+        loadChildren: () => import('./feature/account/account.module').then(m => m.AccountModule),
+      },
     ],
     canActivate:[
       AuthGuardService

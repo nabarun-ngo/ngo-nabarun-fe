@@ -1,25 +1,23 @@
-import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
+import { FormGroup, Validators } from '@angular/forms';
 import { Paginator } from 'src/app/core/component/paginator';
+import { scrollToFirstInvalidControl } from 'src/app/core/service/form.service';
+import { DetailedView, DetailedViewField } from 'src/app/shared/components/generic/detailed-view/detailed-view.model';
+import { TaskDefaultValue, TaskField, workListTab } from '../task.const';
 import { AccordionCell, AccordionList, AccordionRow } from 'src/app/shared/components/generic/accordion-list/accordion-list.model';
 import { PaginateWorkDetail } from 'src/app/core/api/models';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { ActivatedRoute } from '@angular/router';
-import { RequestService } from '../request.service';
-import { PageEvent } from '@angular/material/paginator';
-import { FormGroup, Validators } from '@angular/forms';
-import { DatePipe } from '@angular/common';
+import { TaskService } from '../task.service';
 import { date } from 'src/app/core/service/utilities.service';
-import { DetailedView, DetailedViewField } from 'src/app/shared/components/generic/detailed-view/detailed-view.model';
-import { ModalService } from 'src/app/core/service/modal.service';
-import { scrollToFirstInvalidControl } from 'src/app/core/service/form.service';
-import { workListTab } from '../../task/task.const';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
-  selector: 'app-workflow-list',
-  templateUrl: './workflow-list.component.html',
-  styleUrls: ['./workflow-list.component.scss']
+  selector: 'app-task-list',
+  templateUrl: './task-list.component.html',
+  styleUrls: ['./task-list.component.scss']
 })
-export class WorkflowListComponent extends Paginator implements OnInit {
+export class TaskListComponent extends Paginator implements OnInit {
 
 
   protected tabIndex!: number;
@@ -43,22 +41,22 @@ export class WorkflowListComponent extends Paginator implements OnInit {
   constructor(
     private sharedDataService: SharedDataService,
     private route: ActivatedRoute,
-    private requestService: RequestService,
+    private taskService: TaskService,
     private el: ElementRef,
   ) {
     super();
-    //super.init(WorkListDefaultValue.pageNumber, WorkListDefaultValue.pageSize, WorkListDefaultValue.pageSizeOptions)
+    super.init(TaskDefaultValue.pageNumber, TaskDefaultValue.pageSize, TaskDefaultValue.pageSizeOptions)
   }
 
   ngOnInit(): void {
-   // this.sharedDataService.setPageName(WorkListDefaultValue.pageTitle);
+    this.sharedDataService.setPageName(TaskDefaultValue.pageTitle);
 
-    // let tab = this.route.snapshot.data["tab"] ? this.route.snapshot.data["tab"] as workListTab : WorkListDefaultValue.tabName;
-    // this.tabMapping.forEach((value: workListTab, key: number) => {
-    //   if (tab == value) {
-    //     this.tabIndex = key;
-    //   }
-    // })
+    let tab = this.route.snapshot.data["tab"] ? this.route.snapshot.data["tab"] as workListTab : TaskDefaultValue.tabName;
+    this.tabMapping.forEach((value: workListTab, key: number) => {
+      if (tab == value) {
+        this.tabIndex = key;
+      }
+    })
 
     if (this.route.snapshot.data['ref_data']) {
       let refData = this.route.snapshot.data['ref_data'];
@@ -77,46 +75,46 @@ export class WorkflowListComponent extends Paginator implements OnInit {
 
   protected tabChanged(index: number) {
     this.tabIndex = index;
-    //this.pageNumber = WorkListDefaultValue.pageNumber;
-   // this.pageSize = WorkListDefaultValue.pageSize;
+    this.pageNumber = TaskDefaultValue.pageNumber;
+    this.pageSize = TaskDefaultValue.pageSize;
     this.fetchDetails();
 
   }
   private fetchDetails() {
-    // if (this.tabMapping[this.tabIndex] == 'pending_worklist') {
-    //   this.requestService.findMyWorkList(false).subscribe(s => {
-    //     this.workItemList = s!;
-    //     this.itemLengthSubs.next(this.workItemList?.totalSize!);
-    //     this.showWorkList(false);
-    //   })
-    // } else if (this.tabMapping[this.tabIndex] == 'completed_worklist') {
-    //   this.requestService.findMyWorkList(true).subscribe(s => {
-    //     this.workItemList = s!;
-    //     this.itemLengthSubs.next(this.workItemList?.totalSize!);
-    //     this.showWorkList(true);
-    //   })
-    // }
+    if (this.tabMapping[this.tabIndex] == 'pending_worklist') {
+      this.taskService.findMyWorkList(false).subscribe(s => {
+        this.workItemList = s!;
+        this.itemLengthSubs.next(this.workItemList?.totalSize!);
+        this.showWorkList(false);
+      })
+    } else if (this.tabMapping[this.tabIndex] == 'completed_worklist') {
+      this.taskService.findMyWorkList(true).subscribe(s => {
+        this.workItemList = s!;
+        this.itemLengthSubs.next(this.workItemList?.totalSize!);
+        this.showWorkList(true);
+      })
+    }
   }
 
   private showWorkList(completed: boolean) {
-    // let headers = [
-    //   {
-    //     value: WorkField.workId,
-    //     rounded: true
-    //   },
-    //   {
-    //     value: WorkField.workType,
-    //     rounded: true
-    //   },
-    //   {
-    //     value: WorkField.requestId,
-    //     rounded: true
-    //   },
-    //   {
-    //     value: completed ? WorkField.completedOn : WorkField.pendingSince,
-    //     rounded: true
-    //   }
-    // ]
+    let headers = [
+      {
+        value: TaskField.workId,
+        rounded: true
+      },
+      {
+        value: TaskField.workType,
+        rounded: true
+      },
+      {
+        value: TaskField.requestId,
+        rounded: true
+      },
+      {
+        value: completed ? TaskField.completedOn : TaskField.pendingSince,
+        rounded: true
+      }
+    ]
     let content = this.workItemList.content?.map(m => {
       let column_data = [
         {
@@ -217,10 +215,10 @@ export class WorkflowListComponent extends Paginator implements OnInit {
         ]
       } as AccordionRow;
     })
-    // this.accordionList = {
-    //   headers: headers,
-    //   contents: content!,
-    // }
+    this.accordionList = {
+      headers: headers,
+      contents: content!,
+    }
 
 
 
@@ -252,17 +250,9 @@ export class WorkflowListComponent extends Paginator implements OnInit {
         let item = this.workItemList.content![$event.rowIndex];
         let content = this.accordionList.contents[$event.rowIndex].detailed.find(f => f.section_html_id == 'work_detail');
         if (content?.section_form?.valid) {
-          // this.requestService.updateWorkItem(item.id!, content?.section_form.value).subscribe(data => {
-          //   //console.log(data)
-          //   this.fetchDetails();
-          //   // this.cancelOption($event.rowIndex);
-          //   // if(data?.stepCompleted){
-          //      //this.workItemList.content?.splice($event.rowIndex,1);
-          //     // console.log(this.workItemList.content)
-          //   // }else{
-          //   //   this.workItemList.content![$event.rowIndex]=data!;
-          //   // }
-          // })
+          this.taskService.updateWorkItem(item.id!, content?.section_form.value).subscribe(data => {
+            this.fetchDetails();
+          })
         } else {
           content?.section_form?.markAllAsTouched();
           scrollToFirstInvalidControl(this.el.nativeElement);
@@ -294,67 +284,67 @@ export class WorkflowListComponent extends Paginator implements OnInit {
   
   }
   addRequestDetails(id: string,rowIndex:number) {
-    // this.requestService.getRequestDetail(id).subscribe(request => {
+    this.taskService.getRequestDetail(id).subscribe(request => {
 
-    //   /**
-    //    * Inserting request additional details at top
-    //    */
+      /**
+       * Inserting request additional details at top
+       */
 
-    //   let additional_content = request?.additionalFields?.map(m => {
-    //     return {
-    //       field_name: m.name,
-    //       field_value: m.value,
-    //     } as DetailedViewField;
-    //   })
+      let additional_content = request?.additionalFields?.map(m => {
+        return {
+          field_name: m.name,
+          field_value: m.value,
+        } as DetailedViewField;
+      })
 
-    //   let request_add_detail = {
-    //     section_name: 'Request Additional Details',
-    //     section_type: 'key_value',
-    //     section_html_id: 'request_add_detail',
-    //     section_form: new FormGroup({}),
-    //     content: additional_content
-    //   } as DetailedView;
+      let request_add_detail = {
+        section_name: 'Request Additional Details',
+        section_type: 'key_value',
+        section_html_id: 'request_add_detail',
+        section_form: new FormGroup({}),
+        content: additional_content
+      } as DetailedView;
 
-    //   let indexAddDet = this.accordionList.contents[rowIndex].detailed.findIndex(f => f.section_html_id == 'request_add_detail');
-    //   if (indexAddDet == -1) {
-    //     this.accordionList.contents[rowIndex].detailed.push(request_add_detail);
-    //   } else {
-    //     this.accordionList.contents[rowIndex].detailed[indexAddDet] = request_add_detail;
-    //   }
+      let indexAddDet = this.accordionList.contents[rowIndex].detailed.findIndex(f => f.section_html_id == 'request_add_detail');
+      if (indexAddDet == -1) {
+        this.accordionList.contents[rowIndex].detailed.push(request_add_detail);
+      } else {
+        this.accordionList.contents[rowIndex].detailed[indexAddDet] = request_add_detail;
+      }
 
-    //   /**
-    //    * Inserting request details at top
-    //    */
-    //   let request_detail = {
-    //     section_name: 'Request Details',
-    //     section_type: 'key_value',
-    //     section_html_id: 'request_detail',
-    //     section_form: new FormGroup({}),//Here you have to pass form group
-    //     content: [
-    //       {
-    //         field_name: 'Request Id',
-    //         field_value: request?.id,
-    //       },
-    //       {
-    //         field_name: 'Request Type',
-    //         field_value: request?.type,
-    //       },
-    //       {
-    //         field_name: 'Request Status',
-    //         field_value: request?.status,
-    //       },
-    //       {
-    //         field_name: 'Requester Name',
-    //         field_value: request?.requester?.fullName,
-    //       }
-    //     ]
-    //   } as DetailedView;
-    //   let index = this.accordionList.contents[rowIndex].detailed.findIndex(f => f.section_html_id == 'request_detail');
-    //   if (index == -1) {
-    //     this.accordionList.contents[rowIndex].detailed.push(request_detail);
-    //   } else {
-    //     this.accordionList.contents[rowIndex].detailed[index] = request_detail;
-    //   }
-    // })
+      /**
+       * Inserting request details at top
+       */
+      let request_detail = {
+        section_name: 'Request Details',
+        section_type: 'key_value',
+        section_html_id: 'request_detail',
+        section_form: new FormGroup({}),//Here you have to pass form group
+        content: [
+          {
+            field_name: 'Request Id',
+            field_value: request?.id,
+          },
+          {
+            field_name: 'Request Type',
+            field_value: request?.type,
+          },
+          {
+            field_name: 'Request Status',
+            field_value: request?.status,
+          },
+          {
+            field_name: 'Requester Name',
+            field_value: request?.requester?.fullName,
+          }
+        ]
+      } as DetailedView;
+      let index = this.accordionList.contents[rowIndex].detailed.findIndex(f => f.section_html_id == 'request_detail');
+      if (index == -1) {
+        this.accordionList.contents[rowIndex].detailed.push(request_detail);
+      } else {
+        this.accordionList.contents[rowIndex].detailed[index] = request_detail;
+      }
+    })
   }
 }
