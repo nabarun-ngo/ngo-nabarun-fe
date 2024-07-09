@@ -18,7 +18,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { PageNavigationButtonsComponent } from './components/generic/page-navigation-buttons/page-navigation-buttons.component';
 import { SearchAndAdvancedSearchFormComponent } from './components/search-and-advanced-search-form/search-and-advanced-search-form.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ReplaceNullPipe } from './pipes/replace-null.pipe';
 import { DocumentListComponent } from './components/generic/document-list/document-list.component';
 import { ExpandableTableComponent } from './components/generic/expandable-table/expandable-table.component';
 import { AccordionListComponent } from './components/generic/accordion-list/accordion-list.component';
@@ -32,6 +31,7 @@ import {MAT_RADIO_DEFAULT_OPTIONS, MatRadioModule} from '@angular/material/radio
 import { UniversalInputComponent } from './components/generic/universal-input/universal-input.component';
 import { ProfileCardComponent } from './components/profile-card/profile-card.component';
 import { ProfileViewComponent } from './components/profile-view/profile-view.component';
+import { ReplaceNullPipe } from './pipes/replace-null.pipe';
 import { HtmlSanitizerPipe } from './pipes/html-sanitizer.pipe';
 
 @NgModule({
@@ -41,7 +41,6 @@ import { HtmlSanitizerPipe } from './pipes/html-sanitizer.pipe';
     SearchAndAdvancedSearchFormComponent,
     DetailedDonationComponent,
     DetailedProfileComponent,
-    ReplaceNullPipe,
     DocumentListComponent,
     ExpandableTableComponent,
     AccordionListComponent,
@@ -52,6 +51,7 @@ import { HtmlSanitizerPipe } from './pipes/html-sanitizer.pipe';
     UniversalInputComponent,
     ProfileCardComponent,
     ProfileViewComponent,
+    ReplaceNullPipe,
     HtmlSanitizerPipe,
   ],
   imports: [
@@ -82,7 +82,6 @@ import { HtmlSanitizerPipe } from './pipes/html-sanitizer.pipe';
     MatIconModule,
     FormsModule,
     ReactiveFormsModule,
-    ReplaceNullPipe,
     MatPaginatorModule,
     ExpandableTableComponent,
     AccordionListComponent,
@@ -94,8 +93,8 @@ import { HtmlSanitizerPipe } from './pipes/html-sanitizer.pipe';
     MatInputModule,
     ProfileCardComponent,
     ProfileViewComponent,
+    ReplaceNullPipe,
     HtmlSanitizerPipe,
-
   ],
   providers: [{
     provide: MAT_RADIO_DEFAULT_OPTIONS,

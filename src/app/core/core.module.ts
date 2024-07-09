@@ -18,7 +18,6 @@ import { SecuredLayoutComponent } from './layout/secured-layout/secured-layout.c
 import { ModalComponent } from './component/modal/modal.component';
 import { MessageComponent } from './component/message/message.component';
 import { DateDiffPipe } from './pipe/date-diff.pipe';
-import { AppInvalidControlScrollPipe } from './pipe/app-invalid-control-scroll.pipe';
 
 
 
@@ -33,8 +32,7 @@ import { AppInvalidControlScrollPipe } from './pipe/app-invalid-control-scroll.p
     SecuredLayoutComponent,
     ModalComponent,
     MessageComponent,
-    DateDiffPipe,
-    AppInvalidControlScrollPipe,
+    DateDiffPipe,    
   ],
   imports: [
     CommonModule,

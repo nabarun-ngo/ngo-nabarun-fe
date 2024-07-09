@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { KeyValue } from 'src/app/core/api/models';
 import { DetailedView } from 'src/app/shared/components/generic/detailed-view/detailed-view.model';
 
 @Component({
@@ -9,6 +10,9 @@ import { DetailedView } from 'src/app/shared/components/generic/detailed-view/de
 })
 export class DetailedViewComponent{
   detailed_views: DetailedView[]=[];
+  @Input({ required: true, alias:'refData' }) 
+  refData!:{[name:string]:KeyValue[]};
+
 
   @Input({ required: true, alias:'detailedViews' }) set detailedViews(view: DetailedView[]) {
     //console.log(view)
@@ -26,5 +30,11 @@ export class DetailedViewComponent{
   };
 
   //  @Input() viewForm:boolean=false;
+  protected displayValue = (section:string | undefined , code: string | undefined) => {
+    if (this.refData && section && code) {
+      return this.refData[section]?.find(f => f.key == code)?.displayValue;
+    }
+    return code;
+  }
 
 }

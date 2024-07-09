@@ -1,9 +1,11 @@
+import { KeyValue } from "src/app/core/api/models";
 import { DetailedView } from "../detailed-view/detailed-view.model";
 
 export interface AccordionList{
     headers?:AccordionCell[];
     addContent?:AccordionRow;
     contents: AccordionRow[];
+    refData?:{[name:string]:KeyValue[]};
 }
 
 export interface AccordionRow{
@@ -20,7 +22,9 @@ export interface AccordionCell{
     bgColor?:string;
     textColor?:string;
     case?:'uppercase'|'lowercase'
-    font?:'normal'|'bold'
+    font?:'normal'|'bold';
+    showDisplayValue?:boolean;
+    refDataSection?:string;
 }
 
 export interface AccordionButton{

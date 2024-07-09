@@ -60,7 +60,7 @@ export class TaskListComponent extends Paginator implements OnInit {
 
     if (this.route.snapshot.data['ref_data']) {
       let refData = this.route.snapshot.data['ref_data'];
-      this.sharedDataService.setRefData('REQUEST', refData);
+      this.sharedDataService.setRefData('TASK', refData);
     }
 
     if (this.route.snapshot.data['data']) {

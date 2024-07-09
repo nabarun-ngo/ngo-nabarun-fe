@@ -5,7 +5,7 @@
                 <div class="grid grid-cols-{{accordionList.headers.length}} gap-10 w-full text-center">
                     <div *ngFor="let header of accordionList.headers;let i=index;" class="col-span-1">
                         <span class="px-2 py-1 inline-flex leading-5 font-bold {{header.rounded ? 'rounded-full': ''}} {{header.bgColor ? header.bgColor :'bg-purple-100'}} {{header.textColor ? header.textColor:'text-gray-900'}} uppercase">
-                           {{header.value}}
+                          {{header.showDisplayValue ? displayValue(header.refDataSection,header.value) : header.value}} 
                         </span>
                     </div>
                 </div>
@@ -13,20 +13,39 @@
         </div>
     </section>
    
+    <mat-expansion-panel class="m-2" [expanded]="true" *ngIf="accordionList.addContent">
+        <mat-expansion-panel-header style="pointer-events: none;">
+            <mat-panel-description>
+                <div class="grid grid-cols-{{accordionList.addContent.columns.length}} gap-10 w-full text-center">
+                    <div *ngFor="let item of accordionList.addContent.columns;" class="col-span-1">
+                        <span class="px-2 py-1 inline-flex leading-5 font-medium {{item.rounded ? 'rounded-full': ''}} {{item.bgColor ? item.bgColor :''}} {{item.textColor ? item.textColor:'text-gray-900'}} uppercase ">
+                            {{(item.showDisplayValue ? displayValue(item.refDataSection,item.value) : item.value) | replaceNull}}
+                        </span>
+                    </div>
+                </div>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+        <app-detailed-view [detailedViews]="accordionList.addContent.detailed" [refData]="this.accordionList.refData!"></app-detailed-view>
 
+        <mat-action-row>
+            <div class="mx-4">
+                <button mat-button *ngFor="let button of accordionList.addContent.buttons" [id]="button.button_id+'_add'" class="text-green-600" (click)="onButtonClick.emit({buttonId:button.button_id,rowIndex:0})">{{button.button_name}}</button>
+            </div>
+        </mat-action-row>
+    </mat-expansion-panel>
     <mat-expansion-panel *ngFor="let content of accordionList.contents;let i=index;" (opened)="onAccordionOpen.emit({rowIndex:i})">
         <mat-expansion-panel-header>
             <mat-panel-description>
                 <div class="grid grid-cols-{{content.columns.length}} gap-10 w-full text-center">
                     <div *ngFor="let item of content.columns;" class="col-span-1">
                         <span class="px-2 py-1 inline-flex leading-5 font-medium {{item.rounded ? 'rounded-full': ''}} {{item.bgColor ? item.bgColor :''}} {{item.textColor ? item.textColor:'text-gray-900'}} uppercase ">
-                           {{item.value | replaceNull}}
+                            {{(item.showDisplayValue ? displayValue(item.refDataSection,item.value) : item.value) | replaceNull}}
                         </span>
                     </div>
                 </div>
             </mat-panel-description>
         </mat-expansion-panel-header>
-        <app-detailed-view [detailedViews]="content.detailed"></app-detailed-view>
+        <app-detailed-view [detailedViews]="content.detailed" [refData]="this.accordionList.refData!"></app-detailed-view>
         <mat-action-row>
             <div class="mx-4">
                 <button mat-button *ngFor="let button of content.buttons" [id]="button.button_id+i" class="text-green-600" (click)="onButtonClick.emit({buttonId:button.button_id,rowIndex:i})">{{button.button_name}}</button>

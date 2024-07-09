@@ -13,4 +13,12 @@ export class AccordionListComponent {
   @Output() onButtonClick: EventEmitter<{ buttonId: string;rowIndex: number }> = new EventEmitter();
   @Output() onAccordionOpen: EventEmitter<{rowIndex: number }> = new EventEmitter();
 
+  
+  protected displayValue = (section:string | undefined , code: string | undefined) => {
+    if (this.accordionList.refData && section && code) {
+      return this.accordionList.refData[section]?.find(f => f.key == code)?.displayValue;
+    }
+    return code;
+  }
+
 }

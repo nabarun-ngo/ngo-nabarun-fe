@@ -14,7 +14,7 @@ export class SecuredLayoutComponent {
     minDuration: 300,
     backdropBackgroundColor: '#777777',
     entryComponent: PageLoaderComponent,
-    filteredUrlPatterns: ['manageNotification','getNotifications'],
+    filteredUrlPatterns: ['token','manageNotification','getNotifications'],
     opacity: '0.9'
   }
 }
