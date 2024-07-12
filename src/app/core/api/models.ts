@@ -34,6 +34,7 @@ export { PaginateUserDetail } from './models/paginate-user-detail';
 export { PaginateWorkDetail } from './models/paginate-work-detail';
 export { PayableAccDetail } from './models/payable-acc-detail';
 export { PaymentMethod } from './models/payment-method';
+export { RefDataType } from './models/ref-data-type';
 export { RequestDetail } from './models/request-detail';
 export { SuccessResponseAccountDetail } from './models/success-response-account-detail';
 export { SuccessResponseDonationDetail } from './models/success-response-donation-detail';

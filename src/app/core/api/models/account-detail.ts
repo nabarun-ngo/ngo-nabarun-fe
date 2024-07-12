@@ -6,7 +6,7 @@ import { UserDetail } from '../models/user-detail';
 export interface AccountDetail {
   accountHolder?: UserDetail;
   accountHolderName?: string;
-  accountStatus?: 'ACTIVE' | 'INACTIVE';
+  accountStatus?: 'ACTIVE' | 'INACTIVE' | 'BLOCKED';
   accountType?: 'PRINCIPAL' | 'GENERAL' | 'DONATION' | 'PUBLIC_DONATION';
   activatedOn?: string;
   bankDetail?: BankDetail;

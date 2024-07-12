@@ -13,3 +13,11 @@ export const AccountConstant={
     accountType:'accountTypes',
     accountStatus:'accountStatuses'
 }
+
+export const TransactionDefaultValue={
+    pageNumber: 0,
+    pageSize:20,
+    pageSizeOptions: [20, 50,100],
+    pageTitle:'Transactions',
+    tabName:'NA'
+}

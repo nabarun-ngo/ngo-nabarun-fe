@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, combineLatest, forkJoin, map } from 'rxjs';
-import { DocumentDetailUpload, DonationDetail, DonationStatus, DonationType } from 'src/app/core/api/models';
+import { DocumentDetailUpload, DonationDetail, DonationStatus, DonationType, RefDataType } from 'src/app/core/api/models';
 import { AccountControllerService, CommonControllerService, DonationControllerService, EventControllerService, UserControllerService } from 'src/app/core/api/services';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 
@@ -53,7 +53,7 @@ export class DonationService {
   }
 
   fetchRefData(type?:DonationType,status?:DonationStatus) {
-    return this.commonController.getReferenceData({ names: ["DONATION"], currentDonationStatus:status,donationType:type}).pipe(map(d => d.responsePayload));
+    return this.commonController.getReferenceData({ names: [RefDataType.Donation], currentDonationStatus:status,donationType:type}).pipe(map(d => d.responsePayload));
   }
 
   updateDonation(id: string, details: DonationDetail) {

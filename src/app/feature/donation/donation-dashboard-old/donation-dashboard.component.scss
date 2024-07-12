@@ -1,0 +1,59 @@
+.date_container {
+    float: left;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+input.ng-touched.ng-invalid,
+textarea.ng-touched.ng-invalid,
+select.ng-touched.ng-invalid {
+    @apply outline-none ring-red-500 border-2 border-red-500 z-10;
+}
+
+.example-action-buttons {
+    padding-bottom: 20px;
+}
+
+.example-headers-align .mat-expansion-panel-header-title,
+.example-headers-align .mat-expansion-panel-header-description {
+    flex-basis: 0;
+}
+
+.example-headers-align .mat-expansion-panel-header-description {
+    justify-content: space-between;
+    align-items: center;
+}
+
+::ng-deep .mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+    color: unset;
+}
+
+::ng-deep .mat-option-pseudo-checkbox.mat-pseudo-checkbox-checked {
+    @apply bg-indigo-600;
+}
+
+.example-headers-align .mat-form-field+.mat-form-field {
+    margin-left: 8px;
+}
+
+.mat-paginator {
+    background-color: transparent;
+}
+
+
+/* The div container */
+
+.qrcodeImage {
+    display: flex;
+    flex: 1;
+}
+
+
+/* Add custom styles here */
+
+.center {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+}

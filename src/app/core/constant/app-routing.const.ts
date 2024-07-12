@@ -86,10 +86,10 @@ export const AppRoute = {
   },
   secured_account_transaction_page: {
     id: 'secured_account_transaction_page',
-    url: '/secured/account/transactions',
+    url: '/secured/account/:id/transactions',
     parent: 'secured',
     feature: 'account',
-    path: 'transactions',
+    path: ':id/transactions',
   },
 }
 

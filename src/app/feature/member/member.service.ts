@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
+import { RefDataType } from 'src/app/core/api/models';
 import { CommonControllerService, UserControllerService } from 'src/app/core/api/services';
 
 @Injectable({
@@ -18,7 +19,7 @@ export class MemberService {
   }
 
   fetchRefData() {
-    return this.commonController.getReferenceData({ names: ["USER"]}).pipe(map(d => d.responsePayload));
+    return this.commonController.getReferenceData({ names: [RefDataType.Donation]}).pipe(map(d => d.responsePayload));
   }
 
   getUserDetail(id: string): any {

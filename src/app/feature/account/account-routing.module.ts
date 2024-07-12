@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { AccountDashboardComponent } from './account-dashboard/account-dashboard.component';
 import { accountDashboardResolver, accountRefDataResolver, accountTransactionResolver } from './account.resolver';
+import { AccountTransactionComponent } from './account-transaction/account-transaction.component';
 
 const route_data = AppRoute;
 
@@ -16,8 +17,8 @@ const routes: Routes = [
     }
   },
   {
-    path: route_data.secured_account_list_page.path,
-    component: AccountDashboardComponent,
+    path: route_data.secured_account_transaction_page.path,
+    component: AccountTransactionComponent,
     resolve:{
       data:accountTransactionResolver,
       ref_data:accountRefDataResolver

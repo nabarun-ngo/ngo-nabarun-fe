@@ -13,6 +13,8 @@ import { createAccount } from '../fn/account-controller/create-account';
 import { CreateAccount$Params } from '../fn/account-controller/create-account';
 import { getAccounts } from '../fn/account-controller/get-accounts';
 import { GetAccounts$Params } from '../fn/account-controller/get-accounts';
+import { getMyAccounts } from '../fn/account-controller/get-my-accounts';
+import { GetMyAccounts$Params } from '../fn/account-controller/get-my-accounts';
 import { getTransactions } from '../fn/account-controller/get-transactions';
 import { GetTransactions$Params } from '../fn/account-controller/get-transactions';
 import { SuccessResponseAccountDetail } from '../models/success-response-account-detail';
@@ -72,6 +74,31 @@ export class AccountControllerService extends BaseService {
   getTransactions(params: GetTransactions$Params, context?: HttpContext): Observable<SuccessResponsePaginateTransactionDetail> {
     return this.getTransactions$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponsePaginateTransactionDetail>): SuccessResponsePaginateTransactionDetail => r.body)
+    );
+  }
+
+  /** Path part for operation `getMyAccounts()` */
+  static readonly GetMyAccountsPath = '/api/account/getMyAccounts';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getMyAccounts()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getMyAccounts$Response(params: GetMyAccounts$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateAccountDetail>> {
+    return getMyAccounts(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getMyAccounts$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getMyAccounts(params: GetMyAccounts$Params, context?: HttpContext): Observable<SuccessResponsePaginateAccountDetail> {
+    return this.getMyAccounts$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponsePaginateAccountDetail>): SuccessResponsePaginateAccountDetail => r.body)
     );
   }
 

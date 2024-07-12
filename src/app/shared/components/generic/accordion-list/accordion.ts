@@ -45,14 +45,30 @@ export abstract class Accordion<NumType> extends Paginator {
     this.accordionList.contents.push(row);
   }
 
-  protected showCreateForm(data?: NumType) {
+  setContent(dataList: NumType[],totalSize?:number){
+    this.clearContents()
+    dataList.forEach(e=>{
+      this.addContentRow(e);
+    })
+    this.itemLengthSubs.next(totalSize!);
+  }
+
+  protected getSectionForm(sectionId:string){
+    return this.accordionList.addContent?.detailed.find(f => f.section_html_id == sectionId)?.section_form;
+  }
+
+  protected showCreateForm(data?: NumType,options?: { [key: string]: any }) {
+    if(!options){
+      options={};
+    }
+    options['create']=true;
     let row = {
-      columns: this.prepareHighLevelView(data!, { create: true }),
-      detailed: this.prepareDetailedView(data!, { create: true }),
-      buttons: this.prepareDefaultButtons(data!, { create: true })
+      columns: this.prepareHighLevelView(data!, options),
+      detailed: this.prepareDetailedView(data!, options),
+      buttons: this.prepareDefaultButtons(data!, options)
     } as AccordionRow;
     this.accordionList.addContent = row;
-    this.accordionList.addContent.detailed.map(m => {
+    return this.accordionList.addContent.detailed.map(m => {
       //console.log(m)
       m.show_form = true;
       m.hide_section = false;

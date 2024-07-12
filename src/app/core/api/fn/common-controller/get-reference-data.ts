@@ -8,10 +8,11 @@ import { RequestBuilder } from '../../request-builder';
 
 import { DonationStatus } from '../../models/donation-status';
 import { DonationType } from '../../models/donation-type';
+import { RefDataType } from '../../models/ref-data-type';
 import { SuccessResponseMapStringListKeyValue } from '../../models/success-response-map-string-list-key-value';
 
 export interface GetReferenceData$Params {
-  names?: Array<'USER' | 'DONATION' | 'PUBLIC'>;
+  names?: Array<RefDataType>;
   donationType?: DonationType;
   currentDonationStatus?: DonationStatus;
 }

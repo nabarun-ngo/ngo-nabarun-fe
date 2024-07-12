@@ -112,7 +112,7 @@
                     <div x-show="isProfileDropdownOpen" x-on:click.away="isProfileDropdownOpen = false" class=" origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical"
                         aria-labelledby="user-menu-button" tabindex="-1">
                         <a [routerLink]="[app_route.secured_dashboard_page.url]" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="dashboardLink">Dashboard</a>
-                        <a [routerLink]="[app_route.secured_member_profile_page.url,userId]" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="myprofile">My profile</a>
+                        <a (click)="profile()" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="myprofile">My profile</a>
                         <!-- <a class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="settings">Settings</a> -->
                         <a (click)="logout()" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="logout">Logout</a>
                     </div>
