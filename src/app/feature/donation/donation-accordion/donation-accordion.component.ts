@@ -195,14 +195,14 @@ export class DonationAccordionComponent implements OnInit {
     if (this.refData == undefined || donationTypeCode == undefined) {
       return donationTypeCode;
     }
-    return this.refData[DonationRefData.type]?.find((f: { key: string; }) => f.key == donationTypeCode)?.displayValue;
+    return this.refData[DonationRefData.refDataKey.type]?.find((f: { key: string; }) => f.key == donationTypeCode)?.displayValue;
   }
 
   protected displayDonationStatus = (donationStatusCode: string | undefined) => {
     if (this.refData == undefined || donationStatusCode == undefined) {
       return donationStatusCode;
     }
-    return this.refData[DonationRefData.status]?.find((f: { key: string; }) => f.key == donationStatusCode)?.displayValue;
+    return this.refData[DonationRefData.refDataKey.status]?.find((f: { key: string; }) => f.key == donationStatusCode)?.displayValue;
   }
 
 }

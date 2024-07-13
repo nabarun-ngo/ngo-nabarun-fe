@@ -10,15 +10,15 @@ const route_data = AppRoute;
 const routes: Routes = [
   {
     path: route_data.secured_donation_dashboard_page.path,
-    component: DonationDashboardComponent,
+    component: DonationDashboardComponentOld,
     resolve:{
       data:donationDashboardResolver,
       ref_data:donationRefDataResolver
     }
   },
   {
-    path: 'secured/donation/test',
-    component: DonationDashboardComponentOld,
+    path: 'test',
+    component: DonationDashboardComponent,
     resolve:{
       data:donationDashboardResolver,
       ref_data:donationRefDataResolver

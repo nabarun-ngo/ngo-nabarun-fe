@@ -26,7 +26,7 @@
                                     tagName:'select',
                                     inputType:'',
                                     placeholder:'Ex. Regular',
-                                    selectList: getSelectList(donationRefData.status)
+                                    selectList: getSelectList(donationRefData.refDataKey.type)
                                     }" />
 
                                 <!-- <mat-form-field appearance="outline">
@@ -65,7 +65,7 @@
                                     tagName:'select',
                                     inputType:'',
                                     placeholder:'Ex. Paid',
-                                    selectList: []
+                                    selectList: getSelectList(donationRefData.refDataKey.status)
                                     }" />
                             </div>
                         </div>
@@ -145,6 +145,7 @@
                                 <app-universal-input formControlName="paidToAccount" [inputModel]="{
                                     tagName:'select',
                                     inputType:'',
+                                    selectList: payableAccounts
                                     }" />
                             </div>
                         </div>
@@ -163,6 +164,7 @@
                                     tagName:'select',
                                     inputType:'',
                                     placeholder:'Ex. UPI', 
+                                    selectList: getSelectList(donationRefData.refDataKey.paymentMethod)
                                     }" />
                             </div>
                         </div>
@@ -181,6 +183,8 @@
                                     tagName:'select',
                                     inputType:'',
                                     placeholder:'Ex. UPI', 
+                                    selectList: getSelectList(donationRefData.refDataKey.upiOps)
+
                                     }" />
                             </div>
                         </div>

@@ -34,7 +34,7 @@ export class DonationService {
   }
 
   fetchMembers(pageIndex: number = 0, pageSize: number = 100) {
-    return this.userController.getUsers({ pageIndex: pageIndex, pageSize: pageSize ,filter:{}}).pipe(map(m => m.responsePayload));
+    return this.userController.getUsers({ pageIndex: pageIndex, pageSize: pageSize ,filter:{status:['ACTIVE','INACTIVE']}}).pipe(map(m => m.responsePayload));
   }
 
   fetchUserDonations(id: string, pageIndex: number = 0, pageSize: number = 100) {

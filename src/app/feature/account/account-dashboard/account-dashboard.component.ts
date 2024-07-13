@@ -116,13 +116,13 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
         type: 'text',
         value: item?.accountType!,
         showDisplayValue: true,
-        refDataSection: this.constants.accountType
+        refDataSection: this.constants.refDataKey.accountType
       },
       {
         type: 'text',
         value: item?.accountStatus!,
         showDisplayValue: true,
-        refDataSection: this.constants.accountStatus
+        refDataSection: this.constants.refDataKey.accountStatus
       },
       this.tabMapping[this.tabIndex] == 'my_accounts' ?
         {
@@ -202,21 +202,21 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
           field_html_id: 'account_type',
           field_value: m?.accountType!,
           showDisplayValue: true,
-          refDataSection: this.constants.accountType
+          refDataSection: this.constants.refDataKey.accountType
         },
         {
           field_name: 'Account Status',
           field_html_id: 'account_status',
           field_value: m?.accountStatus!,
           showDisplayValue: true,
-          refDataSection: this.constants.accountStatus,
+          refDataSection: this.constants.refDataKey.accountStatus,
           form_control_name: 'status',
           editable: true,
           form_input: {
             tagName: 'select',
             inputType: '',
             placeholder: 'Ex. Approve',
-            selectList: this.refData![this.constants.accountStatus]
+            selectList: this.refData![this.constants.refDataKey.accountStatus]
           },
           form_input_validation: [Validators.required]
         },
@@ -348,13 +348,13 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
           field_name: 'Account Type',
           field_html_id: 'account_type',
           field_value: '',
-          showDisplayValue: true,
-          refDataSection: this.constants.accountType,
+          show_display_value: true,
+          ref_data_section: this.constants.refDataKey.accountType,
           editable: true,
           form_control_name: 'accountType',
           form_input: {
             tagName: 'select',
-            selectList: this.refData![this.constants.accountType],
+            selectList: this.refData![this.constants.refDataKey.accountType],
             placeholder: 'Ex. '
           },
           form_input_validation: [Validators.required]

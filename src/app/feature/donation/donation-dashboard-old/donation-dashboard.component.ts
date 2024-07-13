@@ -29,11 +29,11 @@ export class DonationDashboardComponentOld implements OnInit {
   donations: DonationList[]=[];
   mySummary: DonationSummary | undefined;
   showcreateDonation:boolean=false;
-  route: ActivatedRoute=Inject(ActivatedRoute);
 
   constructor(
     private sharedDataService: SharedDataService,
-    private donationService: DonationService
+    private donationService: DonationService,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -49,7 +49,7 @@ export class DonationDashboardComponentOld implements OnInit {
         this.tabIndex = key;
       }
     })
-
+    
     this.sharedDataService.setPageName(DonationDefaultValue.pageTitle);
 
     if (this.route.snapshot.data['ref_data']){

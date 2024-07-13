@@ -1,7 +1,7 @@
 import { PageEvent } from "@angular/material/paginator";
 import { Paginator } from "src/app/core/component/paginator";
 import { AccordionButton, AccordionCell, AccordionList, AccordionRow } from "./accordion-list.model";
-import { DetailedView } from "../detailed-view/detailed-view.model";
+import { DetailedView, DetailedViewField } from "../detailed-view/detailed-view.model";
 import { KeyValue } from "src/app/core/api/models";
 
 export abstract class Accordion<NumType> extends Paginator {
@@ -128,8 +128,20 @@ export abstract class Accordion<NumType> extends Paginator {
     })
   }
 
-  // protected updateHighLevelInfo(rowIndex: number,updates:{highLevelInfo?: AccordionCell[], detailedInfo?: DetailedView[]}) {
-  //   //this.accordionList.contents.push(row)
-  // }
+  protected updateContent(rowIndex: number,sectionId:string,updates:{highLevelInfo?: AccordionCell[], detailedInfo?: DetailedViewField[]}) {
+    if(updates.highLevelInfo){
+
+    }else if(updates.detailedInfo){
+      let content_index=this.accordionList.contents[rowIndex].detailed.findIndex(f=>f.section_html_id == sectionId);
+      this.accordionList.contents[rowIndex].detailed[content_index].content?.map(m=>{
+        let info = updates.detailedInfo?.find(f=>f.field_html_id == m.field_html_id);
+        if(info){
+          m.field_value=info.field_value;
+        }
+        return m;
+      })
+    }
+  }
+
 
 }

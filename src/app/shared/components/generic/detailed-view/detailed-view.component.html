@@ -11,12 +11,12 @@
                 </span>
                     <span class="tracking-wide">{{view.section_name}}</span>
                 </div>
-                <div class="text-gray-700 my-2 mx-4">
-                    <div class="grid md:grid-cols-2 text-sm">
+                <div class="text-gray-700 my-2 mx-4" *ngIf="view.section_type == 'key_value'">
+                    <div  class="grid md:grid-cols-2 text-sm" >
                         <ng-container *ngFor="let field of view.content">
                             <div class="grid grid-cols-2" *ngIf="field.hide_field == undefined || !field.hide_field">
                                 <div class="px-2 py-2 font-semibold">{{field.field_name}}</div>
-                                <div class="px-2 py-2" *ngIf="!(field.editable && view.show_form)">{{(field.showDisplayValue ? displayValue(field.refDataSection,field.field_value) : field.field_value) | replaceNull}}</div>
+                                <div class="px-2 py-2" *ngIf="!(field.editable && view.show_form)">{{(field.show_display_value ? displayValue(field.ref_data_section,field.field_value) : field.field_value) | replaceNull}}</div>
 
                                 <div class="px-2 dense-3" *ngIf="field.editable && view.show_form">
                                     <app-universal-input [formControlName]="field.form_control_name!" [inputModel]="field.form_input!" />
@@ -24,7 +24,22 @@
                             </div>
                         </ng-container>
                     </div>
+
                 </div>
+                <div *ngIf="view.section_type == 'accordion_list'">
+                    <div class="flex justify-end p-2">
+                        <mat-icon [ngClass]="{'disabledLink ' : false}" class="bg-purple-500 mx-2 mt-2">add</mat-icon>
+                        <mat-form-field appearance="outline" class="dense-3">
+                            <!-- <mat-label>Search here</mat-label> -->
+                            <input type="text" matInput placeholder="Search here">
+                        </mat-form-field>
+                    </div>
+                    <app-accordion-list [accordionList]="view.accordionList!" (onButtonClick)="onClick($event)"
+                    (onAccordionOpen)="accordionOpened($event)"></app-accordion-list>    
+                    <!-- <mat-paginator class="mt-4" style="background-color: transparent;" (page)="handlePageEvent(mem.member!,$event)" [length]="mem.total" [pageSize]="mem.size" [pageSizeOptions]="defaultValue.pageSizeOptions" [pageIndex]="mem.index" aria-label="Select page">
+                    </mat-paginator> -->
+                </div>
+                
             </div>
         </div>
     </form>

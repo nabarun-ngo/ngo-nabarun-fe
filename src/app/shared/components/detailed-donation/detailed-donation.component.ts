@@ -26,7 +26,7 @@ export class DetailedDonationComponent implements OnInit {
     [key: string]: KeyValue[];
 } | undefined;
   protected events!: EventDetail[];
-  protected payableAccounts!: AccountDetail[];
+  protected payableAccounts: KeyValue[]=[];
   mode!: OperationMode;
   errorMessage = getErrorMessage
 
@@ -91,7 +91,11 @@ export class DetailedDonationComponent implements OnInit {
 
       this.dfControl['status'].valueChanges.subscribe(value => {
         if (value == this.donationStatus.Paid) {
-          this.donationService.getPayableAccounts().subscribe(data => this.payableAccounts = data?.content!);
+          this.donationService.getPayableAccounts().subscribe(data => {
+            data?.content!.forEach(m=>{
+              this.payableAccounts.push({key:m.id,displayValue:m.accountHolderName}) 
+            })
+          });
           this.dfControl['amount'].disable();
           setValidator(this.dfControl['paidOn'], [Validators.required]);
           setValidator(this.dfControl['paidToAccount'], [Validators.required]);
@@ -207,14 +211,14 @@ export class DetailedDonationComponent implements OnInit {
     if (this.refData == undefined || donationTypeCode == undefined) {
       return donationTypeCode;
     }
-    return this.refData[this.donationRefData.type]?.find((f: KeyValue) => f.key == donationTypeCode)?.displayValue;
+    return this.refData[this.donationRefData.refDataKey.type]?.find((f: KeyValue) => f.key == donationTypeCode)?.displayValue;
   }
 
   protected displayDonationStatus = (donationStatusCode: string | undefined) => {
     if (this.refData == undefined || donationStatusCode == undefined) {
       return donationStatusCode;
     }
-    return this.refData[this.donationRefData.status]?.find((f: KeyValue) => f.key == donationStatusCode)?.displayValue;
+    return this.refData[this.donationRefData.refDataKey.status]?.find((f: KeyValue) => f.key == donationStatusCode)?.displayValue;
   }
 
   protected getSelectList = (name: string,options?:{donation?:DonationDetail}) : KeyValue[]=> {
@@ -236,10 +240,10 @@ export class DetailedDonationComponent implements OnInit {
     let item=this.refData[name];
     console.log(item);
 
-    if (name == this.donationRefData.type) {
+    if (item && name == this.donationRefData.refDataKey.type) {
       return item.filter(f=>this.donationTab != 'guest_donation' || f.key == this.donationType.Onetime);
     }
-    if (name == this.donationRefData.nextStatus) {
+    if (item && name == this.donationRefData.refDataKey.nextStatus) {
       item.unshift({key:options?.donation?.status,displayValue: this.displayDonationStatus(options?.donation?.status)});
     }
     return item;

@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { KeyValue } from 'src/app/core/api/models';
 import { DetailedView } from 'src/app/shared/components/generic/detailed-view/detailed-view.model';
@@ -9,6 +9,7 @@ import { DetailedView } from 'src/app/shared/components/generic/detailed-view/de
   styleUrls: ['./detailed-view.component.scss']
 })
 export class DetailedViewComponent{
+
   detailed_views: DetailedView[]=[];
   @Input({ required: true, alias:'refData' }) 
   refData!:{[name:string]:KeyValue[]};
@@ -36,5 +37,13 @@ export class DetailedViewComponent{
     }
     return code;
   }
+
+
+  @Output()  accordionOpened($event: { rowIndex: number; }) {
+    throw new Error('Method not implemented.');
+    }
+    onClick($event: { buttonId: string; rowIndex: number; }) {
+    throw new Error('Method not implemented.');
+    }
 
 }

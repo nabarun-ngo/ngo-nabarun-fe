@@ -16,7 +16,7 @@ export interface AccordionRow{
 }
 export interface AccordionCell{
     html_id?:string;
-    type?: 'date'|'text'
+    type?: 'date'|'text'|'user'| 'icon'
     value:string;
     rounded?:boolean;
     bgColor?:string;
@@ -25,6 +25,7 @@ export interface AccordionCell{
     font?:'normal'|'bold';
     showDisplayValue?:boolean;
     refDataSection?:string;
+    props ? :{[key:string] : any};
 }
 
 export interface AccordionButton{
