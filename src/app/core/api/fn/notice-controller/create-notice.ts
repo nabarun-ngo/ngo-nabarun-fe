@@ -6,11 +6,11 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { NoticeDetailCreate } from '../../models/notice-detail-create';
+import { NoticeDetail } from '../../models/notice-detail';
 import { SuccessResponseNoticeDetail } from '../../models/success-response-notice-detail';
 
 export interface CreateNotice$Params {
-      body: NoticeDetailCreate
+      body: NoticeDetail
 }
 
 export function createNotice(http: HttpClient, rootUrl: string, params: CreateNotice$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseNoticeDetail>> {

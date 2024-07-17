@@ -53,7 +53,10 @@ export abstract class Accordion<NumType> extends Paginator {
     this.itemLengthSubs.next(totalSize!);
   }
 
-  protected getSectionForm(sectionId:string){
+  protected getSectionForm(sectionId:string,rowIndex?:number){
+    if(rowIndex){
+      return this.accordionList.contents[rowIndex]?.detailed.find(f => f.section_html_id == sectionId)?.section_form;
+    }
     return this.accordionList.addContent?.detailed.find(f => f.section_html_id == sectionId)?.section_form;
   }
 

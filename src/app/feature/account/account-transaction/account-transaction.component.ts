@@ -7,6 +7,9 @@ import { Accordion } from 'src/app/shared/components/generic/accordion-list/acco
 import { PageEvent } from '@angular/material/paginator';
 import { AccordionCell, AccordionButton } from 'src/app/shared/components/generic/accordion-list/accordion-list.model';
 import { DetailedView } from 'src/app/shared/components/generic/detailed-view/detailed-view.model';
+import { FormGroup } from '@angular/forms';
+import { date } from 'src/app/core/service/utilities.service';
+import { AccountService } from '../account.service';
 
 @Component({
   selector: 'app-account-transaction',
@@ -22,8 +25,10 @@ export class AccountTransactionComponent extends Accordion<TransactionDetail> im
   constructor(
     private sharedDataService: SharedDataService,
     private route: ActivatedRoute,
+    private accountService: AccountService,
   ) {
     super();
+    super.init(this.defaultValue.pageNumber, this.defaultValue.pageSize, this.defaultValue.pageSizeOptions)
   }
 
   ngOnInit(): void {
@@ -37,11 +42,7 @@ export class AccountTransactionComponent extends Accordion<TransactionDetail> im
 
     if (this.route.snapshot.data['data']) {
       this.transactionList = this.route.snapshot.data['data'] as PaginateTransactionDetail;
-      this.itemLengthSubs.next(this.transactionList?.totalSize!);
-      this.clearContents()
-      this.transactionList.content?.forEach(item => {
-        this.addContentRow(item);
-      })
+      this.setContent(this.transactionList.content!,this.transactionList?.totalSize!)
     }
   }
 
@@ -57,7 +58,7 @@ export class AccountTransactionComponent extends Accordion<TransactionDetail> im
         rounded: true
       },
       {
-        value: 'Transaction Status',
+        value: 'Transaction Type',
         rounded: true
       },
       {
@@ -80,7 +81,7 @@ export class AccountTransactionComponent extends Accordion<TransactionDetail> im
       },
       {
         type: 'text',
-        value: data?.txnStatus!,
+        value: data?.txnParticulars!,
       },
       {
         type: 'date',
@@ -89,20 +90,102 @@ export class AccountTransactionComponent extends Accordion<TransactionDetail> im
     ];
   }
   protected override prepareDetailedView(data: TransactionDetail, options?: { [key: string]: any; }): DetailedView[] {
-    return [];
+    return [
+      {
+        section_form: new FormGroup({}),
+        section_name: 'Transaction Detail',
+        section_type:'key_value',
+        section_html_id:'txn_det',
+        content:[
+          {
+            field_name:'Transaction Number',
+            field_value:data.txnId!,
+            field_html_id:'txn_id',
+          },
+          {
+            field_name:'Transaction Type',
+            field_value:data.txnType!,
+            field_html_id:'txn_type',
+          },
+          {
+            field_name:'Transaction Particulars',
+            field_value:data.txnParticulars!,
+            field_html_id:'txn_type',
+          },
+          {
+            field_name:'Transaction Description',
+            field_value: data.txnDescription!,
+            field_html_id:'txn_status',
+          },
+          {
+            field_name:'Transaction Amount',
+            field_value: '₹ ' +data.txnAmount!,
+            field_html_id:'txn_amt',
+          },
+          {
+            field_name:'Transaction Date',
+            field_value: date(data.txnDate!),
+            field_html_id:'txn_status',
+          },
+          {
+            field_name:'Transaction Status',
+            field_value: data.txnStatus!,
+            field_html_id:'txn_status',
+          },
+          {
+            field_name:'Transaction Ref Id',
+            field_value: data.txnRefId!,
+            field_html_id:'txn_status',
+            hide_field : !data.txnRefId
+          },
+          {
+            field_name:'Transaction Ref Type',
+            field_value: data.txnRefType!,
+            field_html_id:'txn_status',
+             hide_field : !data.txnRefType
+          },
+          {
+            field_name:'Transfer From Account',
+            field_value: data.transferFrom?.id! ,
+            field_html_id:'txn_status',
+            hide_field : data.txnType != 'TRANSFER'
+          },
+          {
+            field_name:'Transfer To Account',
+            field_value: data.transferTo?.id!,
+            field_html_id:'txn_status',
+            hide_field : data.txnType != 'TRANSFER'
+          },
+          {
+            field_name:'Balance After Transaction',
+            field_value: '₹ ' + data.accBalance!,
+            field_html_id:'txn_status',
+          },
+          {
+            field_name:'Remarks',
+            field_value: data.comment!,
+            field_html_id:'txn_status',
+          },
+        ]
+      }
+    ];
   }
   protected override prepareDefaultButtons(data: TransactionDetail, options?: { [key: string]: any; }): AccordionButton[] {
     return [];
   }
   override handlePageEvent($event: PageEvent): void {
+    this.pageNumber = $event.pageIndex;
+    this.pageSize = $event.pageSize;
+    this.accountService.fetchTransactions(this.route.snapshot.params['id'],this.pageNumber,this.pageSize).subscribe(s => {
+      this.transactionList = s!;
+      this.setContent(this.transactionList.content!,this.transactionList?.totalSize!)
+    })
   }
 
   onClick($event: { buttonId: string; rowIndex: number; }) {
-    throw new Error('Method not implemented.');
   }
 
   accordionOpened($event: { rowIndex: number; }) {
-    throw new Error('Method not implemented.');
   }
 
 }

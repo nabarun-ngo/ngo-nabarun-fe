@@ -21,7 +21,6 @@ export { MeetingDetail } from './models/meeting-detail';
 export { MeetingDetailCreate } from './models/meeting-detail-create';
 export { MeetingDiscussion } from './models/meeting-discussion';
 export { NoticeDetail } from './models/notice-detail';
-export { NoticeDetailCreate } from './models/notice-detail-create';
 export { NoticeDetailUpdate } from './models/notice-detail-update';
 export { PaginateAccountDetail } from './models/paginate-account-detail';
 export { PaginateDonationDetail } from './models/paginate-donation-detail';
@@ -56,6 +55,7 @@ export { SuccessResponsePaginateUserDetail } from './models/success-response-pag
 export { SuccessResponsePaginateWorkDetail } from './models/success-response-paginate-work-detail';
 export { SuccessResponseRequestDetail } from './models/success-response-request-detail';
 export { SuccessResponseString } from './models/success-response-string';
+export { SuccessResponseTransactionDetail } from './models/success-response-transaction-detail';
 export { SuccessResponseUserDetail } from './models/success-response-user-detail';
 export { SuccessResponseVoid } from './models/success-response-void';
 export { SuccessResponseWorkDetail } from './models/success-response-work-detail';

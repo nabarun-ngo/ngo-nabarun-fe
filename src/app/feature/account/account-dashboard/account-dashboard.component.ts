@@ -27,7 +27,7 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
   actionName!: string;
   private constants = AccountConstant;
   refData: { [name: string]: KeyValue[]; } | undefined;
-  app_route=AppRoute;
+  app_route = AppRoute;
 
   constructor(
     private sharedDataService: SharedDataService,
@@ -69,11 +69,7 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
 
     if (this.route.snapshot.data['data']) {
       this.accountList = this.route.snapshot.data['data'] as PaginateAccountDetail;
-      this.itemLengthSubs.next(this.accountList?.totalSize!);
-      this.clearContents()
-      this.accountList.content?.forEach(item => {
-        this.addContentRow(item);
-      })
+      this.setContent(this.accountList.content!,this.accountList.totalSize)
     }
   }
 
@@ -390,16 +386,74 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
     if (options && options['create']) {
       return [
         section_account_detail_create,
-       // section_bank_detail,
-       // section_upi_detail
+        // section_bank_detail,
+        // section_upi_detail
       ];
     }
-    return [
-      section_account_detail_update,
-      section_account_owner_detail,
-      section_bank_detail,
-      section_upi_detail
-    ];
+    if(this.tabMapping[this.tabIndex] == 'all_accounts'){
+      return [
+        section_account_detail_update,
+        section_account_owner_detail,
+        section_bank_detail,
+        section_upi_detail,
+      ]
+    }else{
+      return [
+        section_account_detail_update,
+        section_bank_detail,
+        section_upi_detail,
+        {
+          section_form: new FormGroup({}),
+          section_name: 'Transfer Amount',
+          section_type: 'key_value',
+          section_html_id: 'transfer_amt',
+          hide_section: true,
+          content: [
+            {
+              field_name: 'Select Transfer To Account',
+              field_value: '',
+              form_control_name: 'transferTo',
+              editable: true,
+              field_html_id: 'transferTo',
+              form_input: {
+                inputType: '',
+                tagName: 'select',
+                selectList: []
+              },
+              form_input_validation:[Validators.required]
+            },
+            {
+              field_name: 'Transfer Amount',
+              field_value: '',
+              form_control_name: 'amount',
+              editable: true,
+              field_html_id: 'amount',
+              form_input: {
+                inputType: 'number',
+                tagName: 'input',
+                placeholder: 'Ex. 500'
+              },
+              form_input_validation:[Validators.required,Validators.min(1)]
+            },
+            {
+              field_name: 'Transfer Description',
+              field_value: '',
+              form_control_name: 'description',
+              editable: true,
+              field_html_id: 'description',
+              form_input: {
+                inputType: 'text',
+                tagName: 'input',
+                placeholder: 'Ex. Monthly donation'
+              },
+              form_input_validation:[Validators.required]
+            }
+          ]
+  
+        }
+      ];
+    }
+   
   }
 
   protected override prepareDefaultButtons(data: AccountDetail, options?: { [key: string]: any }): AccordionButton[] {
@@ -415,22 +469,31 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
         }
       ];
     }
-
+    if (this.tabMapping[this.tabIndex] == 'my_accounts') {
+      return [
+        {
+          button_id: 'VIEW_TXN',
+          button_name: 'View Transactions'
+        },
+        {
+          button_id: 'PERFORM_TXN',
+          button_name: 'Transfer'
+        },
+        {
+          button_id: 'UPDATE_BANK_UPI',
+          button_name: 'Update Bank and UPI Detail'
+        }
+      ]
+    }
     return [
       {
         button_id: 'VIEW_TXN',
         button_name: 'View Transactions'
       },
-      this.tabMapping[this.tabIndex] == 'my_accounts' ?
-        {
-          button_id: 'UPDATE_BANK_UPI',
-          button_name: 'Update Bank and UPI Detail'
-        }
-        :
-        {
-          button_id: 'UPDATE_ACCOUNT',
-          button_name: 'Update Account Detail'
-        }
+      {
+        button_id: 'UPDATE_ACCOUNT',
+        button_name: 'Update Account Detail'
+      }
     ];
   }
 
@@ -441,22 +504,14 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
   }
   fetchDetails() {
     if (this.tabMapping[this.tabIndex] == 'my_accounts') {
-      this.accountService.fetchMyAccounts({ active: true }).subscribe(s => {
+      this.accountService.fetchMyAccounts(this.pageNumber,this.pageSize).subscribe(s => {
         this.accountList = s!;
-        this.itemLengthSubs.next(this.accountList?.totalSize!);
-        this.clearContents()
-        this.accountList.content?.forEach(item => {
-          this.addContentRow(item);
-        })
+        this.setContent(this.accountList.content!,this.accountList?.totalSize!)
       })
     } else if (this.tabMapping[this.tabIndex] == 'all_accounts') {
-      this.accountService.fetchAccounts({ active: true }).subscribe(s => {
+      this.accountService.fetchAccounts(this.pageNumber,this.pageSize).subscribe(s => {
         this.accountList = s!;
-        this.itemLengthSubs.next(this.accountList?.totalSize!);
-        this.clearContents()
-        this.accountList.content?.forEach(item => {
-          this.addContentRow(item);
-        })
+        this.setContent(this.accountList.content!,this.accountList?.totalSize!)
       })
     }
 
@@ -477,31 +532,31 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
   createAccount() {
     this.showCreateForm();
 
-    let account_form=this.getSectionForm('account_detail');
+    let account_form = this.getSectionForm('account_detail');
     account_form?.valueChanges.pipe(startWith(account_form?.value), pairwise())
-    .subscribe((val) => {
-      //console.log(val[0] , val[1])//accountType
-      if(val[1]['accountType'] && val[1]['accountType'] !='' && val[0]['accountType'] != val[1]['accountType']){
-        this.accordionList.addContent?.columns.filter(f => f.html_id == 'acc_type_h').map(m => {
-          m.value = val[1]['accountType'];
-          return m;
-        })
-        this.accountService.fetchUsers(val[1]['accountType']).subscribe(data => {
-          let selectList = this.accordionList.addContent?.detailed.find(f => f.section_html_id == 'account_detail')?.content?.find(f => f.field_html_id == 'account_holder')?.form_input?.selectList;
-          selectList?.splice(0);
-          data?.content?.forEach(element => {
-            let val = { key: element.id, displayValue: element.fullName } as KeyValue;
-            selectList?.push(val);
+      .subscribe((val) => {
+        //console.log(val[0] , val[1])//accountType
+        if (val[1]['accountType'] && val[1]['accountType'] != '' && val[0]['accountType'] != val[1]['accountType']) {
+          this.accordionList.addContent?.columns.filter(f => f.html_id == 'acc_type_h').map(m => {
+            m.value = val[1]['accountType'];
+            return m;
+          })
+          this.accountService.fetchUsers(val[1]['accountType']).subscribe(data => {
+            let selectList = this.accordionList.addContent?.detailed.find(f => f.section_html_id == 'account_detail')?.content?.find(f => f.field_html_id == 'account_holder')?.form_input?.selectList;
+            selectList?.splice(0);
+            data?.content?.forEach(element => {
+              let val = { key: element.id, displayValue: element.fullName } as KeyValue;
+              selectList?.push(val);
+            });
           });
-        });
-      }
-      if(val[0]['accountHolder'] != val[1]['accountHolder']){
-        this.accordionList.addContent?.columns.filter(f => f.html_id == 'acc_holder_h').map(m => {
-          m.value = val[1]['accountHolder'];
-          return m;
-        })
-      }
-    });
+        }
+        if (val[0]['accountHolder'] != val[1]['accountHolder']) {
+          this.accordionList.addContent?.columns.filter(f => f.html_id == 'acc_holder_h').map(m => {
+            m.value = val[1]['accountHolder'];
+            return m;
+          })
+        }
+      });
   }
 
   onClick($event: { buttonId: string; rowIndex: number; }) {
@@ -542,6 +597,17 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
             scrollToFirstInvalidControl(this.el.nativeElement)
           }
         }
+        if (this.actionName == 'PERFORM_TXN') {
+          let transfer_form = this.accordionList.contents[$event.rowIndex].detailed.find(f => ['transfer_amt'].includes(f.section_html_id!));
+          if (transfer_form?.section_form.valid) {
+            this.accountService.performTransaction(this.accountList.content![$event.rowIndex], transfer_form.section_form.value).subscribe(d => {
+              this.fetchDetails();
+            })
+          } else {
+            transfer_form?.section_form?.markAllAsTouched()
+            scrollToFirstInvalidControl(this.el.nativeElement)
+          }
+        }
         break;
       case 'CREATE':
         let accountForm = this.accordionList.addContent?.detailed.find(f => f.section_html_id == 'account_detail')?.section_form;
@@ -569,9 +635,25 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
         break;
       case 'VIEW_TXN':
         let account = this.accountList.content![$event.rowIndex];
-        this.router.navigate([this.app_route.secured_account_transaction_page.url.replace(':id',account.id!)],{state:account})
+        this.router.navigate([this.app_route.secured_account_transaction_page.url.replace(':id', account.id!)], { state: account })
+        break;
+      case 'PERFORM_TXN':
+        this.performTransaction($event.rowIndex);
+        this.actionName = $event.buttonId;
         break;
     }
+  }
+  performTransaction(rowIndex: number) {
+    //let account1 = this.accountList.content![$event.rowIndex];
+    this.showForm(rowIndex, ['transfer_amt']);
+    this.accountService.fetchAccounts(this.pageNumber,this.pageSize).subscribe(data => {
+      let selectList = this.accordionList.contents[rowIndex]?.detailed.find(f => f.section_html_id == 'transfer_amt')?.content?.find(f => f.field_html_id == 'transferTo')?.form_input?.selectList;
+      selectList?.splice(0);
+      data?.content?.forEach(element => {
+        let val = { key: element.id, displayValue: element.id! + '  (' + element.accountHolderName + ')' } as KeyValue;
+        selectList?.push(val);
+      });
+    });
   }
 
 }

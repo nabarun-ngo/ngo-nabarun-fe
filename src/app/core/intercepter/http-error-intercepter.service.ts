@@ -4,6 +4,8 @@ import { Observable, throwError } from 'rxjs';
 import { retry, catchError, switchMap, tap } from 'rxjs/operators';
 import { ModalService } from '../service/modal.service';
 import { isEmpty } from '../service/utilities.service';
+import { environment } from 'src/environments/environment';
+import * as uuid from 'uuid';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +20,17 @@ export class HttpErrorIntercepterService implements HttpInterceptor {
 
  
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpSentEvent | HttpHeaderResponse | HttpProgressEvent | HttpResponse<any> | HttpUserEvent<any>> {
+    
+    if(request.url.includes(environment.api_base_url)){
+      request = request.clone({
+        setHeaders:{
+          'X-Correlation-Id': uuid.v4()
+        }
+      })
+    }
+    
+
+
     var showError=request.headers.get('hideError') ==  null ? true: false;
     //request.headers
     return next.handle(request)

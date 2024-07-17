@@ -124,6 +124,17 @@ export class SecuredDashboardComponent implements OnInit {
           tile_show_badge: true,
           tile_is_loading: true
         }
+      },
+      {
+        tile_html_id: 'noticeTile',
+        tile_name: 'Notices',
+        tile_icon: 'icon_group',
+        tile_link: this.route.secured_notice_notices_page.url,
+        additional_info: {
+          tile_label: '',
+          tile_show_badge: true,
+          tile_is_loading: true
+        }
       }
     ];
   }

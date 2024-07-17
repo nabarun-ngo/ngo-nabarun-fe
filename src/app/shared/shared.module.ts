@@ -33,6 +33,7 @@ import { ProfileCardComponent } from './components/profile-card/profile-card.com
 import { ProfileViewComponent } from './components/profile-view/profile-view.component';
 import { ReplaceNullPipe } from './pipes/replace-null.pipe';
 import { HtmlSanitizerPipe } from './pipes/html-sanitizer.pipe';
+import { AngularEditorModule } from '@kolkov/angular-editor';
 
 @NgModule({
   declarations: [
@@ -68,7 +69,8 @@ import { HtmlSanitizerPipe } from './pipes/html-sanitizer.pipe';
     MatTableModule, MatButtonModule,  MatIconModule,
     MatPaginatorModule,
     MatInputModule,
-    MatRadioModule
+    MatRadioModule,
+    AngularEditorModule 
   ],
   exports: [
     ItemTileListComponent,
@@ -95,6 +97,8 @@ import { HtmlSanitizerPipe } from './pipes/html-sanitizer.pipe';
     ProfileViewComponent,
     ReplaceNullPipe,
     HtmlSanitizerPipe,
+    UniversalInputComponent,
+    AngularEditorModule
   ],
   providers: [{
     provide: MAT_RADIO_DEFAULT_OPTIONS,

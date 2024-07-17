@@ -6,5 +6,6 @@ export enum DonationStatus {
   Pending = 'PENDING',
   PaymentFailed = 'PAYMENT_FAILED',
   PayLater = 'PAY_LATER',
-  Cancelled = 'CANCELLED'
+  Cancelled = 'CANCELLED',
+  UpdateMistake = 'UPDATE_MISTAKE'
 }

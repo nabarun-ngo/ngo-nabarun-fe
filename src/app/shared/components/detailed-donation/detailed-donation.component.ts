@@ -92,6 +92,7 @@ export class DetailedDonationComponent implements OnInit {
       this.dfControl['status'].valueChanges.subscribe(value => {
         if (value == this.donationStatus.Paid) {
           this.donationService.getPayableAccounts().subscribe(data => {
+            this.payableAccounts.splice(0);
             data?.content!.forEach(m=>{
               this.payableAccounts.push({key:m.id,displayValue:m.accountHolderName}) 
             })

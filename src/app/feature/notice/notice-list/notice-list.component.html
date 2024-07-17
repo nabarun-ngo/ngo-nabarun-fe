@@ -1,0 +1,97 @@
+
+<main class="p-4 m-4 bg-gray-200 rounded-lg">
+    <div class="flex flex-col">
+        <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+                <div class="flex lg:flex-row p-2 lg:p-4 justify-center items-start lg:items-stretch w-full">
+                    <app-search-and-advanced-search-form></app-search-and-advanced-search-form>
+                </div>
+                <div class="flex justify-end mx-4 my-2">
+                    <div class="mx-1 px-2">
+                        <button [routerLink]="[app_routes.secured_notice_create_page.url]"
+                            class="bg-indigo-600 py-3 px-6 w-full text-white font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">Create Notice</button>
+                    </div>
+                </div>
+                <mat-card class="p-4 m-4" *ngIf="noticeList.content == null || noticeList.content?.length == 0">
+                <div class="text-center">No notice found.</div> </mat-card>
+                <div class="mx-auto my-auto flex items-center justify-center px-8" *ngFor="let notice of noticeList.content">
+                    <div id="{{notice.id}}" class="flex flex-col w-full bg-white rounded shadow-lg sm:w-3/4 md:w-1/2 lg:w-3/5 my-6">
+                        <!--  sm:text-xl -->
+                        <!-- <div class="relative inline-block">
+                            <span *ngIf="notice.visibility == noticeMetaData.states.hidden" class="absolute top-0 text-xl inline-flex items-center justify-center px-2 py-1  font-bold leading-none text-white transform mx-4 -translate-y-1/2 bg-red-600 rounded-full uppercase">{{notice.visibility}}</span>
+                        </div> -->
+                        <div class="flex flex-col w-full md:flex-row">
+                            <div class="p-4 w-full font-normal text-gray-800">
+                                <div class="mb-4 text-2xl uppercase font-bold text-gray-800 text-center">NOTICE</div>
+                                <div class="mb-4 text-center underline text-lg  leading-none tracking-tight text-gray-800 capitalize-first break-words">{{notice.title}}</div>
+                                <div class="mb-4 mx-2 flex justify-between items-start lg:items-stretch w-full">
+                                    <!-- <div class="text-center leading-none tracking-tight text-gray-800 capitalize-first break-words"><span class="font-bold">Notice No</span> : {{notice.noticeNumber}}</div> -->
+                                    <div class="text-center leading-none tracking-tight text-gray-800 capitalize-first break-words"><span class="font-bold">Dated</span> : {{notice.noticeDate | date:'dd/MM/yyyy'}}</div>
+                                </div>
+                                <div class="mt-10 mx-4 mb-4">
+                                    <p class="leading-normal capitalize-first break-words text-center" [innerHTML]="notice.description">
+                                    </p>
+                                    <!-- <div *ngIf="notice.needMeeting">
+                                        <div class="mb-4 underline text-sm font-bold leading-none tracking-tight text-gray-800 capitalize-first break-words">Meeting Details</div>
+                                        <div class="mb-2  text-sm leading-none tracking-tight text-gray-800 capitalize-first"><b><u>Date</u></b> : {{notice.meetingInfo.summary}}</div>
+                                        <div class="mb-2  text-sm leading-none tracking-tight text-gray-800 capitalize-first"><b><u>Time</u></b> : {{notice.meetingInfo.startTime}} - {{notice.meetingInfo.endTime}}</div>
+                                        <div class="mb-2  text-sm leading-none tracking-tight text-gray-800 capitalize-first"><b><u>Venue</u></b> : {{notice.meetingInfo.location}}</div>
+                                        <div *ngIf="notice.meetingInfo.meetingLink" class="mb-2 text-sm leading-none tracking-tight text-gray-800 capitalize-first"><b><u>Meeting Link</u></b> : <a target="_blank" href="{{notice.meetingInfo.meetingLink}}">{{notice.meetingInfo.meetingLink}}</a> -->
+                                            <!-- <div class="text-blue-800 underline mt-2 hover:text-blue-500" x-on:click.away="copied = false" (click)="copyToClipboard(notice.meetingInfo.meetingLink)" x-on:click="copied = true">
+                                                <span x-show="copied">Copied!</span>
+                                                <span x-show="!copied">Copy</span>
+                                            </div> -->
+                                        <!-- </div>
+                                        <div *ngIf="notice.meetingInfo.description" class="mb-2 text-sm leading-none tracking-tight text-gray-800 capitalize-first"><b><u>Agenda</u></b> :
+                                            <div class="mt-2 text-sm" [innerHTML]="notice.meetingInfo.description"></div>
+                                        </div>
+                
+                                    </div> -->
+                
+                                </div>
+                                <div class="mx-2 mt-8 mb-4 flex justify-between items-start lg:items-stretch w-full">
+                                    <div class="p-2 leading-none tracking-tight">
+                                        <!-- <div class="my-1 text-center leading-none tracking-tight text-gray-800 capitalize-first break-words font-bold">{{notice.creatorName}}</div> -->
+                                        <!-- <div class="my-1 text-center leading-none tracking-tight text-gray-800 capitalize-first break-words">{{notice.creatorRole}}</div> -->
+                                    </div>
+                                </div>
+                                <!-- <div class="mb-4 uppercase font-bold text-red-600 text-center">
+                                    Note : This notice is currently hidden.
+                                </div> -->
+                            </div>
+                        </div>
+                        <!-- {{event | json}}  -->
+                        <div class="flex w-full md:flex-row ">
+                            <div class="flex items-center justify-center p-4 w-full">
+                                <!-- <a (click)="updateNotice(notice)" [ngClass]="{'disabledLink' : isInactiveUser}" *ngIf="canUpdateNotice" class="text-blue-600 dark:text-gray-400 ml-2 p-2 border-transparent border bg-gray-100 dark:hover:bg-gray-600 dark:bg-gray-700 hover:bg-gray-200 cursor-pointer rounded focus:outline-none focus:border-gray-800 focus:shadow-outline-gray inline-flex">
+                                    Update
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                </a>
+                                <a (click)="deleteNotice(notice)" [ngClass]="{'disabledLink' : isInactiveUser}" *ngIf="canUpdateNotice && !singleNotice" class="text-red-600 dark:text-gray-400 ml-2 p-2 border-transparent border bg-gray-100 dark:hover:bg-gray-600 dark:bg-gray-700 hover:bg-gray-200 cursor-pointer rounded focus:outline-none focus:border-gray-800 focus:shadow-outline-gray inline-flex">
+                                    Delete
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                </a> -->
+                                <!-- <a *ngIf="canViewNoticeHistory" (click)="showNoticeHistory(notice)" class="text-gray-800 dark:text-gray-400 ml-2 p-2 border-transparent border bg-gray-100 dark:hover:bg-gray-600 dark:bg-gray-700 hover:bg-gray-200 cursor-pointer rounded focus:outline-none focus:border-gray-800 focus:shadow-outline-gray inline-flex">
+                                    History
+                                    <svg class="h-5 w-5 sm:ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                </a> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <mat-paginator class="mt-4" style="background-color: transparent;" (page)="handlePageEvent($event)" [length]="itemLength$ | async" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" [pageIndex]="pageNumber" aria-label="Select page">
+                </mat-paginator>
+            </div>
+        </div>
+    </div>
+    <button id="back" class="block uppercase w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-300 focus:outline-none focus:shadow-outline focus:bg-gray-300 hover:shadow-xs p-3 my-4">
+        BACK TO DASHBOARD</button>
+</main>
+
+
+

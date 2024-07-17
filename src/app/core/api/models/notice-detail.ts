@@ -1,15 +1,16 @@
 /* tslint:disable */
 /* eslint-disable */
 import { MeetingDetail } from '../models/meeting-detail';
+import { UserDetail } from '../models/user-detail';
 export interface NoticeDetail {
-  creatorName?: string;
-  creatorRole?: string;
+  creator?: UserDetail;
   creatorRoleCode?: string;
   description?: string;
+  hasMeeting?: boolean;
   id?: string;
   meeting?: MeetingDetail;
   noticeDate?: string;
-  noticeNumber?: string;
+  noticeStatus?: 'ACTIVE' | 'EXPIRED' | 'DRAFT';
   publishDate?: string;
   title?: string;
 }

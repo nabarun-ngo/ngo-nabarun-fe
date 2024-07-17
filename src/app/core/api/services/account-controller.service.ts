@@ -11,6 +11,8 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { createAccount } from '../fn/account-controller/create-account';
 import { CreateAccount$Params } from '../fn/account-controller/create-account';
+import { createTransaction } from '../fn/account-controller/create-transaction';
+import { CreateTransaction$Params } from '../fn/account-controller/create-transaction';
 import { getAccounts } from '../fn/account-controller/get-accounts';
 import { GetAccounts$Params } from '../fn/account-controller/get-accounts';
 import { getMyAccounts } from '../fn/account-controller/get-my-accounts';
@@ -20,11 +22,41 @@ import { GetTransactions$Params } from '../fn/account-controller/get-transaction
 import { SuccessResponseAccountDetail } from '../models/success-response-account-detail';
 import { SuccessResponsePaginateAccountDetail } from '../models/success-response-paginate-account-detail';
 import { SuccessResponsePaginateTransactionDetail } from '../models/success-response-paginate-transaction-detail';
+import { SuccessResponseTransactionDetail } from '../models/success-response-transaction-detail';
+import { updateAccount } from '../fn/account-controller/update-account';
+import { UpdateAccount$Params } from '../fn/account-controller/update-account';
+import { updateMyAccount } from '../fn/account-controller/update-my-account';
+import { UpdateMyAccount$Params } from '../fn/account-controller/update-my-account';
 
 @Injectable({ providedIn: 'root' })
 export class AccountControllerService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
+  }
+
+  /** Path part for operation `createTransaction()` */
+  static readonly CreateTransactionPath = '/api/account/createTransaction';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `createTransaction()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createTransaction$Response(params: CreateTransaction$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseTransactionDetail>> {
+    return createTransaction(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `createTransaction$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createTransaction(params: CreateTransaction$Params, context?: HttpContext): Observable<SuccessResponseTransactionDetail> {
+    return this.createTransaction$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseTransactionDetail>): SuccessResponseTransactionDetail => r.body)
+    );
   }
 
   /** Path part for operation `createAccount()` */
@@ -48,6 +80,56 @@ export class AccountControllerService extends BaseService {
    */
   createAccount(params: CreateAccount$Params, context?: HttpContext): Observable<SuccessResponseAccountDetail> {
     return this.createAccount$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseAccountDetail>): SuccessResponseAccountDetail => r.body)
+    );
+  }
+
+  /** Path part for operation `updateMyAccount()` */
+  static readonly UpdateMyAccountPath = '/api/account/{id}/updateMyAccount';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateMyAccount()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateMyAccount$Response(params: UpdateMyAccount$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseAccountDetail>> {
+    return updateMyAccount(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateMyAccount$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateMyAccount(params: UpdateMyAccount$Params, context?: HttpContext): Observable<SuccessResponseAccountDetail> {
+    return this.updateMyAccount$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseAccountDetail>): SuccessResponseAccountDetail => r.body)
+    );
+  }
+
+  /** Path part for operation `updateAccount()` */
+  static readonly UpdateAccountPath = '/api/account/{id}/updateAccount';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateAccount()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateAccount$Response(params: UpdateAccount$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseAccountDetail>> {
+    return updateAccount(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateAccount$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateAccount(params: UpdateAccount$Params, context?: HttpContext): Observable<SuccessResponseAccountDetail> {
+    return this.updateAccount$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseAccountDetail>): SuccessResponseAccountDetail => r.body)
     );
   }

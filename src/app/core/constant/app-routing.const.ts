@@ -91,6 +91,27 @@ export const AppRoute = {
     feature: 'account',
     path: ':id/transactions',
   },
+  secured_notice_notices_page: {
+    id: 'secured_notice_notices_page',
+    url: '/secured/notice/list',
+    parent: 'secured',
+    feature: 'notice',
+    path: 'list',
+  },
+  secured_notice_create_page: {
+    id: 'secured_notice_create_page',
+    url: '/secured/notice/create',
+    parent: 'secured',
+    feature: 'notice',
+    path: 'create',
+  },
+  secured_notice_update_page: {
+    id: 'secured_notice_update_page',
+    url: '/secured/notice/:id',
+    parent: 'secured',
+    feature: 'notice',
+    path: ':id',
+  },
 }
 
 
