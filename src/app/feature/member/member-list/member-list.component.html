@@ -3,7 +3,7 @@
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                 <div class="flex lg:flex-row p-2 lg:p-4 justify-center items-start lg:items-stretch w-full">
-                    <app-search-and-advanced-search-form></app-search-and-advanced-search-form>
+                    <app-search-and-advanced-search-form [searchInput]="searchInputData" (onSearch)="onSearch($event)"></app-search-and-advanced-search-form>
                 </div>
                 <div class="flex justify-end mx-4 my-2">
                     <div class="mx-1 px-2">
@@ -11,7 +11,7 @@
                     </div>
                 </div>
                 <div class="container mx-auto grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 pt-6 gap-4">
-                    <app-profile-card *ngFor="let profile of memberList.content" [profile]="profile"></app-profile-card>
+                    <app-profile-card *ngFor="let profile of memberList.content | memberSearch:searchValue" [profile]="profile"></app-profile-card>
                 </div>
                 <mat-paginator class="mt-4" style="background-color: transparent;" (page)="handlePageEvent($event)" [length]="itemLength$ | async" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" [pageIndex]="pageNumber" aria-label="Select page">
                 </mat-paginator>

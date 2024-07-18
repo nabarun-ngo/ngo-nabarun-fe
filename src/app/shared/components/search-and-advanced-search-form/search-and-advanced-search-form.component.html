@@ -1,78 +1,41 @@
-<div x-data="{ open: false }" class="flex items-center p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-500">
+<div x-data="{ open: false }"
+    class="flex items-center p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-500">
     <div x-show="!open" class="flex flex-wrap sm:flex-nowrap bg-gray-100 p-4 w-full space-x-4 rounded-lg">
         <div class="relative w-full">
-            <input type="text" id="simple-search" class="border border-gray-300 sm:w-96 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ps-10 p-3  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                [placeholder]="normalSearchPlaceHolder" required>
+            <input type="text" id="simple-search" (change)="normalSearch($event)"
+                class="border border-gray-300 sm:w-96 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ps-10 p-3  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                [placeholder]="search.normalSearchPlaceHolder" required>
         </div>
-        <button x-on:click="open = true" class="bg-indigo-600 py-3 px-5 w-full text-white font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">
+        <button *ngIf="search.advancedSearch" x-on:click="open = true"
+            class="bg-indigo-600 py-3 px-5 w-full text-white font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">
             Advanced Search
         </button>
     </div>
     <div x-show="open" class="flex flex-col bg-gray-100 p-4 w-full space-x-4 rounded-lg">
         <div class="text-lg font-medium leading-6 mb-4 text-center text-gray-900">Advanced Search</div>
-        <div class="grid grid-cols-6 gap-6">
-            <div class="col-span-6 sm:col-span-2">
-                <div>
-                    <!-- <label for="currentPassword" class="block text-sm font-medium text-gray-700">Donor name</label>
-                    <input type="password" name="currentPassword" id="currentPassword" formControlName="currentPassword" autocomplete="given-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"> -->
-                    <!-- <div class="relative">
-                        <input type="text" id="floating_outlined" class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                            placeholder=" " />
-                        <label for="floating_outlined" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Donor name</label>
-                    </div> -->
-                    <div>
-                        <div class="relative">
-                            <input type="text" id="outlined_error" aria-describedby="outlined_error_help" class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 appearance-none dark:text-white dark:border-red-500 border-red-600 dark:focus:border-red-500 focus:outline-none focus:ring-0 focus:border-red-600 peer"
-                                placeholder=" " />
-                            <label for="outlined_error" class="absolute text-sm text-red-600 dark:text-red-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Outlined error</label>
+        <form [formGroup]="searchformGroup">
+            <div class="shadow overflow-hidden sm:rounded-md">
+                <div class="px-4 py-4 bg-white">
+                    <div class="grid grid-cols-6 gap-6">
+                        <div class="col-span-6" [ngClass]="search.advancedSearch?.searchFormFields?.length! > 2 ?'sm:col-span-2':'sm:col-span-3'" *ngFor="let input of search.advancedSearch?.searchFormFields">
+                            <app-universal-input [formControlName]="input.formControlName"
+                                [inputModel]="input.inputModel"></app-universal-input>
                         </div>
-                        <p id="outlined_error_help" class="mt-2 text-xs text-red-600 dark:text-red-400"><span class="font-medium">Oh, snapp!</span> Some error message.</p>
                     </div>
-                </div>
-            </div>
-            <div class="col-span-6 sm:col-span-2">
-                <div>
-                    <label for="newpassword" class="block text-sm font-medium text-gray-700">New password</label>
-                    <mat-select multiple class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                        <mat-option class="" [value]="'A'">AAAA</mat-option>
-                        <mat-option [value]="'B'">BBBB</mat-option>
-                    </mat-select>
                 </div>
             </div>
 
-            <div class="col-span-6 sm:col-span-2">
-                <label for="fromDate" class="block text-sm font-medium text-gray-700">
-                    From date</label>
-                <div class="relative">
-                    <input type="text" name="fromDate" id="fromDate" [matDatepicker]="fromDate" readonly placeholder="Select start date" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                    <div class="absolute top-0 right-0">
-                        <mat-datepicker-toggle [for]="fromDate" class="sm:border-none"></mat-datepicker-toggle>
-                        <mat-datepicker #fromDate></mat-datepicker>
-                    </div>
-                </div>
-            </div>
-            <div class="col-span-6 sm:col-span-2">
-                <!-- <label for="toDate" class="block text-sm font-medium text-gray-700">
-                    To date</label>
-                <div class="relative">
-                    <input type="text" name="toDate" id="toDate" formControlName="toDate" [matDatepicker]="toDate" readonly placeholder="Select start date" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                    <div class="absolute top-0 right-0">
-                        <mat-datepicker-toggle [for]="toDate" class="sm:border-none"></mat-datepicker-toggle>
-                        <mat-datepicker #toDate></mat-datepicker>
-                    </div>
-                </div> -->
-                <mat-form-field class="example-full-width">
-                    <mat-label>Email</mat-label>
-                    <input type="email" matInput placeholder="Ex. pat@example.com">
 
-                </mat-form-field>
-            </div>
-        </div>
+        </form>
+
+
         <div class="pt-4 mt-2 bg-gray-100 text-center sm:px-6 rounded-lg">
-            <button class="bg-indigo-600 py-3 px-5 mx-2 text-white font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">
+            <button (click)="advSearch()"
+                class="bg-indigo-600 py-3 px-5 mx-2 text-white font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">
                 Search
             </button>
-            <button x-on:click="open = false" class="bg-white py-3 px-5 mx-1 text-gray-700 border border-gray-300 font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">
+            <button (click)="advSearchReset()"    x-on:click="open = false"
+                class="bg-white py-3 px-5 mx-1 text-gray-700 border border-gray-300 font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">
                 Close
             </button>
         </div>

@@ -1,11 +1,10 @@
-<!-- {{inputModel | json}} -->
-<ng-container *ngIf="inputModel.tagName == 'select'">
+<ng-container *ngIf="inputModel.tagName == 'select' && inputModel.inputType == 'multiselect'">
     <label *ngIf="inputModel.labelName"
         [for]="inputModel.html_id ?inputModel.html_id : inputModel.tagName+'_'+inputModel.inputType+'_'+inputModel.labelName"
         class="block text-sm font-medium text-gray-700 mb-1">{{inputModel.labelName}}</label>
-    <mat-form-field [appearance]="inputModel.appearance ? inputModel.appearance :'outline'"
+    <mat-form-field class="dense-3" [appearance]="inputModel.appearance ? inputModel.appearance :'outline'"
         [style]="inputModel.style? inputModel.style : ''" [ngClass]="inputModel.cssClass ? inputModel.cssClass : ''">
-        <mat-select [formControl]="ngControl.control"
+        <mat-select multiple [formControl]="ngControl.control" [placeholder]="inputModel.placeholder!" 
             [ngClass]="inputModel.cssInputClass ? inputModel.cssInputClass : ''">
             <mat-option *ngFor="let opt of inputModel.selectList" [value]="opt.key">{{opt.displayValue}}</mat-option>
         </mat-select>
@@ -13,13 +12,30 @@
     </mat-form-field>
 </ng-container>
 
+
+<!-- {{inputModel | json}} -->
+<ng-container *ngIf="inputModel.tagName == 'select' && inputModel.inputType != 'multiselect'">
+    <label *ngIf="inputModel.labelName"
+        [for]="inputModel.html_id ?inputModel.html_id : inputModel.tagName+'_'+inputModel.inputType+'_'+inputModel.labelName"
+        class="block text-sm font-medium text-gray-700 mb-1">{{inputModel.labelName}}</label>
+    <mat-form-field class="dense-3" [appearance]="inputModel.appearance ? inputModel.appearance :'outline'"
+        [style]="inputModel.style? inputModel.style : ''" [ngClass]="inputModel.cssClass ? inputModel.cssClass : ''">
+        <mat-select [formControl]="ngControl.control" [placeholder]="inputModel.placeholder!" 
+            [ngClass]="inputModel.cssInputClass ? inputModel.cssInputClass : ''">
+            <mat-option *ngFor="let opt of inputModel.selectList" [value]="opt.key">{{opt.displayValue}}</mat-option>
+        </mat-select>
+        <mat-error>{{ errorMessage(ngControl.control.errors,inputModel.labelName)}}</mat-error>
+    </mat-form-field>
+</ng-container>
+
+
 <!-- input other than date-->
 <ng-container
     *ngIf="inputModel.tagName == 'input' && inputModel.inputType != 'date' && inputModel.inputType != 'editor'">
     <label *ngIf="inputModel.labelName"
         [for]="inputModel.html_id ?inputModel.html_id : inputModel.tagName+'_'+inputModel.inputType+'_'+inputModel.labelName"
         class="block text-sm font-medium text-gray-700 mb-2">{{inputModel.labelName}}</label>
-    <mat-form-field [appearance]="inputModel.appearance ? inputModel.appearance :'outline'"
+    <mat-form-field class="dense-3" [appearance]="inputModel.appearance ? inputModel.appearance :'outline'"
         [style]="inputModel.style? inputModel.style : ''" [ngClass]="inputModel.cssClass ? inputModel.cssClass : ''">
         <input matInput *ngIf="inputModel.tagName == 'input'" [type]="inputModel.inputType"
             [id]="inputModel.html_id ?inputModel.html_id : inputModel.tagName+'_'+inputModel.inputType+'_'+inputModel.labelName"
@@ -35,7 +51,7 @@
     <label *ngIf="inputModel.labelName"
         [for]="inputModel.html_id ?inputModel.html_id : inputModel.tagName+'_'+inputModel.inputType+'_'+inputModel.labelName"
         class="block text-sm font-medium text-gray-700 mb-2">{{inputModel.labelName}}</label>
-    <mat-form-field [appearance]="inputModel.appearance ? inputModel.appearance :'outline'"
+    <mat-form-field class="dense-3" [appearance]="inputModel.appearance ? inputModel.appearance :'outline'"
         [style]="inputModel.style? inputModel.style : ''" [ngClass]="inputModel.cssClass ? inputModel.cssClass : ''">
         <textarea matInput [placeholder]="inputModel.placeholder!" [formControl]="ngControl.control"
             [ngClass]="inputModel.cssInputClass ? inputModel.cssInputClass : ''"></textarea>
@@ -48,7 +64,7 @@
     <label *ngIf="inputModel.labelName"
         [for]="inputModel.html_id ?inputModel.html_id : inputModel.tagName+'_'+inputModel.inputType+'_'+inputModel.labelName"
         class="block text-sm font-medium text-gray-700 mb-2">{{inputModel.labelName}}</label>
-    <mat-form-field [appearance]="inputModel.appearance ? inputModel.appearance :'outline'"
+    <mat-form-field class="dense-3" [appearance]="inputModel.appearance ? inputModel.appearance :'outline'"
         [style]="inputModel.style? inputModel.style : ''" [ngClass]="inputModel.cssClass ? inputModel.cssClass : ''">
         <input [formControl]="ngControl.control" matInput [matDatepicker]="date" [placeholder]="inputModel.placeholder!"
             [ngClass]="inputModel.cssInputClass ? inputModel.cssInputClass : ''" readonly>

@@ -19,7 +19,7 @@ export class MemberService {
   }
 
   fetchRefData() {
-    return this.commonController.getReferenceData({ names: [RefDataType.Donation]}).pipe(map(d => d.responsePayload));
+    return this.commonController.getReferenceData({ names: [RefDataType.User]}).pipe(map(d => d.responsePayload));
   }
 
   getUserDetail(id: string): any {
@@ -28,6 +28,16 @@ export class MemberService {
 
   getMyDetail(): any {
     return this.userController.getLoggedInUserDetails().pipe(map(d => d.responsePayload));
+  }
+
+  advancedSearch(filter:{firstName:string,lastName:string,email:string,role:string[],phoneNumber:string}){
+    return this.userController.getUsers({ filter:{
+      email: filter.email,
+      firstName:filter.firstName,
+      lastName:filter.lastName,
+      phoneNumber:filter.phoneNumber,
+      roles:filter.role as any
+    }}).pipe(map(d => d.responsePayload));
   }
 
 }

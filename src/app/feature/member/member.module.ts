@@ -5,13 +5,14 @@ import { MemberRoutingModule } from './member-routing.module';
 import { MemberProfileComponent } from './member-profile/member-profile.component';
 import { MemberListComponent } from './member-list/member-list.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { MemberSearchPipe } from './member.pipe';
 
 
 @NgModule({
   declarations: [
-  
     MemberProfileComponent,
-       MemberListComponent
+    MemberListComponent,
+    MemberSearchPipe
   ],
   imports: [
     CommonModule,

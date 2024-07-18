@@ -4,7 +4,7 @@ import { UniversalInputModel } from 'src/app/shared/components/generic/universal
 
 
 @Component({
-  selector: 'app-universal-input',
+  selector: 'app-universal-input,[app-universal-input]',
   templateUrl: './universal-input.component.html',
   styleUrls: ['./universal-input.component.scss']
 })
