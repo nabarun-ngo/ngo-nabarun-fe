@@ -16,7 +16,7 @@ export type AuthEventType = 'login_success' | 'login_error';
 export class UserIdentityService implements OnInit {
 
   constructor(
-    private oAuthService: OAuthService, 
+    private oAuthService: OAuthService,
     private router: Router,
     private bnIdle: BnNgIdleService,
 
@@ -36,18 +36,18 @@ export class UserIdentityService implements OnInit {
         return event_codes.length == 0 || event_codes.includes(data.type)
       }))
       .pipe(map(data => {
-        let response: { status: string; event: EventType; error: { type: string; description: string;state?:string } | undefined, params?: any };
+        let response: { status: string; event: EventType; error: { type: string; description: string; state?: string } | undefined, params?: any };
         console.log(data)
         if (data instanceof OAuthErrorEvent) {
 
-          let error_data = (data as OAuthErrorEvent).params as { error: string; error_description: string,state:string };
+          let error_data = (data as OAuthErrorEvent).params as { error: string; error_description: string, state: string };
           response = {
             status: 'error',
             event: data.type,
             error: {
               type: error_data.error,
               description: error_data.error_description,
-              state:error_data.state
+              state: error_data.state
             },
             params: (data as OAuthErrorEvent).params
           };
@@ -77,21 +77,24 @@ export class UserIdentityService implements OnInit {
     this.oAuthService.setupAutomaticSilentRefresh({}, 'id_token');
     this.oAuthService.loadDiscoveryDocumentAndTryLogin().catch((err: OAuthErrorEvent) => {
       this.onCallback();
-      let data = err.params as { error: string, error_description: string ,state:string};
-      this.router.navigate([AppRoute.login_page.url], { state: { isError: true, description: data.error + ' : ' + data.error_description,state:data.state } });
+      let data = err.params as { error: string, error_description: string, state: string };
+      this.router.navigate([AppRoute.login_page.url], { state: { isError: true, description: data.error + ' : ' + data.error_description, state: data.state } });
     });
- /**
-     * configuring idle timeout
-     */
- this.bnIdle.startWatching(environment.inactivityTimeOut).subscribe((isTimedOut: boolean) => {
-  if (isTimedOut) {
-    console.warn('session expired due to inactivity');
-    //if(this.isUserLoggedIn()){
-     // this.notificationService.deleteToken();
-    //}
-    this.logout();
-  }
-});
+    /**
+        * configuring idle timeout
+        */
+    if(environment.production){
+      this.bnIdle.startWatching(environment.inactivityTimeOut).subscribe((isTimedOut: boolean) => {
+        if (isTimedOut) {
+          console.warn('session expired due to inactivity');
+          //if(this.isUserLoggedIn()){
+          // this.notificationService.deleteToken();
+          //}
+          this.logout();
+        }
+      });
+    }
+    
   }
 
 

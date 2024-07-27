@@ -70,6 +70,31 @@ class NoopValueAccessor implements ControlValueAccessor {
     // Validators.nullValidator
     // Validators.requiredTrue
     return;
+  } 
+
+  export interface BooleanFn {
+    (): boolean;
+  }
+  export function conditionalValidator(predicate: BooleanFn,
+    validator: ValidatorFn,
+    errorNamespace?: string): ValidatorFn {
+    return (formControl => {
+      if (!formControl.parent) {
+        return null;
+      }
+      let error = null;
+      if (predicate()) {
+        error = validator(formControl);
+        //Changeing this 28/09/2021
+        //console.log('formControl',validator,predicate())
+      }
+      if (errorNamespace && error) {
+        const customError:any = {};
+        customError[errorNamespace] = error;
+        error = customError
+      }
+      return error;
+    })
   }
 
 

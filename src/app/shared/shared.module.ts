@@ -34,6 +34,7 @@ import { ProfileViewComponent } from './components/profile-view/profile-view.com
 import { ReplaceNullPipe } from './pipes/replace-null.pipe';
 import { HtmlSanitizerPipe } from './pipes/html-sanitizer.pipe';
 import { AngularEditorModule } from '@kolkov/angular-editor';
+import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 
 @NgModule({
   declarations: [
@@ -70,7 +71,8 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     MatPaginatorModule,
     MatInputModule,
     MatRadioModule,
-    AngularEditorModule 
+    AngularEditorModule,
+    NgxMatTimepickerModule,
   ],
   exports: [
     ItemTileListComponent,

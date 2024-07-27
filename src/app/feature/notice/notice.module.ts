@@ -4,13 +4,13 @@ import { CommonModule } from '@angular/common';
 import { NoticeRoutingModule } from './notice-routing.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { NoticeListComponent } from './notice-list/notice-list.component';
-import { NoticeCreateOrUpdateComponent } from './notice-create-or-update/notice-create-or-update.component';
+import { NoticeCardComponent } from './notice-card/notice-card.component';
 
 
 @NgModule({
   declarations: [
     NoticeListComponent,
-    NoticeCreateOrUpdateComponent
+    NoticeCardComponent,
   ],
   imports: [
     CommonModule,

@@ -2,7 +2,7 @@
     class="flex items-center p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-500">
     <div x-show="!open" class="flex flex-wrap sm:flex-nowrap bg-gray-100 p-4 w-full space-x-4 rounded-lg">
         <div class="relative w-full">
-            <input type="text" id="simple-search" (change)="normalSearch($event)"
+            <input type="text" id="simple-search" (keyup)="normalSearch($event)"
                 class="border border-gray-300 sm:w-96 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ps-10 p-3  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 [placeholder]="search.normalSearchPlaceHolder" required>
         </div>

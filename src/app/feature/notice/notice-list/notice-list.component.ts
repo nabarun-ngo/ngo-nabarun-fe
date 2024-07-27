@@ -5,7 +5,7 @@ import { Paginator } from 'src/app/core/component/paginator';
 import { NoticeDefaultValue } from '../notice.const';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { NoticeService } from '../notice.service';
-import { PaginateNoticeDetail } from 'src/app/core/api/models';
+import { NoticeDetail, PaginateNoticeDetail } from 'src/app/core/api/models';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 
 @Component({
@@ -14,8 +14,11 @@ import { AppRoute } from 'src/app/core/constant/app-routing.const';
   styleUrls: ['./notice-list.component.scss']
 })
 export class NoticeListComponent extends Paginator implements OnInit{
+
   defaultValue=NoticeDefaultValue;
   noticeList!: PaginateNoticeDetail;
+ // noticeListDetail!: {edit:boolean,notice:NoticeDetail}[];
+
   app_routes=AppRoute;
   refData: any;
   canUpdateNotice: any;

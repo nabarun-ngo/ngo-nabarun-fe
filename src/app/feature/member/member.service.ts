@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
-import { RefDataType } from 'src/app/core/api/models';
+import { RefDataType, UserDetailFilter } from 'src/app/core/api/models';
 import { CommonControllerService, UserControllerService } from 'src/app/core/api/services';
 
 @Injectable({
@@ -30,14 +30,24 @@ export class MemberService {
     return this.userController.getLoggedInUserDetails().pipe(map(d => d.responsePayload));
   }
 
-  advancedSearch(filter:{firstName:string,lastName:string,email:string,role:string[],phoneNumber:string}){
-    return this.userController.getUsers({ filter:{
-      email: filter.email,
-      firstName:filter.firstName,
-      lastName:filter.lastName,
-      phoneNumber:filter.phoneNumber,
-      roles:filter.role as any
-    }}).pipe(map(d => d.responsePayload));
+  advancedSearch(filter:{firstName?:string,lastName?:string,email?:string,role?:string[],phoneNumber?:string}){
+    let filterOps:UserDetailFilter={};
+    if(filter.firstName){
+      filterOps.firstName=filter.firstName
+    }
+    if(filter.lastName){
+      filterOps.lastName=filter.lastName
+    }
+    if(filter.email){
+      filterOps.email=filter.email
+    }
+    if(filter.phoneNumber){
+      filterOps.phoneNumber=filter.phoneNumber
+    }
+    if(filter.role){
+      filterOps.roles=filter.role as any
+    }
+    return this.userController.getUsers({ filter:filterOps     }).pipe(map(d => d.responsePayload));
   }
 
 }

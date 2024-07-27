@@ -1,10 +1,10 @@
 <ng-container *ngIf="inputModel.tagName == 'select' && inputModel.inputType == 'multiselect'">
     <label *ngIf="inputModel.labelName"
         [for]="inputModel.html_id ?inputModel.html_id : inputModel.tagName+'_'+inputModel.inputType+'_'+inputModel.labelName"
-        class="block text-sm font-medium text-gray-700 mb-1">{{inputModel.labelName}}</label>
+        class="block text-sm font-medium text-gray-700 mb-2">{{inputModel.labelName}}</label>
     <mat-form-field class="dense-3" [appearance]="inputModel.appearance ? inputModel.appearance :'outline'"
         [style]="inputModel.style? inputModel.style : ''" [ngClass]="inputModel.cssClass ? inputModel.cssClass : ''">
-        <mat-select multiple [formControl]="ngControl.control" [placeholder]="inputModel.placeholder!" 
+        <mat-select multiple [formControl]="ngControl.control" [placeholder]="inputModel.placeholder!"
             [ngClass]="inputModel.cssInputClass ? inputModel.cssInputClass : ''">
             <mat-option *ngFor="let opt of inputModel.selectList" [value]="opt.key">{{opt.displayValue}}</mat-option>
         </mat-select>
@@ -17,10 +17,10 @@
 <ng-container *ngIf="inputModel.tagName == 'select' && inputModel.inputType != 'multiselect'">
     <label *ngIf="inputModel.labelName"
         [for]="inputModel.html_id ?inputModel.html_id : inputModel.tagName+'_'+inputModel.inputType+'_'+inputModel.labelName"
-        class="block text-sm font-medium text-gray-700 mb-1">{{inputModel.labelName}}</label>
+        class="block text-sm font-medium text-gray-700 mb-2">{{inputModel.labelName}}</label>
     <mat-form-field class="dense-3" [appearance]="inputModel.appearance ? inputModel.appearance :'outline'"
         [style]="inputModel.style? inputModel.style : ''" [ngClass]="inputModel.cssClass ? inputModel.cssClass : ''">
-        <mat-select [formControl]="ngControl.control" [placeholder]="inputModel.placeholder!" 
+        <mat-select [formControl]="ngControl.control" [placeholder]="inputModel.placeholder!"
             [ngClass]="inputModel.cssInputClass ? inputModel.cssInputClass : ''">
             <mat-option *ngFor="let opt of inputModel.selectList" [value]="opt.key">{{opt.displayValue}}</mat-option>
         </mat-select>
@@ -31,7 +31,7 @@
 
 <!-- input other than date-->
 <ng-container
-    *ngIf="inputModel.tagName == 'input' && inputModel.inputType != 'date' && inputModel.inputType != 'editor'">
+    *ngIf="inputModel.tagName == 'input' && inputModel.inputType != 'date' && inputModel.inputType != 'time' && inputModel.inputType != 'editor' && inputModel.inputType != 'radio'">
     <label *ngIf="inputModel.labelName"
         [for]="inputModel.html_id ?inputModel.html_id : inputModel.tagName+'_'+inputModel.inputType+'_'+inputModel.labelName"
         class="block text-sm font-medium text-gray-700 mb-2">{{inputModel.labelName}}</label>
@@ -64,7 +64,7 @@
     <label *ngIf="inputModel.labelName"
         [for]="inputModel.html_id ?inputModel.html_id : inputModel.tagName+'_'+inputModel.inputType+'_'+inputModel.labelName"
         class="block text-sm font-medium text-gray-700 mb-2">{{inputModel.labelName}}</label>
-    <mat-form-field class="dense-3" [appearance]="inputModel.appearance ? inputModel.appearance :'outline'"
+    <mat-form-field class="dense-3" style="width: 212px;" [appearance]="inputModel.appearance ? inputModel.appearance :'outline'"
         [style]="inputModel.style? inputModel.style : ''" [ngClass]="inputModel.cssClass ? inputModel.cssClass : ''">
         <input [formControl]="ngControl.control" matInput [matDatepicker]="date" [placeholder]="inputModel.placeholder!"
             [ngClass]="inputModel.cssInputClass ? inputModel.cssInputClass : ''" readonly>
@@ -81,17 +81,53 @@
     <label *ngIf="inputModel.labelName"
         [for]="inputModel.html_id ?inputModel.html_id : inputModel.tagName+'_'+inputModel.inputType+'_'+inputModel.labelName"
         class="block text-sm font-medium text-gray-700 mb-2">{{inputModel.labelName}}</label>
-    <!-- <mat-form-field [appearance]="inputModel.appearance ? inputModel.appearance :'outline'"
-        [style]="inputModel.style? inputModel.style : ''" [ngClass]="inputModel.cssClass ? inputModel.cssClass : ''">
-    </mat-form-field> -->
-    <angular-editor [formControl]="ngControl.control" [style]="inputModel.style? inputModel.style : ''" [ngClass]="inputModel.cssClass ? inputModel.cssClass : ''" [config]="{
+    <angular-editor [formControl]="ngControl.control" [style]="inputModel.style? inputModel.style : ''"
+        [ngClass]="inputModel.cssClass ? inputModel.cssClass : ''" [config]="{
         editable: true,
         spellcheck: true,
         height: '200px', 
         showToolbar: false,
         placeholder: inputModel.placeholder!,
+        outline:true,
         sanitize: true
       }"></angular-editor>
     <mat-error>{{ errorMessage(ngControl.control.errors,inputModel.labelName)}}</mat-error>
+
+</ng-container>
+
+
+<ng-container *ngIf="inputModel.tagName == 'input' && inputModel.inputType == 'radio'">
+    <label *ngIf="inputModel.labelName"
+        [for]="inputModel.html_id ?inputModel.html_id : inputModel.tagName+'_'+inputModel.inputType+'_'+inputModel.labelName"
+        class="block text-sm font-medium text-gray-700 mb-2">{{inputModel.labelName}}</label>
+    <!-- <mat-form-field class="dense-3" [appearance]="inputModel.appearance ? inputModel.appearance :'outline'"
+        [style]="inputModel.style? inputModel.style : ''" [ngClass]="inputModel.cssClass ? inputModel.cssClass : ''">
+        
+    </mat-form-field> -->
+    <mat-radio-group
+        [id]="inputModel.html_id ?inputModel.html_id : inputModel.tagName+'_'+inputModel.inputType+'_'+inputModel.labelName"
+        [formControl]="ngControl.control" [ngClass]="inputModel.cssInputClass ? inputModel.cssInputClass : ''">
+        <mat-radio-button *ngFor="let opt of inputModel.selectList"
+            [value]="opt.key">{{opt.displayValue}}</mat-radio-button>
+    </mat-radio-group>
+    <mat-error>{{ errorMessage(ngControl.control.errors,inputModel.labelName)}}</mat-error>
+
+</ng-container>
+
+<ng-container *ngIf="inputModel.tagName == 'input' && inputModel.inputType == 'time'">
+    <label *ngIf="inputModel.labelName"
+        [for]="inputModel.html_id ?inputModel.html_id : inputModel.tagName+'_'+inputModel.inputType+'_'+inputModel.labelName"
+        class="block text-sm font-medium text-gray-700 mb-2">{{inputModel.labelName}}</label>
+    <mat-form-field  class="dense-3" style="width: 212px;" [appearance]="inputModel.appearance ? inputModel.appearance :'outline'"
+        [style]="inputModel.style? inputModel.style : ''" [ngClass]="inputModel.cssClass ? inputModel.cssClass : ''">
+        <input [ngxMatTimepicker]="pickerA" [formControl]="ngControl.control" matInput
+            [placeholder]="inputModel.placeholder!" [ngClass]="inputModel.cssInputClass ? inputModel.cssInputClass : ''"
+            readonly />
+        <mat-icon matSuffix (click)="pickerA.open()">
+            watch_later
+        </mat-icon>
+        <ngx-mat-timepicker #pickerA dottedMinutesInGap enableKeyboardInput></ngx-mat-timepicker>
+        <mat-error>{{ errorMessage(ngControl.control.errors,inputModel.labelName)}}</mat-error>
+    </mat-form-field>
 
 </ng-container>

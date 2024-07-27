@@ -1,0 +1,231 @@
+<div class="mx-auto my-auto flex items-center justify-center px-8">
+    <div id="{{notice.id}}" class="flex flex-col w-full bg-white rounded shadow-lg sm:w-3/4 md:w-1/2 lg:w-3/5 my-6">
+        <!--  sm:text-xl -->
+        <div class="relative inline-block">
+            <span
+                class="absolute top-0 text-xl inline-flex items-center justify-center px-2 py-1  font-bold leading-none text-white transform mx-4 -translate-y-1/2 bg-red-600 rounded-full uppercase">New</span>
+        </div>
+        <div class="flex flex-col w-full md:flex-row" *ngIf="!isEdit">
+           
+            <div class="p-4 w-full font-normal text-gray-800">
+                <div class="mb-4 text-2xl uppercase font-bold text-gray-800 text-center">NOTICE</div>
+                <div
+                    class="mb-4 text-center underline text-lg  leading-none tracking-tight text-gray-800 capitalize-first break-words">
+                    {{notice.title}}</div>
+                   
+                <div class="mb-4 mx-2 flex justify-between items-start lg:items-stretch w-full">
+                    <div class="text-center leading-none tracking-tight text-gray-800 capitalize-first break-words">
+                        <span class="font-bold" >Notice No : </span>{{notice.id}}</div>
+                    <div class="text-center leading-none tracking-tight text-gray-800 capitalize-first break-words">
+                        <span class="font-bold" >Dated : </span> {{ notice.noticeDate | date:'dd/MM/yyyy'}}
+                    </div>
+                    
+                </div>
+                <div class="mt-10 mx-4 mb-4">
+                    <p class="leading-normal capitalize-first break-words text-center" [innerHTML]="notice.description">
+                    </p>
+                   
+                    <div *ngIf="notice.hasMeeting">
+                        <div
+                            class="mb-4 underline text-sm font-bold leading-none tracking-tight text-gray-800 capitalize-first break-words">
+                            Meeting Details</div>
+                        <div class="mb-2  text-sm leading-none tracking-tight text-gray-800 capitalize-first">
+                            <b><u>Date</u></b> : {{notice.meeting?.meetingSummary}}</div>
+                            
+                        <div class="mb-2  text-sm leading-none tracking-tight text-gray-800 capitalize-first">
+                            <b><u>Time</u></b> : {{notice.meeting?.meetingStartTime}} -
+                            {{notice.meeting?.meetingEndTime}}</div>
+                        <div class="mb-2  text-sm leading-none tracking-tight text-gray-800 capitalize-first">
+                            <b><u>Venue</u></b> : {{notice.meeting?.meetingLocation}}</div>
+                        <div *ngIf="notice.meeting?.extHtmlLink"
+                            class="mb-2 text-sm leading-none tracking-tight text-gray-800 capitalize-first">
+                            <b><u>Meeting Link</u></b> : <a target="_blank"
+                                href="{{notice.meeting?.extHtmlLink}}">{{notice.meeting?.extHtmlLink}}</a>
+                            <div class="text-blue-800 underline mt-2 hover:text-blue-500"
+                                x-on:click.away="copied = false"
+                                (click)="copyToClipboard(notice.meeting?.extVideoConferenceLink)"
+                                x-on:click="copied = true">
+                                <span x-show="copied">Copied!</span>
+                                <span x-show="!copied">Copy</span>
+                            </div>
+                        </div>
+                        <div *ngIf="notice.meeting?.meetingDescription"
+                            class="mb-2 text-sm leading-none tracking-tight text-gray-800 capitalize-first">
+                            <b><u>Agenda</u></b> :
+                            <div class="mt-2 text-sm" [innerHTML]="notice.meeting?.meetingDescription"></div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="mx-2 mt-8 mb-4 flex justify-between items-start lg:items-stretch w-full">
+                    <div class="p-2 leading-none tracking-tight">
+                        <div
+                            class="my-1 text-center leading-none tracking-tight text-gray-800 capitalize-first break-words font-bold">
+                            {{notice.creator?.fullName}}</div>
+                        <div 
+                            class="my-1 text-center leading-none tracking-tight text-gray-800 capitalize-first break-words">
+                            {{notice.creatorRoleCode}}</div>
+                           
+                    </div>
+                </div>
+          
+                <div class="mb-4 uppercase font-bold text-red-600 text-center">
+                    Note : This notice is currently hidden.
+                </div>
+            </div>
+        </div>
+       
+        <div class="flex flex-col w-full md:flex-row" *ngIf="isEdit">
+            <div class="p-4 w-full font-normal text-gray-800">
+                <div class="mb-4 text-2xl uppercase font-bold text-gray-800 text-center">NOTICE</div>
+                <form [formGroup]="noticeForm">
+                    <div class="grid grid-cols-6 gap-6">
+                        <div class="col-span-6 sm:col-span-6">
+                            <app-universal-input formControlName="title" [inputModel]="{
+                                tagName:'input',
+                                inputType:'text',
+                                placeholder:'Enter Notice Title',
+                                cssClass:'w-full',
+                                labelName:'Notice Title'
+                            }"></app-universal-input>
+                        </div>
+                        <div class="col-span-6 sm:col-span-6">
+                            <app-universal-input formControlName="description" [inputModel]="{
+                                tagName:'input',
+                                inputType:'editor',
+                                placeholder:'Enter Notice Description',
+                                labelName:'Notice Description'
+                            }"></app-universal-input>
+                        </div>
+                        <!-- <div class="col-span-6 sm:col-span-3">
+                            <app-universal-input formControlName="noticeDate" [inputModel]="{
+                                tagName:'input',
+                                inputType:'date',
+                                placeholder:'Enter Notice Date',
+                                labelName:'Notice Date'
+                            }"></app-universal-input> 
+                        </div> -->
+                        <!-- <div class="col-span-6 sm:col-span-3">
+                            <app-universal-input formControlName="creatorRoleCode" [inputModel]="{ 
+                                tagName:'select',
+                                inputType:'',
+                                selectList:[{key:'M',displayValue:'Member'},{key:'NO',displayValue:'No'}],
+                                labelName:'Publish as'
+                            }"></app-universal-input>   
+                        </div> -->
+                        <div class="col-span-6 sm:col-span-6">
+                            <app-universal-input formControlName="hasMeeting" [inputModel]="{ 
+                                tagName:'input',
+                                inputType:'radio',
+                                selectList:[{key:'YES',displayValue:'Yes'},{key:'NO',displayValue:'No'}],
+                                labelName:'Do you require any meeting?'
+                            }"></app-universal-input>   
+                        </div>
+                        <div *ngIf="noticeForm.value.hasMeeting == 'YES'" class="col-span-6 sm:col-span-6">
+                            <app-universal-input formControlName="meetingSummary" [inputModel]="{
+                                tagName:'input',
+                                inputType:'text',
+                                placeholder:'Enter Meeting Summary',
+                                cssClass:'w-full',
+                                labelName:'Meeting Summary'
+                            }"></app-universal-input>
+                        </div>
+                        <div *ngIf="noticeForm.value.hasMeeting == 'YES'" class="col-span-6 sm:col-span-6">
+                            <app-universal-input formControlName="meetingAgenda" [inputModel]="{
+                                tagName:'input',
+                                inputType:'editor',
+                                placeholder:'Enter Meeting Agenda',
+                                labelName:'Meeting Agenda'
+                            }"></app-universal-input>
+                        </div>
+                        <div *ngIf="noticeForm.value.hasMeeting == 'YES'" class="col-span-6 sm:col-span-2">
+                            <app-universal-input formControlName="meetingType" [inputModel]="{
+                                tagName:'select',
+                                inputType:'',
+                                selectList:[{key:'ONLINE_VIDEO',displayValue:'Online (Google Meet)'},{key:'OFFLINE',displayValue:'Offline'}],
+                                labelName:'Meeting Type'
+                            }"></app-universal-input>
+                        </div>
+                        <div *ngIf="noticeForm.value.hasMeeting == 'YES' && noticeForm.value.meetingType == 'OFFLINE'" class="col-span-6 sm:col-span-2">
+                            <app-universal-input formControlName="meetingLocation" [inputModel]="{
+                                tagName:'input',
+                                inputType:'text',
+                                labelName:'Meeting Location',
+                                placeholder:'Enter Meeting Location'
+                            }"></app-universal-input>
+                        </div>
+                        <div *ngIf="noticeForm.value.hasMeeting == 'YES'" class="col-span-6 sm:col-span-2">
+                            <app-universal-input formControlName="meetingDate" [inputModel]="{
+                                tagName:'input',
+                                inputType:'date',
+                                labelName:'Meeting Date',
+                                placeholder:'Select Meeting Date'
+                            }"></app-universal-input>
+                        </div>
+                        <div *ngIf="noticeForm.value.hasMeeting == 'YES'" class="col-span-6 sm:col-span-2">
+                            <app-universal-input formControlName="meetingStartTime" [inputModel]="{
+                                tagName:'input',
+                                inputType:'time',
+                                labelName:'Meeting Start Time',
+                                placeholder:'Select Meeting Start Time'
+                            }"></app-universal-input>
+                        </div>
+                        <div *ngIf="noticeForm.value.hasMeeting == 'YES'" class="col-span-6 sm:col-span-2">
+                            <app-universal-input formControlName="meetingEndTime" [inputModel]="{
+                                tagName:'input',
+                                inputType:'time',
+                                labelName:'Meeting End Time',
+                                placeholder:'Select Meeting End Time'
+                            }"></app-universal-input>
+                        </div>
+                    </div> 
+                    
+                </form>
+            </div>
+        </div>
+        
+        <!-- {{event | json}}  -->
+        <div class="flex w-full md:flex-row ">
+            <div class="flex items-center justify-center p-4 w-full">
+                <a *ngIf="!isEdit" (click)="isEdit=true"
+                    class="text-blue-600 dark:text-gray-400 ml-2 p-2 border-transparent border bg-gray-100 dark:hover:bg-gray-600 dark:bg-gray-700 hover:bg-gray-200 cursor-pointer rounded focus:outline-none focus:border-gray-800 focus:shadow-outline-gray inline-flex">
+                    Update
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:ml-2" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                </a>
+                <a *ngIf="isEdit" (click)="submitForm()"
+                    class="text-blue-600 dark:text-gray-400 ml-2 p-2 border-transparent border bg-gray-100 dark:hover:bg-gray-600 dark:bg-gray-700 hover:bg-gray-200 cursor-pointer rounded focus:outline-none focus:border-gray-800 focus:shadow-outline-gray inline-flex">
+                    Save
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:ml-2" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                </a>
+                <a *ngIf="isEdit" (click)="isEdit=false"
+                    class="text-blue-600 dark:text-gray-400 ml-2 p-2 border-transparent border bg-gray-100 dark:hover:bg-gray-600 dark:bg-gray-700 hover:bg-gray-200 cursor-pointer rounded focus:outline-none focus:border-gray-800 focus:shadow-outline-gray inline-flex">
+                    Cancel
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:ml-2" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                </a>
+                <!-- <a (click)="deleteNotice(notice)" [ngClass]="{'disabledLink' : isInactiveUser}" *ngIf="canUpdateNotice && !singleNotice" class="text-red-600 dark:text-gray-400 ml-2 p-2 border-transparent border bg-gray-100 dark:hover:bg-gray-600 dark:bg-gray-700 hover:bg-gray-200 cursor-pointer rounded focus:outline-none focus:border-gray-800 focus:shadow-outline-gray inline-flex">
+                    Delete
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                </a> -->
+                <!-- <a *ngIf="canViewNoticeHistory" (click)="showNoticeHistory(notice)" class="text-gray-800 dark:text-gray-400 ml-2 p-2 border-transparent border bg-gray-100 dark:hover:bg-gray-600 dark:bg-gray-700 hover:bg-gray-200 cursor-pointer rounded focus:outline-none focus:border-gray-800 focus:shadow-outline-gray inline-flex">
+                    History
+                    <svg class="h-5 w-5 sm:ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </a> -->
+            </div>
+        </div>
+    </div>
+</div>

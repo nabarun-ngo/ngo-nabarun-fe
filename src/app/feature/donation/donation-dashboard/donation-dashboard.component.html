@@ -115,22 +115,20 @@
                             </div>
                         </mat-card>
                         <h2 class="text-purple-700 font-bold text-center mt-4">My Donation List</h2>
-                        <app-accordion-list [accordionList]="accordionList" (onButtonClick)="onClick($event)"
-                            (onAccordionOpen)="accordionOpened($event)"></app-accordion-list>
+                        <app-donation-accordion [donations]="donations" [tabName]="'self_donation'"></app-donation-accordion>
                     </mat-tab>
                     <mat-tab id="guestDonationTab" label="Guest Donations" (click)="tabChanged(tabIndex)" [disabled]="false">
                         <div class="flex justify-end mx-4 my-2">
                             <div class="mx-1 px-2">
-                                <button (click)="showCreateForm()" class="bg-indigo-600 py-3 px-6 w-full text-white font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">Add Guest Donation</button>
+                                <button (click)="showcreateDonation=true;" class="bg-indigo-600 py-3 px-6 w-full text-white font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">Add Guest Donation</button>
                             </div>
                         </div>
                         <h2 class="text-purple-700 font-bold text-center mt-4">Guest Donation List</h2>
-                        <app-accordion-list [accordionList]="accordionList" (onButtonClick)="onClick($event)"
-                            (onAccordionOpen)="accordionOpened($event)"></app-accordion-list>
+                        <app-donation-accordion #target [donations]="donations" [tabName]="'guest_donation'" [(createDonation)]="showcreateDonation"></app-donation-accordion>
                     </mat-tab>
                     <mat-tab id="memberDonationTab" label="Member Donations" (click)="tabChanged(tabIndex)" [disabled]="false">
-                        <app-accordion-list [accordionList]="accordionList" (onButtonClick)="onClick($event)"
-                        (onAccordionOpen)="accordionOpened($event)"></app-accordion-list>                    </mat-tab>
+                        <app-member-accordion [members]="members"></app-member-accordion>
+                    </mat-tab>
                 </mat-tab-group>
                 <mat-paginator class="mt-4" style="background-color: transparent;" (page)="handlePageEvent($event)" [length]="itemLength$ | async" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" [pageIndex]="pageNumber" aria-label="Select page">
                 </mat-paginator>

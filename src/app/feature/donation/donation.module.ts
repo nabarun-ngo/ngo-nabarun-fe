@@ -6,14 +6,14 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { DonationAccordionComponent } from './donation-accordion/donation-accordion.component';
 import { QRCodeModule } from 'angularx-qrcode';
 import { MemberAccordionComponent } from './member-accordion/member-accordion.component';
+import { DonationDashboardNewComponent } from './donation-dashboard-new/donation-dashboard-new.component';
 import { DonationDashboardComponent } from './donation-dashboard/donation-dashboard.component';
-import { DonationDashboardComponentOld } from './donation-dashboard-old/donation-dashboard.component';
 
 
 @NgModule({
   declarations: [
+    DonationDashboardNewComponent,
     DonationDashboardComponent,
-    DonationDashboardComponentOld,
     DonationAccordionComponent,
     MemberAccordionComponent,
   ],
