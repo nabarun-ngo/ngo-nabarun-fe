@@ -120,13 +120,13 @@
         class="block text-sm font-medium text-gray-700 mb-2">{{inputModel.labelName}}</label>
     <mat-form-field  class="dense-3" style="width: 212px;" [appearance]="inputModel.appearance ? inputModel.appearance :'outline'"
         [style]="inputModel.style? inputModel.style : ''" [ngClass]="inputModel.cssClass ? inputModel.cssClass : ''">
-        <input [ngxMatTimepicker]="pickerA" [formControl]="ngControl.control" matInput
+        <input [ngxMatTimepicker]="pickerA" [format]="inputModel.props!['format']" [formControl]="ngControl.control" matInput 
             [placeholder]="inputModel.placeholder!" [ngClass]="inputModel.cssInputClass ? inputModel.cssInputClass : ''"
             readonly />
         <mat-icon matSuffix (click)="pickerA.open()">
             watch_later
         </mat-icon>
-        <ngx-mat-timepicker #pickerA dottedMinutesInGap enableKeyboardInput></ngx-mat-timepicker>
+        <ngx-mat-timepicker #pickerA dottedMinutesInGap ></ngx-mat-timepicker>
         <mat-error>{{ errorMessage(ngControl.control.errors,inputModel.labelName)}}</mat-error>
     </mat-form-field>
 

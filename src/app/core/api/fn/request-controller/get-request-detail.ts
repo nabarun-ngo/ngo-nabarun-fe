@@ -10,12 +10,14 @@ import { SuccessResponseRequestDetail } from '../../models/success-response-requ
 
 export interface GetRequestDetail$Params {
   id: string;
+  'X-Correlation-Id'?: string;
 }
 
 export function getRequestDetail(http: HttpClient, rootUrl: string, params: GetRequestDetail$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseRequestDetail>> {
   const rb = new RequestBuilder(rootUrl, getRequestDetail.PATH, 'get');
   if (params) {
     rb.path('id', params.id, {});
+    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
   }
 
   return http.request(

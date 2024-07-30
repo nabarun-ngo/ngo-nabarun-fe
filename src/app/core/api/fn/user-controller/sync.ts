@@ -9,11 +9,13 @@ import { RequestBuilder } from '../../request-builder';
 import { SuccessResponseVoid } from '../../models/success-response-void';
 
 export interface Sync$Params {
+  'X-Correlation-Id'?: string;
 }
 
 export function sync(http: HttpClient, rootUrl: string, params?: Sync$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
   const rb = new RequestBuilder(rootUrl, sync.PATH, 'get');
   if (params) {
+    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
   }
 
   return http.request(

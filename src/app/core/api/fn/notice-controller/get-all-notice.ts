@@ -6,20 +6,23 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { NoticeDetailFilter } from '../../models/notice-detail-filter';
 import { SuccessResponsePaginateNoticeDetail } from '../../models/success-response-paginate-notice-detail';
 
 export interface GetAllNotice$Params {
   pageIndex?: number;
   pageSize?: number;
-  filter?: string;
+  filter: NoticeDetailFilter;
+  'X-Correlation-Id'?: string;
 }
 
-export function getAllNotice(http: HttpClient, rootUrl: string, params?: GetAllNotice$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateNoticeDetail>> {
+export function getAllNotice(http: HttpClient, rootUrl: string, params: GetAllNotice$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateNoticeDetail>> {
   const rb = new RequestBuilder(rootUrl, getAllNotice.PATH, 'get');
   if (params) {
     rb.query('pageIndex', params.pageIndex, {});
     rb.query('pageSize', params.pageSize, {});
     rb.query('filter', params.filter, {});
+    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
   }
 
   return http.request(

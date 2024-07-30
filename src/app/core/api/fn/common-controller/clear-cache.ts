@@ -9,12 +9,14 @@ import { RequestBuilder } from '../../request-builder';
 import { SuccessResponseVoid } from '../../models/success-response-void';
 
 export interface ClearCache$Params {
+  'X-Correlation-Id'?: string;
       body: Array<string>
 }
 
 export function clearCache(http: HttpClient, rootUrl: string, params: ClearCache$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
   const rb = new RequestBuilder(rootUrl, clearCache.PATH, 'post');
   if (params) {
+    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
     rb.body(params.body, 'application/json');
   }
 

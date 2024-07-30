@@ -13,6 +13,7 @@ export interface GetUsers$Params {
   pageIndex?: number;
   pageSize?: number;
   filter: UserDetailFilter;
+  'X-Correlation-Id'?: string;
 }
 
 export function getUsers(http: HttpClient, rootUrl: string, params: GetUsers$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateUserDetail>> {
@@ -21,6 +22,7 @@ export function getUsers(http: HttpClient, rootUrl: string, params: GetUsers$Par
     rb.query('pageIndex', params.pageIndex, {});
     rb.query('pageSize', params.pageSize, {});
     rb.query('filter', params.filter, {});
+    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
   }
 
   return http.request(

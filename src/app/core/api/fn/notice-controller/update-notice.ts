@@ -6,18 +6,20 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { NoticeDetailUpdate } from '../../models/notice-detail-update';
+import { NoticeDetail } from '../../models/notice-detail';
 import { SuccessResponseNoticeDetail } from '../../models/success-response-notice-detail';
 
 export interface UpdateNotice$Params {
   id: string;
-      body: NoticeDetailUpdate
+  'X-Correlation-Id'?: string;
+      body: NoticeDetail
 }
 
 export function updateNotice(http: HttpClient, rootUrl: string, params: UpdateNotice$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseNoticeDetail>> {
   const rb = new RequestBuilder(rootUrl, updateNotice.PATH, 'patch');
   if (params) {
     rb.path('id', params.id, {});
+    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
     rb.body(params.body, 'application/json');
   }
 

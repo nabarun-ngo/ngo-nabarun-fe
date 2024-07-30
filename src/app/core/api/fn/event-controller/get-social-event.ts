@@ -10,12 +10,14 @@ import { SuccessResponseEventDetail } from '../../models/success-response-event-
 
 export interface GetSocialEvent$Params {
   id: string;
+  'X-Correlation-Id'?: string;
 }
 
 export function getSocialEvent(http: HttpClient, rootUrl: string, params: GetSocialEvent$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseEventDetail>> {
   const rb = new RequestBuilder(rootUrl, getSocialEvent.PATH, 'get');
   if (params) {
     rb.path('id', params.id, {});
+    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
   }
 
   return http.request(

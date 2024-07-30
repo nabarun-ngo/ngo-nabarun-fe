@@ -10,12 +10,14 @@ import { MeetingDetailCreate } from '../../models/meeting-detail-create';
 import { SuccessResponseMeetingDetail } from '../../models/success-response-meeting-detail';
 
 export interface AuthorizeAndCreateMeeting$Params {
+  'X-Correlation-Id'?: string;
       body: MeetingDetailCreate
 }
 
 export function authorizeAndCreateMeeting(http: HttpClient, rootUrl: string, params: AuthorizeAndCreateMeeting$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseMeetingDetail>> {
   const rb = new RequestBuilder(rootUrl, authorizeAndCreateMeeting.PATH, 'post');
   if (params) {
+    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
     rb.body(params.body, 'application/json');
   }
 

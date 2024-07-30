@@ -12,6 +12,7 @@ export interface GetSocialEvents$Params {
   pageIndex?: number;
   pageSize?: number;
   filter?: string;
+  'X-Correlation-Id'?: string;
 }
 
 export function getSocialEvents(http: HttpClient, rootUrl: string, params?: GetSocialEvents$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateEventDetail>> {
@@ -20,6 +21,7 @@ export function getSocialEvents(http: HttpClient, rootUrl: string, params?: GetS
     rb.query('pageIndex', params.pageIndex, {});
     rb.query('pageSize', params.pageSize, {});
     rb.query('filter', params.filter, {});
+    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
   }
 
   return http.request(

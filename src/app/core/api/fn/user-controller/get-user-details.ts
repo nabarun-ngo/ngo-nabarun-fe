@@ -11,6 +11,7 @@ import { SuccessResponseUserDetail } from '../../models/success-response-user-de
 export interface GetUserDetails$Params {
   id: string;
   idType?: 'EMAIL' | 'AUTH_USER_ID' | 'ID';
+  'X-Correlation-Id'?: string;
 }
 
 export function getUserDetails(http: HttpClient, rootUrl: string, params: GetUserDetails$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseUserDetail>> {
@@ -18,6 +19,7 @@ export function getUserDetails(http: HttpClient, rootUrl: string, params: GetUse
   if (params) {
     rb.path('id', params.id, {});
     rb.query('idType', params.idType, {});
+    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
   }
 
   return http.request(

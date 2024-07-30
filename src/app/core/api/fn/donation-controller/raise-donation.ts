@@ -10,12 +10,14 @@ import { DonationDetail } from '../../models/donation-detail';
 import { SuccessResponseDonationDetail } from '../../models/success-response-donation-detail';
 
 export interface RaiseDonation$Params {
+  'X-Correlation-Id'?: string;
       body: DonationDetail
 }
 
 export function raiseDonation(http: HttpClient, rootUrl: string, params: RaiseDonation$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseDonationDetail>> {
   const rb = new RequestBuilder(rootUrl, raiseDonation.PATH, 'post');
   if (params) {
+    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
     rb.body(params.body, 'application/json');
   }
 

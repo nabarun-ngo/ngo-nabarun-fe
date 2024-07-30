@@ -13,6 +13,7 @@ export interface GetMyAccounts$Params {
   pageIndex?: number;
   pageSize?: number;
   filter: AccountDetailFilter;
+  'X-Correlation-Id'?: string;
 }
 
 export function getMyAccounts(http: HttpClient, rootUrl: string, params: GetMyAccounts$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateAccountDetail>> {
@@ -21,6 +22,7 @@ export function getMyAccounts(http: HttpClient, rootUrl: string, params: GetMyAc
     rb.query('pageIndex', params.pageIndex, {});
     rb.query('pageSize', params.pageSize, {});
     rb.query('filter', params.filter, {});
+    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
   }
 
   return http.request(

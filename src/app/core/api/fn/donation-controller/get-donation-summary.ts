@@ -12,6 +12,7 @@ export interface GetDonationSummary$Params {
   id?: string;
   includePayableAccount?: boolean;
   includeOutstandingMonths?: boolean;
+  'X-Correlation-Id'?: string;
 }
 
 export function getDonationSummary(http: HttpClient, rootUrl: string, params?: GetDonationSummary$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseDonationSummary>> {
@@ -20,6 +21,7 @@ export function getDonationSummary(http: HttpClient, rootUrl: string, params?: G
     rb.query('id', params.id, {});
     rb.query('includePayableAccount', params.includePayableAccount, {});
     rb.query('includeOutstandingMonths', params.includeOutstandingMonths, {});
+    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
   }
 
   return http.request(

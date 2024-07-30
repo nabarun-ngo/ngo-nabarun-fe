@@ -10,12 +10,14 @@ import { EmailOrPasswordUpdate } from '../../models/email-or-password-update';
 import { SuccessResponseVoid } from '../../models/success-response-void';
 
 export interface ChangeEmail$Params {
+  'X-Correlation-Id'?: string;
       body: EmailOrPasswordUpdate
 }
 
 export function changeEmail(http: HttpClient, rootUrl: string, params: ChangeEmail$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
   const rb = new RequestBuilder(rootUrl, changeEmail.PATH, 'post');
   if (params) {
+    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
     rb.body(params.body, 'application/json');
   }
 

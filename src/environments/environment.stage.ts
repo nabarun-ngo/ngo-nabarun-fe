@@ -35,7 +35,17 @@ const firebaseConfig = {
   measurementId: "G-PT9V4XMXWY"
 };
 
-
+const gapiConfig ={
+  apiKey: 'AIzaSyDEQ5433AfdAoTOOCqjlK9K-Ep0FD8sdwg',
+  clientId:
+    '595475200212-gibsoge21ed013o9obcreldfpfncgops.apps.googleusercontent.com',
+  discoveryDocs: [
+    'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest',
+  ],
+  scope: 'https://www.googleapis.com/auth/calendar.readonly',
+  plugin_name:'nabarun_app'
+  
+};
 
 export const environment = {
   production: false,
@@ -45,6 +55,7 @@ export const environment = {
   auth_config: authConfig,
   firebase_config: firebaseConfig,
   firebase_vapidKey:'BBDkLXhO325xFYbQ9v2yDhAlxRCBwB-MERVALRhUsiPjKWNAFiR1LVxgdxB8M8VVXD6ZBMQllGFdfjmIG0CGvig',
-  inactivityTimeOut: 15*60
+  inactivityTimeOut: 30*60,
+  gapi_config:gapiConfig
 };
 

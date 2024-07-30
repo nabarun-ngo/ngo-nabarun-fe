@@ -12,6 +12,7 @@ export interface GetUserDonations$Params {
   id: string;
   pageIndex?: number;
   pageSize?: number;
+  'X-Correlation-Id'?: string;
 }
 
 export function getUserDonations(http: HttpClient, rootUrl: string, params: GetUserDonations$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateDonationDetail>> {
@@ -20,6 +21,7 @@ export function getUserDonations(http: HttpClient, rootUrl: string, params: GetU
     rb.path('id', params.id, {});
     rb.query('pageIndex', params.pageIndex, {});
     rb.query('pageSize', params.pageSize, {});
+    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
   }
 
   return http.request(

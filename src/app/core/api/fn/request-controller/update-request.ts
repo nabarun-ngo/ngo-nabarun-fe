@@ -11,6 +11,7 @@ import { SuccessResponseRequestDetail } from '../../models/success-response-requ
 
 export interface UpdateRequest$Params {
   id: string;
+  'X-Correlation-Id'?: string;
       body: RequestDetail
 }
 
@@ -18,6 +19,7 @@ export function updateRequest(http: HttpClient, rootUrl: string, params: UpdateR
   const rb = new RequestBuilder(rootUrl, updateRequest.PATH, 'patch');
   if (params) {
     rb.path('id', params.id, {});
+    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
     rb.body(params.body, 'application/json');
   }
 

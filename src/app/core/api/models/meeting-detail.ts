@@ -3,14 +3,15 @@
 import { MeetingDiscussion } from '../models/meeting-discussion';
 import { UserDetail } from '../models/user-detail';
 export interface MeetingDetail {
+  creatorEmail?: string;
   extAudioConferenceLink?: string;
+  extConferenceStatus?: string;
   extHtmlLink?: string;
   extMeetingId?: string;
   extVideoConferenceLink?: string;
-  googleSignInRequired?: boolean;
-  googleSignInURL?: string;
   id?: string;
   meetingAttendees?: Array<UserDetail>;
+  meetingDate?: string;
   meetingDescription?: string;
   meetingDiscussions?: Array<MeetingDiscussion>;
   meetingEndTime?: string;

@@ -21,7 +21,7 @@ export { MeetingDetail } from './models/meeting-detail';
 export { MeetingDetailCreate } from './models/meeting-detail-create';
 export { MeetingDiscussion } from './models/meeting-discussion';
 export { NoticeDetail } from './models/notice-detail';
-export { NoticeDetailUpdate } from './models/notice-detail-update';
+export { NoticeDetailFilter } from './models/notice-detail-filter';
 export { PaginateAccountDetail } from './models/paginate-account-detail';
 export { PaginateDonationDetail } from './models/paginate-donation-detail';
 export { PaginateEventDetail } from './models/paginate-event-detail';

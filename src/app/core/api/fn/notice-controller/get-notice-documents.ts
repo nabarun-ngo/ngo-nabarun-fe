@@ -10,12 +10,14 @@ import { SuccessResponseListDocumentDetail } from '../../models/success-response
 
 export interface GetNoticeDocuments$Params {
   id: string;
+  'X-Correlation-Id'?: string;
 }
 
 export function getNoticeDocuments(http: HttpClient, rootUrl: string, params: GetNoticeDocuments$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseListDocumentDetail>> {
   const rb = new RequestBuilder(rootUrl, getNoticeDocuments.PATH, 'get');
   if (params) {
     rb.path('id', params.id, {});
+    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
   }
 
   return http.request(

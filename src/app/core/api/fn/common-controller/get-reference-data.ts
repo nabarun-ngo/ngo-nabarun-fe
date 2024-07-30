@@ -15,6 +15,7 @@ export interface GetReferenceData$Params {
   names?: Array<RefDataType>;
   donationType?: DonationType;
   currentDonationStatus?: DonationStatus;
+  'X-Correlation-Id'?: string;
 }
 
 export function getReferenceData(http: HttpClient, rootUrl: string, params?: GetReferenceData$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseMapStringListKeyValue>> {
@@ -23,6 +24,7 @@ export function getReferenceData(http: HttpClient, rootUrl: string, params?: Get
     rb.query('names', params.names, {});
     rb.query('donationType', params.donationType, {});
     rb.query('currentDonationStatus', params.currentDonationStatus, {});
+    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
   }
 
   return http.request(

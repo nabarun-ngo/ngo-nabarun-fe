@@ -10,6 +10,7 @@ import { RequestBuilder } from '../../request-builder';
 export interface DownloadDocument$Params {
   id: string;
   asURL?: boolean;
+  'X-Correlation-Id'?: string;
 }
 
 export function downloadDocument(http: HttpClient, rootUrl: string, params: DownloadDocument$Params, context?: HttpContext): Observable<StrictHttpResponse<{
@@ -18,6 +19,7 @@ export function downloadDocument(http: HttpClient, rootUrl: string, params: Down
   if (params) {
     rb.path('id', params.id, {});
     rb.query('asURL', params.asURL, {});
+    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
   }
 
   return http.request(

@@ -11,6 +11,7 @@ import { SuccessResponseDonationDetail } from '../../models/success-response-don
 
 export interface UpdateDonation$Params {
   id: string;
+  'X-Correlation-Id'?: string;
       body: DonationDetail
 }
 
@@ -18,6 +19,7 @@ export function updateDonation(http: HttpClient, rootUrl: string, params: Update
   const rb = new RequestBuilder(rootUrl, updateDonation.PATH, 'patch');
   if (params) {
     rb.path('id', params.id, {});
+    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
     rb.body(params.body, 'application/json');
   }
 

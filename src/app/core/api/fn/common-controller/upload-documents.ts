@@ -12,6 +12,7 @@ export interface UploadDocuments$Params {
   docIndexId: string;
   docIndexType: 'DONATION' | 'EVENT' | 'NOTICE' | 'USER' | 'PROFILE_PHOTO' | 'EVENT_COVER';
   files: Array<Blob>;
+  'X-Correlation-Id'?: string;
 }
 
 export function uploadDocuments(http: HttpClient, rootUrl: string, params: UploadDocuments$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
@@ -20,6 +21,7 @@ export function uploadDocuments(http: HttpClient, rootUrl: string, params: Uploa
     rb.query('docIndexId', params.docIndexId, {});
     rb.query('docIndexType', params.docIndexType, {});
     rb.query('files', params.files, {});
+    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
   }
 
   return http.request(

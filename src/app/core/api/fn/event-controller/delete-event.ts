@@ -10,12 +10,14 @@ import { SuccessResponseVoid } from '../../models/success-response-void';
 
 export interface DeleteEvent$Params {
   id: string;
+  'X-Correlation-Id'?: string;
 }
 
 export function deleteEvent(http: HttpClient, rootUrl: string, params: DeleteEvent$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
   const rb = new RequestBuilder(rootUrl, deleteEvent.PATH, 'delete');
   if (params) {
     rb.path('id', params.id, {});
+    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
   }
 
   return http.request(

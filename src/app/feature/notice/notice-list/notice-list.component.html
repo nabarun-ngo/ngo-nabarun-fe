@@ -9,7 +9,7 @@
                 </div>
                 <div class="flex justify-end mx-4 my-2">
                     <div class="mx-1 px-2">
-                        <button [routerLink]="[app_routes.secured_notice_create_page.url]"
+                        <button (click)="isCreateNotice=true"
                             class="bg-indigo-600 py-3 px-6 w-full text-white font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">Create
                             Notice</button>
                     </div>
@@ -17,8 +17,9 @@
                 <mat-card class="p-4 m-4" *ngIf="noticeList.content == null || noticeList.content?.length == 0">
                     <div class="text-center">No notice found.</div>
                 </mat-card>
-                
-                <app-notice-card *ngFor="let notice of noticeList.content" [notice]="notice"></app-notice-card>
+                <app-notice-card *ngIf="isCreateNotice" [isEdit]="isCreateNotice" (onSubmit)="createNotice($event)"></app-notice-card>
+
+                <app-notice-card *ngFor="let notice of noticeList.content" [notice]="notice" (onSubmit)="editNotice($event)"></app-notice-card>
 
                 <mat-paginator class="mt-4" style="background-color: transparent;" (page)="handlePageEvent($event)"
                     [length]="itemLength$ | async" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"

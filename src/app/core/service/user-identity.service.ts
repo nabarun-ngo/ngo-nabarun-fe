@@ -83,7 +83,7 @@ export class UserIdentityService implements OnInit {
     /**
         * configuring idle timeout
         */
-    if(environment.production){
+    //if(environment.production){
       this.bnIdle.startWatching(environment.inactivityTimeOut).subscribe((isTimedOut: boolean) => {
         if (isTimedOut) {
           console.warn('session expired due to inactivity');
@@ -93,7 +93,7 @@ export class UserIdentityService implements OnInit {
           this.logout();
         }
       });
-    }
+   // }
     
   }
 

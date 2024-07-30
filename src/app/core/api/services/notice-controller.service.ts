@@ -93,7 +93,7 @@ export class NoticeControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAllNotice$Response(params?: GetAllNotice$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateNoticeDetail>> {
+  getAllNotice$Response(params: GetAllNotice$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateNoticeDetail>> {
     return getAllNotice(this.http, this.rootUrl, params, context);
   }
 
@@ -103,7 +103,7 @@ export class NoticeControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAllNotice(params?: GetAllNotice$Params, context?: HttpContext): Observable<SuccessResponsePaginateNoticeDetail> {
+  getAllNotice(params: GetAllNotice$Params, context?: HttpContext): Observable<SuccessResponsePaginateNoticeDetail> {
     return this.getAllNotice$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponsePaginateNoticeDetail>): SuccessResponsePaginateNoticeDetail => r.body)
     );
