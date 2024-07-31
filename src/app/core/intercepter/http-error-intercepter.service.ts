@@ -24,7 +24,7 @@ export class HttpErrorIntercepterService implements HttpInterceptor {
     if(request.url.includes(environment.api_base_url)){
       request = request.clone({
         setHeaders:{
-          'X-Correlation-Id': uuid.v4()
+          'X-Cloud-Trace-Context': uuid.v4()
         }
       })
     }
