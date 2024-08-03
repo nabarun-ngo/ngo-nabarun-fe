@@ -1,3 +1,4 @@
+import { Platform } from '@angular/cdk/platform';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NoticeDetail } from 'src/app/core/api/models';
@@ -11,14 +12,15 @@ import { date } from 'src/app/core/service/utilities.service';
 })
 export class NoticeCardComponent implements OnInit{
 
+  constructor(protected platform:Platform){}
+
 
   @Input() notice: NoticeDetail | undefined;
   @Input() isEdit:boolean=false;
   @Output() onSubmit:EventEmitter<{id?:string,formValue?:any,cancel?:boolean}>=new EventEmitter();
   noticeForm!: FormGroup;
 
-  copyToClipboard(arg0: string | undefined) {
-  }
+
 
   ngOnInit(): void {
     this.noticeForm= new FormGroup({

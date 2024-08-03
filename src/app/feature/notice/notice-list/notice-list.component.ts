@@ -8,6 +8,7 @@ import { NoticeService } from '../notice.service';
 import { NoticeDetail, PaginateNoticeDetail } from 'src/app/core/api/models';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { GoogleCalendarService } from 'src/app/core/service/google-calendar.service';
+import { SearchAndAdvancedSearchModel } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search.model';
 
 @Component({
   selector: 'app-notice-list',
@@ -15,6 +16,7 @@ import { GoogleCalendarService } from 'src/app/core/service/google-calendar.serv
   styleUrls: ['./notice-list.component.scss']
 })
 export class NoticeListComponent extends Paginator implements OnInit {
+
   isCreateNotice: boolean = false;
   defaultValue = NoticeDefaultValue;
   noticeList!: PaginateNoticeDetail;
@@ -24,12 +26,13 @@ export class NoticeListComponent extends Paginator implements OnInit {
   refData: any;
   canUpdateNotice: any;
   isInactiveUser: any;
+  searchInputData!: SearchAndAdvancedSearchModel;
+  searchValue!: string;
 
   constructor(
     private route: ActivatedRoute,
     private sharedDataService: SharedDataService,
     private noticeService: NoticeService,
-    private googleCalService: GoogleCalendarService,
   ) {
     super();
     super.init(this.defaultValue.pageNumber, this.defaultValue.pageSize, this.defaultValue.pageSizeOptions);
@@ -51,6 +54,64 @@ export class NoticeListComponent extends Paginator implements OnInit {
       console.log(this.noticeList)
     }
     //await this.googleCalService.init()
+    this.searchInputData={
+      normalSearchPlaceHolder: 'Search Notice Number, Notice Title, Notice Description',
+      advancedSearch: {
+        searchFormFields: [
+          {
+            formControlName:'noticeNumber',
+            inputModel:{
+              tagName:'input',
+              inputType:'text',
+              html_id:'noticeNumber',
+              labelName:'Notice Number',
+              placeholder:'Enter Notice Number'
+            },
+          },
+          {
+            formControlName:'noticeTitle',
+            inputModel:{
+              tagName:'input',
+              inputType:'text',
+              html_id:'noticeTitle',
+              labelName:'Notice Title',
+              placeholder:'Enter Notice Title',
+            },
+          },
+          {
+            formControlName:'startDate',
+            inputModel:{
+              tagName:'input',
+              inputType:'date',
+              html_id:'startDate',
+              labelName:'From Date',
+              placeholder:'Enter From Date',
+            },
+          },
+          {
+            formControlName:'endDate',
+            inputModel:{
+              tagName:'input',
+              inputType:'date',
+              html_id:'endDate',
+              labelName:'To Date',
+              placeholder:'Enter To Date',
+            },
+          },
+          {
+            formControlName:'status',
+            inputModel:{
+              tagName:'select',
+              inputType:'multiselect',
+              html_id:'role',
+              labelName:'Role',
+              placeholder:'Select Role',
+              selectList: [{key:'ACTIVE',displayValue:'Active'},{key:'DRAFT',displayValue:'Draft'}]
+            },
+          }
+        ]
+      }
+    };
   }
 
 
@@ -84,6 +145,29 @@ export class NoticeListComponent extends Paginator implements OnInit {
     if ($event.id) {
       this.isCreateNotice = false;
     } 
+  }
+
+
+  onSearch($event: { advancedSearch: boolean; reset: boolean; value: any; }) {
+    if($event.advancedSearch && !$event.reset ){
+     // console.log($event.value)
+      this.noticeService.advancedSearch({
+        noticeTitle:$event.value.noticeTitle,
+        noticeNumber:$event.value.noticeNumber,
+        status:$event.value.status,
+        startDate:$event.value.startDate,
+        endDate: $event.value.endDate
+      }).subscribe(data=>this.noticeList=data!)
+    }
+    else if($event.advancedSearch && $event.reset ){
+      this.noticeService.retrieveNotices(this.pageNumber, this.pageSize).subscribe(data => {
+        this.noticeList = data!;
+        this.itemLengthSubs.next(data?.totalSize!);
+      });
+    }
+    else{
+      this.searchValue=$event.value as string;
+    }
   }
 
 }

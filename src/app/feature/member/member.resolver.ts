@@ -18,3 +18,8 @@ export const memberResolver: ResolveFn<any> = (route, state) => {
   return inject(MemberService).getUserDetail(route.params['id']);
 };
 
+export const myProfileResolver: ResolveFn<any> = (route, state) => {
+  // console.log(route,state)
+   return inject(MemberService).getMyDetail();
+ };
+

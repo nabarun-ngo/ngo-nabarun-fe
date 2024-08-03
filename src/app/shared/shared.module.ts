@@ -35,6 +35,9 @@ import { ReplaceNullPipe } from './pipes/replace-null.pipe';
 import { HtmlSanitizerPipe } from './pipes/html-sanitizer.pipe';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
+import { PlatformModule } from '@angular/cdk/platform';
+import {ClipboardModule} from '@angular/cdk/clipboard';
+import {MatMenuModule} from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -73,6 +76,9 @@ import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
     MatRadioModule,
     AngularEditorModule,
     NgxMatTimepickerModule,
+    PlatformModule,
+    ClipboardModule,
+    MatMenuModule,
   ],
   exports: [
     ItemTileListComponent,
@@ -100,7 +106,10 @@ import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
     ReplaceNullPipe,
     HtmlSanitizerPipe,
     UniversalInputComponent,
-    AngularEditorModule
+    AngularEditorModule,
+    PlatformModule,
+    ClipboardModule,
+    MatMenuModule
   ],
   providers: [{
     provide: MAT_RADIO_DEFAULT_OPTIONS,

@@ -8,6 +8,7 @@ import { NotificationService } from '../../service/notification.service';
 import { Observable } from 'rxjs';
 import { AppNotification } from '../../model/notification.model';
 import { Router } from '@angular/router';
+import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
   selector: 'app-header',
@@ -24,8 +25,9 @@ export class HeaderComponent implements OnInit {
   constructor(
     private identityService: UserIdentityService,
     private modalService:ModalService,
-    private notificationService:NotificationService,
-    private router:Router
+    private commonService:CommonService,
+    private router:Router,
+    private commonCo:Router,
   ) { }
 
 
@@ -33,8 +35,8 @@ export class HeaderComponent implements OnInit {
     this.isAuthenticated = this.identityService.isUserLoggedIn();
     this.user=this.identityService.getUser();
    // this.userId=this.user.profile_id;
-    this.notificationService.requestPermission();
-    this.notificationService.liveNotifications$.subscribe(data=>{
+    this.commonService.requestPermission();
+    this.commonService.liveNotifications$.subscribe(data=>{
       this.notifications.push(new AppNotification(data));
     });
       // data?.content?.forEach(f=>{
@@ -51,13 +53,12 @@ export class HeaderComponent implements OnInit {
   }
 
   sound(){
-    this.notificationService.sound.play();
-    console.log('hi hello')
+    //this.commonService.sound.play();
+    //console.log('hi hello');
   }
 
   profile() {
-    this.router.navigateByUrl(this.app_route.secured_member_profile_page.url.replace(':id',this.user.profile_id))
-    //[routerLink]="[app_route.secured_member_profile_page.url,userId]"
+    this.router.navigateByUrl(this.app_route.secured_member_my_profile_page.url)
   }
 
 }

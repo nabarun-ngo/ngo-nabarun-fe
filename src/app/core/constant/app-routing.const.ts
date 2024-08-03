@@ -49,6 +49,13 @@ export const AppRoute = {
     feature: 'member',
     path: ':id',
   },
+  secured_member_my_profile_page: {
+    id: 'secured_member_my_profile_page',
+    url: '/secured/member/myprofile',
+    parent: 'secured',
+    feature: 'member',
+    path: 'myprofile',
+  },
   secured_request_list_page: {
     id: 'secured_request_list_page',
     url: '/secured/request/list',

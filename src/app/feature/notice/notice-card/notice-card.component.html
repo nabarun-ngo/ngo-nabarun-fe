@@ -9,7 +9,23 @@
         <div class="flex flex-col w-full md:flex-row" *ngIf="!isEdit">
 
             <div class="p-4 w-full font-normal text-gray-800">
+                <div class="grid justify-items-end ">
+                    <button mat-icon-button [matMenuTriggerFor]="menu"  aria-label="Example icon-button with a menu">
+                        <mat-icon>more_vert</mat-icon>
+                      </button>
+                      <mat-menu #menu="matMenu">
+                        <button mat-menu-item disabled>
+                          <mat-icon>edit</mat-icon>
+                          <span>Edit</span>
+                        </button>
+                        <button mat-menu-item disabled>
+                          <mat-icon>delete_forever</mat-icon>
+                          <span>Delete</span>
+                        </button>
+                      </mat-menu>
+                  </div>
                 <div class="mb-4 text-2xl uppercase font-bold text-gray-800 text-center">NOTICE</div>
+                
                 <div
                     class="mb-4 text-center underline text-lg  leading-none tracking-tight text-gray-800 capitalize-first break-words">
                     {{notice?.title}}</div>
@@ -57,8 +73,7 @@
                             <b><u>Meeting Link</u></b> : <a target="_blank"
                                 href="{{notice?.meeting?.extVideoConferenceLink}}">{{notice?.meeting?.extVideoConferenceLink}}</a>
                             <div class="text-blue-800 underline mt-2 hover:text-blue-500"
-                                x-on:click.away="copied = false"
-                                (click)="copyToClipboard(notice?.meeting?.extVideoConferenceLink)"
+                                x-on:click.away="copied = false" [cdkCopyToClipboard]="notice?.meeting?.extVideoConferenceLink!"
                                 x-on:click="copied = true">
                                 <span x-show="copied">Copied!</span>
                                 <span x-show="!copied">Copy Link</span>
@@ -200,7 +215,7 @@
         </div>
 
         <!-- {{event | json}}  -->
-        <div class="flex w-full md:flex-row ">
+        <div class="flex w-full md:flex-row " >
             <div class="flex items-center justify-center p-4 w-full">
 
                 <!-- <a *ngIf="!isEdit" (click)="isEdit=true"
@@ -212,7 +227,7 @@
                             d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                     </svg>
                 </a> -->
-                <a *ngIf="!isEdit" [href]="getWhatsAppMessage(notice!)" 
+                <a *ngIf="!isEdit && !platform.isBrowser" [href]="getWhatsAppMessage(notice!)" 
                     class="text-blue-600 dark:text-gray-400 ml-2 p-2 border-transparent border bg-gray-100 dark:hover:bg-gray-600 dark:bg-gray-700 hover:bg-gray-200 cursor-pointer rounded focus:outline-none focus:border-gray-800 focus:shadow-outline-gray inline-flex">
                     Share
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:ml-2" fill="none" viewBox="0 0 24 24"

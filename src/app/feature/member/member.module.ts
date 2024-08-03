@@ -6,13 +6,15 @@ import { MemberProfileComponent } from './member-profile/member-profile.componen
 import { MemberListComponent } from './member-list/member-list.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { MemberSearchPipe } from './member.pipe';
+import { MemberRoleComponent } from './member-role/member-role.component';
 
 
 @NgModule({
   declarations: [
     MemberProfileComponent,
     MemberListComponent,
-    MemberSearchPipe
+    MemberSearchPipe,
+    MemberRoleComponent
   ],
   imports: [
     CommonModule,

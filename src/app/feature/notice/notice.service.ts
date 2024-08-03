@@ -3,7 +3,7 @@ import { NoticeControllerService, UserControllerService } from 'src/app/core/api
 import { NoticeDefaultValue } from './notice.const';
 import { concatMap, from, map } from 'rxjs';
 import { GoogleCalendarService } from 'src/app/core/service/google-calendar.service';
-import { MeetingDetail, NoticeDetail } from 'src/app/core/api/models';
+import { MeetingDetail, NoticeDetail, NoticeDetailFilter } from 'src/app/core/api/models';
 
 @Injectable({
   providedIn: 'root'
@@ -94,5 +94,26 @@ export class NoticeService {
 
   editNotice(id:string,formValue:any){
     
+  }
+
+
+  advancedSearch(filter:{noticeNumber?:string,noticeTitle?:string,startDate?:string,endDate?:string,status?:string}){
+    let filterOps:NoticeDetailFilter={};
+    if(filter.noticeNumber){
+      filterOps.id=filter.noticeNumber
+    }
+    if(filter.noticeTitle){
+      filterOps.title=filter.noticeTitle
+    }
+    if(filter.startDate){
+      filterOps.startDate=filter.startDate
+    }
+    if(filter.endDate){
+      filterOps.endDate=filter.endDate
+    }
+    if(filter.status){
+      filterOps.status=filter.status as any
+    }
+    return this.noticeController.getAllNotice({ filter:filterOps}).pipe(map(d => d.responsePayload));
   }
 }

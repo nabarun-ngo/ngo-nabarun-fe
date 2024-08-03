@@ -22,11 +22,12 @@ export class MemberService {
     return this.commonController.getReferenceData({ names: [RefDataType.User]}).pipe(map(d => d.responsePayload));
   }
 
-  getUserDetail(id: string): any {
+  getUserDetail(id: string) {
     return this.userController.getUserDetails({id:id,idType:"ID"}).pipe(map(d => d.responsePayload));
   }
 
-  getMyDetail(): any {
+  getMyDetail() {
+    //console.log("jhjhs")
     return this.userController.getLoggedInUserDetails().pipe(map(d => d.responsePayload));
   }
 
@@ -47,7 +48,7 @@ export class MemberService {
     if(filter.role){
       filterOps.roles=filter.role as any
     }
-    return this.userController.getUsers({ filter:filterOps     }).pipe(map(d => d.responsePayload));
+    return this.userController.getUsers({ filter:filterOps}).pipe(map(d => d.responsePayload));
   }
 
 }
