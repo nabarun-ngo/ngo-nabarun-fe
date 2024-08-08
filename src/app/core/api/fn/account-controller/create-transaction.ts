@@ -10,14 +10,14 @@ import { SuccessResponseTransactionDetail } from '../../models/success-response-
 import { TransactionDetail } from '../../models/transaction-detail';
 
 export interface CreateTransaction$Params {
-  'X-Correlation-Id'?: string;
+  'X-Cloud-Trace-Context'?: string;
       body: TransactionDetail
 }
 
 export function createTransaction(http: HttpClient, rootUrl: string, params: CreateTransaction$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseTransactionDetail>> {
   const rb = new RequestBuilder(rootUrl, createTransaction.PATH, 'post');
   if (params) {
-    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
+    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
     rb.body(params.body, 'application/json');
   }
 

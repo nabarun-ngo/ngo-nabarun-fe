@@ -15,7 +15,7 @@ export interface GetReferenceData$Params {
   names?: Array<RefDataType>;
   donationType?: DonationType;
   currentDonationStatus?: DonationStatus;
-  'X-Correlation-Id'?: string;
+  'X-Cloud-Trace-Context'?: string;
 }
 
 export function getReferenceData(http: HttpClient, rootUrl: string, params?: GetReferenceData$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseMapStringListKeyValue>> {
@@ -24,7 +24,7 @@ export function getReferenceData(http: HttpClient, rootUrl: string, params?: Get
     rb.query('names', params.names, {});
     rb.query('donationType', params.donationType, {});
     rb.query('currentDonationStatus', params.currentDonationStatus, {});
-    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
+    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
   }
 
   return http.request(

@@ -11,6 +11,8 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { assignRolesToUsers } from '../fn/user-controller/assign-roles-to-users';
 import { AssignRolesToUsers$Params } from '../fn/user-controller/assign-roles-to-users';
+import { assignUsersToRoles } from '../fn/user-controller/assign-users-to-roles';
+import { AssignUsersToRoles$Params } from '../fn/user-controller/assign-users-to-roles';
 import { changeEmail } from '../fn/user-controller/change-email';
 import { ChangeEmail$Params } from '../fn/user-controller/change-email';
 import { getLoggedInUserDetails } from '../fn/user-controller/get-logged-in-user-details';
@@ -29,8 +31,6 @@ import { SuccessResponsePaginateUserDetail } from '../models/success-response-pa
 import { SuccessResponseString } from '../models/success-response-string';
 import { SuccessResponseUserDetail } from '../models/success-response-user-detail';
 import { SuccessResponseVoid } from '../models/success-response-void';
-import { sync } from '../fn/user-controller/sync';
-import { Sync$Params } from '../fn/user-controller/sync';
 import { updateLoggedInUserDetails } from '../fn/user-controller/update-logged-in-user-details';
 import { UpdateLoggedInUserDetails$Params } from '../fn/user-controller/update-logged-in-user-details';
 
@@ -90,6 +90,31 @@ export class UserControllerService extends BaseService {
     );
   }
 
+  /** Path part for operation `assignUsersToRoles()` */
+  static readonly AssignUsersToRolesPath = '/api/user/assignUsersToRoles/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `assignUsersToRoles()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  assignUsersToRoles$Response(params: AssignUsersToRoles$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
+    return assignUsersToRoles(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `assignUsersToRoles$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  assignUsersToRoles(params: AssignUsersToRoles$Params, context?: HttpContext): Observable<SuccessResponseVoid> {
+    return this.assignUsersToRoles$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseVoid>): SuccessResponseVoid => r.body)
+    );
+  }
+
   /** Path part for operation `assignRolesToUsers()` */
   static readonly AssignRolesToUsersPath = '/api/user/assignRolesToUsers/{id}';
 
@@ -137,31 +162,6 @@ export class UserControllerService extends BaseService {
   updateLoggedInUserDetails(params: UpdateLoggedInUserDetails$Params, context?: HttpContext): Observable<SuccessResponseUserDetail> {
     return this.updateLoggedInUserDetails$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseUserDetail>): SuccessResponseUserDetail => r.body)
-    );
-  }
-
-  /** Path part for operation `sync()` */
-  static readonly SyncPath = '/api/user/sync';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `sync()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  sync$Response(params?: Sync$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
-    return sync(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `sync$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  sync(params?: Sync$Params, context?: HttpContext): Observable<SuccessResponseVoid> {
-    return this.sync$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseVoid>): SuccessResponseVoid => r.body)
     );
   }
 

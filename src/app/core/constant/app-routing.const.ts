@@ -56,6 +56,13 @@ export const AppRoute = {
     feature: 'member',
     path: 'myprofile',
   },
+  secured_member_roles_page: {
+    id: 'secured_member_roles_page',
+    url: '/secured/member/roles',
+    parent: 'secured',
+    feature: 'member',
+    path: 'roles',
+  },
   secured_request_list_page: {
     id: 'secured_request_list_page',
     url: '/secured/request/list',
@@ -63,6 +70,7 @@ export const AppRoute = {
     feature: 'request',
     path: 'list',
   },
+  
   // secured_request_workflow_page: {
   //   id: 'secured_request_workflow_page',
   //   url: '/secured/request/workflows',

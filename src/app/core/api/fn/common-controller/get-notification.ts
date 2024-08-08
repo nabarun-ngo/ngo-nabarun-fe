@@ -11,7 +11,7 @@ import { SuccessResponsePaginateMapStringString } from '../../models/success-res
 export interface GetNotification$Params {
   pageIndex?: number;
   pageSize?: number;
-  'X-Correlation-Id'?: string;
+  'X-Cloud-Trace-Context'?: string;
 }
 
 export function getNotification(http: HttpClient, rootUrl: string, params?: GetNotification$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateMapStringString>> {
@@ -19,7 +19,7 @@ export function getNotification(http: HttpClient, rootUrl: string, params?: GetN
   if (params) {
     rb.query('pageIndex', params.pageIndex, {});
     rb.query('pageSize', params.pageSize, {});
-    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
+    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
   }
 
   return http.request(

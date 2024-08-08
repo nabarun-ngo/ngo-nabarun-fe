@@ -8,7 +8,6 @@ import { UserControllerService } from './services/user-controller.service';
 import { EventControllerService } from './services/event-controller.service';
 import { RequestControllerService } from './services/request-controller.service';
 import { NoticeControllerService } from './services/notice-controller.service';
-import { MeetingControllerService } from './services/meeting-controller.service';
 import { DonationControllerService } from './services/donation-controller.service';
 import { CommonControllerService } from './services/common-controller.service';
 import { AccountControllerService } from './services/account-controller.service';
@@ -25,7 +24,6 @@ import { AccountControllerService } from './services/account-controller.service'
     EventControllerService,
     RequestControllerService,
     NoticeControllerService,
-    MeetingControllerService,
     DonationControllerService,
     CommonControllerService,
     AccountControllerService,

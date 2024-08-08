@@ -38,6 +38,7 @@ import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 import { PlatformModule } from '@angular/cdk/platform';
 import {ClipboardModule} from '@angular/cdk/clipboard';
 import {MatMenuModule} from '@angular/material/menu';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 @NgModule({
   declarations: [
@@ -79,6 +80,7 @@ import {MatMenuModule} from '@angular/material/menu';
     PlatformModule,
     ClipboardModule,
     MatMenuModule,
+    MatButtonToggleModule,
   ],
   exports: [
     ItemTileListComponent,
@@ -109,7 +111,8 @@ import {MatMenuModule} from '@angular/material/menu';
     AngularEditorModule,
     PlatformModule,
     ClipboardModule,
-    MatMenuModule
+    MatMenuModule,
+    MatButtonToggleModule
   ],
   providers: [{
     provide: MAT_RADIO_DEFAULT_OPTIONS,

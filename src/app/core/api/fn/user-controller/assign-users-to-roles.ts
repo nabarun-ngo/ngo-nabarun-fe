@@ -7,21 +7,20 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 import { SuccessResponseVoid } from '../../models/success-response-void';
+import { UserDetail } from '../../models/user-detail';
 
-export interface UploadDocuments$Params {
-  docIndexId: string;
-  docIndexType: 'DONATION' | 'EVENT' | 'NOTICE' | 'USER' | 'PROFILE_PHOTO' | 'EVENT_COVER';
-  files: Array<Blob>;
+export interface AssignUsersToRoles$Params {
+  id: 'MEMBER' | 'CASHIER' | 'ASSISTANT_CASHIER' | 'TREASURER' | 'GROUP_COORDINATOR' | 'ASST_GROUP_COORDINATOR' | 'SECRETARY' | 'ASST_SECRETARY' | 'COMMUNITY_MANAGER' | 'ASST_COMMUNITY_MANAGER' | 'PRESIDENT' | 'VICE_PRESIDENT' | 'TECHNICAL_SPECIALIST';
   'X-Cloud-Trace-Context'?: string;
+      body: Array<UserDetail>
 }
 
-export function uploadDocuments(http: HttpClient, rootUrl: string, params: UploadDocuments$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
-  const rb = new RequestBuilder(rootUrl, uploadDocuments.PATH, 'post');
+export function assignUsersToRoles(http: HttpClient, rootUrl: string, params: AssignUsersToRoles$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
+  const rb = new RequestBuilder(rootUrl, assignUsersToRoles.PATH, 'post');
   if (params) {
-    rb.query('docIndexId', params.docIndexId, {});
-    rb.query('docIndexType', params.docIndexType, {});
-    rb.query('files', params.files, {});
+    rb.path('id', params.id, {});
     rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
+    rb.body(params.body, 'application/json');
   }
 
   return http.request(
@@ -34,4 +33,4 @@ export function uploadDocuments(http: HttpClient, rootUrl: string, params: Uploa
   );
 }
 
-uploadDocuments.PATH = '/api/common/document/uploadDocuments';
+assignUsersToRoles.PATH = '/api/user/assignUsersToRoles/{id}';

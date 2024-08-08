@@ -11,7 +11,7 @@ import { SuccessResponseAccountDetail } from '../../models/success-response-acco
 
 export interface UpdateAccount$Params {
   id: string;
-  'X-Correlation-Id'?: string;
+  'X-Cloud-Trace-Context'?: string;
       body: AccountDetail
 }
 
@@ -19,7 +19,7 @@ export function updateAccount(http: HttpClient, rootUrl: string, params: UpdateA
   const rb = new RequestBuilder(rootUrl, updateAccount.PATH, 'patch');
   if (params) {
     rb.path('id', params.id, {});
-    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
+    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
     rb.body(params.body, 'application/json');
   }
 

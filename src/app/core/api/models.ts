@@ -18,7 +18,6 @@ export { EventDetailCreate } from './models/event-detail-create';
 export { EventDetailUpdate } from './models/event-detail-update';
 export { KeyValue } from './models/key-value';
 export { MeetingDetail } from './models/meeting-detail';
-export { MeetingDetailCreate } from './models/meeting-detail-create';
 export { MeetingDiscussion } from './models/meeting-discussion';
 export { NoticeDetail } from './models/notice-detail';
 export { NoticeDetailFilter } from './models/notice-detail-filter';
@@ -42,7 +41,6 @@ export { SuccessResponseEventDetail } from './models/success-response-event-deta
 export { SuccessResponseListDocumentDetail } from './models/success-response-list-document-detail';
 export { SuccessResponseListWorkDetail } from './models/success-response-list-work-detail';
 export { SuccessResponseMapStringListKeyValue } from './models/success-response-map-string-list-key-value';
-export { SuccessResponseMeetingDetail } from './models/success-response-meeting-detail';
 export { SuccessResponseNoticeDetail } from './models/success-response-notice-detail';
 export { SuccessResponsePaginateAccountDetail } from './models/success-response-paginate-account-detail';
 export { SuccessResponsePaginateDonationDetail } from './models/success-response-paginate-donation-detail';

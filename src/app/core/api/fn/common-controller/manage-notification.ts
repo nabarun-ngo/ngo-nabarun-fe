@@ -10,7 +10,7 @@ import { SuccessResponseVoid } from '../../models/success-response-void';
 
 export interface ManageNotification$Params {
   action: string;
-  'X-Correlation-Id'?: string;
+  'X-Cloud-Trace-Context'?: string;
       body: {
 [key: string]: {
 };
@@ -21,7 +21,7 @@ export function manageNotification(http: HttpClient, rootUrl: string, params: Ma
   const rb = new RequestBuilder(rootUrl, manageNotification.PATH, 'post');
   if (params) {
     rb.query('action', params.action, {});
-    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
+    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
     rb.body(params.body, 'application/json');
   }
 

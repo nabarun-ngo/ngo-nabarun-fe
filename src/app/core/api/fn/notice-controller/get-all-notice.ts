@@ -13,7 +13,7 @@ export interface GetAllNotice$Params {
   pageIndex?: number;
   pageSize?: number;
   filter: NoticeDetailFilter;
-  'X-Correlation-Id'?: string;
+  'X-Cloud-Trace-Context'?: string;
 }
 
 export function getAllNotice(http: HttpClient, rootUrl: string, params: GetAllNotice$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateNoticeDetail>> {
@@ -22,7 +22,7 @@ export function getAllNotice(http: HttpClient, rootUrl: string, params: GetAllNo
     rb.query('pageIndex', params.pageIndex, {});
     rb.query('pageSize', params.pageSize, {});
     rb.query('filter', params.filter, {});
-    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
+    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
   }
 
   return http.request(

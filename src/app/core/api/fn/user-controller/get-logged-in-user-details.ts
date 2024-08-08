@@ -9,13 +9,13 @@ import { RequestBuilder } from '../../request-builder';
 import { SuccessResponseUserDetail } from '../../models/success-response-user-detail';
 
 export interface GetLoggedInUserDetails$Params {
-  'X-Correlation-Id'?: string;
+  'X-Cloud-Trace-Context'?: string;
 }
 
 export function getLoggedInUserDetails(http: HttpClient, rootUrl: string, params?: GetLoggedInUserDetails$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseUserDetail>> {
   const rb = new RequestBuilder(rootUrl, getLoggedInUserDetails.PATH, 'get');
   if (params) {
-    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
+    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
   }
 
   return http.request(

@@ -78,6 +78,8 @@ export class CommonService {
     return this.commonController.getNotification({ pageIndex: 0, pageSize: 10 }).pipe(map(m => m.responsePayload))
   }
 
- 
+  clearCache(names:string[]) {
+    return this.commonController.clearCache({body:names}).pipe(map(m => m.responsePayload))
+  }
 
 }

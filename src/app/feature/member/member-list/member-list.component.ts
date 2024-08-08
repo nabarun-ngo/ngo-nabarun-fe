@@ -10,6 +10,7 @@ import { Paginator } from 'src/app/core/component/paginator';
 import { FormGroup } from '@angular/forms';
 import { UniversalInputModel } from 'src/app/shared/components/generic/universal-input/universal-input.model';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search.model';
+import { AppRoute } from 'src/app/core/constant/app-routing.const';
 
 @Component({
   selector: 'app-member-list',
@@ -21,6 +22,7 @@ export class MemberListComponent extends Paginator implements OnInit {
   memberList!: PaginateUserDetail;
   searchValue!:string;
   refData!: {[key: string]: KeyValue[];};
+  protected app_route=AppRoute;
 
   searchInputData! : SearchAndAdvancedSearchModel;
 
@@ -36,6 +38,7 @@ export class MemberListComponent extends Paginator implements OnInit {
 
 
   ngOnInit(): void {
+
     this.sharedDataService.setPageName('MEMBERS');
 
     if (this.route.snapshot.data['ref_data']) {
@@ -47,7 +50,7 @@ export class MemberListComponent extends Paginator implements OnInit {
     if (this.route.snapshot.data['data']) {
       this.memberList = this.route.snapshot.data['data'] as PaginateUserDetail;
       this.itemLengthSubs.next(this.memberList?.totalSize!);
-      console.log(this.memberList)
+      //console.log(this.memberList)
     }
 
     this.searchInputData={

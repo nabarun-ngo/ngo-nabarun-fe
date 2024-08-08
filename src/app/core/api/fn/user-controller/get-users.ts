@@ -13,7 +13,7 @@ export interface GetUsers$Params {
   pageIndex?: number;
   pageSize?: number;
   filter: UserDetailFilter;
-  'X-Correlation-Id'?: string;
+  'X-Cloud-Trace-Context'?: string;
 }
 
 export function getUsers(http: HttpClient, rootUrl: string, params: GetUsers$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateUserDetail>> {
@@ -22,7 +22,7 @@ export function getUsers(http: HttpClient, rootUrl: string, params: GetUsers$Par
     rb.query('pageIndex', params.pageIndex, {});
     rb.query('pageSize', params.pageSize, {});
     rb.query('filter', params.filter, {});
-    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
+    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
   }
 
   return http.request(

@@ -10,14 +10,14 @@ import { NoticeDetail } from '../../models/notice-detail';
 import { SuccessResponseNoticeDetail } from '../../models/success-response-notice-detail';
 
 export interface CreateNotice$Params {
-  'X-Correlation-Id'?: string;
+  'X-Cloud-Trace-Context'?: string;
       body: NoticeDetail
 }
 
 export function createNotice(http: HttpClient, rootUrl: string, params: CreateNotice$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseNoticeDetail>> {
   const rb = new RequestBuilder(rootUrl, createNotice.PATH, 'post');
   if (params) {
-    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
+    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
     rb.body(params.body, 'application/json');
   }
 

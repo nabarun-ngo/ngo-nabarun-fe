@@ -7,6 +7,7 @@ import { MemberListComponent } from './member-list/member-list.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { MemberSearchPipe } from './member.pipe';
 import { MemberRoleComponent } from './member-role/member-role.component';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { MemberRoleComponent } from './member-role/member-role.component';
   imports: [
     CommonModule,
     SharedModule,
-    MemberRoutingModule
+    MemberRoutingModule,
+    DragDropModule,
   ]
 })
 export class MemberModule { }

@@ -7,7 +7,7 @@
                 </div>
                 <div class="flex justify-end mx-4 my-2">
                     <div class="mx-1 px-2">
-                        <button class="bg-indigo-600 py-3 px-6 w-full text-white font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">Manage Roles</button>
+                        <a [routerLink]="[app_route.secured_member_roles_page.url]" class="bg-indigo-600 py-3 px-6 w-full text-white font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">Manage Roles</a>
                     </div>
                 </div>
                 <mat-card class="p-4 m-4" *ngIf="memberList.content?.length == 0  || (memberList.content?.length != 0 && (memberList.content | memberSearch:searchValue).length === 0)">

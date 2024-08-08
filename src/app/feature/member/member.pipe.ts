@@ -7,7 +7,7 @@ import { UserDetail } from 'src/app/core/api/models';
 export class MemberSearchPipe implements PipeTransform {
 
   transform(profiles: UserDetail[] | undefined, searchValue:string): UserDetail[] {
-    console.log(profiles,searchValue)
+    //console.log(profiles,searchValue)
     if(!profiles){
       return [];
     }

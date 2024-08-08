@@ -10,14 +10,14 @@ import { SuccessResponseListWorkDetail } from '../../models/success-response-lis
 
 export interface GetWorkItems$Params {
   id: string;
-  'X-Correlation-Id'?: string;
+  'X-Cloud-Trace-Context'?: string;
 }
 
 export function getWorkItems(http: HttpClient, rootUrl: string, params: GetWorkItems$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseListWorkDetail>> {
   const rb = new RequestBuilder(rootUrl, getWorkItems.PATH, 'get');
   if (params) {
     rb.path('id', params.id, {});
-    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
+    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
   }
 
   return http.request(

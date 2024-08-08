@@ -10,14 +10,14 @@ import { EventDetailCreate } from '../../models/event-detail-create';
 import { SuccessResponseEventDetail } from '../../models/success-response-event-detail';
 
 export interface CreateSocialEvent$Params {
-  'X-Correlation-Id'?: string;
+  'X-Cloud-Trace-Context'?: string;
       body: EventDetailCreate
 }
 
 export function createSocialEvent(http: HttpClient, rootUrl: string, params: CreateSocialEvent$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseEventDetail>> {
   const rb = new RequestBuilder(rootUrl, createSocialEvent.PATH, 'post');
   if (params) {
-    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
+    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
     rb.body(params.body, 'application/json');
   }
 

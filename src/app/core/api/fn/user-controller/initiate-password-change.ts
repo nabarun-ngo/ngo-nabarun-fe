@@ -10,14 +10,14 @@ import { EmailOrPasswordUpdate } from '../../models/email-or-password-update';
 import { SuccessResponseVoid } from '../../models/success-response-void';
 
 export interface InitiatePasswordChange$Params {
-  'X-Correlation-Id'?: string;
+  'X-Cloud-Trace-Context'?: string;
       body: EmailOrPasswordUpdate
 }
 
 export function initiatePasswordChange(http: HttpClient, rootUrl: string, params: InitiatePasswordChange$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
   const rb = new RequestBuilder(rootUrl, initiatePasswordChange.PATH, 'post');
   if (params) {
-    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
+    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
     rb.body(params.body, 'application/json');
   }
 

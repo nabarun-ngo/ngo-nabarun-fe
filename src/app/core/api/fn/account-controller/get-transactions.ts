@@ -12,7 +12,7 @@ export interface GetTransactions$Params {
   id: string;
   pageIndex: number;
   pageSize: number;
-  'X-Correlation-Id'?: string;
+  'X-Cloud-Trace-Context'?: string;
 }
 
 export function getTransactions(http: HttpClient, rootUrl: string, params: GetTransactions$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateTransactionDetail>> {
@@ -21,7 +21,7 @@ export function getTransactions(http: HttpClient, rootUrl: string, params: GetTr
     rb.path('id', params.id, {});
     rb.query('pageIndex', params.pageIndex, {});
     rb.query('pageSize', params.pageSize, {});
-    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
+    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
   }
 
   return http.request(

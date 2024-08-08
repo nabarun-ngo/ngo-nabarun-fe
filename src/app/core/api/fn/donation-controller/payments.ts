@@ -12,7 +12,7 @@ import { SuccessResponseDonationDetail } from '../../models/success-response-don
 export interface Payments$Params {
   id: string;
   action: string;
-  'X-Correlation-Id'?: string;
+  'X-Cloud-Trace-Context'?: string;
       body: DonationDetail
 }
 
@@ -21,7 +21,7 @@ export function payments(http: HttpClient, rootUrl: string, params: Payments$Par
   if (params) {
     rb.path('id', params.id, {});
     rb.query('action', params.action, {});
-    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
+    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
     rb.body(params.body, 'application/json');
   }
 

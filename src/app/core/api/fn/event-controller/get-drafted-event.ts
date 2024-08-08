@@ -9,13 +9,13 @@ import { RequestBuilder } from '../../request-builder';
 import { SuccessResponseEventDetail } from '../../models/success-response-event-detail';
 
 export interface GetDraftedEvent$Params {
-  'X-Correlation-Id'?: string;
+  'X-Cloud-Trace-Context'?: string;
 }
 
 export function getDraftedEvent(http: HttpClient, rootUrl: string, params?: GetDraftedEvent$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseEventDetail>> {
   const rb = new RequestBuilder(rootUrl, getDraftedEvent.PATH, 'get');
   if (params) {
-    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
+    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
   }
 
   return http.request(

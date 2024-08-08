@@ -10,7 +10,7 @@ import { SuccessResponseVoid } from '../../models/success-response-void';
 
 export interface AssignRolesToUsers$Params {
   id: string;
-  'X-Correlation-Id'?: string;
+  'X-Cloud-Trace-Context'?: string;
       body: Array<'MEMBER' | 'CASHIER' | 'ASSISTANT_CASHIER' | 'TREASURER' | 'GROUP_COORDINATOR' | 'ASST_GROUP_COORDINATOR' | 'SECRETARY' | 'ASST_SECRETARY' | 'COMMUNITY_MANAGER' | 'ASST_COMMUNITY_MANAGER' | 'PRESIDENT' | 'VICE_PRESIDENT' | 'TECHNICAL_SPECIALIST'>
 }
 
@@ -18,7 +18,7 @@ export function assignRolesToUsers(http: HttpClient, rootUrl: string, params: As
   const rb = new RequestBuilder(rootUrl, assignRolesToUsers.PATH, 'post');
   if (params) {
     rb.path('id', params.id, {});
-    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
+    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
     rb.body(params.body, 'application/json');
   }
 

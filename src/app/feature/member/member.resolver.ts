@@ -23,3 +23,5 @@ export const myProfileResolver: ResolveFn<any> = (route, state) => {
    return inject(MemberService).getMyDetail();
  };
 
+ 
+

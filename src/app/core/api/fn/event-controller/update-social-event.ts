@@ -11,7 +11,7 @@ import { SuccessResponseEventDetail } from '../../models/success-response-event-
 
 export interface UpdateSocialEvent$Params {
   id: string;
-  'X-Correlation-Id'?: string;
+  'X-Cloud-Trace-Context'?: string;
       body: EventDetailUpdate
 }
 
@@ -19,7 +19,7 @@ export function updateSocialEvent(http: HttpClient, rootUrl: string, params: Upd
   const rb = new RequestBuilder(rootUrl, updateSocialEvent.PATH, 'patch');
   if (params) {
     rb.path('id', params.id, {});
-    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
+    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
     rb.body(params.body, 'application/json');
   }
 

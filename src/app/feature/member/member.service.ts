@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
-import { map } from 'rxjs';
-import { RefDataType, UserDetailFilter } from 'src/app/core/api/models';
+import { combineLatest, concatMap, interval, map, merge, Observable, of } from 'rxjs';
+import { PaginateUserDetail, RefDataType, SuccessResponsePaginateUserDetail, UserDetail, UserDetailFilter } from 'src/app/core/api/models';
 import { CommonControllerService, UserControllerService } from 'src/app/core/api/services';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MemberService {
- 
-
+  
   constructor(
     private userController: UserControllerService,
     private commonController: CommonControllerService,
@@ -50,6 +49,22 @@ export class MemberService {
     }
     return this.userController.getUsers({ filter:filterOps}).pipe(map(d => d.responsePayload));
   }
+
+
+  fetchMembersByRole(roleCode:string) {
+    return this.userController.getUsers({ filter:{
+      status:['ACTIVE'],
+      roles:[roleCode as any],
+      userByRole:true
+    }})
+    .pipe(map(d => d.responsePayload));
+  }
+
+  saveRoleUserWise(roleCode: string, users: UserDetail[]) {
+    return this.userController.assignUsersToRoles({id:roleCode as any,body:users}).pipe(map(d => d.responsePayload));
+  }
+
+  
 
 }
 

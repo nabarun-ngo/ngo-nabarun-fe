@@ -11,7 +11,7 @@ import { UserDetail } from '../../models/user-detail';
 
 export interface UpdateLoggedInUserDetails$Params {
   updatePicture?: boolean;
-  'X-Correlation-Id'?: string;
+  'X-Cloud-Trace-Context'?: string;
       body: UserDetail
 }
 
@@ -19,7 +19,7 @@ export function updateLoggedInUserDetails(http: HttpClient, rootUrl: string, par
   const rb = new RequestBuilder(rootUrl, updateLoggedInUserDetails.PATH, 'patch');
   if (params) {
     rb.query('updatePicture', params.updatePicture, {});
-    rb.header('X-Correlation-Id', params['X-Correlation-Id'], {});
+    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
     rb.body(params.body, 'application/json');
   }
 
