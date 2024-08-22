@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { getErrorMessage, injectNgControl } from 'src/app/core/service/form.service';
-import { UniversalInputModel } from 'src/app/shared/components/generic/universal-input/universal-input.model'; 
+import { inputType, UniversalInputModel } from 'src/app/shared/components/generic/universal-input/universal-input.model'; 
 
 
 @Component({
@@ -15,5 +15,7 @@ export class UniversalInputComponent {
 
   @Input({required:true}) 
   inputModel!:UniversalInputModel;
+
+  specialInputTypes:inputType[]=['date','editor','radio','time','phone','check']
 
 }

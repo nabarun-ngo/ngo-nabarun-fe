@@ -26,7 +26,7 @@ export interface UserDetail {
   roleString?: string;
   roles?: Array<UserRole>;
   socialMediaLinks?: Array<UserSocialMedia>;
-  status?: 'ACTIVE' | 'INACTIVE' | 'DELETED';
+  status?: 'ACTIVE' | 'INACTIVE' | 'DELETED' | 'BLOCKED';
   title?: string;
   userId?: string;
 }

@@ -30,8 +30,7 @@
 
 
 <!-- input other than date-->
-<ng-container
-    *ngIf="inputModel.tagName == 'input' && inputModel.inputType != 'date' && inputModel.inputType != 'time' && inputModel.inputType != 'editor' && inputModel.inputType != 'radio'">
+<ng-container *ngIf="inputModel.tagName == 'input' && !specialInputTypes.includes(inputModel.inputType)">
     <label *ngIf="inputModel.labelName"
         [for]="inputModel.html_id ?inputModel.html_id : inputModel.tagName+'_'+inputModel.inputType+'_'+inputModel.labelName"
         class="block text-sm font-medium text-gray-700 mb-2">{{inputModel.labelName}}</label>
@@ -64,7 +63,8 @@
     <label *ngIf="inputModel.labelName"
         [for]="inputModel.html_id ?inputModel.html_id : inputModel.tagName+'_'+inputModel.inputType+'_'+inputModel.labelName"
         class="block text-sm font-medium text-gray-700 mb-2">{{inputModel.labelName}}</label>
-    <mat-form-field class="dense-3" style="width: 212px;" [appearance]="inputModel.appearance ? inputModel.appearance :'outline'"
+    <mat-form-field class="dense-3" style="width: 212px;"
+        [appearance]="inputModel.appearance ? inputModel.appearance :'outline'"
         [style]="inputModel.style? inputModel.style : ''" [ngClass]="inputModel.cssClass ? inputModel.cssClass : ''">
         <input [formControl]="ngControl.control" matInput [matDatepicker]="date" [placeholder]="inputModel.placeholder!"
             [ngClass]="inputModel.cssInputClass ? inputModel.cssInputClass : ''" readonly>
@@ -118,16 +118,43 @@
     <label *ngIf="inputModel.labelName"
         [for]="inputModel.html_id ?inputModel.html_id : inputModel.tagName+'_'+inputModel.inputType+'_'+inputModel.labelName"
         class="block text-sm font-medium text-gray-700 mb-2">{{inputModel.labelName}}</label>
-    <mat-form-field  class="dense-3" style="width: 212px;" [appearance]="inputModel.appearance ? inputModel.appearance :'outline'"
+    <mat-form-field class="dense-3" style="width: 212px;"
+        [appearance]="inputModel.appearance ? inputModel.appearance :'outline'"
         [style]="inputModel.style? inputModel.style : ''" [ngClass]="inputModel.cssClass ? inputModel.cssClass : ''">
-        <input [ngxMatTimepicker]="pickerA" [format]="inputModel.props!['format']" [formControl]="ngControl.control" matInput 
-            [placeholder]="inputModel.placeholder!" [ngClass]="inputModel.cssInputClass ? inputModel.cssInputClass : ''"
-            readonly />
+        <input [ngxMatTimepicker]="pickerA" [format]="inputModel.props!['format']" [formControl]="ngControl.control"
+            matInput [placeholder]="inputModel.placeholder!"
+            [ngClass]="inputModel.cssInputClass ? inputModel.cssInputClass : ''" readonly />
         <mat-icon matSuffix (click)="pickerA.open()">
             watch_later
         </mat-icon>
-        <ngx-mat-timepicker #pickerA dottedMinutesInGap ></ngx-mat-timepicker>
+        <ngx-mat-timepicker #pickerA dottedMinutesInGap></ngx-mat-timepicker>
         <mat-error>{{ errorMessage(ngControl.control.errors,inputModel.labelName)}}</mat-error>
     </mat-form-field>
 
+</ng-container>
+
+<ng-container *ngIf="inputModel.tagName == 'input' && inputModel.inputType == 'phone'">
+    <label *ngIf="inputModel.labelName"
+        [for]="inputModel.html_id ?inputModel.html_id : inputModel.tagName+'_'+inputModel.inputType+'_'+inputModel.labelName"
+        class="block text-sm font-medium text-gray-700 mb-2">{{inputModel.labelName}}</label>
+    <mat-form-field class="dense-3" style="width: 212px;" [style.--ngxMatInputTel-opacity]="'1'"
+        [appearance]="inputModel.appearance ? inputModel.appearance :'outline'"
+        [style]="inputModel.style? inputModel.style : ''" [ngClass]="inputModel.cssClass ? inputModel.cssClass : ''">
+        <ngx-mat-input-tel  matInput [preferredCountries]="['in']" [enablePlaceholder]="true" [enableSearch]="true"
+            [placeholder]="inputModel.placeholder!" [formControl]="ngControl.control" 
+        	 ></ngx-mat-input-tel>
+        <mat-error>{{ errorMessage(ngControl.control.errors,inputModel.labelName)}}</mat-error>
+    </mat-form-field>
+    
+</ng-container>
+
+
+<ng-container *ngIf="inputModel.tagName == 'input' && inputModel.inputType == 'check'">
+    <!-- <mat-form-field 
+        [appearance]="inputModel.appearance ? inputModel.appearance :'outline'"
+        [style]="inputModel.style? inputModel.style : ''" [ngClass]="inputModel.cssClass ? inputModel.cssClass : ''">
+       
+    </mat-form-field> -->
+      <mat-checkbox [formControl]="ngControl.control">{{inputModel.labelName}}</mat-checkbox>
+      <mat-error>{{ errorMessage(ngControl.control.errors,inputModel.labelName)}}</mat-error> 
 </ng-container>

@@ -17,8 +17,8 @@ export class MemberService {
     return this.userController.getUsers({ pageIndex: pageIndex, pageSize: pageSize,filter:{}}).pipe(map(d => d.responsePayload));
   }
 
-  fetchRefData() {
-    return this.commonController.getReferenceData({ names: [RefDataType.User]}).pipe(map(d => d.responsePayload));
+  fetchRefData(countryCode?:string,stateCode?:string) {
+    return this.commonController.getReferenceData({ names: [RefDataType.User],countryCode:countryCode,stateCode:stateCode}).pipe(map(d => d.responsePayload));
   }
 
   getUserDetail(id: string) {
@@ -62,6 +62,10 @@ export class MemberService {
 
   saveRoleUserWise(roleCode: string, users: UserDetail[]) {
     return this.userController.assignUsersToRoles({id:roleCode as any,body:users}).pipe(map(d => d.responsePayload));
+  }
+
+  updateMyProfiledetail(updatedDetail:UserDetail){
+    return this.userController.updateLoggedInUserDetails({body:updatedDetail}).pipe(map(d => d.responsePayload));
   }
 
   

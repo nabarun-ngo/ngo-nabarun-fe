@@ -1,5 +1,5 @@
 import { KeyValue } from "src/app/core/api/models";
-export type inputType='text' | 'email' | 'password' | 'number' | 'date' | 'time' | 'editor' | 'multiselect' | 'radio' | '';
+export type inputType='text' | 'email' | 'phone' | 'password' | 'number' | 'date' | 'time' | 'editor' | 'multiselect' | 'radio' | 'check' | '';
 
 export interface UniversalInputModel{
     tagName : 'input' | 'textarea' | 'select' ;

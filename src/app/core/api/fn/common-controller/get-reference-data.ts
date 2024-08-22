@@ -15,6 +15,8 @@ export interface GetReferenceData$Params {
   names?: Array<RefDataType>;
   donationType?: DonationType;
   currentDonationStatus?: DonationStatus;
+  countryCode?: string;
+  stateCode?: string;
   'X-Cloud-Trace-Context'?: string;
 }
 
@@ -24,6 +26,8 @@ export function getReferenceData(http: HttpClient, rootUrl: string, params?: Get
     rb.query('names', params.names, {});
     rb.query('donationType', params.donationType, {});
     rb.query('currentDonationStatus', params.currentDonationStatus, {});
+    rb.query('countryCode', params.countryCode, {});
+    rb.query('stateCode', params.stateCode, {});
     rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
   }
 

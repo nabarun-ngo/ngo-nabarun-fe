@@ -27,7 +27,7 @@ import { DetailedDonationComponent } from './components/detailed-donation/detail
 import { SegmentedControllerComponent } from './components/generic/segmented-controller/segmented-controller.component';
 import { ControlSegmentComponent } from './components/generic/segmented-controller/control-segment.component';
 import { FileUploadComponent } from './components/generic/file-upload/file-upload.component';
-import {MAT_RADIO_DEFAULT_OPTIONS, MatRadioModule} from '@angular/material/radio';
+import { MAT_RADIO_DEFAULT_OPTIONS, MatRadioModule } from '@angular/material/radio';
 import { UniversalInputComponent } from './components/generic/universal-input/universal-input.component';
 import { ProfileCardComponent } from './components/profile-card/profile-card.component';
 import { ProfileViewComponent } from './components/profile-view/profile-view.component';
@@ -36,9 +36,11 @@ import { HtmlSanitizerPipe } from './pipes/html-sanitizer.pipe';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 import { PlatformModule } from '@angular/cdk/platform';
-import {ClipboardModule} from '@angular/cdk/clipboard';
-import {MatMenuModule} from '@angular/material/menu';
-import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import { ClipboardModule } from '@angular/cdk/clipboard';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { NgxMatInputTelComponent } from 'ngx-mat-input-tel';
+import { MAT_CHECKBOX_DEFAULT_OPTIONS, MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -71,7 +73,7 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     MatNativeDateModule,
     MatCardModule,
     MatExpansionModule,
-    MatTableModule, MatButtonModule,  MatIconModule,
+    MatTableModule, MatButtonModule, MatIconModule,
     MatPaginatorModule,
     MatInputModule,
     MatRadioModule,
@@ -81,6 +83,8 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     ClipboardModule,
     MatMenuModule,
     MatButtonToggleModule,
+    NgxMatInputTelComponent,
+    MatCheckboxModule
   ],
   exports: [
     ItemTileListComponent,
@@ -89,8 +93,8 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     SearchAndAdvancedSearchFormComponent,
     MatCardModule,
     MatExpansionModule,
-    MatTableModule, 
-    MatButtonModule,  
+    MatTableModule,
+    MatButtonModule,
     MatIconModule,
     FormsModule,
     ReactiveFormsModule,
@@ -112,11 +116,15 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     PlatformModule,
     ClipboardModule,
     MatMenuModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
   ],
   providers: [{
     provide: MAT_RADIO_DEFAULT_OPTIONS,
     useValue: { color: 'primary' },
-}]
+  }, 
+  {
+    provide: MAT_CHECKBOX_DEFAULT_OPTIONS,
+    useValue: { color: 'primary' },
+  }]
 })
 export class SharedModule { }

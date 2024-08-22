@@ -63,6 +63,10 @@ class NoopValueAccessor implements ControlValueAccessor {
     else if(arg0 && arg0['maxLength']){
       return (fieldName ? fieldName : 'This field')+' should be minimum '+arg0['maxLength'].max+'.';
     }
+    else if(arg0 && arg0['validatePhoneNumber']){
+      return (fieldName ? fieldName : 'This field')+' contains invalid phone number.';
+    }
+    
     // Validators.max
     // Validators.maxLength
     // Validators.min
