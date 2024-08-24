@@ -4,7 +4,8 @@
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                 <mat-card class="mb-4">
                     <div class="text-gray-700 m-4">
-                        <div class="py-2 text-center justify-center font-bold text-purple-700">Please drag and drop users in the roles container
+                        <div class="py-2 text-center justify-center font-bold text-purple-700">Please drag and drop
+                            users in the roles container
                         </div>
 
                         <div class="divide-x-4 mt-4">
@@ -12,7 +13,9 @@
                             <div cdkDropListGroup class="grid grid-cols-4 gap-3">
                                 <div class="example-container" *ngFor="let roleItem of rolesToEdit">
                                     <h2>{{roleItem.displayValue}}</h2>
-                                    <div *ngIf="roleErrorMap[roleItem.key!]?.hasError" class="py-2 text-center justify-center font-semibold text-red-700">{{roleErrorMap[roleItem.key!].message}}</div>
+                                    <div *ngIf="roleErrorMap[roleItem.key!]?.hasError"
+                                        class="py-2 text-center justify-center font-semibold text-red-700">
+                                        {{roleErrorMap[roleItem.key!].message}}</div>
                                     <div cdkDropList [cdkDropListData]="roleUserMap[roleItem.key!]" class="example-list"
                                         (cdkDropListDropped)="drop($event)">
                                         <!-- <div *ngFor="let profile of roleUserMap[roleItem.key!] " class="example-box" cdkDrag>{{profile.fullName}}</div> -->
@@ -41,7 +44,9 @@
                                                     <mat-icon>content_copy</mat-icon>
                                                     <span>Clone</span>
                                                 </button>
-                                                <button mat-menu-item [disabled]="roleErrorMap[roleItem.key!] ? !roleErrorMap[roleItem.key!].duplicates.includes(profile.userId!) : true" (click)="remove(roleItem.key!,profile)">
+                                                <button mat-menu-item
+                                                    [disabled]="roleErrorMap[roleItem.key!] ? !roleErrorMap[roleItem.key!].duplicates.includes(profile.userId!) : true"
+                                                    (click)="remove(roleItem.key!,profile)">
                                                     <mat-icon>remove</mat-icon>
                                                     <span>Remove</span>
                                                 </button>
@@ -54,10 +59,12 @@
                             </div>
                         </div>
 
-                        <div class="flex w-full md:flex-row " >
+                        <div class="flex w-full md:flex-row ">
                             <div class="flex items-center justify-center p-4 w-full">
                                 <div class="mx-1 px-2">
-                                    <button (click)="saveRoles()" class="bg-indigo-600 py-3 px-6 w-full text-white font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">Save Roles</button>
+                                    <button (click)="saveRoles()"
+                                        class="bg-indigo-600 py-3 px-6 w-full text-white font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">Save
+                                        Roles</button>
                                 </div>
                             </div>
                         </div>
@@ -67,7 +74,5 @@
             </div>
         </div>
     </div>
-    <button id="back"
-        class="block uppercase w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-300 focus:outline-none focus:shadow-outline focus:bg-gray-300 hover:shadow-xs p-3 my-4">
-        BACK TO DASHBOARD</button>
+    <app-page-navigation-buttons [navigations]="navigations"></app-page-navigation-buttons>
 </main>

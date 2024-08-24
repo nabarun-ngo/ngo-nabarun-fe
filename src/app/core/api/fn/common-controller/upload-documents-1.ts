@@ -11,7 +11,7 @@ import { SuccessResponseVoid } from '../../models/success-response-void';
 
 export interface UploadDocuments1$Params {
   docIndexId: string;
-  docIndexType: 'DONATION' | 'EVENT' | 'NOTICE' | 'USER' | 'PROFILE_PHOTO' | 'EVENT_COVER';
+  docIndexType: 'DONATION' | 'EVENT' | 'NOTICE' | 'USER' | 'PROFILE_PHOTO' | 'EVENT_COVER' | 'REQUEST';
   'X-Cloud-Trace-Context'?: string;
       body: Array<DocumentDetailUpload>
 }

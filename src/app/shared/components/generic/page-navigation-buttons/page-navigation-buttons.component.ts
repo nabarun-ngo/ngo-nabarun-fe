@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-page-navigation-buttons',
@@ -6,5 +6,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./page-navigation-buttons.component.scss']
 })
 export class PageNavigationButtonsComponent {
+
+  @Input()
+  navigations: { displayName: string; routerLink: string }[] = [];
 
 }

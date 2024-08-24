@@ -21,7 +21,7 @@ export class ProfileViewComponent implements OnInit {
 
   @Output()
   onUpdate: EventEmitter<{ actionName: 'SELF_UPDATE'|'CHANGE_MODE', profile?: UserDetail, mode?:OperationMode }> = new EventEmitter();
-  @Input('mode') mode: OperationMode='view';
+  @Input('mode') mode!: OperationMode;
 
   isInactiveUser: any;
 
@@ -102,7 +102,7 @@ export class ProfileViewComponent implements OnInit {
         Validators.required
       )]),
       country_p: new FormControl(this.address.presentAddress?.country, [Validators.required]),
-      presentParmanentSame: new FormControl(true, [Validators.required]),
+      presentParmanentSame: new FormControl(this.profile.presentAndPermanentAddressSame?true:false, [Validators.required]),
       addressLine1_s: new FormControl(this.address.permanentAddress?.addressLine1, [conditionalValidator(() =>
         (this.editSelfForm.get('presentParmanentSame')?.value === false),
         Validators.required
@@ -203,7 +203,7 @@ export class ProfileViewComponent implements OnInit {
         userDetail.phones.push({ phoneType: 'ALTERNATIVE', phoneCode: '+'+sPhNo.countryCallingCode, phoneNumber: sPhNo.nationalNumber })
       }
       userDetail.addresses = []
-
+      userDetail.presentAndPermanentAddressSame=this.editSelfForm.value.presentParmanentSame;
       userDetail.addresses.push({
         addressType: 'PRESENT',
         addressLine1: this.editSelfForm.value.addressLine1_p,
@@ -215,18 +215,7 @@ export class ProfileViewComponent implements OnInit {
         country: this.editSelfForm.value.country_p
       })
 
-      if (this.editSelfForm.value.presentParmanentSame) {
-        userDetail.addresses.push({
-          addressType: 'PERMANENT',
-          addressLine1: this.editSelfForm.value.addressLine1_p,
-          addressLine2: this.editSelfForm.value.addressLine2_p,
-          addressLine3: this.editSelfForm.value.addressLine3_p,
-          hometown: this.editSelfForm.value.hometown_p,
-          district: this.editSelfForm.value.district_p,
-          state: this.editSelfForm.value.state_p,
-          country: this.editSelfForm.value.country_p
-        })
-      } else {
+      if (!this.editSelfForm.value.presentParmanentSame) {
         userDetail.addresses.push({
           addressType: 'PERMANENT',
           addressLine1: this.editSelfForm.value.addressLine1_s,

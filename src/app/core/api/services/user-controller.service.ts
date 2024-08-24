@@ -9,12 +9,8 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { assignRolesToUsers } from '../fn/user-controller/assign-roles-to-users';
-import { AssignRolesToUsers$Params } from '../fn/user-controller/assign-roles-to-users';
 import { assignUsersToRoles } from '../fn/user-controller/assign-users-to-roles';
 import { AssignUsersToRoles$Params } from '../fn/user-controller/assign-users-to-roles';
-import { changeEmail } from '../fn/user-controller/change-email';
-import { ChangeEmail$Params } from '../fn/user-controller/change-email';
 import { getLoggedInUserDetails } from '../fn/user-controller/get-logged-in-user-details';
 import { GetLoggedInUserDetails$Params } from '../fn/user-controller/get-logged-in-user-details';
 import { getUserDetails } from '../fn/user-controller/get-user-details';
@@ -25,14 +21,14 @@ import { getUserRoleHistory } from '../fn/user-controller/get-user-role-history'
 import { GetUserRoleHistory$Params } from '../fn/user-controller/get-user-role-history';
 import { getUsers } from '../fn/user-controller/get-users';
 import { GetUsers$Params } from '../fn/user-controller/get-users';
-import { initiatePasswordChange } from '../fn/user-controller/initiate-password-change';
-import { InitiatePasswordChange$Params } from '../fn/user-controller/initiate-password-change';
 import { SuccessResponsePaginateUserDetail } from '../models/success-response-paginate-user-detail';
 import { SuccessResponseString } from '../models/success-response-string';
 import { SuccessResponseUserDetail } from '../models/success-response-user-detail';
 import { SuccessResponseVoid } from '../models/success-response-void';
 import { updateLoggedInUserDetails } from '../fn/user-controller/update-logged-in-user-details';
 import { UpdateLoggedInUserDetails$Params } from '../fn/user-controller/update-logged-in-user-details';
+import { updateUserDetails } from '../fn/user-controller/update-user-details';
+import { UpdateUserDetails$Params } from '../fn/user-controller/update-user-details';
 
 @Injectable({ providedIn: 'root' })
 export class UserControllerService extends BaseService {
@@ -40,53 +36,28 @@ export class UserControllerService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `initiatePasswordChange()` */
-  static readonly InitiatePasswordChangePath = '/api/user/initiatePasswordChange';
+  /** Path part for operation `updateUserDetails()` */
+  static readonly UpdateUserDetailsPath = '/api/user/updateUserDetails/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `initiatePasswordChange()` instead.
+   * To access only the response body, use `updateUserDetails()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  initiatePasswordChange$Response(params: InitiatePasswordChange$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
-    return initiatePasswordChange(this.http, this.rootUrl, params, context);
+  updateUserDetails$Response(params: UpdateUserDetails$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseUserDetail>> {
+    return updateUserDetails(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `initiatePasswordChange$Response()` instead.
+   * To access the full response (for headers, for example), `updateUserDetails$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  initiatePasswordChange(params: InitiatePasswordChange$Params, context?: HttpContext): Observable<SuccessResponseVoid> {
-    return this.initiatePasswordChange$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseVoid>): SuccessResponseVoid => r.body)
-    );
-  }
-
-  /** Path part for operation `changeEmail()` */
-  static readonly ChangeEmailPath = '/api/user/changeEmail';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `changeEmail()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  changeEmail$Response(params: ChangeEmail$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
-    return changeEmail(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `changeEmail$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  changeEmail(params: ChangeEmail$Params, context?: HttpContext): Observable<SuccessResponseVoid> {
-    return this.changeEmail$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseVoid>): SuccessResponseVoid => r.body)
+  updateUserDetails(params: UpdateUserDetails$Params, context?: HttpContext): Observable<SuccessResponseUserDetail> {
+    return this.updateUserDetails$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseUserDetail>): SuccessResponseUserDetail => r.body)
     );
   }
 
@@ -111,31 +82,6 @@ export class UserControllerService extends BaseService {
    */
   assignUsersToRoles(params: AssignUsersToRoles$Params, context?: HttpContext): Observable<SuccessResponseVoid> {
     return this.assignUsersToRoles$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseVoid>): SuccessResponseVoid => r.body)
-    );
-  }
-
-  /** Path part for operation `assignRolesToUsers()` */
-  static readonly AssignRolesToUsersPath = '/api/user/assignRolesToUsers/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `assignRolesToUsers()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  assignRolesToUsers$Response(params: AssignRolesToUsers$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
-    return assignRolesToUsers(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `assignRolesToUsers$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  assignRolesToUsers(params: AssignRolesToUsers$Params, context?: HttpContext): Observable<SuccessResponseVoid> {
-    return this.assignRolesToUsers$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseVoid>): SuccessResponseVoid => r.body)
     );
   }

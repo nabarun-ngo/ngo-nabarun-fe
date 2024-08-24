@@ -8,6 +8,9 @@ export interface UserDetail {
   about?: string;
   activeContributor?: string;
   addresses?: Array<UserAddress>;
+  attributes?: {
+[key: string]: string;
+};
   dateOfBirth?: string;
   email?: string;
   firstName?: string;
@@ -21,6 +24,7 @@ export interface UserDetail {
   phones?: Array<UserPhoneNumber>;
   picture?: string;
   pictureBase64?: string;
+  presentAndPermanentAddressSame?: boolean;
   primaryNumber?: string;
   publicProfile?: boolean;
   roleString?: string;

@@ -7,6 +7,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { DonationList, MemberList } from '../donation.model';
 import { DonationSummary, KeyValue, PaginateDonationDetail, PaginateUserDetail } from 'src/app/core/api/models';
+import { AppRoute } from 'src/app/core/constant/app-routing.const';
 
 @Component({
   selector: 'app-donation-dashboard',
@@ -28,7 +29,12 @@ export class DonationDashboardComponent implements OnInit {
   donations: DonationList[]=[]; 
   mySummary: DonationSummary | undefined;
   showcreateDonation:boolean=false;
-
+  navigations: { displayName: string; routerLink: string; }[] = [
+    {
+      displayName: 'Back to Dashboard',
+      routerLink: AppRoute.secured_dashboard_page.url
+    }
+  ];
   constructor(
     private sharedDataService: SharedDataService,
     private donationService: DonationService,

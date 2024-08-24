@@ -13,6 +13,7 @@ import { DetailedView, DetailedViewField } from 'src/app/shared/components/gener
 import { ModalService } from 'src/app/core/service/modal.service';
 import { scrollToFirstInvalidControl } from 'src/app/core/service/form.service';
 import { workListTab } from '../../task/task.const';
+import { AppRoute } from 'src/app/core/constant/app-routing.const';
 
 @Component({
   selector: 'app-workflow-list',
@@ -39,7 +40,12 @@ export class WorkflowListComponent extends Paginator implements OnInit {
     button_id: 'CONFIRM',
     button_name: 'Confirm'
   };
-
+  navigations: { displayName: string; routerLink: string; }[] = [
+    {
+      displayName: 'Back to Dashboard',
+      routerLink: AppRoute.secured_dashboard_page.url
+    }
+  ];
   constructor(
     private sharedDataService: SharedDataService,
     private route: ActivatedRoute,

@@ -20,11 +20,12 @@ import { AppRoute } from 'src/app/core/constant/app-routing.const';
 export class MemberListComponent extends Paginator implements OnInit {
 
   memberList!: PaginateUserDetail;
-  searchValue!:string;
-  refData!: {[key: string]: KeyValue[];};
-  protected app_route=AppRoute;
+  searchValue!: string;
+  refData!: { [key: string]: KeyValue[]; };
+  protected app_route = AppRoute;
 
-  searchInputData! : SearchAndAdvancedSearchModel;
+  searchInputData!: SearchAndAdvancedSearchModel;
+  navigations!: { displayName: string; routerLink: string; }[];
 
   constructor(
     private sharedDataService: SharedDataService,
@@ -44,7 +45,7 @@ export class MemberListComponent extends Paginator implements OnInit {
     if (this.route.snapshot.data['ref_data']) {
       this.refData = this.route.snapshot.data['ref_data'];
       this.sharedDataService.setRefData('USER', this.refData);
-     // console.log(refData)
+      // console.log(refData)
     }
 
     if (this.route.snapshot.data['data']) {
@@ -53,65 +54,72 @@ export class MemberListComponent extends Paginator implements OnInit {
       //console.log(this.memberList)
     }
 
-    this.searchInputData={
+    this.searchInputData = {
       normalSearchPlaceHolder: 'Search Member Name, Email, Mobile Number, Role',
       advancedSearch: {
         searchFormFields: [
           {
-            formControlName:'firstName',
-            inputModel:{
-              tagName:'input',
-              inputType:'text',
-              html_id:'firstName',
-              labelName:'First Name',
-              placeholder:'Enter First Name',
-              cssInputClass:'bg-white'
+            formControlName: 'firstName',
+            inputModel: {
+              tagName: 'input',
+              inputType: 'text',
+              html_id: 'firstName',
+              labelName: 'First Name',
+              placeholder: 'Enter First Name',
+              cssInputClass: 'bg-white'
             },
           },
           {
-            formControlName:'lastName',
-            inputModel:{
-              tagName:'input',
-              inputType:'text',
-              html_id:'lastName',
-              labelName:'Last Name',
-              placeholder:'Enter Last Name',
+            formControlName: 'lastName',
+            inputModel: {
+              tagName: 'input',
+              inputType: 'text',
+              html_id: 'lastName',
+              labelName: 'Last Name',
+              placeholder: 'Enter Last Name',
             },
           },
           {
-            formControlName:'email',
-            inputModel:{
-              tagName:'input',
-              inputType:'text',
-              html_id:'email',
-              labelName:'Email',
-              placeholder:'Enter Email',
+            formControlName: 'email',
+            inputModel: {
+              tagName: 'input',
+              inputType: 'text',
+              html_id: 'email',
+              labelName: 'Email',
+              placeholder: 'Enter Email',
             },
           },
           {
-            formControlName:'phoneNumber',
-            inputModel:{
-              tagName:'input',
-              inputType:'number',
-              html_id:'phoneNumber',
-              labelName:'Phone Number',
-              placeholder:'Enter Phone Number',
+            formControlName: 'phoneNumber',
+            inputModel: {
+              tagName: 'input',
+              inputType: 'number',
+              html_id: 'phoneNumber',
+              labelName: 'Phone Number',
+              placeholder: 'Enter Phone Number',
             },
           },
           {
-            formControlName:'role',
-            inputModel:{
-              tagName:'select',
-              inputType:'multiselect',
-              html_id:'role',
-              labelName:'Role',
-              placeholder:'Select Role',
+            formControlName: 'role',
+            inputModel: {
+              tagName: 'select',
+              inputType: 'multiselect',
+              html_id: 'role',
+              labelName: 'Role',
+              placeholder: 'Select Role',
               selectList: this.refData['availableRoles']
             },
           }
         ]
       }
     };
+
+    this.navigations = [
+      {
+        displayName: 'Back to Dashboard',
+        routerLink: this.app_route.secured_dashboard_page.url
+      }
+    ]
   }
 
   handlePageEvent($event: PageEvent) {
@@ -125,23 +133,23 @@ export class MemberListComponent extends Paginator implements OnInit {
   }
 
 
-  onSearch($event: { advancedSearch: boolean; reset:boolean; value: any; }) {
-    if($event.advancedSearch && !$event.reset ){
+  onSearch($event: { advancedSearch: boolean; reset: boolean; value: any; }) {
+    if ($event.advancedSearch && !$event.reset) {
       console.log($event.value)
       this.memberService.advancedSearch({
-        email:$event.value.email,
-        firstName:$event.value.firstName,
-        lastName:$event.value.lastName,
-        phoneNumber:$event.value.phoneNumber,
+        email: $event.value.email,
+        firstName: $event.value.firstName,
+        lastName: $event.value.lastName,
+        phoneNumber: $event.value.phoneNumber,
         role: $event.value.role
-      }).subscribe(data=>this.memberList=data!)
+      }).subscribe(data => this.memberList = data!)
     }
-    else if($event.advancedSearch && $event.reset ){
+    else if ($event.advancedSearch && $event.reset) {
       console.log($event.value)
-      this.memberService.fetchMembers(this.pageNumber,this.pageSize).subscribe(data=>this.memberList=data!)
+      this.memberService.fetchMembers(this.pageNumber, this.pageSize).subscribe(data => this.memberList = data!)
     }
-    else{
-      this.searchValue=$event.value as string;
+    else {
+      this.searchValue = $event.value as string;
     }
   }
 

@@ -6,16 +6,17 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseVoid } from '../../models/success-response-void';
+import { SuccessResponseUserDetail } from '../../models/success-response-user-detail';
+import { UserDetail } from '../../models/user-detail';
 
-export interface AssignRolesToUsers$Params {
+export interface UpdateUserDetails$Params {
   id: string;
   'X-Cloud-Trace-Context'?: string;
-      body: Array<'MEMBER' | 'CASHIER' | 'ASSISTANT_CASHIER' | 'TREASURER' | 'GROUP_COORDINATOR' | 'ASST_GROUP_COORDINATOR' | 'SECRETARY' | 'ASST_SECRETARY' | 'COMMUNITY_MANAGER' | 'ASST_COMMUNITY_MANAGER' | 'PRESIDENT' | 'VICE_PRESIDENT' | 'TECHNICAL_SPECIALIST'>
+      body: UserDetail
 }
 
-export function assignRolesToUsers(http: HttpClient, rootUrl: string, params: AssignRolesToUsers$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
-  const rb = new RequestBuilder(rootUrl, assignRolesToUsers.PATH, 'post');
+export function updateUserDetails(http: HttpClient, rootUrl: string, params: UpdateUserDetails$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseUserDetail>> {
+  const rb = new RequestBuilder(rootUrl, updateUserDetails.PATH, 'post');
   if (params) {
     rb.path('id', params.id, {});
     rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
@@ -27,9 +28,9 @@ export function assignRolesToUsers(http: HttpClient, rootUrl: string, params: As
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseVoid>;
+      return r as StrictHttpResponse<SuccessResponseUserDetail>;
     })
   );
 }
 
-assignRolesToUsers.PATH = '/api/user/assignRolesToUsers/{id}';
+updateUserDetails.PATH = '/api/user/updateUserDetails/{id}';

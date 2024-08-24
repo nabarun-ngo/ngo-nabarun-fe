@@ -28,7 +28,12 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
   private constants = AccountConstant;
   refData: { [name: string]: KeyValue[]; } | undefined;
   app_route = AppRoute;
-
+  navigations: { displayName: string; routerLink: string; }[] = [
+    {
+      displayName: 'Back to Dashboard',
+      routerLink: AppRoute.secured_dashboard_page.url
+    }
+  ];
   constructor(
     private sharedDataService: SharedDataService,
     private route: ActivatedRoute,

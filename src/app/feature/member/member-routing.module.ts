@@ -22,7 +22,10 @@ const routes: Routes = [
     component: MemberProfileComponent,
     resolve:{
       data:myProfileResolver,
-      ref_data:memberRefDataResolver
+      ref_data:memberRefDataResolver,
+    },
+    data:{
+      self_profile:true
     }
   },
   {

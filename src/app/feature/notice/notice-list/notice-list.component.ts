@@ -28,7 +28,12 @@ export class NoticeListComponent extends Paginator implements OnInit {
   isInactiveUser: any;
   searchInputData!: SearchAndAdvancedSearchModel;
   searchValue!: string;
-
+  navigations: { displayName: string; routerLink: string; }[] = [
+    {
+      displayName: 'Back to Dashboard',
+      routerLink: AppRoute.secured_dashboard_page.url
+    }
+  ];
   constructor(
     private route: ActivatedRoute,
     private sharedDataService: SharedDataService,

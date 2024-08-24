@@ -10,6 +10,7 @@ import { DetailedView } from 'src/app/shared/components/generic/detailed-view/de
 import { FormGroup } from '@angular/forms';
 import { date } from 'src/app/core/service/utilities.service';
 import { AccountService } from '../account.service';
+import { AppRoute } from 'src/app/core/constant/app-routing.const';
 
 @Component({
   selector: 'app-account-transaction',
@@ -21,7 +22,12 @@ export class AccountTransactionComponent extends Accordion<TransactionDetail> im
   defaultValue = TransactionDefaultValue;
   refData: { [name: string]: KeyValue[]; } | undefined;
   transactionList!: PaginateTransactionDetail;
-
+  navigations: { displayName: string; routerLink: string; }[] = [
+    {
+      displayName: 'Back to Accounts',
+      routerLink: AppRoute.secured_account_list_page.url
+    }
+  ];
   constructor(
     private sharedDataService: SharedDataService,
     private route: ActivatedRoute,

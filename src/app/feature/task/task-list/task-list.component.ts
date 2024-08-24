@@ -11,6 +11,7 @@ import { ActivatedRoute } from '@angular/router';
 import { TaskService } from '../task.service';
 import { date } from 'src/app/core/service/utilities.service';
 import { PageEvent } from '@angular/material/paginator';
+import { AppRoute } from 'src/app/core/constant/app-routing.const';
 
 @Component({
   selector: 'app-task-list',
@@ -37,6 +38,12 @@ export class TaskListComponent extends Paginator implements OnInit {
     button_id: 'CONFIRM',
     button_name: 'Confirm'
   };
+  navigations: { displayName: string; routerLink: string; }[] = [
+    {
+      displayName: 'Back to Dashboard',
+      routerLink: AppRoute.secured_dashboard_page.url
+    }
+  ];
 
   constructor(
     private sharedDataService: SharedDataService,
@@ -143,7 +150,7 @@ export class TaskListComponent extends Paginator implements OnInit {
             section_name: 'Work Details',
             section_type: 'key_value',
             section_html_id: 'work_detail',
-            section_form:new FormGroup({}),
+            section_form: new FormGroup({}),
             content: [
               {
                 field_name: 'Work Id',
@@ -178,7 +185,7 @@ export class TaskListComponent extends Paginator implements OnInit {
                   placeholder: 'Ex. Approve',
                   selectList: [{ key: 'APPROVE', displayValue: 'Approve' }, { key: 'DECLINE', displayValue: 'Decline' }]
                 },
-                form_input_validation:[Validators.required]
+                form_input_validation: [Validators.required]
               },
               {
                 field_name: 'Decision Owner',
@@ -204,7 +211,7 @@ export class TaskListComponent extends Paginator implements OnInit {
                   inputType: 'text',
                   placeholder: 'Ex. Remarks',
                 },
-                form_input_validation:[Validators.required]
+                form_input_validation: [Validators.required]
               },
 
             ]
@@ -279,11 +286,11 @@ export class TaskListComponent extends Paginator implements OnInit {
 
   accordionOpened($event: { rowIndex: number; }) {
     let item = this.workItemList.content![$event.rowIndex];
-    
-    this.addRequestDetails(item.workflowId!,$event.rowIndex);
-  
+
+    this.addRequestDetails(item.workflowId!, $event.rowIndex);
+
   }
-  addRequestDetails(id: string,rowIndex:number) {
+  addRequestDetails(id: string, rowIndex: number) {
     this.taskService.getRequestDetail(id).subscribe(request => {
 
       /**

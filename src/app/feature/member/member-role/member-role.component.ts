@@ -18,17 +18,18 @@ import { arraysEqual, objectsEqual } from 'src/app/core/service/utilities.servic
 })
 export class MemberRoleComponent implements OnInit {
 
-  protected app_route=AppRoute;
+  protected app_route = AppRoute;
   refData!: { [key: string]: KeyValue[]; };
   roleUserMap: { [roleCode: string]: UserDetail[] } = {};
   roleErrorMap: { [roleCode: string]: { hasError: boolean, message: string, duplicates: string[] } } = {};
   roleUserMapCache: { [roleCode: string]: UserDetail[] } = {};
 
   rolesToEdit!: KeyValue[];
+  navigations!: { displayName: string; routerLink: string; }[];
   constructor(
     private sharedDataService: SharedDataService,
     private route: ActivatedRoute,
-    private router:Router,
+    private router: Router,
     private memberService: MemberService,
     private modalService: ModalService,
     private commonService: CommonService,
@@ -44,16 +45,22 @@ export class MemberRoleComponent implements OnInit {
     this.rolesToEdit = this.refData['availableRoles'];
 
     for (const f of this.rolesToEdit) {
-     // console.log('before', new Date())
+      // console.log('before', new Date())
       const data = await lastValueFrom(this.memberService.fetchMembersByRole(f.key!));
       this.roleUserMap[f.key!] = data?.content!;
       this.roleUserMapCache[f.key!] = Array.from(this.roleUserMap[f.key!]);
-    
-    
+
+
     }
     console.log(this.roleUserMap, this.roleUserMapCache);
     //this.roleUserMapCache= Object.create(this.roleUserMap);
-   // console.log(this.roleUserMap, this.roleUserMapCache);
+    // console.log(this.roleUserMap, this.roleUserMapCache);
+    this.navigations = [
+      {
+        displayName: 'Back to Members',
+        routerLink: this.app_route.secured_member_members_page.url
+      }
+    ]
   }
 
 
@@ -69,7 +76,7 @@ export class MemberRoleComponent implements OnInit {
         event.currentIndex,
       );
     }
-    console.log(this.roleUserMap,this.roleUserMapCache)
+    console.log(this.roleUserMap, this.roleUserMapCache)
     this.checkDuplicate()
   }
 
@@ -81,12 +88,12 @@ export class MemberRoleComponent implements OnInit {
   checkDuplicate() {
     this.rolesToEdit.forEach(f => {
       //let hasError=this.roleUserMap[f.key!]?.some((val,i)=> this.roleUserMap[f.key!].indexOf(val) !== i);
-      const duplicates = this.roleUserMap[f.key!]?.map(m=>m.userId).filter((item, index) => this.roleUserMap[f.key!]?.map(m=>m.userId).indexOf(item) !== index) as string[];
+      const duplicates = this.roleUserMap[f.key!]?.map(m => m.userId).filter((item, index) => this.roleUserMap[f.key!]?.map(m => m.userId).indexOf(item) !== index) as string[];
 
       // console.log( hasError)
       this.roleErrorMap[f.key!] = duplicates.length > 0 ?
         {
-          hasError: true ,
+          hasError: true,
           message: 'Duplicate item exist.',
           duplicates: duplicates
         } :
@@ -111,22 +118,22 @@ export class MemberRoleComponent implements OnInit {
       return !this.roleErrorMap[f].hasError
     });
     if (noError) {
-      let isChanged:boolean=false;
-      for (const f of this.rolesToEdit) {  
+      let isChanged: boolean = false;
+      for (const f of this.rolesToEdit) {
         //console.log(f.key!,this.roleUserMap[f.key!].map(m=>m.userId),this.roleUserMapCache[f.key!].map(m=>m.userId))      
-        if(!arraysEqual(this.roleUserMap[f.key!].map(m=>m.userId),this.roleUserMapCache[f.key!].map(m=>m.userId))){
-          isChanged=true;
+        if (!arraysEqual(this.roleUserMap[f.key!].map(m => m.userId), this.roleUserMapCache[f.key!].map(m => m.userId))) {
+          isChanged = true;
           await lastValueFrom(this.memberService.saveRoleUserWise(f.key!, this.roleUserMap[f.key!]))
         }
       }
-      if(isChanged){
-        this.commonService.clearCache(['auth0_role_users']).subscribe(data=>{
+      if (isChanged) {
+        this.commonService.clearCache(['auth0_role_users']).subscribe(data => {
           this.router.navigateByUrl(this.app_route.secured_member_members_page.url)
         })
-      }else{
+      } else {
         this.modalService.openNotificationModal(AppDialog.err_no_change_made, 'notification', 'error');
       }
-      
+
     } else {
       this.modalService.openNotificationModal(AppDialog.err_incorrect_role, 'notification', 'error');
     }

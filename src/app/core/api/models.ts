@@ -12,7 +12,6 @@ export { DonationDetailFilter } from './models/donation-detail-filter';
 export { DonationStatus } from './models/donation-status';
 export { DonationSummary } from './models/donation-summary';
 export { DonationType } from './models/donation-type';
-export { EmailOrPasswordUpdate } from './models/email-or-password-update';
 export { EventDetail } from './models/event-detail';
 export { EventDetailCreate } from './models/event-detail-create';
 export { EventDetailUpdate } from './models/event-detail-update';
