@@ -4,8 +4,6 @@ import { AuthUser } from '../../model/auth-user.model';
 import { ModalService } from '../../service/modal.service';
 import { AppDialog } from '../../constant/app-dialog.const';
 import { AppRoute } from '../../constant/app-routing.const';
-import { NotificationService } from '../../service/notification.service';
-import { Observable } from 'rxjs';
 import { AppNotification } from '../../model/notification.model';
 import { Router } from '@angular/router';
 import { CommonService } from 'src/app/shared/services/common.service';

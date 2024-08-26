@@ -68,7 +68,9 @@ export class MemberService {
     return this.userController.updateLoggedInUserDetails({body:updatedDetail}).pipe(map(d => d.responsePayload));
   }
 
-  
+  updateProfiledetail(id:string,updatedDetail:UserDetail){
+    return this.userController.updateUserDetails({id: id ,body:updatedDetail}).pipe(map(d => d.responsePayload));
+  }
 
 }
 

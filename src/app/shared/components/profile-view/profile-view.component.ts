@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, RequiredValidator, Validators } from '@angular/forms';
 import { parsePhoneNumber } from 'libphonenumber-js';
-import { KeyValue, UserAddress, UserDetail, UserPhoneNumber, UserSocialMedia } from 'src/app/core/api/models';
+import { KeyValue, UserAddress, UserDetail, UserPhoneNumber, UserRole, UserSocialMedia } from 'src/app/core/api/models';
 import { conditionalValidator } from 'src/app/core/service/form.service';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { OperationMode } from 'src/app/feature/member/member.const';
@@ -14,13 +14,11 @@ import { MemberService } from 'src/app/feature/member/member.service';
 })
 export class ProfileViewComponent implements OnInit {
 
-
-
   @Input({ required: true, alias: 'profile' })
   profile!: UserDetail;
 
   @Output()
-  onUpdate: EventEmitter<{ actionName: 'SELF_UPDATE'|'CHANGE_MODE', profile?: UserDetail, mode?:OperationMode }> = new EventEmitter();
+  onUpdate: EventEmitter<{ actionName: 'SELF_UPDATE' | 'ADMIN_UPDATE' | 'CHANGE_MODE', profile?: UserDetail, mode?: OperationMode }> = new EventEmitter();
   @Input('mode') mode!: OperationMode;
 
   isInactiveUser: any;
@@ -65,7 +63,6 @@ export class ProfileViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.refData = this.sharedDataService.getRefData('USER')!;
-    console.log()
     this.editAdminForm = new FormGroup({
       status: new FormControl(this.profile.status, [Validators.required]),
       roles: new FormControl(this.profile.roles?.map(m => m.roleCode), [Validators.required]),
@@ -87,8 +84,9 @@ export class ProfileViewComponent implements OnInit {
       lastName: new FormControl(this.profile.lastName, [Validators.required]),
       gender: new FormControl(this.profile.gender, [Validators.required]),
       dateOfBirth: new FormControl(new Date(this.profile.dateOfBirth!), [Validators.required]),
-      phoneNumber_p: new FormControl(this.phoneNumber.phoneNumberP ? (this.phoneNumber.phoneNumberP.phoneCode!+this.phoneNumber.phoneNumberP.phoneNumber) : null, [Validators.required]),
-      phoneNumber_s: new FormControl(this.phoneNumber.phoneNumberS ? (this.phoneNumber.phoneNumberS.phoneCode!+this.phoneNumber.phoneNumberS.phoneNumber) : null, []),
+      email: new FormControl(this.profile.email, [Validators.required, Validators.email]),
+      phoneNumber_p: new FormControl(this.phoneNumber.phoneNumberP ? (this.phoneNumber.phoneNumberP.phoneCode! + this.phoneNumber.phoneNumberP.phoneNumber) : null, [Validators.required]),
+      phoneNumber_s: new FormControl(this.phoneNumber.phoneNumberS ? (this.phoneNumber.phoneNumberS.phoneCode! + this.phoneNumber.phoneNumberS.phoneNumber) : null, []),
       addressLine1_p: new FormControl(this.address.presentAddress?.addressLine1, [Validators.required]),
       addressLine2_p: new FormControl(this.address.presentAddress?.addressLine2, []),
       addressLine3_p: new FormControl(this.address.presentAddress?.addressLine3, []),
@@ -102,7 +100,7 @@ export class ProfileViewComponent implements OnInit {
         Validators.required
       )]),
       country_p: new FormControl(this.address.presentAddress?.country, [Validators.required]),
-      presentParmanentSame: new FormControl(this.profile.presentAndPermanentAddressSame?true:false, [Validators.required]),
+      presentParmanentSame: new FormControl(this.profile.presentAndPermanentAddressSame ? true : false, [Validators.required]),
       addressLine1_s: new FormControl(this.address.permanentAddress?.addressLine1, [conditionalValidator(() =>
         (this.editSelfForm.get('presentParmanentSame')?.value === false),
         Validators.required
@@ -166,20 +164,42 @@ export class ProfileViewComponent implements OnInit {
   }
 
   editSelf() {
-    if(this.address.presentAddress){
+    if (this.address.presentAddress) {
       this.memberService.fetchRefData(this.address.presentAddress.country, this.address.presentAddress.state).subscribe(data => {
         this.address.presentAddressStates = data!['states']
         this.address.presentAddressDistricts = data!['districts']
       })
     }
-    if(this.address.permanentAddress){
+    if (this.address.permanentAddress) {
       this.memberService.fetchRefData(this.address.permanentAddress.country, this.address.permanentAddress.state).subscribe(data => {
         this.address.permanentAddressStates = data!['states']
         this.address.permanentAddressDistricts = data!['districts']
       })
     }
-    this.onUpdate.emit({ actionName: 'CHANGE_MODE',mode:'edit_self'})
+    this.onUpdate.emit({ actionName: 'CHANGE_MODE', mode: 'edit_self' })
 
+  }
+
+  updateDetailAdmin() {
+    if (this.editAdminForm.valid) {
+      let userDetail: UserDetail = {};
+      if (this.profile.status != this.editAdminForm.value.status) {
+        userDetail.status = this.editAdminForm.value.status;
+      }
+      console.log(this.editAdminForm.value.roles, this.profile.roles?.map(m => m.roleCode))
+
+      userDetail.roles = [];
+      let roles = this.editAdminForm.value.roles as string[]
+      roles.forEach(f => {
+        userDetail.roles?.push({ roleCode: f as any })
+      })
+
+      userDetail.id = this.profile.id!;
+      this.onUpdate.emit({ actionName: 'ADMIN_UPDATE', profile: userDetail })
+
+    } else {
+      this.editAdminForm.markAllAsTouched();
+    }
   }
 
   updateSelfProfile() {
@@ -193,17 +213,18 @@ export class ProfileViewComponent implements OnInit {
       userDetail.gender = this.editSelfForm.value.gender;
       userDetail.dateOfBirth = this.editSelfForm.value.dateOfBirth;
       userDetail.about = this.editSelfForm.value.about;
+      userDetail.email = this.editSelfForm.value.email;
       userDetail.phones = []
       if (this.editSelfForm.value.phoneNumber_p) {
         let pPhNo = parsePhoneNumber(this.editSelfForm.value.phoneNumber_p);
-        userDetail.phones.push({ phoneType: 'PRIMARY', phoneCode: '+'+pPhNo.countryCallingCode, phoneNumber: pPhNo.nationalNumber })
+        userDetail.phones.push({ phoneType: 'PRIMARY', phoneCode: '+' + pPhNo.countryCallingCode, phoneNumber: pPhNo.nationalNumber })
       }
       if (this.editSelfForm.value.phoneNumber_s) {
         let sPhNo = parsePhoneNumber(this.editSelfForm.value.phoneNumber_s);
-        userDetail.phones.push({ phoneType: 'ALTERNATIVE', phoneCode: '+'+sPhNo.countryCallingCode, phoneNumber: sPhNo.nationalNumber })
+        userDetail.phones.push({ phoneType: 'ALTERNATIVE', phoneCode: '+' + sPhNo.countryCallingCode, phoneNumber: sPhNo.nationalNumber })
       }
       userDetail.addresses = []
-      userDetail.presentAndPermanentAddressSame=this.editSelfForm.value.presentParmanentSame;
+      userDetail.presentAndPermanentAddressSame = this.editSelfForm.value.presentParmanentSame;
       userDetail.addresses.push({
         addressType: 'PRESENT',
         addressLine1: this.editSelfForm.value.addressLine1_p,
@@ -227,21 +248,21 @@ export class ProfileViewComponent implements OnInit {
           country: this.editSelfForm.value.country_s
         })
       }
-      userDetail.socialMediaLinks=[]
-      if(this.editSelfForm.value.facebookLink){
-        userDetail.socialMediaLinks.push({mediaType:'FACEBOOK', mediaName:'Facebook',mediaLink:this.editSelfForm.value.facebookLink})
+      userDetail.socialMediaLinks = []
+      if (this.editSelfForm.value.facebookLink) {
+        userDetail.socialMediaLinks.push({ mediaType: 'FACEBOOK', mediaName: 'Facebook', mediaLink: this.editSelfForm.value.facebookLink })
       }
-      if(this.editSelfForm.value.instagramLink){
-        userDetail.socialMediaLinks.push({mediaType:'INSTAGRAM', mediaName:'Instagram',mediaLink:this.editSelfForm.value.instagramLink})
+      if (this.editSelfForm.value.instagramLink) {
+        userDetail.socialMediaLinks.push({ mediaType: 'INSTAGRAM', mediaName: 'Instagram', mediaLink: this.editSelfForm.value.instagramLink })
       }
-      if(this.editSelfForm.value.linkedInLink){
-        userDetail.socialMediaLinks.push({mediaType:'LINKEDIN', mediaName:'LinkedIn',mediaLink:this.editSelfForm.value.linkedInLink})
+      if (this.editSelfForm.value.linkedInLink) {
+        userDetail.socialMediaLinks.push({ mediaType: 'LINKEDIN', mediaName: 'LinkedIn', mediaLink: this.editSelfForm.value.linkedInLink })
 
       }
-      if(this.editSelfForm.value.twitterLink){
-        userDetail.socialMediaLinks.push({mediaType:'TWITTER', mediaName:'Twitter',mediaLink:this.editSelfForm.value.twitterLink})
+      if (this.editSelfForm.value.twitterLink) {
+        userDetail.socialMediaLinks.push({ mediaType: 'TWITTER', mediaName: 'Twitter', mediaLink: this.editSelfForm.value.twitterLink })
       }
-      userDetail.socialMediaLinks.push({mediaType:'WHATSAPP', mediaName:'Whatsapp',mediaLink:'https://wa.me/'+this.editSelfForm.value.phoneNumber_p})
+      userDetail.socialMediaLinks.push({ mediaType: 'WHATSAPP', mediaName: 'Whatsapp', mediaLink: 'https://wa.me/' + this.editSelfForm.value.phoneNumber_p })
 
       console.log(this.editSelfForm.value)
 

@@ -61,7 +61,7 @@ export class MemberProfileComponent implements OnInit {
   }
 
   onUpdate($event: {
-    actionName: "SELF_UPDATE" | "CHANGE_MODE";
+    actionName: "SELF_UPDATE" | "CHANGE_MODE" | 'ADMIN_UPDATE';
     profile?: UserDetail;
     mode?: OperationMode;
   }) {
@@ -72,6 +72,11 @@ export class MemberProfileComponent implements OnInit {
       })
     } else if ($event.actionName == 'CHANGE_MODE') {
       this.mode = $event.mode!;
+    } else if ($event.actionName == 'ADMIN_UPDATE') {
+      this.memberService.updateProfiledetail($event.profile?.id!,$event.profile!).subscribe(data => {
+        this.member = data!
+        this.mode = 'view_admin';
+      })
     }
 
   }

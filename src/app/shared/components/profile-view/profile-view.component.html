@@ -172,12 +172,12 @@
                 </ul>
             </form>
             <div *ngIf="mode == 'view_admin'" class="grid grid-cols-1">
-                <button (click)="onUpdate.emit({ actionName: 'CHANGE_MODE',mode:'edit_admin'})"
+                <button  (click)="onUpdate.emit({ actionName: 'CHANGE_MODE',mode:'edit_admin'})"
                     class="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">
                     Update Details</button>
             </div>
             <div *ngIf="mode == 'edit_admin'" class="grid grid-cols-2">
-                <button *ngIf="mode == 'edit_admin'" (click)="onUpdate.emit({ actionName: 'CHANGE_MODE',mode:'view_admin'})"
+                <button *ngIf="mode == 'edit_admin'" (click)="updateDetailAdmin()"
                     class="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">
                     Update</button>
                 <button *ngIf="mode == 'edit_admin'" (click)="onUpdate.emit({ actionName: 'CHANGE_MODE',mode:'view_admin'})"
@@ -280,7 +280,7 @@
                         </div>
                         <div class="grid grid-cols-2">
                             <div class="px-4 py-2 font-semibold">Gender</div>
-                            <div **ngIf="mode != 'edit_self'" class="px-4 py-2">{{profile.gender | replaceNull}}</div>
+                            <div *ngIf="mode != 'edit_self'" class="px-4 py-2">{{profile.gender | replaceNull}}</div>
                             <app-universal-input formControlName="gender" *ngIf="mode == 'edit_self'" [inputModel]="{
                             tagName : 'select' ,
                             inputType : '',
@@ -318,10 +318,15 @@
                     <div class="grid md:grid-cols-2 text-sm">
                         <div class="grid grid-cols-2">
                             <div class="px-4 py-2 font-semibold">Email</div>
-                            <div class="px-4 py-2">
+                            <div class="px-4 py-2" *ngIf="mode != 'edit_self'">
                                 <a class="text-blue-800 break-all" href="mailto:{{profile.email}}">{{profile.email |
                                     replaceNull}}</a>
                             </div>
+                            <app-universal-input formControlName="email" *ngIf="mode == 'edit_self'" [inputModel]="{
+                                tagName : 'input',
+                                inputType : 'email',
+                                placeholder:'Enter email'
+                             }"></app-universal-input>
                         </div>
                         <div class="grid grid-cols-2">
                             <div class="px-4 py-2 font-semibold">Phone Number (WhatsApp)</div>
@@ -529,10 +534,13 @@
                         </div>
                     </div>
                 </div>
-                <div *ngIf="mode == 'view_self'" class="grid grid-cols-1">
+                <div *ngIf="mode == 'view_self'" class="grid grid-cols-2">
                     <button (click)="editSelf()"
                         class="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">
                         Update Profile</button>
+                        <button 
+                        class="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">
+                        Change Password</button>
                 </div>
                 <div *ngIf="mode == 'edit_self'" class="grid grid-cols-2">
                     <button *ngIf="mode == 'edit_self'" (click)="updateSelfProfile()"

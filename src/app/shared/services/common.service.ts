@@ -39,11 +39,11 @@ export class CommonService {
           console.log("Granted");
           this.sendToken();
           onMessage(this.messageing, (message) => {
-            this.notificationSub.next(message.data!); console.log("1");
+            this.notificationSub.next(message.data!); console.log("1",message.data);
             //this.sound.play();
           });
           new BroadcastChannel('notification_data').onmessage = (item) => {
-            this.notificationSub.next(item.data); console.log("2");
+            this.notificationSub.next(item.data); console.log("2",item.data);
             //this.sound.play();
           };
         }
@@ -54,10 +54,11 @@ export class CommonService {
   }
 
   sendToken() {
-    navigator.serviceWorker.getRegistration()
-      // .register("./firebase-messaging-sw.js", {
-      //   type: "module",
-      // })
+    navigator.serviceWorker
+    //.getRegistration()
+      .register(environment.production ? "./firebase-messaging-sw-prod.js" :"./firebase-messaging-sw.js", {
+        type: "module",
+      })
       .then((serviceWorkerRegistration) => {
         getToken(this.messageing, {
           vapidKey: environment.firebase_vapidKey,

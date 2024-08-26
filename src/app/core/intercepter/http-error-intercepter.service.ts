@@ -20,18 +20,21 @@ export class HttpErrorIntercepterService implements HttpInterceptor {
 
  
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpSentEvent | HttpHeaderResponse | HttpProgressEvent | HttpResponse<any> | HttpUserEvent<any>> {
-    
+    //console.log(request.url,environment.api_base_url)
     if(request.url.includes(environment.api_base_url)){
+      //console.log("hi")
       request = request.clone({
         setHeaders:{
-          'X-Cloud-Trace-Context': uuid.v4()
+          'Correlation-Id': uuid.v4()
         }
       })
+      //console.log(request.headers)
     }
     
-
+    //console.log(request.headers.get('Correlation-Id'))
 
     var showError=request.headers.get('hideError') ==  null ? true: false;
+    var corrId=request.headers.get('Correlation-Id')!;
     //request.headers
     return next.handle(request)
       .pipe(
@@ -48,9 +51,9 @@ export class HttpErrorIntercepterService implements HttpInterceptor {
         catchError((error) => {
           if(showError){
             if (error instanceof HttpErrorResponse) {
-              this.showErrorResponse(error);
+              this.showErrorResponse(error,corrId);
             }else if (error.error instanceof ErrorEvent) {
-              this.showErrorResponse(error);
+              this.showErrorResponse(error,corrId);
             }
           }
           return throwError(error);
@@ -58,7 +61,7 @@ export class HttpErrorIntercepterService implements HttpInterceptor {
       )
   }
 
-  private showErrorResponse(errorResponse:any){
+  private showErrorResponse(errorResponse:any, corrId ='NA'){
     console.log(errorResponse);
     let message:string; 
     let heading:string='Error'; 
@@ -103,7 +106,7 @@ export class HttpErrorIntercepterService implements HttpInterceptor {
 
     let moreDetails=null;
     if(errorResponse.error !=null && !isEmpty(errorResponse.error.details)){
-      moreDetails=new Array(errorResponse.error.details).toString()
+      moreDetails=new Array(errorResponse.error.details,'Ref Id : '+corrId).toString()
     }
     
 

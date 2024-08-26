@@ -26,15 +26,6 @@ export class SecuredDashboardComponent implements OnInit {
 
   // message$ = this._message.asObservable();
 
-  init(): void {
-    // Request permission to receive notifications
-
-
-
-
-
-  }
-
 
 
   ngOnInit(): void {
