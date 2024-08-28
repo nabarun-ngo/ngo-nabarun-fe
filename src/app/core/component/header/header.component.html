@@ -47,7 +47,7 @@
             <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 z-40">
                 <div class="ml-3 relative " *ngIf="true">
                     <div>
-                        <button x-on:click="notificationDropdownOpen = !notificationDropdownOpen" class="relative inline-block bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                        <button (click)="sound()" x-on:click="notificationDropdownOpen = !notificationDropdownOpen" class="relative inline-block bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                           <span class="sr-only">View notifications</span>
                           <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                             aria-hidden="true">
@@ -92,7 +92,7 @@
                 <!-- Profile dropdown -->
                 <div class="ml-6 relative">
                     <div>
-                        <button type="button" x-on:click=" isProfileDropdownOpen = true" class="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white" id="user-menu-button" aria-expanded="false"
+                        <button  type="button" x-on:click=" isProfileDropdownOpen = true" class="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white" id="user-menu-button" aria-expanded="false"
                             aria-haspopup="true">
                           <span class="sr-only">Open user menu</span>
                           <img class="h-8 w-8 rounded-full" [src]="user.picture" alt="Profile">

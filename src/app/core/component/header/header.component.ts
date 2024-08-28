@@ -7,6 +7,7 @@ import { AppRoute } from '../../constant/app-routing.const';
 import { AppNotification } from '../../model/notification.model';
 import { Router } from '@angular/router';
 import { CommonService } from 'src/app/shared/services/common.service';
+import {Howl, Howler} from 'howler';
 
 @Component({
   selector: 'app-header',
@@ -39,11 +40,7 @@ export class HeaderComponent implements OnInit {
     })
     this.commonService.requestPermission();
     this.commonService.liveNotifications$.subscribe(data=>{
-      var sound = new Howl({
-        src: ['sound.mp3']
-      });
-      
-      sound.play();
+      this.sound()
       this.notifications.unshift(new AppNotification(data));
       console.log(data)
     });
@@ -62,12 +59,15 @@ export class HeaderComponent implements OnInit {
   }
 
   sound(){
-    //this.commonService.sound.play();
-    //console.log('hi hello');
+    Howler.autoUnlock= false;
+    var sound = new Howl({
+      src: ['http://localhost:4201/assets/mixkit-bell-notification-933.wav'],
+      preload:true,
+    });
+    
+    sound.play();
   }
 
-  profile() {
-    this.router.navigateByUrl(this.app_route.secured_member_my_profile_page.url)
-  }
+  
 
 }
