@@ -16,7 +16,6 @@ import { RouterModule } from '@angular/router';
 import { CommonLayoutComponent } from './layout/common-layout/common-layout.component';
 import { SecuredLayoutComponent } from './layout/secured-layout/secured-layout.component';
 import { ModalComponent } from './component/modal/modal.component';
-import { MessageComponent } from './component/message/message.component';
 import { DateDiffPipe } from './pipe/date-diff.pipe';
 
 
@@ -31,7 +30,6 @@ import { DateDiffPipe } from './pipe/date-diff.pipe';
     CommonLayoutComponent,
     SecuredLayoutComponent,
     ModalComponent,
-    MessageComponent,
     DateDiffPipe,    
   ],
   imports: [

@@ -6,6 +6,10 @@ import { filter, map } from 'rxjs';
 @Directive({
   selector: '[appShowAuthed]'
 })
+/**
+ * @deprecated 
+ */
+
 export class ShowAuthedDirective implements OnInit {
   constructor(
     private templateRef: TemplateRef<any>,
@@ -42,4 +46,6 @@ export class ShowAuthedDirective implements OnInit {
     this.condition = condition;
   }
 }
+
+
 

@@ -25,18 +25,29 @@ export class HeaderComponent implements OnInit {
     private modalService:ModalService,
     private commonService:CommonService,
     private router:Router,
-    private commonCo:Router,
   ) { }
 
 
   ngOnInit(): void {
     this.isAuthenticated = this.identityService.isUserLoggedIn();
     this.user=this.identityService.getUser();
-   // this.userId=this.user.profile_id;
+    this.commonService.fetchNotification().subscribe(data=>{
+      this.notifications=[];
+      data?.content?.forEach(d=>{
+        this.notifications.push(new AppNotification(d));
+      })
+    })
     this.commonService.requestPermission();
     this.commonService.liveNotifications$.subscribe(data=>{
-      this.notifications.push(new AppNotification(data));
+      var sound = new Howl({
+        src: ['sound.mp3']
+      });
+      
+      sound.play();
+      this.notifications.unshift(new AppNotification(data));
+      console.log(data)
     });
+    
       // data?.content?.forEach(f=>{
       //   this.notifications.push(new AppNotification(f));
       // })

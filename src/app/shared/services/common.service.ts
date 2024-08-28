@@ -76,7 +76,7 @@ export class CommonService {
   }
 
   fetchNotification() {
-    return this.commonController.getNotification({ pageIndex: 0, pageSize: 10 }).pipe(map(m => m.responsePayload))
+    return this.commonController.getNotification({ pageIndex: 0, pageSize: 5 }).pipe(map(m => m.responsePayload))
   }
 
   clearCache(names:string[]) {
