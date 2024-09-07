@@ -9,13 +9,13 @@ import { AppRoute } from 'src/app/core/constant/app-routing.const';
   selector: 'app-login-callback',
   template: '',
 })
-export class LoginCallbackComponent implements OnInit,OnDestroy {
+export class LoginCallbackComponent implements OnInit, OnDestroy {
   subs!: Subscription;
 
   constructor(
     private identityService: UserIdentityService,
     private sharedDataService: SharedDataService,
-    private router:Router
+    private router: Router
   ) {
 
   }
@@ -27,14 +27,15 @@ export class LoginCallbackComponent implements OnInit,OnDestroy {
 
   ngOnInit(): void {
     //console.log("iniit")
-    this.subs=this.identityService.onEvent('code_error','token_received').subscribe(data=>{
-      if(data.event == 'token_received'){
+    this.subs = this.identityService.onEvent('code_error', 'token_received').subscribe(data => {
+      if (data.event == 'token_received') {
         this.identityService.onCallback();
         this.sharedDataService.setAuthenticated(this.identityService.isUserLoggedIn());
-        this.router.navigate(['secured', 'dashboard']);
-      }else if(data.event == 'code_error'){
+        //console.log("heloo test")
+        this.router.navigateByUrl(AppRoute.secured_dashboard_page.url);
+      } else if (data.event == 'code_error') {
         this.identityService.onCallback();
-        this.router.navigate([AppRoute.login_page.url],{state:{isError: true,description:data.error?.type+' : '+data.error?.description,state:data.error?.state}});
+        this.router.navigate([AppRoute.login_page.url], { state: { isError: true, description: data.error?.type + ' : ' + data.error?.description, state: data.error?.state } });
       }
     })
   }

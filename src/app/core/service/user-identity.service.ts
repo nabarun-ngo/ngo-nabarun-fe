@@ -32,14 +32,13 @@ export class UserIdentityService implements OnInit {
   onEvent(...event_codes: EventType[]) {
     return this.oAuthService.events
       .pipe(filter(data => {
-        console.log(data, event_codes)
+        //console.log(data, event_codes)
         return event_codes.length == 0 || event_codes.includes(data.type)
       }))
       .pipe(map(data => {
         let response: { status: string; event: EventType; error: { type: string; description: string; state?: string } | undefined, params?: any };
-        console.log(data)
+        //console.log(data)
         if (data instanceof OAuthErrorEvent) {
-
           let error_data = (data as OAuthErrorEvent).params as { error: string; error_description: string, state: string };
           response = {
             status: 'error',
@@ -75,7 +74,12 @@ export class UserIdentityService implements OnInit {
     this.oAuthService.configure(environment.auth_config);
     this.oAuthService.setupAutomaticSilentRefresh({}, 'access_token');
     this.oAuthService.setupAutomaticSilentRefresh({}, 'id_token');
-    this.oAuthService.loadDiscoveryDocumentAndTryLogin().catch((err: OAuthErrorEvent) => {
+    console.log("Before Login " + this.oAuthService.state)
+    this.oAuthService.loadDiscoveryDocumentAndTryLogin().then(data => {
+      if(this.oAuthService.state){
+        this.router.navigateByUrl(decodeURIComponent(this.oAuthService.state));
+      }
+    }).catch((err: OAuthErrorEvent) => {
       this.onCallback();
       let data = err.params as { error: string, error_description: string, state: string };
       this.router.navigate([AppRoute.login_page.url], { state: { isError: true, description: data.error + ' : ' + data.error_description, state: data.state } });
@@ -84,17 +88,17 @@ export class UserIdentityService implements OnInit {
         * configuring idle timeout
         */
     //if(environment.production){
-      this.bnIdle.startWatching(environment.inactivityTimeOut).subscribe((isTimedOut: boolean) => {
-        if (isTimedOut) {
-          console.warn('session expired due to inactivity');
-          //if(this.isUserLoggedIn()){
-          // this.notificationService.deleteToken();
-          //}
-          this.logout();
-        }
-      });
-   // }
-    
+    this.bnIdle.startWatching(environment.inactivityTimeOut).subscribe((isTimedOut: boolean) => {
+      if (isTimedOut) {
+        console.warn('session expired due to inactivity');
+        // if(this.isUserLoggedIn()){
+        // this.notificationService.deleteToken();
+        // }
+        this.logout();
+      }
+    });
+    // }
+
   }
 
 
@@ -105,19 +109,20 @@ export class UserIdentityService implements OnInit {
     // }
   }
 
-  loginWith(loginType: LoginType, prompt?: string) {
+  loginWith(loginType: LoginType, prompt?: string, redirectUrl?: string) {
     let params: { connection?: string; prompt?: string } = {};
     if (prompt) {
       params.prompt = prompt;
     }
+    let additionalState = redirectUrl ? redirectUrl : '';
     if (loginType == 'email') {
       params.connection = 'email';
-      this.oAuthService.initCodeFlow('', params);
+      this.oAuthService.initCodeFlow(additionalState, params);
     } if (loginType == 'sms') {
       params.connection = 'sms';
-      this.oAuthService.initCodeFlow('', params);
+      this.oAuthService.initCodeFlow(additionalState, params);
     } else {
-      this.oAuthService.initCodeFlow('', params);
+      this.oAuthService.initCodeFlow(additionalState, params);
     }
   }
 
