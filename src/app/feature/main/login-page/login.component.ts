@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit,AfterViewInit {
 
   loginWithPassword() {
     let stateData=this.location.getState() as {redirect_to:string};
-    let redirect_to = stateData.redirect_to ? stateData.redirect_to : undefined;
+    let redirect_to = stateData && stateData.redirect_to ? stateData.redirect_to : undefined;
 
     if (this.isCodeError) {
       this.identityService.loginWith('password', 'login',redirect_to);
@@ -58,7 +58,7 @@ export class LoginComponent implements OnInit,AfterViewInit {
 
   loginWithoutPassword() {
     let stateData=this.location.getState() as {redirect_to:string};
-    let redirect_to = stateData.redirect_to ? stateData.redirect_to : undefined;
+    let redirect_to = stateData && stateData.redirect_to ? stateData.redirect_to : undefined;
     if (this.isCodeError) {
       this.identityService.loginWith('email', 'login',redirect_to);
     } else {
