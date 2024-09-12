@@ -12,7 +12,7 @@ export interface GetDonationSummary$Params {
   id?: string;
   includePayableAccount?: boolean;
   includeOutstandingMonths?: boolean;
-  'X-Cloud-Trace-Context'?: string;
+  'Correlation-Id'?: string;
 }
 
 export function getDonationSummary(http: HttpClient, rootUrl: string, params?: GetDonationSummary$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseDonationSummary>> {
@@ -21,7 +21,7 @@ export function getDonationSummary(http: HttpClient, rootUrl: string, params?: G
     rb.query('id', params.id, {});
     rb.query('includePayableAccount', params.includePayableAccount, {});
     rb.query('includeOutstandingMonths', params.includeOutstandingMonths, {});
-    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
+    rb.header('Correlation-Id', params['Correlation-Id'], {});
   }
 
   return http.request(

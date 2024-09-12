@@ -10,14 +10,14 @@ import { AuthorizationDetail } from '../../models/authorization-detail';
 import { SuccessResponseString } from '../../models/success-response-string';
 
 export interface GenerateAuthorizationUrl$Params {
-  'X-Cloud-Trace-Context'?: string;
+  'Correlation-Id'?: string;
       body: AuthorizationDetail
 }
 
 export function generateAuthorizationUrl(http: HttpClient, rootUrl: string, params: GenerateAuthorizationUrl$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
   const rb = new RequestBuilder(rootUrl, generateAuthorizationUrl.PATH, 'post');
   if (params) {
-    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
+    rb.header('Correlation-Id', params['Correlation-Id'], {});
     rb.body(params.body, 'application/json');
   }
 

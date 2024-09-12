@@ -10,14 +10,14 @@ import { SuccessResponseRequestDetail } from '../../models/success-response-requ
 
 export interface GetRequestDetail$Params {
   id: string;
-  'X-Cloud-Trace-Context'?: string;
+  'Correlation-Id'?: string;
 }
 
 export function getRequestDetail(http: HttpClient, rootUrl: string, params: GetRequestDetail$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseRequestDetail>> {
   const rb = new RequestBuilder(rootUrl, getRequestDetail.PATH, 'get');
   if (params) {
     rb.path('id', params.id, {});
-    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
+    rb.header('Correlation-Id', params['Correlation-Id'], {});
   }
 
   return http.request(

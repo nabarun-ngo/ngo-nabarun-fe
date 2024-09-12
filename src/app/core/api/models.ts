@@ -40,6 +40,7 @@ export { SuccessResponseEventDetail } from './models/success-response-event-deta
 export { SuccessResponseListDocumentDetail } from './models/success-response-list-document-detail';
 export { SuccessResponseListWorkDetail } from './models/success-response-list-work-detail';
 export { SuccessResponseMapStringListKeyValue } from './models/success-response-map-string-list-key-value';
+export { SuccessResponseMapStringString } from './models/success-response-map-string-string';
 export { SuccessResponseNoticeDetail } from './models/success-response-notice-detail';
 export { SuccessResponsePaginateAccountDetail } from './models/success-response-paginate-account-detail';
 export { SuccessResponsePaginateDonationDetail } from './models/success-response-paginate-donation-detail';

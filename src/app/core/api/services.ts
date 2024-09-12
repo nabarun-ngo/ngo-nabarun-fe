@@ -4,4 +4,6 @@ export { RequestControllerService } from './services/request-controller.service'
 export { NoticeControllerService } from './services/notice-controller.service';
 export { DonationControllerService } from './services/donation-controller.service';
 export { CommonControllerService } from './services/common-controller.service';
+export { AdminControllerService } from './services/admin-controller.service';
 export { AccountControllerService } from './services/account-controller.service';
+export { TestControllerService } from './services/test-controller.service';

@@ -13,7 +13,7 @@ export interface GetAccounts$Params {
   pageIndex?: number;
   pageSize?: number;
   filter: AccountDetailFilter;
-  'X-Cloud-Trace-Context'?: string;
+  'Correlation-Id'?: string;
 }
 
 export function getAccounts(http: HttpClient, rootUrl: string, params: GetAccounts$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateAccountDetail>> {
@@ -22,7 +22,7 @@ export function getAccounts(http: HttpClient, rootUrl: string, params: GetAccoun
     rb.query('pageIndex', params.pageIndex, {});
     rb.query('pageSize', params.pageSize, {});
     rb.query('filter', params.filter, {});
-    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
+    rb.header('Correlation-Id', params['Correlation-Id'], {});
   }
 
   return http.request(

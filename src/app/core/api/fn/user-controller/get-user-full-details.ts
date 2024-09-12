@@ -11,7 +11,7 @@ import { SuccessResponseUserDetail } from '../../models/success-response-user-de
 export interface GetUserFullDetails$Params {
   id: string;
   idType?: 'EMAIL' | 'AUTH_USER_ID' | 'ID';
-  'X-Cloud-Trace-Context'?: string;
+  'Correlation-Id'?: string;
 }
 
 export function getUserFullDetails(http: HttpClient, rootUrl: string, params: GetUserFullDetails$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseUserDetail>> {
@@ -19,7 +19,7 @@ export function getUserFullDetails(http: HttpClient, rootUrl: string, params: Ge
   if (params) {
     rb.path('id', params.id, {});
     rb.query('idType', params.idType, {});
-    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
+    rb.header('Correlation-Id', params['Correlation-Id'], {});
   }
 
   return http.request(

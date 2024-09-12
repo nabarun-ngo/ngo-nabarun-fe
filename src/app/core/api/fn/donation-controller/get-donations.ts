@@ -13,7 +13,7 @@ export interface GetDonations$Params {
   pageIndex?: number;
   pageSize?: number;
   filter: DonationDetailFilter;
-  'X-Cloud-Trace-Context'?: string;
+  'Correlation-Id'?: string;
 }
 
 export function getDonations(http: HttpClient, rootUrl: string, params: GetDonations$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateDonationDetail>> {
@@ -22,7 +22,7 @@ export function getDonations(http: HttpClient, rootUrl: string, params: GetDonat
     rb.query('pageIndex', params.pageIndex, {});
     rb.query('pageSize', params.pageSize, {});
     rb.query('filter', params.filter, {});
-    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
+    rb.header('Correlation-Id', params['Correlation-Id'], {});
   }
 
   return http.request(

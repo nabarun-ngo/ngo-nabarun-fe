@@ -10,14 +10,14 @@ import { SuccessResponseListDocumentDetail } from '../../models/success-response
 
 export interface GetNoticeDocuments$Params {
   id: string;
-  'X-Cloud-Trace-Context'?: string;
+  'Correlation-Id'?: string;
 }
 
 export function getNoticeDocuments(http: HttpClient, rootUrl: string, params: GetNoticeDocuments$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseListDocumentDetail>> {
   const rb = new RequestBuilder(rootUrl, getNoticeDocuments.PATH, 'get');
   if (params) {
     rb.path('id', params.id, {});
-    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
+    rb.header('Correlation-Id', params['Correlation-Id'], {});
   }
 
   return http.request(

@@ -10,14 +10,14 @@ import { SuccessResponseVoid } from '../../models/success-response-void';
 
 export interface DeleteDocument$Params {
   id: string;
-  'X-Cloud-Trace-Context'?: string;
+  'Correlation-Id'?: string;
 }
 
 export function deleteDocument(http: HttpClient, rootUrl: string, params: DeleteDocument$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
   const rb = new RequestBuilder(rootUrl, deleteDocument.PATH, 'delete');
   if (params) {
     rb.path('id', params.id, {});
-    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
+    rb.header('Correlation-Id', params['Correlation-Id'], {});
   }
 
   return http.request(

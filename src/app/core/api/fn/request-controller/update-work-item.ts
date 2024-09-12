@@ -11,7 +11,7 @@ import { WorkDetail } from '../../models/work-detail';
 
 export interface UpdateWorkItem$Params {
   id: string;
-  'X-Cloud-Trace-Context'?: string;
+  'Correlation-Id'?: string;
       body: WorkDetail
 }
 
@@ -19,7 +19,7 @@ export function updateWorkItem(http: HttpClient, rootUrl: string, params: Update
   const rb = new RequestBuilder(rootUrl, updateWorkItem.PATH, 'patch');
   if (params) {
     rb.path('id', params.id, {});
-    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
+    rb.header('Correlation-Id', params['Correlation-Id'], {});
     rb.body(params.body, 'application/json');
   }
 

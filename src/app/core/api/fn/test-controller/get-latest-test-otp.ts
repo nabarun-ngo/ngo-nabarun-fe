@@ -8,15 +8,15 @@ import { RequestBuilder } from '../../request-builder';
 
 import { SuccessResponseString } from '../../models/success-response-string';
 
-export interface GetUserRoleHistory$Params {
-  id: string;
+export interface GetLatestTestOtp$Params {
+  email: string;
   'Correlation-Id'?: string;
 }
 
-export function getUserRoleHistory(http: HttpClient, rootUrl: string, params: GetUserRoleHistory$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
-  const rb = new RequestBuilder(rootUrl, getUserRoleHistory.PATH, 'get');
+export function getLatestTestOtp(http: HttpClient, rootUrl: string, params: GetLatestTestOtp$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
+  const rb = new RequestBuilder(rootUrl, getLatestTestOtp.PATH, 'get');
   if (params) {
-    rb.path('id', params.id, {});
+    rb.query('email', params.email, {});
     rb.header('Correlation-Id', params['Correlation-Id'], {});
   }
 
@@ -30,4 +30,4 @@ export function getUserRoleHistory(http: HttpClient, rootUrl: string, params: Ge
   );
 }
 
-getUserRoleHistory.PATH = '/api/user/getUserRoleHistory/{id}';
+getLatestTestOtp.PATH = '/test/getLatestTestOtp';

@@ -11,7 +11,7 @@ import { SuccessResponseRequestDetail } from '../../models/success-response-requ
 
 export interface UpdateRequest$Params {
   id: string;
-  'X-Cloud-Trace-Context'?: string;
+  'Correlation-Id'?: string;
       body: RequestDetail
 }
 
@@ -19,7 +19,7 @@ export function updateRequest(http: HttpClient, rootUrl: string, params: UpdateR
   const rb = new RequestBuilder(rootUrl, updateRequest.PATH, 'patch');
   if (params) {
     rb.path('id', params.id, {});
-    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
+    rb.header('Correlation-Id', params['Correlation-Id'], {});
     rb.body(params.body, 'application/json');
   }
 

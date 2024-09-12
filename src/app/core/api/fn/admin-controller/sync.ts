@@ -7,18 +7,15 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 import { SuccessResponseVoid } from '../../models/success-response-void';
-import { UserDetail } from '../../models/user-detail';
 
-export interface AssignUsersToRoles$Params {
-  id: 'MEMBER' | 'CASHIER' | 'ASSISTANT_CASHIER' | 'TREASURER' | 'GROUP_COORDINATOR' | 'ASST_GROUP_COORDINATOR' | 'SECRETARY' | 'ASST_SECRETARY' | 'COMMUNITY_MANAGER' | 'ASST_COMMUNITY_MANAGER' | 'PRESIDENT' | 'VICE_PRESIDENT' | 'TECHNICAL_SPECIALIST';
+export interface Sync$Params {
   'Correlation-Id'?: string;
-      body: Array<UserDetail>
+      body: Array<string>
 }
 
-export function assignUsersToRoles(http: HttpClient, rootUrl: string, params: AssignUsersToRoles$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
-  const rb = new RequestBuilder(rootUrl, assignUsersToRoles.PATH, 'post');
+export function sync(http: HttpClient, rootUrl: string, params: Sync$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
+  const rb = new RequestBuilder(rootUrl, sync.PATH, 'post');
   if (params) {
-    rb.path('id', params.id, {});
     rb.header('Correlation-Id', params['Correlation-Id'], {});
     rb.body(params.body, 'application/json');
   }
@@ -33,4 +30,4 @@ export function assignUsersToRoles(http: HttpClient, rootUrl: string, params: As
   );
 }
 
-assignUsersToRoles.PATH = '/api/user/assignUsersToRoles/{id}';
+sync.PATH = '/api/admin/sync';

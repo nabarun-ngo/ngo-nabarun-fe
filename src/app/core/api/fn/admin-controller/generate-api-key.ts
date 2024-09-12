@@ -6,19 +6,16 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { AccountDetail } from '../../models/account-detail';
-import { SuccessResponseAccountDetail } from '../../models/success-response-account-detail';
+import { SuccessResponseMapStringString } from '../../models/success-response-map-string-string';
 
-export interface UpdateAccount$Params {
-  id: string;
+export interface GenerateApiKey$Params {
   'Correlation-Id'?: string;
-      body: AccountDetail
+      body: Array<string>
 }
 
-export function updateAccount(http: HttpClient, rootUrl: string, params: UpdateAccount$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseAccountDetail>> {
-  const rb = new RequestBuilder(rootUrl, updateAccount.PATH, 'patch');
+export function generateApiKey(http: HttpClient, rootUrl: string, params: GenerateApiKey$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseMapStringString>> {
+  const rb = new RequestBuilder(rootUrl, generateApiKey.PATH, 'post');
   if (params) {
-    rb.path('id', params.id, {});
     rb.header('Correlation-Id', params['Correlation-Id'], {});
     rb.body(params.body, 'application/json');
   }
@@ -28,9 +25,9 @@ export function updateAccount(http: HttpClient, rootUrl: string, params: UpdateA
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseAccountDetail>;
+      return r as StrictHttpResponse<SuccessResponseMapStringString>;
     })
   );
 }
 
-updateAccount.PATH = '/api/account/{id}/updateAccount';
+generateApiKey.PATH = '/api/admin/generateApiKey';

@@ -11,7 +11,7 @@ import { SuccessResponseNoticeDetail } from '../../models/success-response-notic
 
 export interface UpdateNotice$Params {
   id: string;
-  'X-Cloud-Trace-Context'?: string;
+  'Correlation-Id'?: string;
       body: NoticeDetail
 }
 
@@ -19,7 +19,7 @@ export function updateNotice(http: HttpClient, rootUrl: string, params: UpdateNo
   const rb = new RequestBuilder(rootUrl, updateNotice.PATH, 'patch');
   if (params) {
     rb.path('id', params.id, {});
-    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
+    rb.header('Correlation-Id', params['Correlation-Id'], {});
     rb.body(params.body, 'application/json');
   }
 

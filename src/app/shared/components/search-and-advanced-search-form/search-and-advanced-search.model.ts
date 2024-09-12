@@ -8,6 +8,7 @@ export interface SearchAndAdvancedSearchModel{
         formControlName:string;
         inputModel:UniversalInputModel;
         validations?:ValidatorFn[];
+        hidden?:boolean;
       }[];
     }
   }

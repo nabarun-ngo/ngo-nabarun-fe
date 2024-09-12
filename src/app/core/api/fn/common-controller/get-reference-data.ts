@@ -17,7 +17,7 @@ export interface GetReferenceData$Params {
   currentDonationStatus?: DonationStatus;
   countryCode?: string;
   stateCode?: string;
-  'X-Cloud-Trace-Context'?: string;
+  'Correlation-Id'?: string;
 }
 
 export function getReferenceData(http: HttpClient, rootUrl: string, params?: GetReferenceData$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseMapStringListKeyValue>> {
@@ -28,7 +28,7 @@ export function getReferenceData(http: HttpClient, rootUrl: string, params?: Get
     rb.query('currentDonationStatus', params.currentDonationStatus, {});
     rb.query('countryCode', params.countryCode, {});
     rb.query('stateCode', params.stateCode, {});
-    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
+    rb.header('Correlation-Id', params['Correlation-Id'], {});
   }
 
   return http.request(

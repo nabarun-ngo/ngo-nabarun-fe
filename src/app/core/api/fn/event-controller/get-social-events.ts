@@ -12,7 +12,7 @@ export interface GetSocialEvents$Params {
   pageIndex?: number;
   pageSize?: number;
   filter?: string;
-  'X-Cloud-Trace-Context'?: string;
+  'Correlation-Id'?: string;
 }
 
 export function getSocialEvents(http: HttpClient, rootUrl: string, params?: GetSocialEvents$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateEventDetail>> {
@@ -21,7 +21,7 @@ export function getSocialEvents(http: HttpClient, rootUrl: string, params?: GetS
     rb.query('pageIndex', params.pageIndex, {});
     rb.query('pageSize', params.pageSize, {});
     rb.query('filter', params.filter, {});
-    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
+    rb.header('Correlation-Id', params['Correlation-Id'], {});
   }
 
   return http.request(

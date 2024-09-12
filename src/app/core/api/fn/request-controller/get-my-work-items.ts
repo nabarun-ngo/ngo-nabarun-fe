@@ -12,7 +12,7 @@ export interface GetMyWorkItems$Params {
   pageIndex?: number;
   pageSize?: number;
   completed?: boolean;
-  'X-Cloud-Trace-Context'?: string;
+  'Correlation-Id'?: string;
 }
 
 export function getMyWorkItems(http: HttpClient, rootUrl: string, params?: GetMyWorkItems$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateWorkDetail>> {
@@ -21,7 +21,7 @@ export function getMyWorkItems(http: HttpClient, rootUrl: string, params?: GetMy
     rb.query('pageIndex', params.pageIndex, {});
     rb.query('pageSize', params.pageSize, {});
     rb.query('completed', params.completed, {});
-    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
+    rb.header('Correlation-Id', params['Correlation-Id'], {});
   }
 
   return http.request(

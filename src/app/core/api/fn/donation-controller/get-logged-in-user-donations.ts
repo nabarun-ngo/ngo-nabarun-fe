@@ -11,7 +11,7 @@ import { SuccessResponsePaginateDonationDetail } from '../../models/success-resp
 export interface GetLoggedInUserDonations$Params {
   pageIndex?: number;
   pageSize?: number;
-  'X-Cloud-Trace-Context'?: string;
+  'Correlation-Id'?: string;
 }
 
 export function getLoggedInUserDonations(http: HttpClient, rootUrl: string, params?: GetLoggedInUserDonations$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateDonationDetail>> {
@@ -19,7 +19,7 @@ export function getLoggedInUserDonations(http: HttpClient, rootUrl: string, para
   if (params) {
     rb.query('pageIndex', params.pageIndex, {});
     rb.query('pageSize', params.pageSize, {});
-    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
+    rb.header('Correlation-Id', params['Correlation-Id'], {});
   }
 
   return http.request(

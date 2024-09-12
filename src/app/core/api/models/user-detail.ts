@@ -9,7 +9,8 @@ export interface UserDetail {
   activeContributor?: string;
   addresses?: Array<UserAddress>;
   attributes?: {
-[key: string]: string;
+[key: string]: {
+};
 };
   dateOfBirth?: string;
   email?: string;

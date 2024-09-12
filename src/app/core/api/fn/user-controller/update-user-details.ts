@@ -11,7 +11,7 @@ import { UserDetail } from '../../models/user-detail';
 
 export interface UpdateUserDetails$Params {
   id: string;
-  'X-Cloud-Trace-Context'?: string;
+  'Correlation-Id'?: string;
       body: UserDetail
 }
 
@@ -19,7 +19,7 @@ export function updateUserDetails(http: HttpClient, rootUrl: string, params: Upd
   const rb = new RequestBuilder(rootUrl, updateUserDetails.PATH, 'post');
   if (params) {
     rb.path('id', params.id, {});
-    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
+    rb.header('Correlation-Id', params['Correlation-Id'], {});
     rb.body(params.body, 'application/json');
   }
 

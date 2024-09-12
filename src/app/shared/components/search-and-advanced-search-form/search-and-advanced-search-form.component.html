@@ -18,14 +18,12 @@
                 <div class="px-4 py-4 bg-white">
                     <div class="grid grid-cols-6 gap-6">
                         <div class="col-span-6" [ngClass]="search.advancedSearch?.searchFormFields?.length! > 2 ?'sm:col-span-2':'sm:col-span-3'" *ngFor="let input of search.advancedSearch?.searchFormFields">
-                            <app-universal-input [formControlName]="input.formControlName"
+                            <app-universal-input *ngIf="!input.hidden" [formControlName]="input.formControlName"
                                 [inputModel]="input.inputModel"></app-universal-input>
                         </div>
                     </div>
                 </div>
             </div>
-
-
         </form>
 
 

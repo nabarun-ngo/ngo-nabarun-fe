@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, combineLatest, forkJoin, map } from 'rxjs';
-import { DocumentDetailUpload, DonationDetail, DonationStatus, DonationType, RefDataType } from 'src/app/core/api/models';
+import { DocumentDetailUpload, DonationDetail, DonationDetailFilter, DonationStatus, DonationType, RefDataType } from 'src/app/core/api/models';
 import { AccountControllerService, CommonControllerService, DonationControllerService, EventControllerService, UserControllerService } from 'src/app/core/api/services';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 
@@ -8,7 +8,6 @@ import { UserIdentityService } from 'src/app/core/service/user-identity.service'
   providedIn: 'root'
 })
 export class DonationService {
-  
 
   constructor(
     private donationController: DonationControllerService,
@@ -25,7 +24,7 @@ export class DonationService {
     let id = this.identityService.getUser().profile_id;
     return combineLatest({
       donations: this.donationController.getLoggedInUserDonations({ pageIndex: pageIndex, pageSize: pageSize }).pipe(map(d => d.responsePayload)),
-      summary: this.donationController.getDonationSummary({ id: id, includeOutstandingMonths: true, includePayableAccount: true }).pipe(map(d => d.responsePayload))
+      summary: this.donationController.getDonationSummary({ id: id, includeOutstandingMonths: true, includePayableAccount: true }).pipe(map(d => d.responsePayload)),
     })
   }
 
@@ -76,6 +75,47 @@ export class DonationService {
 
   getPayableAccounts() {
     return this.accountController.getAccounts({filter:{status:['ACTIVE'],type:['DONATION']}}).pipe(map(d => d.responsePayload));
+  }
+
+  advancedSearch(filter:{
+    donationId?:string,
+    donationStatus?:string[],
+    donorName?:string,
+    startDate?:string,
+    endDate?:string,
+    donationType?:string[],
+    guest:boolean,
+    donorId?:string
+  }){
+    console.log(filter)
+    let filterOps:DonationDetailFilter={};
+    if(filter.donationId){
+      filterOps.donationId=filter.donationId
+    }
+    if(filter.donationStatus){
+      filterOps.donationStatus=filter.donationStatus as any
+    }
+    if(filter.startDate){
+      filterOps.fromDate=filter.startDate
+    }
+    if(filter.endDate){
+      filterOps.toDate=filter.endDate
+    }
+    if(filter.donationType){
+      filterOps.donationType=filter.donationType as any
+    }
+    if(filter.donorName){
+      filterOps.donorName=filter.donorName
+    }
+    if(filter.donorId){
+      filterOps.donorId=filter.donorId
+    }
+    filterOps.isGuest=filter.guest
+    return this.donationController.getDonations({ filter:filterOps}).pipe(map(d => d.responsePayload));
+  }
+
+  getMyId(){
+    return this.identityService.getUser().profile_id;
   }
   
 }

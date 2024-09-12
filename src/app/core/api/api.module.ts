@@ -10,7 +10,9 @@ import { RequestControllerService } from './services/request-controller.service'
 import { NoticeControllerService } from './services/notice-controller.service';
 import { DonationControllerService } from './services/donation-controller.service';
 import { CommonControllerService } from './services/common-controller.service';
+import { AdminControllerService } from './services/admin-controller.service';
 import { AccountControllerService } from './services/account-controller.service';
+import { TestControllerService } from './services/test-controller.service';
 
 /**
  * Module that provides all services and configuration.
@@ -26,7 +28,9 @@ import { AccountControllerService } from './services/account-controller.service'
     NoticeControllerService,
     DonationControllerService,
     CommonControllerService,
+    AdminControllerService,
     AccountControllerService,
+    TestControllerService,
     ApiConfiguration
   ],
 })

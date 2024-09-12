@@ -10,14 +10,14 @@ import { AccountDetail } from '../../models/account-detail';
 import { SuccessResponseAccountDetail } from '../../models/success-response-account-detail';
 
 export interface CreateAccount$Params {
-  'X-Cloud-Trace-Context'?: string;
+  'Correlation-Id'?: string;
       body: AccountDetail
 }
 
 export function createAccount(http: HttpClient, rootUrl: string, params: CreateAccount$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseAccountDetail>> {
   const rb = new RequestBuilder(rootUrl, createAccount.PATH, 'post');
   if (params) {
-    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
+    rb.header('Correlation-Id', params['Correlation-Id'], {});
     rb.body(params.body, 'application/json');
   }
 

@@ -9,14 +9,14 @@ import { RequestBuilder } from '../../request-builder';
 import { SuccessResponseVoid } from '../../models/success-response-void';
 
 export interface ClearCache$Params {
-  'X-Cloud-Trace-Context'?: string;
+  'Correlation-Id'?: string;
       body: Array<string>
 }
 
 export function clearCache(http: HttpClient, rootUrl: string, params: ClearCache$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
   const rb = new RequestBuilder(rootUrl, clearCache.PATH, 'post');
   if (params) {
-    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
+    rb.header('Correlation-Id', params['Correlation-Id'], {});
     rb.body(params.body, 'application/json');
   }
 

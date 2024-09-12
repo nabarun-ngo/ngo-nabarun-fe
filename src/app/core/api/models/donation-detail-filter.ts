@@ -6,6 +6,7 @@ export interface DonationDetailFilter {
   donationId?: string;
   donationStatus?: Array<DonationStatus>;
   donationType?: Array<DonationType>;
+  donorId?: string;
   donorName?: string;
   fromDate?: string;
   isGuest?: boolean;

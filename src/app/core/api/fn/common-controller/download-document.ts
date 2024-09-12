@@ -10,7 +10,7 @@ import { RequestBuilder } from '../../request-builder';
 export interface DownloadDocument$Params {
   id: string;
   asURL?: boolean;
-  'X-Cloud-Trace-Context'?: string;
+  'Correlation-Id'?: string;
 }
 
 export function downloadDocument(http: HttpClient, rootUrl: string, params: DownloadDocument$Params, context?: HttpContext): Observable<StrictHttpResponse<{
@@ -19,7 +19,7 @@ export function downloadDocument(http: HttpClient, rootUrl: string, params: Down
   if (params) {
     rb.path('id', params.id, {});
     rb.query('asURL', params.asURL, {});
-    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
+    rb.header('Correlation-Id', params['Correlation-Id'], {});
   }
 
   return http.request(

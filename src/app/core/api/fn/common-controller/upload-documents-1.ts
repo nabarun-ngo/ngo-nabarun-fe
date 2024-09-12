@@ -12,7 +12,7 @@ import { SuccessResponseVoid } from '../../models/success-response-void';
 export interface UploadDocuments1$Params {
   docIndexId: string;
   docIndexType: 'DONATION' | 'EVENT' | 'NOTICE' | 'USER' | 'PROFILE_PHOTO' | 'EVENT_COVER' | 'REQUEST';
-  'X-Cloud-Trace-Context'?: string;
+  'Correlation-Id'?: string;
       body: Array<DocumentDetailUpload>
 }
 
@@ -21,7 +21,7 @@ export function uploadDocuments1(http: HttpClient, rootUrl: string, params: Uplo
   if (params) {
     rb.query('docIndexId', params.docIndexId, {});
     rb.query('docIndexType', params.docIndexType, {});
-    rb.header('X-Cloud-Trace-Context', params['X-Cloud-Trace-Context'], {});
+    rb.header('Correlation-Id', params['Correlation-Id'], {});
     rb.body(params.body, 'application/json');
   }
 
