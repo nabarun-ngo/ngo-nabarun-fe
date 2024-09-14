@@ -22,6 +22,9 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
     SharedModule,
     MemberRoutingModule,
     DragDropModule,
+  ],
+  providers:[
+    
   ]
 })
 export class MemberModule { }

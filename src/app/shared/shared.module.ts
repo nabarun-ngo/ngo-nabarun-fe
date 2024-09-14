@@ -41,6 +41,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { NgxMatInputTelComponent } from 'ngx-mat-input-tel';
 import { MAT_CHECKBOX_DEFAULT_OPTIONS, MatCheckboxModule } from '@angular/material/checkbox';
+import { DynamicInjectPipe } from './pipes/dynamic-inject.pipe';
 
 @NgModule({
   declarations: [
@@ -61,6 +62,7 @@ import { MAT_CHECKBOX_DEFAULT_OPTIONS, MatCheckboxModule } from '@angular/materi
     ProfileViewComponent,
     ReplaceNullPipe,
     HtmlSanitizerPipe,
+    DynamicInjectPipe,
   ],
   imports: [
     CommonModule,

@@ -1,7 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
+import { AdditionalField } from '../models/additional-field';
 import { UserDetail } from '../models/user-detail';
 export interface WorkDetail {
+  additionalFields?: Array<AdditionalField>;
   createdOn?: string;
   decision?: 'APPROVE' | 'DECLINE';
   decisionDate?: string;

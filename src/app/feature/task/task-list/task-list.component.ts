@@ -5,13 +5,15 @@ import { scrollToFirstInvalidControl } from 'src/app/core/service/form.service';
 import { DetailedView, DetailedViewField } from 'src/app/shared/components/generic/detailed-view/detailed-view.model';
 import { TaskDefaultValue, TaskField, workListTab } from '../task.const';
 import { AccordionCell, AccordionList, AccordionRow } from 'src/app/shared/components/generic/accordion-list/accordion-list.model';
-import { PaginateWorkDetail } from 'src/app/core/api/models';
+import { PaginateWorkDetail, WorkDetail } from 'src/app/core/api/models';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { ActivatedRoute } from '@angular/router';
 import { TaskService } from '../task.service';
 import { date } from 'src/app/core/service/utilities.service';
 import { PageEvent } from '@angular/material/paginator';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
+import { inputType, UniversalInputModel } from 'src/app/shared/components/generic/universal-input/universal-input.model';
+import { TaskSearchPipe } from '../task.pipe';
 
 @Component({
   selector: 'app-task-list',
@@ -19,7 +21,6 @@ import { AppRoute } from 'src/app/core/constant/app-routing.const';
   styleUrls: ['./task-list.component.scss']
 })
 export class TaskListComponent extends Paginator implements OnInit {
-
 
   protected tabIndex!: number;
   protected tabMapping: workListTab[] = ['pending_worklist', 'completed_worklist'];
@@ -44,6 +45,8 @@ export class TaskListComponent extends Paginator implements OnInit {
       routerLink: AppRoute.secured_dashboard_page.url
     }
   ];
+ // searchValue!: string;
+  searchPipe: TaskSearchPipe;
 
   constructor(
     private sharedDataService: SharedDataService,
@@ -53,6 +56,7 @@ export class TaskListComponent extends Paginator implements OnInit {
   ) {
     super();
     super.init(TaskDefaultValue.pageNumber, TaskDefaultValue.pageSize, TaskDefaultValue.pageSizeOptions)
+    this.searchPipe=new TaskSearchPipe();
   }
 
   ngOnInit(): void {
@@ -143,7 +147,62 @@ export class TaskListComponent extends Paginator implements OnInit {
         }
       ] as AccordionCell[];
 
-      return {
+      let work_detail_fields: DetailedViewField[] = [
+        {
+          field_name: 'Work Id',
+          field_html_id: 'work_id',
+          field_value: m.id!
+        },
+        {
+          field_name: 'Work Type',
+          field_html_id: 'work_type',
+          field_value: m.workType!
+        },
+        {
+          field_name: 'Work Description',
+          field_html_id: 'work_description',
+          field_value: m.description!,
+        },
+        {
+          field_name: 'Creation Date',
+          field_html_id: 'creation_date',
+          field_value: date(m.createdOn)
+        },
+        {
+          field_name: 'Decision Owner',
+          field_html_id: 'decision_owner',
+          field_value: m.decisionOwner?.fullName!,
+          hide_field: !completed
+        },
+        {
+          field_name: 'Decision Date',
+          field_html_id: 'decision_date',
+          field_value: date(m.decisionDate),
+          hide_field: !completed,
+        },
+      ]
+
+      m.additionalFields?.forEach(m1 => {
+        work_detail_fields.push({
+          field_name: m1.name!,
+          field_html_id: m1.id!,
+          field_value: m1.value!,
+          hide_field: false,
+          form_control_name: 'additionalField.' + m1.key,
+          editable: true,
+          form_input: {
+            tagName: m1.type as any,
+            inputType: m1.valueType as any,
+            placeholder: 'Ex. Something',
+            selectList: m1.options?.map(o => {
+              return { key: o, displayValue: o };
+            })
+          },
+          form_input_validation: m1.mandatory ? [Validators.required] : []
+        })
+        //console.log(work_detail_fields)
+      });
+      let acc_data = {
         columns: column_data,
         detailed: [
           {
@@ -151,76 +210,18 @@ export class TaskListComponent extends Paginator implements OnInit {
             section_type: 'key_value',
             section_html_id: 'work_detail',
             section_form: new FormGroup({}),
-            content: [
-              {
-                field_name: 'Work Id',
-                field_html_id: 'work_id',
-                field_value: m.id
-              },
-              {
-                field_name: 'Work Type',
-                field_html_id: 'work_type',
-                field_value: m.workType
-              },
-              {
-                field_name: 'Work Description',
-                field_html_id: 'work_description',
-                field_value: m.description,
-              },
-              {
-                field_name: 'Creation Date',
-                field_html_id: 'creation_date',
-                field_value: date(m.createdOn)
-              },
-              {
-                field_name: 'Decision',
-                field_html_id: 'decision',
-                field_value: m.decision,
-                hide_field: !completed,
-                form_control_name: 'decision',
-                editable: true,
-                form_input: {
-                  tagName: 'select',
-                  inputType: '',
-                  placeholder: 'Ex. Approve',
-                  selectList: [{ key: 'APPROVE', displayValue: 'Approve' }, { key: 'DECLINE', displayValue: 'Decline' }]
-                },
-                form_input_validation: [Validators.required]
-              },
-              {
-                field_name: 'Decision Owner',
-                field_html_id: 'decision_owner',
-                field_value: m.decisionOwner?.fullName,
-                hide_field: !completed
-              },
-              {
-                field_name: 'Decision Date',
-                field_html_id: 'decision_date',
-                field_value: date(m.decisionDate),
-                hide_field: !completed,
-              },
-              {
-                field_name: 'Remarks',
-                field_html_id: 'remarks',
-                field_value: m.remarks,
-                hide_field: !completed,
-                form_control_name: 'remarks',
-                editable: true,
-                form_input: {
-                  tagName: 'input',
-                  inputType: 'text',
-                  placeholder: 'Ex. Remarks',
-                },
-                form_input_validation: [Validators.required]
-              },
-
-            ]
+            content: work_detail_fields
           }
         ],
         buttons: completed ? [] : [
           this.update_button
         ]
       } as AccordionRow;
+      /**
+       * Adding Dynamic fields
+       */
+      console.log(acc_data)
+      return acc_data;
     })
     this.accordionList = {
       headers: headers,
@@ -257,7 +258,25 @@ export class TaskListComponent extends Paginator implements OnInit {
         let item = this.workItemList.content![$event.rowIndex];
         let content = this.accordionList.contents[$event.rowIndex].detailed.find(f => f.section_html_id == 'work_detail');
         if (content?.section_form?.valid) {
-          this.taskService.updateWorkItem(item.id!, content?.section_form.value).subscribe(data => {
+          let detail: WorkDetail = {};
+          detail.additionalFields = [];
+          console.log(content?.section_form.value)
+          Object.keys(content?.section_form.value).forEach(key => {
+            console.log(key)
+            if (key.startsWith('additionalField.')) {
+
+              let splitted_key = key.split('.')[1] as any;
+              console.log(splitted_key)
+              detail.additionalFields?.push({
+                key: splitted_key,
+                value: content?.section_form.value[key],
+                updateField: item.additionalFields?.find(f => f.key === splitted_key)?.value != content?.section_form.value[key]
+              })
+              console.log(detail.additionalFields)
+            }
+          })
+          console.log(detail)
+          this.taskService.updateWorkItem(item.id!, detail).subscribe(data => {
             this.fetchDetails();
           })
         } else {
@@ -353,5 +372,11 @@ export class TaskListComponent extends Paginator implements OnInit {
         this.accordionList.contents[rowIndex].detailed[index] = request_detail;
       }
     })
+  }
+
+  onSearch($event: { advancedSearch: boolean; reset: boolean; value: any; }) {
+    //this.searchValue=$event.value;
+   // this.workItemList.content=this.searchPipe.transform( this.workItemList.content,$event.value)
+   // console.log( this.workItemList.content)
   }
 }
