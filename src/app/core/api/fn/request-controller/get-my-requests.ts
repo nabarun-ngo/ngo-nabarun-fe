@@ -6,12 +6,13 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { RequestDetailFilter } from '../../models/request-detail-filter';
 import { SuccessResponsePaginateRequestDetail } from '../../models/success-response-paginate-request-detail';
 
 export interface GetMyRequests$Params {
   pageIndex?: number;
   pageSize?: number;
-  delegated?: boolean;
+  filter?: RequestDetailFilter;
   'Correlation-Id'?: string;
 }
 
@@ -20,7 +21,7 @@ export function getMyRequests(http: HttpClient, rootUrl: string, params?: GetMyR
   if (params) {
     rb.query('pageIndex', params.pageIndex, {});
     rb.query('pageSize', params.pageSize, {});
-    rb.query('delegated', params.delegated, {});
+    rb.query('filter', params.filter, {});
     rb.header('Correlation-Id', params['Correlation-Id'], {});
   }
 

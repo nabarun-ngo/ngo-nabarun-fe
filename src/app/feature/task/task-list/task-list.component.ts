@@ -15,6 +15,7 @@ import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { inputType, UniversalInputModel } from 'src/app/shared/components/generic/universal-input/universal-input.model';
 import { TaskSearchPipe } from '../task.pipe';
 import { Accordion } from 'src/app/shared/components/generic/accordion-list/accordion';
+import { SearchAndAdvancedSearchModel } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search.model';
 
 @Component({
   selector: 'app-task-list',
@@ -26,7 +27,7 @@ export class TaskListComponent extends Accordion<WorkDetail> implements OnInit {
   protected tabIndex!: number;
   protected tabMapping: workListTab[] = ['pending_worklist', 'completed_worklist'];
   protected workItemList!: PaginateWorkDetail;
- 
+
   protected navigations: { displayName: string; routerLink: string; }[] = [
     {
       displayName: 'Back to Dashboard',
@@ -34,9 +35,7 @@ export class TaskListComponent extends Accordion<WorkDetail> implements OnInit {
     }
   ];
   protected actionName!: string;
-  protected searchInput={
-    normalSearchPlaceHolder:'Search by Task Id, Request Id, Task Type',
-  }
+  protected searchInput!: SearchAndAdvancedSearchModel;
 
 
   constructor(
@@ -65,6 +64,65 @@ export class TaskListComponent extends Accordion<WorkDetail> implements OnInit {
       this.setRefData(refData);
     }
 
+    this.setAccordionHeader();
+
+    if (this.route.snapshot.data['data']) {
+      this.workItemList = this.route.snapshot.data['data'] as PaginateWorkDetail;
+      this.setContent(this.workItemList.content!, this.workItemList.totalSize)
+
+    }
+
+    this.searchInput = {
+      normalSearchPlaceHolder: 'Search by Work Id, Request Id, Work Type',
+      advancedSearch: {
+        searchFormFields: [
+          {
+            formControlName: 'workId',
+            inputModel: {
+              tagName: 'input',
+              inputType: 'text',
+              html_id: 'workId',
+              labelName: 'Work Id',
+              placeholder: 'Enter Work Id',
+              cssInputClass: 'bg-white'
+            },
+          },
+          {
+            formControlName: 'requestId',
+            inputModel: {
+              tagName: 'input',
+              inputType: 'text',
+              html_id: 'requestId',
+              labelName: 'Request Id',
+              placeholder: 'Enter Request Id',
+            },
+          },
+          {
+            formControlName: 'fromDate',
+            inputModel: {
+              tagName: 'input',
+              inputType: 'date',
+              html_id: 'startDate',
+              labelName: 'From Date',
+              placeholder: 'Enter From Date',
+            },
+          },
+          {
+            formControlName: 'toDate',
+            inputModel: {
+              tagName: 'input',
+              inputType: 'date',
+              html_id: 'endDate',
+              labelName: 'To Date',
+              placeholder: 'Enter To Date',
+            },
+          },
+
+        ]
+      }
+    }
+  }
+  setAccordionHeader() {
     this.setHeaderRow([
       {
         value: TaskField.workId,
@@ -84,12 +142,6 @@ export class TaskListComponent extends Accordion<WorkDetail> implements OnInit {
       }
     ])
 
-
-    if (this.route.snapshot.data['data']) {
-      this.workItemList = this.route.snapshot.data['data'] as PaginateWorkDetail;
-      this.setContent(this.workItemList.content!, this.workItemList.totalSize)
-
-    }
   }
 
 
@@ -115,7 +167,7 @@ export class TaskListComponent extends Accordion<WorkDetail> implements OnInit {
     ]
   }
 
-  protected override prepareDetailedView(m: WorkDetail, options?: { [key: string]: any }): DetailedView[] { 
+  protected override prepareDetailedView(m: WorkDetail, options?: { [key: string]: any }): DetailedView[] {
     let task_action_content = m?.additionalFields?.map(m1 => {
       return {
         field_name: m1.name!,
@@ -135,7 +187,7 @@ export class TaskListComponent extends Accordion<WorkDetail> implements OnInit {
         form_input_validation: m1.mandatory ? [Validators.required] : []
       } as DetailedViewField;
     })
-         
+
     return [
       {
         section_name: 'Work Details',
@@ -188,18 +240,6 @@ export class TaskListComponent extends Accordion<WorkDetail> implements OnInit {
   }
 
   protected override prepareDefaultButtons(data: WorkDetail, options?: { [key: string]: any }): AccordionButton[] {
-    // if (options && options['create']) {
-    //   return [
-    //     {
-    //       button_id: 'CANCEL',
-    //       button_name: 'Cancel'
-    //     },
-    //     {
-    //       button_id: 'CONFIRM',
-    //       button_name: 'Confirm'
-    //     }
-    //   ];
-    // }
     if (this.tabMapping[this.tabIndex] == 'pending_worklist') {
       return [
         {
@@ -218,18 +258,34 @@ export class TaskListComponent extends Accordion<WorkDetail> implements OnInit {
     this.pageNumber = TaskDefaultValue.pageNumber;
     this.pageSize = TaskDefaultValue.pageSize;
     this.fetchDetails();
-
+    this.setAccordionHeader();
   }
 
-  private fetchDetails() {
+  private fetchDetails(filter?: {
+    requestId?: string,
+    workId?: string,
+    fromDate?: string,
+    toDate?: string,
+  }) {
     if (this.tabMapping[this.tabIndex] == 'pending_worklist') {
-      this.taskService.findMyWorkList(false,this.pageNumber,this.pageSize).subscribe(s => {
+      this.taskService.findMyWorkList({
+        isCompleted: false,
+        requestId: filter?.requestId,
+        workId: filter?.workId,
+        fromDate: filter?.fromDate,
+        toDate: filter?.toDate,
+      }, this.pageNumber, this.pageSize).subscribe(s => {
         this.workItemList = s!;
         this.setContent(this.workItemList.content!, this.workItemList?.totalSize!);
-
       })
     } else if (this.tabMapping[this.tabIndex] == 'completed_worklist') {
-      this.taskService.findMyWorkList(true,this.pageNumber,this.pageSize).subscribe(s => {
+      this.taskService.findMyWorkList({
+        isCompleted: true,
+        requestId: filter?.requestId,
+        workId: filter?.workId,
+        fromDate: filter?.fromDate,
+        toDate: filter?.toDate
+      }, this.pageNumber, this.pageSize).subscribe(s => {
         this.workItemList = s!;
         this.setContent(this.workItemList.content!, this.workItemList?.totalSize!);
       })
@@ -251,16 +307,16 @@ export class TaskListComponent extends Accordion<WorkDetail> implements OnInit {
         break;
       case 'CONFIRM':
         let item = this.workItemList.content![$event.rowIndex];
-        let form_action_detail=this.getSectionForm('action_details',$event.rowIndex);
+        let form_action_detail = this.getSectionForm('action_details', $event.rowIndex);
         if (form_action_detail?.valid) {
           let detail: WorkDetail = {};
           detail.additionalFields = [];
           Object.keys(form_action_detail.value).forEach(key => {
-              detail.additionalFields?.push({
-                key: key as any,
-                value: form_action_detail!.value[key],
-                updateField: item.additionalFields?.find(f => f.key === key)?.value != form_action_detail!.value[key]
-              }) 
+            detail.additionalFields?.push({
+              key: key as any,
+              value: form_action_detail!.value[key],
+              updateField: item.additionalFields?.find(f => f.key === key)?.value != form_action_detail!.value[key]
+            })
           })
           this.taskService.updateWorkItem(item.id!, detail).subscribe(data => {
             this.fetchDetails();
@@ -276,7 +332,7 @@ export class TaskListComponent extends Accordion<WorkDetail> implements OnInit {
     }
 
   }
- 
+
 
   accordionOpened($event: { rowIndex: number; }) {
     let item = this.workItemList.content![$event.rowIndex];
@@ -284,7 +340,7 @@ export class TaskListComponent extends Accordion<WorkDetail> implements OnInit {
       /**
        * Inserting request request details at top
        */
-      this.addSectionInRow( $event.rowIndex,{
+      this.addSectionInRow($event.rowIndex, {
         section_name: 'Request Details',
         section_type: 'key_value',
         section_html_id: 'request_detail',
@@ -316,7 +372,7 @@ export class TaskListComponent extends Accordion<WorkDetail> implements OnInit {
         } as DetailedViewField;
       })
 
-      this.addSectionInRow( $event.rowIndex,{
+      this.addSectionInRow($event.rowIndex, {
         section_name: 'Request Additional Details',
         section_type: 'key_value',
         section_html_id: 'request_add_detail',
@@ -326,9 +382,23 @@ export class TaskListComponent extends Accordion<WorkDetail> implements OnInit {
     })
   }
 
-  
+
 
   onSearch($event: { advancedSearch: boolean; reset: boolean; value: any; }) {
-    this.accordionList.searchValue = $event.value;
+    if ($event.advancedSearch && !$event.reset) {
+      console.log($event.value)
+      this.fetchDetails({
+        fromDate: $event.value.fromDate,
+        requestId:$event.value.requestId,
+        toDate:$event.value.toDate,
+        workId:$event.value.workId
+      })
+    }
+    else if ($event.advancedSearch && $event.reset) {
+      this.fetchDetails()
+    }
+    else {
+      this.accordionList.searchValue = $event.value as string;
+    }
   }
 }

@@ -173,21 +173,21 @@ export class WorkflowListComponent extends Paginator implements OnInit {
                 field_html_id: 'creation_date',
                 field_value: date(m.createdOn)
               },
-              {
-                field_name: 'Decision',
-                field_html_id: 'decision',
-                field_value: m.decision,
-                hide_field: !completed,
-                form_control_name: 'decision',
-                editable: true,
-                form_input: {
-                  tagName: 'select',
-                  inputType: '',
-                  placeholder: 'Ex. Approve',
-                  selectList: [{ key: 'APPROVE', displayValue: 'Approve' }, { key: 'DECLINE', displayValue: 'Decline' }]
-                },
-                form_input_validation:[Validators.required]
-              },
+              // {
+              //   field_name: 'Decision',
+              //   field_html_id: 'decision',
+              //   field_value: m.decision,
+              //   hide_field: !completed,
+              //   form_control_name: 'decision',
+              //   editable: true,
+              //   form_input: {
+              //     tagName: 'select',
+              //     inputType: '',
+              //     placeholder: 'Ex. Approve',
+              //     selectList: [{ key: 'APPROVE', displayValue: 'Approve' }, { key: 'DECLINE', displayValue: 'Decline' }]
+              //   },
+              //   form_input_validation:[Validators.required]
+              // },
               {
                 field_name: 'Decision Owner',
                 field_html_id: 'decision_owner',
@@ -200,20 +200,20 @@ export class WorkflowListComponent extends Paginator implements OnInit {
                 field_value: date(m.decisionDate),
                 hide_field: !completed,
               },
-              {
-                field_name: 'Remarks',
-                field_html_id: 'remarks',
-                field_value: m.remarks,
-                hide_field: !completed,
-                form_control_name: 'remarks',
-                editable: true,
-                form_input: {
-                  tagName: 'input',
-                  inputType: 'text',
-                  placeholder: 'Ex. Remarks',
-                },
-                form_input_validation:[Validators.required]
-              },
+              // {
+              //   field_name: 'Remarks',
+              //   field_html_id: 'remarks',
+              //   field_value: m.remarks,
+              //   hide_field: !completed,
+              //   form_control_name: 'remarks',
+              //   editable: true,
+              //   form_input: {
+              //     tagName: 'input',
+              //     inputType: 'text',
+              //     placeholder: 'Ex. Remarks',
+              //   },
+              //   form_input_validation:[Validators.required]
+              // },
 
             ]
           }

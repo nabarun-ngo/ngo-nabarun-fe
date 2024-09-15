@@ -4,5 +4,6 @@ export enum RefDataType {
   User = 'USER',
   Donation = 'DONATION',
   Public = 'PUBLIC',
-  Account = 'ACCOUNT'
+  Account = 'ACCOUNT',
+  Workflow = 'WORKFLOW'
 }

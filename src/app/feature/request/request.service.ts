@@ -18,7 +18,7 @@ export class RequestService {
   
 
   findRequests(delegated: boolean = false) {
-    return this.requestController.getMyRequests({ delegated: delegated, pageIndex: RequestDefaultValue.pageNumber, pageSize: RequestDefaultValue.pageSize }).pipe(map(d => d.responsePayload));
+    return this.requestController.getMyRequests({ filter:{isDelegated: delegated}, pageIndex: RequestDefaultValue.pageNumber, pageSize: RequestDefaultValue.pageSize }).pipe(map(d => d.responsePayload));
   }
 
   // getRequestDetail(id:string){

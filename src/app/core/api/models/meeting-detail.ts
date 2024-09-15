@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-import { MeetingDiscussion } from '../models/meeting-discussion';
 import { UserDetail } from '../models/user-detail';
 export interface MeetingDetail {
   creatorEmail?: string;
@@ -13,7 +12,6 @@ export interface MeetingDetail {
   meetingAttendees?: Array<UserDetail>;
   meetingDate?: string;
   meetingDescription?: string;
-  meetingDiscussions?: Array<MeetingDiscussion>;
   meetingEndTime?: string;
   meetingLocation?: string;
   meetingRefId?: string;

@@ -6,12 +6,12 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { EventDetailCreate } from '../../models/event-detail-create';
+import { EventDetail } from '../../models/event-detail';
 import { SuccessResponseEventDetail } from '../../models/success-response-event-detail';
 
 export interface CreateSocialEvent$Params {
   'Correlation-Id'?: string;
-      body: EventDetailCreate
+      body: EventDetail
 }
 
 export function createSocialEvent(http: HttpClient, rootUrl: string, params: CreateSocialEvent$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseEventDetail>> {

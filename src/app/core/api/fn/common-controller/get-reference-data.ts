@@ -17,6 +17,7 @@ export interface GetReferenceData$Params {
   currentDonationStatus?: DonationStatus;
   countryCode?: string;
   stateCode?: string;
+  workflowType?: 'JOIN_REQUEST' | 'JOIN_REQUEST_USER' | 'CHECK_PAYMENT' | 'COLLECT_CASH_PAYMENT';
   'Correlation-Id'?: string;
 }
 
@@ -28,6 +29,7 @@ export function getReferenceData(http: HttpClient, rootUrl: string, params?: Get
     rb.query('currentDonationStatus', params.currentDonationStatus, {});
     rb.query('countryCode', params.countryCode, {});
     rb.query('stateCode', params.stateCode, {});
+    rb.query('workflowType', params.workflowType, {});
     rb.header('Correlation-Id', params['Correlation-Id'], {});
   }
 

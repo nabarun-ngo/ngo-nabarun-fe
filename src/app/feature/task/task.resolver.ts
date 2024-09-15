@@ -6,7 +6,7 @@ import { TaskDefaultValue, workListTab } from './task.const';
 export const taskListResolver: ResolveFn<any> = (route, state) => {
     let tab = (route.data['tab'] || TaskDefaultValue.tabName) as workListTab;
     let completed = tab == 'completed_worklist'
-    return inject(TaskService).findMyWorkList(completed);
+    return inject(TaskService).findMyWorkList({isCompleted:completed});
   };
 
 

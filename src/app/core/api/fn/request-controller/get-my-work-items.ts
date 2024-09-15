@@ -7,11 +7,12 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 import { SuccessResponsePaginateWorkDetail } from '../../models/success-response-paginate-work-detail';
+import { WorkDetailFilter } from '../../models/work-detail-filter';
 
 export interface GetMyWorkItems$Params {
   pageIndex?: number;
   pageSize?: number;
-  completed?: boolean;
+  filter?: WorkDetailFilter;
   'Correlation-Id'?: string;
 }
 
@@ -20,7 +21,7 @@ export function getMyWorkItems(http: HttpClient, rootUrl: string, params?: GetMy
   if (params) {
     rb.query('pageIndex', params.pageIndex, {});
     rb.query('pageSize', params.pageSize, {});
-    rb.query('completed', params.completed, {});
+    rb.query('filter', params.filter, {});
     rb.header('Correlation-Id', params['Correlation-Id'], {});
   }
 
