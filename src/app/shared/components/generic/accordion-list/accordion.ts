@@ -6,7 +6,8 @@ import { KeyValue } from "src/app/core/api/models";
 
 export abstract class Accordion<NumType> extends Paginator {
   protected accordionList: AccordionList = {
-    contents: []
+    contents: [],
+    searchValue:''
   };
   private actionButtons: AccordionButton[] = [
     {
@@ -45,6 +46,15 @@ export abstract class Accordion<NumType> extends Paginator {
     this.accordionList.contents.push(row);
   }
 
+  addSectionInRow(rowIndex:number,section_detail:DetailedView){
+    let indexAddDet = this.accordionList.contents[rowIndex].detailed.findIndex(f => f.section_html_id == section_detail.section_html_id);
+      if (indexAddDet == -1) {
+        this.accordionList.contents[rowIndex].detailed.push(section_detail);
+      } else {
+        this.accordionList.contents[rowIndex].detailed[indexAddDet] = section_detail;
+      }
+  }
+
   setContent(dataList: NumType[],totalSize?:number){
     this.clearContents()
     dataList.forEach(e=>{
@@ -53,10 +63,11 @@ export abstract class Accordion<NumType> extends Paginator {
     this.itemLengthSubs.next(totalSize!);
   }
 
-  protected getSectionForm(sectionId:string,rowIndex?:number){
-    if(rowIndex){
-      return this.accordionList.contents[rowIndex]?.detailed.find(f => f.section_html_id == sectionId)?.section_form;
-    }
+  protected getSectionForm(sectionId:string,rowIndex:number){
+    return this.accordionList.contents[rowIndex]?.detailed.find(f => f.section_html_id == sectionId)?.section_form;
+  }
+
+  protected getCreateForm(sectionId:string){
     return this.accordionList.addContent?.detailed.find(f => f.section_html_id == sectionId)?.section_form;
   }
 
@@ -97,14 +108,18 @@ export abstract class Accordion<NumType> extends Paginator {
       })
       return m;
     });
+    console.log(this.accordionList.contents)
     this.functionButtons = [];
     this.accordionList.contents[rowIndex].buttons?.forEach(b => {
       this.functionButtons.push(b)
     });
+     
     this.accordionList.contents[rowIndex].buttons?.splice(0);
+    console.log(this.accordionList.contents[rowIndex].buttons,this.functionButtons)
     this.actionButtons.forEach(b => {
       this.accordionList.contents[rowIndex].buttons?.push(b);
     })
+    console.log(this.accordionList.contents[rowIndex].buttons,this.actionButtons)
 
   }
   protected hideForm(rowIndex: number) {

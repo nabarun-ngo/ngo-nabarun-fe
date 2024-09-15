@@ -42,6 +42,8 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { NgxMatInputTelComponent } from 'ngx-mat-input-tel';
 import { MAT_CHECKBOX_DEFAULT_OPTIONS, MatCheckboxModule } from '@angular/material/checkbox';
 import { DynamicInjectPipe } from './pipes/dynamic-inject.pipe';
+import { MemberSearchPipe } from '../feature/member/member.pipe';
+import { AccordionFilterPipe } from './pipes/accordion-filter.pipe';
 
 @NgModule({
   declarations: [
@@ -63,6 +65,7 @@ import { DynamicInjectPipe } from './pipes/dynamic-inject.pipe';
     ReplaceNullPipe,
     HtmlSanitizerPipe,
     DynamicInjectPipe,
+    AccordionFilterPipe,
   ],
   imports: [
     CommonModule,
@@ -119,6 +122,7 @@ import { DynamicInjectPipe } from './pipes/dynamic-inject.pipe';
     ClipboardModule,
     MatMenuModule,
     MatButtonToggleModule,
+    DynamicInjectPipe,
   ],
   providers: [{
     provide: MAT_RADIO_DEFAULT_OPTIONS,
@@ -127,6 +131,10 @@ import { DynamicInjectPipe } from './pipes/dynamic-inject.pipe';
   {
     provide: MAT_CHECKBOX_DEFAULT_OPTIONS,
     useValue: { color: 'primary' },
-  }]
+  },
+  //MemberSearchPipe,
+],
+  
+
 })
 export class SharedModule { }

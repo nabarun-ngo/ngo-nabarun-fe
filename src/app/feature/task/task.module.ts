@@ -16,6 +16,9 @@ import { TaskSearchPipe } from './task.pipe';
     CommonModule,
     TaskRoutingModule,
     SharedModule,
+  ],
+  providers:[
+    TaskSearchPipe
   ]
 })
 export class TaskModule { }

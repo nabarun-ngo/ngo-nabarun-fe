@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { AccordionList } from './accordion-list.model';
+import { AccordionList, AccordionRow } from './accordion-list.model';
 
 @Component({
   selector: 'app-accordion-list',
@@ -7,6 +7,8 @@ import { AccordionList } from './accordion-list.model';
   styleUrls: ['./accordion-list.component.scss']
 })
 export class AccordionListComponent {
+
+
 
   @Input()
   accordionList!:AccordionList;
@@ -19,6 +21,19 @@ export class AccordionListComponent {
       return this.accordionList.refData[section]?.find(f => f.key == code)?.displayValue;
     }
     return code;
+  }
+
+
+  accordionOpened(row: AccordionRow) {
+    //console.log(this.accordionList,row)
+    let rowIndex=this.accordionList.contents.findIndex(f=>f.detailed == row.detailed);
+    //console.log(rowIndex)
+    this.onAccordionOpen.emit({rowIndex:rowIndex})
+  }
+
+  buttonClicked(row: AccordionRow,buttonnId: string) {
+    let rowIndex=this.accordionList.contents.findIndex(f=>f.detailed == row.detailed);
+    this.onButtonClick.emit({buttonId:buttonnId,rowIndex:rowIndex})
   }
 
 }

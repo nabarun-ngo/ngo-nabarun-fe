@@ -24,7 +24,7 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
     DragDropModule,
   ],
   providers:[
-    
+    MemberSearchPipe
   ]
 })
 export class MemberModule { }

@@ -11,6 +11,7 @@ import { FormGroup } from '@angular/forms';
 import { UniversalInputModel } from 'src/app/shared/components/generic/universal-input/universal-input.model';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search.model';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
+import { MemberSearchPipe } from '../member.pipe';
 
 @Component({
   selector: 'app-member-list',

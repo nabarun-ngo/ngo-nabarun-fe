@@ -532,12 +532,12 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
 
   }
 
-  accordionOpened($event: { rowIndex: number; }) { }
+  accordionOpened($event: { rowIndex: number; }) {}
 
   createAccount() {
     this.showCreateForm();
 
-    let account_form = this.getSectionForm('account_detail');
+    let account_form = this.getCreateForm('account_detail');
     account_form?.valueChanges.pipe(startWith(account_form?.value), pairwise())
       .subscribe((val) => {
         //console.log(val[0] , val[1])//accountType
@@ -577,49 +577,47 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
       case 'CONFIRM':
         let item = this.accountList.content![$event.rowIndex];
         if (this.actionName == 'UPDATE_BANK_UPI') {
-          let bankForm = this.accordionList.contents[$event.rowIndex].detailed.find(f => ['bank_detail'].includes(f.section_html_id!));
-          let upiForm = this.accordionList.contents[$event.rowIndex].detailed.find(f => ['upi_detail'].includes(f.section_html_id!));
-          if (bankForm?.section_form.valid && upiForm?.section_form.valid) {
-            this.accountService.updateBankingAndUPIDetail(item.id!, bankForm?.section_form.value, upiForm?.section_form.value).subscribe(d => {
+          let bankForm = this.getSectionForm('bank_detail',$event.rowIndex);
+          let upiForm = this.getSectionForm('upi_detail',$event.rowIndex);
+          
+          if (bankForm?.valid && upiForm?.valid) {
+            this.accountService.updateBankingAndUPIDetail(item.id!, bankForm?.value, upiForm?.value).subscribe(d => {
               this.hideForm($event.rowIndex)
               this.fetchDetails();
             })
           } else {
-            bankForm?.section_form.markAllAsTouched();
-            upiForm?.section_form.markAllAsTouched();
+            bankForm?.markAllAsTouched();
+            upiForm?.markAllAsTouched();
             scrollToFirstInvalidControl(this.el.nativeElement)
           }
         }
         if (this.actionName == 'UPDATE_ACCOUNT') {
-          let accountForm = this.accordionList.contents[$event.rowIndex].detailed.find(f => ['bank_detail', 'upi_detail'].includes(f.section_html_id!));
-          if (accountForm?.section_form.valid) {
-            this.accountService.updateAccountDetail(item.id!, accountForm?.section_form.value).subscribe(d => {
+          let accountForm =  this.getSectionForm('account_detail',$event.rowIndex);
+          if (accountForm?.valid) {
+            this.accountService.updateAccountDetail(item.id!, accountForm?.value).subscribe(d => {
               this.hideForm($event.rowIndex)
               this.fetchDetails();
             })
           } else {
-            accountForm?.section_form.markAllAsTouched()
+            accountForm?.markAllAsTouched()
             scrollToFirstInvalidControl(this.el.nativeElement)
           }
         }
         if (this.actionName == 'PERFORM_TXN') {
-          let transfer_form = this.accordionList.contents[$event.rowIndex].detailed.find(f => ['transfer_amt'].includes(f.section_html_id!));
-          if (transfer_form?.section_form.valid) {
-            this.accountService.performTransaction(this.accountList.content![$event.rowIndex], transfer_form.section_form.value).subscribe(d => {
+          let transfer_form =  this.getSectionForm('transfer_amt',$event.rowIndex);
+          if (transfer_form?.valid) {
+            this.accountService.performTransaction(this.accountList.content![$event.rowIndex], transfer_form.value).subscribe(d => {
               this.fetchDetails();
             })
           } else {
-            transfer_form?.section_form?.markAllAsTouched()
+            transfer_form?.markAllAsTouched()
             scrollToFirstInvalidControl(this.el.nativeElement)
           }
         }
         break;
       case 'CREATE':
-        let accountForm = this.accordionList.addContent?.detailed.find(f => f.section_html_id == 'account_detail')?.section_form;
-        //let bankingForm = this.accordionList.addContent?.detailed.find(f => f.section_html_id == 'bank_detail')?.section_form;
-        //let upiForm = this.accordionList.addContent?.detailed.find(f => f.section_html_id == 'upi_detail')?.section_form;
-        if (accountForm?.valid /*&& bankingForm?.valid && upiForm?.valid*/) {
-          //bankingForm.value,upiForm.value
+        let accountForm = this.getCreateForm('account_detail');
+        if (accountForm?.valid) {
           this.accountService.createAccount(accountForm.value).subscribe(d => {
             this.hideCreateForm();
             this.fetchDetails()
@@ -627,8 +625,6 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
 
         } else {
           accountForm?.markAllAsTouched();
-          //bankingForm?.markAllAsTouched();
-          //upiForm?.markAllAsTouched();
           scrollToFirstInvalidControl(this.el.nativeElement);
         }
         break;

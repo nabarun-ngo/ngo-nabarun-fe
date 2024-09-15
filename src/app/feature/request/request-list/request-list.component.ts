@@ -151,7 +151,8 @@ export class RequestListComponent extends Paginator implements OnInit {
     })
     this.accordionList = {
       headers: headers,
-      contents: content!
+      contents: content!,
+      searchValue:''
     }
 
 

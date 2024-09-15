@@ -4,7 +4,7 @@ import { Paginator } from 'src/app/core/component/paginator';
 import { scrollToFirstInvalidControl } from 'src/app/core/service/form.service';
 import { DetailedView, DetailedViewField } from 'src/app/shared/components/generic/detailed-view/detailed-view.model';
 import { TaskDefaultValue, TaskField, workListTab } from '../task.const';
-import { AccordionCell, AccordionList, AccordionRow } from 'src/app/shared/components/generic/accordion-list/accordion-list.model';
+import { AccordionButton, AccordionCell, AccordionList, AccordionRow } from 'src/app/shared/components/generic/accordion-list/accordion-list.model';
 import { PaginateWorkDetail, WorkDetail } from 'src/app/core/api/models';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { ActivatedRoute } from '@angular/router';
@@ -14,39 +14,30 @@ import { PageEvent } from '@angular/material/paginator';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { inputType, UniversalInputModel } from 'src/app/shared/components/generic/universal-input/universal-input.model';
 import { TaskSearchPipe } from '../task.pipe';
+import { Accordion } from 'src/app/shared/components/generic/accordion-list/accordion';
 
 @Component({
   selector: 'app-task-list',
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.scss']
 })
-export class TaskListComponent extends Paginator implements OnInit {
+export class TaskListComponent extends Accordion<WorkDetail> implements OnInit {
 
   protected tabIndex!: number;
   protected tabMapping: workListTab[] = ['pending_worklist', 'completed_worklist'];
-  protected accordionList!: AccordionList;
   protected workItemList!: PaginateWorkDetail;
-
-  private cancel_button = {
-    button_id: 'CANCEL',
-    button_name: 'Cancel'
-  };
-  private update_button = {
-    button_id: 'UPDATE',
-    button_name: 'Update'
-  };
-  private confirm_button = {
-    button_id: 'CONFIRM',
-    button_name: 'Confirm'
-  };
-  navigations: { displayName: string; routerLink: string; }[] = [
+ 
+  protected navigations: { displayName: string; routerLink: string; }[] = [
     {
       displayName: 'Back to Dashboard',
       routerLink: AppRoute.secured_dashboard_page.url
     }
   ];
- // searchValue!: string;
-  searchPipe: TaskSearchPipe;
+  protected actionName!: string;
+  protected searchInput={
+    normalSearchPlaceHolder:'Search by Task Id, Request Id, Task Type',
+  }
+
 
   constructor(
     private sharedDataService: SharedDataService,
@@ -56,7 +47,6 @@ export class TaskListComponent extends Paginator implements OnInit {
   ) {
     super();
     super.init(TaskDefaultValue.pageNumber, TaskDefaultValue.pageSize, TaskDefaultValue.pageSizeOptions)
-    this.searchPipe=new TaskSearchPipe();
   }
 
   ngOnInit(): void {
@@ -72,43 +62,10 @@ export class TaskListComponent extends Paginator implements OnInit {
     if (this.route.snapshot.data['ref_data']) {
       let refData = this.route.snapshot.data['ref_data'];
       this.sharedDataService.setRefData('TASK', refData);
+      this.setRefData(refData);
     }
 
-    if (this.route.snapshot.data['data']) {
-      this.workItemList = this.route.snapshot.data['data'] as PaginateWorkDetail;
-      this.itemLengthSubs.next(this.workItemList?.totalSize!);
-      console.log(this.workItemList)
-      this.showWorkList(false);
-    }
-  }
-
-
-
-  protected tabChanged(index: number) {
-    this.tabIndex = index;
-    this.pageNumber = TaskDefaultValue.pageNumber;
-    this.pageSize = TaskDefaultValue.pageSize;
-    this.fetchDetails();
-
-  }
-  private fetchDetails() {
-    if (this.tabMapping[this.tabIndex] == 'pending_worklist') {
-      this.taskService.findMyWorkList(false).subscribe(s => {
-        this.workItemList = s!;
-        this.itemLengthSubs.next(this.workItemList?.totalSize!);
-        this.showWorkList(false);
-      })
-    } else if (this.tabMapping[this.tabIndex] == 'completed_worklist') {
-      this.taskService.findMyWorkList(true).subscribe(s => {
-        this.workItemList = s!;
-        this.itemLengthSubs.next(this.workItemList?.totalSize!);
-        this.showWorkList(true);
-      })
-    }
-  }
-
-  private showWorkList(completed: boolean) {
-    let headers = [
+    this.setHeaderRow([
       {
         value: TaskField.workId,
         rounded: true
@@ -122,115 +79,164 @@ export class TaskListComponent extends Paginator implements OnInit {
         rounded: true
       },
       {
-        value: completed ? TaskField.completedOn : TaskField.pendingSince,
+        value: this.tabMapping[this.tabIndex] == 'completed_worklist' ? TaskField.completedOn : TaskField.pendingSince,
         rounded: true
       }
-    ]
-    let content = this.workItemList.content?.map(m => {
-      let column_data = [
-        {
-          type: 'text',
-          value: m.id,
-          bgColor: 'bg-purple-200'
-        },
-        {
-          type: 'text',
-          value: m.workType
-        },
-        {
-          type: 'text',
-          value: m.workflowId
-        },
-        {
-          type: 'text',
-          value: date(completed ? m.decisionDate : m.createdOn)
-        }
-      ] as AccordionCell[];
+    ])
 
-      let work_detail_fields: DetailedViewField[] = [
-        {
-          field_name: 'Work Id',
-          field_html_id: 'work_id',
-          field_value: m.id!
-        },
-        {
-          field_name: 'Work Type',
-          field_html_id: 'work_type',
-          field_value: m.workType!
-        },
-        {
-          field_name: 'Work Description',
-          field_html_id: 'work_description',
-          field_value: m.description!,
-        },
-        {
-          field_name: 'Creation Date',
-          field_html_id: 'creation_date',
-          field_value: date(m.createdOn)
-        },
-        {
-          field_name: 'Decision Owner',
-          field_html_id: 'decision_owner',
-          field_value: m.decisionOwner?.fullName!,
-          hide_field: !completed
-        },
-        {
-          field_name: 'Decision Date',
-          field_html_id: 'decision_date',
-          field_value: date(m.decisionDate),
-          hide_field: !completed,
-        },
-      ]
 
-      m.additionalFields?.forEach(m1 => {
-        work_detail_fields.push({
-          field_name: m1.name!,
-          field_html_id: m1.id!,
-          field_value: m1.value!,
-          hide_field: false,
-          form_control_name: 'additionalField.' + m1.key,
-          editable: true,
-          form_input: {
-            tagName: m1.type as any,
-            inputType: m1.valueType as any,
-            placeholder: 'Ex. Something',
-            selectList: m1.options?.map(o => {
-              return { key: o, displayValue: o };
-            })
-          },
-          form_input_validation: m1.mandatory ? [Validators.required] : []
-        })
-        //console.log(work_detail_fields)
-      });
-      let acc_data = {
-        columns: column_data,
-        detailed: [
-          {
-            section_name: 'Work Details',
-            section_type: 'key_value',
-            section_html_id: 'work_detail',
-            section_form: new FormGroup({}),
-            content: work_detail_fields
-          }
-        ],
-        buttons: completed ? [] : [
-          this.update_button
-        ]
-      } as AccordionRow;
-      /**
-       * Adding Dynamic fields
-       */
-      console.log(acc_data)
-      return acc_data;
-    })
-    this.accordionList = {
-      headers: headers,
-      contents: content!,
+    if (this.route.snapshot.data['data']) {
+      this.workItemList = this.route.snapshot.data['data'] as PaginateWorkDetail;
+      this.setContent(this.workItemList.content!, this.workItemList.totalSize)
+
     }
+  }
 
 
+  protected override prepareHighLevelView(item: WorkDetail, options?: { [key: string]: any }): AccordionCell[] {
+    return [
+      {
+        type: 'text',
+        value: item?.id!,
+        bgColor: 'bg-purple-200'
+      },
+      {
+        type: 'text',
+        value: item?.workType!,
+      },
+      {
+        type: 'text',
+        value: item?.workflowId!,
+      },
+      {
+        type: 'text',
+        value: date(this.tabMapping[this.tabIndex] == 'completed_worklist' ? item.decisionDate : item.createdOn)
+      }
+    ]
+  }
+
+  protected override prepareDetailedView(m: WorkDetail, options?: { [key: string]: any }): DetailedView[] { 
+    let task_action_content = m?.additionalFields?.map(m1 => {
+      return {
+        field_name: m1.name!,
+        field_html_id: m1.id!,
+        field_value: m1.value!,
+        hide_field: false,
+        form_control_name: m1.key,
+        editable: true,
+        form_input: {
+          tagName: m1.type as any,
+          inputType: m1.valueType as any,
+          placeholder: '',
+          selectList: m1.options?.map(o => {
+            return { key: o, displayValue: o };
+          })
+        },
+        form_input_validation: m1.mandatory ? [Validators.required] : []
+      } as DetailedViewField;
+    })
+         
+    return [
+      {
+        section_name: 'Work Details',
+        section_type: 'key_value',
+        section_html_id: 'work_detail',
+        section_form: new FormGroup({}),
+        content: [
+          {
+            field_name: 'Work Id',
+            field_html_id: 'work_id',
+            field_value: m.id!
+          },
+          {
+            field_name: 'Work Type',
+            field_html_id: 'work_type',
+            field_value: m.workType!
+          },
+          {
+            field_name: 'Work Description',
+            field_html_id: 'work_description',
+            field_value: m.description!,
+          },
+          {
+            field_name: 'Creation Date',
+            field_html_id: 'creation_date',
+            field_value: date(m.createdOn)
+          },
+          {
+            field_name: 'Decision Owner',
+            field_html_id: 'decision_owner',
+            field_value: m.decisionOwner?.fullName!,
+            hide_field: this.tabMapping[this.tabIndex] == 'pending_worklist'
+          },
+          {
+            field_name: 'Decision Date',
+            field_html_id: 'decision_date',
+            field_value: date(m.decisionDate),
+            hide_field: this.tabMapping[this.tabIndex] == 'pending_worklist',
+          },
+        ]
+      },
+      {
+        section_name: 'Work Action Detail',
+        section_type: 'key_value',
+        section_html_id: 'action_details',
+        section_form: new FormGroup({}),
+        content: task_action_content
+      }
+    ]
+  }
+
+  protected override prepareDefaultButtons(data: WorkDetail, options?: { [key: string]: any }): AccordionButton[] {
+    // if (options && options['create']) {
+    //   return [
+    //     {
+    //       button_id: 'CANCEL',
+    //       button_name: 'Cancel'
+    //     },
+    //     {
+    //       button_id: 'CONFIRM',
+    //       button_name: 'Confirm'
+    //     }
+    //   ];
+    // }
+    if (this.tabMapping[this.tabIndex] == 'pending_worklist') {
+      return [
+        {
+          button_id: 'UPDATE',
+          button_name: 'Update'
+        }
+      ]
+    }
+    return [];
+  }
+
+
+
+  protected tabChanged(index: number) {
+    this.tabIndex = index;
+    this.pageNumber = TaskDefaultValue.pageNumber;
+    this.pageSize = TaskDefaultValue.pageSize;
+    this.fetchDetails();
 
   }
+
+  private fetchDetails() {
+    if (this.tabMapping[this.tabIndex] == 'pending_worklist') {
+      this.taskService.findMyWorkList(false,this.pageNumber,this.pageSize).subscribe(s => {
+        this.workItemList = s!;
+        this.setContent(this.workItemList.content!, this.workItemList?.totalSize!);
+
+      })
+    } else if (this.tabMapping[this.tabIndex] == 'completed_worklist') {
+      this.taskService.findMyWorkList(true,this.pageNumber,this.pageSize).subscribe(s => {
+        this.workItemList = s!;
+        this.setContent(this.workItemList.content!, this.workItemList?.totalSize!);
+      })
+    }
+  }
+
+
   override handlePageEvent($event: PageEvent): void {
     this.pageNumber = $event.pageIndex;
     this.pageSize = $event.pageSize;
@@ -240,81 +246,68 @@ export class TaskListComponent extends Paginator implements OnInit {
   onClick($event: { buttonId: string; rowIndex: number; }) {
     switch ($event.buttonId) {
       case 'UPDATE':
-        this.accordionList.contents[$event.rowIndex].detailed.filter(f => f.section_html_id == 'work_detail').map(m => {
-          console.log(m)
-          m.show_form = true;
-          m.content?.filter(f => ['remarks', 'decision'].includes(f.field_html_id!)).map(m => {
-            m.hide_field = false;
-            return m;
-          })
-          return m;
-        });
-        let index = this.accordionList.contents[$event.rowIndex].buttons?.findIndex(f => f.button_id == this.update_button.button_id);
-        this.accordionList.contents[$event.rowIndex].buttons?.splice(index!, 1)
-        this.accordionList.contents[$event.rowIndex].buttons?.push(this.cancel_button)
-        this.accordionList.contents[$event.rowIndex].buttons?.push(this.confirm_button)
+        this.showForm($event.rowIndex, ['action_details']);
+        this.actionName = $event.buttonId;
         break;
       case 'CONFIRM':
         let item = this.workItemList.content![$event.rowIndex];
-        let content = this.accordionList.contents[$event.rowIndex].detailed.find(f => f.section_html_id == 'work_detail');
-        if (content?.section_form?.valid) {
+        let form_action_detail=this.getSectionForm('action_details',$event.rowIndex);
+        if (form_action_detail?.valid) {
           let detail: WorkDetail = {};
           detail.additionalFields = [];
-          console.log(content?.section_form.value)
-          Object.keys(content?.section_form.value).forEach(key => {
-            console.log(key)
-            if (key.startsWith('additionalField.')) {
-
-              let splitted_key = key.split('.')[1] as any;
-              console.log(splitted_key)
+          Object.keys(form_action_detail.value).forEach(key => {
               detail.additionalFields?.push({
-                key: splitted_key,
-                value: content?.section_form.value[key],
-                updateField: item.additionalFields?.find(f => f.key === splitted_key)?.value != content?.section_form.value[key]
-              })
-              console.log(detail.additionalFields)
-            }
+                key: key as any,
+                value: form_action_detail!.value[key],
+                updateField: item.additionalFields?.find(f => f.key === key)?.value != form_action_detail!.value[key]
+              }) 
           })
-          console.log(detail)
           this.taskService.updateWorkItem(item.id!, detail).subscribe(data => {
             this.fetchDetails();
           })
         } else {
-          content?.section_form?.markAllAsTouched();
+          form_action_detail?.markAllAsTouched();
           scrollToFirstInvalidControl(this.el.nativeElement);
         }
         break;
       case 'CANCEL':
-        this.cancelOption($event.rowIndex);
+        this.hideForm($event.rowIndex)
         break;
     }
 
   }
-  cancelOption(rowIndex: number) {
-    this.accordionList.contents[rowIndex].detailed.filter(f => f.section_html_id == 'work_detail').map(m => {
-      m.show_form = false;
-      m.section_form?.reset();
-      return m;
-    });
-    let confirm_btn_index = this.accordionList.contents[rowIndex].buttons?.findIndex(f => f.button_id == this.confirm_button.button_id);
-    this.accordionList.contents[rowIndex].buttons?.splice(confirm_btn_index!, 1)
-    let cancel_btn_index = this.accordionList.contents[rowIndex].buttons?.findIndex(f => f.button_id == this.cancel_button.button_id);
-    this.accordionList.contents[rowIndex].buttons?.splice(cancel_btn_index!, 1)
-    this.accordionList.contents[rowIndex].buttons?.push(this.update_button)
-  }
+ 
 
   accordionOpened($event: { rowIndex: number; }) {
     let item = this.workItemList.content![$event.rowIndex];
-
-    this.addRequestDetails(item.workflowId!, $event.rowIndex);
-
-  }
-  addRequestDetails(id: string, rowIndex: number) {
-    this.taskService.getRequestDetail(id).subscribe(request => {
-
+    this.taskService.getRequestDetail(item.workflowId!).subscribe(request => {
       /**
-       * Inserting request additional details at top
+       * Inserting request request details at top
        */
+      this.addSectionInRow( $event.rowIndex,{
+        section_name: 'Request Details',
+        section_type: 'key_value',
+        section_html_id: 'request_detail',
+        section_form: new FormGroup({}),//Here you have to pass form group
+        content: [
+          {
+            field_name: 'Request Id',
+            field_value: request?.id!,
+          },
+          {
+            field_name: 'Request Type',
+            field_value: request?.type!,
+          },
+          {
+            field_name: 'Request Status',
+            field_value: request?.status!,
+          },
+          {
+            field_name: 'Requester Name',
+            field_value: request?.requester?.fullName!,
+          }
+        ]
+      })
 
       let additional_content = request?.additionalFields?.map(m => {
         return {
@@ -323,60 +316,19 @@ export class TaskListComponent extends Paginator implements OnInit {
         } as DetailedViewField;
       })
 
-      let request_add_detail = {
+      this.addSectionInRow( $event.rowIndex,{
         section_name: 'Request Additional Details',
         section_type: 'key_value',
         section_html_id: 'request_add_detail',
         section_form: new FormGroup({}),
         content: additional_content
-      } as DetailedView;
-
-      let indexAddDet = this.accordionList.contents[rowIndex].detailed.findIndex(f => f.section_html_id == 'request_add_detail');
-      if (indexAddDet == -1) {
-        this.accordionList.contents[rowIndex].detailed.push(request_add_detail);
-      } else {
-        this.accordionList.contents[rowIndex].detailed[indexAddDet] = request_add_detail;
-      }
-
-      /**
-       * Inserting request details at top
-       */
-      let request_detail = {
-        section_name: 'Request Details',
-        section_type: 'key_value',
-        section_html_id: 'request_detail',
-        section_form: new FormGroup({}),//Here you have to pass form group
-        content: [
-          {
-            field_name: 'Request Id',
-            field_value: request?.id,
-          },
-          {
-            field_name: 'Request Type',
-            field_value: request?.type,
-          },
-          {
-            field_name: 'Request Status',
-            field_value: request?.status,
-          },
-          {
-            field_name: 'Requester Name',
-            field_value: request?.requester?.fullName,
-          }
-        ]
-      } as DetailedView;
-      let index = this.accordionList.contents[rowIndex].detailed.findIndex(f => f.section_html_id == 'request_detail');
-      if (index == -1) {
-        this.accordionList.contents[rowIndex].detailed.push(request_detail);
-      } else {
-        this.accordionList.contents[rowIndex].detailed[index] = request_detail;
-      }
+      })
     })
   }
 
+  
+
   onSearch($event: { advancedSearch: boolean; reset: boolean; value: any; }) {
-    //this.searchValue=$event.value;
-   // this.workItemList.content=this.searchPipe.transform( this.workItemList.content,$event.value)
-   // console.log( this.workItemList.content)
+    this.accordionList.searchValue = $event.value;
   }
 }

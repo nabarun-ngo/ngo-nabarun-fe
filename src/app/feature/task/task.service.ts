@@ -13,8 +13,8 @@ export class TaskService {
   findTaskRefData(): any {
   }
 
-  findMyWorkList(isCompleted: boolean) {
-    return this.requestController.getMyWorkItems({ completed: isCompleted, pageIndex: TaskDefaultValue.pageNumber, pageSize: TaskDefaultValue.pageSize }).pipe(map(d => d.responsePayload));
+  findMyWorkList(isCompleted: boolean,pageIndex=TaskDefaultValue.pageNumber,pageSize=TaskDefaultValue.pageSize) {
+    return this.requestController.getMyWorkItems({ completed: isCompleted, pageIndex: pageIndex, pageSize: pageSize }).pipe(map(d => d.responsePayload));
   }
 
   updateWorkItem(id:string,detail:WorkDetail){
