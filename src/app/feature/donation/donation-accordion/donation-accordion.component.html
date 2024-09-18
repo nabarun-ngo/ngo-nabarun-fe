@@ -47,7 +47,7 @@
         </mat-action-row>
     </mat-expansion-panel>
 
-    <mat-expansion-panel class="m-2" *ngFor="let don of donations" (opened)="accordionOpened(don.donation!)">
+    <mat-expansion-panel class="m-2" *ngFor="let don of donations | donationSearch:searchValue" (opened)="accordionOpened(don.donation!)">
         <mat-expansion-panel-header>
             <mat-panel-description>
                 <ng-container *ngTemplateOutlet="headerTemplate;context:{donation:don.donation}"></ng-container>
@@ -68,7 +68,7 @@
             </div>
         </mat-action-row>
     </mat-expansion-panel>
-    <mat-card class="border-2" *ngIf="donations && donations.length == 0">
+    <mat-card class="border-2" *ngIf="donations && donations.length == 0 || (donations.length != 0 && (donations | donationSearch:searchValue).length === 0)">
         <div class="m-2 p-2 text-center">No records found.</div>
     </mat-card>
 </mat-accordion>

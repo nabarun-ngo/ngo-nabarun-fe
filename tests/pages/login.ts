@@ -3,24 +3,22 @@ import { DashboardPage } from "./dashboard";
 import { BasePage } from "./base";
 
 export class LoginPage extends BasePage{
-    page: Page;
-    loginWithPasswordEl: Locator;
-    loginWithEmailEl: Locator;
-    usernameEl: Locator;
-    continueBtnEl: Locator;
-    passwordEl: Locator;
-    submitBtnEl: Locator;
-    loginAcceptEL: Locator;
+    protected readonly loginWithPasswordEl: Locator;
+    protected readonly loginWithEmailEl: Locator;
+    protected readonly usernameEl: Locator;
+    protected readonly continueBtnEl: Locator;
+    protected readonly passwordEl: Locator;
+    protected readonly submitBtnEl: Locator;
+    protected readonly loginAcceptEL: Locator;
     constructor(page:Page,testInfo:TestInfo){
         super(page,testInfo);
-        this.page=page;
         this.loginWithPasswordEl=page.getByText('Continue with Password');
         this.loginWithEmailEl=page.getByText('Continue with Email');
         this.usernameEl=page.locator('#username');
         this.continueBtnEl=page.locator('//button[contains(text(),"Continue")]');
         this.passwordEl=page.locator('#password');
         this.submitBtnEl=page.locator('//button[contains(text(),"Login")]');
-        this.loginAcceptEL=this.page.locator('//*[@value="accept"]');
+        this.loginAcceptEL=page.locator('//*[@value="accept"]');
     }
 
     async continueWithPassword(){

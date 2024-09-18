@@ -24,6 +24,8 @@ export class DonationAccordionComponent implements OnInit {
   donationStatus = DonationStatus;
   createDonationData: { eventSubject: Subject<any>; validDonation?: boolean, validGuest?: boolean; donation?: DonationDetail } = { eventSubject: new Subject<any>() };
   @Input() member!: UserDetail;
+  @Input() searchValue!: string;
+
 
   constructor(
     private donationService: DonationService,

@@ -21,5 +21,7 @@ export interface MemberList {
     member?: UserDetail;
     donations?: DonationList[];
     donationSummary?: DonationSummary;
+    searchValue?:string;
+    advancedSearch?:boolean
 }
 

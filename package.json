@@ -8,7 +8,8 @@
     "buildstage": "ng build --configuration stage",
     "watch": "ng build --watch --configuration development",
     "test": "npx playwright test --grep '@sanity'",
-    "sync:api": "ng-openapi-gen --input http://localhost:8082/v3/api-docs --output src/app/core/api"
+    "sync:api": "ng-openapi-gen --input http://localhost:8082/v3/api-docs --output src/app/core/api",
+    "show:report":"allure-report.bat"
   },
   "private": true,
   "dependencies": {
@@ -52,6 +53,8 @@
     "@types/node": "^22.5.5",
     "@types/qrcode": "^1.5.5",
     "@types/uuid": "^10.0.0",
+    "allure-commandline": "^2.30.0",
+    "allure-playwright": "^3.0.0",
     "autoprefixer": "^10.4.19",
     "dotenv": "^16.4.5",
     "jasmine-core": "~4.6.0",

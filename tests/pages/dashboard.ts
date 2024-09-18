@@ -3,36 +3,35 @@ import { DonationPage } from "./donations";
 import { BasePage } from "./base";
 import { WorkListPage } from "./workList";
 import { LoginPage } from "./login";
+import { ProfilePage } from "./profile";
 
 export class DashboardPage extends BasePage {
    
-    page: Page;
-    donationTileEl: Locator;
-    membersTileEl: Locator;
-    accountTileEl: Locator;
-    requestTileEl: Locator;
-    worklistTileEl: Locator;
-    noticeTileEl: Locator;
-    profileIconEl: Locator;
-    logoutBtnEl: Locator;
-    yesButtonEl: Locator;
+    protected readonly donationTileEl: Locator;
+    protected readonly membersTileEl: Locator;
+    protected readonly accountTileEl: Locator;
+    protected readonly requestTileEl: Locator;
+    protected readonly worklistTileEl: Locator;
+    protected readonly noticeTileEl: Locator;
+    
 
     constructor(page: Page, testInfo: TestInfo) {
         super(page, testInfo);
-        this.page = page;
         this.donationTileEl = page.locator('#donationTile');
         this.membersTileEl = page.locator('#memberTile');
         this.accountTileEl = page.locator('#accountTile');
         this.requestTileEl = page.locator('#requestTile');
         this.worklistTileEl = page.locator('#worklistTile');
         this.noticeTileEl = page.locator('#noticeTile');
-        this.profileIconEl=page.locator('//img[@alt="Profile"]')
-        this.logoutBtnEl=page.locator('//a[text()="Logout"]')
-        this.yesButtonEl=page.locator('//button[normalize-space(text())="Yes"]');
+        
     }
 
     async gotoDonations() {
-        await this.click(this.donationTileEl);
+        //await this.page.waitForNavigation();
+
+        await this.donationTileEl.click();
+
+        //await this.click(this.donationTileEl);
         await this.assertText(this.pageTitleEL,"DONATION DASHBOARD");
         return new DonationPage(this.page, this.testInfo);
     }
@@ -63,11 +62,13 @@ export class DashboardPage extends BasePage {
         await this.assertText(this.pageTitleEL,"NOTICES");
     }
 
-    async logout() {
-        await this.click(this.profileIconEl)
-        await this.click(this.logoutBtnEl)
-        await this.click(this.yesButtonEl)
-        expect.soft(this.page.locator('//div[@role="alert"]')).toContainText("You must be logged in to access digital portal of Nabarun")
-        return new LoginPage(this.page,this.testInfo);
+  
+
+    async gotoMyProfile() {
+        await this.click(this.navbarProfileIconEl)
+        await this.click(this.navbarMyProfileBtnEl)
+        await this.assertText(this.pageTitleEL,"MY PROFILE");
+        return new ProfilePage(this.page,this.testInfo);
     }
+   
 }

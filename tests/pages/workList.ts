@@ -4,7 +4,6 @@ import { BasePage } from "./base";
 import { th } from "@faker-js/faker";
 
 export class WorkListPage extends BasePage {
-    page: Page;
     pendingWorksTabEl: Locator;
     completedWorksTabEl: Locator;
     remarksFldEl: Locator;
@@ -43,9 +42,8 @@ export class WorkListPage extends BasePage {
 
     async search(search?:string,advancedSearch?: { workId?: string; requestId?: string; close?:boolean}) {
         if(search){
-            await this.enter(this.searchFldEl,search);
-            await this.page.keyboard.press('Tab');
-            await this.page.keyboard.press('Enter');
+            await this.click(this.searchFldEl);
+            await this.page.keyboard.type(search);
         }else if(advancedSearch){
             if(advancedSearch.close){
                 await this.click(this.advSearchCloseBtnEl);

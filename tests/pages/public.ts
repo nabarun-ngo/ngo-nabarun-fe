@@ -2,33 +2,33 @@ import { expect, Locator, Page, TestInfo } from "@playwright/test";
 import { BasePage } from "./base";
 
 export class NabarunPublicPage extends BasePage{
-    protected firstnameEl: Locator;
-    joinUsLinkEl: Locator;
-    joinNowBtnEl: Locator;
-    whyDoUWantToJoinEl: Locator;
-    howDoUKnowAboutEl: Locator;
-    whereAreYouFromEl: Locator;
-    mobileNumberEl: Locator;
-    phoneCodeEl: Locator;
-    emailEl: Locator;
-    lastNameEl: Locator;
-    page: Page;
-    breadCrumbEL: Locator;
-    agreeAndContinueBtnEl: Locator;
-    loginEmailEl: Locator;
-    loginPasswordEl: Locator;
-    loginPasswordConfirmEl: Locator;
-    proceedBtnEl: Locator;
-    oneTimePasswordEl: Locator;
-    submitBtnEl: Locator;
-    loginEmailValue: string | null;
-    baseURL: string;
-    alertEl: Locator;
+    protected readonly  firstnameEl: Locator;
+    protected readonly joinUsLinkEl: Locator;
+    protected readonly joinNowBtnEl: Locator;
+    protected readonly whyDoUWantToJoinEl: Locator;
+    protected readonly howDoUKnowAboutEl: Locator;
+    protected readonly whereAreYouFromEl: Locator;
+    protected readonly mobileNumberEl: Locator;
+    protected readonly phoneCodeEl: Locator;
+    protected readonly emailEl: Locator;
+    protected readonly lastNameEl: Locator;
+    protected readonly breadCrumbEL: Locator;
+    protected readonly agreeAndContinueBtnEl: Locator;
+    protected readonly loginEmailEl: Locator;
+    protected readonly loginPasswordEl: Locator;
+    protected readonly loginPasswordConfirmEl: Locator;
+    protected readonly proceedBtnEl: Locator;
+    protected readonly oneTimePasswordEl: Locator;
+    protected readonly submitBtnEl: Locator;
+    protected readonly alertEl: Locator;
+
+    private loginEmailValue!: string | null;
+    private baseURL: string;
+
 
     constructor(page:Page,testInfo:TestInfo){
         super(page,testInfo);
-        this.baseURL = process.env.BASE_URL!;
-        this.page = page;
+        this.baseURL = process.env['BASE_URL']!;
         /**
          * Elements for 'Join us'
          */
@@ -79,13 +79,11 @@ export class NabarunPublicPage extends BasePage{
         await this.whyDoUWantToJoinEl.fill(data?.whyDoYouWantToJoinNabarun);
         await this.joinNowBtnEl.click();
         await expect.soft(this.breadCrumbEL).toContainText('Rules and Regulations');
-        await this.page.screenshot({type:'png',fullPage:true,path:'/my-report/screenshots/'+new Date().toDateString()+'.png'})
     }
 
     async agreeAndContinue() {
         await this.agreeAndContinueBtnEl.click();
         await expect.soft(this.breadCrumbEL).toContainText('Login Details');
-        await this.page.screenshot({type:'png',fullPage:true,path:'/my-report/screenshots/'+new Date().toDateString()+'.png'})
     }
 
     async fillLoginDetail(data: { password: string }) {
@@ -96,22 +94,19 @@ export class NabarunPublicPage extends BasePage{
         await this.loginPasswordConfirmEl.fill(data.password);
         await this.proceedBtnEl.click();
         await expect.soft(this.breadCrumbEL).toContainText('Verify and Submit');
-        await this.page.screenshot({type:'png',fullPage:true,path:'/my-report/screenshots/'+new Date().toDateString()+'.png'})
     }
 
     async submit() {
-        let response = await this.page.request.get(this.baseURL + '/test/getLatestTestOtp', { params: { email: this.loginEmailValue! } })
+        let response = await this.request().get(this.baseURL + '/test/getLatestTestOtp', { params: { email: this.loginEmailValue! } })
         expect(response).toBeOK();
         let otpData= await response.json() as {responsePayload : string}
        // await this.page.mouse.move(0,300);
         await this.oneTimePasswordEl.scrollIntoViewIfNeeded();
         await this.oneTimePasswordEl.fill(otpData.responsePayload);
-        await this.page.screenshot({type:'png',fullPage:true,path:'/my-report/screenshots/'+new Date().toDateString()+'.png'})
         await this.submitBtnEl.click(); 
         await expect.soft(this.breadCrumbEL).toContainText('Request Submitted');
-        const reqId=await this.page.locator('//*[@id="id"]').textContent();
+        const reqId=await this.getTextOrValue(this.getLocator('//*[@id="id"]'))
         await expect.soft(this.alertEl).toContainText('Thank you for your interest. Your request number is '+reqId+'. We will connect you very shortly.');
-        await this.page.screenshot({type:'png',fullPage:true,path:'/my-report/screenshots/'+new Date().toDateString()+'.png'})
         return reqId;
     }
 }

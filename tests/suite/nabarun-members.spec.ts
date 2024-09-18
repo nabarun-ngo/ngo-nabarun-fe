@@ -1,23 +1,19 @@
 import test, { Page } from "@playwright/test";
 import { NabarunPublicPage } from "../pages/public";
 import { LoginPage } from "../pages/login";
-
 import { faker } from "@faker-js/faker";
 
-// test.describe.configure({ mode: 'serial' });
-// test.setTimeout(5 * 60 * 1000);
-
-
-
 test.describe.serial('Onboard member End 2 End', {
-    tag: ['@regression','@sanity']
+    tag: ['@regression', '@sanity', '@member']
 }, async () => {
     let page: Page;
-    let requestId: string | null;
-    let email: string | null;;
-    test.beforeAll(async ({ browser }) => { page = await browser.newPage(); });
+    test.beforeAll(async ({ browser }) => { page=await browser.newPage(); });
     test.afterAll(async () => { await page.close(); });
-    test('Complete registration functionality', async ({ browser }, testInfo) => {
+
+    let requestId: string | null;
+    let email: string | null;
+        
+    test('Complete registration functionality', async ({}, testInfo) => {
         await page.goto('/')
         let publicPage = new NabarunPublicPage(page, testInfo);
         await publicPage.clickJoinUs()
@@ -40,7 +36,7 @@ test.describe.serial('Onboard member End 2 End', {
         console.log(requestId)
     })
 
-    test('Login And Approve 1',  async ({ browser }, testInfo) => {
+    test('Login And Approve 1', async ({}, testInfo) => {
         await page.goto(process.env['LOGIN_URL']!)
         let loginPage = new LoginPage(page, testInfo);
         await loginPage.continueWithPassword();
@@ -52,8 +48,8 @@ test.describe.serial('Onboard member End 2 End', {
         await workList.confirmDecisionTask({ id: requestId!, decision: 'APPROVE', remarks: 'ok Approved by 1' });
         await dashboard.logout();
     })
-    test('Login And Approve 2', async ({ browser }, testInfo) => {
-        await page.goto(process.env['LOGIN_URL']!)
+    test('Login And Approve 2', async ({}, testInfo) => {
+        //await page.goto(process.env['LOGIN_URL']!)
         let loginPage = new LoginPage(page, testInfo);
         await loginPage.continueWithPassword();
         let dashboard = await loginPage.login({
@@ -65,7 +61,7 @@ test.describe.serial('Onboard member End 2 End', {
         await dashboard.logout();
     })
 
-    test('Login check Onboarded user', async ({ browser }, testInfo) => {
+    test('Login check Onboarded user and update profile', async ({}, testInfo) => {
         await page.goto(process.env['LOGIN_URL']!)
         let loginPage = new LoginPage(page, testInfo);
         await loginPage.continueWithPassword();
@@ -73,6 +69,30 @@ test.describe.serial('Onboard member End 2 End', {
             username: email!,
             password: 'Password@01'
         });
+        let profile = await dashboard.gotoMyProfile();
+        await profile.updateMyProfile({
+            about: faker.lorem.text(),
+            title: 'Mr',
+            gender: 'Male',
+            phoneNo1: faker.phone.number().replaceAll('-', ''),
+            phoneNo2: faker.phone.number().replaceAll('-', ''),
+            address1: {
+                addressLine1: faker.location.streetAddress(),
+                addressLine2: faker.location.streetAddress(),
+                addressLine3: faker.location.streetAddress(),
+                hometown: faker.location.city(),
+                country: 'Greece'
+            },
+            address2: {
+                addressLine1: faker.location.streetAddress(),
+                addressLine2: faker.location.streetAddress(),
+                addressLine3: faker.location.streetAddress(),
+                hometown: faker.location.city(),
+                country: 'India',
+                state: 'West Bengal',
+                district: 'Purulia'
+            }
+        })
         await dashboard.logout()
     })
 })

@@ -44,6 +44,7 @@ import { MAT_CHECKBOX_DEFAULT_OPTIONS, MatCheckboxModule } from '@angular/materi
 import { DynamicInjectPipe } from './pipes/dynamic-inject.pipe';
 import { MemberSearchPipe } from '../feature/member/member.pipe';
 import { AccordionFilterPipe } from './pipes/accordion-filter.pipe';
+import { AlertComponent } from './components/generic/alert/alert.component';
 
 @NgModule({
   declarations: [
@@ -66,6 +67,7 @@ import { AccordionFilterPipe } from './pipes/accordion-filter.pipe';
     HtmlSanitizerPipe,
     DynamicInjectPipe,
     AccordionFilterPipe,
+    AlertComponent
   ],
   imports: [
     CommonModule,
@@ -89,7 +91,8 @@ import { AccordionFilterPipe } from './pipes/accordion-filter.pipe';
     MatMenuModule,
     MatButtonToggleModule,
     NgxMatInputTelComponent,
-    MatCheckboxModule
+    MatCheckboxModule,
+    
   ],
   exports: [
     ItemTileListComponent,
@@ -123,6 +126,7 @@ import { AccordionFilterPipe } from './pipes/accordion-filter.pipe';
     MatMenuModule,
     MatButtonToggleModule,
     DynamicInjectPipe,
+    AlertComponent,
   ],
   providers: [{
     provide: MAT_RADIO_DEFAULT_OPTIONS,

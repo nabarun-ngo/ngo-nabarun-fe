@@ -7,6 +7,9 @@ import { compareObjects } from 'src/app/core/service/utilities.service';
 import { OperationMode } from '../member.const';
 import { Location } from '@angular/common';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
+import { ModalService } from 'src/app/core/service/modal.service';
+import { AlertData } from 'src/app/shared/components/generic/alert/alert.model';
+import { AppAlert } from 'src/app/core/constant/app-alert.const';
 
 @Component({
   selector: 'app-member-profile',
@@ -20,11 +23,12 @@ export class MemberProfileComponent implements OnInit {
   mode!: OperationMode;
   navigations!: { displayName: string; routerLink: string; }[];
   routes = AppRoute
+  alertList:AlertData[]=[];
   constructor(
     private sharedDataService: SharedDataService,
     private route: ActivatedRoute,
     private memberService: MemberService,
-    protected location: Location
+    protected location: Location,
 
   ) { }
 
@@ -69,6 +73,7 @@ export class MemberProfileComponent implements OnInit {
       this.memberService.updateMyProfiledetail(compareObjects($event.profile, this.member)).subscribe(data => {
         this.member = data!
         this.mode = 'view_self';
+        this.alertList.push(AppAlert.profile_updated_self)
       })
     } else if ($event.actionName == 'CHANGE_MODE') {
       this.mode = $event.mode!;

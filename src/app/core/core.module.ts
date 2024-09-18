@@ -7,7 +7,7 @@ import { FooterComponent } from './component/footer/footer.component';
 import { ShowAuthedDirective } from './directive/show-authed.directive';
 import { PageTitleComponent } from './component/page-title/page-title.component';
 import { MatDialogModule } from '@angular/material/dialog';
-import { NotificationModalComponent } from './component/notification-modal/notification-modal.component';
+import { NotificationModalComponent, SnackComponent } from './component/notification-modal/notification-modal.component';
 import { environment } from 'src/environments/environment';
 import { ApiModule } from './api/api.module';
 import { HttpErrorIntercepterService } from './intercepter/http-error-intercepter.service';
@@ -17,6 +17,7 @@ import { CommonLayoutComponent } from './layout/common-layout/common-layout.comp
 import { SecuredLayoutComponent } from './layout/secured-layout/secured-layout.component';
 import { ModalComponent } from './component/modal/modal.component';
 import { DateDiffPipe } from './pipe/date-diff.pipe';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 
 
@@ -27,10 +28,11 @@ import { DateDiffPipe } from './pipe/date-diff.pipe';
     ShowAuthedDirective,
     PageTitleComponent,
     NotificationModalComponent,
+    SnackComponent,
     CommonLayoutComponent,
     SecuredLayoutComponent,
     ModalComponent,
-    DateDiffPipe,    
+    DateDiffPipe,
   ],
   imports: [
     CommonModule,
@@ -47,6 +49,8 @@ import { DateDiffPipe } from './pipe/date-diff.pipe';
     }),
     NgHttpLoaderModule.forRoot(),
     RouterModule,
+    MatSnackBarModule,
+    
   ],
   exports:[
     FooterComponent,

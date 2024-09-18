@@ -8,14 +8,16 @@
                             <div class="flex-shrink-0 h-10 w-10">
                                 <img class="h-10 w-10 rounded-full" [src]="mem.member?.picture" alt="img">
                             </div>
-                            <span class="px-2 mx-2 inline-flex leading-5 font-medium rounded-full bg-purple-100 text-purple-800 uppercase">
+                            <span
+                                class="px-2 mx-2 inline-flex leading-5 font-medium rounded-full bg-purple-100 text-purple-800 uppercase">
                                 {{mem.member?.fullName}}
                             </span>
                         </div>
                     </div>
 
                     <div class="col-span-2 mt-2">
-                        <span class="px-2 inline-flex leading-5 font-medium rounded-full bg-purple-100 text-green-500 uppercase">
+                        <span
+                            class="px-2 inline-flex leading-5 font-medium rounded-full bg-purple-100 text-green-500 uppercase">
                             {{mem.member?.status}}
                         </span>
                     </div>
@@ -34,9 +36,9 @@
                 <div class="flex items-center space-x-2 font-semibold text-gray-900 leading-8 ">
                     <span clas="text-green-500">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
                         </svg>
                     </span>
                     <span class="tracking-wide">Donation Summary</span>
@@ -51,7 +53,8 @@
                             <div class="py-2 font-semibold">Outstanding month(s)</div>
                             <div class="py-2">
                                 <span>
-                                   {{ mem.donationSummary?.outstandingMonths?.length ==0 ? '-' : mem.donationSummary?.outstandingMonths?.join(', ') | replaceNull }}
+                                    {{ mem.donationSummary?.outstandingMonths?.length ==0 ? '-' :
+                                    mem.donationSummary?.outstandingMonths?.join(', ') | replaceNull }}
                                 </span>
                             </div>
                         </div>
@@ -61,23 +64,54 @@
             <div class="flex items-center space-x-2 font-semibold text-gray-900 leading-8 ">
                 <span clas="text-green-500">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
                     </svg>
                 </span>
                 <span class="tracking-wide">Donation List</span>
             </div>
             <div class="flex justify-end p-2">
-                <mat-icon [ngClass]="{'disabledLink ' : false}" (click)="mem.showcreateDonation=true" class="bg-purple-500 mx-2 mt-2">add</mat-icon>
+                <mat-icon [ngClass]="{'disabledLink ' : false}" (click)="mem.showcreateDonation=true"
+                    class="bg-purple-500 mx-2 mt-2">add</mat-icon>
+                <!-- <mat-icon [ngClass]="{'disabledLink ' : false}" (click)="mem.showcreateDonation=true" class="bg-purple-500 mx-2 mt-2">filter_list</mat-icon>
+                <mat-icon [ngClass]="{'disabledLink ' : false}" (click)="mem.showcreateDonation=true" class="bg-purple-500 mx-2 mt-2">clear</mat-icon> -->
+                <!-- <span clas="text-green-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5" version="1" viewBox="0 0 24 24" id="filter">
+                        <path
+                            d="M19 6H5c-1.1 0-1.4.6-.6 1.4l4.2 4.2c.8.8 1.4 2.3 1.4 3.4v5l4-2v-3.5c0-.8.6-2.1 1.4-2.9l4.2-4.2c.8-.8.5-1.4-.6-1.4z">
+                        </path>
+                    </svg>
+
+                </span>
+                <span clas="text-green-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="20" viewBox="0 0 22 20" id="filter">
+                        <g fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+                          <g stroke="#000" stroke-width="2" transform="translate(-1614 -1629)">
+                            <g transform="translate(1615 1630)">
+                              <path d="M20 0H0l8 9.46V16l4 2V9.46z"></path>
+                            </g>
+                          </g>
+                        </g>
+                      </svg>
+                </span> -->
+
+
+
+
+
                 <mat-form-field appearance="outline" class="dense-3">
                     <!-- <mat-label>Search here</mat-label> -->
-                    <input type="text" matInput placeholder="Search here">
+                    <input type="text" matInput [(ngModel)]="mem.searchValue" placeholder="Search here">
                 </mat-form-field>
+                <button mat-button *ngIf="!mem.advancedSearch" color="primary" class="text-green-600 m-1" >Filter</button>
+                <button mat-button *ngIf="mem.advancedSearch" color="primary" class="text-green-600 m-1" >Clear Filter</button>
             </div>
-
-            <app-donation-accordion [member]="mem.member!" [donations]="mem.donations!" [(createDonation)]="mem.showcreateDonation!"></app-donation-accordion>
-            <mat-paginator class="mt-4" style="background-color: transparent;" (page)="handlePageEvent(mem.member!,$event)" [length]="mem.total" [pageSize]="mem.size" [pageSizeOptions]="defaultValue.pageSizeOptions" [pageIndex]="mem.index" aria-label="Select page">
+            <app-donation-accordion [member]="mem.member!" [donations]="mem.donations!" [searchValue]="mem.searchValue!"
+                [(createDonation)]="mem.showcreateDonation!"></app-donation-accordion>
+            <mat-paginator class="mt-4" style="background-color: transparent;"
+                (page)="handlePageEvent(mem.member!,$event)" [length]="mem.total" [pageSize]="mem.size"
+                [pageSizeOptions]="defaultValue.pageSizeOptions" [pageIndex]="mem.index" aria-label="Select page">
             </mat-paginator>
         </div>
     </mat-expansion-panel>
