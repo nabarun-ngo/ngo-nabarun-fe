@@ -1,3 +1,4 @@
+<app-alert *ngFor="let alert of alertList" [alertData]="alert"></app-alert>
 <mat-accordion class="mat-table" multi>
     <section class="mat-elevation-z2 bg-white py-3">
         <div class="px-6">
@@ -55,11 +56,16 @@
         </mat-expansion-panel-header>
         <app-detailed-profile [mode]="'view'" *ngIf="tabName == 'guest_donation'" [member]="don.donation?.donorDetails!" [triggerEvent]="don.eventSubject.asObservable()"></app-detailed-profile>
         <app-detailed-donation [tab]="tabName!" [donation]="don.donation!" [documents]="don.documents!" [mode]="don.action" [triggerEvent]="don.eventSubject.asObservable()" (donationChange)="don.update=$event" (docChange)="don.upload=$event"></app-detailed-donation>
+        <!-- <pre>{{don.update | json}}</pre> -->
         <mat-action-row>
             <div *ngIf="tabName == 'self_donation'" class="mx-4">
                 <button mat-button color="primary" class="text-green-600">Show changes</button>
-                <button mat-button color="primary" class="text-green-600">Pay now</button>
-                <button mat-button color="primary" class="text-purple-600" *ngIf="don.donation?.status == donationStatus.Raised || don.donation?.status == donationStatus.Pending" (click)="saveAndUpload(don.donation!)">Save</button>
+                <button mat-button color="primary" class="text-green-600" *ngIf="!don.update?.donation?.isPaymentNotified && 
+                (don.donation?.status == donationStatus.Raised 
+                || don.donation?.status == donationStatus.Pending)">Pay now</button>
+                <button mat-button color="primary" class="text-purple-600" *ngIf="don.update?.donation?.isPaymentNotified && 
+                (don.donation?.status == donationStatus.Raised 
+                || don.donation?.status == donationStatus.Pending)" (click)="saveAndUpload(don.donation!)">Notify Payment</button>
             </div>
             <div *ngIf="tabName !== 'self_donation'" class="mx-4">
                 <button mat-button color="primary" class="text-green-600">Show changes</button>
@@ -68,7 +74,7 @@
             </div>
         </mat-action-row>
     </mat-expansion-panel>
-    <mat-card class="border-2" *ngIf="donations && donations.length == 0 || (donations.length != 0 && (donations | donationSearch:searchValue).length === 0)">
+    <mat-card class="border-2" *ngIf="(donations && donations.length == 0) || (donations && donations.length != 0 && (donations | donationSearch:searchValue).length === 0)">
         <div class="m-2 p-2 text-center">No records found.</div>
     </mat-card>
 </mat-accordion>

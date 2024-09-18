@@ -1,5 +1,6 @@
 import { expect, Locator, Page, TestInfo } from "@playwright/test";
 import { BasePage } from "./base";
+import { AppAlert } from "src/app/core/constant/app-alert.const";
 
 export class DonationPage extends BasePage {
     
@@ -84,6 +85,7 @@ export class DonationPage extends BasePage {
         await this.click(this.donationEventNoEl);
         await this.click(this.donationCreateBtnEl);
         //await expect.soft(this.firstRowEl).toContainText(data.name, { timeout: 30000 });
+        await this.assertText(this.alertEL,AppAlert.donation_created.message)
         await this.click(this.firstExpansionPanelEl);
         let donationNumber=await this.getTextOrValue(this.donationNumber1stRowEL)
         await this.click(this.firstExpansionPanelEl);
@@ -153,6 +155,7 @@ export class DonationPage extends BasePage {
 
         await this.click(this.donationConfirmBtnEl)
         //Assert
+        await this.assertText(this.alertEL,AppAlert.donation_updated.message)
     }
    
 

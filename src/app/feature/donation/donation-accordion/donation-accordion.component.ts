@@ -8,6 +8,8 @@ import { compareObjects, getNonNullValues } from 'src/app/core/service/utilities
 import { ModalService } from 'src/app/core/service/modal.service';
 import { AppDialog } from 'src/app/core/constant/app-dialog.const';
 import { Subject } from 'rxjs';
+import { AlertData } from 'src/app/shared/components/generic/alert/alert.model';
+import { AppAlert } from 'src/app/core/constant/app-alert.const';
 
 @Component({
   selector: 'app-donation-accordion',
@@ -25,6 +27,8 @@ export class DonationAccordionComponent implements OnInit {
   createDonationData: { eventSubject: Subject<any>; validDonation?: boolean, validGuest?: boolean; donation?: DonationDetail } = { eventSubject: new Subject<any>() };
   @Input() member!: UserDetail;
   @Input() searchValue!: string;
+
+  alertList:AlertData[]=[];
 
 
   constructor(
@@ -68,6 +72,7 @@ export class DonationAccordionComponent implements OnInit {
               let files=result?.upload?.map(m=>m.detail);
               this.donationService.uploadDocuments(donation.id!,files!).subscribe(data=>{
                 this.donationService.updateDonation(donation.id!, update).subscribe(data => {
+                  this.alertList.push(AppAlert.donation_updated);
                   this.donationService.fetchDocuments(donation.id!).subscribe(docs=>{
                     this.donations.filter(f => f.donation?.id == donation.id).map(item => {
                       item.action = 'view';
@@ -81,6 +86,7 @@ export class DonationAccordionComponent implements OnInit {
               })
             }else{
               this.donationService.updateDonation(donation.id!, update).subscribe(data => {
+                this.alertList.push(AppAlert.donation_updated);
                 this.donations.filter(f => f.donation?.id == donation.id).map(item => {
                   item.action = 'view';
                   item.update = undefined;
@@ -128,6 +134,7 @@ export class DonationAccordionComponent implements OnInit {
           let files=result?.upload?.map(m=>m.detail);
           this.donationService.uploadDocuments(donation.id!,files!).subscribe(data=>{})
         }
+        this.alertList.push(AppAlert.payment_notified);
       })
     }
     console.log(result)
@@ -146,6 +153,8 @@ export class DonationAccordionComponent implements OnInit {
         }
         //console.log(donation);
         this.donationService.createDonation(donation).subscribe(data => {
+          this.alertList.push(AppAlert.donation_created);
+
           this.donations.unshift({
             donation: data!,
             action: 'view',

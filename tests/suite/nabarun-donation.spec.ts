@@ -48,7 +48,7 @@ test.describe.serial('Create & Update Guest Donation : PAID', {
             },
             status: 'Paid',
             paidOn: '',
-            paidTO: 'Quinten Volkman',
+            paidTO: 'Cashier Cashier',
             paymentMethod: 'UPI',
             upiName: 'Google Pay',
             file: "C:\\Users\\Souvik\\Downloads\\RetiralSettlements.pptx"
