@@ -15,6 +15,8 @@ export class MemberAccordionComponent {
 
 
   @Input() members!: MemberList[];
+  @Input() searchValue!: string;
+
 
   constructor(private donationService:DonationService){}
   defaultValue=DonationDefaultValue;

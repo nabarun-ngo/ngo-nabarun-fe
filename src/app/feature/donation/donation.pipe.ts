@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { DonationDetail } from 'src/app/core/api/models';
-import { DonationList } from './donation.model';
+import { DonationDetail, UserDetail } from 'src/app/core/api/models';
+import { DonationList, MemberList } from './donation.model';
 
 @Pipe({
   name: 'donationSearch'
@@ -27,6 +27,40 @@ export class DonationPipe implements PipeTransform {
       (donation.donation?.amount && donation.donation?.amount.toLocaleString().includes(searchValue)) 
       ||
       (donation.donation?.status != null && donation.donation?.status.toLowerCase().includes(searchValue)) 
+    );
+  }
+
+}
+
+
+@Pipe({
+  name: 'memberSearch'
+})
+export class MemberSearchPipe implements PipeTransform {
+
+  transform(profiles: MemberList[] | undefined, searchValue:string): MemberList[] {
+    //console.log(profiles,searchValue)
+    if(!profiles){
+      return [];
+    }
+    if(!searchValue){
+      return profiles;
+    }
+    //console.log(searchValue)
+    searchValue=searchValue.toLowerCase();
+    return profiles.filter((profile:MemberList)=>
+
+      (profile.member?.firstName != null && profile.member?.firstName.toLowerCase().includes(searchValue))
+      ||
+      (profile.member?.lastName != null && profile.member?.lastName.toLowerCase().includes(searchValue)) 
+      ||
+      (profile.member?.middleName != null && profile.member?.middleName.toLowerCase().includes(searchValue)) 
+      ||
+      (profile.member?.fullName != null && profile.member?.fullName.toLowerCase().includes(searchValue)) 
+      ||
+      (profile.member?.email != null && profile.member?.email.toLowerCase().includes(searchValue)) 
+      ||
+      (profile.member?.roles != null && profile.member?.roleString?.toString().toLowerCase().includes(searchValue)) 
     );
   }
 

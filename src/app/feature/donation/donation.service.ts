@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, combineLatest, forkJoin, map } from 'rxjs';
-import { DocumentDetailUpload, DonationDetail, DonationDetailFilter, DonationStatus, DonationType, RefDataType } from 'src/app/core/api/models';
+import { DocumentDetailUpload, DonationDetail, DonationDetailFilter, DonationStatus, DonationType, RefDataType, UserDetailFilter } from 'src/app/core/api/models';
 import { AccountControllerService, CommonControllerService, DonationControllerService, EventControllerService, UserControllerService } from 'src/app/core/api/services';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 
@@ -32,8 +32,22 @@ export class DonationService {
     return this.donationController.getDonations({ pageIndex: pageIndex, pageSize: pageSize, filter: { isGuest: true } }).pipe(map(d => d.responsePayload));
   }
 
-  fetchMembers(pageIndex: number = 0, pageSize: number = 100) {
-    return this.userController.getUsers({ pageIndex: pageIndex, pageSize: pageSize ,filter:{status:['ACTIVE','INACTIVE']}}).pipe(map(m => m.responsePayload));
+  fetchMembers(pageIndex: number = 0, pageSize: number = 100,filter?:{firstName?:string;lastName?:string,status?:string[]}) {
+    let memberFilter:UserDetailFilter={};
+    if(filter){
+      if(filter.firstName){
+        memberFilter.firstName=filter.firstName
+      }
+      if(filter.lastName){
+        memberFilter.lastName=filter.lastName
+      }
+      if(filter.status){
+        memberFilter.status=filter.status as any
+      }
+    }else{
+      memberFilter.status=['ACTIVE','INACTIVE']
+    }
+    return this.userController.getUsers({ pageIndex: pageIndex, pageSize: pageSize ,filter:memberFilter}).pipe(map(m => m.responsePayload));
   }
 
   fetchUserDonations(id: string, pageIndex: number = 0, pageSize: number = 100) {
@@ -52,7 +66,7 @@ export class DonationService {
   }
 
   fetchRefData(type?:DonationType,status?:DonationStatus) {
-    return this.commonController.getReferenceData({ names: [RefDataType.Donation], currentDonationStatus:status,donationType:type}).pipe(map(d => d.responsePayload));
+    return this.commonController.getReferenceData({ names: [RefDataType.Donation,RefDataType.User], currentDonationStatus:status,donationType:type}).pipe(map(d => d.responsePayload));
   }
 
   updateDonation(id: string, details: DonationDetail) {

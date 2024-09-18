@@ -88,79 +88,7 @@ export class DonationDashboardComponent implements OnInit {
       this.fetchDetails();
     }
 
-    this.searchInputData = {
-      normalSearchPlaceHolder: 'Search Donation Number, Donor Name',
-      advancedSearch: {
-        searchFormFields: [
-          {
-            formControlName: 'id',
-            inputModel: {
-              tagName: 'input',
-              inputType: 'text',
-              html_id: 'donationId',
-              labelName: 'Donation Number',
-              placeholder: 'Enter Donation Number',
-              cssInputClass: 'bg-white'
-            },
-          },
-          {
-            formControlName: 'type',
-            inputModel: {
-              tagName: 'select',
-              inputType: 'multiselect',
-              html_id: 'd_type',
-              labelName: 'Donation Type',
-              placeholder: 'Select Donation Type',
-              selectList: this.refData['donationTypes']
-            },
-          },
-          {
-            formControlName: 'status',
-            inputModel: {
-              tagName: 'select',
-              inputType: 'multiselect',
-              html_id: 'd_status',
-              labelName: 'Donation Status',
-              placeholder: 'Select Donation Status',
-              selectList: this.refData['donationStatuses']
-            },
-          },
-          {
-            formControlName: 'startDate',
-            inputModel: {
-              tagName: 'input',
-              inputType: 'date',
-              html_id: 'startDate',
-              labelName: 'From Date',
-              placeholder: 'Enter From Date',
-            },
-          },
-          {
-            formControlName: 'endDate',
-            inputModel: {
-              tagName: 'input',
-              inputType: 'date',
-              html_id: 'endDate',
-              labelName: 'To Date',
-              placeholder: 'Enter To Date',
-            },
-          },
-          {
-            hidden: this.tabMapping[this.tabIndex] == 'self_donation',
-            formControlName: 'donorName',
-            inputModel: {
-              tagName: 'input',
-              inputType: 'text',
-              html_id: 'donorName',
-              labelName: 'Donor Name',
-              placeholder: 'Enter Donor Name',
-            },
-          },
-        ]
-      }
-    };
-
-
+    this.searchAdvancedSearchInit()
   }
 
   tabChanged(index: number) {
@@ -170,16 +98,121 @@ export class DonationDashboardComponent implements OnInit {
     this.members = [];
     this.donations = [];
     this.fetchDetails();
-    if(this.tabMapping[this.tabIndex] == 'self_donation'){
-      this.searchInputData.advancedSearch?.searchFormFields.filter(f=>f.inputModel.html_id == 'donorName').map(m=>{
-        m.hidden=true;
-        return m;
-      })
+    this.searchAdvancedSearchInit()
+  }
+
+  private searchAdvancedSearchInit(){
+    if(this.tabMapping[this.tabIndex] == 'member_donation'){
+      this.searchInputData = {
+        normalSearchPlaceHolder: 'Search Member Name, Email, Mobile Number',
+        advancedSearch: {
+          searchFormFields: [
+            {
+              formControlName: 'firstName',
+              inputModel: {
+                tagName: 'input',
+                inputType: 'text',
+                html_id: 'firstName',
+                labelName: 'First Name',
+                placeholder: 'Enter First Name',
+              },
+            },
+            {
+              formControlName: 'lastName',
+              inputModel: {
+                tagName: 'input',
+                inputType: 'text',
+                html_id: 'lastName',
+                labelName: 'Last Name',
+                placeholder: 'Enter Last Name',
+              },
+            },
+            {
+              formControlName: 'status',
+              inputModel: {
+                tagName: 'select',
+                inputType: 'multiselect',
+                html_id: 'u_status',
+                labelName: 'Member Status',
+                placeholder: 'Select Member Status',
+                selectList: this.refData['userStatuses']
+              },
+            },
+          ]
+        }
+      };
     }else{
-      this.searchInputData.advancedSearch?.searchFormFields.filter(f=>f.inputModel.html_id == 'donorName').map(m=>{
-        m.hidden=false;
-        return m;
-      })
+      this.searchInputData = {
+        normalSearchPlaceHolder: 'Search Donation Number, Donor Name',
+        advancedSearch: {
+          searchFormFields: [
+            {
+              formControlName: 'id',
+              inputModel: {
+                tagName: 'input',
+                inputType: 'text',
+                html_id: 'donationId',
+                labelName: 'Donation Number',
+                placeholder: 'Enter Donation Number',
+                cssInputClass: 'bg-white'
+              },
+            },
+            {
+              formControlName: 'type',
+              inputModel: {
+                tagName: 'select',
+                inputType: 'multiselect',
+                html_id: 'd_type',
+                labelName: 'Donation Type',
+                placeholder: 'Select Donation Type',
+                selectList: this.refData['donationTypes']
+              },
+            },
+            {
+              formControlName: 'status',
+              inputModel: {
+                tagName: 'select',
+                inputType: 'multiselect',
+                html_id: 'd_status',
+                labelName: 'Donation Status',
+                placeholder: 'Select Donation Status',
+                selectList: this.refData['donationStatuses']
+              },
+            },
+            {
+              formControlName: 'startDate',
+              inputModel: {
+                tagName: 'input',
+                inputType: 'date',
+                html_id: 'startDate',
+                labelName: 'From Date',
+                placeholder: 'Enter From Date',
+              },
+            },
+            {
+              formControlName: 'endDate',
+              inputModel: {
+                tagName: 'input',
+                inputType: 'date',
+                html_id: 'endDate',
+                labelName: 'To Date',
+                placeholder: 'Enter To Date',
+              },
+            },
+            {
+              hidden: this.tabMapping[this.tabIndex] == 'self_donation',
+              formControlName: 'donorName',
+              inputModel: {
+                tagName: 'input',
+                inputType: 'text',
+                html_id: 'donorName',
+                labelName: 'Donor Name',
+                placeholder: 'Enter Donor Name',
+              },
+            },
+          ]
+        }
+      };
     }
   }
 
@@ -223,20 +256,35 @@ export class DonationDashboardComponent implements OnInit {
 
   onSearch($event: { advancedSearch: boolean; reset: boolean; value: any; }) {
     if ($event.advancedSearch && !$event.reset) {
-      this.donationService.advancedSearch({
-        donationId: $event.value.id,
-        donationStatus: $event.value.status,
-        donationType: $event.value.type,
-        startDate: $event.value.startDate,
-        endDate: $event.value.endDate,
-        donorName: $event.value.donorName,
-        guest: this.tabMapping[this.tabIndex] == 'guest_donation',
-        donorId : this.tabMapping[this.tabIndex] == 'self_donation' ? this.donationService.getMyId(): undefined
-      }).subscribe(donations => {
-        this.donations = []
-        donations?.content?.forEach(donation => this.donations.push({ donation: donation, action: 'view', eventSubject: new Subject<any>() }))
-        this.itemLengthSubs.next(donations?.totalSize!);
-      })
+      if(this.tabMapping[this.tabIndex] == 'member_donation'){
+        this.donationService.fetchMembers(this.pageNumber, this.pageSize,{
+          firstName:$event.value.firstName,
+          lastName:$event.value.lastName,
+          status:$event.value.status
+        }).subscribe(members => {
+          this.members = [];
+          members?.content?.forEach(member => this.members.push({
+            member: member
+          }))
+          this.itemLengthSubs.next(members?.totalSize!);
+        });
+      }else{
+        this.donationService.advancedSearch({
+          donationId: $event.value.id,
+          donationStatus: $event.value.status,
+          donationType: $event.value.type,
+          startDate: $event.value.startDate,
+          endDate: $event.value.endDate,
+          donorName: $event.value.donorName,
+          guest: this.tabMapping[this.tabIndex] == 'guest_donation',
+          donorId : this.tabMapping[this.tabIndex] == 'self_donation' ? this.donationService.getMyId(): undefined
+        }).subscribe(donations => {
+          this.donations = []
+          donations?.content?.forEach(donation => this.donations.push({ donation: donation, action: 'view', eventSubject: new Subject<any>() }))
+          this.itemLengthSubs.next(donations?.totalSize!);
+        })
+      }
+      
     }
     else if ($event.advancedSearch && $event.reset) {
       this.fetchDetails()

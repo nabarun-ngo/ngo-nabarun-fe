@@ -8,7 +8,7 @@ import { QRCodeModule } from 'angularx-qrcode';
 import { MemberAccordionComponent } from './member-accordion/member-accordion.component';
 import { DonationDashboardNewComponent } from './donation-dashboard-new/donation-dashboard-new.component';
 import { DonationDashboardComponent } from './donation-dashboard/donation-dashboard.component';
-import { DonationPipe } from './donation.pipe';
+import { DonationPipe, MemberSearchPipe } from './donation.pipe';
 
 
 @NgModule({
@@ -18,6 +18,7 @@ import { DonationPipe } from './donation.pipe';
     DonationAccordionComponent,
     MemberAccordionComponent,
     DonationPipe,
+    MemberSearchPipe
   ],
   imports: [
     CommonModule,
