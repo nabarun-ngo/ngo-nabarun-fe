@@ -126,7 +126,7 @@
                         <app-donation-accordion #target [donations]="donations" [tabName]="'guest_donation'" [searchValue]="searchValue" [(createDonation)]="showcreateDonation"></app-donation-accordion>
                     </mat-tab>
                     <mat-tab id="memberDonationTab" label="Member Donations" (click)="tabChanged(tabIndex)" [disabled]="false">
-                        <app-member-accordion [members]="members" [searchValue]="searchValue"></app-member-accordion>
+                        <app-member-accordion [members]="members" [searchValue]="searchValue" [donationSerach]="getSearchAdvancedSearchData('self_donation')"></app-member-accordion>
                     </mat-tab>
                 </mat-tab-group>
                 <mat-paginator class="mt-4" style="background-color: transparent;" (page)="handlePageEvent($event)" [length]="itemLength$ | async" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" [pageIndex]="pageNumber" aria-label="Select page">

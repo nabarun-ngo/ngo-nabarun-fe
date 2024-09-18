@@ -3,6 +3,7 @@ import { UniversalInputModel } from "../generic/universal-input/universal-input.
 
 export interface SearchAndAdvancedSearchModel{
     normalSearchPlaceHolder: string;
+    showOnlyAdvancedSearch?:boolean;
     advancedSearch?:{
       searchFormFields:{
         formControlName:string;

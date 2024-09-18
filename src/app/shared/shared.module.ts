@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
-import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -14,7 +14,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
-import { MatSelectModule } from '@angular/material/select';
+import { MAT_SELECT_SCROLL_STRATEGY, MatSelectModule } from '@angular/material/select';
 import { PageNavigationButtonsComponent } from './components/generic/page-navigation-buttons/page-navigation-buttons.component';
 import { SearchAndAdvancedSearchFormComponent } from './components/search-and-advanced-search-form/search-and-advanced-search-form.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -45,6 +45,7 @@ import { DynamicInjectPipe } from './pipes/dynamic-inject.pipe';
 import { MemberSearchPipe } from '../feature/member/member.pipe';
 import { AccordionFilterPipe } from './pipes/accordion-filter.pipe';
 import { AlertComponent } from './components/generic/alert/alert.component';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -136,6 +137,18 @@ import { AlertComponent } from './components/generic/alert/alert.component';
     provide: MAT_CHECKBOX_DEFAULT_OPTIONS,
     useValue: { color: 'primary' },
   },
+  {
+    provide:MAT_DIALOG_DATA,
+    useValue:{}
+  },
+  // {
+  //   provide:MAT_SELECT_SCROLL_STRATEGY,
+  //   useValue:{}
+  // },
+  // {
+  //   provide:MatDatepicker,
+  //   useValue:{}
+  // }
   //MemberSearchPipe,
 ],
   

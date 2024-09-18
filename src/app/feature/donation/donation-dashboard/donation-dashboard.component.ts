@@ -88,7 +88,7 @@ export class DonationDashboardComponent implements OnInit {
       this.fetchDetails();
     }
 
-    this.searchAdvancedSearchInit()
+    this.searchInputData=this.getSearchAdvancedSearchData(this.tabMapping[this.tabIndex])
   }
 
   tabChanged(index: number) {
@@ -98,12 +98,12 @@ export class DonationDashboardComponent implements OnInit {
     this.members = [];
     this.donations = [];
     this.fetchDetails();
-    this.searchAdvancedSearchInit()
+    this.searchInputData=this.getSearchAdvancedSearchData(this.tabMapping[this.tabIndex])
   }
 
-  private searchAdvancedSearchInit(){
-    if(this.tabMapping[this.tabIndex] == 'member_donation'){
-      this.searchInputData = {
+  protected getSearchAdvancedSearchData(tab:donationTab){
+    if(tab == 'member_donation'){
+      return {
         normalSearchPlaceHolder: 'Search Member Name, Email, Mobile Number',
         advancedSearch: {
           searchFormFields: [
@@ -140,9 +140,9 @@ export class DonationDashboardComponent implements OnInit {
             },
           ]
         }
-      };
+      } as SearchAndAdvancedSearchModel;
     }else{
-      this.searchInputData = {
+      return {
         normalSearchPlaceHolder: 'Search Donation Number, Donor Name',
         advancedSearch: {
           searchFormFields: [
@@ -200,7 +200,7 @@ export class DonationDashboardComponent implements OnInit {
               },
             },
             {
-              hidden: this.tabMapping[this.tabIndex] == 'self_donation',
+              hidden: tab == 'self_donation',
               formControlName: 'donorName',
               inputModel: {
                 tagName: 'input',
@@ -212,7 +212,7 @@ export class DonationDashboardComponent implements OnInit {
             },
           ]
         }
-      };
+      }as SearchAndAdvancedSearchModel;
     }
   }
 

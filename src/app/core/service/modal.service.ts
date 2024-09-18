@@ -3,13 +3,14 @@ import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dial
 import { AlertMode, AlertType, NotificationModalComponent, SnackComponent } from '../component/notification-modal/notification-modal.component';
 import { ModalComponent } from '../component/modal/modal.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ComponentType } from '@angular/cdk/portal';
 
 
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'any'
 })
-export class ModalService {
+export class ModalService{
   modalClosed = new EventEmitter();
 
   constructor(private dialog: MatDialog,
@@ -81,6 +82,32 @@ export class ModalService {
 
   openSnackBar(data:{message:string;actionName?:string}) {
     return this.snack.openFromComponent(SnackComponent,{verticalPosition:'top'})
+  }
+
+
+  openComponentDialog<T,D>(
+    component:ComponentType<T>, 
+    data:D,
+    dimention?: { width?: number, height?: number,fullScreen?: boolean }
+  ){
+    const config = new MatDialogConfig();
+
+    if (dimention?.width != null || dimention?.width != undefined) {
+      config.width = dimention?.width + 'px';
+    }
+    if (dimention?.height != null || dimention?.height != undefined) {
+      config.height = dimention?.height + 'px';
+    }
+
+    if ((dimention?.fullScreen != null || dimention?.fullScreen != undefined) && dimention?.fullScreen == true) {
+      config.panelClass = 'fullscreen-dialog';
+      config.width = '100%';
+      config.height = '100%';
+      config.maxWidth = '100vw';
+      config.maxHeight = '100vh';
+    }
+    config.data=data;
+    return this.dialog.open(component,config);
   }
 
 

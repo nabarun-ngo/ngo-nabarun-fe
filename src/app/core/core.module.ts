@@ -18,6 +18,9 @@ import { SecuredLayoutComponent } from './layout/secured-layout/secured-layout.c
 import { ModalComponent } from './component/modal/modal.component';
 import { DateDiffPipe } from './pipe/date-diff.pipe';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MAT_DATEPICKER_SCROLL_STRATEGY } from '@angular/material/datepicker';
+import { MAT_SELECT_SCROLL_STRATEGY } from '@angular/material/select';
 
 
 
@@ -50,7 +53,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     NgHttpLoaderModule.forRoot(),
     RouterModule,
     MatSnackBarModule,
-    
+    MatNativeDateModule,
   ],
   exports:[
     FooterComponent,
@@ -64,7 +67,15 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorIntercepterService,
       multi: true
-  }
+  },
+  // {
+  //   provide:MAT_DATEPICKER_SCROLL_STRATEGY,
+  //   useExisting:true
+  // },
+  // {
+  //   provide:MAT_SELECT_SCROLL_STRATEGY,
+  //   useExisting:true
+  // }
   ]
 })
 export class CoreModule {
