@@ -9,6 +9,9 @@ import { ModalService } from 'src/app/core/service/modal.service';
 import { SearchAndAdvancedSearchFormComponent } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search-form.component';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search.model';
 import { MemberProfileComponent } from '../../member/member-profile/member-profile.component';
+import { ProfileViewComponent } from 'src/app/shared/components/profile-view/profile-view.component';
+import { SharedDataService } from 'src/app/core/service/shared-data.service';
+import { MemberProfileModel } from '../../member/member-profile/member-profile.model';
 
 @Component({
   selector: 'app-member-accordion',
@@ -25,6 +28,7 @@ export class MemberAccordionComponent {
   constructor(
     private donationService: DonationService,
     private modalService: ModalService,
+    private sharedDataService: SharedDataService,
   ) { }
   defaultValue = DonationDefaultValue;
 
@@ -52,11 +56,11 @@ export class MemberAccordionComponent {
 
   donationFilter(member: MemberList, clear?: boolean) {
     if (clear) {
-      member.advancedSearch=false;
+      member.advancedSearch = false;
       this.fetchDonations(member.member?.id!, this.defaultValue.pageNumber, this.defaultValue.pageSize);
     }
     else {
-      member.advancedSearch=true;
+      member.advancedSearch = true;
       this.donationSerach.showOnlyAdvancedSearch = true;
       let modal = this.modalService.openComponentDialog(SearchAndAdvancedSearchFormComponent,
         this.donationSerach, {
@@ -90,11 +94,18 @@ export class MemberAccordionComponent {
   }
 
 
-  openProfile(){
+  openProfile(profile: UserDetail) {
     let modal = this.modalService.openComponentDialog(MemberProfileComponent,
-      this.donationSerach, {
-      fullScreen:true
+      {
+        member: profile,
+        mode: 'view_admin',
+        refData: this.sharedDataService.getRefData('DONATION')
+      } as MemberProfileModel, {
+      fullScreen: true
     });
+    modal.componentInstance.dialogClose.subscribe(d=>{
+      modal.close()
+    })
   }
 
 

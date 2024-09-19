@@ -10,6 +10,7 @@ import { AppDialog } from 'src/app/core/constant/app-dialog.const';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { arraysEqual, objectsEqual } from 'src/app/core/service/utilities.service';
+import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
 
 @Component({
   selector: 'app-member-role',
@@ -25,7 +26,7 @@ export class MemberRoleComponent implements OnInit {
   roleUserMapCache: { [roleCode: string]: UserDetail[] } = {};
 
   rolesToEdit!: KeyValue[];
-  navigations!: { displayName: string; routerLink: string; }[];
+  navigations!: NavigationButtonModel[];
   constructor(
     private sharedDataService: SharedDataService,
     private route: ActivatedRoute,

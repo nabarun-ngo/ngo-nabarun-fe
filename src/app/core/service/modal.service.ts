@@ -72,10 +72,10 @@ export class ModalService{
 
     if ((options.config?.fullScreen != null || options.config?.fullScreen != undefined) && options.config?.fullScreen == true) {
       config.panelClass = 'fullscreen-dialog';
-      config.width = '100%';
-      config.height = '100%';
-      config.maxWidth = '100vw';
-      config.maxHeight = '100vh';
+      config.width = '90%';
+      config.height = '90%';
+      config.maxWidth = '90vw';
+      config.maxHeight = '90vh';
     }
     return this.dialog.open<ModalComponent>(ModalComponent, config);
   }

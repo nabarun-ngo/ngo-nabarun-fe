@@ -9,6 +9,7 @@ import { NoticeDetail, PaginateNoticeDetail } from 'src/app/core/api/models';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { GoogleCalendarService } from 'src/app/core/service/google-calendar.service';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search.model';
+import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
 
 @Component({
   selector: 'app-notice-list',
@@ -28,7 +29,7 @@ export class NoticeListComponent extends Paginator implements OnInit {
   isInactiveUser: any;
   searchInputData!: SearchAndAdvancedSearchModel;
   searchValue!: string;
-  navigations: { displayName: string; routerLink: string; }[] = [
+  navigations: NavigationButtonModel[] = [
     {
       displayName: 'Back to Dashboard',
       routerLink: AppRoute.secured_dashboard_page.url

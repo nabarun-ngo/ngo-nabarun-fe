@@ -14,6 +14,7 @@ import { ModalService } from 'src/app/core/service/modal.service';
 import { scrollToFirstInvalidControl } from 'src/app/core/service/form.service';
 import { workListTab } from '../../task/task.const';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
+import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
 
 @Component({
   selector: 'app-workflow-list',
@@ -40,7 +41,7 @@ export class WorkflowListComponent extends Paginator implements OnInit {
     button_id: 'CONFIRM',
     button_name: 'Confirm'
   };
-  navigations: { displayName: string; routerLink: string; }[] = [
+  navigations: NavigationButtonModel[] = [
     {
       displayName: 'Back to Dashboard',
       routerLink: AppRoute.secured_dashboard_page.url

@@ -9,6 +9,7 @@ import { DonationList, MemberList } from '../donation.model';
 import { DonationSummary, KeyValue, PaginateDonationDetail, PaginateUserDetail } from 'src/app/core/api/models';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search.model';
+import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
 
 @Component({
   selector: 'app-donation-dashboard',
@@ -31,7 +32,7 @@ export class DonationDashboardComponent implements OnInit {
   donations: DonationList[] = [];
   mySummary: DonationSummary | undefined;
   showcreateDonation: boolean = false;
-  navigations: { displayName: string; routerLink: string; }[] = [
+  navigations: NavigationButtonModel[] = [
     {
       displayName: 'Back to Dashboard',
       routerLink: AppRoute.secured_dashboard_page.url

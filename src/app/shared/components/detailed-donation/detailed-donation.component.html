@@ -29,12 +29,6 @@
                                     selectList: getSelectList(donationRefData.refDataKey.type)
                                     }" />
 
-                                <!-- <mat-form-field appearance="outline">
-                                    <mat-select formControlName="type">
-                                        <mat-option *ngFor="let type of refData[donationRefData.type]" [disabled]="donationTab == 'guest_donation' && type.key != donationType.Onetime" [value]="type.key">{{type.displayValue}}</mat-option>
-                                    </mat-select>
-                                    <mat-error>{{ errorMessage(dfControl['type'].errors)}}</mat-error>
-                                </mat-form-field> -->
                             </div>
                         </div>
                         <!-- Display section all time-->
@@ -42,10 +36,6 @@
                             <div class="px-2 py-2 font-semibold">Donation amount</div>
                             <div class="px-2 py-2" *ngIf="this.mode == 'view'"> ₹ {{donation.amount! | number:'1.0-2'| replaceNull:'0'}}</div>
                             <div class="px-2 dense-3" *ngIf="this.mode == 'edit' || this.mode == 'create'">
-                                <!-- <mat-form-field appearance="outline">
-                                    <input type="number" matInput placeholder="Ex. 100" formControlName="amount">
-                                    <mat-error>{{ errorMessage(dfControl['amount'].errors)}}</mat-error>
-                                </mat-form-field> -->
                                 <app-universal-input formControlName="amount" [inputModel]="{tagName:'input',inputType:'number',placeholder:'Ex. 100'}" />
                             </div>
                         </div>
@@ -54,32 +44,26 @@
                             <div class="px-2 py-2 font-semibold">Donation status</div>
                             <div class="px-2 py-2" *ngIf="this.mode == 'view'">{{(displayDonationStatus(donation.status)) | replaceNull}}</div>
                             <div class="px-2 dense-3" *ngIf="this.mode == 'edit'">
-                                <!-- <mat-form-field appearance="outline">
-                                    <mat-select formControlName="status">
-                                        <mat-option [value]="donation.status">{{displayDonationStatus(donation.status)}}</mat-option>
-                                        <mat-option *ngFor="let type of refData[donationRefData.nextStatus]" [value]="type.key">{{type.displayValue}}</mat-option>
-                                    </mat-select>
-                                    <mat-error>{{ errorMessage(dfControl['status'].errors)}}</mat-error>
-                                </mat-form-field> -->
+                                
                                 <app-universal-input formControlName="status" [inputModel]="{
                                     tagName:'select',
                                     inputType:'',
                                     placeholder:'Ex. Paid',
-                                    selectList: getSelectList(donationRefData.refDataKey.status)
+                                    selectList: this.refData![donationRefData.refDataKey.nextStatus]
                                     }" />
                             </div>
                         </div>
-                        <div class="grid grid-cols-2" *ngIf="((this.mode == 'create' || this.mode == 'edit') && this.dfControl['type'].value == this.donationType.Regular) || (this.mode == 'view' && this.donation?.type == this.donationType.Regular)">
+                        <div class="grid grid-cols-2" *ngIf="
+                        (this.mode == 'create' && this.dfControl['type'].value == this.donationType.Regular) 
+                        || (this.mode == 'edit' && this.donation?.type == this.donationType.Regular) 
+                        || (this.mode == 'view' && this.donation?.type == this.donationType.Regular)">
                             <div class="px-2 py-2 font-semibold">Donation start date</div>
                             <div class="px-2 py-2" *ngIf="this.mode == 'view'">{{donation.startDate | date | replaceNull}}
                             </div>
-                            <div class="px-2 dense-3" *ngIf="((this.mode == 'create' || this.mode == 'edit') && this.dfControl['type'].value == this.donationType.Regular)">
-                                <!-- <mat-form-field style="width: 212px;" appearance="outline">
-                                    <input matInput [matDatepicker]="startDate" readonly formControlName="startDate">
-                                    <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
-                                    <mat-datepicker #startDate></mat-datepicker>
-                                    <mat-error>{{ errorMessage(dfControl['startDate'].errors)}}</mat-error>
-                                </mat-form-field> -->
+                            <div class="px-2 dense-3" *ngIf="
+                            (this.mode == 'create' && this.dfControl['type'].value == this.donationType.Regular) 
+                            || (this.mode == 'edit' && this.donation?.type == this.donationType.Regular)">
+                                
                                 <app-universal-input formControlName="startDate" [inputModel]="{
                                     tagName:'input',
                                     inputType:'date',
@@ -88,17 +72,17 @@
                                     }" />
                             </div>
                         </div>
-                        <div class="grid grid-cols-2" *ngIf="((this.mode == 'create' || this.mode == 'edit') && this.dfControl['type'].value == this.donationType.Regular) || (this.mode == 'view' && this.donation?.type == this.donationType.Regular)">
+                        <div class="grid grid-cols-2" *ngIf="
+                        (this.mode == 'create' && this.dfControl['type'].value == this.donationType.Regular) 
+                        || (this.mode == 'edit' && this.donation?.type == this.donationType.Regular) 
+                        || (this.mode == 'view' && this.donation?.type == this.donationType.Regular)">
                             <div class="px-2 py-2 font-semibold">Donation end date</div>
                             <div class="px-2 py-2" *ngIf="mode == 'view'">{{donation.endDate | date | replaceNull}}
                             </div>
-                            <div class="px-2 dense-3" *ngIf="((this.mode == 'create' || this.mode == 'edit') && this.dfControl['type'].value == this.donationType.Regular)">
-                                <!-- <mat-form-field style="width: 212px;" appearance="outline">
-                                    <input matInput [matDatepicker]="endDate" formControlName="endDate" readonly>
-                                    <mat-datepicker-toggle matIconSuffix [for]="endDate"></mat-datepicker-toggle>
-                                    <mat-datepicker #endDate></mat-datepicker>
-                                    <mat-error>{{ errorMessage(dfControl['endDate'].errors)}}</mat-error>
-                                </mat-form-field> -->
+                            <div class="px-2 dense-3" *ngIf="
+                            (this.mode == 'create' && this.dfControl['type'].value == this.donationType.Regular) 
+                            || (this.mode == 'edit' && this.donation?.type == this.donationType.Regular)">
+                               
                                 <app-universal-input formControlName="endDate" [inputModel]="{
                                     tagName:'input',
                                     inputType:'date',
@@ -117,12 +101,7 @@
                             <div class="px-2 py-2" *ngIf="mode == 'view'">{{donation.paidOn | date | replaceNull}}
                             </div>
                             <div class="px-2 dense-3" *ngIf="mode == 'edit'">
-                                <!-- <mat-form-field style="width: 212px;" appearance="outline">
-                                    <input matInput [matDatepicker]="paidOn" formControlName="paidOn" readonly>
-                                    <mat-datepicker-toggle matIconSuffix [for]="paidOn"></mat-datepicker-toggle>
-                                    <mat-datepicker #paidOn></mat-datepicker>
-                                    <mat-error>{{ errorMessage(dfControl['paidOn'].errors)}}</mat-error>
-                                </mat-form-field> -->
+                                
                                 <app-universal-input formControlName="paidOn" [inputModel]="{
                                     tagName:'input',
                                     inputType:'date',
@@ -136,12 +115,7 @@
                             <div class="px-2 py-2" *ngIf="mode == 'view'">{{donation.paidToAccount?.accountHolderName}} ({{donation.paidToAccount?.id}})
                             </div>
                             <div class="px-2 dense-3" *ngIf="mode == 'edit'">
-                                <!-- <mat-form-field appearance="outline">
-                                    <mat-select formControlName="paidToAccount">
-                                        <mat-option *ngFor="let account of payableAccounts" [value]="account.id">{{account.accountHolderName}} ({{account.id}})</mat-option>
-                                    </mat-select>
-                                    <mat-error>{{ errorMessage(dfControl['paidToAccount'].errors)}}</mat-error>
-                                </mat-form-field> -->
+                           
                                 <app-universal-input formControlName="paidToAccount" [inputModel]="{
                                     tagName:'select',
                                     inputType:'',
@@ -154,17 +128,12 @@
                             <div class="px-2 py-2" *ngIf="mode == 'view'">{{donation.paymentMethod | replaceNull}}
                             </div>
                             <div class="px-2 dense-3" *ngIf="mode === 'edit'">
-                                <!-- <mat-form-field appearance="outline">
-                                    <mat-select formControlName="paymentMethod">
-                                        <mat-option *ngFor="let type of refData[donationRefData.paymentMethod]" [value]="type.key">{{type.displayValue}}</mat-option>
-                                    </mat-select>
-                                    <mat-error>{{ errorMessage(dfControl['paymentMethod'].errors)}}</mat-error>
-                                </mat-form-field> -->
+                                
                                 <app-universal-input formControlName="paymentMethod" [inputModel]="{
                                     tagName:'select',
                                     inputType:'',
                                     placeholder:'Ex. UPI', 
-                                    selectList: getSelectList(donationRefData.refDataKey.paymentMethod)
+                                    selectList: this.refData![donationRefData.refDataKey.paymentMethod]
                                     }" />
                             </div>
                         </div>
@@ -173,17 +142,12 @@
                             <div class="px-2 py-2" *ngIf="mode == 'view'">{{donation.paidUsingUPI| replaceNull}}
                             </div>
                             <div class="px-2 dense-3" *ngIf="mode == 'edit'">
-                                <!-- <mat-form-field appearance="outline">
-                                    <mat-select formControlName="paidUsingUPI">
-                                        <mat-option *ngFor="let type of refData[donationRefData.upiOps]" [value]="type.key">{{type.displayValue}}</mat-option>
-                                    </mat-select>
-                                    <mat-error>{{ errorMessage(dfControl['paidUsingUPI'].errors)}}</mat-error>
-                                </mat-form-field> -->
+                               
                                 <app-universal-input formControlName="paidUsingUPI" [inputModel]="{
                                     tagName:'select',
                                     inputType:'',
                                     placeholder:'Ex. UPI', 
-                                    selectList: getSelectList(donationRefData.refDataKey.upiOps)
+                                    selectList: this.refData![donationRefData.refDataKey.upiOps]
 
                                     }" />
                             </div>
@@ -203,10 +167,7 @@
                             <div class="px-2 py-2" *ngIf="mode == 'view'">{{donation.remarks| replaceNull}}
                             </div>
                             <div class="px-2 dense-3" *ngIf="mode == 'edit'">
-                                <!-- <mat-form-field appearance="outline">
-                                    <textarea matInput formControlName="remarks"></textarea>
-                                    <mat-error>{{ errorMessage(dfControl['remarks'].errors)}}</mat-error>
-                                </mat-form-field> -->
+                                
                                 <app-universal-input formControlName="remarks" [inputModel]="{
                                     tagName:'textarea',
                                     inputType:'',
@@ -219,10 +180,7 @@
                             <div class="px-2 py-2" *ngIf="mode == 'view'">{{donation.cancelletionReason| replaceNull}}
                             </div>
                             <div class="px-2 dense-3" *ngIf="mode == 'edit'">
-                                <!-- <mat-form-field appearance="outline">
-                                    <textarea matInput formControlName="cancelletionReason"></textarea>
-                                    <mat-error>{{ errorMessage(dfControl['cancelletionReason'].errors)}}</mat-error>
-                                </mat-form-field> -->
+                                
                                 <app-universal-input formControlName="cancelletionReason" [inputModel]="{
                                     tagName:'textarea',
                                     inputType:'',
@@ -235,10 +193,7 @@
                             <div class="px-2 py-2" *ngIf="mode == 'view'">{{donation.laterPaymentReason| replaceNull}}
                             </div>
                             <div class="px-2 dense-3" *ngIf="mode == 'edit'">
-                                <!-- <mat-form-field appearance="outline">
-                                    <textarea matInput formControlName="laterPaymentReason"></textarea>
-                                    <mat-error>{{ errorMessage(dfControl['laterPaymentReason'].errors)}}</mat-error>
-                                </mat-form-field> -->
+                                
                                 <app-universal-input formControlName="laterPaymentReason" [inputModel]="{
                                     tagName:'textarea',
                                     inputType:'',
@@ -251,10 +206,7 @@
                             <div class="px-2 py-2" *ngIf="mode == 'view'">{{donation.paymentFailureDetail| replaceNull}}
                             </div>
                             <div class="px-2 dense-3" *ngIf="mode == 'edit'">
-                                <!-- <mat-form-field appearance="outline">
-                                    <textarea matInput formControlName="paymentFailureDetail"></textarea>
-                                    <mat-error>{{ errorMessage(dfControl['paymentFailureDetail'].errors)}}</mat-error>
-                                </mat-form-field> -->
+                              
                                 <app-universal-input formControlName="paymentFailureDetail" [inputModel]="{
                                     tagName:'textarea',
                                     inputType:'',
@@ -284,12 +236,7 @@
                         <div class="grid grid-cols-2" *ngIf="mode == 'create' && dfControl['type'].value == donationType.Onetime && dfControl['isForEvent'].value == true">
                             <div class="px-2 py-2 font-semibold">Select event</div>
                             <div class="px-2 dense-3">
-                                <!-- <mat-form-field appearance="outline">
-                                    <mat-select formControlName="eventId">
-                                        <mat-option *ngFor="let event of events" [value]="event.id">{{(event.eventDate | date) +' | '+event.eventTitle+' | '+event.eventLocation}}</mat-option>
-                                    </mat-select>
-                                    <mat-error>{{ errorMessage(dfControl['eventId'].errors)}}</mat-error>
-                                </mat-form-field> -->
+                                
                                 <app-universal-input formControlName="eventId" [inputModel]="{
                                     tagName:'select',
                                     inputType:''

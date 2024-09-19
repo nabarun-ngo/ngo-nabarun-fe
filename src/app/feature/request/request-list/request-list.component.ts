@@ -9,6 +9,7 @@ import { PaginateRequestDetail } from 'src/app/core/api/models';
 import { AccordionCell, AccordionList, AccordionRow } from 'src/app/shared/components/generic/accordion-list/accordion-list.model';
 import { FormGroup } from '@angular/forms';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
+import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
 
 @Component({
   selector: 'app-request-list',
@@ -21,7 +22,7 @@ export class RequestListComponent extends Paginator implements OnInit {
   protected accordionList!: AccordionList;
   protected requestList!: PaginateRequestDetail;
   protected requestForm: FormGroup = new FormGroup({});
-  navigations: { displayName: string; routerLink: string; }[] = [
+  navigations: NavigationButtonModel[] = [
     {
       displayName: 'Back to Dashboard',
       routerLink: AppRoute.secured_dashboard_page.url

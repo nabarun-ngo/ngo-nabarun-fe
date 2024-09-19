@@ -7,6 +7,6 @@
             </div>
         </div>
     </div>
-    <app-page-navigation-buttons [navigations]="navigations"
+    <app-page-navigation-buttons [navigations]="navigations" (onClick)="onNavigationClick($event)"
     ></app-page-navigation-buttons>
 </main>

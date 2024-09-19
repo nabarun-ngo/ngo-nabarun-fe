@@ -48,12 +48,13 @@ export class DetailedDonationComponent implements OnInit {
   @Input('mode') set setMode(mode: OperationMode) {
     this.mode = mode;
     if (mode == 'create' || mode == 'edit') {
+      console.log(this.donation)
       this.donationForm.setControl('type', new FormControl(this.donation?.type, []))
       this.donationForm.setControl('amount', new FormControl(this.donation?.amount, [Validators.required, Validators.min(1)]))
       this.donationForm.setControl('status', new FormControl(this.donation?.status, []))
-      this.donationForm.setControl('startDate', new FormControl(this.donation?.startDate, []))
-      this.donationForm.setControl('endDate', new FormControl(this.donation?.endDate, []))
-      this.donationForm.setControl('paidOn', new FormControl(this.donation?.paidOn, []))
+      this.donationForm.setControl('startDate', new FormControl(new Date(this.donation?.startDate as any), []))
+      this.donationForm.setControl('endDate', new FormControl(new Date(this.donation?.endDate as any), []))
+      this.donationForm.setControl('paidOn', new FormControl(new Date(this.donation?.paidOn as any), []))
       this.donationForm.setControl('paidToAccount', new FormControl(this.donation?.paidToAccount?.id, []))
       this.donationForm.setControl('paymentMethod', new FormControl(this.donation?.paymentMethod, []))
       this.donationForm.setControl('paidUsingUPI', new FormControl(this.donation?.paidUsingUPI, []))
@@ -149,7 +150,10 @@ export class DetailedDonationComponent implements OnInit {
 
       if (mode == 'edit') {
         this.donationService.fetchRefData(this.donation.type, this.donation.status).subscribe(data => this.refData=data);
+        console.log(this.dfControl['endDate'].value,this.dfControl['startDate'].value)
         this.dfControl['type'].disable();
+        this.dfControl['startDate'].disable();
+        this.dfControl['endDate'].disable();
         setValidator(this.dfControl['type'], [])
       } else if (mode == 'create') {
         this.dfControl['type'].enable();
@@ -239,14 +243,14 @@ export class DetailedDonationComponent implements OnInit {
       return [];
     }
     let item=this.refData[name];
-    console.log(item);
+   // console.log(item);
 
     if (item && name == this.donationRefData.refDataKey.type) {
       return item.filter(f=>this.donationTab != 'guest_donation' || f.key == this.donationType.Onetime);
     }
-    if (item && name == this.donationRefData.refDataKey.nextStatus) {
-      item.unshift({key:options?.donation?.status,displayValue: this.displayDonationStatus(options?.donation?.status)});
-    }
+    // if (item && name == this.donationRefData.refDataKey.nextStatus) {
+    //   item.unshift({key:options?.donation?.status,displayValue: this.displayDonationStatus(options?.donation?.status)});
+    // }
     return item;
   }
 

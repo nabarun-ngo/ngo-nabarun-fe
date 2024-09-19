@@ -12,6 +12,7 @@ import { UniversalInputModel } from 'src/app/shared/components/generic/universal
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search.model';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { MemberSearchPipe } from '../member.pipe';
+import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
 
 @Component({
   selector: 'app-member-list',
@@ -26,7 +27,7 @@ export class MemberListComponent extends Paginator implements OnInit {
   protected app_route = AppRoute;
 
   searchInputData!: SearchAndAdvancedSearchModel;
-  navigations!: { displayName: string; routerLink: string; }[];
+  navigations!: NavigationButtonModel[];
 
   constructor(
     private sharedDataService: SharedDataService,

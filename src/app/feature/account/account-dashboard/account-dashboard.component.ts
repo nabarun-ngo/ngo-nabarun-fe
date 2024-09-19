@@ -13,6 +13,7 @@ import { scrollToFirstInvalidControl } from 'src/app/core/service/form.service';
 import { Accordion } from 'src/app/shared/components/generic/accordion-list/accordion';
 import { filter, map, pairwise, startWith } from 'rxjs';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
+import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
 @Component({
   selector: 'app-account-dashboard',
   templateUrl: './account-dashboard.component.html',
@@ -28,7 +29,7 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
   private constants = AccountConstant;
   refData: { [name: string]: KeyValue[]; } | undefined;
   app_route = AppRoute;
-  navigations: { displayName: string; routerLink: string; }[] = [
+  navigations: NavigationButtonModel[] = [
     {
       displayName: 'Back to Dashboard',
       routerLink: AppRoute.secured_dashboard_page.url

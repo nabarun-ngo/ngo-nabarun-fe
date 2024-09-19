@@ -16,6 +16,7 @@ import { inputType, UniversalInputModel } from 'src/app/shared/components/generi
 import { TaskSearchPipe } from '../task.pipe';
 import { Accordion } from 'src/app/shared/components/generic/accordion-list/accordion';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search.model';
+import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
 
 @Component({
   selector: 'app-task-list',
@@ -28,7 +29,7 @@ export class TaskListComponent extends Accordion<WorkDetail> implements OnInit {
   protected tabMapping: workListTab[] = ['pending_worklist', 'completed_worklist'];
   protected workItemList!: PaginateWorkDetail;
 
-  protected navigations: { displayName: string; routerLink: string; }[] = [
+  protected navigations: NavigationButtonModel[] = [
     {
       displayName: 'Back to Dashboard',
       routerLink: AppRoute.secured_dashboard_page.url

@@ -11,6 +11,7 @@ import { FormGroup } from '@angular/forms';
 import { date } from 'src/app/core/service/utilities.service';
 import { AccountService } from '../account.service';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
+import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
 
 @Component({
   selector: 'app-account-transaction',
@@ -22,7 +23,7 @@ export class AccountTransactionComponent extends Accordion<TransactionDetail> im
   defaultValue = TransactionDefaultValue;
   refData: { [name: string]: KeyValue[]; } | undefined;
   transactionList!: PaginateTransactionDetail;
-  navigations: { displayName: string; routerLink: string; }[] = [
+  navigations: NavigationButtonModel[] = [
     {
       displayName: 'Back to Accounts',
       routerLink: AppRoute.secured_account_list_page.url

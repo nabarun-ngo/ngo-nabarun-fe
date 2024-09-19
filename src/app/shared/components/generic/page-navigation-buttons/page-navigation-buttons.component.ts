@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-page-navigation-buttons',
@@ -8,6 +8,14 @@ import { Component, Input } from '@angular/core';
 export class PageNavigationButtonsComponent {
 
   @Input()
-  navigations: { displayName: string; routerLink: string }[] = [];
+  navigations: NavigationButtonModel[] = [];
 
+  @Output()
+  onClick:EventEmitter<NavigationButtonModel>=new EventEmitter()
+}
+
+export interface NavigationButtonModel {
+  buttonId?: string;
+  displayName: string; 
+  routerLink?: string
 }
