@@ -8,15 +8,17 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseEventDetail } from '../../models/success-response-event-detail';
+import { SuccessResponseListAdditionalField } from '../../models/success-response-list-additional-field';
 
-export interface GetDraftedEvent$Params {
+export interface GetReferenceField$Params {
+  source: string;
   'Correlation-Id'?: string;
 }
 
-export function getDraftedEvent(http: HttpClient, rootUrl: string, params?: GetDraftedEvent$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseEventDetail>> {
-  const rb = new RequestBuilder(rootUrl, getDraftedEvent.PATH, 'get');
+export function getReferenceField(http: HttpClient, rootUrl: string, params: GetReferenceField$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseListAdditionalField>> {
+  const rb = new RequestBuilder(rootUrl, getReferenceField.PATH, 'get');
   if (params) {
+    rb.query('source', params.source, {});
     rb.header('Correlation-Id', params['Correlation-Id'], {});
   }
 
@@ -25,9 +27,9 @@ export function getDraftedEvent(http: HttpClient, rootUrl: string, params?: GetD
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseEventDetail>;
+      return r as StrictHttpResponse<SuccessResponseListAdditionalField>;
     })
   );
 }
 
-getDraftedEvent.PATH = '/api/socialevent/getDraftedEvent';
+getReferenceField.PATH = '/api/common/getReferenceField';

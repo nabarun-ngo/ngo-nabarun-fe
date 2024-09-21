@@ -25,8 +25,8 @@
                 </div>
             </mat-panel-description>
         </mat-expansion-panel-header>
-        <app-detailed-view [detailedViews]="accordionList.addContent.detailed" [refData]="this.accordionList.refData!"></app-detailed-view>
-
+        <app-detailed-view [detailedViews]="accordionList.addContent.detailed" [refData]="accordionList.refData!"></app-detailed-view>
+        <!-- {{accordionList.addContent.detailed | json}} -->
         <mat-action-row>
             <div class="mx-4">
                 <button mat-button *ngFor="let button of accordionList.addContent.buttons" [id]="button.button_id+'_add'" class="text-green-600" (click)="onButtonClick.emit({buttonId:button.button_id,rowIndex:0})">{{button.button_name}}</button>

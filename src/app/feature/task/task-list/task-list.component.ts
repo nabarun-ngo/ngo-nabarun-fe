@@ -1,10 +1,9 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
-import { Paginator } from 'src/app/core/component/paginator';
 import { scrollToFirstInvalidControl } from 'src/app/core/service/form.service';
 import { DetailedView, DetailedViewField } from 'src/app/shared/components/generic/detailed-view/detailed-view.model';
 import { TaskDefaultValue, TaskField, workListTab } from '../task.const';
-import { AccordionButton, AccordionCell, AccordionList, AccordionRow } from 'src/app/shared/components/generic/accordion-list/accordion-list.model';
+import { AccordionButton, AccordionCell } from 'src/app/shared/components/generic/accordion-list/accordion-list.model';
 import { PaginateWorkDetail, WorkDetail } from 'src/app/core/api/models';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { ActivatedRoute } from '@angular/router';
@@ -12,8 +11,6 @@ import { TaskService } from '../task.service';
 import { date } from 'src/app/core/service/utilities.service';
 import { PageEvent } from '@angular/material/paginator';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
-import { inputType, UniversalInputModel } from 'src/app/shared/components/generic/universal-input/universal-input.model';
-import { TaskSearchPipe } from '../task.pipe';
 import { Accordion } from 'src/app/shared/components/generic/accordion-list/accordion';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search.model';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
@@ -341,7 +338,7 @@ export class TaskListComponent extends Accordion<WorkDetail> implements OnInit {
       /**
        * Inserting request request details at top
        */
-      this.addSectionInRow($event.rowIndex, {
+      this.addSectionInAccordion({
         section_name: 'Request Details',
         section_type: 'key_value',
         section_html_id: 'request_detail',
@@ -364,7 +361,7 @@ export class TaskListComponent extends Accordion<WorkDetail> implements OnInit {
             field_value: request?.requester?.fullName!,
           }
         ]
-      })
+      },$event.rowIndex)
 
       let additional_content = request?.additionalFields?.map(m => {
         return {
@@ -373,13 +370,13 @@ export class TaskListComponent extends Accordion<WorkDetail> implements OnInit {
         } as DetailedViewField;
       })
 
-      this.addSectionInRow($event.rowIndex, {
+      this.addSectionInAccordion({
         section_name: 'Request Additional Details',
         section_type: 'key_value',
         section_html_id: 'request_add_detail',
         section_form: new FormGroup({}),
         content: additional_content
-      })
+      },$event.rowIndex)
     })
   }
 
@@ -399,7 +396,7 @@ export class TaskListComponent extends Accordion<WorkDetail> implements OnInit {
       this.fetchDetails()
     }
     else {
-      this.accordionList.searchValue = $event.value as string;
+      this.getAccordionList().searchValue = $event.value as string;
     }
   }
 }

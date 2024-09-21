@@ -10,7 +10,7 @@
                 <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center"
                     (selectedTabChange)="tabChanged($event.index)" [(selectedIndex)]="tabIndex">
                     <mat-tab id="myAccount" label="My Accounts">
-                        <app-accordion-list [accordionList]="accordionList" (onButtonClick)="onClick($event)"
+                        <app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)"
                             (onAccordionOpen)="accordionOpened($event)"></app-accordion-list>
                     </mat-tab>
                     <mat-tab id="allAccount" label="All Accounts">
@@ -21,7 +21,7 @@
                             </div>
                         </div>
                         <h2 class="text-purple-700 font-bold text-center mt-4">Account List</h2>
-                        <app-accordion-list [accordionList]="accordionList" (onButtonClick)="onClick($event)"
+                        <app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)"
                             (onAccordionOpen)="accordionOpened($event)"></app-accordion-list>
                     </mat-tab>
                 </mat-tab-group>

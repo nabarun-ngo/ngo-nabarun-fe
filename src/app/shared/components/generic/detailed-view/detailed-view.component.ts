@@ -8,7 +8,8 @@ import { DetailedView } from 'src/app/shared/components/generic/detailed-view/de
   templateUrl: './detailed-view.component.html',
   styleUrls: ['./detailed-view.component.scss']
 })
-export class DetailedViewComponent{
+export class DetailedViewComponent {
+ 
 
   detailed_views: DetailedView[]=[];
   @Input({ required: true, alias:'refData' }) 
@@ -16,21 +17,16 @@ export class DetailedViewComponent{
 
 
   @Input({ required: true, alias:'detailedViews' }) set detailedViews(view: DetailedView[]) {
-    //console.log(view)
+    console.log(view)
     this.detailed_views = view;
     this.detailed_views.map(m => { 
       m.content?.filter(f1=>f1.editable).map(m1 => {
-        //console.log(m1)
         m.section_form?.setControl(m1.form_control_name!, new FormControl(m1.field_value,m1.form_input_validation));
-        //return m1;
       })
-      //console.log(m)
       return m;
     })
-    //console.log(vart)
   };
 
-  //  @Input() viewForm:boolean=false;
   protected displayValue = (section:string | undefined , code: string | undefined) => {
     if (this.refData && section && code) {
       return this.refData[section]?.find(f => f.key == code)?.displayValue;

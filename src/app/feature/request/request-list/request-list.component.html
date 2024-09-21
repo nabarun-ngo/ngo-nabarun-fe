@@ -9,15 +9,15 @@
                 </div>
                 <div class="flex justify-end mx-4 my-2">
                     <div class="mx-1 px-2">
-                        <button (click)="add()" class="bg-indigo-600 py-3 px-6 w-full text-white font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">Create Request</button>
+                        <button (click)="createRequest()" class="bg-indigo-600 py-3 px-6 w-full text-white font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">Create Request</button>
                     </div>
                 </div>
                 <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" (selectedTabChange)="tabChanged($event.index)" [(selectedIndex)]="tabIndex">
                     <mat-tab id="myRequestTab" label="My Requests">
-                        <app-accordion-list [accordionList]="accordionList"></app-accordion-list>
+                        <app-accordion-list [accordionList]="getAccordionList()"></app-accordion-list>
                     </mat-tab>
                     <mat-tab id="myDRequestTab" label="Delegated Requests">
-                        <app-accordion-list [accordionList]="accordionList"></app-accordion-list>
+                        <app-accordion-list [accordionList]="getAccordionList()"></app-accordion-list>
                     </mat-tab>
                 </mat-tab-group>
                 <mat-paginator class="mt-4" style="background-color: transparent;" (page)="handlePageEvent($event)" [length]="itemLength$ | async" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" [pageIndex]="pageNumber" aria-label="Select page">

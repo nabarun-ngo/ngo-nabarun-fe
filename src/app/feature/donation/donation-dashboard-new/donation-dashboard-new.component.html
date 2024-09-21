@@ -115,7 +115,7 @@
                             </div>
                         </mat-card>
                         <h2 class="text-purple-700 font-bold text-center mt-4">My Donation List</h2>
-                        <app-accordion-list [accordionList]="accordionList" (onButtonClick)="onClick($event)"
+                        <app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)"
                             (onAccordionOpen)="accordionOpened($event)"></app-accordion-list>
                     </mat-tab>
                     <mat-tab id="guestDonationTab" label="Guest Donations" (click)="tabChanged(tabIndex)" [disabled]="false">
@@ -125,11 +125,11 @@
                             </div>
                         </div>
                         <h2 class="text-purple-700 font-bold text-center mt-4">Guest Donation List</h2>
-                        <app-accordion-list [accordionList]="accordionList" (onButtonClick)="onClick($event)"
+                        <app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)"
                             (onAccordionOpen)="accordionOpened($event)"></app-accordion-list>
                     </mat-tab>
                     <mat-tab id="memberDonationTab" label="Member Donations" (click)="tabChanged(tabIndex)" [disabled]="false">
-                        <app-accordion-list [accordionList]="accordionList" (onButtonClick)="onClick($event)"
+                        <app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)"
                         (onAccordionOpen)="accordionOpened($event)"></app-accordion-list>                    </mat-tab>
                 </mat-tab-group>
                 <mat-paginator class="mt-4" style="background-color: transparent;" (page)="handlePageEvent($event)" [length]="itemLength$ | async" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" [pageIndex]="pageNumber" aria-label="Select page">

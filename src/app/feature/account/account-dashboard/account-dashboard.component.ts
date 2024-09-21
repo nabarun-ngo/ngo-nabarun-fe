@@ -7,9 +7,9 @@ import { AccountConstant, AccountDefaultValue, accountTab } from '../account.con
 import { AccountDetail, KeyValue, PaginateAccountDetail } from 'src/app/core/api/models';
 import { PageEvent } from '@angular/material/paginator';
 import { FormGroup, Validators } from '@angular/forms';
-import { date } from 'src/app/core/service/utilities.service';
+import { compareObjects, date, isEmpty, isEmptyObject } from 'src/app/core/service/utilities.service';
 import { DetailedView } from 'src/app/shared/components/generic/detailed-view/detailed-view.model';
-import { scrollToFirstInvalidControl } from 'src/app/core/service/form.service';
+import { filterFormChange, scrollToFirstInvalidControl } from 'src/app/core/service/form.service';
 import { Accordion } from 'src/app/shared/components/generic/accordion-list/accordion';
 import { filter, map, pairwise, startWith } from 'rxjs';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
@@ -75,7 +75,7 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
 
     if (this.route.snapshot.data['data']) {
       this.accountList = this.route.snapshot.data['data'] as PaginateAccountDetail;
-      this.setContent(this.accountList.content!,this.accountList.totalSize)
+      this.setContent(this.accountList.content!, this.accountList.totalSize)
     }
   }
 
@@ -139,7 +139,7 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
     ]
   }
 
-  protected override prepareDetailedView(m: AccountDetail, options?: { [key: string]: any }): DetailedView[] {
+  protected override prepareDetailedView(m: AccountDetail, options?: { [key: string]: any, create: boolean }): DetailedView[] {
     let section_upi_detail = {
       section_name: 'UPI Detail',
       section_type: 'key_value',
@@ -389,21 +389,21 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
       ]
     } as DetailedView;
     //console.log(options)
-    if (options && options['create']) {
+    if (options && options.create) {
       return [
         section_account_detail_create,
         // section_bank_detail,
         // section_upi_detail
       ];
     }
-    if(this.tabMapping[this.tabIndex] == 'all_accounts'){
+    if (this.tabMapping[this.tabIndex] == 'all_accounts') {
       return [
         section_account_detail_update,
         section_account_owner_detail,
         section_bank_detail,
         section_upi_detail,
       ]
-    }else{
+    } else {
       return [
         section_account_detail_update,
         section_bank_detail,
@@ -426,7 +426,7 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
                 tagName: 'select',
                 selectList: []
               },
-              form_input_validation:[Validators.required]
+              form_input_validation: [Validators.required]
             },
             {
               field_name: 'Transfer Amount',
@@ -439,7 +439,7 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
                 tagName: 'input',
                 placeholder: 'Ex. 500'
               },
-              form_input_validation:[Validators.required,Validators.min(1)]
+              form_input_validation: [Validators.required, Validators.min(1)]
             },
             {
               field_name: 'Transfer Description',
@@ -452,18 +452,18 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
                 tagName: 'input',
                 placeholder: 'Ex. Monthly donation'
               },
-              form_input_validation:[Validators.required]
+              form_input_validation: [Validators.required]
             }
           ]
-  
+
         }
       ];
     }
-   
+
   }
 
-  protected override prepareDefaultButtons(data: AccountDetail, options?: { [key: string]: any }): AccordionButton[] {
-    if (options && options['create']) {
+  protected override prepareDefaultButtons(data: AccountDetail, options?: { [key: string]: any, create: boolean }): AccordionButton[] {
+    if (options && options.create) {
       return [
         {
           button_id: 'CANCEL_CREATE',
@@ -510,14 +510,14 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
   }
   fetchDetails() {
     if (this.tabMapping[this.tabIndex] == 'my_accounts') {
-      this.accountService.fetchMyAccounts(this.pageNumber,this.pageSize).subscribe(s => {
+      this.accountService.fetchMyAccounts(this.pageNumber, this.pageSize).subscribe(s => {
         this.accountList = s!;
-        this.setContent(this.accountList.content!,this.accountList?.totalSize!)
+        this.setContent(this.accountList.content!, this.accountList?.totalSize!)
       })
     } else if (this.tabMapping[this.tabIndex] == 'all_accounts') {
-      this.accountService.fetchAccounts(this.pageNumber,this.pageSize).subscribe(s => {
+      this.accountService.fetchAccounts(this.pageNumber, this.pageSize).subscribe(s => {
         this.accountList = s!;
-        this.setContent(this.accountList.content!,this.accountList?.totalSize!)
+        this.setContent(this.accountList.content!, this.accountList?.totalSize!)
       })
     }
 
@@ -527,28 +527,28 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
     this.tabIndex = index;
     this.pageNumber = this.defaultValue.pageNumber;
     this.pageSize = this.defaultValue.pageSize;
-    this.hideCreateForm();
+    this.hideForm(0,true);
     this.setAccordionHeader();
     this.fetchDetails();
 
   }
 
-  accordionOpened($event: { rowIndex: number; }) {}
+  accordionOpened($event: { rowIndex: number; }) { }
 
   createAccount() {
     this.showCreateForm();
 
-    let account_form = this.getCreateForm('account_detail');
-    account_form?.valueChanges.pipe(startWith(account_form?.value), pairwise())
+    let account_form = this.getSectionForm('account_detail',0,true);
+    account_form?.valueChanges.pipe(filterFormChange(account_form.value))
       .subscribe((val) => {
-        //console.log(val[0] , val[1])//accountType
-        if (val[1]['accountType'] && val[1]['accountType'] != '' && val[0]['accountType'] != val[1]['accountType']) {
-          this.accordionList.addContent?.columns.filter(f => f.html_id == 'acc_type_h').map(m => {
-            m.value = val[1]['accountType'];
-            return m;
-          })
-          this.accountService.fetchUsers(val[1]['accountType']).subscribe(data => {
-            let selectList = this.accordionList.addContent?.detailed.find(f => f.section_html_id == 'account_detail')?.content?.find(f => f.field_html_id == 'account_holder')?.form_input?.selectList;
+        console.log(val)
+        if (val['accountType']) {
+          // this.accordionList.addContent?.columns.filter(f => f.html_id == 'acc_type_h').map(m => {
+          //   m.value = val['accountType'];
+          //   return m;
+          // })
+          this.accountService.fetchUsers(val['accountType']).subscribe(data => {
+            let selectList = this.getSectionField('account_detail','account_holder',0,true)?.form_input?.selectList;
             selectList?.splice(0);
             data?.content?.forEach(element => {
               let val = { key: element.id, displayValue: element.fullName } as KeyValue;
@@ -556,12 +556,13 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
             });
           });
         }
-        if (val[0]['accountHolder'] != val[1]['accountHolder']) {
-          this.accordionList.addContent?.columns.filter(f => f.html_id == 'acc_holder_h').map(m => {
-            m.value = val[1]['accountHolder'];
-            return m;
-          })
+        if (val['accountHolder']) {
+          // this.accordionList.addContent?.columns.filter(f => f.html_id == 'acc_holder_h').map(m => {
+          //   m.value = val['accountHolder'];
+          //   return m;
+          // })
         }
+
       });
   }
 
@@ -578,9 +579,9 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
       case 'CONFIRM':
         let item = this.accountList.content![$event.rowIndex];
         if (this.actionName == 'UPDATE_BANK_UPI') {
-          let bankForm = this.getSectionForm('bank_detail',$event.rowIndex);
-          let upiForm = this.getSectionForm('upi_detail',$event.rowIndex);
-          
+          let bankForm = this.getSectionForm('bank_detail', $event.rowIndex);
+          let upiForm = this.getSectionForm('upi_detail', $event.rowIndex);
+
           if (bankForm?.valid && upiForm?.valid) {
             this.accountService.updateBankingAndUPIDetail(item.id!, bankForm?.value, upiForm?.value).subscribe(d => {
               this.hideForm($event.rowIndex)
@@ -593,7 +594,7 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
           }
         }
         if (this.actionName == 'UPDATE_ACCOUNT') {
-          let accountForm =  this.getSectionForm('account_detail',$event.rowIndex);
+          let accountForm = this.getSectionForm('account_detail', $event.rowIndex);
           if (accountForm?.valid) {
             this.accountService.updateAccountDetail(item.id!, accountForm?.value).subscribe(d => {
               this.hideForm($event.rowIndex)
@@ -605,7 +606,7 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
           }
         }
         if (this.actionName == 'PERFORM_TXN') {
-          let transfer_form =  this.getSectionForm('transfer_amt',$event.rowIndex);
+          let transfer_form = this.getSectionForm('transfer_amt', $event.rowIndex);
           if (transfer_form?.valid) {
             this.accountService.performTransaction(this.accountList.content![$event.rowIndex], transfer_form.value).subscribe(d => {
               this.fetchDetails();
@@ -617,10 +618,10 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
         }
         break;
       case 'CREATE':
-        let accountForm = this.getCreateForm('account_detail');
+        let accountForm = this.getSectionForm('account_detail',0,true);
         if (accountForm?.valid) {
           this.accountService.createAccount(accountForm.value).subscribe(d => {
-            this.hideCreateForm();
+            this.hideForm(0,true);
             this.fetchDetails()
           })
 
@@ -633,7 +634,7 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
         this.hideForm($event.rowIndex)
         break;
       case 'CANCEL_CREATE':
-        this.hideCreateForm()
+        this.hideForm(0,true);
         break;
       case 'VIEW_TXN':
         let account = this.accountList.content![$event.rowIndex];
@@ -648,8 +649,8 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
   performTransaction(rowIndex: number) {
     //let account1 = this.accountList.content![$event.rowIndex];
     this.showForm(rowIndex, ['transfer_amt']);
-    this.accountService.fetchAccounts(this.pageNumber,this.pageSize).subscribe(data => {
-      let selectList = this.accordionList.contents[rowIndex]?.detailed.find(f => f.section_html_id == 'transfer_amt')?.content?.find(f => f.field_html_id == 'transferTo')?.form_input?.selectList;
+    this.accountService.fetchAccounts(this.pageNumber, this.pageSize).subscribe(data => {
+      let selectList = this.getSectionField('transfer_amt','transferTo',rowIndex,true)?.form_input?.selectList;
       selectList?.splice(0);
       data?.content?.forEach(element => {
         let val = { key: element.id, displayValue: element.id! + '  (' + element.accountHolderName + ')' } as KeyValue;

@@ -7,7 +7,7 @@
                         normalSearchPlaceHolder:'Search Transaction Number'
                     }"></app-search-and-advanced-search-form>
                 </div>
-                <app-accordion-list [accordionList]="accordionList" (onButtonClick)="onClick($event)"
+                <app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)"
                 (onAccordionOpen)="accordionOpened($event)"></app-accordion-list>
                 <mat-paginator class="mt-4" style="background-color: transparent;" (page)="handlePageEvent($event)"
                     [length]="itemLength$ | async" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"

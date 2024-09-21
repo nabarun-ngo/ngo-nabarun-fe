@@ -339,7 +339,7 @@ export class DonationDashboardNewComponent extends Accordion<DonationDetail | Us
       // });
       
       this.donationService.fetchUserDonations(user.id!).subscribe(d=>{
-        let index_1 =this.accordionList.contents[$event.rowIndex].detailed.findIndex(f=>f.section_html_id == 'donation_summary');
+        let index_1 =this.getAccordionList().contents[$event.rowIndex].detailed.findIndex(f=>f.section_html_id == 'donation_summary');
         
         d.donations?.content?.forEach(g=>{
           //this.accordionList.contents[$event.rowIndex].detailed.push(this.showDonationDetail(g));
