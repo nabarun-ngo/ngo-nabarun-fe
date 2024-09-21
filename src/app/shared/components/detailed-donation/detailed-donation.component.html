@@ -23,6 +23,7 @@
                             <div class="px-2 py-2" *ngIf="this.mode == 'view'">{{(displayDonationType(donation.type)) | replaceNull}}</div>
                             <div class="px-2 dense-3" *ngIf="this.mode == 'edit' || this.mode == 'create'">
                                 <app-universal-input formControlName="type" [inputModel]="{
+                                    html_id:'type',
                                     tagName:'select',
                                     inputType:'',
                                     placeholder:'Ex. Regular',
@@ -36,7 +37,7 @@
                             <div class="px-2 py-2 font-semibold">Donation amount</div>
                             <div class="px-2 py-2" *ngIf="this.mode == 'view'"> ₹ {{donation.amount! | number:'1.0-2'| replaceNull:'0'}}</div>
                             <div class="px-2 dense-3" *ngIf="this.mode == 'edit' || this.mode == 'create'">
-                                <app-universal-input formControlName="amount" [inputModel]="{tagName:'input',inputType:'number',placeholder:'Ex. 100'}" />
+                                <app-universal-input formControlName="amount" [inputModel]="{html_id:'amount',tagName:'input',inputType:'number',placeholder:'Ex. 100'}" />
                             </div>
                         </div>
                         <!-- Display section all time-->
@@ -46,6 +47,7 @@
                             <div class="px-2 dense-3" *ngIf="this.mode == 'edit'">
                                 
                                 <app-universal-input formControlName="status" [inputModel]="{
+                                    html_id:'status',
                                     tagName:'select',
                                     inputType:'',
                                     placeholder:'Ex. Paid',
@@ -65,6 +67,7 @@
                             || (this.mode == 'edit' && this.donation?.type == this.donationType.Regular)">
                                 
                                 <app-universal-input formControlName="startDate" [inputModel]="{
+                                    html_id:'startDate',
                                     tagName:'input',
                                     inputType:'date',
                                     placeholder:'Ex. 01/01/2024', 
@@ -84,6 +87,7 @@
                             || (this.mode == 'edit' && this.donation?.type == this.donationType.Regular)">
                                
                                 <app-universal-input formControlName="endDate" [inputModel]="{
+                                    html_id:'endDate',
                                     tagName:'input',
                                     inputType:'date',
                                     placeholder:'Ex. 01/31/2024', 
@@ -103,6 +107,7 @@
                             <div class="px-2 dense-3" *ngIf="mode == 'edit'">
                                 
                                 <app-universal-input formControlName="paidOn" [inputModel]="{
+                                    html_id:'paidOn',
                                     tagName:'input',
                                     inputType:'date',
                                     placeholder:'Ex. 01/15/2024', 
@@ -117,6 +122,7 @@
                             <div class="px-2 dense-3" *ngIf="mode == 'edit'">
                            
                                 <app-universal-input formControlName="paidToAccount" [inputModel]="{
+                                    html_id:'paidToAccount',
                                     tagName:'select',
                                     inputType:'',
                                     selectList: payableAccounts
@@ -130,6 +136,7 @@
                             <div class="px-2 dense-3" *ngIf="mode === 'edit'">
                                 
                                 <app-universal-input formControlName="paymentMethod" [inputModel]="{
+                                    html_id:'paymentMethod',
                                     tagName:'select',
                                     inputType:'',
                                     placeholder:'Ex. UPI', 
@@ -144,6 +151,7 @@
                             <div class="px-2 dense-3" *ngIf="mode == 'edit'">
                                
                                 <app-universal-input formControlName="paidUsingUPI" [inputModel]="{
+                                    html_id:'paidUsingUPI',
                                     tagName:'select',
                                     inputType:'',
                                     placeholder:'Ex. UPI', 
@@ -169,6 +177,7 @@
                             <div class="px-2 dense-3" *ngIf="mode == 'edit'">
                                 
                                 <app-universal-input formControlName="remarks" [inputModel]="{
+                                    html_id:'remarks',
                                     tagName:'textarea',
                                     inputType:'',
                                     placeholder:'Ex. Remarks',
@@ -182,6 +191,7 @@
                             <div class="px-2 dense-3" *ngIf="mode == 'edit'">
                                 
                                 <app-universal-input formControlName="cancelletionReason" [inputModel]="{
+                                    html_id:'cancelletionReason',
                                     tagName:'textarea',
                                     inputType:'',
                                     placeholder:'Ex. Cancelletion reason'
@@ -195,6 +205,7 @@
                             <div class="px-2 dense-3" *ngIf="mode == 'edit'">
                                 
                                 <app-universal-input formControlName="laterPaymentReason" [inputModel]="{
+                                    html_id:'laterPaymentReason',
                                     tagName:'textarea',
                                     inputType:'',
                                     placeholder:'Ex. Reason'
@@ -208,6 +219,7 @@
                             <div class="px-2 dense-3" *ngIf="mode == 'edit'">
                               
                                 <app-universal-input formControlName="paymentFailureDetail" [inputModel]="{
+                                    html_id:'paymentFailureDetail',
                                     tagName:'textarea',
                                     inputType:'',
                                     placeholder:'Ex. Failure details'
@@ -238,6 +250,7 @@
                             <div class="px-2 dense-3">
                                 
                                 <app-universal-input formControlName="eventId" [inputModel]="{
+                                    html_id:'eventId',
                                     tagName:'select',
                                     inputType:''
                                     }" />

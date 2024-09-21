@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { CommonControllerService, RequestControllerService, UserControllerService } from 'src/app/core/api/services';
-import { RequestDefaultValue } from './request.const';
+import { RequestDefaultValue, TaskDefaultValue } from './request.const';
 import { Observable, map } from 'rxjs';
-import { RefDataType, WorkDetail } from 'src/app/core/api/models';
+import { RefDataType, RequestDetail, WorkDetail, WorkDetailFilter } from 'src/app/core/api/models';
 
 @Injectable({
   providedIn: 'root'
@@ -36,5 +36,47 @@ export class RequestService {
     return this.commonController.getReferenceField({source:'REQUEST-'+type}).pipe(map(d => d.responsePayload));
   }
 
+  createRequest(detail:RequestDetail){
+    return this.requestController.createRequest({body:detail}).pipe(map(d => d.responsePayload));
+  }
+
+  
+  findMyWorkList(filter: {
+    isCompleted: boolean
+    requestId?: string,
+    workId?: string,
+    fromDate?: string,
+    toDate?: string,
+  }, pageIndex = TaskDefaultValue.pageNumber, pageSize = TaskDefaultValue.pageSize) {
+    let filter_:WorkDetailFilter ={};
+    filter_.completed=filter.isCompleted;
+
+    if(filter?.requestId){
+      filter_.requestId=filter?.requestId;
+    }
+    if(filter?.workId){
+      filter_.workId=filter?.workId;
+    }
+    if(filter?.fromDate){
+      filter_.fromDate=filter?.fromDate;
+    }
+    if(filter?.toDate){
+      filter_.toDate=filter?.toDate;
+    }
+    console.log(filter_)
+    return this.requestController.getMyWorkItems({
+      filter: filter_,
+      pageIndex: pageIndex, pageSize: pageSize
+    }).pipe(map(d => d.responsePayload));
+  }
+
+  updateWorkItem(id: string, detail: WorkDetail) {
+    return this.requestController.updateWorkItem({ id: id, body: detail }).pipe(map(d => d.responsePayload));
+  }
+
+
+  getRequestDetail(id: string) {
+    return this.requestController.getRequestDetail({ id: id }).pipe(map(d => d.responsePayload));
+  }
 
 }

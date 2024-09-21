@@ -70,27 +70,12 @@ export const AppRoute = {
     feature: 'request',
     path: 'list',
   },
-  
-  // secured_request_workflow_page: {
-  //   id: 'secured_request_workflow_page',
-  //   url: '/secured/request/workflows',
-  //   parent: 'secured',
-  //   feature: 'request',
-  //   path: 'workflows',
-  // },
-  // secured_request_create_page: {
-  //   id: 'secured_request_create_page',
-  //   url: '/secured/request/create',
-  //   parent: 'secured',
-  //   feature: 'request',
-  //   path: 'create',
-  // },
   secured_task_list_page: {
     id: 'secured_task_list_page',
-    url: '/secured/task/list',
+    url: '/secured/request/tasklist',
     parent: 'secured',
-    feature: 'task',
-    path: 'list',
+    feature: 'request',
+    path: 'tasklist',
   },
   secured_account_list_page: {
     id: 'secured_account_list_page',

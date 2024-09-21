@@ -1,7 +1,7 @@
 import { ResolveFn } from '@angular/router';
 import { RequestService } from './request.service';
 import { inject } from '@angular/core';
-import { RequestDefaultValue, requestTab } from './request.const';
+import { RequestDefaultValue, requestTab, TaskDefaultValue, workListTab } from './request.const';
 
 export const requestListResolver: ResolveFn<any> = (route, state) => {
   let tab = (route.data['tab'] || RequestDefaultValue.tabName) as requestTab;
@@ -11,4 +11,10 @@ export const requestListResolver: ResolveFn<any> = (route, state) => {
 
 export const requestRefDataResolver: ResolveFn<any> = (route, state) => {
   return inject(RequestService).findRequestRefData();
+};
+
+export const taskListResolver: ResolveFn<any> = (route, state) => {
+  let tab = (route.data['tab'] || TaskDefaultValue.tabName) as workListTab;
+  let completed = tab == 'completed_worklist'
+  return inject(RequestService).findMyWorkList({isCompleted:completed});
 };

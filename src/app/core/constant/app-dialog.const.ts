@@ -15,6 +15,10 @@ export const AppDialog={
         title: 'Error',
         description: 'No changes has been made.'
     },
+    warn_delegated_request:{
+        title: 'Warning',
+        description: 'You are raising a request on behalf of someone. Please ensure that person is aware.'
+    },
 }
 
 

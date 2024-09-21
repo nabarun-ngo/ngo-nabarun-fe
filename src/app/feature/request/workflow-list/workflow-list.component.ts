@@ -6,15 +6,12 @@ import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { ActivatedRoute } from '@angular/router';
 import { RequestService } from '../request.service';
 import { PageEvent } from '@angular/material/paginator';
-import { FormGroup, Validators } from '@angular/forms';
-import { DatePipe } from '@angular/common';
+import { FormGroup } from '@angular/forms';
 import { date } from 'src/app/core/service/utilities.service';
-import { DetailedView, DetailedViewField } from 'src/app/shared/components/generic/detailed-view/detailed-view.model';
-import { ModalService } from 'src/app/core/service/modal.service';
 import { scrollToFirstInvalidControl } from 'src/app/core/service/form.service';
-import { workListTab } from '../../task/task.const';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
+import { workListTab } from '../request.const';
 
 @Component({
   selector: 'app-workflow-list',

@@ -422,6 +422,7 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
               editable: true,
               field_html_id: 'transferTo',
               form_input: {
+                html_id:'transferTo_inp',
                 inputType: '',
                 tagName: 'select',
                 selectList: []
@@ -435,6 +436,7 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
               editable: true,
               field_html_id: 'amount',
               form_input: {
+                html_id:'amount_i',
                 inputType: 'number',
                 tagName: 'input',
                 placeholder: 'Ex. 500'
@@ -448,6 +450,7 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
               editable: true,
               field_html_id: 'description',
               form_input: {
+                html_id:'description_i',
                 inputType: 'text',
                 tagName: 'input',
                 placeholder: 'Ex. Monthly donation'

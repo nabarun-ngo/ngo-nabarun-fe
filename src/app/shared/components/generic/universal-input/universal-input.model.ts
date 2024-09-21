@@ -5,7 +5,7 @@ export interface UniversalInputModel{
     tagName : 'input' | 'textarea' | 'select' ;
     inputType : inputType;
     style? : string;
-    html_id?:string;
+    html_id:string;
     appearance?: 'outline'| 'fill';
     placeholder?:string;
     selectList?: KeyValue[];

@@ -15,40 +15,46 @@
             <h1 class="text-gray-900 font-extrabold text-xl leading-8 py-2 text-center">
                 {{profile.fullName}}
             </h1>
-            <p *ngIf="mode != 'edit_self' && profile.about" class="text-sm text-center text-gray-500 hover:text-gray-600 leading-6">
+            <p *ngIf="mode != 'edit_self' && profile.about"
+                class="text-sm text-center text-gray-500 hover:text-gray-600 leading-6">
                 {{profile.about}}</p>
             <form [formGroup]="editSelfForm" *ngIf="mode == 'edit_self'">
                 <input *ngIf="mode == 'edit_self'" type="hidden" id="pp_b64" formControlName="picture">
                 <div *ngIf="mode == 'edit_self'" class="py-2 px-3 divide-y rounded w-full">
                     <app-universal-input formControlName="about" *ngIf="mode == 'edit_self'" [inputModel]="{
+                        html_id:'about',
                         tagName : 'textarea' ,
                         inputType : '',
                         placeholder:'Descrive something about you',
                         labelName:'Descrive something about you',
                         cssClass:'w-full'
                      }"></app-universal-input>
-                      <app-universal-input formControlName="facebookLink" *ngIf="mode == 'edit_self'" [inputModel]="{
+                    <app-universal-input formControlName="facebookLink" *ngIf="mode == 'edit_self'" [inputModel]="{
+                        html_id:'sm_fb',
                         tagName : 'input' ,
                         inputType : 'text',
                         placeholder:'Enter Facebook Link',
                         labelName:'Facebook Link',
                         cssClass:'w-full'
                      }"></app-universal-input>
-                     <app-universal-input formControlName="instagramLink" *ngIf="mode == 'edit_self'" [inputModel]="{
+                    <app-universal-input formControlName="instagramLink" *ngIf="mode == 'edit_self'" [inputModel]="{
+                        html_id:'sm_in',
                         tagName : 'input',
                         inputType : 'text',
                         placeholder:'Enter Instagram Link',
                         labelName:'Instagram Link',
                         cssClass:'w-full'
                      }"></app-universal-input>
-                     <app-universal-input formControlName="linkedInLink" *ngIf="mode == 'edit_self'" [inputModel]="{
+                    <app-universal-input formControlName="linkedInLink" *ngIf="mode == 'edit_self'" [inputModel]="{
+                        html_id:'sm_ldn',
                         tagName : 'input',
                         inputType : 'text',
                         placeholder:'Enter LinkedIn Link',
                         labelName:'LinkedIn Link',
                         cssClass:'w-full'
                      }"></app-universal-input>
-                     <app-universal-input formControlName="twitterLink" *ngIf="mode == 'edit_self'" [inputModel]="{
+                    <app-universal-input formControlName="twitterLink" *ngIf="mode == 'edit_self'" [inputModel]="{
+                        html_id:'sm_tw',
                         tagName : 'input',
                         inputType : 'text',
                         placeholder:'Enter Twitter Link',
@@ -57,7 +63,8 @@
                      }"></app-universal-input>
                 </div>
             </form>
-            <div *ngIf="mode != 'edit_self'" class="bg-white w-full h-auto flex items-center justify-center gap-4 flex-wrap">
+            <div *ngIf="mode != 'edit_self'"
+                class="bg-white w-full h-auto flex items-center justify-center gap-4 flex-wrap">
                 <a *ngIf="socialMedia.facebookSM?.mediaLink" target="_blank" [href]="socialMedia.facebookSM?.mediaLink"
                     class="bg-blue-50 cursor-pointer rounded-md shadow-md shadow-transparent transition-all duration-300 hover:shadow-indigo-200">
                     <svg class="" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 92 92"
@@ -69,7 +76,8 @@
                     </svg>
                 </a>
 
-                <a *ngIf="socialMedia.instagramSM?.mediaLink" target="_blank" [href]="socialMedia.instagramSM?.mediaLink"
+                <a *ngIf="socialMedia.instagramSM?.mediaLink" target="_blank"
+                    [href]="socialMedia.instagramSM?.mediaLink"
                     class="w-12 h-12 flex items-center justify-center bg-gradient-to-tr from-red-50 to-pink-50 cursor-pointer rounded-md shadow-md shadow-transparent transition-all duration-300 hover:shadow-red-200">
                     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 51 51" fill="none">
                         <path
@@ -142,6 +150,7 @@
                                 </span>
                             </ng-container>
                             <app-universal-input formControlName="roles" *ngIf="mode == 'edit_admin'" [inputModel]="{
+                            html_id:'roles',
                             tagName : 'select' ,
                             inputType : 'multiselect',
                             placeholder:'Select Roles',
@@ -158,6 +167,7 @@
                                 profile.status.toLowerCase():''}}</span>
                             <!-- <span *ngIf="!profile.isActive" class="bg-red-500 py-1 px-2 rounded text-white text-sm">Blocked</span> -->
                             <app-universal-input formControlName="status" *ngIf="mode == 'edit_admin'" [inputModel]="{
+                        html_id:'status_adm',
                         tagName : 'select' ,
                         inputType : '',
                         placeholder:'Select Status',
@@ -172,7 +182,7 @@
                 </ul>
             </form>
             <div *ngIf="mode == 'view_admin'" class="grid grid-cols-1">
-                <button  (click)="onUpdate.emit({ actionName: 'CHANGE_MODE',mode:'edit_admin'})"
+                <button (click)="onUpdate.emit({ actionName: 'CHANGE_MODE',mode:'edit_admin'})"
                     class="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">
                     Update Details</button>
             </div>
@@ -180,7 +190,8 @@
                 <button *ngIf="mode == 'edit_admin'" (click)="updateDetailAdmin()"
                     class="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">
                     Update</button>
-                <button *ngIf="mode == 'edit_admin'" (click)="onUpdate.emit({ actionName: 'CHANGE_MODE',mode:'view_admin'})"
+                <button *ngIf="mode == 'edit_admin'"
+                    (click)="onUpdate.emit({ actionName: 'CHANGE_MODE',mode:'view_admin'})"
                     class="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">
                     Cancel</button>
             </div>
@@ -245,34 +256,39 @@
                             <div class="px-4 py-2 font-semibold">Title</div>
                             <div *ngIf="mode != 'edit_self'" class="px-4 py-2">{{profile.title | replaceNull}}</div>
                             <app-universal-input formControlName="title" *ngIf="mode == 'edit_self'" [inputModel]="{
-                            tagName : 'select' ,
-                            inputType : '',
-                            placeholder:'Select Title',
-                            selectList:refData['userTitles']
+                                html_id:'title',
+                                tagName : 'select' ,
+                                inputType : '',
+                                placeholder:'Select Title',
+                                selectList:refData['userTitles']
                          }"></app-universal-input>
                         </div>
                         <div class="grid grid-cols-2">
                             <div class="px-4 py-2 font-semibold">First Name</div>
                             <div *ngIf="mode != 'edit_self'" class="px-4 py-2">{{profile.firstName | replaceNull}}</div>
                             <app-universal-input formControlName="firstName" *ngIf="mode == 'edit_self'" [inputModel]="{
-                            tagName : 'input' ,
-                            inputType : 'text',
-                            placeholder:'Enter First Name',
+                                html_id:'firstName',
+                                tagName : 'input' ,
+                                inputType : 'text',
+                                placeholder:'Enter First Name',
                          }"></app-universal-input>
                         </div>
                         <div class="grid grid-cols-2">
                             <div class="px-4 py-2 font-semibold">Middle Name</div>
-                            <div *ngIf="mode != 'edit_self'" class="px-4 py-2">{{profile.middleName | replaceNull}}</div>
+                            <div *ngIf="mode != 'edit_self'" class="px-4 py-2">{{profile.middleName | replaceNull}}
+                            </div>
                             <app-universal-input formControlName="middleName" *ngIf="mode == 'edit_self'" [inputModel]="{
-                            tagName : 'input' ,
-                            inputType : 'text',
-                            placeholder:'Enter Middle Name',
+                                html_id:'middleName',
+                                tagName : 'input' ,
+                                inputType : 'text',
+                                placeholder:'Enter Middle Name',
                          }"></app-universal-input>
                         </div>
                         <div class="grid grid-cols-2">
                             <div class="px-4 py-2 font-semibold">Last Name</div>
                             <div *ngIf="mode != 'edit_self'" class="px-4 py-2">{{profile.lastName | replaceNull}}</div>
                             <app-universal-input formControlName="lastName" *ngIf="mode == 'edit_self'" [inputModel]="{
+                            html_id:'lastName',
                             tagName : 'input' ,
                             inputType : 'text',
                             placeholder:'Enter Last Name',
@@ -282,6 +298,7 @@
                             <div class="px-4 py-2 font-semibold">Gender</div>
                             <div *ngIf="mode != 'edit_self'" class="px-4 py-2">{{profile.gender | replaceNull}}</div>
                             <app-universal-input formControlName="gender" *ngIf="mode == 'edit_self'" [inputModel]="{
+                            html_id:'gender',
                             tagName : 'select' ,
                             inputType : '',
                             placeholder:'Select Gender',
@@ -293,6 +310,7 @@
                             <div *ngIf="mode != 'edit_self'" class="px-4 py-2">{{profile.dateOfBirth| date: 'd MMMM y' |
                                 replaceNull}}</div>
                             <app-universal-input formControlName="dateOfBirth" *ngIf="mode == 'edit_self'" [inputModel]="{
+                            html_id:'date_of_birth',
                             tagName : 'input' ,
                             inputType : 'date',
                             placeholder:'Enter Date of Birth',
@@ -323,6 +341,7 @@
                                     replaceNull}}</a>
                             </div>
                             <app-universal-input formControlName="email" *ngIf="mode == 'edit_self'" [inputModel]="{
+                                html_id:'email',
                                 tagName : 'input',
                                 inputType : 'email',
                                 placeholder:'Enter email'
@@ -330,9 +349,12 @@
                         </div>
                         <div class="grid grid-cols-2">
                             <div class="px-4 py-2 font-semibold">Phone Number (WhatsApp)</div>
-                            <div *ngIf="mode != 'edit_self'" class="px-4 py-2">{{phoneNumber.phoneNumberP?.displayNumber |
+                            <div *ngIf="mode != 'edit_self'" class="px-4 py-2">{{phoneNumber.phoneNumberP?.displayNumber
+                                |
                                 replaceNull}}</div>
-                            <app-universal-input formControlName="phoneNumber_p" *ngIf="mode == 'edit_self'" [inputModel]="{
+                            <app-universal-input formControlName="phoneNumber_p" *ngIf="mode == 'edit_self'"
+                                [inputModel]="{
+                            html_id:'phoneNumber',
                             tagName : 'input',
                             inputType : 'phone',
                             placeholder:'Enter Phone Number',
@@ -341,9 +363,12 @@
                         <div class="grid grid-cols-2"
                             *ngIf="phoneNumber?.phoneNumberS?.displayNumber || mode == 'edit_self'">
                             <div class="px-4 py-2 font-semibold">Phone Number (Alternative)</div>
-                            <div *ngIf="mode != 'edit_self'" class="px-4 py-2">{{phoneNumber.phoneNumberS?.displayNumber |
+                            <div *ngIf="mode != 'edit_self'" class="px-4 py-2">{{phoneNumber.phoneNumberS?.displayNumber
+                                |
                                 replaceNull}}</div>
-                            <app-universal-input formControlName="phoneNumber_s" *ngIf="mode == 'edit_self'" [inputModel]="{
+                            <app-universal-input formControlName="phoneNumber_s" *ngIf="mode == 'edit_self'"
+                                [inputModel]="{
+                            html_id:'phoneNumber_S',
                             tagName : 'input',
                             inputType : 'phone',
                             placeholder:'Enter Phone Number',
@@ -370,7 +395,9 @@
                             <div class="px-4 py-2 font-semibold">Address Line 1</div>
                             <div *ngIf="mode != 'edit_self'" class="px-4 py-2">{{address.presentAddress?.addressLine1 |
                                 replaceNull}}</div>
-                            <app-universal-input formControlName="addressLine1_p" *ngIf="mode == 'edit_self'" [inputModel]="{
+                            <app-universal-input formControlName="addressLine1_p" *ngIf="mode == 'edit_self'"
+                                [inputModel]="{
+                            html_id:'addressLine_1_P',
                             tagName : 'input',
                             inputType : 'text',
                             placeholder:'Enter Address Line 1',
@@ -380,7 +407,9 @@
                             <div class="px-4 py-2 font-semibold">Address Line 2</div>
                             <div *ngIf="mode != 'edit_self'" class="px-4 py-2">{{address.presentAddress?.addressLine2 |
                                 replaceNull}}</div>
-                            <app-universal-input formControlName="addressLine2_p" *ngIf="mode == 'edit_self'" [inputModel]="{
+                            <app-universal-input formControlName="addressLine2_p" *ngIf="mode == 'edit_self'"
+                                [inputModel]="{
+                            html_id:'addressLine2_p',
                             tagName : 'input',
                             inputType : 'text',
                             placeholder:'Enter Address Line 2',
@@ -390,7 +419,9 @@
                             <div class="px-4 py-2 font-semibold">Address Line 3</div>
                             <div *ngIf="mode != 'edit_self'" class="px-4 py-2">{{address.presentAddress?.addressLine3 |
                                 replaceNull}}</div>
-                            <app-universal-input formControlName="addressLine3_p" *ngIf="mode == 'edit_self'" [inputModel]="{
+                            <app-universal-input formControlName="addressLine3_p" *ngIf="mode == 'edit_self'"
+                                [inputModel]="{
+                            html_id:'addressLine3_p',
                             tagName : 'input',
                             inputType : 'text',
                             placeholder:'Enter Address Line 3',
@@ -402,6 +433,7 @@
                                 replaceNull}}
                             </div>
                             <app-universal-input formControlName="hometown_p" *ngIf="mode == 'edit_self'" [inputModel]="{
+                            html_id:'hometown_p',
                             tagName : 'input',
                             inputType : 'text',
                             placeholder:'Enter Hometown',
@@ -414,6 +446,7 @@
                                 replaceNull}}
                             </div>
                             <app-universal-input formControlName="district_p" *ngIf="mode == 'edit_self'" [inputModel]="{
+                            html_id:'district_p',
                             tagName : 'select',
                             inputType : '',
                             placeholder:'Select District',
@@ -426,6 +459,7 @@
                                 replaceNull}}
                             </div>
                             <app-universal-input formControlName="state_p" *ngIf="mode == 'edit_self'" [inputModel]="{
+                            html_id:'state_p',
                             tagName : 'select',
                             inputType : '',
                             placeholder:'Select State',
@@ -438,6 +472,7 @@
                                 replaceNull}}
                             </div>
                             <app-universal-input formControlName="country_p" *ngIf="mode == 'edit_self'" [inputModel]="{
+                            html_id:'country_p',
                             tagName : 'select',
                             inputType : '',
                             placeholder:'Select Country',
@@ -446,7 +481,9 @@
                         </div>
 
                     </div>
-                    <app-universal-input *ngIf="mode == 'edit_self'" formControlName="presentParmanentSame" [inputModel]="{
+                    <app-universal-input *ngIf="mode == 'edit_self'" formControlName="presentParmanentSame"
+                        [inputModel]="{
+                        html_id:'pre_per_same',    
                         tagName : 'input',
                         inputType : 'check',
                         labelName:'Permanent Address same as Present Address',
@@ -456,9 +493,12 @@
                     <div *ngIf="!editSelfForm.value?.presentParmanentSame" class="grid md:grid-cols-2 text-sm">
                         <div class="grid grid-cols-2">
                             <div class="px-4 py-2 font-semibold">Address Line 1</div>
-                            <div *ngIf="mode != 'edit_self'" class="px-4 py-2">{{address.permanentAddress?.addressLine1 |
+                            <div *ngIf="mode != 'edit_self'" class="px-4 py-2">{{address.permanentAddress?.addressLine1
+                                |
                                 replaceNull}}</div>
-                            <app-universal-input formControlName="addressLine1_s" *ngIf="mode == 'edit_self'" [inputModel]="{
+                            <app-universal-input formControlName="addressLine1_s" *ngIf="mode == 'edit_self'"
+                                [inputModel]="{
+                            html_id:'addressLine1_s',  
                             tagName : 'input',
                             inputType : 'text',
                             placeholder:'Enter Address Line 1',
@@ -466,9 +506,12 @@
                         </div>
                         <div class="grid grid-cols-2">
                             <div class="px-4 py-2 font-semibold">Address Line 2</div>
-                            <div *ngIf="mode != 'edit_self'" class="px-4 py-2">{{address.permanentAddress?.addressLine2 |
+                            <div *ngIf="mode != 'edit_self'" class="px-4 py-2">{{address.permanentAddress?.addressLine2
+                                |
                                 replaceNull}}</div>
-                            <app-universal-input formControlName="addressLine2_s" *ngIf="mode == 'edit_self'" [inputModel]="{
+                            <app-universal-input formControlName="addressLine2_s" *ngIf="mode == 'edit_self'"
+                                [inputModel]="{
+                            html_id:'addressLine2_s', 
                             tagName : 'input',
                             inputType : 'text',
                             placeholder:'Enter Address Line 2',
@@ -476,10 +519,13 @@
                         </div>
                         <div class="grid grid-cols-2">
                             <div class="px-4 py-2 font-semibold">Address Line 3</div>
-                            <div *ngIf="mode != 'edit_self'" class="px-4 py-2">{{address.permanentAddress?.addressLine3 |
+                            <div *ngIf="mode != 'edit_self'" class="px-4 py-2">{{address.permanentAddress?.addressLine3
+                                |
                                 replaceNull}}</div>
-                            <app-universal-input formControlName="addressLine3_s" *ngIf="mode == 'edit_self'" [inputModel]="{
-                            tagName : 'input',
+                            <app-universal-input formControlName="addressLine3_s" *ngIf="mode == 'edit_self'"
+                                [inputModel]="{
+                             html_id:'addressLine3_s', 
+                             tagName : 'input',
                             inputType : 'text',
                             placeholder:'Enter Address Line 3',
                          }"></app-universal-input>
@@ -490,7 +536,8 @@
                                 replaceNull}}
                             </div>
                             <app-universal-input formControlName="hometown_s" *ngIf="mode == 'edit_self'" [inputModel]="{
-                            tagName : 'input',
+                             html_id:'hometown_s',
+                             tagName : 'input',
                             inputType : 'text',
                             placeholder:'Enter Hometown',
                          }"></app-universal-input>
@@ -502,6 +549,7 @@
                                 replaceNull}}
                             </div>
                             <app-universal-input formControlName="district_s" *ngIf="mode == 'edit_self'" [inputModel]="{
+                            html_id:'district_s',
                             tagName : 'select',
                             inputType : '',
                             placeholder:'Select District',
@@ -514,6 +562,7 @@
                                 replaceNull}}
                             </div>
                             <app-universal-input formControlName="state_s" *ngIf="mode == 'edit_self'" [inputModel]="{
+                            html_id:'state_s',
                             tagName : 'select',
                             inputType : '',
                             placeholder:'Select State',
@@ -526,6 +575,7 @@
                                 replaceNull}}
                             </div>
                             <app-universal-input formControlName="country_s" *ngIf="mode == 'edit_self'" [inputModel]="{
+                            html_id:'country_s',
                             tagName : 'select',
                             inputType : '',
                             placeholder:'Select Country',
@@ -538,7 +588,7 @@
                     <button (click)="editSelf()"
                         class="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">
                         Update Profile</button>
-                        <button 
+                    <button
                         class="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">
                         Change Password</button>
                 </div>
@@ -546,7 +596,8 @@
                     <button *ngIf="mode == 'edit_self'" (click)="updateSelfProfile()"
                         class="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">
                         Update</button>
-                    <button *ngIf="mode == 'edit_self'" (click)="onUpdate.emit({ actionName: 'CHANGE_MODE',mode:'view_self'})"
+                    <button *ngIf="mode == 'edit_self'"
+                        (click)="onUpdate.emit({ actionName: 'CHANGE_MODE',mode:'view_self'})"
                         class="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">
                         Cancel</button>
                 </div>
