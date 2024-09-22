@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Paginator } from 'src/app/core/component/paginator';
-import { RequestConstant, RequestDefaultValue, RequestField, requestTab } from '../request.const';
+import { RequestConstant, RequestDefaultValue, RequestField, requestTab, TaskField } from '../request.const';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { ActivatedRoute } from '@angular/router';
 import { RequestService } from '../request.service';
-import { AdditionalField, KeyValue, PaginateRequestDetail, RequestDetail, RequestType } from 'src/app/core/api/models';
+import { AdditionalField, KeyValue, PaginateRequestDetail, RequestDetail, RequestType, WorkDetail } from 'src/app/core/api/models';
 import { AccordionButton, AccordionCell, AccordionList, AccordionRow } from 'src/app/shared/components/generic/accordion-list/accordion-list.model';
 import { FormGroup, Validators } from '@angular/forms';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
@@ -16,7 +16,7 @@ import { filterFormChange, scrollToFirstInvalidControl } from 'src/app/core/serv
 import { ModalService } from 'src/app/core/service/modal.service';
 import { AppAlert } from 'src/app/core/constant/app-alert.const';
 import { AppDialog } from 'src/app/core/constant/app-dialog.const';
-import { getRequestAdditionalDetailSection, getRequestDetailSection } from '../request.field';
+import { getRequestAdditionalDetailSection, getRequestDetailSection, getWorkActionDetailSection, getWorkDetailSection } from '../request.field';
 import { date } from 'src/app/core/service/utilities.service';
 
 @Component({
@@ -104,18 +104,20 @@ export class RequestListComponent extends Accordion<RequestDetail> implements On
       {
         type: 'text',
         value: data.type!,
-        showDisplayValue:true,
+        showDisplayValue: true,
         refDataSection: RequestConstant.refDataKey.workflowTypes
-      }, 
+      },
       {
         type: 'text',
         value: this.tabMapping[this.tabIndex] == 'delegated_request' ? data.requester?.fullName! : data.status!,
         showDisplayValue: this.tabMapping[this.tabIndex] != 'delegated_request',
         refDataSection: RequestConstant.refDataKey.workflowSteps
       },
-      {
+      { 
         type: 'text',
-        value: this.tabMapping[this.tabIndex] == 'delegated_request' ? data.status! : date(data.createdOn!)
+        value: this.tabMapping[this.tabIndex] == 'delegated_request' ? data.status! : date(data.createdOn!),
+        showDisplayValue: this.tabMapping[this.tabIndex] == 'delegated_request',
+        refDataSection: RequestConstant.refDataKey.workflowSteps
       }
     ]
   }
@@ -254,7 +256,7 @@ export class RequestListComponent extends Accordion<RequestDetail> implements On
               section_html_id: 'request_detail_addnl',
               section_form: new FormGroup({}),
               show_form: true,
-              content: addnl_fields 
+              content: addnl_fields
             }, 0, true);
           });
           this.getSectionForm('request_detail_create', 0, true)?.get('isDelegated')?.reset()
@@ -350,6 +352,76 @@ export class RequestListComponent extends Accordion<RequestDetail> implements On
         break;
     }
   }
+
+
+  onAccordionOpen($event: { rowIndex: number; }) {
+    let item = this.requestList.content![$event.rowIndex];
+    let accordion = new class extends Accordion<WorkDetail> {
+      prepareHighLevelView(item: WorkDetail, options?: { [key: string]: any }): AccordionCell[] {
+        return [
+          {
+            type: 'text',
+            value: item?.id!,
+            bgColor: 'bg-purple-200'
+          },
+          {
+            type: 'text',
+            value: item?.workType!,
+          },
+          {
+            type: 'text',
+            value: item?.stepCompleted ? 'Completed' : 'Pending',
+          }
+        ]
+      }
+      prepareDetailedView(data: WorkDetail, options?: { [key: string]: any }): DetailedView[] {
+        return data.stepCompleted  ? [
+          getWorkDetailSection(data, 'completed_worklist'),
+          getWorkActionDetailSection(data)
+        ]:
+        [          
+          getWorkDetailSection(data, 'pending_worklist'),
+        ]
+      }
+      prepareDefaultButtons(data: WorkDetail, options?: { [key: string]: any }): AccordionButton[] {
+        return []
+      }
+      handlePageEvent($event: PageEvent): void {
+
+      }
+    }();
+    accordion.setRefData(this.refData)
+    accordion.setHeaderRow([
+      {
+        value: TaskField.workId,
+        rounded: true
+      },
+      {
+        value: TaskField.workType,
+        rounded: true
+      },
+      {
+        value: 'Status',
+        rounded: true
+      }
+    ])
+
+    this.requestService.getWorkDetails(item.id!).subscribe(s => {
+      accordion.setContent(s!, s?.length)
+      this.addSectionInAccordion({
+        section_name: 'Work Detail',
+        section_type: 'accordion_list',
+        section_html_id: 'task_list',
+        section_form: new FormGroup({}),
+        accordionList: accordion.getAccordionList()
+      }, $event.rowIndex)
+    })
+
+  }
+
 }
+
+
+
 
 

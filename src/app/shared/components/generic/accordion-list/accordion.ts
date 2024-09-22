@@ -2,7 +2,7 @@ import { PageEvent } from "@angular/material/paginator";
 import { Paginator } from "src/app/core/component/paginator";
 import { AccordionButton, AccordionCell, AccordionList, AccordionRow } from "./accordion-list.model";
 import { DetailedView, DetailedViewField } from "../detailed-view/detailed-view.model";
-import { KeyValue } from "src/app/core/api/models";
+import { KeyValue, WorkDetail } from "src/app/core/api/models";
 import { FormControl } from "@angular/forms";
 
 export abstract class Accordion<NumType> extends Paginator {
@@ -34,7 +34,7 @@ export abstract class Accordion<NumType> extends Paginator {
    * @param headers 
    * Set header row details
    */
-  protected setHeaderRow(headers: AccordionCell[]) {
+  setHeaderRow(headers: AccordionCell[]) {
     this.accordionList.headers = headers;
   }
 
@@ -42,7 +42,7 @@ export abstract class Accordion<NumType> extends Paginator {
    * 
    * @param data 
    */
-  protected setRefData(data: { [name: string]: KeyValue[]; } | undefined) {
+  setRefData(data: { [name: string]: KeyValue[]; } | undefined) {
     this.accordionList.refData = data;
   }
 
@@ -110,8 +110,6 @@ export abstract class Accordion<NumType> extends Paginator {
       }
     }
   }
-
-
 
   protected getSectionForm(sectionId: string, rowIndex: number, create?: boolean) {
     if (create) {
@@ -269,5 +267,7 @@ export abstract class Accordion<NumType> extends Paginator {
   //   }
   // }
 
+  
 
-}
+
+} 

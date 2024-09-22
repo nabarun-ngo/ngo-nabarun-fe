@@ -11,6 +11,7 @@ export interface WorkDetail {
   decisionOwner?: UserDetail;
   description?: string;
   id?: string;
+  pendingWith?: Array<UserDetail>;
   pendingWithRoles?: Array<'MEMBER' | 'CASHIER' | 'ASSISTANT_CASHIER' | 'TREASURER' | 'GROUP_COORDINATOR' | 'ASST_GROUP_COORDINATOR' | 'SECRETARY' | 'ASST_SECRETARY' | 'COMMUNITY_MANAGER' | 'ASST_COMMUNITY_MANAGER' | 'PRESIDENT' | 'VICE_PRESIDENT' | 'TECHNICAL_SPECIALIST'>;
   stepCompleted?: boolean;
   workType?: 'DECISION' | 'NA' | 'CONFIRMATION';

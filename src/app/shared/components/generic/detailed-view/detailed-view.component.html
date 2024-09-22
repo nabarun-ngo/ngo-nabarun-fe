@@ -28,13 +28,12 @@
 
                 </div>
                 <div *ngIf="view.section_type == 'accordion_list'">
-                    <div class="flex justify-end p-2">
+                    <!-- <div class="flex justify-end p-2">
                         <mat-icon [ngClass]="{'disabledLink ' : false}" class="bg-purple-500 mx-2 mt-2">add</mat-icon>
                         <mat-form-field appearance="outline" class="dense-3">
-                            <!-- <mat-label>Search here</mat-label> -->
                             <input type="text" matInput placeholder="Search here">
                         </mat-form-field>
-                    </div>
+                    </div> -->
                     <app-accordion-list [accordionList]="view.accordionList!" (onButtonClick)="onClick($event)"
                     (onAccordionOpen)="accordionOpened($event)"></app-accordion-list>    
                     <!-- <mat-paginator class="mt-4" style="background-color: transparent;" (page)="handlePageEvent(mem.member!,$event)" [length]="mem.total" [pageSize]="mem.size" [pageSizeOptions]="defaultValue.pageSizeOptions" [pageIndex]="mem.index" aria-label="Select page">

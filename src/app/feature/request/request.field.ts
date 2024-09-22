@@ -56,6 +56,12 @@ export const getWorkDetailSection = (m: WorkDetail, tab: workListTab): DetailedV
                 field_value: date(m.createdOn)
             },
             {
+                field_name: 'Assigned to',
+                field_html_id: 'pending_with',
+                field_value: m.pendingWith?.map(m=>m.fullName).join(', ')!,
+                hide_field: tab == 'completed_worklist'
+            },
+            {
                 field_name: 'Decision Owner',
                 field_html_id: 'decision_owner',
                 field_value: m.decisionOwner?.fullName!,

@@ -15,10 +15,10 @@
                                 <button (click)="createRequest()" class="bg-indigo-600 py-3 px-6 w-full text-white font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">Create Request</button>
                             </div>
                         </div>
-                        <app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)"></app-accordion-list>
+                        <app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)" (onAccordionOpen)="onAccordionOpen($event)"></app-accordion-list>
                     </mat-tab>
                     <mat-tab id="myDRequestTab" label="Delegated Requests">
-                        <app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)"></app-accordion-list>
+                        <app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)" (onAccordionOpen)="onAccordionOpen($event)" ></app-accordion-list>
                     </mat-tab>
                 </mat-tab-group>
                 <mat-paginator class="mt-4" style="background-color: transparent;" (page)="handlePageEvent($event)" [length]="itemLength$ | async" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" [pageIndex]="pageNumber" aria-label="Select page">

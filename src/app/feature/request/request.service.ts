@@ -79,4 +79,8 @@ export class RequestService {
     return this.requestController.getRequestDetail({ id: id }).pipe(map(d => d.responsePayload));
   }
 
+  getWorkDetails(id: string) {
+    return this.requestController.getWorkItems({ id: id }).pipe(map(d => d.responsePayload));
+  }
+
 }

@@ -4,7 +4,7 @@
 
 export interface AdditionalField {
   id?: string;
-  key?: 'firstName' | 'lastName' | 'email' | 'dialCode' | 'mobileNumber' | 'hometown' | 'reasonForJoining' | 'howDoUKnowAboutNabarun' | 'password' | 'name' | 'amount' | 'paymentMethod' | 'paidToAccount' | 'decision' | 'remarks' | 'confirmation';
+  key?: 'firstName' | 'lastName' | 'email' | 'dialCode' | 'mobileNumber' | 'hometown' | 'reasonForJoining' | 'howDoUKnowAboutNabarun' | 'password' | 'name' | 'amount' | 'paymentMethod' | 'paidToAccount' | 'decision' | 'remarks' | 'confirmation' | 'reasonForLeaving';
   mandatory?: boolean;
   name?: string;
   options?: Array<string>;
