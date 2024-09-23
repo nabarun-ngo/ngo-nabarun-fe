@@ -39,6 +39,7 @@ export class RequestListComponent extends Accordion<RequestDetail> implements On
   ];
   refData: { [name: string]: KeyValue[]; } | undefined;
   actionName!: string;
+  userList: import("c:/Users/Souvik/git/ngo-nabarun-fe/src/app/core/api/models").UserDetail[] | undefined;
 
   constructor(
     private sharedDataService: SharedDataService,
@@ -285,6 +286,7 @@ export class RequestListComponent extends Accordion<RequestDetail> implements On
           //console.log(requestForm?.get('requestType')?.value)
           if (requestForm?.get('requestType')?.value != RequestType.JoinRequestUser) {
             this.requestService.getUsers().subscribe(data => {
+              this.userList=data?.content;
               let delegatedRequester: KeyValue[] = []
               data?.content?.forEach(m => {
                 delegatedRequester.push({ key: m.id, displayValue: m.fullName })
@@ -334,7 +336,8 @@ export class RequestListComponent extends Accordion<RequestDetail> implements On
             description: request_form?.value.description,
             delegated: request_form?.value.isDelegated === 'YES' ? true : false,
             requester: {
-              id: request_form?.value.isDelegated === 'YES' ? request_form?.value.delegation_user : undefined
+              id: request_form?.value.isDelegated === 'YES' ? request_form?.value.delegation_user : undefined,
+              fullName: request_form?.value.isDelegated === 'YES' ? this.userList?.find(f=>f.id == request_form?.value.delegation_user)?.fullName : undefined,
             },
             additionalFields: additionalFields,
           };

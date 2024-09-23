@@ -653,10 +653,11 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
     //let account1 = this.accountList.content![$event.rowIndex];
     this.showForm(rowIndex, ['transfer_amt']);
     this.accountService.fetchAccounts(this.pageNumber, this.pageSize).subscribe(data => {
-      let selectList = this.getSectionField('transfer_amt','transferTo',rowIndex,true)?.form_input?.selectList;
+      let selectList = this.getSectionField('transfer_amt','transferTo',rowIndex)?.form_input?.selectList;
       selectList?.splice(0);
       data?.content?.forEach(element => {
         let val = { key: element.id, displayValue: element.id! + '  (' + element.accountHolderName + ')' } as KeyValue;
+        console.log(val)
         selectList?.push(val);
       });
     });

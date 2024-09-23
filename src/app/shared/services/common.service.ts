@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { deleteToken, getToken, Messaging, onMessage } from '@angular/fire/messaging';
+import { SpinnerVisibilityService } from 'ng-http-loader';
 import { map, Subject } from 'rxjs';
 import { DonationStatus, DonationType } from 'src/app/core/api/models';
 import { CommonControllerService, UserControllerService } from 'src/app/core/api/services';
@@ -13,6 +14,7 @@ export class CommonService {
   constructor(
   private commonController:CommonControllerService,
   private messageing: Messaging,
+  private spinner: SpinnerVisibilityService,
 ) { }
 
   getRefData(options:{names?:any[],donationStatus?:DonationStatus,donationType?:DonationType}){
@@ -65,7 +67,10 @@ export class CommonService {
           serviceWorkerRegistration: serviceWorkerRegistration,
         }).then((token) => {
           console.log('my fcm token', token);
-          this.commonController.manageNotification({ action: 'SAVE_TOKEN', body: { 'token': token } }).subscribe()
+          this.commonController.manageNotification({ action: 'SAVE_TOKEN', body: { 'token': token } }).subscribe(s=>{
+
+          })
+          this.spinner.hide()
         });
       });
   }

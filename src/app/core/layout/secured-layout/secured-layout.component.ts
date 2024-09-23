@@ -14,13 +14,13 @@ export class SecuredLayoutComponent {
     minDuration: 300,
     backdropBackgroundColor: '#777777',
     entryComponent: PageLoaderComponent,
+    opacity: '0.9',
     filteredUrlPatterns: [
-      'token',
-      'manageNotification',
-      'getNotifications',
-      '/Notification/',
-      '^.*Notification.*$'
-    ],
-    opacity: '0.9'
+      // 'token',
+      // 'openid-configuration',
+       //'jwks.json',
+       'manageNotification',
+       'getNotifications',
+     ]
   }
 }

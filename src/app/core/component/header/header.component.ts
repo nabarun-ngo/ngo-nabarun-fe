@@ -8,6 +8,7 @@ import { AppNotification } from '../../model/notification.model';
 import { Router } from '@angular/router';
 import { CommonService } from 'src/app/shared/services/common.service';
 import {Howl, Howler} from 'howler';
+import { SpinnerVisibilityService } from 'ng-http-loader';
 
 @Component({
   selector: 'app-header',
@@ -26,6 +27,8 @@ export class HeaderComponent implements OnInit {
     private modalService:ModalService,
     private commonService:CommonService,
     private router:Router,
+    private spinner: SpinnerVisibilityService,
+
   ) { }
 
 
@@ -38,6 +41,7 @@ export class HeaderComponent implements OnInit {
         this.notifications.push(new AppNotification(d));
       })
     })
+    this.spinner.hide()
     this.commonService.requestPermission();
     this.commonService.liveNotifications$.subscribe(data=>{
       this.sound()

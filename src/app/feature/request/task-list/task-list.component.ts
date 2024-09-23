@@ -168,7 +168,11 @@ export class TaskListComponent extends Accordion<WorkDetail> implements OnInit {
   }
 
   protected override prepareDetailedView(m: WorkDetail, options?: { [key: string]: any }): DetailedView[] {
-    return [
+    return this.tabMapping[this.tabIndex] == 'completed_worklist'? [
+      getWorkDetailSection(m,this.tabMapping[this.tabIndex]),
+      getWorkActionDetailSection(m)
+    ]:
+    [
       getWorkDetailSection(m,this.tabMapping[this.tabIndex])
     ]
   }
@@ -201,6 +205,7 @@ export class TaskListComponent extends Accordion<WorkDetail> implements OnInit {
     fromDate?: string,
     toDate?: string,
   }) {
+    this.getAccordionList().searchValue='';
     if (this.tabMapping[this.tabIndex] == 'pending_worklist') {
       this.taskService.findMyWorkList({
         isCompleted: false,
@@ -255,6 +260,7 @@ export class TaskListComponent extends Accordion<WorkDetail> implements OnInit {
             })
           })
           this.taskService.updateWorkItem(item.id!, detail).subscribe(data => {
+            this.hideForm($event.rowIndex)
             this.fetchDetails();
           })
         } else {

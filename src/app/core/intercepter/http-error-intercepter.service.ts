@@ -12,6 +12,7 @@ import * as uuid from 'uuid';
 })
 export class HttpErrorIntercepterService implements HttpInterceptor {
 
+ 
 
   constructor(
       private modalService: ModalService,
@@ -22,13 +23,11 @@ export class HttpErrorIntercepterService implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpSentEvent | HttpHeaderResponse | HttpProgressEvent | HttpResponse<any> | HttpUserEvent<any>> {
     //console.log(request.url,environment.api_base_url)
     if(request.url.includes(environment.api_base_url)){
-      //console.log("hi")
       request = request.clone({
         setHeaders:{
           'Correlation-Id': uuid.v4()
         }
       })
-      //console.log(request.headers)
     }
     
     //console.log(request.headers.get('Correlation-Id'))
