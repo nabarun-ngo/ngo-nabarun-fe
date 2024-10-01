@@ -160,12 +160,12 @@
                                     }" />
                             </div>
                         </div>
-                        <div class="grid grid-cols-2" *ngIf="mode == 'edit' && donation?.status == donationStatus.Paid">
+                        <div class="grid grid-cols-2" *ngIf="mode == 'view' && donation?.status == donationStatus.Paid">
                             <div class="px-2 py-2 font-semibold">Donation confirmed by</div>
                             <div class="px-2 py-2">{{donation.confirmedBy?.fullName| replaceNull}}
                             </div>
                         </div>
-                        <div class="grid grid-cols-2" *ngIf="mode == 'edit' && donation?.status == donationStatus.Paid">
+                        <div class="grid grid-cols-2" *ngIf="mode == 'view' && donation?.status == donationStatus.Paid">
                             <div class="px-2 py-2 font-semibold">Donation confirmed on</div>
                             <div class="px-2 py-2">{{donation.confirmedOn | date | replaceNull}}
                             </div>
