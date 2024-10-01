@@ -7,5 +7,7 @@ export enum RequestType {
   JoinRequestUser = 'JOIN_REQUEST_USER',
   CheckPayment = 'CHECK_PAYMENT',
   CollectCashPayment = 'COLLECT_CASH_PAYMENT',
-  TerminationRequest = 'TERMINATION_REQUEST'
+  TerminationRequest = 'TERMINATION_REQUEST',
+  DonationPauseRequest = 'DONATION_PAUSE_REQUEST',
+  ProfileUpdateRequest = 'PROFILE_UPDATE_REQUEST'
 }

@@ -82,6 +82,7 @@ export const getWorkActionDetailSection = (m: WorkDetail): DetailedView => {
         section_name: 'Work Action Detail',
         section_type: 'key_value',
         section_html_id: 'action_details',
+        hide_section:m.additionalFields?.length == 0,
         section_form: new FormGroup({}),
         content: getAdditionalField(m.additionalFields!)
     };
@@ -149,6 +150,7 @@ export const getRequestAdditionalDetailSection = (m: RequestDetail): DetailedVie
         section_name: 'Request Additional Details',
         section_type: 'key_value',
         section_html_id: 'request_add_detail',
+        hide_section : m.additionalFields?.length == 0,
         section_form: new FormGroup({}),
         content: getAdditionalField(m.additionalFields!)
     };

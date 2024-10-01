@@ -56,9 +56,9 @@ export default defineConfig({
     },
   },
   expect: {
-    timeout: 30 * 1000, //30 sec to locate element
+    timeout: 10 * 1000, //30 sec to locate element
   },
-  timeout: 5 * 60 * 1000,//10 mins
+  timeout: 2 * 60 * 1000,//10 mins
   /* Configure projects for major browsers */
   projects: [
     {

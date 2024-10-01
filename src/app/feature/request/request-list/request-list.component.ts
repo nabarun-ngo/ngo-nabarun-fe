@@ -5,7 +5,7 @@ import { RequestConstant, RequestDefaultValue, RequestField, requestTab, TaskFie
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { ActivatedRoute } from '@angular/router';
 import { RequestService } from '../request.service';
-import { AdditionalField, KeyValue, PaginateRequestDetail, RequestDetail, RequestType, WorkDetail } from 'src/app/core/api/models';
+import { AdditionalField, KeyValue, PaginateRequestDetail, RequestDetail, RequestType, UserDetail, WorkDetail } from 'src/app/core/api/models';
 import { AccordionButton, AccordionCell, AccordionList, AccordionRow } from 'src/app/shared/components/generic/accordion-list/accordion-list.model';
 import { FormGroup, Validators } from '@angular/forms';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
@@ -39,7 +39,7 @@ export class RequestListComponent extends Accordion<RequestDetail> implements On
   ];
   refData: { [name: string]: KeyValue[]; } | undefined;
   actionName!: string;
-  userList: import("c:/Users/Souvik/git/ngo-nabarun-fe/src/app/core/api/models").UserDetail[] | undefined;
+  userList: UserDetail[] | undefined;
 
   constructor(
     private sharedDataService: SharedDataService,
@@ -184,8 +184,8 @@ export class RequestListComponent extends Accordion<RequestDetail> implements On
     }
     return [
       {
-        button_id: 'UPDATE',
-        button_name: 'Update'
+        button_id: 'WITHDRAW',
+        button_name: 'Withdraw'
       }
     ]
 
@@ -323,7 +323,7 @@ export class RequestListComponent extends Accordion<RequestDetail> implements On
         let request_form = this.getSectionForm('request_detail_create', 0, true);
         let request_addnl_form = this.getSectionForm('request_detail_addnl', 0, true);
         if (request_form?.valid && request_addnl_form?.valid) {
-          console.log(request_form.value, request_addnl_form.value)
+          //console.log(request_form.value, request_addnl_form.value)
           let additionalFields: AdditionalField[] = [];
           Object.keys(request_addnl_form.value).forEach(key => {
             additionalFields?.push({
@@ -352,6 +352,14 @@ export class RequestListComponent extends Accordion<RequestDetail> implements On
         break;
       case 'CANCEL_CREATE':
         this.hideForm(0, true);
+        break;
+      case 'WITHDRAW':
+        let decision=this.alertService.openNotificationModal(AppDialog.warn_confirm_withdraw,'confirmation','warning');
+        decision.onAccept$.subscribe(d=>{
+          this.requestService.withdrawRequest(this.requestList.content![$event.rowIndex].id!).subscribe(d=>{
+            this.fetchDetails()
+          })
+        })
         break;
     }
   }

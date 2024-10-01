@@ -19,6 +19,10 @@ export const AppDialog={
         title: 'Warning',
         description: 'You are raising a request on behalf of someone. Please ensure that person is aware.'
     },
+    warn_confirm_withdraw:{
+        title: 'Warning',
+        description: 'Are you sure to withdraw this request?'
+    },
 }
 
 

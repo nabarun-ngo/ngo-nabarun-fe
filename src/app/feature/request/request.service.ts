@@ -83,4 +83,9 @@ export class RequestService {
     return this.requestController.getWorkItems({ id: id }).pipe(map(d => d.responsePayload));
   }
 
+  withdrawRequest(id: string) {
+    return this.requestController.updateRequest({ id:id , body:{status:'CANCELLED'} }).pipe(map(d => d.responsePayload));
+  }
+ 
+
 }

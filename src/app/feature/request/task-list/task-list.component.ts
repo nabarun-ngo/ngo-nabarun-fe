@@ -179,7 +179,7 @@ export class TaskListComponent extends Accordion<WorkDetail> implements OnInit {
 
   protected override prepareDefaultButtons(data: WorkDetail, options?: { [key: string]: any }): AccordionButton[] {
     if (this.tabMapping[this.tabIndex] == 'pending_worklist') {
-      return [
+      return data.workType == 'USER_INPUT' ? []:  [
         {
           button_id: 'UPDATE',
           button_name: 'Update'

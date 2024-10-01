@@ -62,7 +62,7 @@ test.describe.serial('Onboard member End 2 End', {
     })
 
     test('Login check Onboarded user and update profile', async ({}, testInfo) => {
-        await page.goto(process.env['LOGIN_URL']!)
+        //await page.goto(process.env['LOGIN_URL']!)
         let loginPage = new LoginPage(page, testInfo);
         await loginPage.continueWithPassword();
         let dashboard = await loginPage.login({
