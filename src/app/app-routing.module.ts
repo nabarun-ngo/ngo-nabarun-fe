@@ -50,6 +50,10 @@ const routes: Routes = [
         path:route_data.secured_notice_notices_page.feature,
         loadChildren: () => import('./feature/notice/notice.module').then(m => m.NoticeModule),
       },
+      {
+        path:route_data.secured_admin_dashboard_page.feature,
+        loadChildren: () => import('./feature/admin/admin.module').then(m => m.AdminModule),
+      }, 
     ],
     canActivate:[
       AuthGuardService

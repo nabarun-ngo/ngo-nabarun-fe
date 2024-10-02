@@ -112,6 +112,13 @@ export const AppRoute = {
     feature: 'notice',
     path: ':id',
   },
+  secured_admin_dashboard_page: {
+    id: 'secured_admin_dashboard_page',
+    url: '/secured/admin/dashboard',
+    parent: 'secured',
+    feature: 'admin',
+    path: 'dashboard',
+  },
 }
 
 
