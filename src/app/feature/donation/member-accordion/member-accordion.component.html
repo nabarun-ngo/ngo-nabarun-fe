@@ -1,7 +1,7 @@
 <mat-accordion class="example-headers-align" multi>
     <mat-expansion-panel class="m-2" *ngFor="let mem of members | memberSearch:searchValue" (opened)="accordionOpened(mem.member!)">
-        <mat-expansion-panel-header>
-            <mat-panel-description>
+        <mat-expansion-panel-header class="w-full items-center my-2">
+            <mat-panel-description  class="w-full">
                 <div class="grid grid-cols-9 gap-10 w-full">
                     <div class="col-span-5">
                         <div class="flex items-center ">

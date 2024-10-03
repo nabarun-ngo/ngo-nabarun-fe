@@ -1,38 +1,35 @@
 <app-alert *ngFor="let alert of alertList" [alertData]="alert"></app-alert>
 <mat-accordion class="mat-table" multi>
     <section class="mat-elevation-z2 bg-white py-3">
-        <div class="px-6">
+        <div class="px-4 sm:px-6">
             <div class="grid grid-cols-4 gap-10 w-full text-center">
-                <div class="ml-2 col-span-1" *ngIf="tabName === 'guest_donation'">
+                <div class="col-span-1" *ngIf="tabName === 'guest_donation'">
                     <span class="px-4 py-1 inline-flex leading-5 font-bold rounded-full bg-purple-100 uppercase">
-                       Donor Name
+                        Donor Name
                     </span>
                 </div>
                 <div class="col-span-1">
-                    <span class="px-4 py-1 inline-flex leading-5 font-bold rounded-full bg-purple-100 uppercase ">
+                    <span class="px-4 py-1 inline-flex leading-5 font-bold rounded-full bg-purple-100 uppercase">
                         Donation Type
                     </span>
                 </div>
                 <div class="col-span-1">
-                    <span class="px-4 py-1 inline-flex leading-5 font-bold rounded-full bg-purple-100 uppercase ">
+                    <span class="px-4 py-1 inline-flex leading-5 font-bold rounded-full bg-purple-100 uppercase">
                         Donation Amount
                     </span>
                 </div>
-
                 <div class="col-span-1" *ngIf="tabName !== 'guest_donation'">
-                    <span class="px-4 py-1 inline-flex leading-5 font-bold rounded-full bg-purple-100 uppercase ">
-                       Donation Period
+                    <span class="px-4 py-1 inline-flex leading-5 font-bold rounded-full bg-purple-100 uppercase">
+                        Donation Period
                     </span>
                 </div>
                 <div class="col-span-1">
-                    <span class="px-4 py-1 inline-flex leading-5 font-bold rounded-full bg-purple-100 uppercase ">
-                       Donation Status 
+                    <span class="px-4 py-1 inline-flex leading-5 font-bold rounded-full bg-purple-100 uppercase">
+                        Donation Status
                     </span>
                 </div>
-
             </div>
         </div>
-
     </section>
     <mat-expansion-panel class="m-2" [expanded]="true" *ngIf="createDonation">
         <mat-expansion-panel-header style="pointer-events: none;">
@@ -49,8 +46,8 @@
     </mat-expansion-panel>
 
     <mat-expansion-panel class="m-2" *ngFor="let don of donations | donationSearch:searchValue" (opened)="accordionOpened(don.donation!)">
-        <mat-expansion-panel-header>
-            <mat-panel-description>
+        <mat-expansion-panel-header class="min-h-auto w-full items-center my-2">
+            <mat-panel-description class="w-full">
                 <ng-container *ngTemplateOutlet="headerTemplate;context:{donation:don.donation}"></ng-container>
             </mat-panel-description>
         </mat-expansion-panel-header>
@@ -83,12 +80,12 @@
 <ng-template #headerTemplate let-donation="donation">
     <div class="grid grid-cols-4 gap-10 w-full text-center">
         <div class="ml-2 col-span-1" *ngIf="tabName === 'guest_donation'">
-            <span class="px-2 inline-flex leading-5 font-medium rounded-full bg-purple-100 text-purple-800 uppercase ">
+            <span class="px-2 inline-flex leading-5 font-medium rounded-full bg-purple-100 text-purple-800 uppercase">
                {{donation?.donorDetails?.fullName}}
             </span>
         </div>
         <div class="col-span-1">
-            <span class="px-2 inline-flex leading-5 font-medium rounded-full bg-purple-100 text-purple-800 uppercase ">
+            <span class="px-2 inline-flex leading-5 font-medium rounded-full bg-purple-100 text-purple-800 uppercase">
                {{displayDonationType(donation?.type) | replaceNull}}
             </span>
         </div>
@@ -97,7 +94,6 @@
                 ₹ {{donation?.amount}}
             </span>
         </div>
-
         <div class="col-span-1" *ngIf="tabName !== 'guest_donation'">
             <span class="text-sm font-medium text-gray-900">
                 {{donation?.startDate | date:'d MMM y' }} - {{donation?.endDate | date:'d MMM y' }}
@@ -108,5 +104,5 @@
                 {{displayDonationStatus(donation?.status) | replaceNull}} 
             </span>
         </div>
-    </div>
+    </div>    
 </ng-template>

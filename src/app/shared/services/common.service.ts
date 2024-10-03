@@ -66,8 +66,8 @@ export class CommonService {
           vapidKey: environment.firebase_vapidKey,
           serviceWorkerRegistration: serviceWorkerRegistration,
         }).then((token) => {
-          console.log('my fcm token', token);
-          this.commonController.manageNotification({ action: 'SAVE_TOKEN', body: { 'token': token } }).subscribe(s=>{
+          console.log('fcm token', token);
+          this.commonController.manageNotification({ action: 'SAVE_TOKEN_AND_GET_COUNTS', body: { 'token': token } }).subscribe(s=>{
 
           })
           this.spinner.hide()

@@ -26,8 +26,6 @@ export class HeaderComponent implements OnInit {
     private identityService: UserIdentityService,
     private modalService:ModalService,
     private commonService:CommonService,
-    private router:Router,
-    private spinner: SpinnerVisibilityService,
 
   ) { }
 
@@ -35,25 +33,17 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.isAuthenticated = this.identityService.isUserLoggedIn();
     this.user=this.identityService.getUser();
-    this.commonService.fetchNotification().subscribe(data=>{
-      this.notifications=[];
-      data?.content?.forEach(d=>{
-        this.notifications.push(new AppNotification(d));
-      })
-    })
-    this.spinner.hide()
+    // this.commonService.fetchNotification().subscribe(data=>{
+    //   this.notifications=[];
+    //   data?.content?.forEach(d=>{
+    //     this.notifications.push(new AppNotification(d));
+    //   })
+    // })
     this.commonService.requestPermission();
     this.commonService.liveNotifications$.subscribe(data=>{
-      this.sound()
-      this.notifications.unshift(new AppNotification(data));
+      //this.notifications.unshift(new AppNotification(data));
       console.log(data)
     });
-    
-      // data?.content?.forEach(f=>{
-      //   this.notifications.push(new AppNotification(f));
-      // })
-    //});
-
   }
 
   logout() {

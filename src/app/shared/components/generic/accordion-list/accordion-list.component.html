@@ -14,8 +14,8 @@
     </section>
    
     <mat-expansion-panel class="m-2" [expanded]="true" *ngIf="accordionList.addContent">
-        <mat-expansion-panel-header style="pointer-events: none;">
-            <mat-panel-description>
+        <mat-expansion-panel-header class="w-full items-center my-2" style="pointer-events: none;">
+            <mat-panel-description class="w-full">
                 <div class="grid grid-cols-{{accordionList.addContent.columns.length}} gap-10 w-full text-center">
                     <div *ngFor="let item of accordionList.addContent.columns;" class="col-span-1">
                         <span class="px-2 py-1 inline-flex leading-5 font-medium {{item.rounded ? 'rounded-full': ''}} {{item.bgColor ? item.bgColor :''}} {{item.textColor ? item.textColor:'text-gray-900'}} uppercase ">
@@ -34,8 +34,8 @@
         </mat-action-row>
     </mat-expansion-panel>
     <mat-expansion-panel *ngFor="let content of accordionList.contents | accordionFilter:accordionList.searchValue;" (opened)="accordionOpened(content)">
-        <mat-expansion-panel-header>
-            <mat-panel-description>
+        <mat-expansion-panel-header class="w-full items-center my-2">
+            <mat-panel-description class="w-full">
                 <div class="grid grid-cols-{{content.columns.length}} gap-10 w-full text-center">
                     <div *ngFor="let item of content.columns;" class="col-span-1">
                         
