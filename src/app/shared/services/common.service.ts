@@ -4,6 +4,7 @@ import { SpinnerVisibilityService } from 'ng-http-loader';
 import { map, Subject } from 'rxjs';
 import { DonationStatus, DonationType } from 'src/app/core/api/models';
 import { CommonControllerService, UserControllerService } from 'src/app/core/api/services';
+import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -15,6 +16,7 @@ export class CommonService {
   private commonController:CommonControllerService,
   private messageing: Messaging,
   private spinner: SpinnerVisibilityService,
+  private userDetail:UserIdentityService
 ) { }
 
   getRefData(options:{names?:any[],donationStatus?:DonationStatus,donationType?:DonationType}){
@@ -41,11 +43,13 @@ export class CommonService {
           console.log("Granted");
           this.sendToken();
           onMessage(this.messageing, (message) => {
-            this.notificationSub.next(message.data!); console.log("1",message.data);
+            this.notificationSub.next(message.data!); 
+            //console.log("1",message.data);
             //this.sound.play();
           });
           new BroadcastChannel('notification_data').onmessage = (item) => {
-            this.notificationSub.next(item.data); console.log("2",item.data);
+            this.notificationSub.next(item.data); 
+            //console.log("2",item.data);
             //this.sound.play();
           };
         }
@@ -67,7 +71,7 @@ export class CommonService {
           serviceWorkerRegistration: serviceWorkerRegistration,
         }).then((token) => {
           console.log('fcm token', token);
-          this.commonController.manageNotification({ action: 'SAVE_TOKEN_AND_GET_COUNTS', body: { 'token': token } }).subscribe(s=>{
+          this.commonController.manageNotification({ action: 'SAVE_TOKEN_AND_GET_COUNTS', body: { 'token': token,'profile_id':this.userDetail.getUser().profile_id } }).subscribe(s=>{
 
           })
           this.spinner.hide()

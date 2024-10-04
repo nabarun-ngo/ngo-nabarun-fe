@@ -21,7 +21,8 @@ export class HeaderComponent implements OnInit {
   isAuthenticated!: boolean;
   user!: AuthUser;
   //userId!:string;
-  notifications:  AppNotification[]=[];
+  //notifications:  AppNotification[]=[];
+  notificationCount:string='0';
   constructor(
     private identityService: UserIdentityService,
     private modalService:ModalService,
@@ -42,7 +43,10 @@ export class HeaderComponent implements OnInit {
     this.commonService.requestPermission();
     this.commonService.liveNotifications$.subscribe(data=>{
       //this.notifications.unshift(new AppNotification(data));
-      console.log(data)
+      //console.log(data)
+      if(data['notificationCount']){
+        this.notificationCount=data['notificationCount'];
+      }
     });
   }
 
@@ -55,7 +59,7 @@ export class HeaderComponent implements OnInit {
   sound(){
     Howler.autoUnlock= false;
     var sound = new Howl({
-      src: ['http://localhost:4201/assets/mixkit-bell-notification-933.wav'],
+      src: ['/assets/mixkit-bell-notification-933.wav'],
       preload:true,
     });
     
