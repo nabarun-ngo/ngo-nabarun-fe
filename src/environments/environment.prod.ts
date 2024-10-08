@@ -2,8 +2,12 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+import { Browser } from "@capacitor/browser";
+import { Capacitor } from "@capacitor/core";
 import { AuthConfig } from "angular-oauth2-oidc";
+import config from "capacitor.config";
 import { getScopes } from "src/app/core/constant/auth-scope.const";
+import { version } from "./version";
 
 const authDomain = 'sso-nabarun.us.auth0.com';
 const authClientId = '8AzSWAAYeZdRC7taAICQkkxqpbtc3Bqm';
@@ -15,9 +19,19 @@ const authConfig: AuthConfig = {
   responseType: 'code',
   scope: 'openid profile email offline_access api auth_time family_name given_name email_verified exp phone_number picture sub iss iat aud ' + getScopes(),
   showDebugInformation: true,
-  postLogoutRedirectUri: window.location.origin,
+  useSilentRefresh: true,
+  strictDiscoveryDocumentValidation: false, // Set to true for production
+  redirectUri: Capacitor.isNativePlatform() ? `${config.appId}://${authDomain}/capacitor/${config.appId}/callback` : window.location.origin + '/callback',
+  postLogoutRedirectUri: Capacitor.isNativePlatform() ? `${config.appId}://${authDomain}/capacitor/${config.appId}/logout` : window.location.origin,
   customQueryParams: { audience: 'https://nabarun.resourceserver.api' },
-  redirectUri: window.location.origin + '/callback'
+  async openUri(uri:string) {
+    console.log(Capacitor.isNativePlatform())
+    if (Capacitor.isNativePlatform()) {
+      await Browser.open({ url: uri });
+    }else{
+      window.location.href=uri;
+    }
+  },
 }
 
 const firebaseConfig = {
@@ -43,7 +57,7 @@ const gapiConfig ={
 };
 export const environment = {
   production: true,
-  name:'',
+  name:version,
   max_idle_time_in_sec: 10,
   api_base_url: 'https://ngonabarun.appspot.com',
   auth_config: authConfig,

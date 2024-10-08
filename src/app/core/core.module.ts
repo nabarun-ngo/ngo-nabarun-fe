@@ -19,8 +19,7 @@ import { ModalComponent } from './component/modal/modal.component';
 import { DateDiffPipe } from './pipe/date-diff.pipe';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { MatNativeDateModule } from '@angular/material/core';
-import { MAT_DATEPICKER_SCROLL_STRATEGY } from '@angular/material/datepicker';
-import { MAT_SELECT_SCROLL_STRATEGY } from '@angular/material/select';
+import { IonicModule } from '@ionic/angular';
 
 
 
@@ -46,6 +45,7 @@ import { MAT_SELECT_SCROLL_STRATEGY } from '@angular/material/select';
         allowedUrls:[environment.api_base_url]
       }
     }),
+    IonicModule.forRoot(),
     MatDialogModule,
     ApiModule.forRoot({
       rootUrl : environment.api_base_url

@@ -66,6 +66,7 @@ export class CommonService {
         type: "module",
       })
       .then((serviceWorkerRegistration) => {
+        
         getToken(this.messageing, {
           vapidKey: environment.firebase_vapidKey,
           serviceWorkerRegistration: serviceWorkerRegistration,

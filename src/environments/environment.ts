@@ -4,6 +4,10 @@
 
 import { AuthConfig } from "angular-oauth2-oidc";
 import { getScopes } from "src/app/core/constant/auth-scope.const";
+import { Capacitor } from '@capacitor/core';
+import config from '../../capacitor.config';
+import { Browser } from "@capacitor/browser";
+import { version } from "./version";
 
 const authDomain = 'dev-u2aco2py.us.auth0.com';
 const authClientId = '8DLWlfdUodZhM8nW2HRKFYL7GjBxMbGH';
@@ -14,9 +18,19 @@ const authConfig: AuthConfig = {
   responseType: 'code',
   scope: 'openid profile email offline_access api auth_time family_name given_name email_verified exp phone_number picture sub iss iat aud ' + getScopes(),
   showDebugInformation: true,
-  postLogoutRedirectUri: window.location.origin,
+  useSilentRefresh: true,
+  strictDiscoveryDocumentValidation: false, // Set to true for production
+  redirectUri: Capacitor.isNativePlatform() ? `${config.appId}://${authDomain}/capacitor/${config.appId}/callback` : window.location.origin + '/callback',
+  postLogoutRedirectUri: Capacitor.isNativePlatform() ? `${config.appId}://${authDomain}/capacitor/${config.appId}/logout` : window.location.origin,
   customQueryParams: { audience: 'https://nabarun.resourceserver.api', device:'M' },
-  redirectUri: window.location.origin + '/callback'
+  async openUri(uri:string) {
+    console.log(Capacitor.isNativePlatform())
+    if (Capacitor.isNativePlatform()) {
+      await Browser.open({ url: uri });
+    }else{
+      window.location.href=uri;
+    }
+  },
 }
 
 // Your web app's Firebase configuration
@@ -47,13 +61,14 @@ const gapiConfig ={
 
 export const environment = {
   production: false,
-  name:'DEV-WEB',
+  name:'DEV-WEB '+version,
   max_idle_time_in_sec: 10,
   api_base_url: 'http://'+window.location.hostname+':8082',
   auth_config: authConfig,
   firebase_config: firebaseConfig,
   firebase_vapidKey:'BBDkLXhO325xFYbQ9v2yDhAlxRCBwB-MERVALRhUsiPjKWNAFiR1LVxgdxB8M8VVXD6ZBMQllGFdfjmIG0CGvig',
   inactivityTimeOut: 120*60,
-  gapi_config:gapiConfig
+  gapi_config:gapiConfig,
+
 };
 

@@ -11,6 +11,8 @@ import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getMessaging, provideMessaging } from '@angular/fire/messaging';
 import { environment } from 'src/environments/environment';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { RouteReuseStrategy } from '@angular/router';
+import { IonicRouteStrategy } from '@ionic/angular';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
       registrationStrategy: 'registerWhenStable:30000'
     }),
   ],
-  providers: [BnNgIdleService],
+  providers: [BnNgIdleService,{provide:RouteReuseStrategy,useClass:IonicRouteStrategy}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
