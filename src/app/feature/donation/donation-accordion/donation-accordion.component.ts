@@ -10,6 +10,8 @@ import { AppDialog } from 'src/app/core/constant/app-dialog.const';
 import { Subject } from 'rxjs';
 import { AlertData } from 'src/app/shared/components/generic/alert/alert.model';
 import { AppAlert } from 'src/app/core/constant/app-alert.const';
+import { UserIdentityService } from 'src/app/core/service/user-identity.service';
+import { SCOPE } from 'src/app/core/constant/auth-scope.const';
 
 @Component({
   selector: 'app-donation-accordion',
@@ -17,7 +19,7 @@ import { AppAlert } from 'src/app/core/constant/app-alert.const';
   styleUrls: ['./donation-accordion.component.scss']
 })
 export class DonationAccordionComponent implements OnInit {
-
+  protected scope=SCOPE;
   @Input({ required: true }) donations!: DonationList[];
   @Input() tabName: donationTab | undefined;
   @Input() createDonation: boolean = false;
@@ -29,17 +31,19 @@ export class DonationAccordionComponent implements OnInit {
   @Input() searchValue!: string;
 
   alertList:AlertData[]=[];
+  canUpdateDonation!: boolean;
 
 
   constructor(
     private donationService: DonationService,
     private sharedDataService: SharedDataService,
     private modalService: ModalService,
-
+    protected identityService:UserIdentityService
   ) { }
 
   ngOnInit(): void {
     this.refData = this.sharedDataService.getRefData('DONATION');
+    this.canUpdateDonation=this.identityService.isAccrediatedTo(this.scope.update.donation);
   }
 
   accordionOpened(donation: DonationDetail) {

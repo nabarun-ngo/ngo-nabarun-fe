@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, RequiredValidator, Validators } from '@angular/forms';
 import { parsePhoneNumber } from 'libphonenumber-js';
-import { KeyValue, UserAddress, UserDetail, UserPhoneNumber, UserRole, UserSocialMedia } from 'src/app/core/api/models';
+import { KeyValue, RefDataType, UserAddress, UserDetail, UserPhoneNumber, UserRole, UserSocialMedia } from 'src/app/core/api/models';
 import { conditionalValidator } from 'src/app/core/service/form.service';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { OperationMode } from 'src/app/feature/member/member.const';
 import { MemberService } from 'src/app/feature/member/member.service';
+import { CommonService } from '../../services/common.service';
 
 @Component({
   selector: 'app-profile-view',
@@ -57,6 +58,7 @@ export class ProfileViewComponent implements OnInit {
   constructor(
     private sharedDataService: SharedDataService,
     private memberService: MemberService,
+    private commonService: CommonService,
 
   ) { }
 
@@ -136,20 +138,28 @@ export class ProfileViewComponent implements OnInit {
 
     this.editSelfForm.controls['country_p'].valueChanges.subscribe(s => {
       if (s == 'IN') {
-        this.memberService.fetchRefData(s).subscribe(data => this.address.presentAddressStates = data!['states'])
+        this.commonService.getRefData([RefDataType.User],{countryCode:s}).subscribe(data => this.address.presentAddressStates = data!['states'])
       }
     })
 
     this.editSelfForm.controls['country_s'].valueChanges.subscribe(s => {
       if (s == 'IN') {
-        this.memberService.fetchRefData(s).subscribe(data => this.address.permanentAddressStates = data!['states'])
+        this.commonService.getRefData([RefDataType.User],{
+          countryCode:s
+        }).subscribe(data => this.address.permanentAddressStates = data!['states'])
       }
     })
     this.editSelfForm.controls['state_p'].valueChanges.subscribe(s => {
-      this.memberService.fetchRefData(this.editSelfForm.value['country_p'], s).subscribe(data => this.address.presentAddressDistricts = data!['districts'])
+      this.commonService.getRefData([RefDataType.User],{
+        countryCode:this.editSelfForm.value['country_p'],
+        stateCode:s
+      }).subscribe(data => this.address.presentAddressDistricts = data!['districts'])
     })
     this.editSelfForm.controls['state_s'].valueChanges.subscribe(s => {
-      this.memberService.fetchRefData(this.editSelfForm.value['country_s'], s).subscribe(data => this.address.permanentAddressDistricts = data!['districts'])
+      this.commonService.getRefData([RefDataType.User],{
+        countryCode:this.editSelfForm.value['country_s'],
+        stateCode:s
+      }).subscribe(data => this.address.permanentAddressDistricts = data!['districts'])
     })
 
     this.editSelfForm.controls['presentParmanentSame'].valueChanges.subscribe(s => {
@@ -165,13 +175,19 @@ export class ProfileViewComponent implements OnInit {
 
   editSelf() {
     if (this.address.presentAddress) {
-      this.memberService.fetchRefData(this.address.presentAddress.country, this.address.presentAddress.state).subscribe(data => {
+      this.commonService.getRefData([RefDataType.User],{
+        countryCode:this.address.presentAddress.country,
+        stateCode:this.address.presentAddress.state
+      }).subscribe(data => {
         this.address.presentAddressStates = data!['states']
         this.address.presentAddressDistricts = data!['districts']
       })
     }
     if (this.address.permanentAddress) {
-      this.memberService.fetchRefData(this.address.permanentAddress.country, this.address.permanentAddress.state).subscribe(data => {
+      this.commonService.getRefData([RefDataType.User],{
+        countryCode:this.address.permanentAddress.country,
+        stateCode:this.address.permanentAddress.state
+      }).subscribe(data => {
         this.address.permanentAddressStates = data!['states']
         this.address.permanentAddressDistricts = data!['districts']
       })

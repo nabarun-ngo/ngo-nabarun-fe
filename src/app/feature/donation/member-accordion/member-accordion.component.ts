@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MemberList } from '../donation.model';
 import { UserDetail } from 'src/app/core/api/models';
 import { DonationService } from '../donation.service';
@@ -12,25 +12,34 @@ import { MemberProfileComponent } from '../../member/member-profile/member-profi
 import { ProfileViewComponent } from 'src/app/shared/components/profile-view/profile-view.component';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { MemberProfileModel } from '../../member/member-profile/member-profile.model';
+import { UserIdentityService } from 'src/app/core/service/user-identity.service';
+import { SCOPE } from 'src/app/core/constant/auth-scope.const';
 
 @Component({
   selector: 'app-member-accordion',
   templateUrl: './member-accordion.component.html',
   styleUrls: ['./member-accordion.component.scss']
 })
-export class MemberAccordionComponent {
+export class MemberAccordionComponent implements OnInit {
+  protected scope = SCOPE;
 
   @Input() members!: MemberList[];
   @Input() searchValue!: string;
   @Input() donationSerach!: SearchAndAdvancedSearchModel;
+  canCreateDonation!: boolean;
+  defaultValue = DonationDefaultValue;
 
 
   constructor(
     private donationService: DonationService,
     private modalService: ModalService,
     private sharedDataService: SharedDataService,
+    protected identityService: UserIdentityService,
+
   ) { }
-  defaultValue = DonationDefaultValue;
+  ngOnInit(): void {
+    this.canCreateDonation = this.identityService.isAccrediatedTo(this.scope.create.donation)
+  }
 
   accordionOpened(member: UserDetail) {
     this.fetchDonations(member.id!, this.defaultValue.pageNumber, this.defaultValue.pageSize);
@@ -103,7 +112,7 @@ export class MemberAccordionComponent {
       } as MemberProfileModel, {
       fullScreen: true
     });
-    modal.componentInstance.dialogClose.subscribe(d=>{
+    modal.componentInstance.dialogClose.subscribe(d => {
       modal.close()
     })
   }

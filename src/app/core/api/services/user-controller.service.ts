@@ -17,8 +17,6 @@ import { getLoggedInUserDetails } from '../fn/user-controller/get-logged-in-user
 import { GetLoggedInUserDetails$Params } from '../fn/user-controller/get-logged-in-user-details';
 import { getUserDetails } from '../fn/user-controller/get-user-details';
 import { GetUserDetails$Params } from '../fn/user-controller/get-user-details';
-import { getUserFullDetails } from '../fn/user-controller/get-user-full-details';
-import { GetUserFullDetails$Params } from '../fn/user-controller/get-user-full-details';
 import { getUserRoleHistory } from '../fn/user-controller/get-user-role-history';
 import { GetUserRoleHistory$Params } from '../fn/user-controller/get-user-role-history';
 import { getUsers } from '../fn/user-controller/get-users';
@@ -160,31 +158,6 @@ export class UserControllerService extends BaseService {
   getUserRoleHistory(params: GetUserRoleHistory$Params, context?: HttpContext): Observable<SuccessResponseString> {
     return this.getUserRoleHistory$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseString>): SuccessResponseString => r.body)
-    );
-  }
-
-  /** Path part for operation `getUserFullDetails()` */
-  static readonly GetUserFullDetailsPath = '/api/user/getUserFullDetails/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getUserFullDetails()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getUserFullDetails$Response(params: GetUserFullDetails$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseUserDetail>> {
-    return getUserFullDetails(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getUserFullDetails$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getUserFullDetails(params: GetUserFullDetails$Params, context?: HttpContext): Observable<SuccessResponseUserDetail> {
-    return this.getUserFullDetails$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseUserDetail>): SuccessResponseUserDetail => r.body)
     );
   }
 

@@ -6,10 +6,12 @@ import { DonationService } from '../donation.service';
 import { PageEvent } from '@angular/material/paginator';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { DonationList, MemberList } from '../donation.model';
-import { DonationSummary, KeyValue, PaginateDonationDetail, PaginateUserDetail } from 'src/app/core/api/models';
+import { DonationDetail, DonationSummary, KeyValue, PaginateDonationDetail, PaginateUserDetail } from 'src/app/core/api/models';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search.model';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
+import { UserIdentityService } from 'src/app/core/service/user-identity.service';
+import { SCOPE } from 'src/app/core/constant/auth-scope.const';
 
 @Component({
   selector: 'app-donation-dashboard',
@@ -17,7 +19,7 @@ import { NavigationButtonModel } from 'src/app/shared/components/generic/page-na
   styleUrls: ['./donation-dashboard.component.scss']
 })
 export class DonationDashboardComponent implements OnInit {
-
+  protected scope = SCOPE;
   protected pageNumber: number = DonationDefaultValue.pageNumber;
   protected pageSize: number = DonationDefaultValue.pageSize;
   protected pageSizeOptions: number[] = DonationDefaultValue.pageSizeOptions;
@@ -40,14 +42,22 @@ export class DonationDashboardComponent implements OnInit {
   ];
   refData!: { [key: string]: KeyValue[] };
   searchValue!: string;
+  canViewGuestDonation!: boolean;
+  canCreateDonation!: boolean;
+  canViewMemberDonation!: boolean;
   constructor(
+    protected identityService: UserIdentityService,
     private sharedDataService: SharedDataService,
     private donationService: DonationService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+
   ) { }
 
   ngOnInit(): void {
-
+    this.canViewGuestDonation = this.identityService.isAccrediatedTo(this.scope.read.donations);
+    this.canCreateDonation = this.identityService.isAccrediatedTo(this.scope.create.donation);
+    this.canViewMemberDonation = (this.identityService.isAccrediatedTo(this.scope.read.users)
+      && this.identityService.isAccrediatedTo(this.scope.read.donations));
 
     /**
      * Setting tabIndex
@@ -89,7 +99,7 @@ export class DonationDashboardComponent implements OnInit {
       this.fetchDetails();
     }
 
-    this.searchInputData=this.getSearchAdvancedSearchData(this.tabMapping[this.tabIndex])
+    this.searchInputData = this.getSearchAdvancedSearchData(this.tabMapping[this.tabIndex])
   }
 
   tabChanged(index: number) {
@@ -99,11 +109,11 @@ export class DonationDashboardComponent implements OnInit {
     this.members = [];
     this.donations = [];
     this.fetchDetails();
-    this.searchInputData=this.getSearchAdvancedSearchData(this.tabMapping[this.tabIndex])
+    this.searchInputData = this.getSearchAdvancedSearchData(this.tabMapping[this.tabIndex])
   }
 
-  protected getSearchAdvancedSearchData(tab:donationTab){
-    if(tab == 'member_donation'){
+  protected getSearchAdvancedSearchData(tab: donationTab) {
+    if (tab == 'member_donation') {
       return {
         normalSearchPlaceHolder: 'Search Member Name, Email, Mobile Number',
         advancedSearch: {
@@ -142,7 +152,7 @@ export class DonationDashboardComponent implements OnInit {
           ]
         }
       } as SearchAndAdvancedSearchModel;
-    }else{
+    } else {
       return {
         normalSearchPlaceHolder: 'Search Donation Number, Donor Name',
         advancedSearch: {
@@ -213,18 +223,17 @@ export class DonationDashboardComponent implements OnInit {
             },
           ]
         }
-      }as SearchAndAdvancedSearchModel;
+      } as SearchAndAdvancedSearchModel;
     }
   }
 
-  private fetchDetails() {
+  private async fetchDetails() {
     switch (this.tabMapping[this.tabIndex]) {
       case 'self_donation': {
-        this.donationService.fetchMyDonations(this.pageNumber, this.pageSize).subscribe(data => {
-          data.donations?.content?.forEach(donation => this.donations.push({ donation: donation, action: 'view', eventSubject: new Subject<any>() }))
-          this.itemLengthSubs.next(data.donations?.totalSize!);
-          this.mySummary = data.summary;
-        });
+        let data = await this.donationService.fetchMyDonations(this.pageNumber, this.pageSize);
+        data.donations?.content?.forEach((donation) => this.donations.push({ donation: donation, action: 'view', eventSubject: new Subject<any>() }))
+        this.itemLengthSubs.next(data.donations?.totalSize!);
+        this.mySummary = data.summary;
         break;
       }
       case 'guest_donation': {
@@ -255,13 +264,13 @@ export class DonationDashboardComponent implements OnInit {
     this.fetchDetails();
   }
 
-  onSearch($event: { advancedSearch: boolean; reset: boolean; value: any; }) {
+  async onSearch($event: { advancedSearch: boolean; reset: boolean; value: any; }) {
     if ($event.advancedSearch && !$event.reset) {
-      if(this.tabMapping[this.tabIndex] == 'member_donation'){
-        this.donationService.fetchMembers(this.pageNumber, this.pageSize,{
-          firstName:$event.value.firstName,
-          lastName:$event.value.lastName,
-          status:$event.value.status
+      if (this.tabMapping[this.tabIndex] == 'member_donation') {
+        this.donationService.fetchMembers(this.pageNumber, this.pageSize, {
+          firstName: $event.value.firstName,
+          lastName: $event.value.lastName,
+          status: $event.value.status
         }).subscribe(members => {
           this.members = [];
           members?.content?.forEach(member => this.members.push({
@@ -269,7 +278,7 @@ export class DonationDashboardComponent implements OnInit {
           }))
           this.itemLengthSubs.next(members?.totalSize!);
         });
-      }else{
+      } else {
         this.donationService.advancedSearch({
           donationId: $event.value.id,
           donationStatus: $event.value.status,
@@ -278,14 +287,14 @@ export class DonationDashboardComponent implements OnInit {
           endDate: $event.value.endDate,
           donorName: $event.value.donorName,
           guest: this.tabMapping[this.tabIndex] == 'guest_donation',
-          donorId : this.tabMapping[this.tabIndex] == 'self_donation' ? this.donationService.getMyId(): undefined
+          donorId: this.tabMapping[this.tabIndex] == 'self_donation' ? await this.donationService.getMyId() : undefined
         }).subscribe(donations => {
           this.donations = []
           donations?.content?.forEach(donation => this.donations.push({ donation: donation, action: 'view', eventSubject: new Subject<any>() }))
           this.itemLengthSubs.next(donations?.totalSize!);
         })
       }
-      
+
     }
     else if ($event.advancedSearch && $event.reset) {
       this.fetchDetails()

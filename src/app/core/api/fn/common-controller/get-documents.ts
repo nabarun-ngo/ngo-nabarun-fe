@@ -8,19 +8,19 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseUserDetail } from '../../models/success-response-user-detail';
+import { SuccessResponseListDocumentDetail } from '../../models/success-response-list-document-detail';
 
-export interface GetUserFullDetails$Params {
+export interface GetDocuments$Params {
   id: string;
-  idType?: 'EMAIL' | 'AUTH_USER_ID' | 'ID';
+  type: 'DONATION' | 'EVENT' | 'NOTICE' | 'USER' | 'PROFILE_PHOTO' | 'EVENT_COVER' | 'REQUEST';
   'Correlation-Id'?: string;
 }
 
-export function getUserFullDetails(http: HttpClient, rootUrl: string, params: GetUserFullDetails$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseUserDetail>> {
-  const rb = new RequestBuilder(rootUrl, getUserFullDetails.PATH, 'get');
+export function getDocuments(http: HttpClient, rootUrl: string, params: GetDocuments$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseListDocumentDetail>> {
+  const rb = new RequestBuilder(rootUrl, getDocuments.PATH, 'get');
   if (params) {
     rb.path('id', params.id, {});
-    rb.query('idType', params.idType, {});
+    rb.query('type', params.type, {});
     rb.header('Correlation-Id', params['Correlation-Id'], {});
   }
 
@@ -29,9 +29,9 @@ export function getUserFullDetails(http: HttpClient, rootUrl: string, params: Ge
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseUserDetail>;
+      return r as StrictHttpResponse<SuccessResponseListDocumentDetail>;
     })
   );
 }
 
-getUserFullDetails.PATH = '/api/user/getUserFullDetails/{id}';
+getDocuments.PATH = '/api/common/getDocuments/{id}';

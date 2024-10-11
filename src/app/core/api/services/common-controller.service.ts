@@ -17,6 +17,8 @@ import { deleteDocument } from '../fn/common-controller/delete-document';
 import { DeleteDocument$Params } from '../fn/common-controller/delete-document';
 import { downloadDocument } from '../fn/common-controller/download-document';
 import { DownloadDocument$Params } from '../fn/common-controller/download-document';
+import { getDocuments } from '../fn/common-controller/get-documents';
+import { GetDocuments$Params } from '../fn/common-controller/get-documents';
 import { getNotification } from '../fn/common-controller/get-notification';
 import { GetNotification$Params } from '../fn/common-controller/get-notification';
 import { getReferenceData } from '../fn/common-controller/get-reference-data';
@@ -26,6 +28,7 @@ import { GetReferenceField$Params } from '../fn/common-controller/get-reference-
 import { manageNotification } from '../fn/common-controller/manage-notification';
 import { ManageNotification$Params } from '../fn/common-controller/manage-notification';
 import { SuccessResponseListAdditionalField } from '../models/success-response-list-additional-field';
+import { SuccessResponseListDocumentDetail } from '../models/success-response-list-document-detail';
 import { SuccessResponseMapStringListKeyValue } from '../models/success-response-map-string-list-key-value';
 import { SuccessResponsePaginateMapStringString } from '../models/success-response-paginate-map-string-string';
 import { SuccessResponseVoid } from '../models/success-response-void';
@@ -212,6 +215,31 @@ export class CommonControllerService extends BaseService {
   getNotification(params?: GetNotification$Params, context?: HttpContext): Observable<SuccessResponsePaginateMapStringString> {
     return this.getNotification$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponsePaginateMapStringString>): SuccessResponsePaginateMapStringString => r.body)
+    );
+  }
+
+  /** Path part for operation `getDocuments()` */
+  static readonly GetDocumentsPath = '/api/common/getDocuments/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getDocuments()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDocuments$Response(params: GetDocuments$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseListDocumentDetail>> {
+    return getDocuments(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getDocuments$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDocuments(params: GetDocuments$Params, context?: HttpContext): Observable<SuccessResponseListDocumentDetail> {
+    return this.getDocuments$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseListDocumentDetail>): SuccessResponseListDocumentDetail => r.body)
     );
   }
 

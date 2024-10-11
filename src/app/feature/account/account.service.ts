@@ -41,10 +41,6 @@ export class AccountService {
     }).pipe(map(d => d.responsePayload));
   }
 
-  fetchRefData() {
-    return this.commonController.getReferenceData({ names: [RefDataType.Account] }).pipe(map(d => d.responsePayload));
-  }
-
   updateAccountDetail(id: string, value: any) {
     return this.accountController.updateAccount({
       id:id,

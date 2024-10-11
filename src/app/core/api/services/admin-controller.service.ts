@@ -15,38 +15,13 @@ import { generateApiKey } from '../fn/admin-controller/generate-api-key';
 import { GenerateApiKey$Params } from '../fn/admin-controller/generate-api-key';
 import { SuccessResponseMapStringString } from '../models/success-response-map-string-string';
 import { SuccessResponseVoid } from '../models/success-response-void';
-import { sync } from '../fn/admin-controller/sync';
-import { Sync$Params } from '../fn/admin-controller/sync';
+import { triggerCron } from '../fn/admin-controller/trigger-cron';
+import { TriggerCron$Params } from '../fn/admin-controller/trigger-cron';
 
 @Injectable({ providedIn: 'root' })
 export class AdminControllerService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
-  }
-
-  /** Path part for operation `sync()` */
-  static readonly SyncPath = '/api/admin/sync';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `sync()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  sync$Response(params: Sync$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
-    return sync(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `sync$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  sync(params: Sync$Params, context?: HttpContext): Observable<SuccessResponseVoid> {
-    return this.sync$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseVoid>): SuccessResponseVoid => r.body)
-    );
   }
 
   /** Path part for operation `generateApiKey()` */
@@ -71,6 +46,31 @@ export class AdminControllerService extends BaseService {
   generateApiKey(params: GenerateApiKey$Params, context?: HttpContext): Observable<SuccessResponseMapStringString> {
     return this.generateApiKey$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseMapStringString>): SuccessResponseMapStringString => r.body)
+    );
+  }
+
+  /** Path part for operation `triggerCron()` */
+  static readonly TriggerCronPath = '/api/admin/cron/trigger';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `triggerCron()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  triggerCron$Response(params: TriggerCron$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
+    return triggerCron(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `triggerCron$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  triggerCron(params: TriggerCron$Params, context?: HttpContext): Observable<SuccessResponseVoid> {
+    return this.triggerCron$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseVoid>): SuccessResponseVoid => r.body)
     );
   }
 

@@ -3,6 +3,7 @@ import { AccountService } from './account.service';
 import { inject } from '@angular/core';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { AccountDefaultValue, accountTab, TransactionDefaultValue } from './account.const';
+import { RefDataType } from 'src/app/core/api/models';
 
 export const accountDashboardResolver: ResolveFn<any> = (route, state) => {
   let tab = (route.data['tab'] || AccountDefaultValue.tabName) as accountTab;
@@ -20,5 +21,5 @@ export const accountTransactionResolver: ResolveFn<any> = (route, state) => {
 };
 
 export const accountRefDataResolver: ResolveFn<any> = (route, state) => {
-  return inject(AccountService).fetchRefData();
+  return inject(CommonService).getRefData([RefDataType.Account]);
 };

@@ -1,10 +1,9 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { DonationDefaultValue, DonationRefData, donationTab } from '../donation.const';
 import { DonationService } from '../donation.service';
 import { PageEvent } from '@angular/material/paginator';
-import { DonationList, MemberList } from '../donation.model';
 import { DonationDetail, DonationSummary, KeyValue, PaginateDonationDetail, PaginateUserDetail, UserDetail } from 'src/app/core/api/models';
 import { Accordion } from 'src/app/shared/components/generic/accordion-list/accordion';
 import { AccordionCell, AccordionButton } from 'src/app/shared/components/generic/accordion-list/accordion-list.model';
@@ -51,7 +50,7 @@ export class DonationDashboardNewComponent extends Accordion<DonationDetail | Us
       }
     })
 
-   // this.sharedDataService.setPageName(this.defaultValue.pageTitle + " kk");
+    // this.sharedDataService.setPageName(this.defaultValue.pageTitle + " kk");
 
     if (this.route.snapshot.data['ref_data']) {
       this.refData = this.route.snapshot.data['ref_data'];
@@ -63,7 +62,7 @@ export class DonationDashboardNewComponent extends Accordion<DonationDetail | Us
     this.setAccordionHeader()
     if (this.route.snapshot.data['data'] && this.tabMapping[this.tabIndex] == 'member_donation') {
       let data = this.route.snapshot.data['data'] as PaginateUserDetail;
-      this.userList=data.content!;
+      this.userList = data.content!;
       this.setContent(data.content!, data.totalSize);
     }
     else if (this.route.snapshot.data['data'] && this.tabMapping[this.tabIndex] == 'self_donation') {
@@ -231,7 +230,7 @@ export class DonationDashboardNewComponent extends Accordion<DonationDetail | Us
 
   }
   protected override prepareDetailedView(data: DonationDetail | UserDetail, options?: { [key: string]: any; }): DetailedView[] {
-    if (this.tabMapping[this.tabIndex] == 'member_donation'){
+    if (this.tabMapping[this.tabIndex] == 'member_donation') {
       let user = data as UserDetail;
       return [
         {
@@ -297,7 +296,7 @@ export class DonationDashboardNewComponent extends Accordion<DonationDetail | Us
           },
         ]
       },
-      this.showDonationDetail(donation)   
+      this.showDonationDetail(donation)
     ];
   }
   protected override prepareDefaultButtons(data: DonationDetail | UserDetail, options?: { [key: string]: any; }): AccordionButton[] {
@@ -322,8 +321,8 @@ export class DonationDashboardNewComponent extends Accordion<DonationDetail | Us
     }
   }
   accordionOpened($event: { rowIndex: number; }) {
-    if(this.tabMapping[this.tabIndex] == 'member_donation'){
-      let user=this.userList[$event.rowIndex];
+    if (this.tabMapping[this.tabIndex] == 'member_donation') {
+      let user = this.userList[$event.rowIndex];
       // this.accordionList.contents[$event.rowIndex].detailed.push({
       //   section_name: 'Donation Detail',
       //   section_type: 'key_value',
@@ -337,11 +336,11 @@ export class DonationDashboardNewComponent extends Accordion<DonationDetail | Us
       //     },
       //   ]
       // });
-      
-      this.donationService.fetchUserDonations(user.id!).subscribe(d=>{
-        let index_1 =this.getAccordionList().contents[$event.rowIndex].detailed.findIndex(f=>f.section_html_id == 'donation_summary');
-        
-        d.donations?.content?.forEach(g=>{
+
+      this.donationService.fetchUserDonations(user.id!).subscribe(d => {
+        let index_1 = this.getAccordionList().contents[$event.rowIndex].detailed.findIndex(f => f.section_html_id == 'donation_summary');
+
+        d.donations?.content?.forEach(g => {
           //this.accordionList.contents[$event.rowIndex].detailed.push(this.showDonationDetail(g));
         })
       });
@@ -349,7 +348,7 @@ export class DonationDashboardNewComponent extends Accordion<DonationDetail | Us
   }
 
 
-  showDonationDetail(donation:DonationDetail){
+  showDonationDetail(donation: DonationDetail) {
     return {
       section_name: 'Donation Detail',
       section_type: 'key_value',
@@ -392,7 +391,7 @@ export class DonationDashboardNewComponent extends Accordion<DonationDetail | Us
           show_display_value: true,
           ref_data_section: this.constants.refDataKey.status,
           editable: true,
-          form_control_name:'status',
+          form_control_name: 'status',
           form_input: {
             inputType: '',
             tagName: 'select',
@@ -410,7 +409,7 @@ export class DonationDashboardNewComponent extends Accordion<DonationDetail | Us
           field_html_id: 'donation_paid_date',
           hide_field: !donation.paidOn && donation.status! != this.constants.enum.status.Paid,
           editable: true,
-          form_control_name:'paidOn',
+          form_control_name: 'paidOn',
           form_input: {
             inputType: 'date',
             tagName: 'input',
@@ -423,7 +422,7 @@ export class DonationDashboardNewComponent extends Accordion<DonationDetail | Us
           show_display_value: true,
           ref_data_section: this.constants.refDataKey.paymentMethod,
           editable: true,
-          form_control_name:'paymentMethod',
+          form_control_name: 'paymentMethod',
           form_input: {
             inputType: '',
             tagName: 'select',
@@ -437,7 +436,7 @@ export class DonationDashboardNewComponent extends Accordion<DonationDetail | Us
           show_display_value: true,
           ref_data_section: this.constants.refDataKey.paymentMethod,
           editable: true,
-          form_control_name:'paidUsingUPI',
+          form_control_name: 'paidUsingUPI',
           form_input: {
             inputType: '',
             tagName: 'select',
@@ -465,7 +464,7 @@ export class DonationDashboardNewComponent extends Accordion<DonationDetail | Us
           field_value: donation.remarks!,
           field_html_id: 'donation_remarks',
           editable: true,
-          form_control_name:'remarks',
+          form_control_name: 'remarks',
           form_input: {
             inputType: 'text',
             tagName: 'textarea',
@@ -476,7 +475,7 @@ export class DonationDashboardNewComponent extends Accordion<DonationDetail | Us
           field_name: 'Reason for cancel',
           field_value: donation.cancelletionReason!,
           field_html_id: 'donation_RFC',
-          form_control_name:'cancelletionReason',
+          form_control_name: 'cancelletionReason',
           editable: true,
           form_input: {
             inputType: 'text',
@@ -489,7 +488,7 @@ export class DonationDashboardNewComponent extends Accordion<DonationDetail | Us
           field_value: donation.laterPaymentReason!,
           field_html_id: 'donation_RPL',
           editable: true,
-          form_control_name:'laterPaymentReason',
+          form_control_name: 'laterPaymentReason',
           form_input: {
             inputType: 'text',
             tagName: 'textarea',
@@ -501,13 +500,13 @@ export class DonationDashboardNewComponent extends Accordion<DonationDetail | Us
           field_value: donation.paymentFailureDetail!,
           field_html_id: 'donation_PFD',
           editable: true,
-          form_control_name:'paymentFailureDetail',
+          form_control_name: 'paymentFailureDetail',
           form_input: {
             inputType: 'text',
             tagName: 'textarea',
           },
           hide_field: !donation.paymentFailureDetail
-        }, 
+        },
       ]
     } as DetailedView;
   }
@@ -540,14 +539,13 @@ export class DonationDashboardNewComponent extends Accordion<DonationDetail | Us
     this.fetchDetails();
   }
 
-  private fetchDetails() {
+  private async fetchDetails() {
     this.setAccordionHeader()
     switch (this.tabMapping[this.tabIndex]) {
       case 'self_donation': {
-        this.donationService.fetchMyDonations(this.pageNumber, this.pageSize).subscribe(data => {
-          this.setContent(data.donations?.content!, data.donations?.totalSize);
-          this.mySummary = data.summary;
-        });
+        let data = await this.donationService.fetchMyDonations(this.pageNumber, this.pageSize);
+        this.setContent(data.donations?.content!, data.donations?.totalSize);
+        this.mySummary = data.summary;
         break;
       }
       case 'guest_donation': {
@@ -558,7 +556,7 @@ export class DonationDashboardNewComponent extends Accordion<DonationDetail | Us
       }
       case 'member_donation': {
         this.donationService.fetchMembers(this.pageNumber, this.pageSize).subscribe(members => {
-          this.userList=members?.content!;
+          this.userList = members?.content!;
           this.setContent(members?.content!, members?.totalSize);
         });
         break;

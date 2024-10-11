@@ -14,6 +14,8 @@ import { Accordion } from 'src/app/shared/components/generic/accordion-list/acco
 import { filter, map, pairwise, startWith } from 'rxjs';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
+import { SCOPE } from 'src/app/core/constant/auth-scope.const';
+import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 @Component({
   selector: 'app-account-dashboard',
   templateUrl: './account-dashboard.component.html',
@@ -21,6 +23,7 @@ import { NavigationButtonModel } from 'src/app/shared/components/generic/page-na
 })
 export class AccountDashboardComponent extends Accordion<AccountDetail> implements OnInit {
 
+  protected scope = SCOPE;
   protected accountList!: PaginateAccountDetail;
   protected defaultValue = AccountDefaultValue;
   protected tabIndex!: number;
@@ -35,18 +38,30 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
       routerLink: AppRoute.secured_dashboard_page.url
     }
   ];
+  canViewAccounts!: boolean;
+  canCreateAccount!: boolean;
+  canUpdateAccount!: boolean;
+  canViewTransactions!: boolean;
+
   constructor(
     private sharedDataService: SharedDataService,
     private route: ActivatedRoute,
     private accountService: AccountService,
     private el: ElementRef,
     private router: Router,
+    private identityService: UserIdentityService,
   ) {
     super();
     super.init(this.defaultValue.pageNumber, this.defaultValue.pageSize, this.defaultValue.pageSizeOptions)
   }
 
   ngOnInit(): void {
+    this.canViewAccounts = this.identityService.isAccrediatedTo(this.scope.read.accounts)
+    this.canCreateAccount = this.identityService.isAccrediatedTo(this.scope.create.account)
+    this.canUpdateAccount = this.identityService.isAccrediatedTo(this.scope.update.account)
+    this.canViewTransactions = this.identityService.isAccrediatedTo(this.scope.read.transactions)
+
+
     /**
      * Setting page name
      */
@@ -422,7 +437,7 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
               editable: true,
               field_html_id: 'transferTo',
               form_input: {
-                html_id:'transferTo_inp',
+                html_id: 'transferTo_inp',
                 inputType: '',
                 tagName: 'select',
                 selectList: []
@@ -436,7 +451,7 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
               editable: true,
               field_html_id: 'amount',
               form_input: {
-                html_id:'amount_i',
+                html_id: 'amount_i',
                 inputType: 'number',
                 tagName: 'input',
                 placeholder: 'Ex. 500'
@@ -450,7 +465,7 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
               editable: true,
               field_html_id: 'description',
               form_input: {
-                html_id:'description_i',
+                html_id: 'description_i',
                 inputType: 'text',
                 tagName: 'input',
                 placeholder: 'Ex. Monthly donation'
@@ -494,16 +509,20 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
         }
       ]
     }
-    return [
-      {
+    let buttons = []
+    if (this.canViewTransactions) {
+      buttons.push({
         button_id: 'VIEW_TXN',
         button_name: 'View Transactions'
-      },
-      {
+      })
+    }
+    if (this.canUpdateAccount) {
+      buttons.push({
         button_id: 'UPDATE_ACCOUNT',
         button_name: 'Update Account Detail'
-      }
-    ];
+      })
+    }
+    return buttons;
   }
 
   override handlePageEvent($event: PageEvent): void {
@@ -530,7 +549,7 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
     this.tabIndex = index;
     this.pageNumber = this.defaultValue.pageNumber;
     this.pageSize = this.defaultValue.pageSize;
-    this.hideForm(0,true);
+    this.hideForm(0, true);
     this.setAccordionHeader();
     this.fetchDetails();
 
@@ -541,7 +560,7 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
   createAccount() {
     this.showCreateForm();
 
-    let account_form = this.getSectionForm('account_detail',0,true);
+    let account_form = this.getSectionForm('account_detail', 0, true);
     account_form?.valueChanges.pipe(filterFormChange(account_form.value))
       .subscribe((val) => {
         console.log(val)
@@ -551,7 +570,7 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
           //   return m;
           // })
           this.accountService.fetchUsers(val['accountType']).subscribe(data => {
-            let selectList = this.getSectionField('account_detail','account_holder',0,true)?.form_input?.selectList;
+            let selectList = this.getSectionField('account_detail', 'account_holder', 0, true)?.form_input?.selectList;
             selectList?.splice(0);
             data?.content?.forEach(element => {
               let val = { key: element.id, displayValue: element.fullName } as KeyValue;
@@ -621,10 +640,10 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
         }
         break;
       case 'CREATE':
-        let accountForm = this.getSectionForm('account_detail',0,true);
+        let accountForm = this.getSectionForm('account_detail', 0, true);
         if (accountForm?.valid) {
           this.accountService.createAccount(accountForm.value).subscribe(d => {
-            this.hideForm(0,true);
+            this.hideForm(0, true);
             this.fetchDetails()
           })
 
@@ -637,7 +656,7 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
         this.hideForm($event.rowIndex)
         break;
       case 'CANCEL_CREATE':
-        this.hideForm(0,true);
+        this.hideForm(0, true);
         break;
       case 'VIEW_TXN':
         let account = this.accountList.content![$event.rowIndex];
@@ -653,7 +672,7 @@ export class AccountDashboardComponent extends Accordion<AccountDetail> implemen
     //let account1 = this.accountList.content![$event.rowIndex];
     this.showForm(rowIndex, ['transfer_amt']);
     this.accountService.fetchAccounts(this.pageNumber, this.pageSize).subscribe(data => {
-      let selectList = this.getSectionField('transfer_amt','transferTo',rowIndex)?.form_input?.selectList;
+      let selectList = this.getSectionField('transfer_amt', 'transferTo', rowIndex)?.form_input?.selectList;
       selectList?.splice(0);
       data?.content?.forEach(element => {
         let val = { key: element.id, displayValue: element.id! + '  (' + element.accountHolderName + ')' } as KeyValue;

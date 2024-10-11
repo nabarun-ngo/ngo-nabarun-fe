@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, combineLatest, forkJoin, map } from 'rxjs';
+import { Observable, combineLatest, firstValueFrom, forkJoin, map } from 'rxjs';
 import { DocumentDetailUpload, DonationDetail, DonationDetailFilter, DonationStatus, DonationType, RefDataType, UserDetailFilter } from 'src/app/core/api/models';
 import { AccountControllerService, CommonControllerService, DonationControllerService, EventControllerService, UserControllerService } from 'src/app/core/api/services';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
@@ -20,12 +20,12 @@ export class DonationService {
   ) { }
 
 
-  fetchMyDonations(pageIndex: number = 0, pageSize: number = 100) {
-    let id = this.identityService.getUser().profile_id;
-    return combineLatest({
+  async fetchMyDonations(pageIndex: number = 0, pageSize: number = 100) {
+    let id =  (await this.identityService.getUser()).profile_id;
+    return firstValueFrom(combineLatest({
       donations: this.donationController.getLoggedInUserDonations({ pageIndex: pageIndex, pageSize: pageSize }).pipe(map(d => d.responsePayload)),
       summary: this.donationController.getDonationSummary({ id: id, includeOutstandingMonths: true, includePayableAccount: true }).pipe(map(d => d.responsePayload)),
-    })
+    }))
   }
 
   fetchGuestDonations(pageIndex: number = 0, pageSize: number = 100) {
@@ -52,22 +52,22 @@ export class DonationService {
 
   fetchUserDonations(id: string, pageIndex: number = 0, pageSize: number = 100) {
     return combineLatest({
-      donations: this.donationController.getUserDonations({ id: id, pageIndex: pageIndex, pageSize: pageSize }).pipe(map(d => d.responsePayload)),
+      donations: this.donationController.getDonations({ filter:{ donorId: id }, pageIndex: pageIndex, pageSize: pageSize }).pipe(map(d => d.responsePayload)),
       summary: this.donationController.getDonationSummary({ id: id, includeOutstandingMonths: true }).pipe(map(d => d.responsePayload))
     })
   }
 
   fetchDocuments(id: string) {
-    return this.donationController.getDonationDocuments({ id: id }).pipe(map(m => m.responsePayload));
+    return this.commonController.getDocuments({ id: id , type:'DONATION'}).pipe(map(m => m.responsePayload));
   }
 
   fetchEvents() {
     return this.eventController.getSocialEvents().pipe(map(m => m.responsePayload));
   }
 
-  fetchRefData(type?:DonationType,status?:DonationStatus) {
-    return this.commonController.getReferenceData({ names: [RefDataType.Donation,RefDataType.User], currentDonationStatus:status,donationType:type}).pipe(map(d => d.responsePayload));
-  }
+  // fetchRefData(type?:DonationType,status?:DonationStatus) {
+  //   return this.commonController.getReferenceData({ names: [RefDataType.Donation,RefDataType.User], currentDonationStatus:status,donationType:type}).pipe(map(d => d.responsePayload));
+  // }
 
   updateDonation(id: string, details: DonationDetail) {
     return this.donationController.updateDonation({ id: id, body: details }).pipe(map(d => d.responsePayload));
@@ -128,8 +128,8 @@ export class DonationService {
     return this.donationController.getDonations({ filter:filterOps}).pipe(map(d => d.responsePayload));
   }
 
-  getMyId(){
-    return this.identityService.getUser().profile_id;
+  async getMyId(){
+    return (await this.identityService.getUser()).profile_id;
   }
   
 }

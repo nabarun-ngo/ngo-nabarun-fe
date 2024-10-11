@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { deleteToken, getToken, Messaging, onMessage } from '@angular/fire/messaging';
 import { SpinnerVisibilityService } from 'ng-http-loader';
-import { map, Subject } from 'rxjs';
-import { DonationStatus, DonationType } from 'src/app/core/api/models';
+import { map, Observable, shareReplay, Subject } from 'rxjs';
+import { DonationStatus, DonationType, KeyValue, RefDataType, RequestType } from 'src/app/core/api/models';
 import { CommonControllerService, UserControllerService } from 'src/app/core/api/services';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 import { environment } from 'src/environments/environment';
@@ -11,21 +11,44 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class CommonService {
+  cachedObservable!: Observable<{
+    [key: string]: KeyValue[];
+  }>;
 
   constructor(
-  private commonController:CommonControllerService,
-  private messageing: Messaging,
-  private spinner: SpinnerVisibilityService,
-  private userDetail:UserIdentityService
-) { }
+    private commonController: CommonControllerService,
+    private messageing: Messaging,
+    private userDetail: UserIdentityService
+  ) { }
 
-  getRefData(options:{names?:any[],donationStatus?:DonationStatus,donationType?:DonationType}){
-    return this.commonController.getReferenceData({
-      names:options.names!,
-      currentDonationStatus:options.donationStatus,
-      donationType:options.donationType
-    }).pipe(map(m=>m.responsePayload));
+  getRefData(names?: RefDataType[], options?: {
+    donationStatus?: DonationStatus,
+    donationType?: DonationType,
+    countryCode?:string,
+    stateCode?:string,
+    workflowType?:RequestType
+  }) {
+    if (options) {
+      return this.commonController.getReferenceData({
+        names: names!,
+        currentDonationStatus: options.donationStatus,
+        donationType: options.donationType,
+        countryCode: options.countryCode,
+        stateCode:options.stateCode,
+        workflowType:options.workflowType
+      }).pipe(map(m => m.responsePayload));
+    }
+    if (!this.cachedObservable) {
+      this.cachedObservable = this.commonController.getReferenceData().pipe(
+        map(m => m.responsePayload!),
+        shareReplay(1) // Share the response with all subscribers
+      );
+    }
+    return this.cachedObservable;
+
   }
+
+
 
 
   private notificationSub = new Subject<{ [key: string]: string; }>();
@@ -34,7 +57,7 @@ export class CommonService {
   //   src: ['/assets/microsoft_teams.mp3']
   // });
 
- 
+
 
   requestPermission() {
     Notification.requestPermission().then(
@@ -43,12 +66,12 @@ export class CommonService {
           console.log("Granted");
           this.sendToken();
           onMessage(this.messageing, (message) => {
-            this.notificationSub.next(message.data!); 
+            this.notificationSub.next(message.data!);
             //console.log("1",message.data);
             //this.sound.play();
           });
           new BroadcastChannel('notification_data').onmessage = (item) => {
-            this.notificationSub.next(item.data); 
+            this.notificationSub.next(item.data);
             //console.log("2",item.data);
             //this.sound.play();
           };
@@ -61,21 +84,20 @@ export class CommonService {
 
   sendToken() {
     navigator.serviceWorker
-    //.getRegistration()
-      .register(environment.production ? "./firebase-messaging-sw-prod.js" :"./firebase-messaging-sw.js", {
+      //.getRegistration()
+      .register(environment.production ? "./firebase-messaging-sw-prod.js" : "./firebase-messaging-sw.js", {
         type: "module",
       })
       .then((serviceWorkerRegistration) => {
-        
+
         getToken(this.messageing, {
           vapidKey: environment.firebase_vapidKey,
           serviceWorkerRegistration: serviceWorkerRegistration,
-        }).then((token) => {
+        }).then(async (token) => {
           console.log('fcm token', token);
-          this.commonController.manageNotification({ action: 'SAVE_TOKEN_AND_GET_COUNTS', body: { 'token': token,'profile_id':this.userDetail.getUser().profile_id } }).subscribe(s=>{
+          this.commonController.manageNotification({ action: 'SAVE_TOKEN_AND_GET_COUNTS', body: { 'token': token, 'profile_id': (await this.userDetail.getUser()).profile_id } }).subscribe(s => {
 
           })
-          this.spinner.hide()
         });
       });
   }
@@ -89,8 +111,8 @@ export class CommonService {
     return this.commonController.getNotification({ pageIndex: 0, pageSize: 5 }).pipe(map(m => m.responsePayload))
   }
 
-  clearCache(names:string[]) {
-    return this.commonController.clearCache({body:names}).pipe(map(m => m.responsePayload))
+  clearCache(names: string[]) {
+    return this.commonController.clearCache({ body: names }).pipe(map(m => m.responsePayload))
   }
 
 }

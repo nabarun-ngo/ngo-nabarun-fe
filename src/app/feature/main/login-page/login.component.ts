@@ -30,12 +30,12 @@ export class LoginComponent implements OnInit,AfterViewInit {
     el?.addEventListener('click',(e:Event)=>{
       let stateData=this.location.getState() as {state:string};
       console.log(stateData)
-      window.location.href = environment.auth_config.issuer+'u/reset-password/request/Username-Password-Authentication?state='+stateData.state
+      //window.location.href = environment.auth_config.issuer+'u/reset-password/request/Username-Password-Authentication?state='+stateData.state
     })
   }
   ngOnInit(): void {
 
-    this.sharedDataService.setAuthenticated(this.identityService.isUserLoggedIn());
+    //this.sharedDataService.setAuthenticated(await this.identityService.isUserLoggedIn());
     let stateData=this.location.getState() as {isError:boolean;description:string}
     console.log('state data',stateData)
     if(stateData && stateData.isError){

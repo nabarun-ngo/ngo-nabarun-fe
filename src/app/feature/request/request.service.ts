@@ -17,9 +17,9 @@ export class RequestService {
     private userController:UserControllerService,
   ) { }
 
-  findRequestRefData(workflowType?: string) {
-    return this.commonController.getReferenceData({ names: [RefDataType.Workflow], workflowType: workflowType as any }).pipe(map(d => d.responsePayload));
-  }
+  // findRequestRefData(workflowType?: string) {
+  //   return this.commonController.getReferenceData({ names: [RefDataType.Workflow], workflowType: workflowType as any }).pipe(map(d => d.responsePayload));
+  // }
 
   getUsers() {
     return this.userController.getUsers({filter:{}}).pipe(map(d => d.responsePayload));

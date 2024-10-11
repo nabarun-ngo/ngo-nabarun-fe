@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 // import { Messaging, getToken, onMessage } from '@angular/fire/messaging';
 import { BehaviorSubject } from 'rxjs';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
+import { SCOPE } from 'src/app/core/constant/auth-scope.const';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 import { getGreetings } from 'src/app/core/service/utilities.service';
@@ -15,6 +16,7 @@ import { CommonService } from 'src/app/shared/services/common.service';
 })
 export class SecuredDashboardComponent implements OnInit {
   protected route = AppRoute;
+  protected scope = SCOPE;
   greetings!: string;
   static tileList: TileInfo[]=[];
   constructor(
@@ -26,8 +28,8 @@ export class SecuredDashboardComponent implements OnInit {
 
   get tiles(){return SecuredDashboardComponent.tileList;}
 
-  ngOnInit(): void {
-    let user = this.identityService.getUser();
+  async ngOnInit(): Promise<void> {
+    let user = await this.identityService.getUser();
     this.greetings = getGreetings(user.given_name || user.nickname || user.name);
     this.sharedDataService.setPageName("WELCOME TO NABARUN'S SECURED DASHBOARD");
     if(SecuredDashboardComponent.tileList.length == 0){

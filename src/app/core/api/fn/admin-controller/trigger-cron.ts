@@ -8,17 +8,17 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseListDocumentDetail } from '../../models/success-response-list-document-detail';
+import { SuccessResponseVoid } from '../../models/success-response-void';
 
-export interface GetNoticeDocuments$Params {
-  id: string;
+export interface TriggerCron$Params {
+  trigger: Array<'DONATION_REMINDER_EMAIL' | 'TASK_REMINDER_EMAIL' | 'CREATE_DONATION' | 'UPDATE_DONATION' | 'SYNC_USERS'>;
   'Correlation-Id'?: string;
 }
 
-export function getNoticeDocuments(http: HttpClient, rootUrl: string, params: GetNoticeDocuments$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseListDocumentDetail>> {
-  const rb = new RequestBuilder(rootUrl, getNoticeDocuments.PATH, 'get');
+export function triggerCron(http: HttpClient, rootUrl: string, params: TriggerCron$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
+  const rb = new RequestBuilder(rootUrl, triggerCron.PATH, 'get');
   if (params) {
-    rb.path('id', params.id, {});
+    rb.query('trigger', params.trigger, {});
     rb.header('Correlation-Id', params['Correlation-Id'], {});
   }
 
@@ -27,9 +27,9 @@ export function getNoticeDocuments(http: HttpClient, rootUrl: string, params: Ge
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseListDocumentDetail>;
+      return r as StrictHttpResponse<SuccessResponseVoid>;
     })
   );
 }
 
-getNoticeDocuments.PATH = '/api/notice/getNoticeDocuments/{id}';
+triggerCron.PATH = '/api/admin/cron/trigger';

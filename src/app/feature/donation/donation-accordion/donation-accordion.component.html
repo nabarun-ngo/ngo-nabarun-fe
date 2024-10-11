@@ -56,7 +56,7 @@
         <!-- <pre>{{don.update | json}}</pre> -->
         <mat-action-row>
             <div *ngIf="tabName == 'self_donation'" class="mx-4">
-                <button mat-button color="primary" class="text-green-600">Show changes</button>
+                <!-- <button mat-button color="primary" class="text-green-600">Show changes</button> -->
                 <button mat-button color="primary" class="text-green-600" *ngIf="!don.update?.donation?.isPaymentNotified && 
                 (don.donation?.status == donationStatus.Raised 
                 || don.donation?.status == donationStatus.Pending)">Pay now</button>
@@ -65,9 +65,11 @@
                 || don.donation?.status == donationStatus.Pending)" (click)="saveAndUpload(don.donation!)">Notify Payment</button>
             </div>
             <div *ngIf="tabName !== 'self_donation'" class="mx-4">
-                <button mat-button color="primary" class="text-green-600">Show changes</button>
+                <!-- <button mat-button color="primary" class="text-green-600">Show changes</button> -->
                 <button *ngIf="don.action == 'edit'" mat-button color="primary" class="text-green-600" (click)="donationEdit(don.donation!,false)">Cancel</button>
-                <button mat-button color="primary" class="text-green-600" (click)="donationEdit(don.donation!,true)">{{don.action == 'edit' ? 'Confirm':'Update'}}</button>
+                <button mat-button color="primary" class="text-green-600" 
+                *ngIf="canUpdateDonation" 
+                (click)="donationEdit(don.donation!,true)">{{don.action == 'edit' ? 'Confirm':'Update'}}</button>
             </div>
         </mat-action-row>
     </mat-expansion-panel>

@@ -1,6 +1,5 @@
 import { Directive, Input, OnInit, TemplateRef, ViewContainerRef, ViewRef } from '@angular/core';
 import { UserIdentityService } from '../service/user-identity.service';
-import { OAuthEvent, OAuthSuccessEvent } from 'angular-oauth2-oidc';
 import { filter, map } from 'rxjs';
 
 @Directive({
@@ -23,23 +22,23 @@ export class ShowAuthedDirective implements OnInit {
 
   ngOnInit() {
     console.log('Directive called')
-    this.identityService.onEvent()
-      .pipe(filter(data => data.event == 'token_received' || data.event == 'token_refreshed'))
-      .pipe(map(data => data.status == 'success'))
-      .subscribe(isAuthenticated => {
-        if (
-          (isAuthenticated && this.condition) ||
-          (!isAuthenticated && !this.condition)
-        ) {
-          if (!this.authRef) {
-            this.authRef = this.viewContainer.createEmbeddedView(
-              this.templateRef
-            );
-          }
-        } else {
-          this.viewContainer.clear();
-        }
-      })
+    // this.identityService.onEvent()
+    //   .pipe(filter(data => data.event == 'token_received' || data.event == 'token_refreshed'))
+    //   .pipe(map(data => data.status == 'success'))
+    //   .subscribe(isAuthenticated => {
+    //     if (
+    //       (isAuthenticated && this.condition) ||
+    //       (!isAuthenticated && !this.condition)
+    //     ) {
+    //       if (!this.authRef) {
+    //         this.authRef = this.viewContainer.createEmbeddedView(
+    //           this.templateRef
+    //         );
+    //       }
+    //     } else {
+    //       this.viewContainer.clear();
+    //     }
+    //   })
   }
 
   @Input() set appShowAuthed(condition: boolean) {

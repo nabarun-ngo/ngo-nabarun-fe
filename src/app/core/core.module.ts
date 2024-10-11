@@ -1,7 +1,6 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { OAuthModule } from 'angular-oauth2-oidc';
 import { HeaderComponent } from './component/header/header.component';
 import { FooterComponent } from './component/footer/footer.component';
 import { ShowAuthedDirective } from './directive/show-authed.directive';
@@ -20,6 +19,8 @@ import { DateDiffPipe } from './pipe/date-diff.pipe';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { MatNativeDateModule } from '@angular/material/core';
 import { IonicModule } from '@ionic/angular';
+import { AuthHttpInterceptor, AuthModule } from '@auth0/auth0-angular';
+import { getScopes } from './constant/auth-scope.const';
 
 
 
@@ -39,12 +40,13 @@ import { IonicModule } from '@ionic/angular';
   imports: [
     CommonModule,
     HttpClientModule,
-    OAuthModule.forRoot({
-      resourceServer:{
-        sendAccessToken:true,
-        allowedUrls:[environment.api_base_url]
-      }
-    }),
+    // OAuthModule.forRoot({
+    //   resourceServer:{
+    //     sendAccessToken:true,
+    //     allowedUrls:[environment.api_base_url]
+    //   }
+    // }),
+    AuthModule.forRoot(environment.auth_config),
     IonicModule.forRoot(),
     MatDialogModule,
     ApiModule.forRoot({
@@ -67,7 +69,11 @@ import { IonicModule } from '@ionic/angular';
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorIntercepterService,
       multi: true
-  },
+  },{
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthHttpInterceptor,
+    multi: true
+},
   // {
   //   provide:MAT_DATEPICKER_SCROLL_STRATEGY,
   //   useExisting:true

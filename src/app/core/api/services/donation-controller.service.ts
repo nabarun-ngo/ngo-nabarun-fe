@@ -11,8 +11,6 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { getDonationDocuments } from '../fn/donation-controller/get-donation-documents';
-import { GetDonationDocuments$Params } from '../fn/donation-controller/get-donation-documents';
 import { getDonations } from '../fn/donation-controller/get-donations';
 import { GetDonations$Params } from '../fn/donation-controller/get-donations';
 import { getDonationSummary } from '../fn/donation-controller/get-donation-summary';
@@ -27,7 +25,6 @@ import { raiseDonation } from '../fn/donation-controller/raise-donation';
 import { RaiseDonation$Params } from '../fn/donation-controller/raise-donation';
 import { SuccessResponseDonationDetail } from '../models/success-response-donation-detail';
 import { SuccessResponseDonationSummary } from '../models/success-response-donation-summary';
-import { SuccessResponseListDocumentDetail } from '../models/success-response-list-document-detail';
 import { SuccessResponsePaginateDonationDetail } from '../models/success-response-paginate-donation-detail';
 import { updateDonation } from '../fn/donation-controller/update-donation';
 import { UpdateDonation$Params } from '../fn/donation-controller/update-donation';
@@ -210,35 +207,6 @@ export class DonationControllerService extends BaseService {
   getDonationSummary(params?: GetDonationSummary$Params, context?: HttpContext): Observable<SuccessResponseDonationSummary> {
     return this.getDonationSummary$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseDonationSummary>): SuccessResponseDonationSummary => r.body)
-    );
-  }
-
-  /** Path part for operation `getDonationDocuments()` */
-  static readonly GetDonationDocumentsPath = '/api/donation/getDonationDocuments/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getDonationDocuments()` instead.
-   *
-   * This method doesn't expect any request body.
-   *
-   * @deprecated
-   */
-  getDonationDocuments$Response(params: GetDonationDocuments$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseListDocumentDetail>> {
-    return getDonationDocuments(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getDonationDocuments$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   *
-   * @deprecated
-   */
-  getDonationDocuments(params: GetDonationDocuments$Params, context?: HttpContext): Observable<SuccessResponseListDocumentDetail> {
-    return this.getDonationDocuments$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseListDocumentDetail>): SuccessResponseListDocumentDetail => r.body)
     );
   }
 

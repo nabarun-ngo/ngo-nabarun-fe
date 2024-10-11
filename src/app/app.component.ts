@@ -3,13 +3,7 @@ import { UserIdentityService } from './core/service/user-identity.service';
 import { environment } from 'src/environments/environment';
 import { GoogleAuthService } from './core/service/google-auth.service';
 import { BnNgIdleService } from 'bn-ng-idle';
-import { Capacitor } from '@capacitor/core';
-import { App } from '@capacitor/app';
-import config from 'capacitor.config';
-import { AppRoute } from './core/constant/app-routing.const';
-import { Router } from '@angular/router';
-import { SharedDataService } from './core/service/shared-data.service';
-import { Browser } from '@capacitor/browser';
+import { AuthService } from '@auth0/auth0-angular';
 
 @Component({
   selector: 'app-root',
@@ -21,12 +15,13 @@ export class AppComponent {
     private identityService:UserIdentityService,
     private googleService: GoogleAuthService,
     private bnIdle: BnNgIdleService,
-    ){
+    private authService: AuthService,
+    ){  
  
      
   }
   async ngOnInit(): Promise<void> {
-    
+    console.log("Hiii")
     /**
      * Disableing logs in production
      */
@@ -36,15 +31,18 @@ export class AppComponent {
       }
     }
     /**
-     * Configuring oauth services
+     * Configuring App callback
      */
     this.identityService.configure();
     /**
-     * All callback configuration
+     * 
      */
-    if (Capacitor.isNativePlatform()) {
-      this.identityService.mobileCallback();
-    }
+    // if (Capacitor.isNativePlatform()) {
+    //   //this.identityService.mobileCallback();
+    // }else{
+
+    // }
+   
     /**
      * configuring idle timeout
      */

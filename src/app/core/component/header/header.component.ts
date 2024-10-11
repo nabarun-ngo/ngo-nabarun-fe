@@ -18,7 +18,7 @@ import { SpinnerVisibilityService } from 'ng-http-loader';
 export class HeaderComponent implements OnInit {
 
   protected app_route=AppRoute;
-  isAuthenticated!: boolean;
+  //isAuthenticated!: boolean;
   user!: AuthUser;
   //userId!:string;
   //notifications:  AppNotification[]=[];
@@ -31,9 +31,9 @@ export class HeaderComponent implements OnInit {
   ) { }
 
 
-  ngOnInit(): void {
-    this.isAuthenticated = this.identityService.isUserLoggedIn();
-    this.user=this.identityService.getUser();
+  async ngOnInit(): Promise<void> {
+    //this.isAuthenticated = this.identityService.isUserLoggedIn();
+    this.user=await this.identityService.getUser();
     // this.commonService.fetchNotification().subscribe(data=>{
     //   this.notifications=[];
     //   data?.content?.forEach(d=>{
@@ -44,6 +44,7 @@ export class HeaderComponent implements OnInit {
     this.commonService.liveNotifications$.subscribe(data=>{
       //this.notifications.unshift(new AppNotification(data));
       //console.log(data)
+      this.sound();
       if(data['notificationCount']){
         this.notificationCount=data['notificationCount'];
       }

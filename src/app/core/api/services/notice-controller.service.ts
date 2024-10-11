@@ -21,9 +21,6 @@ import { getDraftedNotice } from '../fn/notice-controller/get-drafted-notice';
 import { GetDraftedNotice$Params } from '../fn/notice-controller/get-drafted-notice';
 import { getNotice } from '../fn/notice-controller/get-notice';
 import { GetNotice$Params } from '../fn/notice-controller/get-notice';
-import { getNoticeDocuments } from '../fn/notice-controller/get-notice-documents';
-import { GetNoticeDocuments$Params } from '../fn/notice-controller/get-notice-documents';
-import { SuccessResponseListDocumentDetail } from '../models/success-response-list-document-detail';
 import { SuccessResponseNoticeDetail } from '../models/success-response-notice-detail';
 import { SuccessResponsePaginateNoticeDetail } from '../models/success-response-paginate-notice-detail';
 import { SuccessResponseVoid } from '../models/success-response-void';
@@ -108,31 +105,6 @@ export class NoticeControllerService extends BaseService {
   getAllNotice(params: GetAllNotice$Params, context?: HttpContext): Observable<SuccessResponsePaginateNoticeDetail> {
     return this.getAllNotice$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponsePaginateNoticeDetail>): SuccessResponsePaginateNoticeDetail => r.body)
-    );
-  }
-
-  /** Path part for operation `getNoticeDocuments()` */
-  static readonly GetNoticeDocumentsPath = '/api/notice/getNoticeDocuments/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getNoticeDocuments()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getNoticeDocuments$Response(params: GetNoticeDocuments$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseListDocumentDetail>> {
-    return getNoticeDocuments(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getNoticeDocuments$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getNoticeDocuments(params: GetNoticeDocuments$Params, context?: HttpContext): Observable<SuccessResponseListDocumentDetail> {
-    return this.getNoticeDocuments$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseListDocumentDetail>): SuccessResponseListDocumentDetail => r.body)
     );
   }
 
