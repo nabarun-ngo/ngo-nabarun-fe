@@ -6,12 +6,10 @@ import { DashboardPage } from "tests/pages/dashboard";
 import { constant } from "tests/data/constant";
 import { faker } from "@faker-js/faker";
 import { generateAllureReport } from "tests/config/allure-reporter";
-import { testCaseId } from 'allure-js-commons';
 
 test.describe.serial('MEM_TC001: Onboard member End 2 End', {
     tag: ['@regression', '@sanity', '@member']
 }, async () => {
-    await testCaseId('MEM_TC001')
     let page: Page;
     test.beforeAll(async ({ browser }) => { page=await browser.newPage(); });
     test.afterAll(async () => { await page.close();generateAllureReport(); });

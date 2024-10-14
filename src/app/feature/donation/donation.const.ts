@@ -1,6 +1,6 @@
 import { DonationStatus, DonationType } from "src/app/core/api/models";
 
-export type donationTab = 'self_donation' | 'guest_donation' | 'member_donation';
+export type donationTab = 'self_donation' | 'guest_donation' | 'member_donation' | 'all_donation';
 export type OperationMode = 'edit' | 'view' | 'create';
 
 export const DonationDefaultValue = {

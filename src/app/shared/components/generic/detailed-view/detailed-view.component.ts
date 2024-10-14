@@ -17,7 +17,7 @@ export class DetailedViewComponent {
 
 
   @Input({ required: true, alias: 'detailedViews' }) set detailedViews(view: DetailedView[]) {
-    console.log(view)
+   // console.log(view)
     this.detailed_views = view;
     this.detailed_views.map(m => {
       m.content?.filter(f1 => f1.editable).map(m1 => {

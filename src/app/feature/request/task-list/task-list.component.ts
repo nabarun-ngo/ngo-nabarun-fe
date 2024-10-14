@@ -12,9 +12,9 @@ import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { Accordion } from 'src/app/shared/components/generic/accordion-list/accordion';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search.model';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
-import { TaskDefaultValue, TaskField, workListTab } from '../request.const';
+import { RequestConstant, TaskDefaultValue, TaskField, workListTab } from '../request.const';
 import { RequestService } from '../request.service';
-import { getRequestAdditionalDetailSection, getRequestDetailSection, getWorkActionDetailSection, getWorkDetailSection } from '../request.field';
+import { getDocumentDetailSection, getRequestAdditionalDetailSection, getRequestDetailSection, getWorkActionDetailSection, getWorkDetailSection } from '../request.field';
 
 @Component({
   selector: 'app-task-list',
@@ -129,7 +129,7 @@ export class TaskListComponent extends Accordion<WorkDetail> implements OnInit {
         rounded: true
       },
       {
-        value: TaskField.workType,
+        value: this.tabMapping[this.tabIndex] == 'completed_worklist' ?TaskField.workType :TaskField.requestStatus,
         rounded: true
       },
       {
@@ -154,7 +154,9 @@ export class TaskListComponent extends Accordion<WorkDetail> implements OnInit {
       },
       {
         type: 'text',
-        value: item?.workType!,
+        value: this.tabMapping[this.tabIndex] == 'completed_worklist' ? item?.workType! :item?.workflowStatus!,
+        showDisplayValue:true,
+        refDataSection: this.tabMapping[this.tabIndex] == 'completed_worklist' ? RequestConstant.refDataKey.workType  :RequestConstant.refDataKey.workflowSteps
       },
       {
         type: 'text',
@@ -168,18 +170,18 @@ export class TaskListComponent extends Accordion<WorkDetail> implements OnInit {
   }
 
   protected override prepareDetailedView(m: WorkDetail, options?: { [key: string]: any }): DetailedView[] {
-    return this.tabMapping[this.tabIndex] == 'completed_worklist'? [
-      getWorkDetailSection(m,this.tabMapping[this.tabIndex]),
+    return this.tabMapping[this.tabIndex] == 'completed_worklist' ? [
+      getWorkDetailSection(m, this.tabMapping[this.tabIndex]),
       getWorkActionDetailSection(m)
-    ]:
-    [
-      getWorkDetailSection(m,this.tabMapping[this.tabIndex])
-    ]
+    ] :
+      [
+        getWorkDetailSection(m, this.tabMapping[this.tabIndex])
+      ]
   }
 
   protected override prepareDefaultButtons(data: WorkDetail, options?: { [key: string]: any }): AccordionButton[] {
     if (this.tabMapping[this.tabIndex] == 'pending_worklist') {
-      return data.workType == 'USER_INPUT' ? []:  [
+      return data.workType == 'USER_INPUT' ? [] : [
         {
           button_id: 'UPDATE',
           button_name: 'Update'
@@ -205,7 +207,7 @@ export class TaskListComponent extends Accordion<WorkDetail> implements OnInit {
     fromDate?: string,
     toDate?: string,
   }) {
-    this.getAccordionList().searchValue='';
+    this.getAccordionList().searchValue = '';
     if (this.tabMapping[this.tabIndex] == 'pending_worklist') {
       this.taskService.findMyWorkList({
         isCompleted: false,
@@ -242,7 +244,7 @@ export class TaskListComponent extends Accordion<WorkDetail> implements OnInit {
     switch ($event.buttonId) {
       case 'UPDATE':
         let work = this.workItemList.content![$event.rowIndex];
-        this.addSectionInAccordion(getWorkActionDetailSection(work!),$event.rowIndex)
+        this.addSectionInAccordion(getWorkActionDetailSection(work!), $event.rowIndex)
         this.showForm($event.rowIndex, ['action_details']);
         this.actionName = $event.buttonId;
         break;
@@ -269,7 +271,7 @@ export class TaskListComponent extends Accordion<WorkDetail> implements OnInit {
         }
         break;
       case 'CANCEL':
-        this.removeSectionInAccordion('action_details',$event.rowIndex)
+        this.removeSectionInAccordion('action_details', $event.rowIndex)
         this.hideForm($event.rowIndex)
         break;
     }
@@ -283,9 +285,13 @@ export class TaskListComponent extends Accordion<WorkDetail> implements OnInit {
       /**
        * Inserting request request details at top
        */
-      this.addSectionInAccordion(getRequestDetailSection(request!),$event.rowIndex)
-      this.addSectionInAccordion(getRequestAdditionalDetailSection(request!),$event.rowIndex)
-    })
+      this.addSectionInAccordion(getRequestDetailSection(request!), $event.rowIndex)
+      this.addSectionInAccordion(getRequestAdditionalDetailSection(request!), $event.rowIndex)
+      this.taskService.getDocuments(item.workflowId!).subscribe(data => {
+        this.addSectionInAccordion(getDocumentDetailSection(data!), $event.rowIndex)
+      })
+
+    }) 
   }
 
 
@@ -295,9 +301,9 @@ export class TaskListComponent extends Accordion<WorkDetail> implements OnInit {
       console.log($event.value)
       this.fetchDetails({
         fromDate: $event.value.fromDate,
-        requestId:$event.value.requestId,
-        toDate:$event.value.toDate,
-        workId:$event.value.workId
+        requestId: $event.value.requestId,
+        toDate: $event.value.toDate,
+        workId: $event.value.workId
       })
     }
     else if ($event.advancedSearch && $event.reset) {

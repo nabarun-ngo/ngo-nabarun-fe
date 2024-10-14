@@ -31,7 +31,9 @@ export class DonationService {
   fetchGuestDonations(pageIndex: number = 0, pageSize: number = 100) {
     return this.donationController.getDonations({ pageIndex: pageIndex, pageSize: pageSize, filter: { isGuest: true } }).pipe(map(d => d.responsePayload));
   }
-
+  fetchDonations(pageIndex: number = 0, pageSize: number = 100) {
+    return this.donationController.getDonations({ pageIndex: pageIndex, pageSize: pageSize, filter: {} }).pipe(map(d => d.responsePayload));
+  }
   fetchMembers(pageIndex: number = 0, pageSize: number = 100,filter?:{firstName?:string;lastName?:string,status?:string[]}) {
     let memberFilter:UserDetailFilter={};
     if(filter){

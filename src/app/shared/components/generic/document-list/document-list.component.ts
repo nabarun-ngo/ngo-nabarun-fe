@@ -12,6 +12,8 @@ export class DocumentListComponent {
   
   @Input('documents') documents: DocumentDetail[] | undefined;
   @Input('heading') documentHeading: string = 'Documents';
+  @Input('showHeading') showHeading: boolean = true;
+
   canViewAttachment: boolean=true;
   canDeleteAttachment: boolean=true;
 

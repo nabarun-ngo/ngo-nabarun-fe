@@ -21,7 +21,8 @@ export const RequestConstant = {
     refDataKey: {
         visibleWorkflowTypes: 'visibleWorkflowTypes',
         workflowSteps: 'workflowSteps',
-        workflowTypes:'workflowTypes'
+        workflowTypes:'workflowTypes',
+        workType:'workType'
     },
     enum: {
         

@@ -28,7 +28,7 @@ export class DonationDashboardComponent implements OnInit {
   protected itemLength$: Observable<number> = this.itemLengthSubs.asObservable();
 
   protected tabIndex!: number;
-  protected tabMapping: donationTab[] = ['self_donation', 'guest_donation', 'member_donation'];
+  protected tabMapping: donationTab[] = ['self_donation', 'guest_donation', 'member_donation', 'all_donation'];
 
   members: MemberList[] = [];
   donations: DonationList[] = [];
@@ -149,6 +149,16 @@ export class DonationDashboardComponent implements OnInit {
                 selectList: this.refData['userStatuses']
               },
             },
+            // {
+            //   formControlName: 'donationId',
+            //   inputModel: {
+            //     tagName: 'input',
+            //     inputType: 'text',
+            //     html_id: 'donationId',
+            //     labelName: 'Donation Id',
+            //     placeholder: 'Enter Donation Id',
+            //   },
+            // }
           ]
         }
       } as SearchAndAdvancedSearchModel;
@@ -239,7 +249,7 @@ export class DonationDashboardComponent implements OnInit {
       case 'guest_donation': {
         this.donationService.fetchGuestDonations(this.pageNumber, this.pageSize).subscribe(donations => {
           donations?.content?.forEach(donation => this.donations.push({ donation: donation, action: 'view', eventSubject: new Subject<any>() }))
-          console.log(this.donations)
+          //console.log(this.donations)
           this.itemLengthSubs.next(donations?.totalSize!);
         });
         break;
@@ -250,6 +260,14 @@ export class DonationDashboardComponent implements OnInit {
             member: member
           }))
           this.itemLengthSubs.next(members?.totalSize!);
+        });
+        break;
+      }
+      case 'all_donation': {
+        this.donationService.fetchDonations(this.pageNumber, this.pageSize).subscribe(donations => {
+          donations?.content?.forEach(donation => this.donations.push({ donation: donation, action: 'view', eventSubject: new Subject<any>() }))
+         // console.log(this.donations)
+          this.itemLengthSubs.next(donations?.totalSize!);
         });
         break;
       }

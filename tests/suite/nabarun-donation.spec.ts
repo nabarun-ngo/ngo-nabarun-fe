@@ -1,6 +1,5 @@
 import test, { Page } from "@playwright/test";
 import { LoginPage } from "../pages/login";
-import { testCaseId } from 'allure-js-commons';
 import { randomInt } from "crypto";
 import { DonationPage } from "tests/pages/donations";
 import { credentials } from "tests/data/cred";
@@ -13,7 +12,6 @@ import { generateAllureReport } from "tests/config/allure-reporter";
 test.describe.serial('DON_TC001: Create & Update Guest Donation : PAID', {
     tag: ['@regression', '@donation']
 }, async () => {
-    await testCaseId('MEM_TC001')
     let page: Page;
     test.beforeAll(async ({ browser }) => { page = await browser.newPage(); });
     test.afterAll(async () => { await page.close(); generateAllureReport();});

@@ -57,10 +57,10 @@
         <mat-action-row>
             <div *ngIf="tabName == 'self_donation'" class="mx-4">
                 <!-- <button mat-button color="primary" class="text-green-600">Show changes</button> -->
-                <button mat-button color="primary" class="text-green-600" *ngIf="!don.update?.donation?.isPaymentNotified && 
+                <!-- <button mat-button color="primary" class="text-green-600" *ngIf="!don.update?.donation?.isPaymentNotified && 
                 (don.donation?.status == donationStatus.Raised 
                 || don.donation?.status == donationStatus.Pending) 
-                && !don.donation?.isPaymentNotified">Pay now</button>
+                && !don.donation?.isPaymentNotified">Pay now</button> -->
                 <button mat-button color="primary" class="text-purple-600" *ngIf=" 
                 don.update?.donation?.isPaymentNotified &&
                 (don.donation?.status == donationStatus.Raised 

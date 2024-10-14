@@ -1,5 +1,5 @@
 import { FormGroup, Validators } from "@angular/forms";
-import { AdditionalField, KeyValue, RequestDetail, WorkDetail } from "src/app/core/api/models";
+import { AdditionalField, DocumentDetail, KeyValue, RequestDetail, WorkDetail } from "src/app/core/api/models";
 import { date } from "src/app/core/service/utilities.service";
 import { RequestConstant, workListTab } from "./request.const";
 import { DetailedView, DetailedViewField } from "src/app/shared/components/generic/detailed-view/detailed-view.model";
@@ -153,6 +153,17 @@ export const getRequestAdditionalDetailSection = (m: RequestDetail): DetailedVie
         hide_section : m.additionalFields?.length == 0,
         section_form: new FormGroup({}),
         content: getAdditionalField(m.additionalFields!)
+    };
+}
+
+export const getDocumentDetailSection=(m: DocumentDetail[]): DetailedView =>{
+    return {
+        section_name: 'Documents',
+        section_type: 'doc_list',
+        section_html_id: 'request_docs',
+        hide_section : m.length == 0,
+        section_form: new FormGroup({}),
+        documents:m
     };
 }
 

@@ -1,6 +1,6 @@
 import { FormGroup, ValidatorFn } from "@angular/forms";
 import { UniversalInputModel, inputType } from "../universal-input/universal-input.model";
-import { KeyValue } from "src/app/core/api/models";
+import { DocumentDetail, KeyValue } from "src/app/core/api/models";
 import { AccordionList } from "../accordion-list/accordion-list.model";
 
 export interface DetailedView {
@@ -13,6 +13,8 @@ export interface DetailedView {
     section_form:FormGroup;
     show_form?: boolean;
     accordionList?:AccordionList;
+    documentHeader?: string;
+    documents?: DocumentDetail[]
 }
 
 export interface DetailedViewField {
