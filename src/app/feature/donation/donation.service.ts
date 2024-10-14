@@ -74,13 +74,13 @@ export class DonationService {
   }
 
   uploadDocuments(id:string,documents:DocumentDetailUpload[]){
-    return this.commonController.uploadDocuments1({body:documents,docIndexId:id,docIndexType:'DONATION'})
+    return this.commonController.uploadDocuments1({body:documents,docIndexId:id,docIndexType:'DONATION'}).pipe(map(d => d.responsePayload));
   }
 
-  updatePaymentInfo(id:string,donation:DonationDetail){
-    return this.donationController.payments({action:'NOTIFY',id:id,body:{
+  updatePaymentInfo(id:string,action:string,donation:DonationDetail){
+    return this.donationController.payments({action:action,id:id,body:{
       isPaymentNotified:donation.isPaymentNotified,
-    }})
+    }}).pipe(map(d => d.responsePayload));
   }
 
   createDonation(donation: DonationDetail) {

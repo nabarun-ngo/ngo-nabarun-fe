@@ -132,16 +132,21 @@ export class DonationAccordionComponent implements OnInit {
     if (isFileNeeded && (!result?.upload || result?.upload?.length == 0)) {
       this.modalService.openNotificationModal(AppDialog.err_min_1_doc, 'notification', 'error');
     } else {
-      this.donationService.updatePaymentInfo(donation.id!, result?.update?.donation!).subscribe(data => {
+      this.donationService.updatePaymentInfo(donation.id!, 'NOTIFY', result?.update?.donation!).subscribe(data => {
         console.log(data)
         if(isFileNeeded){
           let files=result?.upload?.map(m=>m.detail);
           this.donationService.uploadDocuments(donation.id!,files!).subscribe(data=>{})
         }
+        this.donations.filter(f => f.donation?.id == donation.id).map(item => {
+          item.donation=data!;
+          item.action='view';
+          return item;
+        });
         this.alertList.push(AppAlert.payment_notified);
       })
     }
-    console.log(result)
+    console.log(this.donations)
     //this.donationService.updatePaymentAndDocuments
   }
 

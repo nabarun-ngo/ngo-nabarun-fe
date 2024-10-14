@@ -1,5 +1,4 @@
 import { DatePipe } from "@angular/common";
-import { inject } from "@angular/core";
 
 export const getGreetings = (name:string) :string =>{
     var hour = new Date().getHours();

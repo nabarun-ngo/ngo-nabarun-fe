@@ -8,12 +8,11 @@ import * as os from "os";
  */
 import { config } from 'dotenv';
 import * as path from 'path';
-import tearDown from 'tests/config/global-teardown';
 config({ path: path.resolve(__dirname, '.env') });
 
 const currentDateTime = new Date().toISOString().replace(/[:.]/g, "_").slice(0, -1);
 const outputFolder = `C:/Temp/test-results/results-${currentDateTime}`;
-tearDown
+
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
@@ -27,6 +26,7 @@ export default defineConfig({
   retries: process.env['CI'] ? 2 : 0,
   /* Opt out of parallel tests on CI. */
   workers: process.env['CI'] ? 1 : undefined,
+  //globalTeardown: require.resolve('./global-teardown'),
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
     // ['html', { outputFolder: outputFolder+'/html' ,printSteps:true}],
@@ -40,7 +40,8 @@ export default defineConfig({
         os_version: os.version(),
         node_version: process.version,
       },
-    },]
+    },],
+   
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
@@ -56,9 +57,9 @@ export default defineConfig({
     },
   },
   expect: {
-    timeout: 10 * 1000, //30 sec to locate element
+    timeout: 30 * 1000, //30 sec to locate element
   },
-  timeout: 2 * 60 * 1000,//10 mins
+  //timeout: 2 * 60 * 1000,//10 mins
   /* Configure projects for major browsers */
   projects: [
     {

@@ -85,7 +85,7 @@ export class ProfileViewComponent implements OnInit {
       middleName: new FormControl(this.profile.middleName, []),
       lastName: new FormControl(this.profile.lastName, [Validators.required]),
       gender: new FormControl(this.profile.gender, [Validators.required]),
-      dateOfBirth: new FormControl(new Date(this.profile.dateOfBirth!), [Validators.required]),
+      dateOfBirth: new FormControl(this.profile.dateOfBirth ?new Date(this.profile.dateOfBirth):'', [Validators.required]),
       email: new FormControl(this.profile.email, [Validators.required, Validators.email]),
       phoneNumber_p: new FormControl(this.phoneNumber.phoneNumberP ? (this.phoneNumber.phoneNumberP.phoneCode! + this.phoneNumber.phoneNumberP.phoneNumber) : null, [Validators.required]),
       phoneNumber_s: new FormControl(this.phoneNumber.phoneNumberS ? (this.phoneNumber.phoneNumberS.phoneCode! + this.phoneNumber.phoneNumberS.phoneNumber) : null, []),

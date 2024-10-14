@@ -1,6 +1,7 @@
 import { expect, Locator, Page, TestInfo } from "@playwright/test";
 import { DashboardPage } from "./dashboard";
 import { BasePage } from "./base";
+import { logStep } from 'allure-js-commons';
 
 export class LoginPage extends BasePage{
     protected readonly loginWithPasswordEl: Locator;
@@ -21,8 +22,11 @@ export class LoginPage extends BasePage{
         this.loginAcceptEL=page.locator('//*[@value="accept"]');
     }
 
+
     async continueWithPassword(){
+        logStep('Continue With Password')
         await this.loginWithPasswordEl.click() 
+        
     }
 
     async continueWithEmail(){
@@ -30,6 +34,7 @@ export class LoginPage extends BasePage{
     }
 
     async login(data:{username:string,password:string}){
+        logStep('Login')
         await this.usernameEl.fill(data.username);
         await this.continueBtnEl.click();
         await this.passwordEl.fill(data.password);
@@ -40,7 +45,7 @@ export class LoginPage extends BasePage{
         if(isVisible){
             await this.loginAcceptEL.click();
         }
-        await expect.soft(this.pageTitleEL).toContainText("WELCOME TO NABARUN'S SECURED DASHBOARD",{timeout:60000});
+        await expect.soft(this.getLocator(this.pageTitleEL)).toContainText("WELCOME TO NABARUN'S SECURED DASHBOARD",{timeout:60000});
         return new DashboardPage(this.page,this.testInfo);
     }
 }

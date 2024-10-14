@@ -1,0 +1,19 @@
+export const credentials={
+    defaultPassword:'Password@01',
+    cashier:{
+        email:'cashier@nabarun.com',
+        password:'Password@01'
+    },
+    secretory:{
+        email:'souviksarrkar362@gmail.com',
+        password:'Password@01'
+    },
+    admin:{
+        email:'technicalspecialist@nabarun.com',
+        password:'Password@01'
+    },
+    president:{
+        email:'president@nabarun.com',
+        password:'Password@01'
+    },
+}

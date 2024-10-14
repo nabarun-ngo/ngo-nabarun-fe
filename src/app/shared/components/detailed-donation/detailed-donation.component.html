@@ -280,7 +280,8 @@
                     <div class="grid md:grid-cols-2 text-sm">
                         <div class="grid grid-cols-2">
                             <div class="px-2 py-2 font-semibold">Have you already paid this donation?</div>
-                            <div class="px-2 py-2">
+                            <div class="px-2 py-2" *ngIf="donation.isPaymentNotified">{{donation.isPaymentNotified ? 'Yes':'No'}}</div>
+                            <div class="px-2 py-2" *ngIf="!donation.isPaymentNotified">
                                 <div class="flex justify-start">
                                     <label for="yes" class="ml-4 block text-sm text-gray-900">
                                     <input id="yes" name="isPaymentNotified" formControlName="isPaymentNotified" type="radio" [value]="true"
@@ -297,7 +298,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="m-2" *ngIf="dfControl['isPaymentNotified'].value">
+                    <div class="m-2" *ngIf="dfControl['isPaymentNotified'].value && !donation.isPaymentNotified">
                         <div class="py-2 font-semibold">Please upload supporting document(s)</div>
                         <app-file-upload (files)="docChange.emit($event)"></app-file-upload>
                     </div>
