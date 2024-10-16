@@ -4,6 +4,7 @@
 
 export interface AccountDetailFilter {
   accountHolderId?: string;
+  accountId?: string;
   includeBalance?: boolean;
   includePaymentDetail?: boolean;
   status?: Array<'ACTIVE' | 'INACTIVE' | 'BLOCKED'>;

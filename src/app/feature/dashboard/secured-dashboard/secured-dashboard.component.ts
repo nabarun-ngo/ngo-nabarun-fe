@@ -58,7 +58,7 @@ export class SecuredDashboardComponent implements OnInit {
         },
         {
           tile_html_id: 'accountTile',
-          tile_name: 'Accounting',
+          tile_name: 'Accounts & Finance',
           tile_icon: 'icon_book',
           tile_link: this.route.secured_account_list_page.url,
           additional_info: {

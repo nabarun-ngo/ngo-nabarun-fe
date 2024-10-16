@@ -8,20 +8,19 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseVoid } from '../../models/success-response-void';
+import { ExpenseDetail } from '../../models/expense-detail';
+import { SuccessResponseExpenseDetail } from '../../models/success-response-expense-detail';
 
-export interface TriggerCron$Params {
-  trigger: Array<'DONATION_REMINDER_EMAIL' | 'TASK_REMINDER_EMAIL' | 'CREATE_DONATION' | 'UPDATE_DONATION' | 'SYNC_USERS'>;
+export interface UpdateExpense$Params {
+  id: string;
   'Correlation-Id'?: string;
-      body: {
-[key: string]: string;
-}
+      body: ExpenseDetail
 }
 
-export function triggerCron(http: HttpClient, rootUrl: string, params: TriggerCron$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
-  const rb = new RequestBuilder(rootUrl, triggerCron.PATH, 'post');
+export function updateExpense(http: HttpClient, rootUrl: string, params: UpdateExpense$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseExpenseDetail>> {
+  const rb = new RequestBuilder(rootUrl, updateExpense.PATH, 'patch');
   if (params) {
-    rb.query('trigger', params.trigger, {});
+    rb.path('id', params.id, {});
     rb.header('Correlation-Id', params['Correlation-Id'], {});
     rb.body(params.body, 'application/json');
   }
@@ -31,9 +30,9 @@ export function triggerCron(http: HttpClient, rootUrl: string, params: TriggerCr
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseVoid>;
+      return r as StrictHttpResponse<SuccessResponseExpenseDetail>;
     })
   );
 }
 
-triggerCron.PATH = '/api/admin/cron/trigger';
+updateExpense.PATH = '/api/account/{id}/updateExpense';

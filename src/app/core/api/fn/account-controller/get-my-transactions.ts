@@ -11,7 +11,7 @@ import { RequestBuilder } from '../../request-builder';
 import { SuccessResponsePaginateTransactionDetail } from '../../models/success-response-paginate-transaction-detail';
 import { TransactionDetailFilter } from '../../models/transaction-detail-filter';
 
-export interface GetTransactions$Params {
+export interface GetMyTransactions$Params {
   id: string;
   pageIndex?: number;
   pageSize?: number;
@@ -19,8 +19,8 @@ export interface GetTransactions$Params {
   'Correlation-Id'?: string;
 }
 
-export function getTransactions(http: HttpClient, rootUrl: string, params: GetTransactions$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateTransactionDetail>> {
-  const rb = new RequestBuilder(rootUrl, getTransactions.PATH, 'get');
+export function getMyTransactions(http: HttpClient, rootUrl: string, params: GetMyTransactions$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateTransactionDetail>> {
+  const rb = new RequestBuilder(rootUrl, getMyTransactions.PATH, 'get');
   if (params) {
     rb.path('id', params.id, {});
     rb.query('pageIndex', params.pageIndex, {});
@@ -39,4 +39,4 @@ export function getTransactions(http: HttpClient, rootUrl: string, params: GetTr
   );
 }
 
-getTransactions.PATH = '/api/account/{id}/getTransactions';
+getMyTransactions.PATH = '/api/account/{id}/getMyTransactions';

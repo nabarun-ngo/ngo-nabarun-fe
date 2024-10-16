@@ -13,20 +13,30 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { createAccount } from '../fn/account-controller/create-account';
 import { CreateAccount$Params } from '../fn/account-controller/create-account';
+import { createExpense } from '../fn/account-controller/create-expense';
+import { CreateExpense$Params } from '../fn/account-controller/create-expense';
 import { createTransaction } from '../fn/account-controller/create-transaction';
 import { CreateTransaction$Params } from '../fn/account-controller/create-transaction';
 import { getAccounts } from '../fn/account-controller/get-accounts';
 import { GetAccounts$Params } from '../fn/account-controller/get-accounts';
+import { getExpenses } from '../fn/account-controller/get-expenses';
+import { GetExpenses$Params } from '../fn/account-controller/get-expenses';
 import { getMyAccounts } from '../fn/account-controller/get-my-accounts';
 import { GetMyAccounts$Params } from '../fn/account-controller/get-my-accounts';
+import { getMyTransactions } from '../fn/account-controller/get-my-transactions';
+import { GetMyTransactions$Params } from '../fn/account-controller/get-my-transactions';
 import { getTransactions } from '../fn/account-controller/get-transactions';
 import { GetTransactions$Params } from '../fn/account-controller/get-transactions';
 import { SuccessResponseAccountDetail } from '../models/success-response-account-detail';
+import { SuccessResponseExpenseDetail } from '../models/success-response-expense-detail';
 import { SuccessResponsePaginateAccountDetail } from '../models/success-response-paginate-account-detail';
+import { SuccessResponsePaginateExpenseDetail } from '../models/success-response-paginate-expense-detail';
 import { SuccessResponsePaginateTransactionDetail } from '../models/success-response-paginate-transaction-detail';
 import { SuccessResponseTransactionDetail } from '../models/success-response-transaction-detail';
 import { updateAccount } from '../fn/account-controller/update-account';
 import { UpdateAccount$Params } from '../fn/account-controller/update-account';
+import { updateExpense } from '../fn/account-controller/update-expense';
+import { UpdateExpense$Params } from '../fn/account-controller/update-expense';
 import { updateMyAccount } from '../fn/account-controller/update-my-account';
 import { UpdateMyAccount$Params } from '../fn/account-controller/update-my-account';
 
@@ -58,6 +68,31 @@ export class AccountControllerService extends BaseService {
   createTransaction(params: CreateTransaction$Params, context?: HttpContext): Observable<SuccessResponseTransactionDetail> {
     return this.createTransaction$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseTransactionDetail>): SuccessResponseTransactionDetail => r.body)
+    );
+  }
+
+  /** Path part for operation `createExpense()` */
+  static readonly CreateExpensePath = '/api/account/createExpense';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `createExpense()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createExpense$Response(params: CreateExpense$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseExpenseDetail>> {
+    return createExpense(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `createExpense$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createExpense(params: CreateExpense$Params, context?: HttpContext): Observable<SuccessResponseExpenseDetail> {
+    return this.createExpense$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseExpenseDetail>): SuccessResponseExpenseDetail => r.body)
     );
   }
 
@@ -111,6 +146,31 @@ export class AccountControllerService extends BaseService {
     );
   }
 
+  /** Path part for operation `updateExpense()` */
+  static readonly UpdateExpensePath = '/api/account/{id}/updateExpense';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateExpense()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateExpense$Response(params: UpdateExpense$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseExpenseDetail>> {
+    return updateExpense(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateExpense$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateExpense(params: UpdateExpense$Params, context?: HttpContext): Observable<SuccessResponseExpenseDetail> {
+    return this.updateExpense$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseExpenseDetail>): SuccessResponseExpenseDetail => r.body)
+    );
+  }
+
   /** Path part for operation `updateAccount()` */
   static readonly UpdateAccountPath = '/api/account/{id}/updateAccount';
 
@@ -161,6 +221,31 @@ export class AccountControllerService extends BaseService {
     );
   }
 
+  /** Path part for operation `getMyTransactions()` */
+  static readonly GetMyTransactionsPath = '/api/account/{id}/getMyTransactions';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getMyTransactions()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getMyTransactions$Response(params: GetMyTransactions$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateTransactionDetail>> {
+    return getMyTransactions(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getMyTransactions$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getMyTransactions(params: GetMyTransactions$Params, context?: HttpContext): Observable<SuccessResponsePaginateTransactionDetail> {
+    return this.getMyTransactions$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponsePaginateTransactionDetail>): SuccessResponsePaginateTransactionDetail => r.body)
+    );
+  }
+
   /** Path part for operation `getMyAccounts()` */
   static readonly GetMyAccountsPath = '/api/account/getMyAccounts';
 
@@ -183,6 +268,31 @@ export class AccountControllerService extends BaseService {
   getMyAccounts(params: GetMyAccounts$Params, context?: HttpContext): Observable<SuccessResponsePaginateAccountDetail> {
     return this.getMyAccounts$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponsePaginateAccountDetail>): SuccessResponsePaginateAccountDetail => r.body)
+    );
+  }
+
+  /** Path part for operation `getExpenses()` */
+  static readonly GetExpensesPath = '/api/account/getExpenses';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getExpenses()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getExpenses$Response(params: GetExpenses$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateExpenseDetail>> {
+    return getExpenses(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getExpenses$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getExpenses(params: GetExpenses$Params, context?: HttpContext): Observable<SuccessResponsePaginateExpenseDetail> {
+    return this.getExpenses$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponsePaginateExpenseDetail>): SuccessResponsePaginateExpenseDetail => r.body)
     );
   }
 

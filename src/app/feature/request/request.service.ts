@@ -3,6 +3,7 @@ import { CommonControllerService, RequestControllerService, UserControllerServic
 import { RequestDefaultValue, TaskDefaultValue } from './request.const';
 import { Observable, map } from 'rxjs';
 import { RefDataType, RequestDetail, WorkDetail, WorkDetailFilter } from 'src/app/core/api/models';
+import { date } from 'src/app/core/service/utilities.service';
 
 @Injectable({
   providedIn: 'root'
@@ -58,10 +59,10 @@ export class RequestService {
       filter_.workId=filter?.workId;
     }
     if(filter?.fromDate){
-      filter_.fromDate=filter?.fromDate;
+      filter_.fromDate=date(filter?.fromDate,'yyyy-MM-dd');
     }
     if(filter?.toDate){
-      filter_.toDate=filter?.toDate;
+      filter_.toDate=date(filter?.toDate,'yyyy-MM-dd');
     }
     console.log(filter_)
     return this.requestController.getMyWorkItems({

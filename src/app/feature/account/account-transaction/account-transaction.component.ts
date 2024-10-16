@@ -12,6 +12,7 @@ import { date } from 'src/app/core/service/utilities.service';
 import { AccountService } from '../account.service';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
+import { SearchAndAdvancedSearchModel } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search.model';
 
 @Component({
   selector: 'app-account-transaction',
@@ -29,6 +30,7 @@ export class AccountTransactionComponent extends Accordion<TransactionDetail> im
       routerLink: AppRoute.secured_account_list_page.url
     }
   ];
+  searchInput!: SearchAndAdvancedSearchModel;
   constructor(
     private sharedDataService: SharedDataService,
     private route: ActivatedRoute,
@@ -40,6 +42,7 @@ export class AccountTransactionComponent extends Accordion<TransactionDetail> im
 
   ngOnInit(): void {
     this.sharedDataService.setPageName(this.defaultValue.pageTitle);
+    console.log(this.route.snapshot)
     if (this.route.snapshot.data['ref_data']) {
       this.refData = this.route.snapshot.data['ref_data'];
       this.sharedDataService.setRefData('TRANSACTION', this.refData!);
@@ -50,6 +53,66 @@ export class AccountTransactionComponent extends Accordion<TransactionDetail> im
     if (this.route.snapshot.data['data']) {
       this.transactionList = this.route.snapshot.data['data'] as PaginateTransactionDetail;
       this.setContent(this.transactionList.content!,this.transactionList?.totalSize!)
+    }
+
+    this.searchInput={
+      normalSearchPlaceHolder:'Search Transaction Number',
+      advancedSearch:{
+        searchFormFields:[{
+          formControlName: 'txnNo',
+          inputModel: {
+            tagName: 'input',
+            inputType: 'text',
+            html_id: 'txnNo',
+            labelName: 'Transaction Number',
+            placeholder: 'Enter Transaction Number',
+          },
+        },
+        {
+          formControlName: 'txnType',
+          inputModel: {
+            tagName: 'select',
+            inputType: 'multiselect',
+            html_id: 'txnType',
+            labelName: 'Transaction Type',
+            placeholder: 'Select Transaction Type',
+            //selectList: this.refData['accountTypes']
+          },
+        },
+        {
+          formControlName: 'txnRef',
+          inputModel: {
+            tagName: 'select',
+            inputType: '',
+            html_id: 'txnRef',
+            labelName: 'Transaction Reference',
+            placeholder: 'Select Transaction Reference',
+            //selectList: this.refData['accountTypes']
+          },
+        },
+        {
+          formControlName: 'txnStartDate',
+          inputModel: {
+            tagName: 'input',
+            inputType: 'date',
+            html_id: 'txnStartDate',
+            labelName: 'Start Date',
+            placeholder: 'Select Start Date',
+          },
+        },
+        {
+          formControlName: 'txnEndDate',
+          inputModel: {
+            tagName: 'input',
+            inputType: 'date',
+            html_id: 'txnEndDate',
+            labelName: 'End Date',
+            placeholder: 'Select End Date',
+          },
+        },
+        
+      ]
+      }
     }
   }
 
@@ -183,16 +246,53 @@ export class AccountTransactionComponent extends Accordion<TransactionDetail> im
   override handlePageEvent($event: PageEvent): void {
     this.pageNumber = $event.pageIndex;
     this.pageSize = $event.pageSize;
-    this.accountService.fetchTransactions(this.route.snapshot.params['id'],this.pageNumber,this.pageSize).subscribe(s => {
-      this.transactionList = s!;
-      this.setContent(this.transactionList.content!,this.transactionList?.totalSize!)
-    })
+    this.fetchDetails();
   }
 
   onClick($event: { buttonId: string; rowIndex: number; }) {
   }
 
   accordionOpened($event: { rowIndex: number; }) {
+  }
+
+  onSearch($event: { advancedSearch: boolean; reset: boolean; value: any; }) {
+    if ($event.advancedSearch && !$event.reset) {
+      console.log($event.value)
+      this.fetchDetails({
+        txnNo: $event.value.txnNo,
+        txnType: $event.value.txnType,
+        txnRef: $event.value.txnRef,
+        startDate: $event.value.txnStartDate,
+        endDate: $event.value.txnEndDate,
+      })
+    }
+    else if ($event.advancedSearch && $event.reset) {
+      this.fetchDetails()
+    }
+    else {
+      //console.log( $event.value)
+      this.getAccordionList().searchValue = $event.value as string;
+    }
+  }
+  fetchDetails(filter?:{
+    txnNo?: string;
+    txnType?: string;
+    txnRef?: string;
+    startDate?: string;
+    endDate?: string;
+  }) {
+    let id =this.route.snapshot.params['id']
+    if(this.route.snapshot.queryParams['self']){
+      this.accountService.fetchMyTransactions(id,this.pageNumber,this.pageSize,filter).subscribe(data=>{
+        this.transactionList=data!;
+        this.setContent(this.transactionList.content!,this.transactionList?.totalSize!)
+      })
+    }else{
+      this.accountService.fetchTransactions(id,this.pageNumber,this.pageSize,filter).subscribe(data=>{
+        this.transactionList=data!;
+        this.setContent(this.transactionList.content!,this.transactionList?.totalSize!)
+      })
+    }
   }
 
 }

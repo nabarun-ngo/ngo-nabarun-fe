@@ -25,7 +25,7 @@ export class AccordionFilterPipe implements PipeTransform {
           all_values_in_row.push(f2.field_value);
         })
       })
-      return all_values_in_row.find(s=> s && s.toLowerCase().includes(searchValue.toLowerCase()))
+      return all_values_in_row.find(s=> s && s.toString().toLowerCase().includes(searchValue.toLowerCase()))
     })
   }
 

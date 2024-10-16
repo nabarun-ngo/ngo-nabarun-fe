@@ -8,21 +8,19 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponsePaginateTransactionDetail } from '../../models/success-response-paginate-transaction-detail';
-import { TransactionDetailFilter } from '../../models/transaction-detail-filter';
+import { ExpenseDetailFilter } from '../../models/expense-detail-filter';
+import { SuccessResponsePaginateExpenseDetail } from '../../models/success-response-paginate-expense-detail';
 
-export interface GetTransactions$Params {
-  id: string;
+export interface GetExpenses$Params {
   pageIndex?: number;
   pageSize?: number;
-  filter: TransactionDetailFilter;
+  filter: ExpenseDetailFilter;
   'Correlation-Id'?: string;
 }
 
-export function getTransactions(http: HttpClient, rootUrl: string, params: GetTransactions$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateTransactionDetail>> {
-  const rb = new RequestBuilder(rootUrl, getTransactions.PATH, 'get');
+export function getExpenses(http: HttpClient, rootUrl: string, params: GetExpenses$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateExpenseDetail>> {
+  const rb = new RequestBuilder(rootUrl, getExpenses.PATH, 'get');
   if (params) {
-    rb.path('id', params.id, {});
     rb.query('pageIndex', params.pageIndex, {});
     rb.query('pageSize', params.pageSize, {});
     rb.query('filter', params.filter, {});
@@ -34,9 +32,9 @@ export function getTransactions(http: HttpClient, rootUrl: string, params: GetTr
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponsePaginateTransactionDetail>;
+      return r as StrictHttpResponse<SuccessResponsePaginateExpenseDetail>;
     })
   );
 }
 
-getTransactions.PATH = '/api/account/{id}/getTransactions';
+getExpenses.PATH = '/api/account/getExpenses';

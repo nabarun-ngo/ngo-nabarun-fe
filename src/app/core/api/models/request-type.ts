@@ -5,6 +5,7 @@
 export enum RequestType {
   JoinRequest = 'JOIN_REQUEST',
   JoinRequestUser = 'JOIN_REQUEST_USER',
+  CheckPaymentGuest = 'CHECK_PAYMENT_GUEST',
   CheckPayment = 'CHECK_PAYMENT',
   CollectCashPayment = 'COLLECT_CASH_PAYMENT',
   TerminationRequest = 'TERMINATION_REQUEST',

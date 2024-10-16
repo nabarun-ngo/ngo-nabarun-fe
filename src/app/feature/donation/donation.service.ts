@@ -3,6 +3,7 @@ import { Observable, combineLatest, firstValueFrom, forkJoin, map } from 'rxjs';
 import { DocumentDetailUpload, DonationDetail, DonationDetailFilter, DonationStatus, DonationType, RefDataType, UserDetailFilter } from 'src/app/core/api/models';
 import { AccountControllerService, CommonControllerService, DonationControllerService, EventControllerService, UserControllerService } from 'src/app/core/api/services';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
+import { date } from 'src/app/core/service/utilities.service';
 
 @Injectable({
   providedIn: 'root'
@@ -112,10 +113,10 @@ export class DonationService {
       filterOps.donationStatus=filter.donationStatus as any
     }
     if(filter.startDate){
-      filterOps.fromDate=filter.startDate
+      filterOps.fromDate=date(filter.startDate,'yyyy-MM-dd')
     }
     if(filter.endDate){
-      filterOps.toDate=filter.endDate
+      filterOps.toDate=date(filter.endDate,'yyyy-MM-dd')
     }
     if(filter.donationType){
       filterOps.donationType=filter.donationType as any

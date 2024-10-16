@@ -56,7 +56,7 @@ export class AdminControllerService extends BaseService {
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `triggerCron()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   triggerCron$Response(params: TriggerCron$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
     return triggerCron(this.http, this.rootUrl, params, context);
@@ -66,7 +66,7 @@ export class AdminControllerService extends BaseService {
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `triggerCron$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   triggerCron(params: TriggerCron$Params, context?: HttpContext): Observable<SuccessResponseVoid> {
     return this.triggerCron$Response(params, context).pipe(
