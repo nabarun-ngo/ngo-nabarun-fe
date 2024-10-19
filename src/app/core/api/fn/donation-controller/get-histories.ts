@@ -8,19 +8,17 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseListDocumentDetail } from '../../models/success-response-list-document-detail';
+import { SuccessResponseListHistoryDetail } from '../../models/success-response-list-history-detail';
 
-export interface GetDocuments$Params {
+export interface GetHistories$Params {
   id: string;
-  type: 'DONATION' | 'EVENT' | 'NOTICE' | 'USER' | 'PROFILE_PHOTO' | 'EVENT_COVER' | 'REQUEST';
   'Correlation-Id'?: string;
 }
 
-export function getDocuments(http: HttpClient, rootUrl: string, params: GetDocuments$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseListDocumentDetail>> {
-  const rb = new RequestBuilder(rootUrl, getDocuments.PATH, 'get');
+export function getHistories(http: HttpClient, rootUrl: string, params: GetHistories$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseListHistoryDetail>> {
+  const rb = new RequestBuilder(rootUrl, getHistories.PATH, 'get');
   if (params) {
     rb.path('id', params.id, {});
-    rb.query('type', params.type, {});
     rb.header('Correlation-Id', params['Correlation-Id'], {});
   }
 
@@ -29,9 +27,9 @@ export function getDocuments(http: HttpClient, rootUrl: string, params: GetDocum
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseListDocumentDetail>;
+      return r as StrictHttpResponse<SuccessResponseListHistoryDetail>;
     })
   );
 }
 
-getDocuments.PATH = '/api/common/document/getDocuments/{id}';
+getHistories.PATH = '/api/donation/getHistories/{id}';

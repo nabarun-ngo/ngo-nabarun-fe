@@ -15,6 +15,8 @@ import { getDonations } from '../fn/donation-controller/get-donations';
 import { GetDonations$Params } from '../fn/donation-controller/get-donations';
 import { getDonationSummary } from '../fn/donation-controller/get-donation-summary';
 import { GetDonationSummary$Params } from '../fn/donation-controller/get-donation-summary';
+import { getHistories } from '../fn/donation-controller/get-histories';
+import { GetHistories$Params } from '../fn/donation-controller/get-histories';
 import { getLoggedInUserDonations } from '../fn/donation-controller/get-logged-in-user-donations';
 import { GetLoggedInUserDonations$Params } from '../fn/donation-controller/get-logged-in-user-donations';
 import { getUserDonations } from '../fn/donation-controller/get-user-donations';
@@ -25,6 +27,7 @@ import { raiseDonation } from '../fn/donation-controller/raise-donation';
 import { RaiseDonation$Params } from '../fn/donation-controller/raise-donation';
 import { SuccessResponseDonationDetail } from '../models/success-response-donation-detail';
 import { SuccessResponseDonationSummary } from '../models/success-response-donation-summary';
+import { SuccessResponseListHistoryDetail } from '../models/success-response-list-history-detail';
 import { SuccessResponsePaginateDonationDetail } from '../models/success-response-paginate-donation-detail';
 import { updateDonation } from '../fn/donation-controller/update-donation';
 import { UpdateDonation$Params } from '../fn/donation-controller/update-donation';
@@ -157,6 +160,31 @@ export class DonationControllerService extends BaseService {
   getLoggedInUserDonations(params?: GetLoggedInUserDonations$Params, context?: HttpContext): Observable<SuccessResponsePaginateDonationDetail> {
     return this.getLoggedInUserDonations$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponsePaginateDonationDetail>): SuccessResponsePaginateDonationDetail => r.body)
+    );
+  }
+
+  /** Path part for operation `getHistories()` */
+  static readonly GetHistoriesPath = '/api/donation/getHistories/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getHistories()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getHistories$Response(params: GetHistories$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseListHistoryDetail>> {
+    return getHistories(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getHistories$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getHistories(params: GetHistories$Params, context?: HttpContext): Observable<SuccessResponseListHistoryDetail> {
+    return this.getHistories$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseListHistoryDetail>): SuccessResponseListHistoryDetail => r.body)
     );
   }
 

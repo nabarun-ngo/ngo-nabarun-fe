@@ -52,11 +52,17 @@
             </mat-panel-description>
         </mat-expansion-panel-header>
         <app-detailed-profile [mode]="'view'" *ngIf="tabName == 'guest_donation'" [member]="don.donation?.donorDetails!" [triggerEvent]="don.eventSubject.asObservable()"></app-detailed-profile>
-        <app-detailed-donation [tab]="tabName!" [donation]="don.donation!" [documents]="don.documents!" [mode]="don.action" [triggerEvent]="don.eventSubject.asObservable()" (donationChange)="don.update=$event" (docChange)="don.upload=$event"></app-detailed-donation>
+        <app-detailed-donation [tab]="tabName!" 
+        [donation]="don.donation!" 
+        [documents]="don.documents!" 
+        [histories]="don.histories!" 
+        [mode]="don.action" 
+        [triggerEvent]="don.eventSubject.asObservable()" 
+        (donationChange)="don.update=$event" (docChange)="don.upload=$event"></app-detailed-donation>
         <!-- <pre>{{don.update | json}}</pre> -->
         <mat-action-row>
             <div *ngIf="tabName == 'self_donation'" class="mx-4">
-                <!-- <button mat-button color="primary" class="text-green-600">Show changes</button> -->
+                <button (click)="showHistory(don.donation!)" mat-button color="primary" class="text-green-600">Show changes</button>
                 <!-- <button mat-button color="primary" class="text-green-600" *ngIf="!don.update?.donation?.isPaymentNotified && 
                 (don.donation?.status == donationStatus.Raised 
                 || don.donation?.status == donationStatus.Pending) 
@@ -69,10 +75,10 @@
                 " (click)="saveAndUpload(don.donation!)">Notify Payment</button>
             </div>
             <div *ngIf="tabName !== 'self_donation'" class="mx-4">
-                <!-- <button mat-button color="primary" class="text-green-600">Show changes</button> -->
+                <button (click)="showHistory(don.donation!)" mat-button color="primary" class="text-green-600">Show changes</button>
                 <button *ngIf="don.action == 'edit'" mat-button color="primary" class="text-green-600" (click)="donationEdit(don.donation!,false)">Cancel</button>
                 <button mat-button color="primary" class="text-green-600" 
-                *ngIf="canUpdateDonation" 
+                  *ngIf="canUpdateDonation" 
                 (click)="donationEdit(don.donation!,true)">{{don.action == 'edit' ? 'Confirm':'Update'}}</button>
             </div>
         </mat-action-row>

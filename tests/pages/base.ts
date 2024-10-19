@@ -12,11 +12,22 @@ export class BasePage {
     protected readonly navbarMyProfileBtnEl: string='//a[normalize-space(text())="My profile"]';
     protected readonly logoIconEl: string='//img[@src="/assets/logo.png"]';
     protected readonly loadingEl: string="//*[contains(text(),'Please wait, Things are getting ready...')]";
-
-
+    private readonly MonthMap = new Map<number,string>();
     constructor(page: Page, testInfo: TestInfo) {
         this.page = page;
         this.testInfo = testInfo;
+        this.MonthMap.set(1,'JAN');
+        this.MonthMap.set(2,'FEB');
+        this.MonthMap.set(3,'MAR');
+        this.MonthMap.set(4,'APR');
+        this.MonthMap.set(5,'MAY');
+        this.MonthMap.set(6,'JUN');
+        this.MonthMap.set(7,'JUL');
+        this.MonthMap.set(8,'AUG');
+        this.MonthMap.set(9,'SEP');
+        this.MonthMap.set(10,'OCT');
+        this.MonthMap.set(11,'NOV');
+        this.MonthMap.set(12,'DEC');
         //console.log(testInfo)
         // this.pageTitleEL = page.locator();
         // this.navbarProfileIconEl=page.locator()
@@ -65,9 +76,30 @@ export class BasePage {
         }
         //await this.captureScreenshot(`Selected '${value}' on locator ${locator}`);
     }
+    /**
+     * 
+     * @param locator Index starts from 1
+     * @param index 
+     */
+    protected async selectByIndex(locator: string, index: number) {
+        // console.log(`Selecting '${value}' on element ${locator}`)
+         await this.page.click(locator);
+         let mat_option=this.page.locator(`mat-option`);
+         let options=await mat_option.all();
+         if(options.length > 0){
+             await options.at(index-1)!.click();
+         }else{
+             throw new Error(`No option found at index `+index)
+         }
+         //await this.captureScreenshot(`Selected '${value}' on locator ${locator}`);
+     }
 
-    protected async selectdate(locator: string, value: {year:string;month:string;date:string}) {
-       
+    protected async selectdate(locator: string, date: Date) {
+       let value :{year:string;month:string;date:string}={
+        date: date.getDate()+'',
+        month: this.MonthMap.get(date.getMonth())!,
+        year: date.getFullYear()+''
+       }
         //console.log(`Selecting date '${value}' on element ${locator}`)
         // await locator.waitFor({state:'attached',timeout:2000})
         // await locator.scrollIntoViewIfNeeded();
@@ -83,9 +115,9 @@ export class BasePage {
         let firstYear:number= parseInt(list[0])
         let year:number= parseInt(value.year)
         if(list.includes(value.year)){
-            await this.page.locator('//mat-calendar').getByText(value.year).click();
-            await this.page.locator('//mat-calendar').getByText(value.month).click()
-            await this.page.locator('//mat-calendar').getByText(value.date).click()
+            await this.page.locator('mat-calendar .mat-calendar-body-cell-content').getByText(value.year,{exact:true}).click();
+            await this.page.locator('mat-calendar .mat-calendar-body-cell-content').getByText(value.month,{exact:true}).click()
+            await this.page.locator('mat-calendar .mat-calendar-body-cell-content').getByText(value.date,{exact:true}).click()
         }else if(firstYear > year){
             //click left
             await this.page.click('.mat-calendar-previous-button')

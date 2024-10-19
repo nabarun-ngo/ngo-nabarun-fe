@@ -35,7 +35,8 @@ export class NabarunPublicPage extends BasePage {
     protected readonly donateBAEl: string="//span[normalize-space()='Bank Account']";
     protected readonly donateBACheck1El: string="#paidToAcc2";
     protected readonly donateBASubmit1BtnEl: string="#sub_bt2";
-
+    protected readonly upiFileUploadBtnEl: string="//form[@id='donate_upi']//input[@id='file']";
+    protected readonly bankFileUploadBtnEl: string="//form[@id='donate_bank']//input[@id='file']";
 
     constructor(page: Page, testInfo: TestInfo) {
         super(page, testInfo);
@@ -149,13 +150,16 @@ export class NabarunPublicPage extends BasePage {
         await this.page.click(this.donateNowBtnEl)
     }
 
-    async confirmPayment(method:'BA'|'UPI') {
+    async confirmPayment(method:'BA'|'UPI', file:string) {
         if(method == 'UPI'){
             await this.page.click(this.donateUPICheck1El)
+            await this.uploadFile(this.upiFileUploadBtnEl,file)
             await this.page.click(this.donateUPISubmit1BtnEl)
         }else{
             await this.page.click(this.donateBAEl)
             await this.page.click(this.donateBACheck1El)
+            const locator = this.page.locator("//form[@id='']//input[@id='file']");
+            await this.uploadFile(this.bankFileUploadBtnEl,file)
             await this.page.click(this.donateBASubmit1BtnEl)
         }
         const reqId = await this.getLocator('//*[@id="id"]').textContent()

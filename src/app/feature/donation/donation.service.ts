@@ -9,6 +9,7 @@ import { date } from 'src/app/core/service/utilities.service';
   providedIn: 'root'
 })
 export class DonationService {
+ 
 
   constructor(
     private donationController: DonationControllerService,
@@ -133,6 +134,10 @@ export class DonationService {
 
   async getMyId(){
     return (await this.identityService.getUser()).profile_id;
+  }
+
+  getHistory(id: string) {
+    return this.donationController.getHistories({id:id}).pipe(map(d => d.responsePayload));
   }
   
 }

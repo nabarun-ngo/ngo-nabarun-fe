@@ -219,7 +219,7 @@ export class CommonControllerService extends BaseService {
   }
 
   /** Path part for operation `getDocuments()` */
-  static readonly GetDocumentsPath = '/api/common/getDocuments/{id}';
+  static readonly GetDocumentsPath = '/api/common/document/getDocuments/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.

@@ -1,6 +1,6 @@
 import { FormGroup } from "@angular/forms";
 import { Subject } from "rxjs";
-import { DocumentDetail, DocumentDetailUpload, DonationDetail, DonationSummary, UserDetail } from "src/app/core/api/models";
+import { DocumentDetail, DocumentDetailUpload, DonationDetail, DonationSummary, HistoryDetail, UserDetail } from "src/app/core/api/models";
 import { FileUpload } from "src/app/shared/components/generic/file-upload/file-upload.component";
 
 
@@ -11,6 +11,7 @@ export interface DonationList {
     update?: {valid:boolean;donation:DonationDetail};
     upload?:FileUpload[];
     eventSubject:Subject<any>
+    histories?: HistoryDetail[];
 }
 
 export interface MemberList {

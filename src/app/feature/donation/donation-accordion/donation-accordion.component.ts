@@ -19,6 +19,7 @@ import { SCOPE } from 'src/app/core/constant/auth-scope.const';
   styleUrls: ['./donation-accordion.component.scss']
 })
 export class DonationAccordionComponent implements OnInit {
+
   protected scope=SCOPE;
   @Input({ required: true }) donations!: DonationList[];
   @Input() tabName: donationTab | undefined;
@@ -204,6 +205,16 @@ export class DonationAccordionComponent implements OnInit {
     this.createDonationData.donation.donorDetails = memberData.member;
     console.log(this.createDonationData.donation)
 
+  }
+
+  showHistory(donation: DonationDetail) {
+    
+    this.donationService.getHistory(donation.id!).subscribe(data=>{
+      this.donations.filter(f => f.donation?.id == donation.id).map(item => {
+        item.histories = data;
+        return item;
+      });
+    });
   }
 
 

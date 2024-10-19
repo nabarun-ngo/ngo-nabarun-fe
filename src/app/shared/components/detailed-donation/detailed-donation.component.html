@@ -252,7 +252,8 @@
                                 <app-universal-input formControlName="eventId" [inputModel]="{
                                     html_id:'eventId',
                                     tagName:'select',
-                                    inputType:''
+                                    inputType:'',
+                                    selectList: events
                                     }" />
                             </div>
                         </div>
@@ -302,6 +303,21 @@
                         <div class="py-2 font-semibold">Please upload supporting document(s)</div>
                         <app-file-upload (files)="docChange.emit($event)"></app-file-upload>
                     </div>
+                </div>
+            </div>
+            
+            <div class="bg-white p-3 shadow-lg rounded-sm" *ngIf="histories">
+                <div class="flex items-center space-x-2 font-semibold text-gray-900 leading-8">
+                    <span clas="text-green-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                    </svg>
+                </span>
+                    <span class="tracking-wide">Donation Changes</span>
+                </div>
+                <div class="text-gray-700 my-2 mx-4">
+                    <app-history [histories]="histories"></app-history>
                 </div>
             </div>
         </div>

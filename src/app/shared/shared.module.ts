@@ -46,6 +46,7 @@ import { MemberSearchPipe } from '../feature/member/member.pipe';
 import { AccordionFilterPipe } from './pipes/accordion-filter.pipe';
 import { AlertComponent } from './components/generic/alert/alert.component';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { HistoryComponent } from './components/generic/history/history.component';
 
 @NgModule({
   declarations: [
@@ -68,7 +69,8 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
     HtmlSanitizerPipe,
     DynamicInjectPipe,
     AccordionFilterPipe,
-    AlertComponent
+    AlertComponent,
+    HistoryComponent
   ],
   imports: [
     CommonModule,
@@ -128,6 +130,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
     MatButtonToggleModule,
     DynamicInjectPipe,
     AlertComponent,
+    HistoryComponent,
   ],
   providers: [{
     provide: MAT_RADIO_DEFAULT_OPTIONS,
