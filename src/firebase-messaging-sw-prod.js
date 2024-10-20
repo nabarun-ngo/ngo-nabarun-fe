@@ -2,15 +2,15 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.10.0/fireba
 import { getMessaging, onBackgroundMessage, isSupported } from 'https://www.gstatic.com/firebasejs/10.10.0/firebase-messaging-sw.js';
 
 const app = initializeApp({
-    // apiKey: "AIzaSyBLw5Ry_9dUOFPbuwoiAzwII99CVMpz978",
-    // authDomain: "nabarun-test.firebaseapp.com",
-    // databaseURL: "https://nabarun-test-default-rtdb.firebaseio.com",
-    // projectId: "nabarun-test",
-    // storageBucket: "nabarun-test.appspot.com",
-    // messagingSenderId: "595475200212",
-    // appId: "1:595475200212:web:5fb71eac858442e0046341",
-    // measurementId: "G-PT9V4XMXWY"
+  apiKey: "AIzaSyD-kDzvTziMDGsDh40GJS3XVuL8A9_riQo",
+  authDomain: "wengonabarun.firebaseapp.com",
+  projectId: "wengonabarun",
+  storageBucket: "wengonabarun.appspot.com",
+  messagingSenderId: "496110742871",
+  appId: "1:496110742871:web:ac779b109599ae719ae212",
+  measurementId: "G-DY3169JJ99"
 });
+
 
 isSupported().then(isSupported => {
 

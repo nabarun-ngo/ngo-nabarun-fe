@@ -1,13 +1,12 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { OAuthModule } from 'angular-oauth2-oidc';
 import { HeaderComponent } from './component/header/header.component';
 import { FooterComponent } from './component/footer/footer.component';
 import { ShowAuthedDirective } from './directive/show-authed.directive';
 import { PageTitleComponent } from './component/page-title/page-title.component';
 import { MatDialogModule } from '@angular/material/dialog';
-import { NotificationModalComponent } from './component/notification-modal/notification-modal.component';
+import { NotificationModalComponent, SnackComponent } from './component/notification-modal/notification-modal.component';
 import { environment } from 'src/environments/environment';
 import { ApiModule } from './api/api.module';
 import { HttpErrorIntercepterService } from './intercepter/http-error-intercepter.service';
@@ -16,8 +15,12 @@ import { RouterModule } from '@angular/router';
 import { CommonLayoutComponent } from './layout/common-layout/common-layout.component';
 import { SecuredLayoutComponent } from './layout/secured-layout/secured-layout.component';
 import { ModalComponent } from './component/modal/modal.component';
-import { MessageComponent } from './component/message/message.component';
 import { DateDiffPipe } from './pipe/date-diff.pipe';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { MatNativeDateModule } from '@angular/material/core';
+import { IonicModule } from '@ionic/angular';
+import { AuthHttpInterceptor, AuthModule } from '@auth0/auth0-angular';
+import { getScopes } from './constant/auth-scope.const';
 
 
 
@@ -28,27 +31,31 @@ import { DateDiffPipe } from './pipe/date-diff.pipe';
     ShowAuthedDirective,
     PageTitleComponent,
     NotificationModalComponent,
+    SnackComponent,
     CommonLayoutComponent,
     SecuredLayoutComponent,
     ModalComponent,
-    MessageComponent,
     DateDiffPipe,
   ],
   imports: [
     CommonModule,
     HttpClientModule,
-    OAuthModule.forRoot({
-      resourceServer:{
-        sendAccessToken:true,
-        allowedUrls:[environment.api_base_url]
-      }
-    }),
+    // OAuthModule.forRoot({
+    //   resourceServer:{
+    //     sendAccessToken:true,
+    //     allowedUrls:[environment.api_base_url]
+    //   }
+    // }),
+    AuthModule.forRoot(environment.auth_config),
+    IonicModule.forRoot(),
     MatDialogModule,
     ApiModule.forRoot({
       rootUrl : environment.api_base_url
     }),
     NgHttpLoaderModule.forRoot(),
     RouterModule,
+    MatSnackBarModule,
+    MatNativeDateModule,
   ],
   exports:[
     FooterComponent,
@@ -62,7 +69,19 @@ import { DateDiffPipe } from './pipe/date-diff.pipe';
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorIntercepterService,
       multi: true
-  }
+  },{
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthHttpInterceptor,
+    multi: true
+},
+  // {
+  //   provide:MAT_DATEPICKER_SCROLL_STRATEGY,
+  //   useExisting:true
+  // },
+  // {
+  //   provide:MAT_SELECT_SCROLL_STRATEGY,
+  //   useExisting:true
+  // }
   ]
 })
 export class CoreModule {

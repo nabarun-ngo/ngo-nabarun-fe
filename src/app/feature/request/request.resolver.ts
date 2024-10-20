@@ -1,7 +1,9 @@
 import { ResolveFn } from '@angular/router';
 import { RequestService } from './request.service';
 import { inject } from '@angular/core';
-import { RequestDefaultValue, WorkListDefaultValue, requestTab, workListTab } from './request.const';
+import { RequestDefaultValue, requestTab, TaskDefaultValue, workListTab } from './request.const';
+import { CommonService } from 'src/app/shared/services/common.service';
+import { RefDataType } from 'src/app/core/api/models';
 
 export const requestListResolver: ResolveFn<any> = (route, state) => {
   let tab = (route.data['tab'] || RequestDefaultValue.tabName) as requestTab;
@@ -9,12 +11,12 @@ export const requestListResolver: ResolveFn<any> = (route, state) => {
   return inject(RequestService).findRequests(isDelegated);
 };
 
-export const requestWorkflowResolver: ResolveFn<any> = (route, state) => {
-  let tab = (route.data['tab'] || WorkListDefaultValue.tabName) as workListTab;
-  let completed = tab == 'completed_worklist'
-  return inject(RequestService).findMyWorkList(completed);
+export const requestRefDataResolver: ResolveFn<any> = (route, state) => {
+  return inject(CommonService).getRefData([RefDataType.Workflow]);
 };
 
-export const requestRefDataResolver: ResolveFn<any> = (route, state) => {
-  return inject(RequestService).findRequestRefData();
+export const taskListResolver: ResolveFn<any> = (route, state) => {
+  let tab = (route.data['tab'] || TaskDefaultValue.tabName) as workListTab;
+  let completed = tab == 'completed_worklist'
+  return inject(RequestService).findMyWorkList({isCompleted:completed});
 };

@@ -5,6 +5,7 @@
 /tmp
 /out-tsc
 /bazel-out
+.env
 
 # Node
 /node_modules
@@ -45,3 +46,11 @@ Thumbs.db
 .firebase
 *-debug.log
 .runtimeconfig.json
+.vscode
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/my-reports/
+/allure-report/
+/allure-results/

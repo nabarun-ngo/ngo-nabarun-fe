@@ -8,6 +8,10 @@ import { compareObjects, getNonNullValues } from 'src/app/core/service/utilities
 import { ModalService } from 'src/app/core/service/modal.service';
 import { AppDialog } from 'src/app/core/constant/app-dialog.const';
 import { Subject } from 'rxjs';
+import { AlertData } from 'src/app/shared/components/generic/alert/alert.model';
+import { AppAlert } from 'src/app/core/constant/app-alert.const';
+import { UserIdentityService } from 'src/app/core/service/user-identity.service';
+import { SCOPE } from 'src/app/core/constant/auth-scope.const';
 
 @Component({
   selector: 'app-donation-accordion',
@@ -16,6 +20,7 @@ import { Subject } from 'rxjs';
 })
 export class DonationAccordionComponent implements OnInit {
 
+  protected scope=SCOPE;
   @Input({ required: true }) donations!: DonationList[];
   @Input() tabName: donationTab | undefined;
   @Input() createDonation: boolean = false;
@@ -24,16 +29,22 @@ export class DonationAccordionComponent implements OnInit {
   donationStatus = DonationStatus;
   createDonationData: { eventSubject: Subject<any>; validDonation?: boolean, validGuest?: boolean; donation?: DonationDetail } = { eventSubject: new Subject<any>() };
   @Input() member!: UserDetail;
+  @Input() searchValue!: string;
+
+  alertList:AlertData[]=[];
+  canUpdateDonation!: boolean;
+
 
   constructor(
     private donationService: DonationService,
     private sharedDataService: SharedDataService,
     private modalService: ModalService,
-
+    protected identityService:UserIdentityService
   ) { }
 
   ngOnInit(): void {
     this.refData = this.sharedDataService.getRefData('DONATION');
+    this.canUpdateDonation=this.identityService.isAccrediatedTo(this.scope.update.donation);
   }
 
   accordionOpened(donation: DonationDetail) {
@@ -66,6 +77,7 @@ export class DonationAccordionComponent implements OnInit {
               let files=result?.upload?.map(m=>m.detail);
               this.donationService.uploadDocuments(donation.id!,files!).subscribe(data=>{
                 this.donationService.updateDonation(donation.id!, update).subscribe(data => {
+                  this.alertList.push(AppAlert.donation_updated);
                   this.donationService.fetchDocuments(donation.id!).subscribe(docs=>{
                     this.donations.filter(f => f.donation?.id == donation.id).map(item => {
                       item.action = 'view';
@@ -79,6 +91,7 @@ export class DonationAccordionComponent implements OnInit {
               })
             }else{
               this.donationService.updateDonation(donation.id!, update).subscribe(data => {
+                this.alertList.push(AppAlert.donation_updated);
                 this.donations.filter(f => f.donation?.id == donation.id).map(item => {
                   item.action = 'view';
                   item.update = undefined;
@@ -120,15 +133,21 @@ export class DonationAccordionComponent implements OnInit {
     if (isFileNeeded && (!result?.upload || result?.upload?.length == 0)) {
       this.modalService.openNotificationModal(AppDialog.err_min_1_doc, 'notification', 'error');
     } else {
-      this.donationService.updatePaymentInfo(donation.id!, result?.update?.donation!).subscribe(data => {
+      this.donationService.updatePaymentInfo(donation.id!, 'NOTIFY', result?.update?.donation!).subscribe(data => {
         console.log(data)
         if(isFileNeeded){
           let files=result?.upload?.map(m=>m.detail);
           this.donationService.uploadDocuments(donation.id!,files!).subscribe(data=>{})
         }
+        this.donations.filter(f => f.donation?.id == donation.id).map(item => {
+          item.donation=data!;
+          item.action='view';
+          return item;
+        });
+        this.alertList.push(AppAlert.payment_notified);
       })
     }
-    console.log(result)
+    console.log(this.donations)
     //this.donationService.updatePaymentAndDocuments
   }
 
@@ -144,6 +163,8 @@ export class DonationAccordionComponent implements OnInit {
         }
         //console.log(donation);
         this.donationService.createDonation(donation).subscribe(data => {
+          this.alertList.push(AppAlert.donation_created);
+
           this.donations.unshift({
             donation: data!,
             action: 'view',
@@ -186,6 +207,16 @@ export class DonationAccordionComponent implements OnInit {
 
   }
 
+  showHistory(donation: DonationDetail) {
+    
+    this.donationService.getHistory(donation.id!).subscribe(data=>{
+      this.donations.filter(f => f.donation?.id == donation.id).map(item => {
+        item.histories = data;
+        return item;
+      });
+    });
+  }
+
 
   /**
    * @param donationTypeCode 
@@ -195,14 +226,14 @@ export class DonationAccordionComponent implements OnInit {
     if (this.refData == undefined || donationTypeCode == undefined) {
       return donationTypeCode;
     }
-    return this.refData[DonationRefData.type]?.find((f: { key: string; }) => f.key == donationTypeCode)?.displayValue;
+    return this.refData[DonationRefData.refDataKey.type]?.find((f: { key: string; }) => f.key == donationTypeCode)?.displayValue;
   }
 
   protected displayDonationStatus = (donationStatusCode: string | undefined) => {
     if (this.refData == undefined || donationStatusCode == undefined) {
       return donationStatusCode;
     }
-    return this.refData[DonationRefData.status]?.find((f: { key: string; }) => f.key == donationStatusCode)?.displayValue;
+    return this.refData[DonationRefData.refDataKey.status]?.find((f: { key: string; }) => f.key == donationStatusCode)?.displayValue;
   }
 
 }

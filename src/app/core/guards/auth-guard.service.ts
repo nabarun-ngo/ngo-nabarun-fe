@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { OAuthService } from 'angular-oauth2-oidc';
 import { UserIdentityService } from '../service/user-identity.service';
 
 @Injectable({
@@ -15,11 +14,20 @@ export class AuthGuardService  {
     ) {
     
   }
-  canActivate(): boolean {     
-    if (this.identityService.isUserLoggedIn()) {
+  async canActivate(): Promise<boolean> {     
+    if (await this.identityService.isUserLoggedIn()) {
       return true;
     }else{
-      this.router.navigate(['']);
+      const request_uri = window.location.pathname + window.location.search;
+      const redirect_to = (request_uri !== '/' ? request_uri : undefined);
+      if (redirect_to) {
+        console.log('saving requested url: ', redirect_to);
+        this.router.navigate([''],{
+          state:{redirect_to: redirect_to}
+        });
+      }else{
+        this.router.navigate(['']);
+      }     
       return false;
     }
   

@@ -4,9 +4,11 @@ import { AuthUser } from '../../model/auth-user.model';
 import { ModalService } from '../../service/modal.service';
 import { AppDialog } from '../../constant/app-dialog.const';
 import { AppRoute } from '../../constant/app-routing.const';
-import { NotificationService } from '../../service/notification.service';
-import { Observable } from 'rxjs';
 import { AppNotification } from '../../model/notification.model';
+import { Router } from '@angular/router';
+import { CommonService } from 'src/app/shared/services/common.service';
+import {Howl, Howler} from 'howler';
+import { SpinnerVisibilityService } from 'ng-http-loader';
 
 @Component({
   selector: 'app-header',
@@ -14,39 +16,57 @@ import { AppNotification } from '../../model/notification.model';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
+
   protected app_route=AppRoute;
-  isAuthenticated!: boolean;
+  //isAuthenticated!: boolean;
   user!: AuthUser;
-  userId!:string;
-  notifications:  AppNotification[]=[];
+  //userId!:string;
+  //notifications:  AppNotification[]=[];
+  notificationCount:string='0';
   constructor(
     private identityService: UserIdentityService,
     private modalService:ModalService,
-    private notificationService:NotificationService
+    private commonService:CommonService,
+
   ) { }
 
 
-  ngOnInit(): void {
-    this.isAuthenticated = this.identityService.isUserLoggedIn();
-    this.user=this.identityService.getUser();
-    this.userId=this.user.profile_id;
-    this.notificationService.requestPermission();
-    this.notificationService.liveNotifications$.subscribe(data=>{
-      this.notifications.push(new AppNotification(data));
+  async ngOnInit(): Promise<void> {
+    //this.isAuthenticated = this.identityService.isUserLoggedIn();
+    this.user=await this.identityService.getUser();
+    // this.commonService.fetchNotification().subscribe(data=>{
+    //   this.notifications=[];
+    //   data?.content?.forEach(d=>{
+    //     this.notifications.push(new AppNotification(d));
+    //   })
+    // })
+    this.commonService.requestPermission();
+    this.commonService.liveNotifications$.subscribe(data=>{
+      //this.notifications.unshift(new AppNotification(data));
+      //console.log(data)
+      this.sound();
+      if(data['notificationCount']){
+        this.notificationCount=data['notificationCount'];
+      }
     });
-      // data?.content?.forEach(f=>{
-      //   this.notifications.push(new AppNotification(f));
-      // })
-    //});
-
   }
 
   logout() {
+    this.modalService.openNotificationModal(AppDialog.logout_dialog,'confirmation','warning').onAccept$.subscribe(data=>{
+      this.identityService.logout();
+    })
   }
 
   sound(){
-    this.notificationService.sound.play();
-    console.log('hi hello')
+    Howler.autoUnlock= false;
+    var sound = new Howl({
+      src: ['/assets/mixkit-bell-notification-933.wav'],
+      preload:true,
+    });
+    
+    sound.play();
   }
+
+  
 
 }

@@ -4,12 +4,15 @@ import { Observable, throwError } from 'rxjs';
 import { retry, catchError, switchMap, tap } from 'rxjs/operators';
 import { ModalService } from '../service/modal.service';
 import { isEmpty } from '../service/utilities.service';
+import { environment } from 'src/environments/environment';
+import * as uuid from 'uuid';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HttpErrorIntercepterService implements HttpInterceptor {
 
+ 
 
   constructor(
       private modalService: ModalService,
@@ -18,7 +21,19 @@ export class HttpErrorIntercepterService implements HttpInterceptor {
 
  
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpSentEvent | HttpHeaderResponse | HttpProgressEvent | HttpResponse<any> | HttpUserEvent<any>> {
+    //console.log(request.url,environment.api_base_url)
+    if(request.url.includes(environment.api_base_url)){
+      request = request.clone({
+        setHeaders:{
+          'Correlation-Id': uuid.v4()
+        }
+      })
+    }
+    
+    //console.log(request.headers.get('Correlation-Id'))
+
     var showError=request.headers.get('hideError') ==  null ? true: false;
+    var corrId=request.headers.get('Correlation-Id')!;
     //request.headers
     return next.handle(request)
       .pipe(
@@ -35,9 +50,9 @@ export class HttpErrorIntercepterService implements HttpInterceptor {
         catchError((error) => {
           if(showError){
             if (error instanceof HttpErrorResponse) {
-              this.showErrorResponse(error);
+              this.showErrorResponse(error,corrId);
             }else if (error.error instanceof ErrorEvent) {
-              this.showErrorResponse(error);
+              this.showErrorResponse(error,corrId);
             }
           }
           return throwError(error);
@@ -45,7 +60,7 @@ export class HttpErrorIntercepterService implements HttpInterceptor {
       )
   }
 
-  private showErrorResponse(errorResponse:any){
+  private showErrorResponse(errorResponse:any, corrId ='NA'){
     console.log(errorResponse);
     let message:string; 
     let heading:string='Error'; 
@@ -90,7 +105,7 @@ export class HttpErrorIntercepterService implements HttpInterceptor {
 
     let moreDetails=null;
     if(errorResponse.error !=null && !isEmpty(errorResponse.error.details)){
-      moreDetails=new Array(errorResponse.error.details).toString()
+      moreDetails=new Array(errorResponse.error.details,'Ref Id : '+corrId).toString()
     }
     
 

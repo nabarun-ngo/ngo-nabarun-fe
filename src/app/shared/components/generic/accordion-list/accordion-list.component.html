@@ -5,54 +5,69 @@
                 <div class="grid grid-cols-{{accordionList.headers.length}} gap-10 w-full text-center">
                     <div *ngFor="let header of accordionList.headers;let i=index;" class="col-span-1">
                         <span class="px-2 py-1 inline-flex leading-5 font-bold {{header.rounded ? 'rounded-full': ''}} {{header.bgColor ? header.bgColor :'bg-purple-100'}} {{header.textColor ? header.textColor:'text-gray-900'}} uppercase">
-                           {{header.value}}
+                          {{header.showDisplayValue ? displayValue(header.refDataSection,header.value) : header.value}} 
                         </span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- <mat-expansion-panel class="m-2" [expanded]="true" *ngIf="accordionList.addContent">
-        <mat-expansion-panel-header style="pointer-events: none;">
-            <mat-panel-description>
+   
+    <mat-expansion-panel class="m-2" [expanded]="true" *ngIf="accordionList.addContent">
+        <mat-expansion-panel-header class="w-full items-center my-2" style="pointer-events: none;">
+            <mat-panel-description class="w-full">
                 <div class="grid grid-cols-{{accordionList.addContent.columns.length}} gap-10 w-full text-center">
-                    <div *ngFor="let item of accordionList.addContent.columns;let i=index;" class="col-span-1">
+                    <div *ngFor="let item of accordionList.addContent.columns;" class="col-span-1">
                         <span class="px-2 py-1 inline-flex leading-5 font-medium {{item.rounded ? 'rounded-full': ''}} {{item.bgColor ? item.bgColor :''}} {{item.textColor ? item.textColor:'text-gray-900'}} uppercase ">
-                           {{item.value | replaceNull}}
+                            {{(item.showDisplayValue ? displayValue(item.refDataSection,item.value) : item.value) | replaceNull}}
                         </span>
                     </div>
                 </div>
             </mat-panel-description>
         </mat-expansion-panel-header>
+        <app-detailed-view [detailedViews]="accordionList.addContent.detailed" [refData]="accordionList.refData!"></app-detailed-view>
+        <!-- {{accordionList.addContent.detailed | json}} -->
         <mat-action-row>
-        </mat-action-row>
-    </mat-expansion-panel> -->
-
-    <mat-expansion-panel *ngFor="let content of accordionList.contents;let i=index;" (opened)="onAccordionOpen.emit({rowIndex:i})">
-        <mat-expansion-panel-header>
-            <mat-panel-description>
-                <div class="grid grid-cols-{{content.columns.length}} gap-10 w-full text-center">
-                    <div *ngFor="let item of content.columns;" class="col-span-1">
-                        <span class="px-2 py-1 inline-flex leading-5 font-medium {{item.rounded ? 'rounded-full': ''}} {{item.bgColor ? item.bgColor :''}} {{item.textColor ? item.textColor:'text-gray-900'}} uppercase ">
-                           {{item.value | replaceNull}}
-                        </span>
-                    </div>
-                </div>
-            </mat-panel-description>
-        </mat-expansion-panel-header>
-        <app-detailed-view [detailedViews]="content.detailed"></app-detailed-view>
-        <mat-action-row>
-            <!-- <div *ngIf="tabName == 'self_donation'" class="mx-4">
-                <button mat-button color="primary" class="text-green-600">Show changes</button>
-                <button mat-button color="primary" class="text-green-600">Pay now</button>
-                <button mat-button color="primary" class="text-purple-600" *ngIf="don.donation?.status == donationStatus.Raised || don.donation?.status == donationStatus.Pending" (click)="saveAndUpload(don.donation!)">Save</button>
-            </div> -->
             <div class="mx-4">
-                <button mat-button *ngFor="let button of content.buttons" [id]="button.button_id+i" class="text-green-600" (click)="onButtonClick.emit({buttonId:button.button_id,rowIndex:i})">{{button.button_name}}</button>
+                <button mat-button *ngFor="let button of accordionList.addContent.buttons" [id]="button.button_id+'_add'" class="text-green-600" (click)="onButtonClick.emit({buttonId:button.button_id,rowIndex:0})">{{button.button_name}}</button>
             </div>
         </mat-action-row>
     </mat-expansion-panel>
-    <mat-card class="border-2" *ngIf="accordionList && (accordionList.contents == undefined || accordionList.contents.length == 0)">
+    <mat-expansion-panel *ngFor="let content of accordionList.contents | accordionFilter:accordionList.searchValue;" (opened)="accordionOpened(content)">
+        <mat-expansion-panel-header class="w-full items-center my-2">
+            <mat-panel-description class="w-full">
+                <div class="grid grid-cols-{{content.columns.length}} gap-10 w-full text-center">
+                    <div *ngFor="let item of content.columns;" class="col-span-1">
+                        
+                        <span *ngIf="item.type == 'text'" class="px-2 py-1 inline-flex leading-5 font-medium {{item.rounded ? 'rounded-full': ''}} {{item.bgColor ? item.bgColor :''}} {{item.textColor ? item.textColor:'text-gray-900'}} uppercase ">
+                            {{(item.showDisplayValue ? displayValue(item.refDataSection,item.value) : item.value) | replaceNull}}
+                        </span>
+                        <span *ngIf="item.type == 'date'" class="px-2 py-1 inline-flex leading-5 font-medium {{item.rounded ? 'rounded-full': ''}} {{item.bgColor ? item.bgColor :''}} {{item.textColor ? item.textColor:'text-gray-900'}} uppercase ">
+                            {{item.value | date | replaceNull}}
+                        </span>
+                        <div *ngIf="item.type == 'icon'" class="flex justify-end pt-2 px-2">
+                            <mat-icon class="ml-2">{{item.props!['icon']}}</mat-icon>
+                        </div>
+                        <div class="flex items-center" *ngIf="item.type == 'user'">
+                            <div class="flex-shrink-0 h-10 w-10">
+                                <img class="h-10 w-10 rounded-full" [src]="item.props!['picture']" alt="img">
+                            </div>
+                            <span class="px-2 mx-2 inline-flex leading-5 font-medium rounded-full bg-purple-100 text-purple-800 uppercase">
+                                {{item.value | replaceNull}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+        <app-detailed-view [detailedViews]="content.detailed" [refData]="this.accordionList.refData!"></app-detailed-view>
+        <mat-action-row>
+            <div class="mx-4">
+                <button mat-button *ngFor="let button of content.buttons" [id]="button.button_id" class="text-green-600" (click)="buttonClicked(content,button.button_id)">{{button.button_name}}</button>
+            </div>
+        </mat-action-row>
+    </mat-expansion-panel>
+    <mat-card class="border-2" *ngIf="accordionList?.contents?.length == 0 || (accordionList.contents && (accordionList.contents?.length != 0 && (accordionList.contents | accordionFilter:accordionList.searchValue).length === 0))">
         <div class="m-2 p-2 text-center">No records found.</div>
     </mat-card>
 </mat-accordion>

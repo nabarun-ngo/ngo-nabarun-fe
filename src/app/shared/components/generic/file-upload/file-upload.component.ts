@@ -31,9 +31,10 @@ export class FileUploadComponent {
         this.fileError = 'File size must be greter than ' + this.getSizeText(this.minFileSize) + '.';
       } else if (files[0].size > this.maxFileSize) {
         this.fileError = 'File size must be less than ' + this.getSizeText(this.maxFileSize) + '.';
-        console.log('hiii')
+        //console.log('hiii')
         return;
       } else {
+        
         this.fileError = '';
         let reader = new FileReader();
         reader.readAsDataURL(files[0]);
@@ -41,7 +42,7 @@ export class FileUploadComponent {
           this.selectedFiles.push({
             file: files[0],
             detail: {
-              base64Content: reader.result as string,
+              base64Content: this.sanitizeBase64(reader.result as string),
               contentType: files[0].type,
               originalFileName: files[0].name
             }
@@ -67,6 +68,13 @@ export class FileUploadComponent {
         ? Math.round(size / 1048576) + " MB"
         : Math.round(size / 1024) + " KB"
       : size + " B";
+  }
+  sanitizeBase64(base64:string){
+    let base64Splits=base64.split(",");
+    if(base64Splits && base64Splits.length > 0){
+      return base64Splits[base64Splits.length-1];
+    }
+    return base64;
   }
 
 }

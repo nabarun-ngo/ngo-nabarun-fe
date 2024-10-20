@@ -17,8 +17,8 @@
             </div> -->
             <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
                 <div class="flex-shrink-0 flex items-center">
-                    <img [routerLink]="[app_route.secured_dashboard_page.url]" class="logo block lg:hidden h-8 w-auto" src="/assets/logo.png" alt="image" width="250" height="500">
-                    <img [routerLink]="[app_route.secured_dashboard_page.url]" class="logo hidden lg:block h-8 w-auto" src="/assets/logo.png" alt="image" width="250" height="500">
+                    <img [routerLink]="[app_route.secured_dashboard_page.url]" class="logo block lg:hidden h-16 w-auto" src="/assets/logo.png" alt="image" width="250" height="500">
+                    <img [routerLink]="[app_route.secured_dashboard_page.url]" class="logo hidden lg:block h-16 w-auto" src="/assets/logo.png" alt="image" width="250" height="500">
                 </div>
 
                 <!-- <div class="hidden sm:block sm:ml-6" *ngIf="isNavVisible()">
@@ -54,48 +54,29 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                           </svg>
-                          <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">99</span>
+                          <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">{{notificationCount}}</span>
                         </button>
                     </div>
-                    <div x-show="notificationDropdownOpen" x-on:click.away="notificationDropdownOpen = false" class="absolute right-0 mt-2 bg-white rounded-md shadow-lg overflow-hidden z-20" style="width:20rem;">
+                    <!-- <div x-show="notificationDropdownOpen" x-on:click.away="notificationDropdownOpen = false" class="absolute right-0 mt-2 bg-white rounded-md shadow-lg overflow-hidden z-20" style="width:20rem;">
                         <div class="py-2">
-                            <a (click)="sound()" *ngFor="let notification of notifications"  class="flex items-center px-4 py-3 border-b hover:bg-gray-100 -mx-2">
+                            <a *ngFor="let notification of notifications"  class="flex items-center px-4 py-3 border-b hover:bg-gray-100 -mx-2">
                                 <img class="h-8 w-8 rounded-full object-cover mx-1" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80" alt="avatar">
                                 <p class="text-gray-600 text-sm mx-2">
                                     {{notification.summary}} {{notification.date | dateDiff}} 
-                                    <!-- <span class="font-bold" href="#">Slick Net</span> start following you . 45m -->
                                 </p>
                             </a>
-                            <!-- <a href="#" class="flex items-center px-4 py-3 border-b hover:bg-gray-100 -mx-2">
-                                <img class="h-8 w-8 rounded-full object-cover mx-1" src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80" alt="avatar">
-                                <p class="text-gray-600 text-sm mx-2">
-                                    <span class="font-bold" href="#">Slick Net</span> start following you . 45m
-                                </p>
-                            </a>
-                            <a href="#" class="flex items-center px-4 py-3 border-b hover:bg-gray-100 -mx-2">
-                                <img class="h-8 w-8 rounded-full object-cover mx-1" src="https://images.unsplash.com/photo-1450297350677-623de575f31c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80" alt="avatar">
-                                <p class="text-gray-600 text-sm mx-2">
-                                    <span class="font-bold" href="#">Jane Doe</span> Like Your reply on <span class="font-bold text-blue-500" href="#">Test with TDD</span> artical . 1h
-                                </p>
-                            </a>
-                            <a href="#" class="flex items-center px-4 py-3 hover:bg-gray-100 -mx-2">
-                                <img class="h-8 w-8 rounded-full object-cover mx-1" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=398&q=80" alt="avatar">
-                                <p class="text-gray-600 text-sm mx-2">
-                                    <span class="font-bold" href="#">Abigail Bennett</span> start following you . 3h
-                                </p>
-                            </a>-->
                         </div> 
-                        <a href="#" class="block bg-gray-800 text-white text-center font-bold py-2">See all notifications</a>
-                    </div>
+                        <a class="block bg-gray-800 text-white text-center font-bold py-2">See all notifications</a>
+                    </div> -->
                 </div>
 
                 <!-- Profile dropdown -->
-                <div class="ml-6 relative ">
+                <div class="ml-6 relative">
                     <div>
-                        <button type="button" x-on:click=" isProfileDropdownOpen = true" class="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white" id="user-menu-button" aria-expanded="false"
+                        <button  type="button" x-on:click=" isProfileDropdownOpen = true" class="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white" id="user-menu-button" aria-expanded="false"
                             aria-haspopup="true">
                           <span class="sr-only">Open user menu</span>
-                          <img class="h-8 w-8 rounded-full" src="{{user.picture}}" alt="Profile">
+                          <img class="h-8 w-8 rounded-full" [src]="user.picture" alt="Profile">
                         </button>
                     </div>
 
@@ -112,7 +93,7 @@
                     <div x-show="isProfileDropdownOpen" x-on:click.away="isProfileDropdownOpen = false" class=" origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical"
                         aria-labelledby="user-menu-button" tabindex="-1">
                         <a [routerLink]="[app_route.secured_dashboard_page.url]" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="dashboardLink">Dashboard</a>
-                        <a [routerLink]="[app_route.secured_member_profile_page.url,userId]" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="myprofile">My profile</a>
+                        <a [routerLink]="[app_route.secured_member_my_profile_page.url]" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="myprofile">My profile</a>
                         <!-- <a class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="settings">Settings</a> -->
                         <a (click)="logout()" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="logout">Logout</a>
                     </div>

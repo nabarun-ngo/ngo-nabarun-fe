@@ -49,6 +49,20 @@ export const AppRoute = {
     feature: 'member',
     path: ':id',
   },
+  secured_member_my_profile_page: {
+    id: 'secured_member_my_profile_page',
+    url: '/secured/member/myprofile',
+    parent: 'secured',
+    feature: 'member',
+    path: 'myprofile',
+  },
+  secured_member_roles_page: {
+    id: 'secured_member_roles_page',
+    url: '/secured/member/roles',
+    parent: 'secured',
+    feature: 'member',
+    path: 'roles',
+  },
   secured_request_list_page: {
     id: 'secured_request_list_page',
     url: '/secured/request/list',
@@ -56,19 +70,54 @@ export const AppRoute = {
     feature: 'request',
     path: 'list',
   },
-  secured_request_workflow_page: {
-    id: 'secured_request_workflow_page',
-    url: '/secured/request/workflows',
+  secured_task_list_page: {
+    id: 'secured_task_list_page',
+    url: '/secured/request/tasklist',
     parent: 'secured',
     feature: 'request',
-    path: 'workflows',
+    path: 'tasklist',
   },
-  secured_request_create_page: {
-    id: 'secured_request_create_page',
-    url: '/secured/request/create',
+  secured_account_list_page: {
+    id: 'secured_account_list_page',
+    url: '/secured/account/list',
     parent: 'secured',
-    feature: 'request',
+    feature: 'account',
+    path: 'list',
+  },
+  secured_account_transaction_page: {
+    id: 'secured_account_transaction_page',
+    url: '/secured/account/:id/transactions',
+    parent: 'secured',
+    feature: 'account',
+    path: ':id/transactions',
+  },
+  secured_notice_notices_page: {
+    id: 'secured_notice_notices_page',
+    url: '/secured/notice/list',
+    parent: 'secured',
+    feature: 'notice',
+    path: 'list',
+  },
+  secured_notice_create_page: {
+    id: 'secured_notice_create_page',
+    url: '/secured/notice/create',
+    parent: 'secured',
+    feature: 'notice',
     path: 'create',
+  },
+  secured_notice_update_page: {
+    id: 'secured_notice_update_page',
+    url: '/secured/notice/:id',
+    parent: 'secured',
+    feature: 'notice',
+    path: ':id',
+  },
+  secured_admin_dashboard_page: {
+    id: 'secured_admin_dashboard_page',
+    url: '/secured/admin/dashboard',
+    parent: 'secured',
+    feature: 'admin',
+    path: 'dashboard',
   },
 }
 

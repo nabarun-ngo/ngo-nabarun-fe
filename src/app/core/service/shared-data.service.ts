@@ -11,15 +11,15 @@ export class SharedDataService {
   private pageNameSource = new BehaviorSubject("Welcome");
   pageName = this.pageNameSource.asObservable();
 
-  private isAuthenticatedSource = new BehaviorSubject(false);
-  isAuthenticated = this.isAuthenticatedSource.asObservable();
+  //private isAuthenticatedSource = new BehaviorSubject(false);
+  //isAuthenticated = this.isAuthenticatedSource.asObservable();
 
   private refDataMap: Map<string, {
     [key: string]: KeyValue[];
   }> = new Map();
 
   setPageName(param: string) { this.pageNameSource.next(param) }
-  setAuthenticated(param: boolean) { this.isAuthenticatedSource.next(param) }
+  //setAuthenticated(param: boolean) { this.isAuthenticatedSource.next(param) }
 
   setRefData(name: string, data: {
     [key: string]: KeyValue[];

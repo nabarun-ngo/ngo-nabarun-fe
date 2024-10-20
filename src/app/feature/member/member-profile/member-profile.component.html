@@ -1,11 +1,12 @@
 <main class="p-4 m-4 bg-gray-200 rounded-lg">
     <div class="flex flex-col">
-        <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <app-alert *ngFor="let alertData of alertList" [alertData]="alertData" ></app-alert>
+        <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 mt-2">
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                <app-profile-view [profile]="member"></app-profile-view>
+                <app-profile-view [profile]="member" (onUpdate)="onUpdate($event)" [mode]="mode"></app-profile-view>
             </div>
         </div>
     </div>
-    <button id="back" class="block uppercase w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-300 focus:outline-none focus:shadow-outline focus:bg-gray-300 hover:shadow-xs p-3 my-4">
-        BACK TO DASHBOARD</button>
+    <app-page-navigation-buttons [navigations]="navigations" (onClick)="onNavigationClick($event)"
+    ></app-page-navigation-buttons>
 </main>

@@ -2,8 +2,17 @@
   "hosting": [
     {
       "target": "ngo-nabarun-fe",
-      "source": ".",
-      "frameworksBackend": {}
+      "frameworksBackend": {},
+      "public": "dist/ngo-nabarun-fe",
+      "ignore": [
+            "firebase.json",
+            "**/.*",
+            "**/node_modules/**"
+        ],
+        "rewrites": [{
+            "source": "**",
+            "destination": "/index.html"
+        }]
     }
   ]
 }

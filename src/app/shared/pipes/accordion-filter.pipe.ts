@@ -1,0 +1,32 @@
+import { Pipe, PipeTransform } from '@angular/core';
+import { AccordionRow } from '../components/generic/accordion-list/accordion-list.model';
+import { concatMapTo } from 'rxjs';
+
+@Pipe({
+  name: 'accordionFilter'
+})
+export class AccordionFilterPipe implements PipeTransform {
+
+  transform(rows: AccordionRow[], searchValue: string): AccordionRow[] {
+    if(!rows){
+      return [];
+    }
+    if(!searchValue){
+      return rows;
+    }
+    return rows.filter(f=>{
+      let all_values_in_row:string[]=[];
+      f.columns.forEach(f1=>{
+        all_values_in_row.push(f1.value);
+      })
+      f.detailed.forEach(f1=>{
+        f1.content?.forEach(f2=>{
+          //console.log(f2.field_name+' '+f2.field_value,searchValue)
+          all_values_in_row.push(f2.field_value);
+        })
+      })
+      return all_values_in_row.find(s=> s && s.toString().toLowerCase().includes(searchValue.toLowerCase()))
+    })
+  }
+
+}

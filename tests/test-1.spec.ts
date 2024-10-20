@@ -1,0 +1,37 @@
+import { test, expect } from '@playwright/test';
+
+test('test', async ({ page }) => {
+  await page.goto('http://localhost:4201/');
+  await page.goto('http://localhost:4201/login');
+  await page.getByRole('button', { name: 'Continue with Password' }).click();
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await page.getByRole('button', { name: 'Login' }).click();
+  await page.getByRole('button', { name: 'Accept' }).click();
+  await page.getByRole('link', { name: 'Donations My Pending donations' }).click();
+  await page.getByText('Guest Donations').click();
+  await page.getByRole('button', { name: 'Add Guest Donation' }).click();
+  await page.getByPlaceholder('Ex. John', { exact: true }).click();
+  await page.getByPlaceholder('Ex. John', { exact: true }).click();
+  await page.getByPlaceholder('Ex. John', { exact: true }).fill('Souvik');
+  await page.getByPlaceholder('Ex. John@gmail.com').click();
+  await page.getByPlaceholder('Ex. John@gmail.com').click();
+  await page.getByPlaceholder('Ex. John@gmail.com').fill('souvik@gmail.com');
+  await page.locator('#mat-select-value-3').click();
+  await page.getByRole('option', { name: 'One Time' }).locator('span').click();
+  await page.getByLabel('Yes').check();
+  await page.getByPlaceholder('Ex. 100').click();
+  await page.getByPlaceholder('Ex. 100').fill('600');
+  await page.getByText('Select event').click();
+  await page.locator('#mat-select-value-5').click();
+  await page.getByLabel('', { exact: true }).locator('svg').click();
+  await page.getByRole('button', { name: 'Create' }).click();
+  await page.getByLabel('No').check();
+  await page.getByRole('button', { name: 'Create' }).click();
+  await page.getByRole('button', { name: 'Souvik One Time ₹ 600 Raised' }).click();
+  await page.getByRole('button', { name: 'Update' }).click();
+  await page.getByText('Ex. Paid').click();
+  await page.getByRole('option', { name: 'Cancelled' }).click();
+  await page.getByPlaceholder('Ex. Cancelletion reason').click();
+  await page.getByPlaceholder('Ex. Cancelletion reason').fill('okay');
+  await page.getByRole('button', { name: 'Confirm' }).click();
+});

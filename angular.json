@@ -49,12 +49,12 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumError": "1.5mb"
                 },
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumError": "6kb"
                 }
               ],
               "outputHashing": "all"
@@ -70,12 +70,12 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumError": "1.5mb"
                 },
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumError": "6kb"
                 }
               ],
               "outputHashing": "all"
@@ -96,6 +96,9 @@
           "configurations": {
             "production": {
               "browserTarget": "ngo-nabarun-fe:build:production"
+            },
+            "stage": {
+              "browserTarget": "ngo-nabarun-fe:build:stage"
             },
             "development": {
               "browserTarget": "ngo-nabarun-fe:build:development"

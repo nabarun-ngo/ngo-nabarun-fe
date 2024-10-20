@@ -1,6 +1,6 @@
-<div *ngFor="let view of detailedViews">
-    <form [formGroup]="view.section_form!">
-        <div class="py-4">
+<div *ngFor="let view of detailed_views">
+    <form [formGroup]="view.section_form!" *ngIf="!view.hide_section">
+        <div class="py-4" *ngIf="!view.hide_section">
             <div class="bg-white p-3 shadow-lg rounded-sm">
                 <div class="flex items-center space-x-2 font-semibold text-gray-900 leading-8" *ngIf="view.section_name">
                     <span clas="text-green-500">
@@ -11,35 +11,38 @@
                 </span>
                     <span class="tracking-wide">{{view.section_name}}</span>
                 </div>
-                <div class="text-gray-700 my-2 mx-4">
-                    <div class="grid md:grid-cols-2 text-sm">
+                <div class="text-gray-700 my-2 mx-4" *ngIf="view.section_type == 'key_value'">
+                    <div  class="grid md:grid-cols-2 text-sm" >
                         <ng-container *ngFor="let field of view.content">
-                            <div class="grid grid-cols-2" *ngIf="field.hide_field == undefined || !field.hide_field">
+                            <!-- {{!field.hide_field}}{{field.hide_field}} -->
+                            <div class="grid grid-cols-2" *ngIf="!field.hide_field">
                                 <div class="px-2 py-2 font-semibold">{{field.field_name}}</div>
-                                <div class="px-2 py-2" *ngIf="!(field.editable && view.show_form)">{{field.field_value | replaceNull}}</div>
+                                <div class="px-2 py-2" *ngIf="!(field.editable && view.show_form)" [innerHtml]="(field.show_display_value ? displayValue(field.ref_data_section,field.field_value) : field.field_value) | replaceNull"></div>
 
                                 <div class="px-2 dense-3" *ngIf="field.editable && view.show_form">
-                                    <app-universal-input formControlName="{{field.form_control_name}}" [inputModel]="field.form_input!" />
+                                    <app-universal-input [formControlName]="field.form_control_name!" [inputModel]="field.form_input!" />
                                 </div>
                             </div>
                         </ng-container>
-                        <!-- <div class="grid grid-cols-2" *ngFor="let field of view.content">
-                            <ng-container *ngIf="field.hide_field == undefined || !field.hide_field">
-                                <div class="px-2 py-2 font-semibold">{{field.field_name}}</div>
-                                <div class="px-2 py-2" *ngIf="!(field.editable && viewForm)">{{field.field_value | replaceNull}}</div>
-                                <div class="px-2 dense-3" *ngIf="field.editable && viewForm">
-                                    <app-universal-input formControlName="{{field.form_control_name}}" [inputModel]="field.form_input!" />
-                                </div>
-                            </ng-container>
-                        </div> -->
                     </div>
-                    <!-- <div class="m-2" *ngIf="(mode == 'edit' && dfControl['status'].value == donationStatus.Paid && dfControl['paymentMethod'].value && dfControl['paymentMethod'].value != paymentMethod.Cash)">
-                        <div class="py-2 font-semibold">Upload document(s)</div>
-                        <app-file-upload (files)="docChange.emit($event)"></app-file-upload>
+
+                </div>
+                <div *ngIf="view.section_type == 'accordion_list'">
+                    <!-- <div class="flex justify-end p-2">
+                        <mat-icon [ngClass]="{'disabledLink ' : false}" class="bg-purple-500 mx-2 mt-2">add</mat-icon>
+                        <mat-form-field appearance="outline" class="dense-3">
+                            <input type="text" matInput placeholder="Search here">
+                        </mat-form-field>
                     </div> -->
+                    <app-accordion-list [accordionList]="view.accordionList!" (onButtonClick)="onClick($event)"
+                    (onAccordionOpen)="accordionOpened($event)"></app-accordion-list>    
+                    <!-- <mat-paginator class="mt-4" style="background-color: transparent;" (page)="handlePageEvent(mem.member!,$event)" [length]="mem.total" [pageSize]="mem.size" [pageSizeOptions]="defaultValue.pageSizeOptions" [pageIndex]="mem.index" aria-label="Select page">
+                    </mat-paginator> -->
+                </div>
+                <div *ngIf="view.section_type == 'doc_list'">
+                    <app-document-list [documents]="view.documents" [showHeading]="false"></app-document-list>
                 </div>
             </div>
-
         </div>
     </form>
 </div>

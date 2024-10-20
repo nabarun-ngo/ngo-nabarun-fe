@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
-import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -14,11 +14,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
-import { MatSelectModule } from '@angular/material/select';
+import { MAT_SELECT_SCROLL_STRATEGY, MatSelectModule } from '@angular/material/select';
 import { PageNavigationButtonsComponent } from './components/generic/page-navigation-buttons/page-navigation-buttons.component';
 import { SearchAndAdvancedSearchFormComponent } from './components/search-and-advanced-search-form/search-and-advanced-search-form.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ReplaceNullPipe } from './pipes/replace-null.pipe';
 import { DocumentListComponent } from './components/generic/document-list/document-list.component';
 import { ExpandableTableComponent } from './components/generic/expandable-table/expandable-table.component';
 import { AccordionListComponent } from './components/generic/accordion-list/accordion-list.component';
@@ -28,11 +27,26 @@ import { DetailedDonationComponent } from './components/detailed-donation/detail
 import { SegmentedControllerComponent } from './components/generic/segmented-controller/segmented-controller.component';
 import { ControlSegmentComponent } from './components/generic/segmented-controller/control-segment.component';
 import { FileUploadComponent } from './components/generic/file-upload/file-upload.component';
-import {MAT_RADIO_DEFAULT_OPTIONS, MatRadioModule} from '@angular/material/radio';
+import { MAT_RADIO_DEFAULT_OPTIONS, MatRadioModule } from '@angular/material/radio';
 import { UniversalInputComponent } from './components/generic/universal-input/universal-input.component';
 import { ProfileCardComponent } from './components/profile-card/profile-card.component';
 import { ProfileViewComponent } from './components/profile-view/profile-view.component';
+import { ReplaceNullPipe } from './pipes/replace-null.pipe';
 import { HtmlSanitizerPipe } from './pipes/html-sanitizer.pipe';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
+import { PlatformModule } from '@angular/cdk/platform';
+import { ClipboardModule } from '@angular/cdk/clipboard';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { NgxMatInputTelComponent } from 'ngx-mat-input-tel';
+import { MAT_CHECKBOX_DEFAULT_OPTIONS, MatCheckboxModule } from '@angular/material/checkbox';
+import { DynamicInjectPipe } from './pipes/dynamic-inject.pipe';
+import { MemberSearchPipe } from '../feature/member/member.pipe';
+import { AccordionFilterPipe } from './pipes/accordion-filter.pipe';
+import { AlertComponent } from './components/generic/alert/alert.component';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { HistoryComponent } from './components/generic/history/history.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +55,6 @@ import { HtmlSanitizerPipe } from './pipes/html-sanitizer.pipe';
     SearchAndAdvancedSearchFormComponent,
     DetailedDonationComponent,
     DetailedProfileComponent,
-    ReplaceNullPipe,
     DocumentListComponent,
     ExpandableTableComponent,
     AccordionListComponent,
@@ -52,7 +65,12 @@ import { HtmlSanitizerPipe } from './pipes/html-sanitizer.pipe';
     UniversalInputComponent,
     ProfileCardComponent,
     ProfileViewComponent,
+    ReplaceNullPipe,
     HtmlSanitizerPipe,
+    DynamicInjectPipe,
+    AccordionFilterPipe,
+    AlertComponent,
+    HistoryComponent
   ],
   imports: [
     CommonModule,
@@ -65,10 +83,19 @@ import { HtmlSanitizerPipe } from './pipes/html-sanitizer.pipe';
     MatNativeDateModule,
     MatCardModule,
     MatExpansionModule,
-    MatTableModule, MatButtonModule,  MatIconModule,
+    MatTableModule, MatButtonModule, MatIconModule,
     MatPaginatorModule,
     MatInputModule,
-    MatRadioModule
+    MatRadioModule,
+    AngularEditorModule,
+    NgxMatTimepickerModule,
+    PlatformModule,
+    ClipboardModule,
+    MatMenuModule,
+    MatButtonToggleModule,
+    NgxMatInputTelComponent,
+    MatCheckboxModule,
+    
   ],
   exports: [
     ItemTileListComponent,
@@ -77,12 +104,11 @@ import { HtmlSanitizerPipe } from './pipes/html-sanitizer.pipe';
     SearchAndAdvancedSearchFormComponent,
     MatCardModule,
     MatExpansionModule,
-    MatTableModule, 
-    MatButtonModule,  
+    MatTableModule,
+    MatButtonModule,
     MatIconModule,
     FormsModule,
     ReactiveFormsModule,
-    ReplaceNullPipe,
     MatPaginatorModule,
     ExpandableTableComponent,
     AccordionListComponent,
@@ -94,12 +120,41 @@ import { HtmlSanitizerPipe } from './pipes/html-sanitizer.pipe';
     MatInputModule,
     ProfileCardComponent,
     ProfileViewComponent,
+    ReplaceNullPipe,
     HtmlSanitizerPipe,
-
+    UniversalInputComponent,
+    AngularEditorModule,
+    PlatformModule,
+    ClipboardModule,
+    MatMenuModule,
+    MatButtonToggleModule,
+    DynamicInjectPipe,
+    AlertComponent,
+    HistoryComponent,
   ],
   providers: [{
     provide: MAT_RADIO_DEFAULT_OPTIONS,
     useValue: { color: 'primary' },
-}]
+  }, 
+  {
+    provide: MAT_CHECKBOX_DEFAULT_OPTIONS,
+    useValue: { color: 'primary' },
+  },
+  {
+    provide:MAT_DIALOG_DATA,
+    useValue:{}
+  },
+  // {
+  //   provide:MAT_SELECT_SCROLL_STRATEGY,
+  //   useValue:{}
+  // },
+  // {
+  //   provide:MatDatepicker,
+  //   useValue:{}
+  // }
+  //MemberSearchPipe,
+],
+  
+
 })
 export class SharedModule { }

@@ -1,13 +1,14 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { AccountDetail, DocumentDetail, DocumentDetailUpload, DonationDetail, DonationStatus, DonationType, EventDetail, KeyValue, PaginateAccountDetail, PaymentMethod } from 'src/app/core/api/models';
+import { AccountDetail, DocumentDetail, DocumentDetailUpload, DonationDetail, DonationStatus, DonationType, EventDetail, HistoryDetail, KeyValue, PaginateAccountDetail, PaymentMethod, RefDataType } from 'src/app/core/api/models';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { getErrorMessage, setValidator } from 'src/app/core/service/form.service';
 import { DonationRefData, OperationMode, donationTab } from 'src/app/feature/donation/donation.const';
 import { DonationService } from 'src/app/feature/donation/donation.service';
 import { FileUpload } from '../generic/file-upload/file-upload.component';
 import { DatePipe } from '@angular/common';
+import { CommonService } from '../../services/common.service';
 
 @Component({
   selector: 'app-detailed-donation',
@@ -24,17 +25,22 @@ export class DetailedDonationComponent implements OnInit {
   protected paymentMethod = PaymentMethod;
   protected refData: {
     [key: string]: KeyValue[];
-} | undefined;
-  protected events!: EventDetail[];
-  protected payableAccounts!: AccountDetail[];
+  } | undefined;
+  //protected events!: EventDetail[];
+  protected payableAccounts: KeyValue[] = [];
+  protected events: KeyValue[] = [];
+
   mode!: OperationMode;
   errorMessage = getErrorMessage
 
   constructor(
     private sharedDataService: SharedDataService,
-    private donationService: DonationService
+    private donationService: DonationService,
+    private commonService: CommonService
+
   ) { }
 
+  @Input('histories') histories!:HistoryDetail[]
   @Input('donation') donation: DonationDetail = {};
   @Input('documents') documents!: DocumentDetail[];
   @Input('tab') donationTab!: donationTab;
@@ -48,12 +54,13 @@ export class DetailedDonationComponent implements OnInit {
   @Input('mode') set setMode(mode: OperationMode) {
     this.mode = mode;
     if (mode == 'create' || mode == 'edit') {
+      console.log(this.donation)
       this.donationForm.setControl('type', new FormControl(this.donation?.type, []))
       this.donationForm.setControl('amount', new FormControl(this.donation?.amount, [Validators.required, Validators.min(1)]))
       this.donationForm.setControl('status', new FormControl(this.donation?.status, []))
-      this.donationForm.setControl('startDate', new FormControl(this.donation?.startDate, []))
-      this.donationForm.setControl('endDate', new FormControl(this.donation?.endDate, []))
-      this.donationForm.setControl('paidOn', new FormControl(this.donation?.paidOn, []))
+      this.donationForm.setControl('startDate', new FormControl(this.donation?.startDate ? new Date(this.donation?.startDate):'', []))
+      this.donationForm.setControl('endDate', new FormControl(this.donation?.endDate ? new Date(this.donation?.endDate):'', []))
+      this.donationForm.setControl('paidOn', new FormControl(this.donation?.paidOn ? new Date(this.donation?.paidOn):'', []))
       this.donationForm.setControl('paidToAccount', new FormControl(this.donation?.paidToAccount?.id, []))
       this.donationForm.setControl('paymentMethod', new FormControl(this.donation?.paymentMethod, []))
       this.donationForm.setControl('paidUsingUPI', new FormControl(this.donation?.paidUsingUPI, []))
@@ -91,7 +98,12 @@ export class DetailedDonationComponent implements OnInit {
 
       this.dfControl['status'].valueChanges.subscribe(value => {
         if (value == this.donationStatus.Paid) {
-          this.donationService.getPayableAccounts().subscribe(data => this.payableAccounts = data?.content!);
+          this.donationService.getPayableAccounts().subscribe(data => {
+            this.payableAccounts.splice(0);
+            data?.content!.forEach(m => {
+              this.payableAccounts.push({ key: m.id, displayValue: m.accountHolderName })
+            })
+          });
           this.dfControl['amount'].disable();
           setValidator(this.dfControl['paidOn'], [Validators.required]);
           setValidator(this.dfControl['paidToAccount'], [Validators.required]);
@@ -135,7 +147,12 @@ export class DetailedDonationComponent implements OnInit {
       this.dfControl['isForEvent'].valueChanges.subscribe(value => {
         this.dfControl['eventId'].reset();
         if (value == true) {
-          this.donationService.fetchEvents().subscribe(data => this.events = data?.content!)
+          this.donationService.fetchEvents().subscribe(data => {
+            this.events.splice(0);
+            data?.content!.forEach(m => {
+              this.events.push({ key: m.id, displayValue: m.eventTitle })
+            })
+          })
           setValidator(this.dfControl['eventId'], [Validators.required])
         } else {
           setValidator(this.dfControl['eventId'], [])
@@ -143,8 +160,14 @@ export class DetailedDonationComponent implements OnInit {
       })
 
       if (mode == 'edit') {
-        this.donationService.fetchRefData(this.donation.type, this.donation.status).subscribe(data => this.refData=data);
+        this.commonService.getRefData([RefDataType.Donation], {
+          donationStatus: this.donation.status,
+          donationType: this.donation.type
+        }).subscribe(data => this.refData = data);
+        //console.log(this.dfControl['endDate'].value, this.dfControl['startDate'].value)
         this.dfControl['type'].disable();
+        this.dfControl['startDate'].disable();
+        this.dfControl['endDate'].disable();
         setValidator(this.dfControl['type'], [])
       } else if (mode == 'create') {
         this.dfControl['type'].enable();
@@ -207,17 +230,17 @@ export class DetailedDonationComponent implements OnInit {
     if (this.refData == undefined || donationTypeCode == undefined) {
       return donationTypeCode;
     }
-    return this.refData[this.donationRefData.type]?.find((f: KeyValue) => f.key == donationTypeCode)?.displayValue;
+    return this.refData[this.donationRefData.refDataKey.type]?.find((f: KeyValue) => f.key == donationTypeCode)?.displayValue;
   }
 
   protected displayDonationStatus = (donationStatusCode: string | undefined) => {
     if (this.refData == undefined || donationStatusCode == undefined) {
       return donationStatusCode;
     }
-    return this.refData[this.donationRefData.status]?.find((f: KeyValue) => f.key == donationStatusCode)?.displayValue;
+    return this.refData[this.donationRefData.refDataKey.status]?.find((f: KeyValue) => f.key == donationStatusCode)?.displayValue;
   }
 
-  protected getSelectList = (name: string,options?:{donation?:DonationDetail}) : KeyValue[]=> {
+  protected getSelectList = (name: string, options?: { donation?: DonationDetail }): KeyValue[] => {
 
     // if(name == 'payableAccounts'){
     //   return this.payableAccounts?.map(m => {
@@ -230,18 +253,18 @@ export class DetailedDonationComponent implements OnInit {
     //     return { key: m.id, displayValue: ' | '+m.eventTitle+' | '+m.eventLocation} as KeyValue;
     //   })
     // }
-    if(!this.refData){
+    if (!this.refData) {
       return [];
     }
-    let item=this.refData[name];
-    console.log(item);
+    let item = this.refData[name];
+    // console.log(item);
 
-    if (name == this.donationRefData.type) {
-      return item.filter(f=>this.donationTab != 'guest_donation' || f.key == this.donationType.Onetime);
+    if (item && name == this.donationRefData.refDataKey.type) {
+      return item.filter(f => this.donationTab != 'guest_donation' || f.key == this.donationType.Onetime);
     }
-    if (name == this.donationRefData.nextStatus) {
-      item.unshift({key:options?.donation?.status,displayValue: this.displayDonationStatus(options?.donation?.status)});
-    }
+    // if (item && name == this.donationRefData.refDataKey.nextStatus) {
+    //   item.unshift({key:options?.donation?.status,displayValue: this.displayDonationStatus(options?.donation?.status)});
+    // }
     return item;
   }
 

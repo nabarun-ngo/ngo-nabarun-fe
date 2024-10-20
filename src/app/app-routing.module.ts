@@ -42,6 +42,18 @@ const routes: Routes = [
         path:route_data.secured_request_list_page.feature,
         loadChildren: () => import('./feature/request/request.module').then(m => m.RequestModule),
       },
+      {
+        path:route_data.secured_account_list_page.feature,
+        loadChildren: () => import('./feature/account/account.module').then(m => m.AccountModule),
+      },
+      {
+        path:route_data.secured_notice_notices_page.feature,
+        loadChildren: () => import('./feature/notice/notice.module').then(m => m.NoticeModule),
+      },
+      {
+        path:route_data.secured_admin_dashboard_page.feature,
+        loadChildren: () => import('./feature/admin/admin.module').then(m => m.AdminModule),
+      }, 
     ],
     canActivate:[
       AuthGuardService

@@ -1,0 +1,7 @@
+{
+  "name": "NabarunNGO",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

@@ -33,6 +33,18 @@ export class ModalComponent {
 
 }
 
+// @Component({
+//   selector: 'app-fs-modal',
+//   template: `
+  
+//   `,
+//   styleUrls: ['./modal.component.scss']
+// })
+// export class ModalFSComponent<T> {
+  
+
+// }
+
 
 export class DialogData {
   headerText?: string;

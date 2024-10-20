@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
-import { DonationDashboardComponent } from './donation-dashboard/donation-dashboard.component';
 import { donationDashboardResolver, donationRefDataResolver } from './donation.resolver';
+import { DonationDashboardNewComponent } from './donation-dashboard-new/donation-dashboard-new.component';
+import { DonationDashboardComponent } from './donation-dashboard/donation-dashboard.component';
 
 const route_data = AppRoute;
 
@@ -14,7 +15,15 @@ const routes: Routes = [
       data:donationDashboardResolver,
       ref_data:donationRefDataResolver
     }
-  }
+  },
+  {
+    path: 'test',
+    component: DonationDashboardNewComponent,
+    resolve:{
+      data:donationDashboardResolver,
+      ref_data:donationRefDataResolver
+    }
+  },
 ];
 
 @NgModule({

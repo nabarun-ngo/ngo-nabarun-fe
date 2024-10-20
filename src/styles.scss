@@ -24,3 +24,37 @@
 }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+.snackbar-success {
+    .mdc-snackbar__surface {
+      background-color: var(--color-primary) !important;
+    }
+  
+    .mdc-snackbar__label {
+      color: white !important;
+    }
+  }
+
+  .custom-snackbar {
+    .mat-mdc-snack-bar-container .mdc-snackbar__surface {
+      border-radius: 8px !important;
+    }
+
+    .mat-mdc-button.mat-mdc-snack-bar-action {
+      color: white !important;
+    }
+  }
+
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+    /* Chrome, Safari and Opera */
+}
