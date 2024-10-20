@@ -63,25 +63,3 @@ export const environment = {
   gapi_config:gapiConfig,
   auth_config:auth_config,
 };
-
-// const authConfig: AuthConfig = {
-//   issuer: 'https://' + authDomain + '/',
-//   logoutUrl: 'https://' + authDomain + '/v2/logout',
-//   clientId: authClientId,
-//   responseType: 'code',
-//   scope: 'openid profile email offline_access api auth_time family_name given_name email_verified exp phone_number picture sub iss iat aud ' + getScopes(),
-//   showDebugInformation: true,
-//   useSilentRefresh: true,
-//   strictDiscoveryDocumentValidation: false, // Set to true for production
-//   redirectUri: Capacitor.isNativePlatform() ? `${config.appId}://${authDomain}/capacitor/${config.appId}/callback` : window.location.origin + '/callback',
-//   postLogoutRedirectUri: Capacitor.isNativePlatform() ? `${config.appId}://${authDomain}/capacitor/${config.appId}/logout` : window.location.origin,
-//   customQueryParams: { audience: 'https://nabarun.resourceserver.api', device:'M' },
-//   async openUri(uri:string) {
-//     console.log(Capacitor.isNativePlatform())
-//     if (Capacitor.isNativePlatform()) {
-//       await Browser.open({ url: uri });
-//     }else{
-//       window.location.href=uri;
-//     }
-//   },
-// }

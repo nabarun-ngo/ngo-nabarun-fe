@@ -2,7 +2,6 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-import { Browser } from "@capacitor/browser";
 import { Capacitor } from "@capacitor/core";
 import config from "capacitor.config";
 import { getScopes } from "src/app/core/constant/auth-scope.const";
@@ -11,7 +10,7 @@ import { AuthConfig } from "@auth0/auth0-angular";
 
 const authDomain = 'sso-nabarun-test.us.auth0.com';
 const authClientId = Capacitor.isNativePlatform() ? 'JWk5uhtVVP2clxe9At7xdor9vbGakFv2':'RAcWqnITnhfXPTLhFLVtAzWxeujR5Znk';
-const apiBaseUrl='https://ngonabarun.appspot.com';
+const apiBaseUrl='https://nabarun-resource-server.appspot.com';
 
 const auth_config:AuthConfig={
   domain: authDomain,
