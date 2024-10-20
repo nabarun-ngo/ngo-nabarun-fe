@@ -8,29 +8,28 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { SuccessResponseDocumentDetail } from '../../models/success-response-document-detail';
 
-export interface DownloadDocument$Params {
+export interface ViewDocument$Params {
   id: string;
   'Correlation-Id'?: string;
 }
 
-export function downloadDocument(http: HttpClient, rootUrl: string, params: DownloadDocument$Params, context?: HttpContext): Observable<StrictHttpResponse<{
-}>> {
-  const rb = new RequestBuilder(rootUrl, downloadDocument.PATH, 'get');
+export function viewDocument(http: HttpClient, rootUrl: string, params: ViewDocument$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseDocumentDetail>> {
+  const rb = new RequestBuilder(rootUrl, viewDocument.PATH, 'get');
   if (params) {
     rb.path('id', params.id, {});
     rb.header('Correlation-Id', params['Correlation-Id'], {});
   }
 
   return http.request(
-    rb.build({ responseType: 'blob', accept: '*/*', context })
+    rb.build({ responseType: 'json', accept: 'application/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<{
-      }>;
+      return r as StrictHttpResponse<SuccessResponseDocumentDetail>;
     })
   );
 }
 
-downloadDocument.PATH = '/api/common/document/downloadDocument/{id}';
+viewDocument.PATH = '/api/common/document/viewDocument/{id}';

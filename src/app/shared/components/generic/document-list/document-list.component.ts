@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { DocumentDetail } from 'src/app/core/api/models';
 import { CommonControllerService } from 'src/app/core/api/services';
-import { saveFromURL } from 'src/app/core/service/utilities.service';
+import { openWindow, saveAs, saveFromURL } from 'src/app/core/service/utilities.service';
 
 @Component({
   selector: 'app-document-list',
@@ -24,15 +24,17 @@ export class DocumentListComponent {
   }
 
   downloadAttachment(document: DocumentDetail) {
-    this.commonController.downloadDocument({id:document.docId!,asURL:true}).subscribe(data=>{
-      console.log(data)
+    this.commonController.downloadDocument({id:document.docId!}).subscribe(data=>{
+     // console.log(data)
       //saveFromURL(data,document.originalFileName)
+      saveAs(data as Blob, document.originalFileName!);
     })
   }
 
   viewAttachment(document: DocumentDetail) {
-    this.commonController.downloadDocument({id:document.docId!,asURL:true}).subscribe(data=>{
+    this.commonController.viewDocument({id:document.docId!}).subscribe((data)=>{
       console.log(data)
+      openWindow(data.responsePayload?.downloadURL!);
     })
   }
 

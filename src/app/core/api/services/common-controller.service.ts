@@ -27,6 +27,7 @@ import { getReferenceField } from '../fn/common-controller/get-reference-field';
 import { GetReferenceField$Params } from '../fn/common-controller/get-reference-field';
 import { manageNotification } from '../fn/common-controller/manage-notification';
 import { ManageNotification$Params } from '../fn/common-controller/manage-notification';
+import { SuccessResponseDocumentDetail } from '../models/success-response-document-detail';
 import { SuccessResponseListAdditionalField } from '../models/success-response-list-additional-field';
 import { SuccessResponseListDocumentDetail } from '../models/success-response-list-document-detail';
 import { SuccessResponseMapStringListKeyValue } from '../models/success-response-map-string-list-key-value';
@@ -36,6 +37,8 @@ import { uploadDocuments } from '../fn/common-controller/upload-documents';
 import { UploadDocuments$Params } from '../fn/common-controller/upload-documents';
 import { uploadDocuments1 } from '../fn/common-controller/upload-documents-1';
 import { UploadDocuments1$Params } from '../fn/common-controller/upload-documents-1';
+import { viewDocument } from '../fn/common-controller/view-document';
+import { ViewDocument$Params } from '../fn/common-controller/view-document';
 
 @Injectable({ providedIn: 'root' })
 export class CommonControllerService extends BaseService {
@@ -215,6 +218,31 @@ export class CommonControllerService extends BaseService {
   getNotification(params?: GetNotification$Params, context?: HttpContext): Observable<SuccessResponsePaginateMapStringString> {
     return this.getNotification$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponsePaginateMapStringString>): SuccessResponsePaginateMapStringString => r.body)
+    );
+  }
+
+  /** Path part for operation `viewDocument()` */
+  static readonly ViewDocumentPath = '/api/common/document/viewDocument/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `viewDocument()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  viewDocument$Response(params: ViewDocument$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseDocumentDetail>> {
+    return viewDocument(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `viewDocument$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  viewDocument(params: ViewDocument$Params, context?: HttpContext): Observable<SuccessResponseDocumentDetail> {
+    return this.viewDocument$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseDocumentDetail>): SuccessResponseDocumentDetail => r.body)
     );
   }
 

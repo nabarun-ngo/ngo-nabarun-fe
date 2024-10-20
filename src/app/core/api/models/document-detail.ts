@@ -5,6 +5,7 @@
 export interface DocumentDetail {
   docId?: string;
   documentIndexId?: string;
+  downloadURL?: string;
   generatedDoc?: boolean;
   image?: boolean;
   originalFileName?: string;

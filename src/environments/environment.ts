@@ -22,7 +22,7 @@ const auth_config:AuthConfig={
   },
   httpInterceptor:{
     allowedList:['http://localhost:8082/api/*']
-  }
+  },
 }
 
 

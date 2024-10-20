@@ -40,6 +40,7 @@ export { RequestDetail } from './models/request-detail';
 export { RequestDetailFilter } from './models/request-detail-filter';
 export { RequestType } from './models/request-type';
 export { SuccessResponseAccountDetail } from './models/success-response-account-detail';
+export { SuccessResponseDocumentDetail } from './models/success-response-document-detail';
 export { SuccessResponseDonationDetail } from './models/success-response-donation-detail';
 export { SuccessResponseDonationSummary } from './models/success-response-donation-summary';
 export { SuccessResponseEventDetail } from './models/success-response-event-detail';
