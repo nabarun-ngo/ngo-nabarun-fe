@@ -1,12 +1,20 @@
 {
   "projects": {
-    "staging": "nabarun-test"
+    "staging": "nabarun-test",
+    "prod": "wengonabarun"
   },
   "targets": {
     "nabarun-test": {
       "hosting": {
         "ngo-nabarun-fe": [
           "nabarun-test"
+        ]
+      }
+    },
+    "wengonabarun": {
+      "hosting": {
+        "ngo-nabarun-fe": [
+          "wengonabarun"
         ]
       }
     }
