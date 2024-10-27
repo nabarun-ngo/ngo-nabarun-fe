@@ -11,6 +11,7 @@ import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { arraysEqual, objectsEqual } from 'src/app/core/service/utilities.service';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
+import { AdminService } from '../../admin/admin.service';
 
 @Component({
   selector: 'app-member-role',
@@ -34,6 +35,7 @@ export class MemberRoleComponent implements OnInit {
     private memberService: MemberService,
     private modalService: ModalService,
     private commonService: CommonService,
+    private adminService: AdminService,
 
   ) { }
 
@@ -128,7 +130,7 @@ export class MemberRoleComponent implements OnInit {
         }
       }
       if (isChanged) {
-        this.commonService.clearCache(['auth0_role_users']).subscribe(data => {
+        this.adminService.clearCache(['auth0_role_users']).subscribe(data => {
           this.router.navigateByUrl(this.app_route.secured_member_members_page.url)
         })
       } else {

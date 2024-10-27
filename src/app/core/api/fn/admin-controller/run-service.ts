@@ -8,15 +8,16 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { CronServiceDetail } from '../../models/cron-service-detail';
 import { SuccessResponseVoid } from '../../models/success-response-void';
 
-export interface ClearCache$Params {
+export interface RunService$Params {
   'Correlation-Id'?: string;
-      body: Array<string>
+      body: CronServiceDetail
 }
 
-export function clearCache(http: HttpClient, rootUrl: string, params: ClearCache$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
-  const rb = new RequestBuilder(rootUrl, clearCache.PATH, 'post');
+export function runService(http: HttpClient, rootUrl: string, params: RunService$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
+  const rb = new RequestBuilder(rootUrl, runService.PATH, 'post');
   if (params) {
     rb.header('Correlation-Id', params['Correlation-Id'], {});
     rb.body(params.body, 'application/json');
@@ -32,4 +33,4 @@ export function clearCache(http: HttpClient, rootUrl: string, params: ClearCache
   );
 }
 
-clearCache.PATH = '/api/common/general/clearCache';
+runService.PATH = '/api/admin/runService';

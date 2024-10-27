@@ -161,6 +161,14 @@ export function getNonNullValues(obj:any) {
   return Object.assign({},Object.fromEntries(Object.entries(obj).filter(([key, value]) => value != null || value != undefined)))
 }
 
+export function sanitizeBase64(base64:string){
+  let base64Splits=base64.split(",");
+  if(base64Splits && base64Splits.length > 0){
+    return base64Splits[base64Splits.length-1];
+  }
+  return base64;
+}
+
 
 
 

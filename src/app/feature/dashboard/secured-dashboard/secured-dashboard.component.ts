@@ -40,18 +40,7 @@ export class SecuredDashboardComponent implements OnInit {
           tile_icon: 'icon_rupee',
           tile_link: this.route.secured_donation_dashboard_page.url,
           additional_info: {
-            tile_label: 'My Pending donations',
-            tile_show_badge: false,
-            tile_is_loading: true
-          }
-        },
-        {
-          tile_html_id: 'memberTile',
-          tile_name: 'Members',
-          tile_icon: 'icon_group',
-          tile_link: this.route.secured_member_members_page.url,
-          additional_info: {
-            tile_label: 'Active Members',
+            tile_label: 'My Pending Donations',
             tile_show_badge: false,
             tile_is_loading: true
           }
@@ -62,147 +51,60 @@ export class SecuredDashboardComponent implements OnInit {
           tile_icon: 'icon_book',
           tile_link: this.route.secured_account_list_page.url,
           additional_info: {
-            tile_label: 'Available amount',
+            tile_label: 'My Available Amount',
             tile_show_badge: false,
             tile_is_loading: true
           }
         },
         {
           tile_html_id: 'requestTile',
-          tile_name: 'My Requests',
+          tile_name: 'Requests',
           tile_icon: 'icon_presentation',
           tile_link: this.route.secured_request_list_page.url,
           additional_info: {
-            tile_label: 'Pending request',
+            tile_label: 'My Pending Requests',
             tile_show_badge: false,
             tile_is_loading: true
           }
         },
         {
           tile_html_id: 'worklistTile',
-          tile_name: 'My Worklist',
+          tile_name: 'Worklist',
           tile_icon: 'icon_group',
           tile_link: this.route.secured_task_list_page.url,
           additional_info: {
-            tile_label: 'Pending work',
+            tile_label: 'My Pending Works',
             tile_show_badge: false,
             tile_is_loading: true
           }
+        },
+        {
+          tile_html_id: 'memberTile',
+          tile_name: 'Members',
+          tile_icon: 'icon_group',
+          tile_link: this.route.secured_member_members_page.url,
         },
         {
           tile_html_id: 'noticeTile',
           tile_name: 'Notices',
           tile_icon: 'icon_group',
           tile_link: this.route.secured_notice_notices_page.url,
-          additional_info: {
-            tile_label: 'New Notice',
-            tile_show_badge: false,
-            tile_is_loading: true
-          }
+        },
+        {
+          tile_html_id: 'eventTile',
+          tile_name: 'Events',
+          tile_icon: 'icon_group',
+          tile_link: '',
         },
         {
           tile_html_id: 'adminTile',
           tile_name: 'Admin Console',
           tile_icon: 'icon_group',
           tile_link: this.route.secured_admin_dashboard_page.url,
-          additional_info: {
-            tile_is_loading: false,
-            tile_label: 'Admin',
-            tile_value: '',
-            tile_show_badge: false
-          }
         }
       ];
     }
    
-
-    this.commonService.liveNotifications$.subscribe(data => {
-      console.log(data)
-      
-      if (data['needActionAccount']) {
-        SecuredDashboardComponent.tileList.filter(f => f.tile_html_id == 'accountTile').map(m => {
-          m.additional_info!.tile_show_badge = data['needActionAccount'] == 'Y' ? true : false;
-          return m;
-        })
-      }
-      if (data['needActionDonation']) {
-        SecuredDashboardComponent.tileList.filter(f => f.tile_html_id == 'donationTile').map(m => {
-          m.additional_info!.tile_show_badge = data['needActionDonation'] == 'Y' ? true : false;
-          return m;
-        })
-      }
-      if (data['needActionMember']) {
-        SecuredDashboardComponent.tileList.filter(f => f.tile_html_id == 'memberTile').map(m => {
-          m.additional_info!.tile_show_badge = data['needActionMember'] == 'Y' ? true : false;
-          return m;
-        })
-      }
-
-      if (data['needActionNotice']) {
-        SecuredDashboardComponent.tileList.filter(f => f.tile_html_id == 'noticeTile').map(m => {
-          m.additional_info!.tile_show_badge = data['needActionNotice'] == 'Y' ? true : false;
-          return m;
-        })
-      }
-      if (data['needActionRequest']) {
-        SecuredDashboardComponent.tileList.filter(f => f.tile_html_id == 'requestTile').map(m => {
-          m.additional_info!.tile_show_badge = data['needActionRequest'] == 'Y' ? true : false;
-          return m;
-        })
-      }
-      if (data['needActionTask']) {
-        SecuredDashboardComponent.tileList.filter(f => f.tile_html_id == 'worklistTile').map(m => {
-          m.additional_info!.tile_show_badge = data['needActionTask'] == 'Y' ? true : false;
-          return m;
-        })
-      }
-      
-
-      if (data['donationAmount']) {
-        SecuredDashboardComponent.tileList.filter(f => f.tile_html_id == 'donationTile').map(m => {
-          m.additional_info!.tile_is_loading = false;
-          m.additional_info!.tile_value = data['donationAmount'];
-          return m;
-        });
-        
-      }
-      if (data['accountAmount']) {
-        SecuredDashboardComponent.tileList.filter(f => f.tile_html_id == 'accountTile').map(m => {
-          m.additional_info!.tile_is_loading = false;
-          m.additional_info!.tile_value = data['accountAmount'];
-          return m;
-        });
-        
-      }
-      if (data['noticeCount']) {
-        SecuredDashboardComponent.tileList.filter(f => f.tile_html_id == 'noticeTile').map(m => {
-          m.additional_info!.tile_is_loading = false;
-          m.additional_info!.tile_value = data['noticeCount'];
-          return m;
-        });
-      }
-      if (data['memberCount']) {
-        SecuredDashboardComponent.tileList.filter(f => f.tile_html_id == 'memberTile').map(m => {
-          m.additional_info!.tile_is_loading = false;
-          m.additional_info!.tile_value = data['memberCount'];
-          return m;
-        });
-      }
-      if (data['requestCount']) {
-        SecuredDashboardComponent.tileList.filter(f => f.tile_html_id == 'requestTile').map(m => {
-          m.additional_info!.tile_is_loading = false;
-          m.additional_info!.tile_value = data['requestCount'];
-          return m;
-        });
-      }
-      if (data['workCount']) {
-        SecuredDashboardComponent.tileList.filter(f => f.tile_html_id == 'worklistTile').map(m => {
-          m.additional_info!.tile_is_loading = false;
-          m.additional_info!.tile_value = data['workCount'];
-          return m;
-        });
-      }
-    });
   }
 
 }

@@ -7,6 +7,7 @@ export { AccountDetailFilter } from './models/account-detail-filter';
 export { AdditionalField } from './models/additional-field';
 export { BankDetail } from './models/bank-detail';
 export { ChangeDetail } from './models/change-detail';
+export { CronServiceDetail } from './models/cron-service-detail';
 export { DocumentDetail } from './models/document-detail';
 export { DocumentDetailUpload } from './models/document-detail-upload';
 export { DonationDetail } from './models/donation-detail';

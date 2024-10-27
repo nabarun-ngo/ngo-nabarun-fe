@@ -12,6 +12,7 @@ export const membersResolver: ResolveFn<any> = (route, state) => {
 };
 
 export const memberRefDataResolver: ResolveFn<any> = (route, state) => {
+  //console.log(route,state)
   return inject(CommonService).getRefData([RefDataType.User]);
 };
 

@@ -11,8 +11,6 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { clearCache } from '../fn/common-controller/clear-cache';
-import { ClearCache$Params } from '../fn/common-controller/clear-cache';
 import { deleteDocument } from '../fn/common-controller/delete-document';
 import { DeleteDocument$Params } from '../fn/common-controller/delete-document';
 import { downloadDocument } from '../fn/common-controller/download-document';
@@ -67,31 +65,6 @@ export class CommonControllerService extends BaseService {
    */
   manageNotification(params: ManageNotification$Params, context?: HttpContext): Observable<SuccessResponseVoid> {
     return this.manageNotification$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseVoid>): SuccessResponseVoid => r.body)
-    );
-  }
-
-  /** Path part for operation `clearCache()` */
-  static readonly ClearCachePath = '/api/common/general/clearCache';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `clearCache()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  clearCache$Response(params: ClearCache$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
-    return clearCache(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `clearCache$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  clearCache(params: ClearCache$Params, context?: HttpContext): Observable<SuccessResponseVoid> {
-    return this.clearCache$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseVoid>): SuccessResponseVoid => r.body)
     );
   }

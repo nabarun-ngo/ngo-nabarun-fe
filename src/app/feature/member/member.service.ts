@@ -66,7 +66,8 @@ export class MemberService {
   }
 
   updateMyProfiledetail(updatedDetail:UserDetail){
-    return this.userController.updateLoggedInUserDetails({body:updatedDetail}).pipe(map(d => d.responsePayload));
+    let updatePicture= updatedDetail.pictureBase64 != undefined || updatedDetail.pictureBase64 != null;
+    return this.userController.updateLoggedInUserDetails({body:updatedDetail,updatePicture:updatePicture}).pipe(map(d => d.responsePayload));
   }
 
   updateProfiledetail(id:string,updatedDetail:UserDetail){

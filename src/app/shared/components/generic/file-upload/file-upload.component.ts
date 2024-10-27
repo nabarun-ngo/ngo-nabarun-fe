@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { DocumentDetailUpload } from 'src/app/core/api/models';
+import { sanitizeBase64 } from 'src/app/core/service/utilities.service';
 
 export type FileUpload={ file: File, detail: DocumentDetailUpload };
 @Component({
@@ -42,7 +43,7 @@ export class FileUploadComponent {
           this.selectedFiles.push({
             file: files[0],
             detail: {
-              base64Content: this.sanitizeBase64(reader.result as string),
+              base64Content: sanitizeBase64(reader.result as string),
               contentType: files[0].type,
               originalFileName: files[0].name
             }
@@ -69,12 +70,6 @@ export class FileUploadComponent {
         : Math.round(size / 1024) + " KB"
       : size + " B";
   }
-  sanitizeBase64(base64:string){
-    let base64Splits=base64.split(",");
-    if(base64Splits && base64Splits.length > 0){
-      return base64Splits[base64Splits.length-1];
-    }
-    return base64;
-  }
+  
 
 }

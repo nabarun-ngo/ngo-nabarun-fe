@@ -1,4 +1,4 @@
-export type adminTabs = 'ext_service_list'|'cron_jobs' | 'doppler_prop' | 'app_config';
+export type adminTabs = 'service_list' | 'app_logs' | 'global_config';
 
 
 export const AdminDefaultValue = {
@@ -6,13 +6,12 @@ export const AdminDefaultValue = {
     pageSize: 10,
     pageSizeOptions: [10,20, 50, 100],
     pageTitle: 'Admin Console',
-    tabName: 'cron_jobs'
+    tabName: 'service_list'
 }
 export const AdminConstant = {
-    refDataName: 'ACCOUNT',
+    refDataName: 'ADMIN',
     refDataKey: {
-        accountType: 'accountTypes',
-        accountStatus: 'accountStatuses'
+        importantLinks: 'importantLinks',
     },
     enum: {
         
