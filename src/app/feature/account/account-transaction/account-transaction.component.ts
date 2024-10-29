@@ -281,8 +281,8 @@ export class AccountTransactionComponent extends Accordion<TransactionDetail> im
     startDate?: string;
     endDate?: string;
   }) {
-    let id =this.route.snapshot.params['id']
-    if(this.route.snapshot.queryParams['self']){
+    let id =atob(this.route.snapshot.params['id'])
+    if(this.route.snapshot.queryParams['self'] == 'Y'){
       this.accountService.fetchMyTransactions(id,this.pageNumber,this.pageSize,filter).subscribe(data=>{
         this.transactionList=data!;
         this.setContent(this.transactionList.content!,this.transactionList?.totalSize!)

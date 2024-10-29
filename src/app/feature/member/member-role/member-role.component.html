@@ -8,21 +8,21 @@
                             users in the roles container
                         </div>
 
-                        <div class="divide-x-4 mt-4">
+                        <!-- <div class="divide-x-4 mt-4">
 
-                            <div cdkDropListGroup class="grid grid-cols-4 gap-3">
+                            <div cdkDropListGroup class="grid grid-cols-3 gap-3">
                                 <div class="example-container" *ngFor="let roleItem of rolesToEdit">
-                                    <h2>{{roleItem.displayValue}}</h2>
+                                    <div class="font-bold text-center my-2">{{roleItem.displayValue}}</div>
+                                    <div>
+                                        <mat-icon>add</mat-icon>
+                                    </div>
                                     <div *ngIf="roleErrorMap[roleItem.key!]?.hasError"
                                         class="py-2 text-center justify-center font-semibold text-red-700">
                                         {{roleErrorMap[roleItem.key!].message}}</div>
                                     <div cdkDropList [cdkDropListData]="roleUserMap[roleItem.key!]" class="example-list"
                                         (cdkDropListDropped)="drop($event)">
-                                        <!-- <div *ngFor="let profile of roleUserMap[roleItem.key!] " class="example-box" cdkDrag>{{profile.fullName}}</div> -->
-                                        <!-- <app-profile-card *ngFor="let profile of roleUserMap[roleItem.key!] " [profile]="profile" cdkDrag></app-profile-card> -->
                                         <div *ngFor="let profile of roleUserMap[roleItem.key!] " class="example-box"
                                             cdkDrag>
-
                                             <div class="flex items-center ">
                                                 <img [src]="profile.picture" alt=""
                                                     class="flex-shrink-0 h-10 w-10 rounded-full">
@@ -31,10 +31,6 @@
                                                 </span>
 
                                             </div>
-                                            <!-- <mat-button-toggle-group aria-label="Font Style" [(ngModel)]="profile.about">
-                                                <mat-button-toggle value="move">Move</mat-button-toggle>
-                                                <mat-button-toggle value="copy">Copy</mat-button-toggle>
-                                              </mat-button-toggle-group> -->
                                             <button mat-icon-button [matMenuTriggerFor]="menu"
                                                 aria-label="Example icon-button with a menu">
                                                 <mat-icon>more_vert</mat-icon>
@@ -57,8 +53,64 @@
 
 
                             </div>
-                        </div>
-
+                        </div> -->
+                        <div class="divide-x-4 mt-4">
+                            <div cdkDropListGroup class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                              <div class="example-container" *ngFor="let roleItem of rolesToEdit">
+                                <div class="font-bold text-center my-2">{{ roleItem.displayValue }}</div>
+                                <div>
+                                  <mat-icon>add</mat-icon>
+                                </div>
+                                <div
+                                  *ngIf="roleErrorMap[roleItem.key!]?.hasError"
+                                  class="py-2 text-center justify-center font-semibold text-red-700"
+                                >
+                                  {{ roleErrorMap[roleItem.key!].message }}
+                                </div>
+                                <div
+                                  cdkDropList
+                                  [cdkDropListData]="roleUserMap[roleItem.key!]"
+                                  class="example-list"
+                                  (cdkDropListDropped)="drop($event)"
+                                >
+                                  <div
+                                    *ngFor="let profile of roleUserMap[roleItem.key!]"
+                                    class="example-box flex flex-col md:flex-row items-center justify-between"
+                                    cdkDrag
+                                  >
+                                    <div class="flex items-center w-full md:w-auto mb-2 md:mb-0">
+                                      <img
+                                        [src]="profile.picture"
+                                        alt=""
+                                        class="flex-shrink-0 h-10 w-10 rounded-full"
+                                      />
+                                      <span class="font-semibold ml-3 block truncate">
+                                        {{ profile.fullName }}
+                                      </span>
+                                    </div>
+                                    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                                      <mat-icon>more_vert</mat-icon>
+                                    </button>
+                                    <mat-menu #menu="matMenu">
+                                      <button mat-menu-item (click)="clone(roleItem.key!, profile)">
+                                        <mat-icon>content_copy</mat-icon>
+                                        <span>Clone</span>
+                                      </button>
+                                      <button
+                                        mat-menu-item
+                                        [disabled]="roleErrorMap[roleItem.key!] ? !roleErrorMap[roleItem.key!].duplicates.includes(profile.userId!) : true"
+                                        (click)="remove(roleItem.key!, profile)"
+                                      >
+                                        <mat-icon>remove</mat-icon>
+                                        <span>Remove</span>
+                                      </button>
+                                    </mat-menu>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
                         <div class="flex w-full md:flex-row ">
                             <div class="flex items-center justify-center p-4 w-full">
                                 <div class="mx-1 px-2">

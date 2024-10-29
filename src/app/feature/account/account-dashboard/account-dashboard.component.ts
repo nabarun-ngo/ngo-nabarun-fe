@@ -833,7 +833,7 @@ export class AccountDashboardComponent extends Accordion<AccountDetail | Expense
         break;
       case 'VIEW_TXN':
         let account = this.accountList.content![$event.rowIndex];
-        this.router.navigate([this.app_route.secured_account_transaction_page.url.replace(':id', account.id!)], { state: account, queryParams: { self: this.tabMapping[this.tabIndex] == 'my_accounts' } })
+        this.router.navigate([this.app_route.secured_account_transaction_page.url.replace(':id', btoa(account.id!))], { state: account, queryParams: { self: this.tabMapping[this.tabIndex] == 'my_accounts'? 'Y':'N' } })
         break;
       case 'PERFORM_TXN':
         this.performTransaction($event.rowIndex);

@@ -300,9 +300,10 @@ export class RequestListComponent extends Accordion<RequestDetail> implements On
                 form_control_name: 'delegation_user',
                 form_input: {
                   html_id: 'del_user',
-                  tagName: 'select',
-                  inputType: '',
+                  tagName: 'input',
+                  inputType: 'text',
                   placeholder: 'Select user',
+                  autocomplete:true,
                   selectList: delegatedRequester
                 },
                 form_input_validation: [Validators.required]
@@ -335,10 +336,7 @@ export class RequestListComponent extends Accordion<RequestDetail> implements On
             type: request_form?.value.requestType,
             description: request_form?.value.description,
             delegated: request_form?.value.isDelegated === 'YES' ? true : false,
-            requester: {
-              id: request_form?.value.isDelegated === 'YES' ? request_form?.value.delegation_user : undefined,
-              fullName: request_form?.value.isDelegated === 'YES' ? this.userList?.find(f=>f.id == request_form?.value.delegation_user)?.fullName : undefined,
-            },
+            requester: request_form?.value.isDelegated === 'YES' ? this.userList?.find(f=>f.id == request_form?.value.delegation_user) : undefined,
             additionalFields: additionalFields,
           };
           this.requestService.createRequest(request).subscribe(s => {

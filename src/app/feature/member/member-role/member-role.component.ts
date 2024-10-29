@@ -26,6 +26,13 @@ export class MemberRoleComponent implements OnInit {
   roleErrorMap: { [roleCode: string]: { hasError: boolean, message: string, duplicates: string[] } } = {};
   roleUserMapCache: { [roleCode: string]: UserDetail[] } = {};
 
+  roleUserMaping: { [roleCode: string]: {
+    previousUsers:UserDetail[];
+    currentUsers:UserDetail[];
+    errors: { hasError: boolean, message: string, duplicates: string[] };
+  } } = {};
+
+
   rolesToEdit!: KeyValue[];
   navigations!: NavigationButtonModel[];
   constructor(
@@ -34,7 +41,6 @@ export class MemberRoleComponent implements OnInit {
     private router: Router,
     private memberService: MemberService,
     private modalService: ModalService,
-    private commonService: CommonService,
     private adminService: AdminService,
 
   ) { }

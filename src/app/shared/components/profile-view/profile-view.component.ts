@@ -72,7 +72,7 @@ export class ProfileViewComponent implements OnInit {
     this.refData = this.sharedDataService.getRefData(UserConstant.refDataName)!;
     this.editAdminForm = new FormGroup({
       status: new FormControl(this.profile.status, [Validators.required]),
-      roles: new FormControl(this.profile.roles?.map(m => m.roleCode), [Validators.required]),
+      roles: new FormControl(this.profile.roles?.map(m => m.roleCode), []),
       loginMethod: new FormControl(this.profile.loginMethod, [Validators.required]),
     });
     this.initValues();
