@@ -17,7 +17,10 @@ export class MemberService {
   fetchMembers(pageIndex: number = 0, pageSize: number = 20) {
     return this.userController.getUsers({ pageIndex: pageIndex, pageSize: pageSize,filter:{}}).pipe(map(d => d.responsePayload));
   }
-
+  fetchAllMembers() {
+    return this.userController.getUsers({filter:{}}).pipe(map(d => d.responsePayload));
+  }
+  
   // fetchRefData(countryCode?:string,stateCode?:string) {
   //   return this.commonController.getReferenceData({ names: [RefDataType.User],countryCode:countryCode,stateCode:stateCode}).pipe(map(d => d.responsePayload));
   // }

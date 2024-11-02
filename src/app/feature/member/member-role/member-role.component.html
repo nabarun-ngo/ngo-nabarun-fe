@@ -4,45 +4,51 @@
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                 <mat-card class="mb-4">
                     <div class="text-gray-700 m-4">
-                        <div class="py-2 text-center justify-center font-bold text-purple-700">Please drag and drop
+                        <div class="py-2 text-center justify-center font-bold text-purple-700 text-xl">Please drag and
+                            drop
                             users in the roles container
                         </div>
 
-                        <!-- <div class="divide-x-4 mt-4">
-
-                            <div cdkDropListGroup class="grid grid-cols-3 gap-3">
+                        <div class="divide-x-4 mt-4">
+                            <div cdkDropListGroup class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                                 <div class="example-container" *ngFor="let roleItem of rolesToEdit">
-                                    <div class="font-bold text-center my-2">{{roleItem.displayValue}}</div>
-                                    <div>
-                                        <mat-icon>add</mat-icon>
+                                    <div class="font-bold text-center text-lg my-2">{{ roleItem.displayValue }}</div>
+                                    <div class="flex justify-end p-2">
+                                        <mat-icon (click)="addUserToRole(roleItem.key!)"
+                                            class="bg-purple-500 mx-2 mt-2">add</mat-icon>
                                     </div>
-                                    <div *ngIf="roleErrorMap[roleItem.key!]?.hasError"
+                                    <div *ngIf="roleUserMaping![roleItem.key!]?.errors?.hasError"
                                         class="py-2 text-center justify-center font-semibold text-red-700">
-                                        {{roleErrorMap[roleItem.key!].message}}</div>
-                                    <div cdkDropList [cdkDropListData]="roleUserMap[roleItem.key!]" class="example-list"
-                                        (cdkDropListDropped)="drop($event)">
-                                        <div *ngFor="let profile of roleUserMap[roleItem.key!] " class="example-box"
+                                        {{ roleUserMaping![roleItem.key!]!.errors?.message }}
+                                    </div>
+                                    <div *ngIf="roleUserMaping![roleItem.key!]" cdkDropList
+                                        [cdkDropListData]="roleUserMaping![roleItem.key!]!.currentUsers"
+                                        class="example-list" (cdkDropListDropped)="drop($event)">
+                                        <div *ngIf="roleUserMaping![roleItem.key!]!.currentUsers.length == 0"
+                                            class="p-4 m-4 text-center">
+                                            No users allocated for this role
+                                        </div>
+                                        <div *ngFor="let profile of roleUserMaping![roleItem.key!]!.currentUsers"
+                                            class="example-box flex flex-col md:flex-row items-center justify-between"
                                             cdkDrag>
-                                            <div class="flex items-center ">
+                                            <div class="flex items-center w-full md:w-auto mb-2 md:mb-0">
                                                 <img [src]="profile.picture" alt=""
-                                                    class="flex-shrink-0 h-10 w-10 rounded-full">
+                                                    class="flex-shrink-0 h-10 w-10 rounded-full" />
                                                 <span class="font-semibold ml-3 block truncate">
-                                                    {{profile.fullName}}
+                                                    {{ profile.fullName }}
                                                 </span>
-
                                             </div>
                                             <button mat-icon-button [matMenuTriggerFor]="menu"
                                                 aria-label="Example icon-button with a menu">
                                                 <mat-icon>more_vert</mat-icon>
                                             </button>
                                             <mat-menu #menu="matMenu">
-                                                <button mat-menu-item (click)="clone(roleItem.key!,profile)">
+                                                <button mat-menu-item (click)="clone(roleItem.key!, profile)">
                                                     <mat-icon>content_copy</mat-icon>
                                                     <span>Clone</span>
                                                 </button>
-                                                <button mat-menu-item
-                                                    [disabled]="roleErrorMap[roleItem.key!] ? !roleErrorMap[roleItem.key!].duplicates.includes(profile.userId!) : true"
-                                                    (click)="remove(roleItem.key!,profile)">
+                                                <!-- [disabled]="roleUserMaping![roleItem.key!]!.errors ? !roleUserMaping[roleItem.key!].errors?.duplicates?.includes(profile.userId!) : true" -->
+                                                <button mat-menu-item (click)="remove(roleItem.key!, profile)">
                                                     <mat-icon>remove</mat-icon>
                                                     <span>Remove</span>
                                                 </button>
@@ -50,73 +56,15 @@
                                         </div>
                                     </div>
                                 </div>
-
-
                             </div>
-                        </div> -->
-                        <div class="divide-x-4 mt-4">
-                            <div cdkDropListGroup class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                              <div class="example-container" *ngFor="let roleItem of rolesToEdit">
-                                <div class="font-bold text-center my-2">{{ roleItem.displayValue }}</div>
-                                <div>
-                                  <mat-icon>add</mat-icon>
-                                </div>
-                                <div
-                                  *ngIf="roleErrorMap[roleItem.key!]?.hasError"
-                                  class="py-2 text-center justify-center font-semibold text-red-700"
-                                >
-                                  {{ roleErrorMap[roleItem.key!].message }}
-                                </div>
-                                <div
-                                  cdkDropList
-                                  [cdkDropListData]="roleUserMap[roleItem.key!]"
-                                  class="example-list"
-                                  (cdkDropListDropped)="drop($event)"
-                                >
-                                  <div
-                                    *ngFor="let profile of roleUserMap[roleItem.key!]"
-                                    class="example-box flex flex-col md:flex-row items-center justify-between"
-                                    cdkDrag
-                                  >
-                                    <div class="flex items-center w-full md:w-auto mb-2 md:mb-0">
-                                      <img
-                                        [src]="profile.picture"
-                                        alt=""
-                                        class="flex-shrink-0 h-10 w-10 rounded-full"
-                                      />
-                                      <span class="font-semibold ml-3 block truncate">
-                                        {{ profile.fullName }}
-                                      </span>
-                                    </div>
-                                    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-                                      <mat-icon>more_vert</mat-icon>
-                                    </button>
-                                    <mat-menu #menu="matMenu">
-                                      <button mat-menu-item (click)="clone(roleItem.key!, profile)">
-                                        <mat-icon>content_copy</mat-icon>
-                                        <span>Clone</span>
-                                      </button>
-                                      <button
-                                        mat-menu-item
-                                        [disabled]="roleErrorMap[roleItem.key!] ? !roleErrorMap[roleItem.key!].duplicates.includes(profile.userId!) : true"
-                                        (click)="remove(roleItem.key!, profile)"
-                                      >
-                                        <mat-icon>remove</mat-icon>
-                                        <span>Remove</span>
-                                      </button>
-                                    </mat-menu>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          
+                        </div>
+
                         <div class="flex w-full md:flex-row ">
                             <div class="flex items-center justify-center p-4 w-full">
                                 <div class="mx-1 px-2">
                                     <button (click)="saveRoles()"
-                                        class="bg-indigo-600 py-3 px-6 w-full text-white font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">Save
-                                        Roles</button>
+                                        class="bg-indigo-600 py-3 px-6 w-full text-white font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">Save</button>
+                                    <!-- <button class="py-3 px-6 w-full text-white font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">Cancel</button> -->
                                 </div>
                             </div>
                         </div>
