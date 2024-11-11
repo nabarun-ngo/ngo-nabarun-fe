@@ -13,8 +13,6 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { createNotice } from '../fn/notice-controller/create-notice';
 import { CreateNotice$Params } from '../fn/notice-controller/create-notice';
-import { deleteEvent1 } from '../fn/notice-controller/delete-event-1';
-import { DeleteEvent1$Params } from '../fn/notice-controller/delete-event-1';
 import { getAllNotice } from '../fn/notice-controller/get-all-notice';
 import { GetAllNotice$Params } from '../fn/notice-controller/get-all-notice';
 import { getDraftedNotice } from '../fn/notice-controller/get-drafted-notice';
@@ -23,7 +21,6 @@ import { getNotice } from '../fn/notice-controller/get-notice';
 import { GetNotice$Params } from '../fn/notice-controller/get-notice';
 import { SuccessResponseNoticeDetail } from '../models/success-response-notice-detail';
 import { SuccessResponsePaginateNoticeDetail } from '../models/success-response-paginate-notice-detail';
-import { SuccessResponseVoid } from '../models/success-response-void';
 import { updateNotice } from '../fn/notice-controller/update-notice';
 import { UpdateNotice$Params } from '../fn/notice-controller/update-notice';
 
@@ -34,7 +31,7 @@ export class NoticeControllerService extends BaseService {
   }
 
   /** Path part for operation `createNotice()` */
-  static readonly CreateNoticePath = '/api/notice/createNotice';
+  static readonly CreateNoticePath = '/api/notice/create';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -59,7 +56,7 @@ export class NoticeControllerService extends BaseService {
   }
 
   /** Path part for operation `updateNotice()` */
-  static readonly UpdateNoticePath = '/api/notice/updateNotice/{id}';
+  static readonly UpdateNoticePath = '/api/notice/{id}/update';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -83,33 +80,8 @@ export class NoticeControllerService extends BaseService {
     );
   }
 
-  /** Path part for operation `getAllNotice()` */
-  static readonly GetAllNoticePath = '/api/notice/getNotices';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAllNotice()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getAllNotice$Response(params: GetAllNotice$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateNoticeDetail>> {
-    return getAllNotice(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getAllNotice$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getAllNotice(params: GetAllNotice$Params, context?: HttpContext): Observable<SuccessResponsePaginateNoticeDetail> {
-    return this.getAllNotice$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponsePaginateNoticeDetail>): SuccessResponsePaginateNoticeDetail => r.body)
-    );
-  }
-
   /** Path part for operation `getNotice()` */
-  static readonly GetNoticePath = '/api/notice/getNotice/{id}';
+  static readonly GetNoticePath = '/api/notice/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -130,6 +102,31 @@ export class NoticeControllerService extends BaseService {
   getNotice(params: GetNotice$Params, context?: HttpContext): Observable<SuccessResponseNoticeDetail> {
     return this.getNotice$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseNoticeDetail>): SuccessResponseNoticeDetail => r.body)
+    );
+  }
+
+  /** Path part for operation `getAllNotice()` */
+  static readonly GetAllNoticePath = '/api/notice/list';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAllNotice()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllNotice$Response(params: GetAllNotice$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateNoticeDetail>> {
+    return getAllNotice(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getAllNotice$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllNotice(params: GetAllNotice$Params, context?: HttpContext): Observable<SuccessResponsePaginateNoticeDetail> {
+    return this.getAllNotice$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponsePaginateNoticeDetail>): SuccessResponsePaginateNoticeDetail => r.body)
     );
   }
 
@@ -155,31 +152,6 @@ export class NoticeControllerService extends BaseService {
   getDraftedNotice(params?: GetDraftedNotice$Params, context?: HttpContext): Observable<SuccessResponseNoticeDetail> {
     return this.getDraftedNotice$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseNoticeDetail>): SuccessResponseNoticeDetail => r.body)
-    );
-  }
-
-  /** Path part for operation `deleteEvent1()` */
-  static readonly DeleteEvent1Path = '/api/notice/deleteNotice/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deleteEvent1()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteEvent1$Response(params: DeleteEvent1$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
-    return deleteEvent1(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `deleteEvent1$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  deleteEvent1(params: DeleteEvent1$Params, context?: HttpContext): Observable<SuccessResponseVoid> {
-    return this.deleteEvent1$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseVoid>): SuccessResponseVoid => r.body)
     );
   }
 

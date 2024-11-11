@@ -33,4 +33,4 @@ export function createTransaction(http: HttpClient, rootUrl: string, params: Cre
   );
 }
 
-createTransaction.PATH = '/api/account/createTransaction';
+createTransaction.PATH = '/api/account/transaction/create';

@@ -33,4 +33,4 @@ export function createRequest(http: HttpClient, rootUrl: string, params: CreateR
   );
 }
 
-createRequest.PATH = '/api/request/createRequest';
+createRequest.PATH = '/api/request/create';

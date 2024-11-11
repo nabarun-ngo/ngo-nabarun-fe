@@ -33,4 +33,4 @@ export function createExpense(http: HttpClient, rootUrl: string, params: CreateE
   );
 }
 
-createExpense.PATH = '/api/account/createExpense';
+createExpense.PATH = '/api/account/expense/create';

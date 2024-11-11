@@ -8,20 +8,22 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseUserDetail } from '../../models/success-response-user-detail';
+import { SuccessResponseMapStringString } from '../../models/success-response-map-string-string';
 
-export interface GetUserDetails$Params {
+export interface UpdateApiKey$Params {
   id: string;
-  idType?: 'EMAIL' | 'AUTH_USER_ID' | 'ID';
+  revoke: boolean;
   'Correlation-Id'?: string;
+      body: Array<string>
 }
 
-export function getUserDetails(http: HttpClient, rootUrl: string, params: GetUserDetails$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseUserDetail>> {
-  const rb = new RequestBuilder(rootUrl, getUserDetails.PATH, 'get');
+export function updateApiKey(http: HttpClient, rootUrl: string, params: UpdateApiKey$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseMapStringString>> {
+  const rb = new RequestBuilder(rootUrl, updateApiKey.PATH, 'post');
   if (params) {
     rb.path('id', params.id, {});
-    rb.query('idType', params.idType, {});
+    rb.query('revoke', params.revoke, {});
     rb.header('Correlation-Id', params['Correlation-Id'], {});
+    rb.body(params.body, 'application/json');
   }
 
   return http.request(
@@ -29,9 +31,9 @@ export function getUserDetails(http: HttpClient, rootUrl: string, params: GetUse
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseUserDetail>;
+      return r as StrictHttpResponse<SuccessResponseMapStringString>;
     })
   );
 }
 
-getUserDetails.PATH = '/api/user/{id}';
+updateApiKey.PATH = '/api/admin/apikey/{id}/update';

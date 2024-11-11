@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { AccountControllerService, CommonControllerService, UserControllerService } from 'src/app/core/api/services';
+import { AccountControllerService, CommonControllerService, EventControllerService, UserControllerService } from 'src/app/core/api/services';
 import { AccountDefaultValue, TransactionDefaultValue } from './account.const';
 import { map } from 'rxjs';
-import { AccountDetail, AccountDetailFilter, BankDetail, RefDataType, TransactionDetailFilter, UpiDetail } from 'src/app/core/api/models';
+import { AccountDetail, AccountDetailFilter, BankDetail, DocumentDetailUpload, ExpenseDetail, RefDataType, TransactionDetailFilter, UpiDetail } from 'src/app/core/api/models';
 import { DatePipe } from '@angular/common';
 import { date } from 'src/app/core/service/utilities.service';
 
@@ -10,17 +10,20 @@ import { date } from 'src/app/core/service/utilities.service';
   providedIn: 'root'
 })
 export class AccountService {
-
-
+  
 
 
   constructor(
     private accountController: AccountControllerService,
     private commonController: CommonControllerService,
     private userController: UserControllerService,
+    private eventController: EventControllerService,
 
   ) { }
 
+  fetchAllAccounts(){
+    return this.accountController.getAccounts({filter:{}}).pipe(map(d => d.responsePayload));
+  }
   fetchAccounts(pageIndex: number = 0, pageSize: number = 100, filter?: {
     status?: string[]
     type?: string[],
@@ -89,6 +92,10 @@ export class AccountService {
     }).pipe(map(d => d.responsePayload));
   }
 
+ 
+
+
+
   createAccount(accountDetail: any, banking?: BankDetail, upi?: UpiDetail) {
     let account = {
       accountHolder: { id: accountDetail.accountHolder },
@@ -100,7 +107,10 @@ export class AccountService {
     return this.accountController.createAccount({ body: account }).pipe(map(d => d.responsePayload));
   }
 
-  fetchUsers(accountType: string) {
+  fetchUsers(accountType?: string) {
+    if(!accountType){
+      return this.userController.getUsers({ filter: { status: ['ACTIVE'] } }).pipe(map(d => d.responsePayload));
+    }
     if (accountType == 'PUBLIC_DONATION') {
       return this.userController.getUsers({ filter: { status: ['ACTIVE'] } }).pipe(map(d => d.responsePayload));
     }
@@ -208,6 +218,60 @@ export class AccountService {
       .pipe(map(d => d.responsePayload));
   }
 
+  createExpenses(detail: any) {
+ 
+    let expenseDetail = {
+      description:detail.description,
+      name:detail.name,
+      expenseRefType: detail.expense_source as any,
+      expenseRefId: detail.expense_event,
+      expenseDate: detail.expenseDate,
+      expenseItems:[]
+    } as ExpenseDetail;
+    return this.accountController.createExpense({body:expenseDetail})
+      .pipe(map(d => d.responsePayload));
+  }
+
+  updateExpense(expense:ExpenseDetail,data:any){
+   
+    return this.accountController.updateExpense({id:expense.id!,body:{
+      finalized: data.exp_status == 'FINAL'?true:false,
+      description:data.description,
+      expenseItems:expense.expenseItems
+    }})
+    .pipe(map(d => d.responsePayload));
+  }
+
+  createExpenseItem(id:string,data:any){
+    return this.accountController.createExpenseItem({id:id,body:{
+      itemName:data.itemName,
+      description:data.description,
+      amount:data.amount
+    }})
+    .pipe(map(d => d.responsePayload));
+  }
+
+  updateExpenseItem(id:string,itemId:string,data:any){
+    return this.accountController.updateExpense({id:id,body:{
+      expenseItems:[{
+        itemName:data.name,
+        description:data.description,
+        amount:data.amount,
+        id:itemId,
+        //expenseAccount:{id:detail.exp_account},
+      }]
+    }})
+    .pipe(map(d => d.responsePayload));
+  }
+
+
+  fetchEvents() {
+    return this.eventController.getSocialEvents().pipe(map(m => m.responsePayload));
+  }
+
+  uploadDocuments(id:string,documents:DocumentDetailUpload[]){
+    return this.commonController.uploadDocuments({body:documents,docIndexId:id,docIndexType:'EXPENSE'}).pipe(map(d => d.responsePayload));
+  }
 
   // advancedAccountSerarch(filter:{
 

@@ -37,7 +37,7 @@ export class UserControllerService extends BaseService {
   }
 
   /** Path part for operation `updateUserDetails()` */
-  static readonly UpdateUserDetailsPath = '/api/user/updateUserDetails/{id}';
+  static readonly UpdateUserDetailsPath = '/api/user/{id}/update';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -62,7 +62,7 @@ export class UserControllerService extends BaseService {
   }
 
   /** Path part for operation `assignUsersToRoles()` */
-  static readonly AssignUsersToRolesPath = '/api/user/assignUsersToRoles/{id}';
+  static readonly AssignUsersToRolesPath = '/api/user/roles/{id}/assignUsersToRole';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -87,7 +87,7 @@ export class UserControllerService extends BaseService {
   }
 
   /** Path part for operation `updateLoggedInUserDetails()` */
-  static readonly UpdateLoggedInUserDetailsPath = '/api/user/updateLoggedInUserDetails';
+  static readonly UpdateLoggedInUserDetailsPath = '/api/user/update/self';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -111,58 +111,8 @@ export class UserControllerService extends BaseService {
     );
   }
 
-  /** Path part for operation `getUsers()` */
-  static readonly GetUsersPath = '/api/user/getUsers';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getUsers()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getUsers$Response(params: GetUsers$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateUserDetail>> {
-    return getUsers(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getUsers$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getUsers(params: GetUsers$Params, context?: HttpContext): Observable<SuccessResponsePaginateUserDetail> {
-    return this.getUsers$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponsePaginateUserDetail>): SuccessResponsePaginateUserDetail => r.body)
-    );
-  }
-
-  /** Path part for operation `getUserRoleHistory()` */
-  static readonly GetUserRoleHistoryPath = '/api/user/getUserRoleHistory/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getUserRoleHistory()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getUserRoleHistory$Response(params: GetUserRoleHistory$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
-    return getUserRoleHistory(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getUserRoleHistory$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getUserRoleHistory(params: GetUserRoleHistory$Params, context?: HttpContext): Observable<SuccessResponseString> {
-    return this.getUserRoleHistory$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseString>): SuccessResponseString => r.body)
-    );
-  }
-
   /** Path part for operation `getUserDetails()` */
-  static readonly GetUserDetailsPath = '/api/user/getUserDetails/{id}';
+  static readonly GetUserDetailsPath = '/api/user/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -186,8 +136,33 @@ export class UserControllerService extends BaseService {
     );
   }
 
+  /** Path part for operation `getUserRoleHistory()` */
+  static readonly GetUserRoleHistoryPath = '/api/user/{id}/history';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getUserRoleHistory()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUserRoleHistory$Response(params: GetUserRoleHistory$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
+    return getUserRoleHistory(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getUserRoleHistory$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUserRoleHistory(params: GetUserRoleHistory$Params, context?: HttpContext): Observable<SuccessResponseString> {
+    return this.getUserRoleHistory$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseString>): SuccessResponseString => r.body)
+    );
+  }
+
   /** Path part for operation `getLoggedInUserDetails()` */
-  static readonly GetLoggedInUserDetailsPath = '/api/user/getLoggedInUserDetails';
+  static readonly GetLoggedInUserDetailsPath = '/api/user/self';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -208,6 +183,31 @@ export class UserControllerService extends BaseService {
   getLoggedInUserDetails(params?: GetLoggedInUserDetails$Params, context?: HttpContext): Observable<SuccessResponseUserDetail> {
     return this.getLoggedInUserDetails$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseUserDetail>): SuccessResponseUserDetail => r.body)
+    );
+  }
+
+  /** Path part for operation `getUsers()` */
+  static readonly GetUsersPath = '/api/user/list';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getUsers()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUsers$Response(params: GetUsers$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateUserDetail>> {
+    return getUsers(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getUsers$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUsers(params: GetUsers$Params, context?: HttpContext): Observable<SuccessResponsePaginateUserDetail> {
+    return this.getUsers$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponsePaginateUserDetail>): SuccessResponsePaginateUserDetail => r.body)
     );
   }
 

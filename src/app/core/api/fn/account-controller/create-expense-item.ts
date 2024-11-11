@@ -8,20 +8,21 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseUserDetail } from '../../models/success-response-user-detail';
+import { ExpenseItemDetail } from '../../models/expense-item-detail';
+import { SuccessResponseExpenseItemDetail } from '../../models/success-response-expense-item-detail';
 
-export interface GetUserDetails$Params {
+export interface CreateExpenseItem$Params {
   id: string;
-  idType?: 'EMAIL' | 'AUTH_USER_ID' | 'ID';
   'Correlation-Id'?: string;
+      body: ExpenseItemDetail
 }
 
-export function getUserDetails(http: HttpClient, rootUrl: string, params: GetUserDetails$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseUserDetail>> {
-  const rb = new RequestBuilder(rootUrl, getUserDetails.PATH, 'get');
+export function createExpenseItem(http: HttpClient, rootUrl: string, params: CreateExpenseItem$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseExpenseItemDetail>> {
+  const rb = new RequestBuilder(rootUrl, createExpenseItem.PATH, 'post');
   if (params) {
     rb.path('id', params.id, {});
-    rb.query('idType', params.idType, {});
     rb.header('Correlation-Id', params['Correlation-Id'], {});
+    rb.body(params.body, 'application/json');
   }
 
   return http.request(
@@ -29,9 +30,9 @@ export function getUserDetails(http: HttpClient, rootUrl: string, params: GetUse
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseUserDetail>;
+      return r as StrictHttpResponse<SuccessResponseExpenseItemDetail>;
     })
   );
 }
 
-getUserDetails.PATH = '/api/user/{id}';
+createExpenseItem.PATH = '/api/account/expense/{id}/createitem';

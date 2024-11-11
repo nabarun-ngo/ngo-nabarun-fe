@@ -33,4 +33,4 @@ export function createAccount(http: HttpClient, rootUrl: string, params: CreateA
   );
 }
 
-createAccount.PATH = '/api/account/createAccount';
+createAccount.PATH = '/api/account/create';

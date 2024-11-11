@@ -34,4 +34,4 @@ export function getLoggedInUserDonations(http: HttpClient, rootUrl: string, para
   );
 }
 
-getLoggedInUserDonations.PATH = '/api/donation/getLoggedInUserDonation';
+getLoggedInUserDonations.PATH = '/api/donation/list/self';

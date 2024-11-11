@@ -33,4 +33,4 @@ export function raiseDonation(http: HttpClient, rootUrl: string, params: RaiseDo
   );
 }
 
-raiseDonation.PATH = '/api/donation/raiseDonation';
+raiseDonation.PATH = '/api/donation/create';

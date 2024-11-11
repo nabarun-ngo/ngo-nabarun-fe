@@ -32,4 +32,4 @@ export function clearCache(http: HttpClient, rootUrl: string, params: ClearCache
   );
 }
 
-clearCache.PATH = '/api/admin/clearCache';
+clearCache.PATH = '/api/admin/clearcache';

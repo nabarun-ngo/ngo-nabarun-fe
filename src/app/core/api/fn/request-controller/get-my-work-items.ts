@@ -37,4 +37,4 @@ export function getMyWorkItems(http: HttpClient, rootUrl: string, params: GetMyW
   );
 }
 
-getMyWorkItems.PATH = '/api/request/getMyWorkItems';
+getMyWorkItems.PATH = '/api/request/workitem/list/self';

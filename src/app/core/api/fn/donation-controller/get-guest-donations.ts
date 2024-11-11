@@ -8,21 +8,19 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponsePaginateTransactionDetail } from '../../models/success-response-paginate-transaction-detail';
-import { TransactionDetailFilter } from '../../models/transaction-detail-filter';
+import { DonationDetailFilter } from '../../models/donation-detail-filter';
+import { SuccessResponsePaginateDonationDetail } from '../../models/success-response-paginate-donation-detail';
 
-export interface GetMyTransactions$Params {
-  id: string;
+export interface GetGuestDonations$Params {
   pageIndex?: number;
   pageSize?: number;
-  filter: TransactionDetailFilter;
+  filter: DonationDetailFilter;
   'Correlation-Id'?: string;
 }
 
-export function getMyTransactions(http: HttpClient, rootUrl: string, params: GetMyTransactions$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateTransactionDetail>> {
-  const rb = new RequestBuilder(rootUrl, getMyTransactions.PATH, 'get');
+export function getGuestDonations(http: HttpClient, rootUrl: string, params: GetGuestDonations$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateDonationDetail>> {
+  const rb = new RequestBuilder(rootUrl, getGuestDonations.PATH, 'get');
   if (params) {
-    rb.path('id', params.id, {});
     rb.query('pageIndex', params.pageIndex, {});
     rb.query('pageSize', params.pageSize, {});
     rb.query('filter', params.filter, {});
@@ -34,9 +32,9 @@ export function getMyTransactions(http: HttpClient, rootUrl: string, params: Get
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponsePaginateTransactionDetail>;
+      return r as StrictHttpResponse<SuccessResponsePaginateDonationDetail>;
     })
   );
 }
 
-getMyTransactions.PATH = '/api/account/{id}/transaction/list/self';
+getGuestDonations.PATH = '/api/donation/list/guest';

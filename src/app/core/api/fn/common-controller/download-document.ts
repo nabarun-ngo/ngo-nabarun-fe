@@ -33,4 +33,4 @@ export function downloadDocument(http: HttpClient, rootUrl: string, params: Down
   );
 }
 
-downloadDocument.PATH = '/api/common/document/downloadDocument/{id}';
+downloadDocument.PATH = '/api/common/document/download/{id}';

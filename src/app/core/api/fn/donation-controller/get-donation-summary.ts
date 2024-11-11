@@ -36,4 +36,4 @@ export function getDonationSummary(http: HttpClient, rootUrl: string, params?: G
   );
 }
 
-getDonationSummary.PATH = '/api/donation/getDonationSummary';
+getDonationSummary.PATH = '/api/donation/summary';

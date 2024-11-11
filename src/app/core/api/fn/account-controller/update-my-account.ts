@@ -35,4 +35,4 @@ export function updateMyAccount(http: HttpClient, rootUrl: string, params: Updat
   );
 }
 
-updateMyAccount.PATH = '/api/account/{id}/updateMyAccount';
+updateMyAccount.PATH = '/api/account/{id}/update/self';

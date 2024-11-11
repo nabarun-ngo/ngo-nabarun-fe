@@ -38,7 +38,7 @@ export class RequestControllerService extends BaseService {
   }
 
   /** Path part for operation `createRequest()` */
-  static readonly CreateRequestPath = '/api/request/createRequest';
+  static readonly CreateRequestPath = '/api/request/create';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -62,33 +62,8 @@ export class RequestControllerService extends BaseService {
     );
   }
 
-  /** Path part for operation `updateWorkItem()` */
-  static readonly UpdateWorkItemPath = '/api/request/updateWorkItem/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `updateWorkItem()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  updateWorkItem$Response(params: UpdateWorkItem$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseWorkDetail>> {
-    return updateWorkItem(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `updateWorkItem$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  updateWorkItem(params: UpdateWorkItem$Params, context?: HttpContext): Observable<SuccessResponseWorkDetail> {
-    return this.updateWorkItem$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseWorkDetail>): SuccessResponseWorkDetail => r.body)
-    );
-  }
-
   /** Path part for operation `updateRequest()` */
-  static readonly UpdateRequestPath = '/api/request/updateRequest/{id}';
+  static readonly UpdateRequestPath = '/api/request/{id}/update';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -112,33 +87,33 @@ export class RequestControllerService extends BaseService {
     );
   }
 
-  /** Path part for operation `getWorkItems()` */
-  static readonly GetWorkItemsPath = '/api/request/{id}/getWorkItems';
+  /** Path part for operation `updateWorkItem()` */
+  static readonly UpdateWorkItemPath = '/api/request/workitem/{id}/update';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getWorkItems()` instead.
+   * To access only the response body, use `updateWorkItem()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  getWorkItems$Response(params: GetWorkItems$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseListWorkDetail>> {
-    return getWorkItems(this.http, this.rootUrl, params, context);
+  updateWorkItem$Response(params: UpdateWorkItem$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseWorkDetail>> {
+    return updateWorkItem(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getWorkItems$Response()` instead.
+   * To access the full response (for headers, for example), `updateWorkItem$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  getWorkItems(params: GetWorkItems$Params, context?: HttpContext): Observable<SuccessResponseListWorkDetail> {
-    return this.getWorkItems$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseListWorkDetail>): SuccessResponseListWorkDetail => r.body)
+  updateWorkItem(params: UpdateWorkItem$Params, context?: HttpContext): Observable<SuccessResponseWorkDetail> {
+    return this.updateWorkItem$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseWorkDetail>): SuccessResponseWorkDetail => r.body)
     );
   }
 
   /** Path part for operation `getRequestDetail()` */
-  static readonly GetRequestDetailPath = '/api/request/getRequest/{id}';
+  static readonly GetRequestDetailPath = '/api/request/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -162,8 +137,33 @@ export class RequestControllerService extends BaseService {
     );
   }
 
+  /** Path part for operation `getWorkItems()` */
+  static readonly GetWorkItemsPath = '/api/request/{id}/workitems';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getWorkItems()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getWorkItems$Response(params: GetWorkItems$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseListWorkDetail>> {
+    return getWorkItems(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getWorkItems$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getWorkItems(params: GetWorkItems$Params, context?: HttpContext): Observable<SuccessResponseListWorkDetail> {
+    return this.getWorkItems$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseListWorkDetail>): SuccessResponseListWorkDetail => r.body)
+    );
+  }
+
   /** Path part for operation `getMyWorkItems()` */
-  static readonly GetMyWorkItemsPath = '/api/request/getMyWorkItems';
+  static readonly GetMyWorkItemsPath = '/api/request/workitem/list/self';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -188,7 +188,7 @@ export class RequestControllerService extends BaseService {
   }
 
   /** Path part for operation `getMyRequests()` */
-  static readonly GetMyRequestsPath = '/api/request/getMyRequests';
+  static readonly GetMyRequestsPath = '/api/request/list/self';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.

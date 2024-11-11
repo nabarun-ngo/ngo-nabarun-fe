@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { KeyValue } from 'src/app/core/api/models';
 import { DetailedView } from 'src/app/shared/components/generic/detailed-view/detailed-view.model';
@@ -35,11 +35,8 @@ export class DetailedViewComponent {
   }
 
 
-  @Output() accordionOpened($event: { rowIndex: number; }) {
-    
-  }
-  onClick($event: { buttonId: string; rowIndex: number; }) {
-    
-  }
+  // @Output() accordionOpened: EventEmitter<{rowIndex: number;}> = new EventEmitter();
+  // @Output() buttonClick: EventEmitter<{buttonId: string;rowIndex: number;}> = new EventEmitter();
+
 
 }

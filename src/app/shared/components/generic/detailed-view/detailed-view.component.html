@@ -28,19 +28,20 @@
 
                 </div>
                 <div *ngIf="view.section_type == 'accordion_list'">
-                    <!-- <div class="flex justify-end p-2">
-                        <mat-icon [ngClass]="{'disabledLink ' : false}" class="bg-purple-500 mx-2 mt-2">add</mat-icon>
-                        <mat-form-field appearance="outline" class="dense-3">
+                    <div class="flex justify-end p-2" *ngIf="view.accordion?.createBtn">
+                        <mat-icon [ngClass]="{'disabledLink ' : false}" (click)="view.accordion?.buttonClick?.emit({buttonId:'SHOW_CREATE',rowIndex:0})" class="bg-purple-500 mx-2 mt-2">add</mat-icon>
+                        <!-- <mat-form-field appearance="outline" class="dense-3">
                             <input type="text" matInput placeholder="Search here">
-                        </mat-form-field>
-                    </div> -->
-                    <app-accordion-list [accordionList]="view.accordionList!" (onButtonClick)="onClick($event)"
-                    (onAccordionOpen)="accordionOpened($event)"></app-accordion-list>    
+                        </mat-form-field> -->
+                    </div>
+                    <app-accordion-list [accordionList]="view.accordionList!" (onButtonClick)="view.accordion?.buttonClick?.emit($event)"
+                    (onAccordionOpen)="view.accordion?.accordionOpened?.emit($event)"></app-accordion-list>    
                     <!-- <mat-paginator class="mt-4" style="background-color: transparent;" (page)="handlePageEvent(mem.member!,$event)" [length]="mem.total" [pageSize]="mem.size" [pageSizeOptions]="defaultValue.pageSizeOptions" [pageIndex]="mem.index" aria-label="Select page">
                     </mat-paginator> -->
                 </div>
                 <div *ngIf="view.section_type == 'doc_list'">
-                    <app-document-list [documents]="view.documents" [showHeading]="false"></app-document-list>
+                    <app-file-upload *ngIf="view.show_form" (files)="view.doc?.docChange?.emit($event)"></app-file-upload>
+                    <app-document-list *ngIf="!view.show_form" [documents]="view.documents" [showHeading]="false"></app-document-list>
                 </div>
             </div>
         </div>

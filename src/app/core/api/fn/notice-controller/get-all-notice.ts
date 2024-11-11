@@ -37,4 +37,4 @@ export function getAllNotice(http: HttpClient, rootUrl: string, params: GetAllNo
   );
 }
 
-getAllNotice.PATH = '/api/notice/getNotices';
+getAllNotice.PATH = '/api/notice/list';

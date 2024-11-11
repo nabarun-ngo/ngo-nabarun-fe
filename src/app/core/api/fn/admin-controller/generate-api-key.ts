@@ -32,4 +32,4 @@ export function generateApiKey(http: HttpClient, rootUrl: string, params: Genera
   );
 }
 
-generateApiKey.PATH = '/api/admin/generateApiKey';
+generateApiKey.PATH = '/api/admin/apikey/generate';

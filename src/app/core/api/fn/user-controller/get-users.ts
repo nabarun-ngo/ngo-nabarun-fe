@@ -37,4 +37,4 @@ export function getUsers(http: HttpClient, rootUrl: string, params: GetUsers$Par
   );
 }
 
-getUsers.PATH = '/api/user/getUsers';
+getUsers.PATH = '/api/user/list';

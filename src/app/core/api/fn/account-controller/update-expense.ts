@@ -35,4 +35,4 @@ export function updateExpense(http: HttpClient, rootUrl: string, params: UpdateE
   );
 }
 
-updateExpense.PATH = '/api/account/{id}/updateExpense';
+updateExpense.PATH = '/api/account/expense/{id}/update';

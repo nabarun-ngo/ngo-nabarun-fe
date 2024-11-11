@@ -10,15 +10,15 @@ import { RequestBuilder } from '../../request-builder';
 
 import { SuccessResponseVoid } from '../../models/success-response-void';
 
-export interface DeleteEvent1$Params {
-  id: string;
+export interface GetApiKeyList$Params {
+  names: Array<string>;
   'Correlation-Id'?: string;
 }
 
-export function deleteEvent1(http: HttpClient, rootUrl: string, params: DeleteEvent1$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
-  const rb = new RequestBuilder(rootUrl, deleteEvent1.PATH, 'delete');
+export function getApiKeyList(http: HttpClient, rootUrl: string, params: GetApiKeyList$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
+  const rb = new RequestBuilder(rootUrl, getApiKeyList.PATH, 'get');
   if (params) {
-    rb.path('id', params.id, {});
+    rb.query('names', params.names, {});
     rb.header('Correlation-Id', params['Correlation-Id'], {});
   }
 
@@ -32,4 +32,4 @@ export function deleteEvent1(http: HttpClient, rootUrl: string, params: DeleteEv
   );
 }
 
-deleteEvent1.PATH = '/api/notice/deleteNotice/{id}';
+getApiKeyList.PATH = '/api/admin/apikey/list';

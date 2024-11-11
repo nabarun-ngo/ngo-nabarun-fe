@@ -32,4 +32,4 @@ export function getNotice(http: HttpClient, rootUrl: string, params: GetNotice$P
   );
 }
 
-getNotice.PATH = '/api/notice/getNotice/{id}';
+getNotice.PATH = '/api/notice/{id}';

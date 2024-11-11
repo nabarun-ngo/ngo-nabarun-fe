@@ -37,4 +37,4 @@ export function payments(http: HttpClient, rootUrl: string, params: Payments$Par
   );
 }
 
-payments.PATH = '/api/donation/payments/{id}';
+payments.PATH = '/api/donation/{id}/payment';

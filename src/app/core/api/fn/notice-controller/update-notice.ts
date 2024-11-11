@@ -35,4 +35,4 @@ export function updateNotice(http: HttpClient, rootUrl: string, params: UpdateNo
   );
 }
 
-updateNotice.PATH = '/api/notice/updateNotice/{id}';
+updateNotice.PATH = '/api/notice/{id}/update';

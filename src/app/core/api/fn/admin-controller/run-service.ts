@@ -33,4 +33,4 @@ export function runService(http: HttpClient, rootUrl: string, params: RunService
   );
 }
 
-runService.PATH = '/api/admin/runService';
+runService.PATH = '/api/admin/service/run';

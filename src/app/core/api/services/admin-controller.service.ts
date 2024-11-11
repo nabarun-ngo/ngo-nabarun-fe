@@ -15,12 +15,16 @@ import { clearCache } from '../fn/admin-controller/clear-cache';
 import { ClearCache$Params } from '../fn/admin-controller/clear-cache';
 import { generateApiKey } from '../fn/admin-controller/generate-api-key';
 import { GenerateApiKey$Params } from '../fn/admin-controller/generate-api-key';
+import { getApiKeyList } from '../fn/admin-controller/get-api-key-list';
+import { GetApiKeyList$Params } from '../fn/admin-controller/get-api-key-list';
 import { runService } from '../fn/admin-controller/run-service';
 import { RunService$Params } from '../fn/admin-controller/run-service';
 import { SuccessResponseMapStringString } from '../models/success-response-map-string-string';
 import { SuccessResponseVoid } from '../models/success-response-void';
 import { triggerCron } from '../fn/admin-controller/trigger-cron';
 import { TriggerCron$Params } from '../fn/admin-controller/trigger-cron';
+import { updateApiKey } from '../fn/admin-controller/update-api-key';
+import { UpdateApiKey$Params } from '../fn/admin-controller/update-api-key';
 
 @Injectable({ providedIn: 'root' })
 export class AdminControllerService extends BaseService {
@@ -29,7 +33,7 @@ export class AdminControllerService extends BaseService {
   }
 
   /** Path part for operation `runService()` */
-  static readonly RunServicePath = '/api/admin/runService';
+  static readonly RunServicePath = '/api/admin/service/run';
 
   /**
    * Runs a admin service.
@@ -58,31 +62,6 @@ export class AdminControllerService extends BaseService {
   runService(params: RunService$Params, context?: HttpContext): Observable<SuccessResponseVoid> {
     return this.runService$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseVoid>): SuccessResponseVoid => r.body)
-    );
-  }
-
-  /** Path part for operation `generateApiKey()` */
-  static readonly GenerateApiKeyPath = '/api/admin/generateApiKey';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `generateApiKey()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  generateApiKey$Response(params: GenerateApiKey$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseMapStringString>> {
-    return generateApiKey(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `generateApiKey$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  generateApiKey(params: GenerateApiKey$Params, context?: HttpContext): Observable<SuccessResponseMapStringString> {
-    return this.generateApiKey$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseMapStringString>): SuccessResponseMapStringString => r.body)
     );
   }
 
@@ -120,7 +99,7 @@ export class AdminControllerService extends BaseService {
   }
 
   /** Path part for operation `clearCache()` */
-  static readonly ClearCachePath = '/api/admin/clearCache';
+  static readonly ClearCachePath = '/api/admin/clearcache';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -140,6 +119,81 @@ export class AdminControllerService extends BaseService {
    */
   clearCache(params: ClearCache$Params, context?: HttpContext): Observable<SuccessResponseVoid> {
     return this.clearCache$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseVoid>): SuccessResponseVoid => r.body)
+    );
+  }
+
+  /** Path part for operation `updateApiKey()` */
+  static readonly UpdateApiKeyPath = '/api/admin/apikey/{id}/update';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateApiKey()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateApiKey$Response(params: UpdateApiKey$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseMapStringString>> {
+    return updateApiKey(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateApiKey$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateApiKey(params: UpdateApiKey$Params, context?: HttpContext): Observable<SuccessResponseMapStringString> {
+    return this.updateApiKey$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseMapStringString>): SuccessResponseMapStringString => r.body)
+    );
+  }
+
+  /** Path part for operation `generateApiKey()` */
+  static readonly GenerateApiKeyPath = '/api/admin/apikey/generate';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `generateApiKey()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  generateApiKey$Response(params: GenerateApiKey$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseMapStringString>> {
+    return generateApiKey(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `generateApiKey$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  generateApiKey(params: GenerateApiKey$Params, context?: HttpContext): Observable<SuccessResponseMapStringString> {
+    return this.generateApiKey$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseMapStringString>): SuccessResponseMapStringString => r.body)
+    );
+  }
+
+  /** Path part for operation `getApiKeyList()` */
+  static readonly GetApiKeyListPath = '/api/admin/apikey/list';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getApiKeyList()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getApiKeyList$Response(params: GetApiKeyList$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
+    return getApiKeyList(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getApiKeyList$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getApiKeyList(params: GetApiKeyList$Params, context?: HttpContext): Observable<SuccessResponseVoid> {
+    return this.getApiKeyList$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseVoid>): SuccessResponseVoid => r.body)
     );
   }

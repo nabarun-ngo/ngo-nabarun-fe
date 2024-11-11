@@ -34,4 +34,4 @@ export function getNotification(http: HttpClient, rootUrl: string, params?: GetN
   );
 }
 
-getNotification.PATH = '/api/common/getNotifications';
+getNotification.PATH = '/api/common/notification/list';

@@ -32,4 +32,4 @@ export function getRequestDetail(http: HttpClient, rootUrl: string, params: GetR
   );
 }
 
-getRequestDetail.PATH = '/api/request/getRequest/{id}';
+getRequestDetail.PATH = '/api/request/{id}';

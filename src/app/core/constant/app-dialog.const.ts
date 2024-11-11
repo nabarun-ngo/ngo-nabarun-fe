@@ -23,6 +23,10 @@ export const AppDialog={
         title: 'Warning',
         description: 'Are you sure to withdraw this request?'
     },
+    err_min_1_expense:{
+        title: 'Error',
+        description: 'Please add atleast one expense in the expense list.'
+    },
 }
 
 
