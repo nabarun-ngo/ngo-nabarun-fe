@@ -35,4 +35,4 @@ export function updateRequest(http: HttpClient, rootUrl: string, params: UpdateR
   );
 }
 
-updateRequest.PATH = '/api/request/updateRequest/{id}';
+updateRequest.PATH = '/api/request/{id}/update';

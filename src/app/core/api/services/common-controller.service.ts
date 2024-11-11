@@ -11,8 +11,6 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { clearCache } from '../fn/common-controller/clear-cache';
-import { ClearCache$Params } from '../fn/common-controller/clear-cache';
 import { deleteDocument } from '../fn/common-controller/delete-document';
 import { DeleteDocument$Params } from '../fn/common-controller/delete-document';
 import { downloadDocument } from '../fn/common-controller/download-document';
@@ -46,158 +44,8 @@ export class CommonControllerService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `manageNotification()` */
-  static readonly ManageNotificationPath = '/api/common/manageNotification';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `manageNotification()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  manageNotification$Response(params: ManageNotification$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
-    return manageNotification(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `manageNotification$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  manageNotification(params: ManageNotification$Params, context?: HttpContext): Observable<SuccessResponseVoid> {
-    return this.manageNotification$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseVoid>): SuccessResponseVoid => r.body)
-    );
-  }
-
-  /** Path part for operation `clearCache()` */
-  static readonly ClearCachePath = '/api/common/general/clearCache';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `clearCache()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  clearCache$Response(params: ClearCache$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
-    return clearCache(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `clearCache$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  clearCache(params: ClearCache$Params, context?: HttpContext): Observable<SuccessResponseVoid> {
-    return this.clearCache$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseVoid>): SuccessResponseVoid => r.body)
-    );
-  }
-
-  /** Path part for operation `uploadDocuments()` */
-  static readonly UploadDocumentsPath = '/api/common/document/uploadDocuments';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `uploadDocuments()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  uploadDocuments$Response(params: UploadDocuments$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
-    return uploadDocuments(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `uploadDocuments$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  uploadDocuments(params: UploadDocuments$Params, context?: HttpContext): Observable<SuccessResponseVoid> {
-    return this.uploadDocuments$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseVoid>): SuccessResponseVoid => r.body)
-    );
-  }
-
-  /** Path part for operation `uploadDocuments1()` */
-  static readonly UploadDocuments1Path = '/api/common/document/uploadBase64Documents';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `uploadDocuments1()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  uploadDocuments1$Response(params: UploadDocuments1$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
-    return uploadDocuments1(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `uploadDocuments1$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  uploadDocuments1(params: UploadDocuments1$Params, context?: HttpContext): Observable<SuccessResponseVoid> {
-    return this.uploadDocuments1$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseVoid>): SuccessResponseVoid => r.body)
-    );
-  }
-
-  /** Path part for operation `getReferenceField()` */
-  static readonly GetReferenceFieldPath = '/api/common/getReferenceField';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getReferenceField()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getReferenceField$Response(params: GetReferenceField$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseListAdditionalField>> {
-    return getReferenceField(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getReferenceField$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getReferenceField(params: GetReferenceField$Params, context?: HttpContext): Observable<SuccessResponseListAdditionalField> {
-    return this.getReferenceField$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseListAdditionalField>): SuccessResponseListAdditionalField => r.body)
-    );
-  }
-
-  /** Path part for operation `getReferenceData()` */
-  static readonly GetReferenceDataPath = '/api/common/getReferenceData';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getReferenceData()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getReferenceData$Response(params?: GetReferenceData$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseMapStringListKeyValue>> {
-    return getReferenceData(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getReferenceData$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getReferenceData(params?: GetReferenceData$Params, context?: HttpContext): Observable<SuccessResponseMapStringListKeyValue> {
-    return this.getReferenceData$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseMapStringListKeyValue>): SuccessResponseMapStringListKeyValue => r.body)
-    );
-  }
-
   /** Path part for operation `getNotification()` */
-  static readonly GetNotificationPath = '/api/common/getNotifications';
+  static readonly GetNotificationPath = '/api/common/notification/list';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -221,8 +69,83 @@ export class CommonControllerService extends BaseService {
     );
   }
 
+  /** Path part for operation `manageNotification()` */
+  static readonly ManageNotificationPath = '/api/common/notification/list';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `manageNotification()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  manageNotification$Response(params: ManageNotification$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
+    return manageNotification(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `manageNotification$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  manageNotification(params: ManageNotification$Params, context?: HttpContext): Observable<SuccessResponseVoid> {
+    return this.manageNotification$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseVoid>): SuccessResponseVoid => r.body)
+    );
+  }
+
+  /** Path part for operation `uploadDocuments()` */
+  static readonly UploadDocumentsPath = '/api/common/document/uploadbase64';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `uploadDocuments()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  uploadDocuments$Response(params: UploadDocuments$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
+    return uploadDocuments(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `uploadDocuments$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  uploadDocuments(params: UploadDocuments$Params, context?: HttpContext): Observable<SuccessResponseVoid> {
+    return this.uploadDocuments$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseVoid>): SuccessResponseVoid => r.body)
+    );
+  }
+
+  /** Path part for operation `uploadDocuments1()` */
+  static readonly UploadDocuments1Path = '/api/common/document/upload';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `uploadDocuments1()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  uploadDocuments1$Response(params: UploadDocuments1$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
+    return uploadDocuments1(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `uploadDocuments1$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  uploadDocuments1(params: UploadDocuments1$Params, context?: HttpContext): Observable<SuccessResponseVoid> {
+    return this.uploadDocuments1$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseVoid>): SuccessResponseVoid => r.body)
+    );
+  }
+
   /** Path part for operation `viewDocument()` */
-  static readonly ViewDocumentPath = '/api/common/document/viewDocument/{id}';
+  static readonly ViewDocumentPath = '/api/common/document/view/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -247,7 +170,7 @@ export class CommonControllerService extends BaseService {
   }
 
   /** Path part for operation `getDocuments()` */
-  static readonly GetDocumentsPath = '/api/common/document/getDocuments/{id}';
+  static readonly GetDocumentsPath = '/api/common/document/list/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -272,7 +195,7 @@ export class CommonControllerService extends BaseService {
   }
 
   /** Path part for operation `downloadDocument()` */
-  static readonly DownloadDocumentPath = '/api/common/document/downloadDocument/{id}';
+  static readonly DownloadDocumentPath = '/api/common/document/download/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -300,8 +223,58 @@ export class CommonControllerService extends BaseService {
     );
   }
 
+  /** Path part for operation `getReferenceField()` */
+  static readonly GetReferenceFieldPath = '/api/common/data/referenceFields';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getReferenceField()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getReferenceField$Response(params: GetReferenceField$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseListAdditionalField>> {
+    return getReferenceField(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getReferenceField$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getReferenceField(params: GetReferenceField$Params, context?: HttpContext): Observable<SuccessResponseListAdditionalField> {
+    return this.getReferenceField$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseListAdditionalField>): SuccessResponseListAdditionalField => r.body)
+    );
+  }
+
+  /** Path part for operation `getReferenceData()` */
+  static readonly GetReferenceDataPath = '/api/common/data/referenceData';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getReferenceData()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getReferenceData$Response(params?: GetReferenceData$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseMapStringListKeyValue>> {
+    return getReferenceData(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getReferenceData$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getReferenceData(params?: GetReferenceData$Params, context?: HttpContext): Observable<SuccessResponseMapStringListKeyValue> {
+    return this.getReferenceData$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseMapStringListKeyValue>): SuccessResponseMapStringListKeyValue => r.body)
+    );
+  }
+
   /** Path part for operation `deleteDocument()` */
-  static readonly DeleteDocumentPath = '/api/common/document/deleteDocument/{id}';
+  static readonly DeleteDocumentPath = '/api/common/document/delete/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.

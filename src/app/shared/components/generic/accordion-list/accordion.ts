@@ -4,6 +4,8 @@ import { AccordionButton, AccordionCell, AccordionList, AccordionRow } from "./a
 import { DetailedView, DetailedViewField } from "../detailed-view/detailed-view.model";
 import { KeyValue, WorkDetail } from "src/app/core/api/models";
 import { FormControl } from "@angular/forms";
+import { BehaviorSubject, take } from "rxjs";
+import { FileUpload } from "../file-upload/file-upload.component";
 
 export abstract class Accordion<NumType> extends Paginator {
   private accordionList: AccordionList = {
@@ -49,15 +51,18 @@ export abstract class Accordion<NumType> extends Paginator {
   /**
    * 
    */
-  protected clearContents() {
+  clearContents() {
     this.accordionList.contents.splice(0);
   }
 
   setContent(dataList: NumType[], totalSize?: number) {
     this.clearContents()
-    dataList.forEach(e => {
-      this.addContentRow(e);
-    })
+    if(dataList){
+      dataList.forEach(e => {
+        this.addContentRow(e);
+      })
+    }
+   
     this.itemLengthSubs.next(totalSize!);
   }
 
@@ -65,7 +70,7 @@ export abstract class Accordion<NumType> extends Paginator {
    * 
    * @param data 
    */
-  protected addContentRow(data: NumType) {
+  addContentRow(data: NumType) {
     let row = {
       columns: this.prepareHighLevelView(data),
       detailed: this.prepareDetailedView(data),
@@ -111,7 +116,7 @@ export abstract class Accordion<NumType> extends Paginator {
     }
   }
 
-  protected getSectionForm(sectionId: string, rowIndex: number, create?: boolean) {
+  getSectionForm(sectionId: string, rowIndex: number, create?: boolean) {
     if (create) {
       return this.accordionList.addContent?.detailed.find(f => f.section_html_id == sectionId)?.section_form;
     } else {
@@ -151,6 +156,7 @@ export abstract class Accordion<NumType> extends Paginator {
     }
   }
 
+  
   protected removeSectionField(sectionId: string, field_id: string, rowIndex: number, create?: boolean) {
     if (create) {
       let section = this.accordionList.addContent?.detailed.find(f => f.section_html_id == sectionId);
@@ -172,7 +178,7 @@ export abstract class Accordion<NumType> extends Paginator {
     }
   }
 
-  protected showCreateForm(data?: NumType, options?: { [key: string]: any, create?: boolean }) {
+  showCreateForm(data?: NumType, options?: { [key: string]: any, create?: boolean }) {
     if (!options) {
       options = {};
     }
@@ -202,13 +208,13 @@ export abstract class Accordion<NumType> extends Paginator {
   //   this.accordionList.addContent = undefined;
   // }
 
-  protected showForm(rowIndex: number, section_ids: string[]) {
+  showForm(rowIndex: number, section_ids: string[]) {
     this.accordionList.contents[rowIndex].detailed.filter(f => section_ids.includes(f.section_html_id!)).map(m => {
       console.log(m)
       m.show_form = true;
       m.hide_section = false;
       m.content?.map(m => {
-        m.hide_field = false;
+        //m.hide_field = false;
         return m;
       })
       return m;
@@ -226,7 +232,7 @@ export abstract class Accordion<NumType> extends Paginator {
     })
     //console.log(this.accordionList.contents[rowIndex].buttons, this.actionButtons)
   }
-  protected hideForm(rowIndex: number, create?: boolean) {
+  hideForm(rowIndex: number, create?: boolean) {
     if (create) {
       this.accordionList.addContent = undefined;
     } else {
@@ -240,7 +246,26 @@ export abstract class Accordion<NumType> extends Paginator {
         this.accordionList.contents[rowIndex].buttons?.push(b);
       })
     }
+    
   }
+
+  getSectionAccordion(sectionId: string, rowIndex: number, create?: boolean) {
+    if (create) {
+      return this.accordionList.addContent?.detailed.find(f => f.section_html_id == sectionId)?.accordion?.object;
+    }
+    return this.accordionList.contents[rowIndex]?.detailed.find(f => f.section_html_id == sectionId)?.accordion?.object;
+  }
+
+  getSectionDocuments(sectionId: string, rowIndex: number, create?: boolean) {
+    let subject = new BehaviorSubject<FileUpload[]>([]);
+    if (create) {
+      this.accordionList.addContent?.detailed.find(f => f.section_html_id == sectionId)?.doc?.docChange.subscribe(subject);
+    }else{
+      this.accordionList.contents[rowIndex]?.detailed.find(f => f.section_html_id == sectionId)?.doc?.docChange.subscribe(subject);
+    }
+    return subject.value;
+  }
+ 
 
   // protected updateButtonText(id: string, name: string): void {
   //   this.accordionList.contents.map(m1 => {

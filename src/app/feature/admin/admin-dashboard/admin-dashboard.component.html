@@ -2,9 +2,24 @@
     <div class="flex flex-col">
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+               
+                <mat-card class="m-4 p-4">
+                    <h2 class="text-purple-700 font-bold text-center">Important links</h2>
+                    <div class="text-gray-700">
+                        <div class="grid md:grid-cols-1 text-sm">
+                            <div class="grid grid-cols-8 gap-2" *ngFor="let data of refData[constant.refDataKey.importantLinks]">
+                                <div class="py-2 font-semibold col-span-1">{{data.key}}</div>
+                                <div class="py-2 col-span-6">{{data.description}}</div>
+                                <div class="py-2 col-span-1 text-center">
+                                    <a class="text-blue-700" [href]="data.displayValue" target="_blank">Click here</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card>
                 <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center"
                     (selectedTabChange)="tabChanged($event.index)" [(selectedIndex)]="tabIndex">
-                    <mat-tab id="app_config" label="App Config">
+                    <mat-tab id="admin_services" label="Admin Services">
                         <app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)"
                             (onAccordionOpen)="accordionOpened($event)"></app-accordion-list>
                     </mat-tab>

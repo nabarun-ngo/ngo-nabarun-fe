@@ -32,4 +32,4 @@ export function getReferenceField(http: HttpClient, rootUrl: string, params: Get
   );
 }
 
-getReferenceField.PATH = '/api/common/getReferenceField';
+getReferenceField.PATH = '/api/common/data/referenceFields';

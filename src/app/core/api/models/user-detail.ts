@@ -22,6 +22,7 @@ export interface UserDetail {
   id?: string;
   initials?: string;
   lastName?: string;
+  loginMethod?: Array<'PASSWORD' | 'EMAIL' | 'SMS'>;
   memberSince?: string;
   middleName?: string;
   phones?: Array<UserPhoneNumber>;

@@ -36,4 +36,4 @@ export function getUserDonations(http: HttpClient, rootUrl: string, params: GetU
   );
 }
 
-getUserDonations.PATH = '/api/donation/getUserDonation/{id}';
+getUserDonations.PATH = '/api/donation/donor/{id}/list';

@@ -4,7 +4,7 @@ import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { MemberService } from '../member.service';
 import { KeyValue, UserDetail } from 'src/app/core/api/models';
 import { compareObjects } from 'src/app/core/service/utilities.service';
-import { OperationMode } from '../member.const';
+import { OperationMode, UserConstant } from '../member.const';
 import { Location } from '@angular/common';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { ModalService } from 'src/app/core/service/modal.service';
@@ -30,7 +30,7 @@ export class MemberProfileComponent implements OnInit {
   alertList: AlertData[] = [];
   matDialogData!: MemberProfileModel
   dialogClose: EventEmitter<boolean> = new EventEmitter();
-
+  constant =UserConstant
   constructor(
     private sharedDataService: SharedDataService,
     private route: ActivatedRoute,
@@ -51,7 +51,7 @@ export class MemberProfileComponent implements OnInit {
       this.sharedDataService.setPageName(this.isSelfProfile ? 'MY PROFILE' : 'MEMBER PROFILE');
       this.mode = this.matDialogData.mode;
       this.member = this.matDialogData.member
-      this.sharedDataService.setRefData('USER', this.matDialogData.refData);
+      this.sharedDataService.setRefData(this.constant.refDataName, this.matDialogData.refData);
       this.navigations = [
         {
           displayName: 'CLOSE',
@@ -99,16 +99,17 @@ export class MemberProfileComponent implements OnInit {
   }
 
   onUpdate($event: {
-    actionName: "SELF_UPDATE" | "CHANGE_MODE" | 'ADMIN_UPDATE';
+    actionName: "SELF_UPDATE" | "CHANGE_MODE" | 'ADMIN_UPDATE'| "CHANGE_PASSWORD";
     profile?: UserDetail;
     mode?: OperationMode;
   }) {
-    if ($event.actionName == 'SELF_UPDATE') {
+    if ($event.actionName == 'SELF_UPDATE' || $event.actionName == 'CHANGE_PASSWORD') {
       this.memberService.updateMyProfiledetail(compareObjects($event.profile, this.member)).subscribe(data => {
         this.member = data!
         this.mode = 'view_self';
         this.alertList.push(AppAlert.profile_updated_self)
         this.dialogClose.emit(true)
+        //this.memberService.getMyDetail().subscribe(data=>this.member=data!)
       })
     } else if ($event.actionName == 'CHANGE_MODE') {
       this.mode = $event.mode!;
@@ -117,6 +118,7 @@ export class MemberProfileComponent implements OnInit {
         this.member = data!
         this.mode = 'view_admin';
         this.dialogClose.emit(true)
+        //this.memberService.getUserDetail($event.profile?.id!).subscribe(data=>this.member=data!)
       })
     }
 

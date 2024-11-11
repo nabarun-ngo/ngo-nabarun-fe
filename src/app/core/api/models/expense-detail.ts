@@ -6,16 +6,19 @@ import { AccountDetail } from '../models/account-detail';
 import { ExpenseItemDetail } from '../models/expense-item-detail';
 import { UserDetail } from '../models/user-detail';
 export interface ExpenseDetail {
-  approved?: boolean;
-  approvedBy?: UserDetail;
+  account?: AccountDetail;
   createdBy?: UserDetail;
   createdOn?: string;
   description?: string;
-  expenseAccount?: AccountDetail;
+  expenseDate?: string;
   expenseItems?: Array<ExpenseItemDetail>;
   expenseRefId?: string;
   expenseRefType?: 'EVENT' | 'OTHER';
   finalAmount?: number;
+  finalized?: boolean;
+  finalizedBy?: UserDetail;
   id?: string;
   name?: string;
+  status?: 'SUBMITTED' | 'PAID' | 'CLOSED';
+  txnNumber?: string;
 }

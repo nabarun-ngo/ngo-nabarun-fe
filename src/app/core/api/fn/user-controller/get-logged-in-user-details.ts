@@ -30,4 +30,4 @@ export function getLoggedInUserDetails(http: HttpClient, rootUrl: string, params
   );
 }
 
-getLoggedInUserDetails.PATH = '/api/user/getLoggedInUserDetails';
+getLoggedInUserDetails.PATH = '/api/user/self';

@@ -12,6 +12,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 })
 export class SearchAndAdvancedSearchFormComponent implements OnInit {
   adv_search: boolean = false;
+  colLength!: number;
 
   constructor(@Inject(MAT_DIALOG_DATA) input: SearchAndAdvancedSearchModel) {
     this.inputInit(input);
@@ -28,8 +29,8 @@ export class SearchAndAdvancedSearchFormComponent implements OnInit {
 
 
   @Input({ required: true }) set searchInput(input: SearchAndAdvancedSearchModel) {
-
     this.inputInit(input);
+    
   };
 
   inputInit(input: SearchAndAdvancedSearchModel) {
@@ -37,6 +38,12 @@ export class SearchAndAdvancedSearchFormComponent implements OnInit {
       this.searchformGroup.setControl(e.formControlName, new FormControl('', e.validations));
     })
     this.search = input;
+    let len=input.advancedSearch?.searchFormFields?.length!;
+    if(len == 1 || (len % 2) == 0){
+      this.colLength=len;
+    }else{
+      this.colLength=len+1;
+    }
   }
 
   ngOnInit(): void {

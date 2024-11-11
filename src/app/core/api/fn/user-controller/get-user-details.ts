@@ -34,4 +34,4 @@ export function getUserDetails(http: HttpClient, rootUrl: string, params: GetUse
   );
 }
 
-getUserDetails.PATH = '/api/user/getUserDetails/{id}';
+getUserDetails.PATH = '/api/user/{id}';

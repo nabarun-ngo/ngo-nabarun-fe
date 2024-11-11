@@ -37,4 +37,4 @@ export function manageNotification(http: HttpClient, rootUrl: string, params: Ma
   );
 }
 
-manageNotification.PATH = '/api/common/manageNotification';
+manageNotification.PATH = '/api/common/notification/list';

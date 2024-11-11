@@ -12,7 +12,7 @@ import { SuccessResponseListDocumentDetail } from '../../models/success-response
 
 export interface GetDocuments$Params {
   id: string;
-  type: 'DONATION' | 'EVENT' | 'NOTICE' | 'USER' | 'PROFILE_PHOTO' | 'EVENT_COVER' | 'REQUEST';
+  type: 'DONATION' | 'EVENT' | 'NOTICE' | 'USER' | 'PROFILE_PHOTO' | 'EVENT_COVER' | 'REQUEST' | 'EXPENSE';
   'Correlation-Id'?: string;
 }
 
@@ -34,4 +34,4 @@ export function getDocuments(http: HttpClient, rootUrl: string, params: GetDocum
   );
 }
 
-getDocuments.PATH = '/api/common/document/getDocuments/{id}';
+getDocuments.PATH = '/api/common/document/list/{id}';

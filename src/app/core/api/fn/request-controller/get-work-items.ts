@@ -32,4 +32,4 @@ export function getWorkItems(http: HttpClient, rootUrl: string, params: GetWorkI
   );
 }
 
-getWorkItems.PATH = '/api/request/{id}/getWorkItems';
+getWorkItems.PATH = '/api/request/{id}/workitems';

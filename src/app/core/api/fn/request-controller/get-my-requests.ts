@@ -37,4 +37,4 @@ export function getMyRequests(http: HttpClient, rootUrl: string, params: GetMyRe
   );
 }
 
-getMyRequests.PATH = '/api/request/getMyRequests';
+getMyRequests.PATH = '/api/request/list/self';

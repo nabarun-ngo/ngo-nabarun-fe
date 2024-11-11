@@ -8,20 +8,17 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { CronServiceDetail } from '../../models/cron-service-detail';
 import { SuccessResponseVoid } from '../../models/success-response-void';
 
 export interface TriggerCron$Params {
-  trigger: Array<'DONATION_REMINDER_EMAIL' | 'TASK_REMINDER_EMAIL' | 'CREATE_DONATION' | 'UPDATE_DONATION' | 'SYNC_USERS'>;
   'Correlation-Id'?: string;
-      body: {
-[key: string]: string;
-}
+      body: Array<CronServiceDetail>
 }
 
 export function triggerCron(http: HttpClient, rootUrl: string, params: TriggerCron$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
   const rb = new RequestBuilder(rootUrl, triggerCron.PATH, 'post');
   if (params) {
-    rb.query('trigger', params.trigger, {});
     rb.header('Correlation-Id', params['Correlation-Id'], {});
     rb.body(params.body, 'application/json');
   }

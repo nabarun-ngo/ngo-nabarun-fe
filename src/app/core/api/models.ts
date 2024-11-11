@@ -7,6 +7,7 @@ export { AccountDetailFilter } from './models/account-detail-filter';
 export { AdditionalField } from './models/additional-field';
 export { BankDetail } from './models/bank-detail';
 export { ChangeDetail } from './models/change-detail';
+export { CronServiceDetail } from './models/cron-service-detail';
 export { DocumentDetail } from './models/document-detail';
 export { DocumentDetailUpload } from './models/document-detail-upload';
 export { DonationDetail } from './models/donation-detail';
@@ -45,6 +46,7 @@ export { SuccessResponseDonationDetail } from './models/success-response-donatio
 export { SuccessResponseDonationSummary } from './models/success-response-donation-summary';
 export { SuccessResponseEventDetail } from './models/success-response-event-detail';
 export { SuccessResponseExpenseDetail } from './models/success-response-expense-detail';
+export { SuccessResponseExpenseItemDetail } from './models/success-response-expense-item-detail';
 export { SuccessResponseListAdditionalField } from './models/success-response-list-additional-field';
 export { SuccessResponseListDocumentDetail } from './models/success-response-list-document-detail';
 export { SuccessResponseListHistoryDetail } from './models/success-response-list-history-detail';

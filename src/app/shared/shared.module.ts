@@ -42,11 +42,12 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { NgxMatInputTelComponent } from 'ngx-mat-input-tel';
 import { MAT_CHECKBOX_DEFAULT_OPTIONS, MatCheckboxModule } from '@angular/material/checkbox';
 import { DynamicInjectPipe } from './pipes/dynamic-inject.pipe';
-import { MemberSearchPipe } from '../feature/member/member.pipe';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { AccordionFilterPipe } from './pipes/accordion-filter.pipe';
 import { AlertComponent } from './components/generic/alert/alert.component';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { HistoryComponent } from './components/generic/history/history.component';
+import { DisplayValueFilterPipe } from './pipes/display-value-filter.pipe';
 
 @NgModule({
   declarations: [
@@ -70,7 +71,8 @@ import { HistoryComponent } from './components/generic/history/history.component
     DynamicInjectPipe,
     AccordionFilterPipe,
     AlertComponent,
-    HistoryComponent
+    HistoryComponent,
+    DisplayValueFilterPipe
   ],
   imports: [
     CommonModule,
@@ -95,7 +97,7 @@ import { HistoryComponent } from './components/generic/history/history.component
     MatButtonToggleModule,
     NgxMatInputTelComponent,
     MatCheckboxModule,
-    
+    MatAutocompleteModule,
   ],
   exports: [
     ItemTileListComponent,

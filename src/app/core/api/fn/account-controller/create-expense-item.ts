@@ -8,18 +8,21 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseVoid } from '../../models/success-response-void';
+import { ExpenseItemDetail } from '../../models/expense-item-detail';
+import { SuccessResponseExpenseItemDetail } from '../../models/success-response-expense-item-detail';
 
-export interface DeleteEvent1$Params {
+export interface CreateExpenseItem$Params {
   id: string;
   'Correlation-Id'?: string;
+      body: ExpenseItemDetail
 }
 
-export function deleteEvent1(http: HttpClient, rootUrl: string, params: DeleteEvent1$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
-  const rb = new RequestBuilder(rootUrl, deleteEvent1.PATH, 'delete');
+export function createExpenseItem(http: HttpClient, rootUrl: string, params: CreateExpenseItem$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseExpenseItemDetail>> {
+  const rb = new RequestBuilder(rootUrl, createExpenseItem.PATH, 'post');
   if (params) {
     rb.path('id', params.id, {});
     rb.header('Correlation-Id', params['Correlation-Id'], {});
+    rb.body(params.body, 'application/json');
   }
 
   return http.request(
@@ -27,9 +30,9 @@ export function deleteEvent1(http: HttpClient, rootUrl: string, params: DeleteEv
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseVoid>;
+      return r as StrictHttpResponse<SuccessResponseExpenseItemDetail>;
     })
   );
 }
 
-deleteEvent1.PATH = '/api/notice/deleteNotice/{id}';
+createExpenseItem.PATH = '/api/account/expense/{id}/createitem';

@@ -2,11 +2,11 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, RequiredValidator, Validators } from '@angular/forms';
 import { parsePhoneNumber } from 'libphonenumber-js';
 import { KeyValue, RefDataType, UserAddress, UserDetail, UserPhoneNumber, UserRole, UserSocialMedia } from 'src/app/core/api/models';
-import { conditionalValidator } from 'src/app/core/service/form.service';
+import { conditionalValidator, matchFieldsValidator } from 'src/app/core/service/form.service';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
-import { OperationMode } from 'src/app/feature/member/member.const';
-import { MemberService } from 'src/app/feature/member/member.service';
+import { OperationMode, UserConstant } from 'src/app/feature/member/member.const';
 import { CommonService } from '../../services/common.service';
+import { sanitizeBase64 } from 'src/app/core/service/utilities.service';
 
 @Component({
   selector: 'app-profile-view',
@@ -15,20 +15,25 @@ import { CommonService } from '../../services/common.service';
 })
 export class ProfileViewComponent implements OnInit {
 
-  @Input({ required: true, alias: 'profile' })
+
   profile!: UserDetail;
+  @Input({ required: true, alias: 'profile' })
+  set profileData(data: UserDetail){
+    this.profile=data;
+    //console.log(this.profile)
+    this.initValues();
+  }
+  constant =UserConstant
 
   @Output()
-  onUpdate: EventEmitter<{ actionName: 'SELF_UPDATE' | 'ADMIN_UPDATE' | 'CHANGE_MODE', profile?: UserDetail, mode?: OperationMode }> = new EventEmitter();
+  onUpdate: EventEmitter<{ actionName: 'SELF_UPDATE' | 'ADMIN_UPDATE' | 'CHANGE_MODE' | 'CHANGE_PASSWORD', profile?: UserDetail, mode?: OperationMode }> = new EventEmitter();
   @Input('mode') mode!: OperationMode;
 
   isInactiveUser: any;
-
-  // editProfileSelf: boolean = false;
-  // editProfileAdmin: boolean = false;
-
+  pictureBase64: string | undefined;
   editAdminForm!: FormGroup;
   editSelfForm!: FormGroup;
+  editLoginInfoForm!: FormGroup;
 
   refData!: { [key: string]: KeyValue[]; };
   phoneNumber: {
@@ -57,27 +62,20 @@ export class ProfileViewComponent implements OnInit {
 
   constructor(
     private sharedDataService: SharedDataService,
-    private memberService: MemberService,
+    //private memberService: MemberService,
     private commonService: CommonService,
 
   ) { }
 
 
   ngOnInit(): void {
-    this.refData = this.sharedDataService.getRefData('USER')!;
+    this.refData = this.sharedDataService.getRefData(UserConstant.refDataName)!;
     this.editAdminForm = new FormGroup({
       status: new FormControl(this.profile.status, [Validators.required]),
-      roles: new FormControl(this.profile.roles?.map(m => m.roleCode), [Validators.required]),
+      roles: new FormControl(this.profile.roles?.map(m => m.roleCode), []),
+      loginMethod: new FormControl(this.profile.loginMethod, [Validators.required]),
     });
-    this.phoneNumber.phoneNumberP = this.profile.phones?.find(f => f.phoneType == 'PRIMARY');
-    this.phoneNumber.phoneNumberS = this.profile.phones?.find(f => f.phoneType == 'ALTERNATIVE');
-    this.address.presentAddress = this.profile.addresses?.find(f => f.addressType == 'PRESENT');
-    this.address.permanentAddress = this.profile.addresses?.find(f => f.addressType == 'PERMANENT');
-    this.socialMedia.facebookSM = this.profile.socialMediaLinks?.find(f => f.mediaType == 'FACEBOOK');
-    this.socialMedia.instagramSM = this.profile.socialMediaLinks?.find(f => f.mediaType == 'INSTAGRAM');
-    this.socialMedia.linkedInSM = this.profile.socialMediaLinks?.find(f => f.mediaType == 'LINKEDIN');
-    this.socialMedia.twitterSM = this.profile.socialMediaLinks?.find(f => f.mediaType == 'TWITTER');
-    this.socialMedia.whatsappSM = this.profile.socialMediaLinks?.find(f => f.mediaType == 'WHATSAPP');
+    this.initValues();
 
     this.editSelfForm = new FormGroup({
       title: new FormControl(this.profile.title, [Validators.required]),
@@ -134,6 +132,7 @@ export class ProfileViewComponent implements OnInit {
       //whatsappLink: new FormControl(this.socialMedia.whatsappSM?.mediaLink, []),
       about: new FormControl(this.profile.about, [Validators.required]),
       picture: new FormControl('', []),
+
     });
 
     this.editSelfForm.controls['country_p'].valueChanges.subscribe(s => {
@@ -171,6 +170,42 @@ export class ProfileViewComponent implements OnInit {
       this.editSelfForm.controls['state_s'].updateValueAndValidity();
       this.editSelfForm.controls['country_s'].updateValueAndValidity();
     })
+
+
+
+    this.editLoginInfoForm=new FormGroup({
+      oldPassword: new FormControl('', [Validators.required]),
+      newPassword: new FormControl('', [Validators.required]),
+      confirmNewPassword: new FormControl('', [Validators.required,]),
+
+    },{validators : matchFieldsValidator('newPassword','confirmNewPassword')})
+
+   
+  }
+
+
+  initValues() {
+    
+    this.phoneNumber.phoneNumberP = this.profile.phones?.find(f => f.phoneType == 'PRIMARY');
+    this.phoneNumber.phoneNumberS = this.profile.phones?.find(f => f.phoneType == 'ALTERNATIVE');
+    this.address.presentAddress = this.profile.addresses?.find(f => f.addressType == 'PRESENT');
+    this.address.permanentAddress = this.profile.addresses?.find(f => f.addressType == 'PERMANENT');
+    this.socialMedia.facebookSM = this.profile.socialMediaLinks?.find(f => f.mediaType == 'FACEBOOK');
+    this.socialMedia.instagramSM = this.profile.socialMediaLinks?.find(f => f.mediaType == 'INSTAGRAM');
+    this.socialMedia.linkedInSM = this.profile.socialMediaLinks?.find(f => f.mediaType == 'LINKEDIN');
+    this.socialMedia.twitterSM = this.profile.socialMediaLinks?.find(f => f.mediaType == 'TWITTER');
+    this.socialMedia.whatsappSM = this.profile.socialMediaLinks?.find(f => f.mediaType == 'WHATSAPP');
+  }
+
+
+  onSelectFile($event: any) {
+    let files = $event.target.files as FileList;
+    let reader = new FileReader();
+    reader.readAsDataURL(files[0]);
+    reader.onload = () => {
+      this.pictureBase64=reader.result as string
+      //console.log()
+    }
   }
 
   editSelf() {
@@ -209,7 +244,10 @@ export class ProfileViewComponent implements OnInit {
       roles.forEach(f => {
         userDetail.roles?.push({ roleCode: f as any })
       })
-
+      if(this.editAdminForm.value.loginMethod){
+        let lm=this.editAdminForm.value.loginMethod as string[];
+        userDetail.loginMethod=lm.filter(f=>!this.profile.loginMethod?.includes(f as any)) as any;
+      }
       userDetail.id = this.profile.id!;
       this.onUpdate.emit({ actionName: 'ADMIN_UPDATE', profile: userDetail })
 
@@ -219,7 +257,7 @@ export class ProfileViewComponent implements OnInit {
   }
 
   updateSelfProfile() {
-    console.log(this.editSelfForm)
+    //console.log(this.editSelfForm)
     if (this.editSelfForm.valid) {
       let userDetail: UserDetail = {};
       userDetail.title = this.editSelfForm.value.title;
@@ -252,7 +290,18 @@ export class ProfileViewComponent implements OnInit {
         country: this.editSelfForm.value.country_p
       })
 
-      if (!this.editSelfForm.value.presentParmanentSame) {
+      if (this.editSelfForm.value.presentParmanentSame) {
+        userDetail.addresses.push({
+          addressType: 'PERMANENT',
+          addressLine1: this.editSelfForm.value.addressLine1_p,
+          addressLine2: this.editSelfForm.value.addressLine2_p,
+          addressLine3: this.editSelfForm.value.addressLine3_p,
+          hometown: this.editSelfForm.value.hometown_p,
+          district: this.editSelfForm.value.district_p,
+          state: this.editSelfForm.value.state_p,
+          country: this.editSelfForm.value.country_p
+        })
+      }else {
         userDetail.addresses.push({
           addressType: 'PERMANENT',
           addressLine1: this.editSelfForm.value.addressLine1_s,
@@ -279,16 +328,37 @@ export class ProfileViewComponent implements OnInit {
         userDetail.socialMediaLinks.push({ mediaType: 'TWITTER', mediaName: 'Twitter', mediaLink: this.editSelfForm.value.twitterLink })
       }
       userDetail.socialMediaLinks.push({ mediaType: 'WHATSAPP', mediaName: 'Whatsapp', mediaLink: 'https://wa.me/' + this.editSelfForm.value.phoneNumber_p })
-
+      
+      
       console.log(this.editSelfForm.value)
-
-      //userDetail.pictureBase64
-
+      if(this.pictureBase64){
+        userDetail.pictureBase64=sanitizeBase64(this.pictureBase64);
+      }
       this.onUpdate.emit({ actionName: 'SELF_UPDATE', profile: userDetail })
-      //this.editProfileSelf = false
     } else {
       this.editSelfForm.markAllAsTouched();
     }
+  }
+
+  changePassword() {
+    //console.log(this.editLoginInfoForm)
+    if (this.editLoginInfoForm.valid) {
+      let userDetail = {} as UserDetail;
+      userDetail.attributes={};
+      userDetail.attributes['old_password']=btoa(this.editLoginInfoForm.value.oldPassword);
+      userDetail.attributes['new_password']=btoa(this.editLoginInfoForm.value.newPassword);
+      this.onUpdate.emit({ actionName: 'CHANGE_PASSWORD', profile: userDetail })
+    }else{
+      this.editLoginInfoForm.markAllAsTouched();
+    }
+    
+  }
+
+  protected displayRefData = (name:string,code: string) => {
+    if (this.refData == undefined || code == undefined) {
+      return code;
+    }
+    return this.refData[name].find(f=>f.key == code)?.displayValue;
   }
 
 }

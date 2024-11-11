@@ -46,4 +46,4 @@ export function getReferenceData(http: HttpClient, rootUrl: string, params?: Get
   );
 }
 
-getReferenceData.PATH = '/api/common/getReferenceData';
+getReferenceData.PATH = '/api/common/data/referenceData';

@@ -39,4 +39,4 @@ export function getTransactions(http: HttpClient, rootUrl: string, params: GetTr
   );
 }
 
-getTransactions.PATH = '/api/account/{id}/getTransactions';
+getTransactions.PATH = '/api/account/{id}/transaction/list';

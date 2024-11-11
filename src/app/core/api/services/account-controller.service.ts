@@ -15,6 +15,8 @@ import { createAccount } from '../fn/account-controller/create-account';
 import { CreateAccount$Params } from '../fn/account-controller/create-account';
 import { createExpense } from '../fn/account-controller/create-expense';
 import { CreateExpense$Params } from '../fn/account-controller/create-expense';
+import { createExpenseItem } from '../fn/account-controller/create-expense-item';
+import { CreateExpenseItem$Params } from '../fn/account-controller/create-expense-item';
 import { createTransaction } from '../fn/account-controller/create-transaction';
 import { CreateTransaction$Params } from '../fn/account-controller/create-transaction';
 import { getAccounts } from '../fn/account-controller/get-accounts';
@@ -29,6 +31,7 @@ import { getTransactions } from '../fn/account-controller/get-transactions';
 import { GetTransactions$Params } from '../fn/account-controller/get-transactions';
 import { SuccessResponseAccountDetail } from '../models/success-response-account-detail';
 import { SuccessResponseExpenseDetail } from '../models/success-response-expense-detail';
+import { SuccessResponseExpenseItemDetail } from '../models/success-response-expense-item-detail';
 import { SuccessResponsePaginateAccountDetail } from '../models/success-response-paginate-account-detail';
 import { SuccessResponsePaginateExpenseDetail } from '../models/success-response-paginate-expense-detail';
 import { SuccessResponsePaginateTransactionDetail } from '../models/success-response-paginate-transaction-detail';
@@ -47,7 +50,7 @@ export class AccountControllerService extends BaseService {
   }
 
   /** Path part for operation `createTransaction()` */
-  static readonly CreateTransactionPath = '/api/account/createTransaction';
+  static readonly CreateTransactionPath = '/api/account/transaction/create';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -71,8 +74,33 @@ export class AccountControllerService extends BaseService {
     );
   }
 
+  /** Path part for operation `createExpenseItem()` */
+  static readonly CreateExpenseItemPath = '/api/account/expense/{id}/createitem';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `createExpenseItem()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createExpenseItem$Response(params: CreateExpenseItem$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseExpenseItemDetail>> {
+    return createExpenseItem(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `createExpenseItem$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createExpenseItem(params: CreateExpenseItem$Params, context?: HttpContext): Observable<SuccessResponseExpenseItemDetail> {
+    return this.createExpenseItem$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseExpenseItemDetail>): SuccessResponseExpenseItemDetail => r.body)
+    );
+  }
+
   /** Path part for operation `createExpense()` */
-  static readonly CreateExpensePath = '/api/account/createExpense';
+  static readonly CreateExpensePath = '/api/account/expense/create';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -97,7 +125,7 @@ export class AccountControllerService extends BaseService {
   }
 
   /** Path part for operation `createAccount()` */
-  static readonly CreateAccountPath = '/api/account/createAccount';
+  static readonly CreateAccountPath = '/api/account/create';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -121,8 +149,33 @@ export class AccountControllerService extends BaseService {
     );
   }
 
+  /** Path part for operation `updateAccount()` */
+  static readonly UpdateAccountPath = '/api/account/{id}/update';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateAccount()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateAccount$Response(params: UpdateAccount$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseAccountDetail>> {
+    return updateAccount(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateAccount$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateAccount(params: UpdateAccount$Params, context?: HttpContext): Observable<SuccessResponseAccountDetail> {
+    return this.updateAccount$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseAccountDetail>): SuccessResponseAccountDetail => r.body)
+    );
+  }
+
   /** Path part for operation `updateMyAccount()` */
-  static readonly UpdateMyAccountPath = '/api/account/{id}/updateMyAccount';
+  static readonly UpdateMyAccountPath = '/api/account/{id}/update/self';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -147,7 +200,7 @@ export class AccountControllerService extends BaseService {
   }
 
   /** Path part for operation `updateExpense()` */
-  static readonly UpdateExpensePath = '/api/account/{id}/updateExpense';
+  static readonly UpdateExpensePath = '/api/account/expense/{id}/update';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -171,33 +224,8 @@ export class AccountControllerService extends BaseService {
     );
   }
 
-  /** Path part for operation `updateAccount()` */
-  static readonly UpdateAccountPath = '/api/account/{id}/updateAccount';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `updateAccount()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  updateAccount$Response(params: UpdateAccount$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseAccountDetail>> {
-    return updateAccount(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `updateAccount$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  updateAccount(params: UpdateAccount$Params, context?: HttpContext): Observable<SuccessResponseAccountDetail> {
-    return this.updateAccount$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseAccountDetail>): SuccessResponseAccountDetail => r.body)
-    );
-  }
-
   /** Path part for operation `getTransactions()` */
-  static readonly GetTransactionsPath = '/api/account/{id}/getTransactions';
+  static readonly GetTransactionsPath = '/api/account/{id}/transaction/list';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -222,7 +250,7 @@ export class AccountControllerService extends BaseService {
   }
 
   /** Path part for operation `getMyTransactions()` */
-  static readonly GetMyTransactionsPath = '/api/account/{id}/getMyTransactions';
+  static readonly GetMyTransactionsPath = '/api/account/{id}/transaction/list/self';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -246,8 +274,33 @@ export class AccountControllerService extends BaseService {
     );
   }
 
+  /** Path part for operation `getAccounts()` */
+  static readonly GetAccountsPath = '/api/account/list';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAccounts()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAccounts$Response(params: GetAccounts$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateAccountDetail>> {
+    return getAccounts(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getAccounts$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAccounts(params: GetAccounts$Params, context?: HttpContext): Observable<SuccessResponsePaginateAccountDetail> {
+    return this.getAccounts$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponsePaginateAccountDetail>): SuccessResponsePaginateAccountDetail => r.body)
+    );
+  }
+
   /** Path part for operation `getMyAccounts()` */
-  static readonly GetMyAccountsPath = '/api/account/getMyAccounts';
+  static readonly GetMyAccountsPath = '/api/account/list/self';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -272,7 +325,7 @@ export class AccountControllerService extends BaseService {
   }
 
   /** Path part for operation `getExpenses()` */
-  static readonly GetExpensesPath = '/api/account/getExpenses';
+  static readonly GetExpensesPath = '/api/account/expense/list';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -293,31 +346,6 @@ export class AccountControllerService extends BaseService {
   getExpenses(params: GetExpenses$Params, context?: HttpContext): Observable<SuccessResponsePaginateExpenseDetail> {
     return this.getExpenses$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponsePaginateExpenseDetail>): SuccessResponsePaginateExpenseDetail => r.body)
-    );
-  }
-
-  /** Path part for operation `getAccounts()` */
-  static readonly GetAccountsPath = '/api/account/getAccounts';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAccounts()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getAccounts$Response(params: GetAccounts$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateAccountDetail>> {
-    return getAccounts(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getAccounts$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getAccounts(params: GetAccounts$Params, context?: HttpContext): Observable<SuccessResponsePaginateAccountDetail> {
-    return this.getAccounts$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponsePaginateAccountDetail>): SuccessResponsePaginateAccountDetail => r.body)
     );
   }
 

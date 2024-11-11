@@ -37,4 +37,4 @@ export function getMyAccounts(http: HttpClient, rootUrl: string, params: GetMyAc
   );
 }
 
-getMyAccounts.PATH = '/api/account/getMyAccounts';
+getMyAccounts.PATH = '/api/account/list/self';

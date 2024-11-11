@@ -35,4 +35,4 @@ export function updateWorkItem(http: HttpClient, rootUrl: string, params: Update
   );
 }
 
-updateWorkItem.PATH = '/api/request/updateWorkItem/{id}';
+updateWorkItem.PATH = '/api/request/workitem/{id}/update';

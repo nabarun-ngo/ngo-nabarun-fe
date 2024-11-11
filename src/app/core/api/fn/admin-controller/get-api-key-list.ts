@@ -10,16 +10,16 @@ import { RequestBuilder } from '../../request-builder';
 
 import { SuccessResponseVoid } from '../../models/success-response-void';
 
-export interface ClearCache$Params {
+export interface GetApiKeyList$Params {
+  names: Array<string>;
   'Correlation-Id'?: string;
-      body: Array<string>
 }
 
-export function clearCache(http: HttpClient, rootUrl: string, params: ClearCache$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
-  const rb = new RequestBuilder(rootUrl, clearCache.PATH, 'post');
+export function getApiKeyList(http: HttpClient, rootUrl: string, params: GetApiKeyList$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
+  const rb = new RequestBuilder(rootUrl, getApiKeyList.PATH, 'get');
   if (params) {
+    rb.query('names', params.names, {});
     rb.header('Correlation-Id', params['Correlation-Id'], {});
-    rb.body(params.body, 'application/json');
   }
 
   return http.request(
@@ -32,4 +32,4 @@ export function clearCache(http: HttpClient, rootUrl: string, params: ClearCache
   );
 }
 
-clearCache.PATH = '/api/common/general/clearCache';
+getApiKeyList.PATH = '/api/admin/apikey/list';

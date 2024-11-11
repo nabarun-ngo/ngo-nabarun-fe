@@ -37,4 +37,4 @@ export function getExpenses(http: HttpClient, rootUrl: string, params: GetExpens
   );
 }
 
-getExpenses.PATH = '/api/account/getExpenses';
+getExpenses.PATH = '/api/account/expense/list';

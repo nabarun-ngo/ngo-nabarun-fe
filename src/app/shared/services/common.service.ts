@@ -6,6 +6,7 @@ import { DonationStatus, DonationType, KeyValue, RefDataType, RequestType } from
 import { CommonControllerService, UserControllerService } from 'src/app/core/api/services';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 import { environment } from 'src/environments/environment';
+import { runInThisContext } from 'vm';
 
 @Injectable({
   providedIn: 'root'
@@ -111,8 +112,6 @@ export class CommonService {
     return this.commonController.getNotification({ pageIndex: 0, pageSize: 5 }).pipe(map(m => m.responsePayload))
   }
 
-  clearCache(names: string[]) {
-    return this.commonController.clearCache({ body: names }).pipe(map(m => m.responsePayload))
-  }
+ 
 
 }

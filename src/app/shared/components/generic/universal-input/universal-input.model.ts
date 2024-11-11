@@ -15,5 +15,6 @@ export interface UniversalInputModel{
     csslabelClass?:string;
     labelName?:string;
     props ? :{[key:string] : any};
+    autocomplete?:boolean;
 
 }

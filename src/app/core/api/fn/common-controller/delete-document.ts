@@ -32,4 +32,4 @@ export function deleteDocument(http: HttpClient, rootUrl: string, params: Delete
   );
 }
 
-deleteDocument.PATH = '/api/common/document/deleteDocument/{id}';
+deleteDocument.PATH = '/api/common/document/delete/{id}';

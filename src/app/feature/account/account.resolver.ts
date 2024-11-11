@@ -17,12 +17,12 @@ export const accountDashboardResolver: ResolveFn<any> = (route, state) => {
 
 export const accountTransactionResolver: ResolveFn<any> = (route, state) => {
   //console.log(route, state)
-  let self = route.queryParams['self'] as boolean;
+  let self = route.queryParams['self'] as string;
   console.log(self)
-  if (self == true) {
-    return inject(AccountService).fetchMyTransactions(route.params['id'], TransactionDefaultValue.pageNumber, TransactionDefaultValue.pageSize);
+  if (self == 'Y') {
+    return inject(AccountService).fetchMyTransactions(atob(route.params['id']), TransactionDefaultValue.pageNumber, TransactionDefaultValue.pageSize);
   }else{
-    return inject(AccountService).fetchTransactions(route.params['id'], TransactionDefaultValue.pageNumber, TransactionDefaultValue.pageSize);
+    return inject(AccountService).fetchTransactions(atob(route.params['id']), TransactionDefaultValue.pageNumber, TransactionDefaultValue.pageSize);
   }
 };
 

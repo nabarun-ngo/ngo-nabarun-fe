@@ -3,14 +3,17 @@ import { MemberService } from '../member.service';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { KeyValue, UserDetail } from 'src/app/core/api/models';
-import { CdkDragDrop, copyArrayItem, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { bufferCount, concat, concatAll, concatMap, firstValueFrom, forkJoin, lastValueFrom, map, merge, of, toArray } from 'rxjs';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { lastValueFrom } from 'rxjs';
 import { ModalService } from 'src/app/core/service/modal.service';
 import { AppDialog } from 'src/app/core/constant/app-dialog.const';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
-import { CommonService } from 'src/app/shared/services/common.service';
-import { arraysEqual, objectsEqual } from 'src/app/core/service/utilities.service';
+import { arraysEqual } from 'src/app/core/service/utilities.service';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
+import { AdminService } from '../../admin/admin.service';
+import { FormGroup, Validators } from '@angular/forms';
+import { SearchAndAdvancedSearchFormComponent } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search-form.component';
+import { SearchAndAdvancedSearchModel } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search.model';
 
 @Component({
   selector: 'app-member-role',
@@ -21,24 +24,49 @@ export class MemberRoleComponent implements OnInit {
 
   protected app_route = AppRoute;
   refData!: { [key: string]: KeyValue[]; };
-  roleUserMap: { [roleCode: string]: UserDetail[] } = {};
-  roleErrorMap: { [roleCode: string]: { hasError: boolean, message: string, duplicates: string[] } } = {};
-  roleUserMapCache: { [roleCode: string]: UserDetail[] } = {};
+
+  roleUserMaping: { [roleCode: string]: {
+    previousUsersId:string[];
+    currentUsers:UserDetail[];
+    errors?: { hasError: boolean, message: string, duplicates: string[] };
+  } }={};
+  userSearch:SearchAndAdvancedSearchModel={
+    normalSearchPlaceHolder:'',
+    showOnlyAdvancedSearch:true,
+    advancedSearch:{
+      buttonText:{search:'Add',close:'Close'},
+      title:'Search Members',
+      searchFormFields:[{
+        formControlName:'users',
+        inputModel:{
+          html_id:'user_search',
+          inputType:'text',
+          tagName:'input',
+          autocomplete:true,
+          placeholder:'Search members here',
+          selectList:[]
+        },
+        validations:[Validators.required]
+      }]
+    }
+  };
 
   rolesToEdit!: KeyValue[];
   navigations!: NavigationButtonModel[];
+  allMembers!: UserDetail[];
+
   constructor(
     private sharedDataService: SharedDataService,
     private route: ActivatedRoute,
     private router: Router,
     private memberService: MemberService,
     private modalService: ModalService,
-    private commonService: CommonService,
+    private adminService: AdminService,
 
   ) { }
 
   async ngOnInit(): Promise<any> {
-    this.sharedDataService.setPageName('MEMBERS ROLES');
+    this.sharedDataService.setPageName('ALLOCATE ROLES');
     if (this.route.snapshot.data['ref_data']) {
       this.refData = this.route.snapshot.data['ref_data'];
     }
@@ -46,16 +74,16 @@ export class MemberRoleComponent implements OnInit {
     this.rolesToEdit = this.refData['availableRoles'];
 
     for (const f of this.rolesToEdit) {
-      // console.log('before', new Date())
       const data = await lastValueFrom(this.memberService.fetchMembersByRole(f.key!));
-      this.roleUserMap[f.key!] = data?.content!;
-      this.roleUserMapCache[f.key!] = Array.from(this.roleUserMap[f.key!]);
 
+      this.roleUserMaping[f.key!]={
+        currentUsers:data?.content!,
+        previousUsersId:data?.content!.map(m=>m.userId) as string[],
+      }
 
     }
-    console.log(this.roleUserMap, this.roleUserMapCache);
-    //this.roleUserMapCache= Object.create(this.roleUserMap);
-    // console.log(this.roleUserMap, this.roleUserMapCache);
+    this.allMembers = (await lastValueFrom(this.memberService.fetchAllMembers()))?.content!;
+
     this.navigations = [
       {
         displayName: 'Back to Members',
@@ -77,22 +105,19 @@ export class MemberRoleComponent implements OnInit {
         event.currentIndex,
       );
     }
-    console.log(this.roleUserMap, this.roleUserMapCache)
     this.checkDuplicate()
   }
 
   clone(key: string, profile: UserDetail) {
-    this.roleUserMap[key].push(profile)
+    this.roleUserMaping[key].currentUsers.push(profile)
     this.checkDuplicate()
   }
 
   checkDuplicate() {
     this.rolesToEdit.forEach(f => {
-      //let hasError=this.roleUserMap[f.key!]?.some((val,i)=> this.roleUserMap[f.key!].indexOf(val) !== i);
-      const duplicates = this.roleUserMap[f.key!]?.map(m => m.userId).filter((item, index) => this.roleUserMap[f.key!]?.map(m => m.userId).indexOf(item) !== index) as string[];
+      const duplicates = this.roleUserMaping[f.key!]?.currentUsers.map(m => m.userId).filter((item, index) => this.roleUserMaping[f.key!]?.currentUsers.map(m => m.userId).indexOf(item) !== index) as string[];
 
-      // console.log( hasError)
-      this.roleErrorMap[f.key!] = duplicates.length > 0 ?
+      this.roleUserMaping[f.key!].errors = duplicates.length > 0 ?
         {
           hasError: true,
           message: 'Duplicate item exist.',
@@ -103,32 +128,62 @@ export class MemberRoleComponent implements OnInit {
           message: '',
           duplicates: duplicates
         };
-      //console.log( this.roleErrorMap)
     })
 
   }
 
   remove(key: string, profile: UserDetail) {
-    let index = this.roleUserMap[key].indexOf(profile);
-    this.roleUserMap[key].splice(index, 1)
+    let index = this.roleUserMaping[key].currentUsers.indexOf(profile);
+    this.roleUserMaping[key].currentUsers.splice(index, 1)
     this.checkDuplicate()
   }
 
+  addUserToRole(roleId:string){
+      this.userSearch.advancedSearch?.searchFormFields.filter(f=>f.inputModel.html_id == 'user_search').map(m=>{
+        m.inputModel.selectList=this.allMembers?.map(m2=>{
+          return {key:m2.id,displayValue:m2.fullName} as KeyValue
+        })
+      })
+      let modal = this.modalService.openComponentDialog(SearchAndAdvancedSearchFormComponent,
+        this.userSearch
+        , {
+        height: 290,
+        width: 700
+      });
+      modal.componentInstance.onSearch.subscribe(data => {
+        if(data.reset){
+          modal.close();
+        }
+        else{
+          let profile = this.allMembers.find(f=>f.id == data.value.users);
+          if(profile){
+            this.roleUserMaping[roleId].currentUsers.push(profile!);
+            modal.close();
+            this.checkDuplicate()
+          }
+        }
+      })
+      
+  }
+
   async saveRoles() {
-    let noError = Object.keys(this.roleErrorMap).every(f => {
-      return !this.roleErrorMap[f].hasError
+    let noError = Object.keys(this.roleUserMaping).every(f => {
+      return !this.roleUserMaping[f].errors?.hasError
     });
     if (noError) {
       let isChanged: boolean = false;
       for (const f of this.rolesToEdit) {
-        //console.log(f.key!,this.roleUserMap[f.key!].map(m=>m.userId),this.roleUserMapCache[f.key!].map(m=>m.userId))      
-        if (!arraysEqual(this.roleUserMap[f.key!].map(m => m.userId), this.roleUserMapCache[f.key!].map(m => m.userId))) {
+        let currentUsers=this.roleUserMaping[f.key!].currentUsers.map(m => m.userId) as string[];
+        let pastUsers=this.roleUserMaping[f.key!].previousUsersId;
+        console.log(f.key!,currentUsers,pastUsers)      
+
+        if (!arraysEqual(currentUsers , pastUsers)) {
           isChanged = true;
-          await lastValueFrom(this.memberService.saveRoleUserWise(f.key!, this.roleUserMap[f.key!]))
+          await lastValueFrom(this.memberService.saveRoleUserWise(f.key!, this.roleUserMaping[f.key!].currentUsers))
         }
       }
       if (isChanged) {
-        this.commonService.clearCache(['auth0_role_users']).subscribe(data => {
+        this.adminService.clearCache(['auth0_role_users']).subscribe(data => {
           this.router.navigateByUrl(this.app_route.secured_member_members_page.url)
         })
       } else {

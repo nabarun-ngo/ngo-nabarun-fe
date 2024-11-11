@@ -35,4 +35,4 @@ export function assignUsersToRoles(http: HttpClient, rootUrl: string, params: As
   );
 }
 
-assignUsersToRoles.PATH = '/api/user/assignUsersToRoles/{id}';
+assignUsersToRoles.PATH = '/api/user/roles/{id}/assignUsersToRole';

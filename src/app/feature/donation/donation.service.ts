@@ -78,7 +78,7 @@ export class DonationService {
   }
 
   uploadDocuments(id:string,documents:DocumentDetailUpload[]){
-    return this.commonController.uploadDocuments1({body:documents,docIndexId:id,docIndexType:'DONATION'}).pipe(map(d => d.responsePayload));
+    return this.commonController.uploadDocuments({body:documents,docIndexId:id,docIndexType:'DONATION'}).pipe(map(d => d.responsePayload));
   }
 
   updatePaymentInfo(id:string,action:string,donation:DonationDetail){

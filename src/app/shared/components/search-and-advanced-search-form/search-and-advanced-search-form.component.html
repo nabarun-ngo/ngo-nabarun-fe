@@ -13,17 +13,17 @@
         <!-- Advanced Search Button -->
         <button (click)="adv_search=true"
             class="bg-indigo-600 py-3 px-5 w-full sm:w-auto text-white font-semibold rounded-lg hover:shadow-lg transition duration-300 cursor-pointer">
-            Advanced Search
+            {{search.normalSearchButtonText ? search.normalSearchButtonText : 'Advanced Search'}} 
         </button>
     </div>
 
     <div *ngIf="search.showOnlyAdvancedSearch || adv_search"
         class="flex flex-col bg-gray-100 p-4 w-full space-x-4 rounded-lg">
-        <div class="text-lg font-medium leading-6 mb-4 text-center text-gray-900">Advanced Search</div>
+        <div class="text-lg font-medium leading-6 mb-4 text-center text-gray-900">{{search.advancedSearch?.title ? search.advancedSearch?.title :'Advanced Search'}}</div>
         <form [formGroup]="searchformGroup">
             <div class="shadow overflow-hidden sm:rounded-md">
                 <div class="px-4 py-4 bg-white">
-                    <div class="grid grid-cols-6 gap-6">
+                    <div class="grid gap-6" [ngClass]="'grid-cols-'+colLength ">
                         <div class="col-span-6"
                             [ngClass]="search.advancedSearch?.searchFormFields?.length! > 2 ?'sm:col-span-2':'sm:col-span-3'"
                             *ngFor="let input of search.advancedSearch?.searchFormFields">
@@ -39,11 +39,11 @@
         <div class="pt-4 mt-2 bg-gray-100 text-center sm:px-6 rounded-lg">
             <button (click)="advSearch()"
                 class="bg-indigo-600 py-3 px-5 mx-2 text-white font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">
-                Search
+                 {{search.advancedSearch?.buttonText?.search?search.advancedSearch?.buttonText?.search:'Search'}}
             </button>
             <button (click)="advSearchReset()"
                 class="bg-white py-3 px-5 mx-1 text-gray-700 border border-gray-300 font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">
-                Close
+                {{search.advancedSearch?.buttonText?.search?search.advancedSearch?.buttonText?.close:'Close'}}
             </button>
         </div>
     </div>

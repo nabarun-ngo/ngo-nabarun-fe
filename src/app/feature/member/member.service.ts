@@ -17,7 +17,10 @@ export class MemberService {
   fetchMembers(pageIndex: number = 0, pageSize: number = 20) {
     return this.userController.getUsers({ pageIndex: pageIndex, pageSize: pageSize,filter:{}}).pipe(map(d => d.responsePayload));
   }
-
+  fetchAllMembers() {
+    return this.userController.getUsers({filter:{}}).pipe(map(d => d.responsePayload));
+  }
+  
   // fetchRefData(countryCode?:string,stateCode?:string) {
   //   return this.commonController.getReferenceData({ names: [RefDataType.User],countryCode:countryCode,stateCode:stateCode}).pipe(map(d => d.responsePayload));
   // }
@@ -66,7 +69,8 @@ export class MemberService {
   }
 
   updateMyProfiledetail(updatedDetail:UserDetail){
-    return this.userController.updateLoggedInUserDetails({body:updatedDetail}).pipe(map(d => d.responsePayload));
+    let updatePicture= updatedDetail.pictureBase64 != undefined || updatedDetail.pictureBase64 != null;
+    return this.userController.updateLoggedInUserDetails({body:updatedDetail,updatePicture:updatePicture}).pipe(map(d => d.responsePayload));
   }
 
   updateProfiledetail(id:string,updatedDetail:UserDetail){

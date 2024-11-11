@@ -35,4 +35,4 @@ export function updateLoggedInUserDetails(http: HttpClient, rootUrl: string, par
   );
 }
 
-updateLoggedInUserDetails.PATH = '/api/user/updateLoggedInUserDetails';
+updateLoggedInUserDetails.PATH = '/api/user/update/self';

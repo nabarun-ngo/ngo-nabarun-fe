@@ -3,6 +3,7 @@ import { UniversalInputModel } from "../generic/universal-input/universal-input.
 
 export interface SearchAndAdvancedSearchModel{
     normalSearchPlaceHolder: string;
+    normalSearchButtonText?: string;
     showOnlyAdvancedSearch?:boolean;
     advancedSearch?:{
       searchFormFields:{
@@ -11,5 +12,13 @@ export interface SearchAndAdvancedSearchModel{
         validations?:ValidatorFn[];
         hidden?:boolean;
       }[];
-    }
+      title?:string;
+      buttonText?:{
+        search?:string;
+        close?:string;
+      };
+
+    },
+    
+
   }

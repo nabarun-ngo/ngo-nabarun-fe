@@ -32,4 +32,4 @@ export function getUserRoleHistory(http: HttpClient, rootUrl: string, params: Ge
   );
 }
 
-getUserRoleHistory.PATH = '/api/user/getUserRoleHistory/{id}';
+getUserRoleHistory.PATH = '/api/user/{id}/history';

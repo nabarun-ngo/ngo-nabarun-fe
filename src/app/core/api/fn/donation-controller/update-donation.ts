@@ -35,4 +35,4 @@ export function updateDonation(http: HttpClient, rootUrl: string, params: Update
   );
 }
 
-updateDonation.PATH = '/api/donation/updateDonation/{id}';
+updateDonation.PATH = '/api/donation/{id}/update';

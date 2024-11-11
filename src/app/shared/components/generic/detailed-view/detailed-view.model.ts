@@ -2,8 +2,12 @@ import { FormGroup, ValidatorFn } from "@angular/forms";
 import { UniversalInputModel, inputType } from "../universal-input/universal-input.model";
 import { DocumentDetail, KeyValue } from "src/app/core/api/models";
 import { AccordionList } from "../accordion-list/accordion-list.model";
+import { Accordion } from "../accordion-list/accordion";
+import { EventEmitter } from "@angular/core";
+import { FileUpload } from "../file-upload/file-upload.component";
 
 export interface DetailedView {
+
   
     section_html_id?:string;
     section_name: string;
@@ -12,9 +16,18 @@ export interface DetailedView {
     content?: DetailedViewField[];
     section_form:FormGroup;
     show_form?: boolean;
-    accordionList?:AccordionList;
     documentHeader?: string;
     documents?: DocumentDetail[]
+    accordionList?:AccordionList;
+    accordion?: {
+        createBtn?: boolean;
+        object:Accordion<any>,
+        accordionOpened: EventEmitter<{rowIndex: number;}>;
+        buttonClick: EventEmitter<{buttonId: string;rowIndex: number;}>
+    };
+    doc?: {
+        docChange: EventEmitter<FileUpload[]>; 
+    }
 }
 
 export interface DetailedViewField {

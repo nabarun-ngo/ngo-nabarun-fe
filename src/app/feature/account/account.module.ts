@@ -4,6 +4,7 @@ import { AccountDashboardComponent } from './account-dashboard/account-dashboard
 import { AccountTransactionComponent } from './account-transaction/account-transaction.component';
 import { AccountRoutingModule } from './account-routing.module';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { ExpenseTabComponent } from './account-dashboard/expense-tab/expense-tab.component';
 
 
 
@@ -11,6 +12,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
   declarations: [
     AccountDashboardComponent,
     AccountTransactionComponent,
+    ExpenseTabComponent,
   ],
   imports: [
     CommonModule,

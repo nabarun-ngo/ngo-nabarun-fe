@@ -33,4 +33,4 @@ export function createNotice(http: HttpClient, rootUrl: string, params: CreateNo
   );
 }
 
-createNotice.PATH = '/api/notice/createNotice';
+createNotice.PATH = '/api/notice/create';

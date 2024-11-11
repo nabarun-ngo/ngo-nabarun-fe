@@ -8,14 +8,13 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { DocumentDetailUpload } from '../../models/document-detail-upload';
 import { SuccessResponseVoid } from '../../models/success-response-void';
 
 export interface UploadDocuments1$Params {
   docIndexId: string;
-  docIndexType: 'DONATION' | 'EVENT' | 'NOTICE' | 'USER' | 'PROFILE_PHOTO' | 'EVENT_COVER' | 'REQUEST';
+  docIndexType: 'DONATION' | 'EVENT' | 'NOTICE' | 'USER' | 'PROFILE_PHOTO' | 'EVENT_COVER' | 'REQUEST' | 'EXPENSE';
+  files: Array<Blob>;
   'Correlation-Id'?: string;
-      body: Array<DocumentDetailUpload>
 }
 
 export function uploadDocuments1(http: HttpClient, rootUrl: string, params: UploadDocuments1$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
@@ -23,12 +22,12 @@ export function uploadDocuments1(http: HttpClient, rootUrl: string, params: Uplo
   if (params) {
     rb.query('docIndexId', params.docIndexId, {});
     rb.query('docIndexType', params.docIndexType, {});
+    rb.query('files', params.files, {});
     rb.header('Correlation-Id', params['Correlation-Id'], {});
-    rb.body(params.body, 'application/json');
   }
 
   return http.request(
-    rb.build({ responseType: 'json', accept: 'application/json', context })
+    rb.build({ responseType: 'blob', accept: '*/*', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
@@ -37,4 +36,4 @@ export function uploadDocuments1(http: HttpClient, rootUrl: string, params: Uplo
   );
 }
 
-uploadDocuments1.PATH = '/api/common/document/uploadBase64Documents';
+uploadDocuments1.PATH = '/api/common/document/upload';
