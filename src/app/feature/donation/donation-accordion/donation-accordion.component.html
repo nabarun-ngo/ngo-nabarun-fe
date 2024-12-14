@@ -51,7 +51,7 @@
                 <ng-container *ngTemplateOutlet="headerTemplate;context:{donation:don.donation}"></ng-container>
             </mat-panel-description>
         </mat-expansion-panel-header>
-        <app-detailed-profile [mode]="'view'" *ngIf="tabName == 'guest_donation'" [member]="don.donation?.donorDetails!" [triggerEvent]="don.eventSubject.asObservable()"></app-detailed-profile>
+        <app-detailed-profile [mode]="'view'" *ngIf="tabName == 'guest_donation' || tabName == 'all_donation'" [member]="don.donation?.donorDetails!" [triggerEvent]="don.eventSubject.asObservable()"></app-detailed-profile>
         <app-detailed-donation [tab]="tabName!" 
         [donation]="don.donation!" 
         [documents]="don.documents!" 
