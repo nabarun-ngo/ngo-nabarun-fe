@@ -43,7 +43,7 @@ jobs:
         uses: restackio/update-json-file-action@2.1
         with:
           file: package.json
-          fields: "{'version': '${{ needs.create_release.outputs.tag_name }}'}"
+          fields: "{\"version\": \"${{ needs.create_release.outputs.tag_name }}\"}"
       - name: Build NPM
         run: npm ci --legacy-peer-deps && npm run buildstage
 
