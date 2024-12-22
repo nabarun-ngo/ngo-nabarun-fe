@@ -1,0 +1,94 @@
+name: Create Release and Deploy
+on:
+  push:
+    paths-ignore:
+    - '.github/workflows/**'
+    branches:
+    - master
+
+permissions:
+      contents: write         
+
+jobs:
+  create_release:
+    name: 'Create release'
+    runs-on: ubuntu-latest
+    outputs:
+      tag_name: ${{ steps.tag_version.outputs.new_tag }} 
+    steps:
+      - uses: actions/checkout@v4
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create a GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}
+  
+  build-and-deploy-stage:
+    name: 'Build Artifacts and Deploy to STAGE'
+    runs-on: 'ubuntu-latest'
+    environment: 'STAGE'
+    needs: [create_release]
+    steps:
+      - name: Checkout repository | tag ${{ needs.create_release.outputs.tag_name }}
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.create_release.outputs.tag_name }}
+      - name: Update package.json version
+        uses: restackio/update-json-file-action@2.1
+        with:
+          file: package.json
+          fields: "{'version': '${{ needs.create_release.outputs.tag_name }}'}"
+      - name: Build NPM
+        run: npm ci --legacy-peer-deps && npm run buildstage
+
+      - name: Deploy to Firebase
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_NABARUN }}'
+          channelId: live
+          projectId: nabarun-test
+        env:
+         FIREBASE_CLI_EXPERIMENTS: webframeworks
+ 
+  build-and-deploy-prod:
+    name: 'Build Artifacts and Deploy to PROD'
+    runs-on: 'ubuntu-latest'
+    environment: 'PROD'
+    needs: [create_release,build-and-deploy-stage]
+    steps:
+      - name: Checkout repository | tag ${{ needs.create_release.outputs.tag_name }}
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.create_release.outputs.tag_name }}
+      - name: Update package.json version
+        uses: restackio/update-json-file-action@2.1
+        with:
+          file: package.json
+          fields: "{'version': '${{ needs.create_release.outputs.tag_name }}'}"
+      - name: Build NPM
+        run: npm ci --legacy-peer-deps && npm run buildstage
+
+      - name: Deploy to Firebase
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_NABARUN }}'
+          channelId: live
+          projectId: wengonabarun
+ 
+
+
+
+
+
+
+
+
+  
