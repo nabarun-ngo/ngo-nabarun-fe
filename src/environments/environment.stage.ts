@@ -10,7 +10,7 @@ import { AuthConfig } from "@auth0/auth0-angular";
 
 const authDomain = 'sso-nabarun-test.us.auth0.com';
 const authClientId = Capacitor.isNativePlatform() ? 'JWk5uhtVVP2clxe9At7xdor9vbGakFv2':'RAcWqnITnhfXPTLhFLVtAzWxeujR5Znk';
-const apiBaseUrl='https://nabarun-resource-server.appspot.com';
+const apiBaseUrl='https://ngonabarun-stage.appspot.com';
 
 const auth_config:AuthConfig={
   domain: authDomain,
