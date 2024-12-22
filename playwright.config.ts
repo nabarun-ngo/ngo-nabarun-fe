@@ -11,7 +11,6 @@ import * as path from 'path';
 config({ path: path.resolve(__dirname, '.env') });
 
 const currentDateTime = new Date().toISOString().replace(/[:.]/g, "_").slice(0, -1);
-const outputFolder = `C:/Temp/test-results/results-${currentDateTime}`;
 
 /**
  * See https://playwright.dev/docs/test-configuration.
