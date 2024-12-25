@@ -9,4 +9,6 @@ export interface SuccessResponseDonationSummary {
   responsePayload?: DonationSummary;
   status?: number;
   timestamp?: string;
+  traceId?: string;
+  version?: string;
 }

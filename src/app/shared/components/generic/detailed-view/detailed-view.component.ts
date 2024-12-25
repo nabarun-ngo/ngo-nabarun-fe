@@ -21,7 +21,8 @@ export class DetailedViewComponent {
     this.detailed_views = view;
     this.detailed_views.map(m => {
       m.content?.filter(f1 => f1.editable).map(m1 => {
-        m.section_form?.setControl(m1.form_control_name!, new FormControl(m1.field_value, m1.form_input_validation));
+        let value = m1.field_value && m1.field_value_splitter? m1.field_value.split(m1.field_value_splitter): m1.field_value;
+        m.section_form?.setControl(m1.form_control_name!, new FormControl(value, m1.form_input_validation));
       })
       return m;
     })

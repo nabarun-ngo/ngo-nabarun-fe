@@ -27,6 +27,10 @@ export const AppDialog={
         title: 'Error',
         description: 'Please add atleast one expense in the expense list.'
     },
+    warning_confirm_revoke:{
+        title: 'Warning',
+        description: 'Applications using this token will stop working. Are you sure to revoke this token?'
+    },
 }
 
 

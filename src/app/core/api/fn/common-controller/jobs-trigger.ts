@@ -8,29 +8,29 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { CronServiceDetail } from '../../models/cron-service-detail';
-import { SuccessResponseVoid } from '../../models/success-response-void';
+import { ServiceDetail } from '../../models/service-detail';
+import { SuccessResponseString } from '../../models/success-response-string';
 
-export interface TriggerCron$Params {
+export interface JobsTrigger$Params {
   'Correlation-Id'?: string;
-      body: Array<CronServiceDetail>
+      body: Array<ServiceDetail>
 }
 
-export function triggerCron(http: HttpClient, rootUrl: string, params: TriggerCron$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
-  const rb = new RequestBuilder(rootUrl, triggerCron.PATH, 'post');
+export function jobsTrigger(http: HttpClient, rootUrl: string, params: JobsTrigger$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
+  const rb = new RequestBuilder(rootUrl, jobsTrigger.PATH, 'post');
   if (params) {
     rb.header('Correlation-Id', params['Correlation-Id'], {});
     rb.body(params.body, 'application/json');
   }
 
   return http.request(
-    rb.build({ responseType: 'json', accept: 'application/json', context })
+    rb.build({ responseType: 'blob', accept: '*/*', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseVoid>;
+      return r as StrictHttpResponse<SuccessResponseString>;
     })
   );
 }
 
-triggerCron.PATH = '/api/admin/cron/trigger';
+jobsTrigger.PATH = '/api/common/jobs/trigger';

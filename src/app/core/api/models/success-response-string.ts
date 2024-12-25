@@ -8,4 +8,6 @@ export interface SuccessResponseString {
   responsePayload?: string;
   status?: number;
   timestamp?: string;
+  traceId?: string;
+  version?: string;
 }

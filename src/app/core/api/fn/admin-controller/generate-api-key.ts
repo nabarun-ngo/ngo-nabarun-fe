@@ -8,14 +8,15 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseMapStringString } from '../../models/success-response-map-string-string';
+import { ApiKeyDetail } from '../../models/api-key-detail';
+import { SuccessResponseApiKeyDetail } from '../../models/success-response-api-key-detail';
 
 export interface GenerateApiKey$Params {
   'Correlation-Id'?: string;
-      body: Array<string>
+      body: ApiKeyDetail
 }
 
-export function generateApiKey(http: HttpClient, rootUrl: string, params: GenerateApiKey$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseMapStringString>> {
+export function generateApiKey(http: HttpClient, rootUrl: string, params: GenerateApiKey$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseApiKeyDetail>> {
   const rb = new RequestBuilder(rootUrl, generateApiKey.PATH, 'post');
   if (params) {
     rb.header('Correlation-Id', params['Correlation-Id'], {});
@@ -27,7 +28,7 @@ export function generateApiKey(http: HttpClient, rootUrl: string, params: Genera
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseMapStringString>;
+      return r as StrictHttpResponse<SuccessResponseApiKeyDetail>;
     })
   );
 }

@@ -8,12 +8,12 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { CronServiceDetail } from '../../models/cron-service-detail';
+import { ServiceDetail } from '../../models/service-detail';
 import { SuccessResponseVoid } from '../../models/success-response-void';
 
 export interface RunService$Params {
   'Correlation-Id'?: string;
-      body: CronServiceDetail
+      body: ServiceDetail
 }
 
 export function runService(http: HttpClient, rootUrl: string, params: RunService$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {

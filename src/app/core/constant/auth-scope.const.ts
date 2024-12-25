@@ -13,6 +13,8 @@ export const SCOPE = {
         donation_guest:'read:donation_guest',
         expenses:'read:expenses',
         admin_service:'read:admin_service',
+        actuator:'read:actuator',
+
         // profile: 'read:profile',
         // funds:'read:funds',  
         // expenditure:'read:expenditure',
@@ -68,6 +70,7 @@ export const SCOPE = {
         account:'update:account',
         expense:'update:expense',
         apikey:'update:apikey',
+        actuator:'update:actuator',
 
         // profile: 'update:profile',
         // update_password:'update:self_password',

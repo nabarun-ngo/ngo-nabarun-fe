@@ -1,4 +1,4 @@
-export type adminTabs = 'service_list' | 'app_logs' | 'global_config';
+export type adminTabs = 'service_list' | 'app_logs' | 'global_config'|'api_keys';
 
 
 export const AdminDefaultValue = {
