@@ -23,6 +23,8 @@ import { getReferenceData } from '../fn/common-controller/get-reference-data';
 import { GetReferenceData$Params } from '../fn/common-controller/get-reference-data';
 import { getReferenceField } from '../fn/common-controller/get-reference-field';
 import { GetReferenceField$Params } from '../fn/common-controller/get-reference-field';
+import { jobsTrigger } from '../fn/common-controller/jobs-trigger';
+import { JobsTrigger$Params } from '../fn/common-controller/jobs-trigger';
 import { manageNotification } from '../fn/common-controller/manage-notification';
 import { ManageNotification$Params } from '../fn/common-controller/manage-notification';
 import { SuccessResponseDocumentDetail } from '../models/success-response-document-detail';
@@ -30,6 +32,7 @@ import { SuccessResponseListAdditionalField } from '../models/success-response-l
 import { SuccessResponseListDocumentDetail } from '../models/success-response-list-document-detail';
 import { SuccessResponseMapStringListKeyValue } from '../models/success-response-map-string-list-key-value';
 import { SuccessResponsePaginateMapStringString } from '../models/success-response-paginate-map-string-string';
+import { SuccessResponseString } from '../models/success-response-string';
 import { SuccessResponseVoid } from '../models/success-response-void';
 import { uploadDocuments } from '../fn/common-controller/upload-documents';
 import { UploadDocuments$Params } from '../fn/common-controller/upload-documents';
@@ -91,6 +94,31 @@ export class CommonControllerService extends BaseService {
   manageNotification(params: ManageNotification$Params, context?: HttpContext): Observable<SuccessResponseVoid> {
     return this.manageNotification$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseVoid>): SuccessResponseVoid => r.body)
+    );
+  }
+
+  /** Path part for operation `jobsTrigger()` */
+  static readonly JobsTriggerPath = '/api/common/jobs/trigger';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `jobsTrigger()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  jobsTrigger$Response(params: JobsTrigger$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
+    return jobsTrigger(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `jobsTrigger$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  jobsTrigger(params: JobsTrigger$Params, context?: HttpContext): Observable<SuccessResponseString> {
+    return this.jobsTrigger$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseString>): SuccessResponseString => r.body)
     );
   }
 

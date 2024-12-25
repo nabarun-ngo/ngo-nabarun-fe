@@ -1,0 +1,8 @@
+<div class="flex justify-end mx-4 my-2">
+    <div class="mx-1 px-2">
+        <button (click)="createAPIKey();"
+            class="bg-indigo-600 py-3 px-6 w-full text-white font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">Create API Key</button>
+    </div>
+</div>
+<app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)"
+    (onAccordionOpen)="accordionOpened($event)"></app-accordion-list>

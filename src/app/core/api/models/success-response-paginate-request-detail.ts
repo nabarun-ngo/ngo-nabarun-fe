@@ -9,4 +9,6 @@ export interface SuccessResponsePaginateRequestDetail {
   responsePayload?: PaginateRequestDetail;
   status?: number;
   timestamp?: string;
+  traceId?: string;
+  version?: string;
 }

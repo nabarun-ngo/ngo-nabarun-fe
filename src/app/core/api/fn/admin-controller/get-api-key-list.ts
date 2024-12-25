@@ -8,17 +8,15 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseVoid } from '../../models/success-response-void';
+import { SuccessResponseListApiKeyDetail } from '../../models/success-response-list-api-key-detail';
 
 export interface GetApiKeyList$Params {
-  names: Array<string>;
   'Correlation-Id'?: string;
 }
 
-export function getApiKeyList(http: HttpClient, rootUrl: string, params: GetApiKeyList$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
+export function getApiKeyList(http: HttpClient, rootUrl: string, params?: GetApiKeyList$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseListApiKeyDetail>> {
   const rb = new RequestBuilder(rootUrl, getApiKeyList.PATH, 'get');
   if (params) {
-    rb.query('names', params.names, {});
     rb.header('Correlation-Id', params['Correlation-Id'], {});
   }
 
@@ -27,7 +25,7 @@ export function getApiKeyList(http: HttpClient, rootUrl: string, params: GetApiK
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseVoid>;
+      return r as StrictHttpResponse<SuccessResponseListApiKeyDetail>;
     })
   );
 }

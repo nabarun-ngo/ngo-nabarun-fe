@@ -9,4 +9,6 @@ export interface SuccessResponseUserDetail {
   responsePayload?: UserDetail;
   status?: number;
   timestamp?: string;
+  traceId?: string;
+  version?: string;
 }

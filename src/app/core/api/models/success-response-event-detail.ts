@@ -9,4 +9,6 @@ export interface SuccessResponseEventDetail {
   responsePayload?: EventDetail;
   status?: number;
   timestamp?: string;
+  traceId?: string;
+  version?: string;
 }

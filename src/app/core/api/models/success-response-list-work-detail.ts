@@ -9,4 +9,6 @@ export interface SuccessResponseListWorkDetail {
   responsePayload?: Array<WorkDetail>;
   status?: number;
   timestamp?: string;
+  traceId?: string;
+  version?: string;
 }

@@ -9,4 +9,6 @@ export interface SuccessResponseListHistoryDetail {
   responsePayload?: Array<HistoryDetail>;
   status?: number;
   timestamp?: string;
+  traceId?: string;
+  version?: string;
 }

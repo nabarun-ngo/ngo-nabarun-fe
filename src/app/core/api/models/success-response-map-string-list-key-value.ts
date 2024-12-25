@@ -11,4 +11,6 @@ export interface SuccessResponseMapStringListKeyValue {
 };
   status?: number;
   timestamp?: string;
+  traceId?: string;
+  version?: string;
 }

@@ -9,4 +9,6 @@ export interface SuccessResponseListAdditionalField {
   responsePayload?: Array<AdditionalField>;
   status?: number;
   timestamp?: string;
+  traceId?: string;
+  version?: string;
 }

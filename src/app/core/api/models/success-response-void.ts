@@ -9,4 +9,6 @@ export interface SuccessResponseVoid {
 };
   status?: number;
   timestamp?: string;
+  traceId?: string;
+  version?: string;
 }

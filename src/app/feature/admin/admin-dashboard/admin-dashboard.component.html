@@ -2,7 +2,6 @@
     <div class="flex flex-col">
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-               
                 <mat-card class="m-4 p-4">
                     <h2 class="text-purple-700 font-bold text-center">Important links</h2>
                     <div class="text-gray-700">
@@ -19,25 +18,13 @@
                 </mat-card>
                 <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center"
                     (selectedTabChange)="tabChanged($event.index)" [(selectedIndex)]="tabIndex">
-                    <mat-tab id="admin_services" label="Admin Services">
-                        <app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)"
-                            (onAccordionOpen)="accordionOpened($event)"></app-accordion-list>
+                    <mat-tab id="admin_services" label="Services">
+                        <app-admin-service-tab [serviceList]="serviceList!"></app-admin-service-tab>
                     </mat-tab>
-                    <mat-tab id="cron" label="Cron">
-                        <!-- <div class="flex justify-end mx-4 my-2">
-                            <div class="mx-1 px-2">
-                                <button (click)="createAccount();"
-                                    class="bg-indigo-600 py-3 px-6 w-full text-white font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">Create Account</button>
-                            </div>
-                        </div> -->
-                        <app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)"
-                            (onAccordionOpen)="accordionOpened($event)"></app-accordion-list>
+                    <mat-tab id="apiKey" label="Manage API keys">
+                        <app-admin-apikey-tab [apiKeyList]="apiKeyList!"></app-admin-apikey-tab>
                     </mat-tab>
                 </mat-tab-group>
-                <mat-paginator class="mt-4" style="background-color: transparent;" (page)="handlePageEvent($event)"
-                    [length]="itemLength$ | async" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
-                    [pageIndex]="pageNumber" aria-label="Select page">
-                </mat-paginator>
             </div>
         </div>
     </div>
