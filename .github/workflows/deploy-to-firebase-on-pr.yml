@@ -28,7 +28,7 @@ jobs:
     with:
      tag_name: ${{ needs.create_release.outputs.tag_name }}
      firebase_project_id: ${{ github.base_ref == 'master' && vars.FIREBASE_PROJECT_ID || vars.FIREBASE_PROJECT_ID_STAGE }}
-     npm_run_command: ${{ github.base_ref == 'master' && "build" || "buildstage" }}
+     npm_run_command: ${{ github.base_ref == 'master' && 'build' || 'buildstage' }}
     secrets:
       firebase_service_account: ${{ github.base_ref == 'master' && secrets.NABARUN_FIREBASE_SERVICE_ACCOUNT || secrets.NABARUN_FIREBASE_SERVICE_ACCOUNT_STAGE }}
   
