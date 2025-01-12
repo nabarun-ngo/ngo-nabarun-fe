@@ -16,7 +16,7 @@ jobs:
   create_release:
     if: github.event.pull_request.merged == true
     name: Create Tag and Release
-    uses: nabarun-ngo/ngo-nabarun-devops/.github/workflows/Create-Tag-Release.yml@main
+    uses: nabarun-ngo/ngo-nabarun-devops/.github/workflows/templates/Create-Tag-Release.yml@main
     with:
      source_branch: ${{ github.base_ref }}
   
@@ -24,7 +24,7 @@ jobs:
     if: github.event.pull_request.merged == true
     needs: create_release
     name: Deploy to Firebase
-    uses: nabarun-ngo/ngo-nabarun-devops/.github/workflows/Firebase-Deploy.yml@main
+    uses: nabarun-ngo/ngo-nabarun-devops/.github/workflows/templates/Firebase-Deploy.yml@main
     with:
      tag_name: ${{ needs.create_release.outputs.tag_name }}
      firebase_project_id: ${{ github.base_ref == 'master' && vars.FIREBASE_PROJECT_ID || vars.FIREBASE_PROJECT_ID_STAGE }}
@@ -33,10 +33,10 @@ jobs:
       firebase_service_account: ${{ github.base_ref == 'master' && secrets.NABARUN_FIREBASE_SERVICE_ACCOUNT || secrets.NABARUN_FIREBASE_SERVICE_ACCOUNT_STAGE }}
   
   auth0_sync:
-    if: github.event.pull_request.merged == true && (github.base_ref == 'master' || contains(join(fromJSON(toJSON(github.event.pull_request.labels)).name, ','),'Sync_Auth0'))
+    if: github.event.pull_request.merged == true && (github.base_ref == 'master' || contains(join(fromJSON(toJSON(github.event.pull_request.labels)).name, ','),'auth0'))
     needs: create_release
     name: Sync Auth0 Tenants 
-    uses: nabarun-ngo/ngo-nabarun-devops/.github/workflows/Auth0-Sync.yml@main
+    uses: nabarun-ngo/ngo-nabarun-devops/.github/workflows/templates/Auth0-Sync.yml@main
     with:
         branch_name: 'main'
         auth0_source_tenant: ${{ github.base_ref == 'master' && 'STAGE' || 'DEV' }}
@@ -48,7 +48,7 @@ jobs:
     if: github.event.pull_request.merged == true && always()
     needs: [firebase_deploy,auth0_sync]
     name: Run Smoke Test 
-    uses: nabarun-ngo/ngo-nabarun-devops/.github/workflows/Run-Tests.yml@main
+    uses: nabarun-ngo/ngo-nabarun-devops/.github/workflows/templates/Run-Tests.yml@main
     with:
         test_env: ${{ github.base_ref == 'master' && 'prod' || 'stage' }}
         test_doppler_project_name: 'nabarun_test'
