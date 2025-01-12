@@ -52,9 +52,11 @@ jobs:
     with:
         test_env: ${{ github.base_ref == 'master' && 'prod' || 'stage' }}
         test_doppler_project_name: 'nabarun_test'
-        test_cycle: ${{ github.base_ref == 'master' && 'NAB-TR-3' || 'NAB-TR-1' }}
+        test_cycle: ${{ github.base_ref == 'master' && vars.SMOKE_TEST_CYCLE_PROD || vars.SMOKE_TEST_CYCLE_STAGE }}
         upload_result: true 
         test_cucumber_tags: ${{ github.base_ref == 'master' && '@smokeprod' || '@smoke' }}
+        app_ui_version:  ${{ needs.create_release.outputs.tag_name }}
+        test_type: 'Smoke'
     secrets:
       test_doppler_service_token: ${{ github.base_ref == 'master' && secrets.DOPPLER_TEST_SERVICE_TOKEN || secrets.DOPPLER_TEST_SERVICE_TOKEN_STAGE }}
       qmetry_api_key: ${{ secrets.QMETRY_APIKEY }}
