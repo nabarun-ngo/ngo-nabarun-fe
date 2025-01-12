@@ -1,0 +1,67 @@
+name: 'Manual : Release, Deploy to Firebase, Sync Env'
+on:
+  workflow_dispatch:
+    inputs:
+     tag_name:
+       required: true
+       description: 'Tag to deploy'
+       type: string
+     target_env:
+       required: true
+       description: 'Target env'
+       type: choice
+       options:
+         - stage
+         - prod
+     auth0_sync:
+       description: 'Sync Auth0'
+       required: true
+       type: choice
+       options:
+         - N
+         - Y
+     cucumber_tags:
+       description: 'Cucumber Tags'
+       required: true
+       type: string
+       default: '@smoke'
+
+permissions:
+  contents: write      
+
+jobs:
+  firebase_deploy:
+    name: Deploy to Firebase
+    uses: nabarun-ngo/ngo-nabarun-devops/.github/workflows/Firebase-Deploy.yml@main
+    with:
+     tag_name: ${{ github.event.inputs.tag_name }}
+     firebase_project_id: ${{ github.event.inputs.target_env == 'prod' && vars.FIREBASE_PROJECT_ID || vars.FIREBASE_PROJECT_ID_STAGE }}
+     npm_run_command: ${{ github.event.inputs.target_env == 'prod' && 'build' || 'buildstage' }}
+    secrets:
+      firebase_service_account: ${{ github.event.inputs.target_env == 'prod' && secrets.NABARUN_FIREBASE_SERVICE_ACCOUNT || secrets.NABARUN_FIREBASE_SERVICE_ACCOUNT_STAGE }}
+  
+  auth0_sync:
+    if: github.event.inputs.auth0_sync == 'Y'
+    name: Sync Auth0 Tenants 
+    uses: nabarun-ngo/ngo-nabarun-devops/.github/workflows/Auth0-Sync.yml@main
+    with:
+        branch_name: 'main'
+        auth0_source_tenant: ${{ github.event.inputs.target_env == 'prod' && 'STAGE' || 'DEV' }}
+        auth0_dest_tenant:  ${{ github.event.inputs.target_env == 'prod' && 'PROD' || 'STAGE' }}
+    secrets:
+        auth0_secrets: ${{ secrets.AUTH0_CREDENTIALS }}
+
+  run_automated_test:
+    if: always()
+    needs: [firebase_deploy,auth0_sync]
+    name: Run Smoke Test 
+    uses: nabarun-ngo/ngo-nabarun-devops/.github/workflows/Run-Tests.yml@main
+    with:
+        test_env: ${{ github.event.inputs.target_env == 'prod' && 'prod' || 'stage' }}
+        test_doppler_project_name: 'nabarun_test'
+        test_cycle: ${{ github.event.inputs.target_env == 'prod' && 'NAB-TR-3' || 'NAB-TR-1' }}
+        upload_result: true 
+        test_cucumber_tags: ${{ github.event.inputs.target_env == 'prod' && '@smokeprod' || '@smoke' }}
+    secrets:
+      test_doppler_service_token: ${{ github.event.inputs.target_env == 'prod' && secrets.DOPPLER_TEST_SERVICE_TOKEN || secrets.DOPPLER_TEST_SERVICE_TOKEN_STAGE }}
+      qmetry_api_key: ${{ secrets.QMETRY_APIKEY }}
