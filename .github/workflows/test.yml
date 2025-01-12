@@ -17,5 +17,5 @@ jobs:
         uses: peter-evans/repository-dispatch@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          repository: nabarun-ngo/ngo-nabarun-be
+          repository: nabarun-ngo/ngo-nabarun-devops
           event-type: frontend-deployed
