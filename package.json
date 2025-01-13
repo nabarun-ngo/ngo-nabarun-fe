@@ -1,6 +1,6 @@
 {
   "name": "ngo-nabarun-fe",
-  "version": "0.0.4-test",
+  "version": "0.0.5-test",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0 --disable-host-check",
