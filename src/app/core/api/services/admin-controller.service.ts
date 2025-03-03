@@ -37,7 +37,7 @@ export class AdminControllerService extends BaseService {
   /**
    * Runs a admin service.
    *
-   * <table><thead><tr><th>Trigger Name</th><th>Parameters</th></tr></thead><tbody><tr><td>SYNC_USER</td><td>sync_role - Y/N (Sync roles with auth0)<br>user_id - &lt;user id &gt; (Sync specific user by id)<br>user_email - &lt;user email&gt; (Sync specific user by email)</td></tr></tbody></table>
+   * Authorities : hasAuthority('SCOPE_create:servicerun')<br><br><table><thead><tr><th>Trigger Name</th><th>Parameters</th></tr></thead><tbody><tr><td>SYNC_USER</td><td>sync_role - Y/N (Sync roles with auth0)<br>user_id - &lt;user id &gt; (Sync specific user by id)<br>user_email - &lt;user email&gt; (Sync specific user by email)</td></tr></tbody></table>
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `runService()` instead.
@@ -51,7 +51,7 @@ export class AdminControllerService extends BaseService {
   /**
    * Runs a admin service.
    *
-   * <table><thead><tr><th>Trigger Name</th><th>Parameters</th></tr></thead><tbody><tr><td>SYNC_USER</td><td>sync_role - Y/N (Sync roles with auth0)<br>user_id - &lt;user id &gt; (Sync specific user by id)<br>user_email - &lt;user email&gt; (Sync specific user by email)</td></tr></tbody></table>
+   * Authorities : hasAuthority('SCOPE_create:servicerun')<br><br><table><thead><tr><th>Trigger Name</th><th>Parameters</th></tr></thead><tbody><tr><td>SYNC_USER</td><td>sync_role - Y/N (Sync roles with auth0)<br>user_id - &lt;user id &gt; (Sync specific user by id)<br>user_email - &lt;user email&gt; (Sync specific user by email)</td></tr></tbody></table>
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `runService$Response()` instead.
@@ -68,6 +68,10 @@ export class AdminControllerService extends BaseService {
   static readonly ClearCachePath = '/api/admin/clearcache';
 
   /**
+   * Clears System cache.
+   *
+   *
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `clearCache()` instead.
    *
@@ -78,6 +82,10 @@ export class AdminControllerService extends BaseService {
   }
 
   /**
+   * Clears System cache.
+   *
+   *
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `clearCache$Response()` instead.
    *
@@ -93,6 +101,10 @@ export class AdminControllerService extends BaseService {
   static readonly UpdateApiKeyPath = '/api/admin/apikey/{id}/update';
 
   /**
+   * Update existing apikey.
+   *
+   * Authorities : hasAuthority('SCOPE_update:apikey')
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updateApiKey()` instead.
    *
@@ -103,6 +115,10 @@ export class AdminControllerService extends BaseService {
   }
 
   /**
+   * Update existing apikey.
+   *
+   * Authorities : hasAuthority('SCOPE_update:apikey')
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `updateApiKey$Response()` instead.
    *
@@ -118,6 +134,10 @@ export class AdminControllerService extends BaseService {
   static readonly GenerateApiKeyPath = '/api/admin/apikey/generate';
 
   /**
+   * Create new apikey.
+   *
+   * Authorities : hasAuthority('SCOPE_create:apikey')
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `generateApiKey()` instead.
    *
@@ -128,6 +148,10 @@ export class AdminControllerService extends BaseService {
   }
 
   /**
+   * Create new apikey.
+   *
+   * Authorities : hasAuthority('SCOPE_create:apikey')
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `generateApiKey$Response()` instead.
    *
@@ -143,6 +167,10 @@ export class AdminControllerService extends BaseService {
   static readonly GetApiKeyListPath = '/api/admin/apikey/list';
 
   /**
+   * Retrieve list of apikeys.
+   *
+   * Authorities : hasAuthority('SCOPE_read:apikey')
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getApiKeyList()` instead.
    *
@@ -153,6 +181,10 @@ export class AdminControllerService extends BaseService {
   }
 
   /**
+   * Retrieve list of apikeys.
+   *
+   * Authorities : hasAuthority('SCOPE_read:apikey')
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getApiKeyList$Response()` instead.
    *

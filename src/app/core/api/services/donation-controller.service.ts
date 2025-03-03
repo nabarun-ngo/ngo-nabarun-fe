@@ -47,6 +47,10 @@ export class DonationControllerService extends BaseService {
   static readonly PaymentsPath = '/api/donation/{id}/payment';
 
   /**
+   * Initiate payment for a donation.
+   *
+   *
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `payments()` instead.
    *
@@ -57,6 +61,10 @@ export class DonationControllerService extends BaseService {
   }
 
   /**
+   * Initiate payment for a donation.
+   *
+   *
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `payments$Response()` instead.
    *
@@ -72,6 +80,10 @@ export class DonationControllerService extends BaseService {
   static readonly RaiseDonationPath = '/api/donation/create';
 
   /**
+   * Create new donation.
+   *
+   * Authorities : hasAuthority('SCOPE_create:donation')
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `raiseDonation()` instead.
    *
@@ -82,6 +94,10 @@ export class DonationControllerService extends BaseService {
   }
 
   /**
+   * Create new donation.
+   *
+   * Authorities : hasAuthority('SCOPE_create:donation')
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `raiseDonation$Response()` instead.
    *
@@ -97,6 +113,10 @@ export class DonationControllerService extends BaseService {
   static readonly UpdateDonationPath = '/api/donation/{id}/update';
 
   /**
+   * Update a donation details.
+   *
+   * Authorities : hasAuthority('SCOPE_update:donation')
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updateDonation()` instead.
    *
@@ -107,6 +127,10 @@ export class DonationControllerService extends BaseService {
   }
 
   /**
+   * Update a donation details.
+   *
+   * Authorities : hasAuthority('SCOPE_update:donation')
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `updateDonation$Response()` instead.
    *
@@ -118,35 +142,14 @@ export class DonationControllerService extends BaseService {
     );
   }
 
-  /** Path part for operation `getHistories()` */
-  static readonly GetHistoriesPath = '/api/donation/{id}/histories';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getHistories()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getHistories$Response(params: GetHistories$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseListHistoryDetail>> {
-    return getHistories(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getHistories$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getHistories(params: GetHistories$Params, context?: HttpContext): Observable<SuccessResponseListHistoryDetail> {
-    return this.getHistories$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseListHistoryDetail>): SuccessResponseListHistoryDetail => r.body)
-    );
-  }
-
   /** Path part for operation `getDonationDocuments()` */
   static readonly GetDonationDocumentsPath = '/api/donation/{id}/documents';
 
   /**
+   * Retrieve list of documents for a donation.
+   *
+   * Authorities : hasAuthority('SCOPE_read:donation_documents')
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getDonationDocuments()` instead.
    *
@@ -157,6 +160,10 @@ export class DonationControllerService extends BaseService {
   }
 
   /**
+   * Retrieve list of documents for a donation.
+   *
+   * Authorities : hasAuthority('SCOPE_read:donation_documents')
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getDonationDocuments$Response()` instead.
    *
@@ -168,28 +175,135 @@ export class DonationControllerService extends BaseService {
     );
   }
 
-  /** Path part for operation `getDonationSummary()` */
-  static readonly GetDonationSummaryPath = '/api/donation/summary';
+  /** Path part for operation `getHistories()` */
+  static readonly GetHistoriesPath = '/api/donation/{id}/changes';
 
   /**
+   * Retrieve list of changes for a donation.
+   *
+   * Authorities : hasAuthority('SCOPE_read:donation_history')
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getHistories()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getHistories$Response(params: GetHistories$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseListHistoryDetail>> {
+    return getHistories(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Retrieve list of changes for a donation.
+   *
+   * Authorities : hasAuthority('SCOPE_read:donation_history')
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getHistories$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getHistories(params: GetHistories$Params, context?: HttpContext): Observable<SuccessResponseListHistoryDetail> {
+    return this.getHistories$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseListHistoryDetail>): SuccessResponseListHistoryDetail => r.body)
+    );
+  }
+
+  /** Path part for operation `getDonationSummary()` */
+  static readonly GetDonationSummaryPath = '/api/donation/{donorId}/summary';
+
+  /**
+   * Calculates the donation summary.
+   *
+   *
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getDonationSummary()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getDonationSummary$Response(params?: GetDonationSummary$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseDonationSummary>> {
+  getDonationSummary$Response(params: GetDonationSummary$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseDonationSummary>> {
     return getDonationSummary(this.http, this.rootUrl, params, context);
   }
 
   /**
+   * Calculates the donation summary.
+   *
+   *
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getDonationSummary$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getDonationSummary(params?: GetDonationSummary$Params, context?: HttpContext): Observable<SuccessResponseDonationSummary> {
+  getDonationSummary(params: GetDonationSummary$Params, context?: HttpContext): Observable<SuccessResponseDonationSummary> {
     return this.getDonationSummary$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseDonationSummary>): SuccessResponseDonationSummary => r.body)
+    );
+  }
+
+  /** Path part for operation `getUserDonations()` */
+  static readonly GetUserDonationsPath = '/api/donation/{donorId}/list';
+
+  /**
+   * Retrieve list of donations for a member.
+   *
+   * Authorities : hasAuthority('SCOPE_read:user_donations')
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getUserDonations()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUserDonations$Response(params: GetUserDonations$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateDonationDetail>> {
+    return getUserDonations(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Retrieve list of donations for a member.
+   *
+   * Authorities : hasAuthority('SCOPE_read:user_donations')
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getUserDonations$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUserDonations(params: GetUserDonations$Params, context?: HttpContext): Observable<SuccessResponsePaginateDonationDetail> {
+    return this.getUserDonations$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponsePaginateDonationDetail>): SuccessResponsePaginateDonationDetail => r.body)
+    );
+  }
+
+  /** Path part for operation `getLoggedInUserDonations()` */
+  static readonly GetLoggedInUserDonationsPath = '/api/donation/self/list';
+
+  /**
+   * Retrieve list of donations of a logged in user.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getLoggedInUserDonations()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getLoggedInUserDonations$Response(params: GetLoggedInUserDonations$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateDonationDetail>> {
+    return getLoggedInUserDonations(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Retrieve list of donations of a logged in user.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getLoggedInUserDonations$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getLoggedInUserDonations(params: GetLoggedInUserDonations$Params, context?: HttpContext): Observable<SuccessResponsePaginateDonationDetail> {
+    return this.getLoggedInUserDonations$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponsePaginateDonationDetail>): SuccessResponsePaginateDonationDetail => r.body)
     );
   }
 
@@ -197,6 +311,10 @@ export class DonationControllerService extends BaseService {
   static readonly GetDonationsPath = '/api/donation/list';
 
   /**
+   * Retrieve list of donations.
+   *
+   * Authorities : hasAuthority('SCOPE_read:donations')
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getDonations()` instead.
    *
@@ -207,6 +325,10 @@ export class DonationControllerService extends BaseService {
   }
 
   /**
+   * Retrieve list of donations.
+   *
+   * Authorities : hasAuthority('SCOPE_read:donations')
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getDonations$Response()` instead.
    *
@@ -218,35 +340,14 @@ export class DonationControllerService extends BaseService {
     );
   }
 
-  /** Path part for operation `getLoggedInUserDonations()` */
-  static readonly GetLoggedInUserDonationsPath = '/api/donation/list/self';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getLoggedInUserDonations()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getLoggedInUserDonations$Response(params?: GetLoggedInUserDonations$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateDonationDetail>> {
-    return getLoggedInUserDonations(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getLoggedInUserDonations$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getLoggedInUserDonations(params?: GetLoggedInUserDonations$Params, context?: HttpContext): Observable<SuccessResponsePaginateDonationDetail> {
-    return this.getLoggedInUserDonations$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponsePaginateDonationDetail>): SuccessResponsePaginateDonationDetail => r.body)
-    );
-  }
-
   /** Path part for operation `getGuestDonations()` */
-  static readonly GetGuestDonationsPath = '/api/donation/list/guest';
+  static readonly GetGuestDonationsPath = '/api/donation/guest/list';
 
   /**
+   * Retrieve list of donations for guests.
+   *
+   * Authorities : hasAnyAuthority('SCOPE_read:donation_guest','ROLE_API_USER')
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getGuestDonations()` instead.
    *
@@ -257,6 +358,10 @@ export class DonationControllerService extends BaseService {
   }
 
   /**
+   * Retrieve list of donations for guests.
+   *
+   * Authorities : hasAnyAuthority('SCOPE_read:donation_guest','ROLE_API_USER')
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getGuestDonations$Response()` instead.
    *
@@ -264,31 +369,6 @@ export class DonationControllerService extends BaseService {
    */
   getGuestDonations(params: GetGuestDonations$Params, context?: HttpContext): Observable<SuccessResponsePaginateDonationDetail> {
     return this.getGuestDonations$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponsePaginateDonationDetail>): SuccessResponsePaginateDonationDetail => r.body)
-    );
-  }
-
-  /** Path part for operation `getUserDonations()` */
-  static readonly GetUserDonationsPath = '/api/donation/donor/{id}/list';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getUserDonations()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getUserDonations$Response(params: GetUserDonations$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateDonationDetail>> {
-    return getUserDonations(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getUserDonations$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getUserDonations(params: GetUserDonations$Params, context?: HttpContext): Observable<SuccessResponsePaginateDonationDetail> {
-    return this.getUserDonations$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponsePaginateDonationDetail>): SuccessResponsePaginateDonationDetail => r.body)
     );
   }

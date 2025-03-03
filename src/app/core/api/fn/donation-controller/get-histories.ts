@@ -32,4 +32,4 @@ export function getHistories(http: HttpClient, rootUrl: string, params: GetHisto
   );
 }
 
-getHistories.PATH = '/api/donation/{id}/histories';
+getHistories.PATH = '/api/donation/{id}/changes';

@@ -11,16 +11,16 @@ import { RequestBuilder } from '../../request-builder';
 import { SuccessResponseListDocumentDetail } from '../../models/success-response-list-document-detail';
 
 export interface GetDocuments$Params {
-  id: string;
-  type: 'DONATION' | 'EVENT' | 'NOTICE' | 'USER' | 'PROFILE_PHOTO' | 'EVENT_COVER' | 'REQUEST' | 'EXPENSE';
+  docIndexId: string;
+  docIndexType: 'DONATION' | 'EVENT' | 'NOTICE' | 'USER' | 'PROFILE_PHOTO' | 'EVENT_COVER' | 'REQUEST' | 'EXPENSE';
   'Correlation-Id'?: string;
 }
 
 export function getDocuments(http: HttpClient, rootUrl: string, params: GetDocuments$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseListDocumentDetail>> {
   const rb = new RequestBuilder(rootUrl, getDocuments.PATH, 'get');
   if (params) {
-    rb.path('id', params.id, {});
-    rb.query('type', params.type, {});
+    rb.path('docIndexId', params.docIndexId, {});
+    rb.path('docIndexType', params.docIndexType, {});
     rb.header('Correlation-Id', params['Correlation-Id'], {});
   }
 
@@ -34,4 +34,4 @@ export function getDocuments(http: HttpClient, rootUrl: string, params: GetDocum
   );
 }
 
-getDocuments.PATH = '/api/common/document/list/{id}';
+getDocuments.PATH = '/api/common/document/{docIndexType}/{docIndexId}/list';

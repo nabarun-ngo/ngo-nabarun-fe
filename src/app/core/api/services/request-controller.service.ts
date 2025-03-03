@@ -41,6 +41,10 @@ export class RequestControllerService extends BaseService {
   static readonly CreateRequestPath = '/api/request/create';
 
   /**
+   * Create a new request.
+   *
+   * Authorities : hasAuthority('SCOPE_create:request')
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createRequest()` instead.
    *
@@ -51,6 +55,10 @@ export class RequestControllerService extends BaseService {
   }
 
   /**
+   * Create a new request.
+   *
+   * Authorities : hasAuthority('SCOPE_create:request')
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `createRequest$Response()` instead.
    *
@@ -66,6 +74,10 @@ export class RequestControllerService extends BaseService {
   static readonly UpdateRequestPath = '/api/request/{id}/update';
 
   /**
+   * Update an existing requests.
+   *
+   * Authorities : hasAuthority('SCOPE_update:request')
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updateRequest()` instead.
    *
@@ -76,6 +88,10 @@ export class RequestControllerService extends BaseService {
   }
 
   /**
+   * Update an existing requests.
+   *
+   * Authorities : hasAuthority('SCOPE_update:request')
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `updateRequest$Response()` instead.
    *
@@ -91,6 +107,10 @@ export class RequestControllerService extends BaseService {
   static readonly UpdateWorkItemPath = '/api/request/workitem/{id}/update';
 
   /**
+   * Update an existing workitem.
+   *
+   * Authorities : hasAuthority('SCOPE_update:work')
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updateWorkItem()` instead.
    *
@@ -101,6 +121,10 @@ export class RequestControllerService extends BaseService {
   }
 
   /**
+   * Update an existing workitem.
+   *
+   * Authorities : hasAuthority('SCOPE_update:work')
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `updateWorkItem$Response()` instead.
    *
@@ -116,6 +140,10 @@ export class RequestControllerService extends BaseService {
   static readonly GetRequestDetailPath = '/api/request/{id}';
 
   /**
+   * Retrieves details of a specific request.
+   *
+   * Authorities : hasAuthority('SCOPE_read:request')
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getRequestDetail()` instead.
    *
@@ -126,6 +154,10 @@ export class RequestControllerService extends BaseService {
   }
 
   /**
+   * Retrieves details of a specific request.
+   *
+   * Authorities : hasAuthority('SCOPE_read:request')
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getRequestDetail$Response()` instead.
    *
@@ -141,6 +173,10 @@ export class RequestControllerService extends BaseService {
   static readonly GetWorkItemsPath = '/api/request/{id}/workitems';
 
   /**
+   * Retrieves list of workitems against a specific request.
+   *
+   * Authorities : hasAuthority('SCOPE_read:work')
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getWorkItems()` instead.
    *
@@ -151,6 +187,10 @@ export class RequestControllerService extends BaseService {
   }
 
   /**
+   * Retrieves list of workitems against a specific request.
+   *
+   * Authorities : hasAuthority('SCOPE_read:work')
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getWorkItems$Response()` instead.
    *
@@ -166,6 +206,10 @@ export class RequestControllerService extends BaseService {
   static readonly GetMyWorkItemsPath = '/api/request/workitem/list/self';
 
   /**
+   * Retrieve list of workitems for logged in user.
+   *
+   *
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getMyWorkItems()` instead.
    *
@@ -176,6 +220,10 @@ export class RequestControllerService extends BaseService {
   }
 
   /**
+   * Retrieve list of workitems for logged in user.
+   *
+   *
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getMyWorkItems$Response()` instead.
    *
@@ -191,6 +239,10 @@ export class RequestControllerService extends BaseService {
   static readonly GetMyRequestsPath = '/api/request/list/self';
 
   /**
+   * Retrieve list of requests of logged in user.
+   *
+   *
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getMyRequests()` instead.
    *
@@ -201,6 +253,10 @@ export class RequestControllerService extends BaseService {
   }
 
   /**
+   * Retrieve list of requests of logged in user.
+   *
+   *
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getMyRequests$Response()` instead.
    *

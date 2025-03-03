@@ -81,7 +81,7 @@ export class RequestService {
   }
 
   getDocuments(refId: string) {
-    return this.commonController.getDocuments({ id:refId, type:'REQUEST' }).pipe(map(d => d.responsePayload));
+    return this.commonController.getDocuments({ docIndexId:refId, docIndexType:'REQUEST' }).pipe(map(d => d.responsePayload));
   }
 
   getWorkDetails(id: string) {
