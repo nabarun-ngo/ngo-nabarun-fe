@@ -17,12 +17,9 @@ import { getLoggedInUserDetails } from '../fn/user-controller/get-logged-in-user
 import { GetLoggedInUserDetails$Params } from '../fn/user-controller/get-logged-in-user-details';
 import { getUserDetails } from '../fn/user-controller/get-user-details';
 import { GetUserDetails$Params } from '../fn/user-controller/get-user-details';
-import { getUserRoleHistory } from '../fn/user-controller/get-user-role-history';
-import { GetUserRoleHistory$Params } from '../fn/user-controller/get-user-role-history';
 import { getUsers } from '../fn/user-controller/get-users';
 import { GetUsers$Params } from '../fn/user-controller/get-users';
 import { SuccessResponsePaginateUserDetail } from '../models/success-response-paginate-user-detail';
-import { SuccessResponseString } from '../models/success-response-string';
 import { SuccessResponseUserDetail } from '../models/success-response-user-detail';
 import { SuccessResponseVoid } from '../models/success-response-void';
 import { updateLoggedInUserDetails } from '../fn/user-controller/update-logged-in-user-details';
@@ -40,6 +37,10 @@ export class UserControllerService extends BaseService {
   static readonly UpdateUserDetailsPath = '/api/user/{id}/update';
 
   /**
+   * Update user details by admin.
+   *
+   * Authorities : hasAuthority('SCOPE_update:user')
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updateUserDetails()` instead.
    *
@@ -50,6 +51,10 @@ export class UserControllerService extends BaseService {
   }
 
   /**
+   * Update user details by admin.
+   *
+   * Authorities : hasAuthority('SCOPE_update:user')
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `updateUserDetails$Response()` instead.
    *
@@ -65,6 +70,10 @@ export class UserControllerService extends BaseService {
   static readonly AssignUsersToRolesPath = '/api/user/roles/{id}/assignUsersToRole';
 
   /**
+   * Assign users to specific role.
+   *
+   * Authorities : hasAuthority('SCOPE_update:user_role')
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `assignUsersToRoles()` instead.
    *
@@ -75,6 +84,10 @@ export class UserControllerService extends BaseService {
   }
 
   /**
+   * Assign users to specific role.
+   *
+   * Authorities : hasAuthority('SCOPE_update:user_role')
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `assignUsersToRoles$Response()` instead.
    *
@@ -90,6 +103,10 @@ export class UserControllerService extends BaseService {
   static readonly UpdateLoggedInUserDetailsPath = '/api/user/update/self';
 
   /**
+   * Update user details by user.
+   *
+   *
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updateLoggedInUserDetails()` instead.
    *
@@ -100,6 +117,10 @@ export class UserControllerService extends BaseService {
   }
 
   /**
+   * Update user details by user.
+   *
+   *
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `updateLoggedInUserDetails$Response()` instead.
    *
@@ -115,6 +136,10 @@ export class UserControllerService extends BaseService {
   static readonly GetUserDetailsPath = '/api/user/{id}';
 
   /**
+   * Retrieve user details by user id.
+   *
+   * Authorities : hasAuthority('SCOPE_read:user')
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getUserDetails()` instead.
    *
@@ -125,6 +150,10 @@ export class UserControllerService extends BaseService {
   }
 
   /**
+   * Retrieve user details by user id.
+   *
+   * Authorities : hasAuthority('SCOPE_read:user')
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getUserDetails$Response()` instead.
    *
@@ -136,35 +165,14 @@ export class UserControllerService extends BaseService {
     );
   }
 
-  /** Path part for operation `getUserRoleHistory()` */
-  static readonly GetUserRoleHistoryPath = '/api/user/{id}/history';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getUserRoleHistory()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getUserRoleHistory$Response(params: GetUserRoleHistory$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
-    return getUserRoleHistory(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getUserRoleHistory$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getUserRoleHistory(params: GetUserRoleHistory$Params, context?: HttpContext): Observable<SuccessResponseString> {
-    return this.getUserRoleHistory$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseString>): SuccessResponseString => r.body)
-    );
-  }
-
   /** Path part for operation `getLoggedInUserDetails()` */
   static readonly GetLoggedInUserDetailsPath = '/api/user/self';
 
   /**
+   * Retrieve logged in user details.
+   *
+   *
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getLoggedInUserDetails()` instead.
    *
@@ -175,6 +183,10 @@ export class UserControllerService extends BaseService {
   }
 
   /**
+   * Retrieve logged in user details.
+   *
+   *
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getLoggedInUserDetails$Response()` instead.
    *
@@ -190,6 +202,10 @@ export class UserControllerService extends BaseService {
   static readonly GetUsersPath = '/api/user/list';
 
   /**
+   * Retrieve list of users.
+   *
+   * Authorities : hasAnyAuthority('SCOPE_read:users','ROLE_API_USER')
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getUsers()` instead.
    *
@@ -200,6 +216,10 @@ export class UserControllerService extends BaseService {
   }
 
   /**
+   * Retrieve list of users.
+   *
+   * Authorities : hasAnyAuthority('SCOPE_read:users','ROLE_API_USER')
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getUsers$Response()` instead.
    *

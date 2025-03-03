@@ -21,6 +21,7 @@ export { ExpenseDetailFilter } from './models/expense-detail-filter';
 export { ExpenseItemDetail } from './models/expense-item-detail';
 export { HistoryDetail } from './models/history-detail';
 export { KeyValue } from './models/key-value';
+export { Link } from './models/link';
 export { MeetingDetail } from './models/meeting-detail';
 export { NoticeDetail } from './models/notice-detail';
 export { NoticeDetailFilter } from './models/notice-detail-filter';

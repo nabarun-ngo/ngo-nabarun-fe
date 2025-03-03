@@ -243,10 +243,14 @@ export class AccountService {
   }
 
   createExpenseItem(id:string,data:any){
-    return this.accountController.createExpenseItem({id:id,body:{
-      itemName:data.itemName,
-      description:data.description,
-      amount:data.amount
+    return this.accountController.updateExpense({id:id,body:{
+      expenseItems:[
+        {
+          itemName:data.itemName,
+          description:data.description,
+          amount:data.amount
+        }
+      ]
     }})
     .pipe(map(d => d.responsePayload));
   }

@@ -100,7 +100,8 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDetail> implements 
             inputType: 'multiselect',
             tagName: 'select',
             selectList:[],
-            placeholder:'Select APIKey Scope'
+            placeholder:'Select APIKey Scope',
+            autocomplete:true
           }
         },
         {

@@ -8,21 +8,24 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { DonationDetailFilter } from '../../models/donation-detail-filter';
 import { SuccessResponsePaginateDonationDetail } from '../../models/success-response-paginate-donation-detail';
 
 export interface GetUserDonations$Params {
-  id: string;
+  donorId: string;
   pageIndex?: number;
   pageSize?: number;
+  filter: DonationDetailFilter;
   'Correlation-Id'?: string;
 }
 
 export function getUserDonations(http: HttpClient, rootUrl: string, params: GetUserDonations$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateDonationDetail>> {
   const rb = new RequestBuilder(rootUrl, getUserDonations.PATH, 'get');
   if (params) {
-    rb.path('id', params.id, {});
+    rb.path('donorId', params.donorId, {});
     rb.query('pageIndex', params.pageIndex, {});
     rb.query('pageSize', params.pageSize, {});
+    rb.query('filter', params.filter, {});
     rb.header('Correlation-Id', params['Correlation-Id'], {});
   }
 
@@ -36,4 +39,4 @@ export function getUserDonations(http: HttpClient, rootUrl: string, params: GetU
   );
 }
 
-getUserDonations.PATH = '/api/donation/donor/{id}/list';
+getUserDonations.PATH = '/api/donation/{donorId}/list';

@@ -47,35 +47,14 @@ export class CommonControllerService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `getNotification()` */
-  static readonly GetNotificationPath = '/api/common/notification/list';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getNotification()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getNotification$Response(params?: GetNotification$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateMapStringString>> {
-    return getNotification(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getNotification$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getNotification(params?: GetNotification$Params, context?: HttpContext): Observable<SuccessResponsePaginateMapStringString> {
-    return this.getNotification$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponsePaginateMapStringString>): SuccessResponsePaginateMapStringString => r.body)
-    );
-  }
-
   /** Path part for operation `manageNotification()` */
-  static readonly ManageNotificationPath = '/api/common/notification/list';
+  static readonly ManageNotificationPath = '/api/common/notification/manage';
 
   /**
+   * Manage notification for logged in user.
+   *
+   *
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `manageNotification()` instead.
    *
@@ -86,6 +65,10 @@ export class CommonControllerService extends BaseService {
   }
 
   /**
+   * Manage notification for logged in user.
+   *
+   *
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `manageNotification$Response()` instead.
    *
@@ -101,6 +84,10 @@ export class CommonControllerService extends BaseService {
   static readonly JobsTriggerPath = '/api/common/jobs/trigger';
 
   /**
+   * Triggers a job from external systems.
+   *
+   *
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `jobsTrigger()` instead.
    *
@@ -111,6 +98,10 @@ export class CommonControllerService extends BaseService {
   }
 
   /**
+   * Triggers a job from external systems.
+   *
+   *
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `jobsTrigger$Response()` instead.
    *
@@ -126,6 +117,10 @@ export class CommonControllerService extends BaseService {
   static readonly UploadDocumentsPath = '/api/common/document/uploadbase64';
 
   /**
+   * Upload document as base64.
+   *
+   *
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `uploadDocuments()` instead.
    *
@@ -136,6 +131,10 @@ export class CommonControllerService extends BaseService {
   }
 
   /**
+   * Upload document as base64.
+   *
+   *
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `uploadDocuments$Response()` instead.
    *
@@ -151,6 +150,10 @@ export class CommonControllerService extends BaseService {
   static readonly UploadDocuments1Path = '/api/common/document/upload';
 
   /**
+   * Upload document.
+   *
+   *
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `uploadDocuments1()` instead.
    *
@@ -161,6 +164,10 @@ export class CommonControllerService extends BaseService {
   }
 
   /**
+   * Upload document.
+   *
+   *
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `uploadDocuments1$Response()` instead.
    *
@@ -172,10 +179,47 @@ export class CommonControllerService extends BaseService {
     );
   }
 
-  /** Path part for operation `viewDocument()` */
-  static readonly ViewDocumentPath = '/api/common/document/view/{id}';
+  /** Path part for operation `getNotification()` */
+  static readonly GetNotificationPath = '/api/common/notification/list';
 
   /**
+   * Retrieve notifications for logged in user.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getNotification()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getNotification$Response(params?: GetNotification$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateMapStringString>> {
+    return getNotification(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Retrieve notifications for logged in user.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getNotification$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getNotification(params?: GetNotification$Params, context?: HttpContext): Observable<SuccessResponsePaginateMapStringString> {
+    return this.getNotification$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponsePaginateMapStringString>): SuccessResponsePaginateMapStringString => r.body)
+    );
+  }
+
+  /** Path part for operation `viewDocument()` */
+  static readonly ViewDocumentPath = '/api/common/document/{id}/view';
+
+  /**
+   * View a document.
+   *
+   *
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `viewDocument()` instead.
    *
@@ -186,6 +230,10 @@ export class CommonControllerService extends BaseService {
   }
 
   /**
+   * View a document.
+   *
+   *
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `viewDocument$Response()` instead.
    *
@@ -197,35 +245,14 @@ export class CommonControllerService extends BaseService {
     );
   }
 
-  /** Path part for operation `getDocuments()` */
-  static readonly GetDocumentsPath = '/api/common/document/list/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getDocuments()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getDocuments$Response(params: GetDocuments$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseListDocumentDetail>> {
-    return getDocuments(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getDocuments$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getDocuments(params: GetDocuments$Params, context?: HttpContext): Observable<SuccessResponseListDocumentDetail> {
-    return this.getDocuments$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseListDocumentDetail>): SuccessResponseListDocumentDetail => r.body)
-    );
-  }
-
   /** Path part for operation `downloadDocument()` */
-  static readonly DownloadDocumentPath = '/api/common/document/download/{id}';
+  static readonly DownloadDocumentPath = '/api/common/document/{id}/download';
 
   /**
+   * Download a document.
+   *
+   *
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `downloadDocument()` instead.
    *
@@ -237,6 +264,10 @@ export class CommonControllerService extends BaseService {
   }
 
   /**
+   * Download a document.
+   *
+   *
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `downloadDocument$Response()` instead.
    *
@@ -251,10 +282,47 @@ export class CommonControllerService extends BaseService {
     );
   }
 
+  /** Path part for operation `getDocuments()` */
+  static readonly GetDocumentsPath = '/api/common/document/{docIndexType}/{docIndexId}/list';
+
+  /**
+   * Retrieve list of documents against docIndexType and docIndexId.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getDocuments()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDocuments$Response(params: GetDocuments$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseListDocumentDetail>> {
+    return getDocuments(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Retrieve list of documents against docIndexType and docIndexId.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getDocuments$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDocuments(params: GetDocuments$Params, context?: HttpContext): Observable<SuccessResponseListDocumentDetail> {
+    return this.getDocuments$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseListDocumentDetail>): SuccessResponseListDocumentDetail => r.body)
+    );
+  }
+
   /** Path part for operation `getReferenceField()` */
   static readonly GetReferenceFieldPath = '/api/common/data/referenceFields';
 
   /**
+   * Retrieve reference field against source.
+   *
+   *
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getReferenceField()` instead.
    *
@@ -265,6 +333,10 @@ export class CommonControllerService extends BaseService {
   }
 
   /**
+   * Retrieve reference field against source.
+   *
+   *
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getReferenceField$Response()` instead.
    *
@@ -280,6 +352,10 @@ export class CommonControllerService extends BaseService {
   static readonly GetReferenceDataPath = '/api/common/data/referenceData';
 
   /**
+   * Retrieve reference data with filter.
+   *
+   *
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getReferenceData()` instead.
    *
@@ -290,6 +366,10 @@ export class CommonControllerService extends BaseService {
   }
 
   /**
+   * Retrieve reference data with filter.
+   *
+   *
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getReferenceData$Response()` instead.
    *
@@ -302,9 +382,13 @@ export class CommonControllerService extends BaseService {
   }
 
   /** Path part for operation `deleteDocument()` */
-  static readonly DeleteDocumentPath = '/api/common/document/delete/{id}';
+  static readonly DeleteDocumentPath = '/api/common/document/{id}/delete';
 
   /**
+   * Delete a document.
+   *
+   * Authorities : hasAuthority('SCOPE_delete:document')
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `deleteDocument()` instead.
    *
@@ -315,6 +399,10 @@ export class CommonControllerService extends BaseService {
   }
 
   /**
+   * Delete a document.
+   *
+   * Authorities : hasAuthority('SCOPE_delete:document')
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `deleteDocument$Response()` instead.
    *

@@ -32,4 +32,4 @@ export function viewDocument(http: HttpClient, rootUrl: string, params: ViewDocu
   );
 }
 
-viewDocument.PATH = '/api/common/document/view/{id}';
+viewDocument.PATH = '/api/common/document/{id}/view';

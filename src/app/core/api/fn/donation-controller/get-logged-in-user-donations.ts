@@ -8,19 +8,22 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { DonationDetailFilter } from '../../models/donation-detail-filter';
 import { SuccessResponsePaginateDonationDetail } from '../../models/success-response-paginate-donation-detail';
 
 export interface GetLoggedInUserDonations$Params {
   pageIndex?: number;
   pageSize?: number;
+  filter: DonationDetailFilter;
   'Correlation-Id'?: string;
 }
 
-export function getLoggedInUserDonations(http: HttpClient, rootUrl: string, params?: GetLoggedInUserDonations$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateDonationDetail>> {
+export function getLoggedInUserDonations(http: HttpClient, rootUrl: string, params: GetLoggedInUserDonations$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateDonationDetail>> {
   const rb = new RequestBuilder(rootUrl, getLoggedInUserDonations.PATH, 'get');
   if (params) {
     rb.query('pageIndex', params.pageIndex, {});
     rb.query('pageSize', params.pageSize, {});
+    rb.query('filter', params.filter, {});
     rb.header('Correlation-Id', params['Correlation-Id'], {});
   }
 
@@ -34,4 +37,4 @@ export function getLoggedInUserDonations(http: HttpClient, rootUrl: string, para
   );
 }
 
-getLoggedInUserDonations.PATH = '/api/donation/list/self';
+getLoggedInUserDonations.PATH = '/api/donation/self/list';

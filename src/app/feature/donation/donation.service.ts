@@ -25,8 +25,8 @@ export class DonationService {
   async fetchMyDonations(pageIndex: number = 0, pageSize: number = 100) {
     let id =  (await this.identityService.getUser()).profile_id;
     return firstValueFrom(combineLatest({
-      donations: this.donationController.getLoggedInUserDonations({ pageIndex: pageIndex, pageSize: pageSize }).pipe(map(d => d.responsePayload)),
-      summary: this.donationController.getDonationSummary({ id: id, includeOutstandingMonths: true, includePayableAccount: true }).pipe(map(d => d.responsePayload)),
+      donations: this.donationController.getLoggedInUserDonations({ pageIndex: pageIndex, pageSize: pageSize, filter:{}}).pipe(map(d => d.responsePayload)),
+      summary: this.donationController.getDonationSummary({ donorId: id, includeOutstandingMonths: true, includePayableAccount: true }).pipe(map(d => d.responsePayload)),
     }))
   }
 
@@ -57,12 +57,12 @@ export class DonationService {
   fetchUserDonations(id: string, pageIndex: number = 0, pageSize: number = 100) {
     return combineLatest({
       donations: this.donationController.getDonations({ filter:{ donorId: id }, pageIndex: pageIndex, pageSize: pageSize }).pipe(map(d => d.responsePayload)),
-      summary: this.donationController.getDonationSummary({ id: id, includeOutstandingMonths: true }).pipe(map(d => d.responsePayload))
+      summary: this.donationController.getDonationSummary({ donorId: id, includeOutstandingMonths: true }).pipe(map(d => d.responsePayload))
     })
   }
 
   fetchDocuments(id: string) {
-    return this.commonController.getDocuments({ id: id , type:'DONATION'}).pipe(map(m => m.responsePayload));
+    return this.donationController.getDonationDocuments({ id: id }).pipe(map(m => m.responsePayload));
   }
 
   fetchEvents() {
