@@ -17,10 +17,13 @@ import { generateApiKey } from '../fn/admin-controller/generate-api-key';
 import { GenerateApiKey$Params } from '../fn/admin-controller/generate-api-key';
 import { getApiKeyList } from '../fn/admin-controller/get-api-key-list';
 import { GetApiKeyList$Params } from '../fn/admin-controller/get-api-key-list';
+import { getApiKeyScopes } from '../fn/admin-controller/get-api-key-scopes';
+import { GetApiKeyScopes$Params } from '../fn/admin-controller/get-api-key-scopes';
 import { runService } from '../fn/admin-controller/run-service';
 import { RunService$Params } from '../fn/admin-controller/run-service';
 import { SuccessResponseApiKeyDetail } from '../models/success-response-api-key-detail';
 import { SuccessResponseListApiKeyDetail } from '../models/success-response-list-api-key-detail';
+import { SuccessResponseListKeyValue } from '../models/success-response-list-key-value';
 import { SuccessResponseVoid } from '../models/success-response-void';
 import { updateApiKey } from '../fn/admin-controller/update-api-key';
 import { UpdateApiKey$Params } from '../fn/admin-controller/update-api-key';
@@ -160,6 +163,39 @@ export class AdminControllerService extends BaseService {
   generateApiKey(params: GenerateApiKey$Params, context?: HttpContext): Observable<SuccessResponseApiKeyDetail> {
     return this.generateApiKey$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseApiKeyDetail>): SuccessResponseApiKeyDetail => r.body)
+    );
+  }
+
+  /** Path part for operation `getApiKeyScopes()` */
+  static readonly GetApiKeyScopesPath = '/api/admin/apikey/scopes';
+
+  /**
+   * Retrieve scope of api key.
+   *
+   * Authorities : hasAuthority('SCOPE_read:apikey')
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getApiKeyScopes()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getApiKeyScopes$Response(params?: GetApiKeyScopes$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseListKeyValue>> {
+    return getApiKeyScopes(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Retrieve scope of api key.
+   *
+   * Authorities : hasAuthority('SCOPE_read:apikey')
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getApiKeyScopes$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getApiKeyScopes(params?: GetApiKeyScopes$Params, context?: HttpContext): Observable<SuccessResponseListKeyValue> {
+    return this.getApiKeyScopes$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseListKeyValue>): SuccessResponseListKeyValue => r.body)
     );
   }
 
