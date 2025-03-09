@@ -100,7 +100,8 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDetail> implements 
             inputType: 'multiselect',
             tagName: 'select',
             selectList:[],
-            placeholder:'Select APIKey Scope'
+            placeholder:'Select APIKey Scope',
+            autocomplete:true
           }
         },
         {
@@ -183,13 +184,13 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDetail> implements 
         })
         break;
       case 'UPDATE':
-          this.adminService.getEndpointList().subscribe(d=>{
-            let list = d.filter((p: any)=> p.details ).map((m: any)=>{
-              let url= m.details.requestMappingConditions.patterns[0];
-              return {key:url,displayValue:url}as KeyValue;
-            })
+        this.adminService.getScopeList().subscribe(d=>{
+            // let list = d.filter((p: any)=> p.details ).map((m: any)=>{
+            //   let url= m.details.requestMappingConditions.patterns[0];
+            //   return {key:url,displayValue:url}as KeyValue;
+            // })
             this.showForm($event.rowIndex, ['api_key_detail']);
-            this.getSectionField('api_key_detail','api_key_scope',$event.rowIndex).form_input!.selectList=list;
+            this.getSectionField('api_key_detail','api_key_scope',$event.rowIndex).form_input!.selectList=d;
           })
           break;
       case 'CONFIRM':
@@ -210,13 +211,17 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDetail> implements 
 
   createAPIKey() {
     this.showCreateForm({})
-    this.adminService.getEndpointList().subscribe(d=>{
-      let list = d.filter((p: any)=> p.details ).map((m: any)=>{
-        let url= m.details.requestMappingConditions.patterns[0];
-        return {key:url,displayValue:url}as KeyValue;
-      })
-      this.getSectionField('api_key_detail','api_key_scope',0,true).form_input!.selectList=list;
+    this.adminService.getScopeList().subscribe(d=>{
+      this.getSectionField('api_key_detail','api_key_scope',0,true).form_input!.selectList=d;
     })
+    // this.adminService.getEndpointList().subscribe(d=>{
+    //   let list = d.filter((p: any)=> p.details ).map((m: any)=>{
+    //     let url= m.details.requestMappingConditions.patterns[0];
+    //     return {key:url,displayValue:url}as KeyValue;
+    //   })
+    //   this.getSectionField('api_key_detail','api_key_scope',0,true).form_input!.selectList=list;
+    // })
+
     
   }
 }

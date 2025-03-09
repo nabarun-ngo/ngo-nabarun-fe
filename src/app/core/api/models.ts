@@ -21,6 +21,7 @@ export { ExpenseDetailFilter } from './models/expense-detail-filter';
 export { ExpenseItemDetail } from './models/expense-item-detail';
 export { HistoryDetail } from './models/history-detail';
 export { KeyValue } from './models/key-value';
+export { Link } from './models/link';
 export { MeetingDetail } from './models/meeting-detail';
 export { NoticeDetail } from './models/notice-detail';
 export { NoticeDetailFilter } from './models/notice-detail-filter';
@@ -53,6 +54,7 @@ export { SuccessResponseListAdditionalField } from './models/success-response-li
 export { SuccessResponseListApiKeyDetail } from './models/success-response-list-api-key-detail';
 export { SuccessResponseListDocumentDetail } from './models/success-response-list-document-detail';
 export { SuccessResponseListHistoryDetail } from './models/success-response-list-history-detail';
+export { SuccessResponseListKeyValue } from './models/success-response-list-key-value';
 export { SuccessResponseListWorkDetail } from './models/success-response-list-work-detail';
 export { SuccessResponseMapStringListKeyValue } from './models/success-response-map-string-list-key-value';
 export { SuccessResponseNoticeDetail } from './models/success-response-notice-detail';

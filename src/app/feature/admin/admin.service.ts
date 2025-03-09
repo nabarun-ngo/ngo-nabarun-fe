@@ -10,6 +10,7 @@ import { environment } from 'src/environments/environment';
 })
 export class AdminService {
 
+
   
   constructor(private adminController: AdminControllerService,private httpClient:HttpClient) { }
 
@@ -52,6 +53,10 @@ export class AdminService {
 
   revokeAPIKey(id: string) {
     return this.adminController.updateApiKey({id:id,body:{},revoke:true}).pipe(map(m=>m.responsePayload));
+  }
+
+  getScopeList() {
+    return this.adminController.getApiKeyScopes().pipe(map(m=>m.responsePayload));
   }
 
 }

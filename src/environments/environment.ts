@@ -10,7 +10,7 @@ import { AuthConfig } from "@auth0/auth0-angular";
 
 const authDomain = 'dev-u2aco2py.us.auth0.com';
 const authClientId = Capacitor.isNativePlatform() ? 'eTrMFsU97X71Dve76lbYuZmUN6k3PN66': '8DLWlfdUodZhM8nW2HRKFYL7GjBxMbGH';
-const apiBaseUrl=Capacitor.isNativePlatform() ? `${config.appId}://${authDomain}/capacitor/${config.appId}/callback` : 'http://'+window.location.hostname+':8082';
+const apiBaseUrl=Capacitor.isNativePlatform() ? `${config.appId}://${authDomain}/capacitor/${config.appId}/callback` : 'http://localhost:8082';
 
 const auth_config:AuthConfig={
   domain: authDomain,

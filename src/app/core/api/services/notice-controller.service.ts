@@ -34,6 +34,10 @@ export class NoticeControllerService extends BaseService {
   static readonly CreateNoticePath = '/api/notice/create';
 
   /**
+   * Create a new notice.
+   *
+   * Authorities : hasAuthority('SCOPE_create:notice')
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createNotice()` instead.
    *
@@ -44,6 +48,10 @@ export class NoticeControllerService extends BaseService {
   }
 
   /**
+   * Create a new notice.
+   *
+   * Authorities : hasAuthority('SCOPE_create:notice')
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `createNotice$Response()` instead.
    *
@@ -59,6 +67,10 @@ export class NoticeControllerService extends BaseService {
   static readonly UpdateNoticePath = '/api/notice/{id}/update';
 
   /**
+   * Update a specific notice.
+   *
+   * Authorities : hasAuthority('SCOPE_update:notice')
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updateNotice()` instead.
    *
@@ -69,6 +81,10 @@ export class NoticeControllerService extends BaseService {
   }
 
   /**
+   * Update a specific notice.
+   *
+   * Authorities : hasAuthority('SCOPE_update:notice')
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `updateNotice$Response()` instead.
    *
@@ -84,6 +100,10 @@ export class NoticeControllerService extends BaseService {
   static readonly GetNoticePath = '/api/notice/{id}';
 
   /**
+   * Retrieve details of a specific notice.
+   *
+   * Authorities : hasAuthority('SCOPE_read:notice')
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getNotice()` instead.
    *
@@ -94,6 +114,10 @@ export class NoticeControllerService extends BaseService {
   }
 
   /**
+   * Retrieve details of a specific notice.
+   *
+   * Authorities : hasAuthority('SCOPE_read:notice')
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getNotice$Response()` instead.
    *
@@ -109,6 +133,10 @@ export class NoticeControllerService extends BaseService {
   static readonly GetAllNoticePath = '/api/notice/list';
 
   /**
+   * Retrieve notice list.
+   *
+   * Authorities : hasAuthority('SCOPE_read:notices')
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getAllNotice()` instead.
    *
@@ -119,6 +147,10 @@ export class NoticeControllerService extends BaseService {
   }
 
   /**
+   * Retrieve notice list.
+   *
+   * Authorities : hasAuthority('SCOPE_read:notices')
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getAllNotice$Response()` instead.
    *
@@ -138,6 +170,8 @@ export class NoticeControllerService extends BaseService {
    * To access only the response body, use `getDraftedNotice()` instead.
    *
    * This method doesn't expect any request body.
+   *
+   * @deprecated
    */
   getDraftedNotice$Response(params?: GetDraftedNotice$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseNoticeDetail>> {
     return getDraftedNotice(this.http, this.rootUrl, params, context);
@@ -148,6 +182,8 @@ export class NoticeControllerService extends BaseService {
    * To access the full response (for headers, for example), `getDraftedNotice$Response()` instead.
    *
    * This method doesn't expect any request body.
+   *
+   * @deprecated
    */
   getDraftedNotice(params?: GetDraftedNotice$Params, context?: HttpContext): Observable<SuccessResponseNoticeDetail> {
     return this.getDraftedNotice$Response(params, context).pipe(
