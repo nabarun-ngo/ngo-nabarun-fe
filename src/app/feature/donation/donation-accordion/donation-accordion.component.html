@@ -31,7 +31,7 @@
             </div>
         </div>
     </section>
-    <mat-expansion-panel class="m-2" [expanded]="true" *ngIf="createDonation">
+    <mat-expansion-panel class="m-2" [expanded]="true" *ngIf="createDonation" id="createDonation">
         <mat-expansion-panel-header style="pointer-events: none;">
             <mat-panel-description>
                 <ng-container *ngTemplateOutlet="headerTemplate;context:{donation:createDonationData.donation}"></ng-container>
