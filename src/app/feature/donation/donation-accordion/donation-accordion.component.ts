@@ -9,7 +9,7 @@ import { ModalService } from 'src/app/core/service/modal.service';
 import { AppDialog } from 'src/app/core/constant/app-dialog.const';
 import { Subject } from 'rxjs';
 import { AlertData } from 'src/app/shared/components/generic/alert/alert.model';
-import { AppAlert } from 'src/app/core/constant/app-alert.const';
+import { AppAlert, interpolate } from 'src/app/core/constant/app-alert.const';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 import { SCOPE } from 'src/app/core/constant/auth-scope.const';
 
@@ -163,7 +163,7 @@ export class DonationAccordionComponent implements OnInit {
         }
         //console.log(donation);
         this.donationService.createDonation(donation).subscribe(data => {
-          this.alertList.push(AppAlert.donation_created);
+          this.alertList.push(interpolate(AppAlert.donation_created,{donationId:data?.id!}));
 
           this.donations.unshift({
             donation: data!,
