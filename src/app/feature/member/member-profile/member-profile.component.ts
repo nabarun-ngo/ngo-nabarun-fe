@@ -13,6 +13,7 @@ import { AppAlert } from 'src/app/core/constant/app-alert.const';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MemberProfileModel } from './member-profile.model';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
+import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 
 @Component({
   selector: 'app-member-profile',
@@ -31,11 +32,14 @@ export class MemberProfileComponent implements OnInit {
   matDialogData!: MemberProfileModel
   dialogClose: EventEmitter<boolean> = new EventEmitter();
   constant =UserConstant
+  isSelfCompleteProfile!: boolean;
   constructor(
     private sharedDataService: SharedDataService,
     private route: ActivatedRoute,
     private memberService: MemberService,
     protected location: Location,
+    private router:Router,
+    private identity:UserIdentityService,
     @Inject(MAT_DIALOG_DATA) data: MemberProfileModel
   ) {
     this.matDialogData = data;
@@ -60,9 +64,7 @@ export class MemberProfileComponent implements OnInit {
       ]
     } else {
       this.isSelfProfile = this.route.snapshot.data['self_profile'] as boolean;
-      this.sharedDataService.setPageName(this.isSelfProfile ? 'MY PROFILE' : 'MEMBER PROFILE');
-      this.mode = this.isSelfProfile ? 'view_self' : 'view_admin';
-
+      this.isSelfCompleteProfile = this.route.snapshot.data['complete_flag'] as boolean;
 
       if (this.route.snapshot.data['ref_data']) {
         let refData = this.route.snapshot.data['ref_data'];
@@ -73,18 +75,30 @@ export class MemberProfileComponent implements OnInit {
       if (this.route.snapshot.data['data']) {
         this.member = this.route.snapshot.data['data'] as UserDetail;
       }
-      this.navigations = [
-        this.isSelfProfile ?
+
+      if(this.isSelfCompleteProfile){
+        this.sharedDataService.setPageName('COMPLETE PROFILE');
+        this.mode = 'edit_self';
+        this.navigations = []
+      }else if(this.isSelfProfile){
+        this.sharedDataService.setPageName('MY PROFILE');
+        this.mode = 'view_self' ;
+        this.navigations = [
           {
             displayName: 'Back to Dashboard',
             routerLink: this.routes.secured_dashboard_page.url
           }
-          :
+        ]
+      }else{
+        this.sharedDataService.setPageName('MEMBER PROFILE');
+        this.mode = 'view_admin';
+        this.navigations = [
           {
             displayName: 'Back to Members',
             routerLink: this.routes.secured_member_members_page.url
-          }
-      ]
+          } 
+        ]
+      }
     }
 
 
@@ -109,6 +123,10 @@ export class MemberProfileComponent implements OnInit {
         this.mode = 'view_self';
         this.alertList.push(AppAlert.profile_updated_self)
         this.dialogClose.emit(true)
+        if(this.isSelfCompleteProfile){
+          this.identity.profileUpdated =true;
+          this.router.navigateByUrl(AppRoute.secured_dashboard_page.url);
+        }
         //this.memberService.getMyDetail().subscribe(data=>this.member=data!)
       })
     } else if ($event.actionName == 'CHANGE_MODE') {

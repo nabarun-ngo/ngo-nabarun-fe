@@ -5,6 +5,7 @@ import { CommonLayoutComponent } from './core/layout/common-layout/common-layout
 import { NoAuthGuardService } from './core/guards/no-auth-guard.service';
 import { SecuredLayoutComponent } from './core/layout/secured-layout/secured-layout.component';
 import { AuthGuardService } from './core/guards/auth-guard.service';
+import { UserGuardService } from './core/guards/user-guard.service';
 
 const route_data =AppRoute;
 
@@ -56,7 +57,12 @@ const routes: Routes = [
       }, 
     ],
     canActivate:[
-      AuthGuardService
+      AuthGuardService,
+      UserGuardService
+    ],
+    runGuardsAndResolvers:'always',
+    canActivateChild:[
+      //,
     ]
   }
 ];

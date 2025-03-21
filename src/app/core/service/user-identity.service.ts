@@ -22,6 +22,8 @@ export class UserIdentityService {
   isLoggedIn!: boolean;
   loggedInUser!: AuthUser;
   grantedScopes: string[]=[];
+  profileUpdated!: boolean;
+
 
   constructor(
     private oAuthService: AuthService,
@@ -193,6 +195,10 @@ export class UserIdentityService {
 
   async getUser(): Promise<AuthUser> {
     return await firstValueFrom(this.oAuthService.user$.pipe(map(m=> m as AuthUser)))
+  }
+
+  async isProfileUpdated(){
+    return this.profileUpdated || (await this.getUser()).profile_updated;
   }
   // getUser(): AuthUser {
   //   return this.loggedInUser || {};
