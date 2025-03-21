@@ -37,7 +37,7 @@ export const TaskDefaultValue={
     pageNumber: 0,
     pageSize:20,
     pageSizeOptions: [20, 50,100],
-    pageTitle:'My Worklist',
+    pageTitle:'My Tasks',
     tabName:'pending_worklist'
 }
 export const TaskField={

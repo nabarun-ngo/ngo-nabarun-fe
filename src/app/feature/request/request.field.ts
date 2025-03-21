@@ -30,23 +30,23 @@ const getAdditionalField = (fields: AdditionalField[]) => {
 
 export const getWorkDetailSection = (m: WorkDetail, tab: workListTab): DetailedView => {
     return {
-        section_name: 'Work Details',
+        section_name: 'Task Details',
         section_type: 'key_value',
         section_html_id: 'work_detail',
         section_form: new FormGroup({}),
         content: [
             {
-                field_name: 'Work Id',
+                field_name: 'Task Id',
                 field_html_id: 'work_id',
                 field_value: m.id!
             },
             {
-                field_name: 'Work Type',
+                field_name: 'Task Type',
                 field_html_id: 'work_type',
                 field_value: m.workType!,
             },
             {
-                field_name: 'Work Description',
+                field_name: 'Task Description',
                 field_html_id: 'work_description',
                 field_value: m.description!,
             },
@@ -79,7 +79,7 @@ export const getWorkDetailSection = (m: WorkDetail, tab: workListTab): DetailedV
 
 export const getWorkActionDetailSection = (m: WorkDetail): DetailedView => {
     return {
-        section_name: 'Work Action Detail',
+        section_name: 'Task Action Detail',
         section_type: 'key_value',
         section_html_id: 'action_details',
         hide_section:m.additionalFields?.length == 0,
