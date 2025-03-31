@@ -23,7 +23,6 @@ jobs:
   firebase_deploy:
     if: github.event.pull_request.merged == true
     needs: create_release
-    runs-on: ubuntu-latest
     name: Trigger Deploy to Firebase
     steps:
        - name: Repository Dispatch
