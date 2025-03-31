@@ -30,6 +30,9 @@ export class SecuredDashboardComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     let user = await this.identityService.getUser();
+    if(!user.profile_updated){
+      console.log("Profile Not updated")
+    }
     this.greetings = getGreetings(user.given_name || user.nickname || user.name);
     this.sharedDataService.setPageName("WELCOME TO NABARUN'S SECURED DASHBOARD");
     if(SecuredDashboardComponent.tileList.length == 0){
@@ -69,11 +72,11 @@ export class SecuredDashboardComponent implements OnInit {
         },
         {
           tile_html_id: 'worklistTile',
-          tile_name: 'Worklist',
+          tile_name: 'Tasks',
           tile_icon: 'icon_group',
           tile_link: this.route.secured_task_list_page.url,
           additional_info: {
-            tile_label: 'My Pending Works',
+            tile_label: 'My Pending Tasks',
             tile_show_badge: false,
             tile_is_loading: true
           }

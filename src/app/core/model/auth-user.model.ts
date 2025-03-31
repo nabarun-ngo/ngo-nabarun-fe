@@ -10,5 +10,6 @@ export interface AuthUser{
     sub : string;
     user_id: string;
     profile_id: string;
+    profile_updated:boolean;
    // scopes: string[];
 }

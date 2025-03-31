@@ -11,16 +11,16 @@ import { RequestBuilder } from '../../request-builder';
 import { SuccessResponseDonationSummary } from '../../models/success-response-donation-summary';
 
 export interface GetDonationSummary$Params {
-  id?: string;
+  donorId: string;
   includePayableAccount?: boolean;
   includeOutstandingMonths?: boolean;
   'Correlation-Id'?: string;
 }
 
-export function getDonationSummary(http: HttpClient, rootUrl: string, params?: GetDonationSummary$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseDonationSummary>> {
+export function getDonationSummary(http: HttpClient, rootUrl: string, params: GetDonationSummary$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseDonationSummary>> {
   const rb = new RequestBuilder(rootUrl, getDonationSummary.PATH, 'get');
   if (params) {
-    rb.query('id', params.id, {});
+    rb.path('donorId', params.donorId, {});
     rb.query('includePayableAccount', params.includePayableAccount, {});
     rb.query('includeOutstandingMonths', params.includeOutstandingMonths, {});
     rb.header('Correlation-Id', params['Correlation-Id'], {});
@@ -36,4 +36,4 @@ export function getDonationSummary(http: HttpClient, rootUrl: string, params?: G
   );
 }
 
-getDonationSummary.PATH = '/api/donation/summary';
+getDonationSummary.PATH = '/api/donation/{donorId}/summary';

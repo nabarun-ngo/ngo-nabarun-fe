@@ -8,17 +8,19 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseString } from '../../models/success-response-string';
+import { Link } from '../../models/link';
 
-export interface GetUserRoleHistory$Params {
-  id: string;
+export interface Links$Params {
   'Correlation-Id'?: string;
 }
 
-export function getUserRoleHistory(http: HttpClient, rootUrl: string, params: GetUserRoleHistory$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
-  const rb = new RequestBuilder(rootUrl, getUserRoleHistory.PATH, 'get');
+export function links(http: HttpClient, rootUrl: string, params?: Links$Params, context?: HttpContext): Observable<StrictHttpResponse<{
+[key: string]: {
+[key: string]: Link;
+};
+}>> {
+  const rb = new RequestBuilder(rootUrl, links.PATH, 'get');
   if (params) {
-    rb.path('id', params.id, {});
     rb.header('Correlation-Id', params['Correlation-Id'], {});
   }
 
@@ -27,9 +29,13 @@ export function getUserRoleHistory(http: HttpClient, rootUrl: string, params: Ge
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseString>;
+      return r as StrictHttpResponse<{
+      [key: string]: {
+      [key: string]: Link;
+      };
+      }>;
     })
   );
 }
 
-getUserRoleHistory.PATH = '/api/user/{id}/history';
+links.PATH = '/api/actuator';

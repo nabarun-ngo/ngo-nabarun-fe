@@ -11,14 +11,14 @@ import { RequestBuilder } from '../../request-builder';
 import { ExpenseItemDetail } from '../../models/expense-item-detail';
 import { SuccessResponseExpenseItemDetail } from '../../models/success-response-expense-item-detail';
 
-export interface CreateExpenseItem$Params {
+export interface FinalizeExpense$Params {
   id: string;
   'Correlation-Id'?: string;
       body: ExpenseItemDetail
 }
 
-export function createExpenseItem(http: HttpClient, rootUrl: string, params: CreateExpenseItem$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseExpenseItemDetail>> {
-  const rb = new RequestBuilder(rootUrl, createExpenseItem.PATH, 'post');
+export function finalizeExpense(http: HttpClient, rootUrl: string, params: FinalizeExpense$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseExpenseItemDetail>> {
+  const rb = new RequestBuilder(rootUrl, finalizeExpense.PATH, 'patch');
   if (params) {
     rb.path('id', params.id, {});
     rb.header('Correlation-Id', params['Correlation-Id'], {});
@@ -35,4 +35,4 @@ export function createExpenseItem(http: HttpClient, rootUrl: string, params: Cre
   );
 }
 
-createExpenseItem.PATH = '/api/account/expense/{id}/createitem';
+finalizeExpense.PATH = '/api/account/expense/{id}/finalize';

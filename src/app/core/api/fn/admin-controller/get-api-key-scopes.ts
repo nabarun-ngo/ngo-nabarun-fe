@@ -8,29 +8,26 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { SuccessResponseListKeyValue } from '../../models/success-response-list-key-value';
 
-export interface DownloadDocument$Params {
-  id: string;
+export interface GetApiKeyScopes$Params {
   'Correlation-Id'?: string;
 }
 
-export function downloadDocument(http: HttpClient, rootUrl: string, params: DownloadDocument$Params, context?: HttpContext): Observable<StrictHttpResponse<{
-}>> {
-  const rb = new RequestBuilder(rootUrl, downloadDocument.PATH, 'get');
+export function getApiKeyScopes(http: HttpClient, rootUrl: string, params?: GetApiKeyScopes$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseListKeyValue>> {
+  const rb = new RequestBuilder(rootUrl, getApiKeyScopes.PATH, 'get');
   if (params) {
-    rb.path('id', params.id, {});
     rb.header('Correlation-Id', params['Correlation-Id'], {});
   }
 
   return http.request(
-    rb.build({ responseType: 'blob', accept: '*/*', context })
+    rb.build({ responseType: 'json', accept: 'application/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<{
-      }>;
+      return r as StrictHttpResponse<SuccessResponseListKeyValue>;
     })
   );
 }
 
-downloadDocument.PATH = '/api/common/document/{id}/download';
+getApiKeyScopes.PATH = '/api/admin/apikey/scopes';

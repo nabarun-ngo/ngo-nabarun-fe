@@ -15,6 +15,7 @@ import { CommonControllerService } from './services/common-controller.service';
 import { AdminControllerService } from './services/admin-controller.service';
 import { AccountControllerService } from './services/account-controller.service';
 import { TestControllerService } from './services/test-controller.service';
+import { ActuatorService } from './services/actuator.service';
 
 /**
  * Module that provides all services and configuration.
@@ -33,6 +34,7 @@ import { TestControllerService } from './services/test-controller.service';
     AdminControllerService,
     AccountControllerService,
     TestControllerService,
+    ActuatorService,
     ApiConfiguration
   ],
 })

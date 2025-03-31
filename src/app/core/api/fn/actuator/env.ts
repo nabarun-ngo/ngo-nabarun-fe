@@ -9,21 +9,19 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 
-export interface DownloadDocument$Params {
-  id: string;
+export interface Env$Params {
   'Correlation-Id'?: string;
 }
 
-export function downloadDocument(http: HttpClient, rootUrl: string, params: DownloadDocument$Params, context?: HttpContext): Observable<StrictHttpResponse<{
+export function env(http: HttpClient, rootUrl: string, params?: Env$Params, context?: HttpContext): Observable<StrictHttpResponse<{
 }>> {
-  const rb = new RequestBuilder(rootUrl, downloadDocument.PATH, 'get');
+  const rb = new RequestBuilder(rootUrl, env.PATH, 'get');
   if (params) {
-    rb.path('id', params.id, {});
     rb.header('Correlation-Id', params['Correlation-Id'], {});
   }
 
   return http.request(
-    rb.build({ responseType: 'blob', accept: '*/*', context })
+    rb.build({ responseType: 'json', accept: 'application/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
@@ -33,4 +31,4 @@ export function downloadDocument(http: HttpClient, rootUrl: string, params: Down
   );
 }
 
-downloadDocument.PATH = '/api/common/document/{id}/download';
+env.PATH = '/api/actuator/env';

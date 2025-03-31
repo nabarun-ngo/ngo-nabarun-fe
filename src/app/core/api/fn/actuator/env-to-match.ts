@@ -9,21 +9,21 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 
-export interface DownloadDocument$Params {
-  id: string;
+export interface EnvToMatch$Params {
   'Correlation-Id'?: string;
+  toMatch: string;
 }
 
-export function downloadDocument(http: HttpClient, rootUrl: string, params: DownloadDocument$Params, context?: HttpContext): Observable<StrictHttpResponse<{
+export function envToMatch(http: HttpClient, rootUrl: string, params: EnvToMatch$Params, context?: HttpContext): Observable<StrictHttpResponse<{
 }>> {
-  const rb = new RequestBuilder(rootUrl, downloadDocument.PATH, 'get');
+  const rb = new RequestBuilder(rootUrl, envToMatch.PATH, 'get');
   if (params) {
-    rb.path('id', params.id, {});
     rb.header('Correlation-Id', params['Correlation-Id'], {});
+    rb.path('toMatch', params.toMatch, {});
   }
 
   return http.request(
-    rb.build({ responseType: 'blob', accept: '*/*', context })
+    rb.build({ responseType: 'json', accept: 'application/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
@@ -33,4 +33,4 @@ export function downloadDocument(http: HttpClient, rootUrl: string, params: Down
   );
 }
 
-downloadDocument.PATH = '/api/common/document/{id}/download';
+envToMatch.PATH = '/api/actuator/env/{toMatch}';

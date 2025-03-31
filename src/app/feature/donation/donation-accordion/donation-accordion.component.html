@@ -2,7 +2,7 @@
 <mat-accordion class="mat-table" multi>
     <section class="mat-elevation-z2 bg-white py-3">
         <div class="px-4 sm:px-6">
-            <div class="grid grid-cols-4 gap-10 w-full text-center">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full text-center">
                 <div class="col-span-1" *ngIf="tabName === 'guest_donation'">
                     <span class="px-4 py-1 inline-flex leading-5 font-bold rounded-full bg-purple-100 uppercase">
                         Donor Name
@@ -31,7 +31,7 @@
             </div>
         </div>
     </section>
-    <mat-expansion-panel class="m-2" [expanded]="true" *ngIf="createDonation">
+    <mat-expansion-panel class="m-2" [expanded]="true" *ngIf="createDonation" id="createDonation">
         <mat-expansion-panel-header style="pointer-events: none;">
             <mat-panel-description>
                 <ng-container *ngTemplateOutlet="headerTemplate;context:{donation:createDonationData.donation}"></ng-container>
@@ -59,27 +59,15 @@
         [mode]="don.action" 
         [triggerEvent]="don.eventSubject.asObservable()" 
         (donationChange)="don.update=$event" (docChange)="don.upload=$event"></app-detailed-donation>
-        <!-- <pre>{{don.update | json}}</pre> -->
         <mat-action-row>
             <div *ngIf="tabName == 'self_donation'" class="mx-4">
                 <button (click)="showHistory(don.donation!)" mat-button color="primary" class="text-green-600">Show changes</button>
-                <!-- <button mat-button color="primary" class="text-green-600" *ngIf="!don.update?.donation?.isPaymentNotified && 
-                (don.donation?.status == donationStatus.Raised 
-                || don.donation?.status == donationStatus.Pending) 
-                && !don.donation?.isPaymentNotified">Pay now</button> -->
-                <button mat-button color="primary" class="text-purple-600" *ngIf=" 
-                don.update?.donation?.isPaymentNotified &&
-                (don.donation?.status == donationStatus.Raised 
-                || don.donation?.status == donationStatus.Pending)
-                && !don.donation?.isPaymentNotified
-                " (click)="saveAndUpload(don.donation!)">Notify Payment</button>
+                <button mat-button color="primary" class="text-purple-600" *ngIf="don.update?.donation?.isPaymentNotified && (don.donation?.status == donationStatus.Raised || don.donation?.status == donationStatus.Pending)" (click)="saveAndUpload(don.donation!)">Notify Payment</button>
             </div>
             <div *ngIf="tabName !== 'self_donation'" class="mx-4">
                 <button (click)="showHistory(don.donation!)" mat-button color="primary" class="text-green-600">Show changes</button>
                 <button *ngIf="don.action == 'edit'" mat-button color="primary" class="text-green-600" (click)="donationEdit(don.donation!,false)">Cancel</button>
-                <button mat-button color="primary" class="text-green-600" 
-                  *ngIf="canUpdateDonation" 
-                (click)="donationEdit(don.donation!,true)">{{don.action == 'edit' ? 'Confirm':'Update'}}</button>
+                <button mat-button color="primary" class="text-green-600" *ngIf="canUpdateDonation" (click)="donationEdit(don.donation!,true)">{{don.action == 'edit' ? 'Confirm':'Update'}}</button>
             </div>
         </mat-action-row>
     </mat-expansion-panel>
@@ -88,9 +76,8 @@
     </mat-card>
 </mat-accordion>
 
-
 <ng-template #headerTemplate let-donation="donation">
-    <div class="grid grid-cols-4 gap-10 w-full text-center">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full text-center">
         <div class="ml-2 col-span-1" *ngIf="tabName === 'guest_donation'">
             <span class="px-2 inline-flex leading-5 font-medium rounded-full bg-purple-100 text-purple-800 uppercase">
                {{donation?.donorDetails?.fullName}}

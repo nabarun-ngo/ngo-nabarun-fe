@@ -9,7 +9,7 @@
             <div class="mx-2 text-base font-bold text-gray-800 dark:text-gray-100 mt-2 md:my-0 uppercase">{{alertType}}</div>
             <!-- <div class="h-1 w-1 bg-gray-300 dark:bg-gray-700 rounded-full mr-2 hidden xl:block"></div> -->
             <!-- Hurricane warning in this area. Please check local media and authorities-NWS -->
-            <div class="text-sm lg:text-base dark:text-gray-400 text-gray-600 lg:pt-1 xl:pt-0 sm:mb-0 mb-2 text-center sm:text-left">{{alertData.message}}</div>
+            <div id="description" class="text-sm lg:text-base dark:text-gray-400 text-gray-600 lg:pt-1 xl:pt-0 sm:mb-0 mb-2 text-center sm:text-left" [innerHTML]="alertData.message"></div>
         </div>
         <div class="flex xl:items-center lg:items-center sm:justify-end justify-center pr-4">
             <!-- <button class="focus:outline-none focus:text-indigo-400 hover:text-indigo-400 text-sm mr-4 font-bold cursor-pointer text-indigo-700 dark:text-indigo-600" *ngIf="action">{{actionButton?actionButton:'See more'}}</button> -->
