@@ -17,7 +17,7 @@ jobs:
    uses: nabarun-ngo/ngo-nabarun-templates/.github/workflows/Build-Test.yml@main
    with:
       platform: "node"
-      command: "npm run build"
+      command: "npm install && npm run ${{ github.base_ref == 'master' && 'build' || 'buildstage' }}"
       
   create_release:
     if: github.event.pull_request.merged == true
