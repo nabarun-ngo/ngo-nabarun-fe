@@ -3,8 +3,7 @@ on:
   pull_request:
     paths-ignore:
     - '.github/**'
-    types:
-      - closed 
+    types: [opened, synchronize, reopened, closed] 
     branches:
     - master
     - stage
@@ -13,50 +12,36 @@ permissions:
   contents: write      
 
 jobs:
+  build:
+   name: Build and Test
+   uses: nabarun-ngo/ngo-nabarun-templates/.github/workflows/Build-Test.yml@main
+   with:
+      platform: "node"
+      command: "npm run build"
+      
   create_release:
     if: github.event.pull_request.merged == true
+    needs: build
     name: Create Tag and Release
     uses: nabarun-ngo/ngo-nabarun-templates/.github/workflows/Create-Tag-Release.yml@main
     with:
      source_branch: ${{ github.base_ref }}
-  
+
   firebase_deploy:
     if: github.event.pull_request.merged == true
     needs: create_release
-    name: Deploy to Firebase
-    uses: nabarun-ngo/ngo-nabarun-templates/.github/workflows/Firebase-Deploy.yml@main
+    name: Trigger Deploy to Firebase
+    uses: nabarun-ngo/ngo-nabarun-templates/.github/workflows/Trigger-Workflow.yml@main    
     with:
-     tag_name: ${{ needs.create_release.outputs.tag_name }}
-     firebase_project_id: ${{ github.base_ref == 'master' && vars.FIREBASE_PROJECT_ID || vars.FIREBASE_PROJECT_ID_STAGE }}
-     npm_run_command: ${{ github.base_ref == 'master' && 'build' || 'buildstage' }}
+      repository: ${{ github.base_ref == 'master' && 'nabarun-ngo/ngo-nabarun-prodops' || 'nabarun-ngo/ngo-nabarun-ops' }}
+      event_type: Trigger-Deploy-Sync-Test
+      input_json: |-
+        {
+          "fe_deploy": true,
+          "fe_tag_name": "${{ needs.create_release.outputs.tag_name }}",
+          "target_env": "${{ github.base_ref == 'master' && 'prod' || 'stage' }}",
+          "auth0_sync" : ${{ contains(join(fromJSON(toJSON(github.event.pull_request.labels)).name, ','),'auth0') }},
+          "run_smoke_test" : true
+        }
     secrets:
-      firebase_service_account: ${{ github.base_ref == 'master' && secrets.NABARUN_FIREBASE_SERVICE_ACCOUNT || secrets.NABARUN_FIREBASE_SERVICE_ACCOUNT_STAGE }}
-  
-  auth0_sync:
-    if: github.event.pull_request.merged == true && (github.base_ref == 'master' || contains(join(fromJSON(toJSON(github.event.pull_request.labels)).name, ','),'auth0'))
-    needs: create_release
-    name: Sync Auth0 Tenants 
-    uses: nabarun-ngo/ngo-nabarun-templates/.github/workflows/Auth0-Sync.yml@main
-    with:
-        branch_name: 'main'
-        auth0_source_tenant: ${{ github.base_ref == 'master' && 'STAGE' || 'DEV' }}
-        auth0_dest_tenant:  ${{ github.base_ref == 'master' && 'PROD' || 'STAGE' }}
-    secrets:
-        auth0_secrets: ${{ secrets.AUTH0_CREDENTIALS }}
-
-  run_automated_test:
-    if: github.event.pull_request.merged == true && always()
-    needs: [firebase_deploy,auth0_sync]
-    name: Run Smoke Test 
-    uses: nabarun-ngo/ngo-nabarun-templates/.github/workflows/Run-Tests.yml@main
-    with:
-        test_env: ${{ github.base_ref == 'master' && 'prod' || 'stage' }}
-        test_doppler_project_name: 'nabarun_test'
-        test_cycle: ${{ github.base_ref == 'master' && vars.SMOKE_TEST_CYCLE_PROD || vars.SMOKE_TEST_CYCLE_STAGE }}
-        upload_result: true 
-        test_cucumber_tags: ${{ github.base_ref == 'master' && '@smokeprod' || '@smoke' }}
-        app_ui_version:  ${{ needs.create_release.outputs.tag_name }}
-        test_type: 'Smoke'
-    secrets:
-      test_doppler_service_token: ${{ github.base_ref == 'master' && secrets.DOPPLER_TEST_SERVICE_TOKEN || secrets.DOPPLER_TEST_SERVICE_TOKEN_STAGE }}
-      qmetry_api_key: ${{ secrets.QMETRY_APIKEY }}
+      token: ${{ secrets.PAT }}
