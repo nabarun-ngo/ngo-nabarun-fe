@@ -201,7 +201,7 @@ export class ExpenseTabComponent extends Accordion<ExpenseDetail> implements OnI
       this.setContent(this.expenseList.content!, this.expenseList?.totalSize!)
     })
   }
-  accordionOpened($event: { rowIndex: number; }) {
+  protected override onAccordionOpen($event: { rowIndex: number; }) {
     //throw new Error('Method not implemented.');
   }
 

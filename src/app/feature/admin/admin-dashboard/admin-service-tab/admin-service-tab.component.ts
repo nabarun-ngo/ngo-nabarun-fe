@@ -98,7 +98,7 @@ export class AdminServiceTabComponent extends Accordion<AdminServiceInfo> implem
 
 
   override handlePageEvent($event: PageEvent): void {}
-  accordionOpened($event: { rowIndex: number; }) {}
+  protected override onAccordionOpen($event: { rowIndex: number; }) {}
 
   onClick($event: { buttonId: string; rowIndex: number; }) {
     let formdata = this.getSectionForm('service_input', $event.rowIndex);

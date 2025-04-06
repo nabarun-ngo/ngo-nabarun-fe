@@ -175,6 +175,10 @@ export const expenseDocumentSection = (m: ExpenseDetail, isCreate: boolean = fal
 
 export const expenseListSection = (m: ExpenseDetail, isCreate: boolean = false) => {
   let accordion = new class extends Accordion<ExpenseItemDetail> {
+    protected override onClick(event: { buttonId: string; rowIndex: number; }): void {
+    }
+    protected override onAccordionOpen(event: { rowIndex: number; }): void {
+    }
     prepareHighLevelView(item: ExpenseItemDetail, options?: { [key: string]: any }): AccordionCell[] {
       return [
         {

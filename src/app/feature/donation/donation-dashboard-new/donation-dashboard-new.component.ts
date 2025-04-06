@@ -320,7 +320,8 @@ export class DonationDashboardNewComponent extends Accordion<DonationDetail | Us
         break;
     }
   }
-  accordionOpened($event: { rowIndex: number; }) {
+ 
+  protected override onAccordionOpen($event: { rowIndex: number; }) {
     if (this.tabMapping[this.tabIndex] == 'member_donation') {
       let user = this.userList[$event.rowIndex];
       // this.accordionList.contents[$event.rowIndex].detailed.push({

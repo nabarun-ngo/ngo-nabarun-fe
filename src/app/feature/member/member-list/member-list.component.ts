@@ -6,7 +6,7 @@ import { KeyValue, PaginateUserDetail } from 'src/app/core/api/models';
 import { MemberDefaultValue } from '../member.const';
 import { PageEvent } from '@angular/material/paginator';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Paginator } from 'src/app/core/component/paginator';
+import { Paginator } from 'src/app/shared/model/paginator';
 import { FormGroup } from '@angular/forms';
 import { UniversalInputModel } from 'src/app/shared/components/generic/universal-input/universal-input.model';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search.model';

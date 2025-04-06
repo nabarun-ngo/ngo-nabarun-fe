@@ -15,7 +15,6 @@ import { MatCardModule } from '@angular/material/card';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MAT_SELECT_SCROLL_STRATEGY, MatSelectModule } from '@angular/material/select';
-import { PageNavigationButtonsComponent } from './components/generic/page-navigation-buttons/page-navigation-buttons.component';
 import { SearchAndAdvancedSearchFormComponent } from './components/search-and-advanced-search-form/search-and-advanced-search-form.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DocumentListComponent } from './components/generic/document-list/document-list.component';
@@ -25,7 +24,6 @@ import { DetailedViewComponent } from './components/generic/detailed-view/detail
 import { DetailedProfileComponent } from './components/detailed-profile/detailed-profile.component';
 import { DetailedDonationComponent } from './components/detailed-donation/detailed-donation.component';
 import { SegmentedControllerComponent } from './components/generic/segmented-controller/segmented-controller.component';
-import { ControlSegmentComponent } from './components/generic/segmented-controller/control-segment.component';
 import { FileUploadComponent } from './components/generic/file-upload/file-upload.component';
 import { MAT_RADIO_DEFAULT_OPTIONS, MatRadioModule } from '@angular/material/radio';
 import { UniversalInputComponent } from './components/generic/universal-input/universal-input.component';
@@ -48,11 +46,12 @@ import { AlertComponent } from './components/generic/alert/alert.component';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { HistoryComponent } from './components/generic/history/history.component';
 import { DisplayValueFilterPipe } from './pipes/display-value-filter.pipe';
+import { PageNavigationButtonsComponent } from './components/generic/page-navigation-buttons/page-navigation-buttons.component';
+import { PageLayoutComponent } from './layout/page-layout/page-layout.component';
 
 @NgModule({
   declarations: [
     ItemTileListComponent,
-    PageNavigationButtonsComponent,
     SearchAndAdvancedSearchFormComponent,
     DetailedDonationComponent,
     DetailedProfileComponent,
@@ -61,7 +60,6 @@ import { DisplayValueFilterPipe } from './pipes/display-value-filter.pipe';
     AccordionListComponent,
     DetailedViewComponent,
     SegmentedControllerComponent,
-    ControlSegmentComponent,
     FileUploadComponent,
     UniversalInputComponent,
     ProfileCardComponent,
@@ -72,7 +70,9 @@ import { DisplayValueFilterPipe } from './pipes/display-value-filter.pipe';
     AccordionFilterPipe,
     AlertComponent,
     HistoryComponent,
-    DisplayValueFilterPipe
+    DisplayValueFilterPipe,
+    PageNavigationButtonsComponent,
+    PageLayoutComponent,
   ],
   imports: [
     CommonModule,
@@ -102,7 +102,6 @@ import { DisplayValueFilterPipe } from './pipes/display-value-filter.pipe';
   exports: [
     ItemTileListComponent,
     MatTabsModule,
-    PageNavigationButtonsComponent,
     SearchAndAdvancedSearchFormComponent,
     MatCardModule,
     MatExpansionModule,
@@ -117,7 +116,6 @@ import { DisplayValueFilterPipe } from './pipes/display-value-filter.pipe';
     DetailedDonationComponent,
     DetailedProfileComponent,
     SegmentedControllerComponent,
-    ControlSegmentComponent,
     FileUploadComponent,
     MatInputModule,
     ProfileCardComponent,
@@ -133,6 +131,8 @@ import { DisplayValueFilterPipe } from './pipes/display-value-filter.pipe';
     DynamicInjectPipe,
     AlertComponent,
     HistoryComponent,
+    PageNavigationButtonsComponent,
+    PageLayoutComponent,
   ],
   providers: [{
     provide: MAT_RADIO_DEFAULT_OPTIONS,
