@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
-import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
 import {  AdminConstant, AdminDefaultValue, adminTabs } from '../admin.const';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { ActivatedRoute } from '@angular/router';
 import { ApiKeyDetail, KeyValue } from 'src/app/core/api/models';
 import { AdminServiceInfo } from '../admin.model';
 import { AdminService } from '../admin.service';
+import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
 
 @Component({
   selector: 'app-admin-dashboard',

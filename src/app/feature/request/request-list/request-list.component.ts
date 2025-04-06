@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { Paginator } from 'src/app/core/component/paginator';
+import { Paginator } from 'src/app/shared/model/paginator';
 import { RequestConstant, RequestDefaultValue, RequestField, requestTab, TaskField } from '../request.const';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { ActivatedRoute } from '@angular/router';
@@ -426,6 +426,10 @@ export class RequestListComponent extends Accordion<RequestDetail> implements On
       }, $event.rowIndex)
     })
 
+  }
+
+  clickkk($event:any){
+    console.log($event)
   }
 
 }

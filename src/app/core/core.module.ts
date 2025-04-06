@@ -20,7 +20,6 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { MatNativeDateModule } from '@angular/material/core';
 import { IonicModule } from '@ionic/angular';
 import { AuthHttpInterceptor, AuthModule } from '@auth0/auth0-angular';
-import { getScopes } from './constant/auth-scope.const';
 
 
 
@@ -40,12 +39,6 @@ import { getScopes } from './constant/auth-scope.const';
   imports: [
     CommonModule,
     HttpClientModule,
-    // OAuthModule.forRoot({
-    //   resourceServer:{
-    //     sendAccessToken:true,
-    //     allowedUrls:[environment.api_base_url]
-    //   }
-    // }),
     AuthModule.forRoot(environment.auth_config),
     IonicModule.forRoot(),
     MatDialogModule,
@@ -73,15 +66,7 @@ import { getScopes } from './constant/auth-scope.const';
     provide: HTTP_INTERCEPTORS,
     useClass: AuthHttpInterceptor,
     multi: true
-},
-  // {
-  //   provide:MAT_DATEPICKER_SCROLL_STRATEGY,
-  //   useExisting:true
-  // },
-  // {
-  //   provide:MAT_SELECT_SCROLL_STRATEGY,
-  //   useExisting:true
-  // }
+  }
   ]
 })
 export class CoreModule {

@@ -1,4 +1,3 @@
-import { Component, Input } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { BehaviorSubject, Observable } from 'rxjs';
 

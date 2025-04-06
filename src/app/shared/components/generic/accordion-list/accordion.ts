@@ -1,5 +1,5 @@
 import { PageEvent } from "@angular/material/paginator";
-import { Paginator } from "src/app/core/component/paginator";
+import { Paginator } from "src/app/shared/model/paginator";
 import { AccordionButton, AccordionCell, AccordionList, AccordionRow } from "./accordion-list.model";
 import { DetailedView, DetailedViewField } from "../detailed-view/detailed-view.model";
 import { KeyValue, WorkDetail } from "src/app/core/api/models";
