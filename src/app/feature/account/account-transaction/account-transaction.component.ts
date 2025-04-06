@@ -252,7 +252,7 @@ export class AccountTransactionComponent extends Accordion<TransactionDetail> im
   onClick($event: { buttonId: string; rowIndex: number; }) {
   }
 
-  accordionOpened($event: { rowIndex: number; }) {
+  onAccordionOpen($event: { rowIndex: number; }) {
   }
 
   onSearch($event: { advancedSearch: boolean; reset: boolean; value: any; }) {

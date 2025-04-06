@@ -10,7 +10,7 @@
                     <mat-tab id="myAccount" label="My Accounts">
                         <h2 class="text-purple-700 font-bold text-center mt-4">My Account List</h2>
                         <app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)"
-                            (onAccordionOpen)="accordionOpened($event)"></app-accordion-list>
+                            (onAccordionOpen)="onAccordionOpen($event)"></app-accordion-list>
                     </mat-tab>
                     <mat-tab id="allAccount" label="Manage Accounts" [disabled]="!canViewAccounts">
                         <div class="flex justify-end mx-4 my-2" *ngIf="canCreateAccount">
@@ -21,7 +21,7 @@
                         </div>
                         <h2 class="text-purple-700 font-bold text-center mt-4">Account List</h2>
                         <app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)"
-                            (onAccordionOpen)="accordionOpened($event)"></app-accordion-list>
+                            (onAccordionOpen)="onAccordionOpen($event)"></app-accordion-list>
                     </mat-tab>
                     <!-- <mat-tab id="expenses" label="Manage Expenses" >
                         <div class="flex justify-end mx-4 my-2">
@@ -32,7 +32,7 @@
                         </div>
                         <h2 class="text-purple-700 font-bold text-center mt-4">Expense List</h2>
                         <app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)"
-                            (onAccordionOpen)="accordionOpened($event)"></app-accordion-list>
+                            (onAccordionOpen)="onAccordionOpen($event)"></app-accordion-list>
                     </mat-tab> -->
                     <mat-tab id="expenses" label="Manage Expenses" [disabled]="true">
                         <app-expense-tab [expenseList]="expenseList"></app-expense-tab>

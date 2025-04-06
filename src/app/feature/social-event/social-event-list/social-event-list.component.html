@@ -3,12 +3,14 @@
         <app-search-and-advanced-search-form [searchInput]="{
             normalSearchPlaceHolder:'Search Request Number'
         }"></app-search-and-advanced-search-form>
-        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center"
-        (selectedTabChange)="tabChanged($event.index)" [(selectedIndex)]="tabIndex">
+    </div>
+    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" (selectedTabChange)="tabChanged($event.index)"
+        [(selectedIndex)]="tabIndex">
         <mat-tab id="upcoming_events" label="Upcoming Events">
+            <app-upcoming-events-tab [eventListDetail]="eventListDetail"></app-upcoming-events-tab>
         </mat-tab>
         <mat-tab id="completed_events" label="Completed Events">
+            <app-completed-events-tab [eventListDetail]="eventListDetail"></app-completed-events-tab>
         </mat-tab>
     </mat-tab-group>
-    </div>
-</app-page-layout> 
+</app-page-layout>

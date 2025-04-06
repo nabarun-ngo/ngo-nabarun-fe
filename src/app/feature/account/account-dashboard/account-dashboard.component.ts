@@ -24,9 +24,7 @@ import { accountDetailSection, accountHighLevelView, accountSearchInput, account
   styleUrls: ['./account-dashboard.component.scss']
 })
 export class AccountDashboardComponent extends Accordion<AccountDetail | ExpenseDetail> implements OnInit {
-
-
-
+  
   protected scope = SCOPE;
   protected accountList!: PaginateAccountDetail;
   protected defaultValue = AccountDefaultValue;
@@ -306,7 +304,7 @@ export class AccountDashboardComponent extends Accordion<AccountDetail | Expense
 
   }
 
-  accordionOpened($event: { rowIndex: number; }) { }
+  protected override onAccordionOpen($event: { rowIndex: number; }) { }
 
   createAccount() {
     this.showCreateForm();

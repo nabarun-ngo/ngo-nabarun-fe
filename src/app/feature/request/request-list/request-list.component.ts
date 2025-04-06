@@ -363,9 +363,13 @@ export class RequestListComponent extends Accordion<RequestDetail> implements On
   }
 
 
-  onAccordionOpen($event: { rowIndex: number; }) {
+  protected override onAccordionOpen($event: { rowIndex: number; }) {
     let item = this.requestList.content![$event.rowIndex];
     let accordion = new class extends Accordion<WorkDetail> {
+      protected override onClick(event: { buttonId: string; rowIndex: number; }): void {
+      }
+      protected override onAccordionOpen(event: { rowIndex: number; }): void {
+      }
       prepareHighLevelView(item: WorkDetail, options?: { [key: string]: any }): AccordionCell[] {
         return [
           {
@@ -425,11 +429,6 @@ export class RequestListComponent extends Accordion<RequestDetail> implements On
         accordionList: accordion.getAccordionList()
       }, $event.rowIndex)
     })
-
-  }
-
-  clickkk($event:any){
-    console.log($event)
   }
 
 }

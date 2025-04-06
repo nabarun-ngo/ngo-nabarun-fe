@@ -279,16 +279,18 @@ export class TaskListComponent extends Accordion<WorkDetail> implements OnInit {
   }
 
 
-  accordionOpened($event: { rowIndex: number; }) {
-    let item = this.workItemList.content![$event.rowIndex];
+ 
+
+  protected override onAccordionOpen(event: { rowIndex: number; }): void {
+    let item = this.workItemList.content![event.rowIndex];
     this.taskService.getRequestDetail(item.workflowId!).subscribe(request => {
       /**
        * Inserting request request details at top
        */
-      this.addSectionInAccordion(getRequestDetailSection(request!), $event.rowIndex)
-      this.addSectionInAccordion(getRequestAdditionalDetailSection(request!), $event.rowIndex)
+      this.addSectionInAccordion(getRequestDetailSection(request!), event.rowIndex)
+      this.addSectionInAccordion(getRequestAdditionalDetailSection(request!), event.rowIndex)
       this.taskService.getDocuments(item.workflowId!).subscribe(data => {
-        this.addSectionInAccordion(getDocumentDetailSection(data!), $event.rowIndex)
+        this.addSectionInAccordion(getDocumentDetailSection(data!), event.rowIndex)
       })
 
     }) 

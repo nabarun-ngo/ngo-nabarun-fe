@@ -149,7 +149,7 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDetail> implements 
 
 
   override handlePageEvent($event: PageEvent): void { }
-  accordionOpened($event: { rowIndex: number; }) { }
+  onAccordionOpen($event: { rowIndex: number; }) { }
 
   onClick($event: { buttonId: string; rowIndex: number; }) {
     switch ($event.buttonId) {
