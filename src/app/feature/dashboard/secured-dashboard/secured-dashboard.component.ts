@@ -95,9 +95,9 @@ export class SecuredDashboardComponent implements OnInit {
         },
         {
           tile_html_id: 'eventTile',
-          tile_name: 'Events',
+          tile_name: 'Social Events',
           tile_icon: 'icon_group',
-          tile_link: '',
+          tile_link: this.route.secured_event_list_page.url,
         },
         {
           tile_html_id: 'adminTile',

@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { Paginator } from 'src/app/core/component/paginator';
+import { Paginator } from 'src/app/shared/model/paginator';
 import { AccordionCell, AccordionList, AccordionRow } from 'src/app/shared/components/generic/accordion-list/accordion-list.model';
 import { PaginateWorkDetail } from 'src/app/core/api/models';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
