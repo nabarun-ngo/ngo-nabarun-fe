@@ -37,6 +37,7 @@ export class SocialEventListComponent
         'data'
       ] as PaginateEventDetail;
     }
+    console.log(this.eventListDetail);
   }
   override onTabChanged(): void {}
 }

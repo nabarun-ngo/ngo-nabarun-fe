@@ -8,19 +8,18 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { ServiceDetail } from '../../models/service-detail';
-import { SuccessResponseMapStringObject } from '../../models/success-response-map-string-object';
+import { SuccessResponseVoid } from '../../models/success-response-void';
 
-export interface RunService$Params {
+export interface DeleteEvent$Params {
+  id: string;
   'Correlation-Id'?: string;
-      body: ServiceDetail
 }
 
-export function runService(http: HttpClient, rootUrl: string, params: RunService$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseMapStringObject>> {
-  const rb = new RequestBuilder(rootUrl, runService.PATH, 'post');
+export function deleteEvent(http: HttpClient, rootUrl: string, params: DeleteEvent$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
+  const rb = new RequestBuilder(rootUrl, deleteEvent.PATH, 'delete');
   if (params) {
+    rb.path('id', params.id, {});
     rb.header('Correlation-Id', params['Correlation-Id'], {});
-    rb.body(params.body, 'application/json');
   }
 
   return http.request(
@@ -28,9 +27,9 @@ export function runService(http: HttpClient, rootUrl: string, params: RunService
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseMapStringObject>;
+      return r as StrictHttpResponse<SuccessResponseVoid>;
     })
   );
 }
 
-runService.PATH = '/api/admin/service/run';
+deleteEvent.PATH = '/api/socialevent/{id}/delete';

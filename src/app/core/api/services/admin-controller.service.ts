@@ -19,11 +19,18 @@ import { getApiKeyList } from '../fn/admin-controller/get-api-key-list';
 import { GetApiKeyList$Params } from '../fn/admin-controller/get-api-key-list';
 import { getApiKeyScopes } from '../fn/admin-controller/get-api-key-scopes';
 import { GetApiKeyScopes$Params } from '../fn/admin-controller/get-api-key-scopes';
+import { jobsTrigger } from '../fn/admin-controller/jobs-trigger';
+import { JobsTrigger$Params } from '../fn/admin-controller/jobs-trigger';
+import { retrieveJobHistory } from '../fn/admin-controller/retrieve-job-history';
+import { RetrieveJobHistory$Params } from '../fn/admin-controller/retrieve-job-history';
 import { runService } from '../fn/admin-controller/run-service';
 import { RunService$Params } from '../fn/admin-controller/run-service';
 import { SuccessResponseApiKeyDetail } from '../models/success-response-api-key-detail';
 import { SuccessResponseListApiKeyDetail } from '../models/success-response-list-api-key-detail';
 import { SuccessResponseListKeyValue } from '../models/success-response-list-key-value';
+import { SuccessResponseMapStringObject } from '../models/success-response-map-string-object';
+import { SuccessResponseMapStringString } from '../models/success-response-map-string-string';
+import { SuccessResponsePaginateJobDetail } from '../models/success-response-paginate-job-detail';
 import { SuccessResponseVoid } from '../models/success-response-void';
 import { updateApiKey } from '../fn/admin-controller/update-api-key';
 import { UpdateApiKey$Params } from '../fn/admin-controller/update-api-key';
@@ -47,7 +54,7 @@ export class AdminControllerService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  runService$Response(params: RunService$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
+  runService$Response(params: RunService$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseMapStringObject>> {
     return runService(this.http, this.rootUrl, params, context);
   }
 
@@ -61,9 +68,42 @@ export class AdminControllerService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  runService(params: RunService$Params, context?: HttpContext): Observable<SuccessResponseVoid> {
+  runService(params: RunService$Params, context?: HttpContext): Observable<SuccessResponseMapStringObject> {
     return this.runService$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseVoid>): SuccessResponseVoid => r.body)
+      map((r: StrictHttpResponse<SuccessResponseMapStringObject>): SuccessResponseMapStringObject => r.body)
+    );
+  }
+
+  /** Path part for operation `jobsTrigger()` */
+  static readonly JobsTriggerPath = '/api/admin/jobs/trigger';
+
+  /**
+   * Triggers a job from external systems.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `jobsTrigger()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  jobsTrigger$Response(params: JobsTrigger$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseMapStringString>> {
+    return jobsTrigger(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Triggers a job from external systems.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `jobsTrigger$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  jobsTrigger(params: JobsTrigger$Params, context?: HttpContext): Observable<SuccessResponseMapStringString> {
+    return this.jobsTrigger$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseMapStringString>): SuccessResponseMapStringString => r.body)
     );
   }
 
@@ -163,6 +203,39 @@ export class AdminControllerService extends BaseService {
   generateApiKey(params: GenerateApiKey$Params, context?: HttpContext): Observable<SuccessResponseApiKeyDetail> {
     return this.generateApiKey$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseApiKeyDetail>): SuccessResponseApiKeyDetail => r.body)
+    );
+  }
+
+  /** Path part for operation `retrieveJobHistory()` */
+  static readonly RetrieveJobHistoryPath = '/api/admin/jobs/list';
+
+  /**
+   * Retrieve job history.
+   *
+   * Authorities : hasAuthority('SCOPE_read:job')
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `retrieveJobHistory()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  retrieveJobHistory$Response(params: RetrieveJobHistory$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateJobDetail>> {
+    return retrieveJobHistory(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Retrieve job history.
+   *
+   * Authorities : hasAuthority('SCOPE_read:job')
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `retrieveJobHistory$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  retrieveJobHistory(params: RetrieveJobHistory$Params, context?: HttpContext): Observable<SuccessResponsePaginateJobDetail> {
+    return this.retrieveJobHistory$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponsePaginateJobDetail>): SuccessResponsePaginateJobDetail => r.body)
     );
   }
 

@@ -8,19 +8,18 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { ServiceDetail } from '../../models/service-detail';
-import { SuccessResponseMapStringObject } from '../../models/success-response-map-string-object';
+import { SuccessResponseListDocumentDetail } from '../../models/success-response-list-document-detail';
 
-export interface RunService$Params {
+export interface GetSocialEventDocuments$Params {
+  id: string;
   'Correlation-Id'?: string;
-      body: ServiceDetail
 }
 
-export function runService(http: HttpClient, rootUrl: string, params: RunService$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseMapStringObject>> {
-  const rb = new RequestBuilder(rootUrl, runService.PATH, 'post');
+export function getSocialEventDocuments(http: HttpClient, rootUrl: string, params: GetSocialEventDocuments$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseListDocumentDetail>> {
+  const rb = new RequestBuilder(rootUrl, getSocialEventDocuments.PATH, 'get');
   if (params) {
+    rb.path('id', params.id, {});
     rb.header('Correlation-Id', params['Correlation-Id'], {});
-    rb.body(params.body, 'application/json');
   }
 
   return http.request(
@@ -28,9 +27,9 @@ export function runService(http: HttpClient, rootUrl: string, params: RunService
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseMapStringObject>;
+      return r as StrictHttpResponse<SuccessResponseListDocumentDetail>;
     })
   );
 }
 
-runService.PATH = '/api/admin/service/run';
+getSocialEventDocuments.PATH = '/api/socialevent/{id}/documents';

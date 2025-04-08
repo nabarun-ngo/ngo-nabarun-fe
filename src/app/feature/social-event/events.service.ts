@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { EventControllerService } from 'src/app/core/api/services';
+import { SocialEventControllerService } from 'src/app/core/api/services';
 import { DefaultValue } from './events.conts';
+import { map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -8,9 +9,9 @@ import { DefaultValue } from './events.conts';
 export class EventsService {
   defaultValue = DefaultValue;
 
-  constructor(private eventController:EventControllerService) { }
+  constructor(private eventController:SocialEventControllerService) { }
 
   getSocialEventList(pageIndex: number = this.defaultValue.pageNumber, pageSize: number = this.defaultValue.pageSize){
-    return this.eventController.getSocialEvents({pageIndex:pageIndex , pageSize : pageSize})
+    return this.eventController.getSocialEvents({pageIndex:pageIndex , pageSize : pageSize, eventFilter:{}}).pipe(map(d => d.responsePayload));
   }
 }

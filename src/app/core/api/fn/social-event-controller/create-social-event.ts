@@ -8,29 +8,29 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { ServiceDetail } from '../../models/service-detail';
-import { SuccessResponseString } from '../../models/success-response-string';
+import { EventDetail } from '../../models/event-detail';
+import { SuccessResponseEventDetail } from '../../models/success-response-event-detail';
 
-export interface JobsTrigger$Params {
+export interface CreateSocialEvent$Params {
   'Correlation-Id'?: string;
-      body: Array<ServiceDetail>
+      body: EventDetail
 }
 
-export function jobsTrigger(http: HttpClient, rootUrl: string, params: JobsTrigger$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
-  const rb = new RequestBuilder(rootUrl, jobsTrigger.PATH, 'post');
+export function createSocialEvent(http: HttpClient, rootUrl: string, params: CreateSocialEvent$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseEventDetail>> {
+  const rb = new RequestBuilder(rootUrl, createSocialEvent.PATH, 'post');
   if (params) {
     rb.header('Correlation-Id', params['Correlation-Id'], {});
     rb.body(params.body, 'application/json');
   }
 
   return http.request(
-    rb.build({ responseType: 'blob', accept: '*/*', context })
+    rb.build({ responseType: 'json', accept: 'application/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseString>;
+      return r as StrictHttpResponse<SuccessResponseEventDetail>;
     })
   );
 }
 
-jobsTrigger.PATH = '/api/common/jobs/trigger';
+createSocialEvent.PATH = '/api/socialevent/create';
