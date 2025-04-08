@@ -9,15 +9,15 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 import { ServiceDetail } from '../../models/service-detail';
-import { SuccessResponseMapStringObject } from '../../models/success-response-map-string-object';
+import { SuccessResponseMapStringString } from '../../models/success-response-map-string-string';
 
-export interface RunService$Params {
+export interface JobsTrigger$Params {
   'Correlation-Id'?: string;
-      body: ServiceDetail
+      body: Array<ServiceDetail>
 }
 
-export function runService(http: HttpClient, rootUrl: string, params: RunService$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseMapStringObject>> {
-  const rb = new RequestBuilder(rootUrl, runService.PATH, 'post');
+export function jobsTrigger(http: HttpClient, rootUrl: string, params: JobsTrigger$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseMapStringString>> {
+  const rb = new RequestBuilder(rootUrl, jobsTrigger.PATH, 'post');
   if (params) {
     rb.header('Correlation-Id', params['Correlation-Id'], {});
     rb.body(params.body, 'application/json');
@@ -28,9 +28,9 @@ export function runService(http: HttpClient, rootUrl: string, params: RunService
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseMapStringObject>;
+      return r as StrictHttpResponse<SuccessResponseMapStringString>;
     })
   );
 }
 
-runService.PATH = '/api/admin/service/run';
+jobsTrigger.PATH = '/api/admin/jobs/trigger';
