@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AccountControllerService, CommonControllerService, EventControllerService, UserControllerService } from 'src/app/core/api/services';
+import { AccountControllerService, CommonControllerService, SocialEventControllerService, UserControllerService } from 'src/app/core/api/services';
 import { AccountDefaultValue, TransactionDefaultValue } from './account.const';
 import { map } from 'rxjs';
 import { AccountDetail, AccountDetailFilter, BankDetail, DocumentDetailUpload, ExpenseDetail, RefDataType, TransactionDetailFilter, UpiDetail } from 'src/app/core/api/models';
@@ -17,7 +17,7 @@ export class AccountService {
     private accountController: AccountControllerService,
     private commonController: CommonControllerService,
     private userController: UserControllerService,
-    private eventController: EventControllerService,
+    private eventController: SocialEventControllerService,
 
   ) { }
 
@@ -270,7 +270,7 @@ export class AccountService {
 
 
   fetchEvents() {
-    return this.eventController.getSocialEvents().pipe(map(m => m.responsePayload));
+    return this.eventController.getSocialEvents({eventFilter:{}}).pipe(map(m => m.responsePayload));
   }
 
   uploadDocuments(id:string,documents:DocumentDetailUpload[]){
