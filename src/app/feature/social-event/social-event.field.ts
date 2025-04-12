@@ -1,7 +1,7 @@
 import { FormGroup, Validators } from "@angular/forms";
 import { EventDetail } from "src/app/core/api/models";
 import { date } from "src/app/core/service/utilities.service";
-import { DetailedView } from "src/app/shared/components/generic/detailed-view/detailed-view.model";
+import { DetailedView } from "src/app/shared/model/detailed-view.model";
 
 export const eventDetailSection = (data: EventDetail) : DetailedView=>{
     return {

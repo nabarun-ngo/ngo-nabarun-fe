@@ -1,5 +1,5 @@
 import { KeyValue } from "src/app/core/api/models";
-import { DetailedView } from "../detailed-view/detailed-view.model";
+import { DetailedView } from "./detailed-view.model";
 import { Pipe } from "@angular/core";
 
 export interface AccordionList{

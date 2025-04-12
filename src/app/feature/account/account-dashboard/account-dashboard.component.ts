@@ -1,21 +1,21 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
-import { AccordionButton, AccordionCell } from 'src/app/shared/components/generic/accordion-list/accordion-list.model';
+import { AccordionButton, AccordionCell } from 'src/app/shared/model/accordion-list.model';
 import { AccountService } from '../account.service';
 import { AccountConstant, AccountDefaultValue, accountTab } from '../account.const';
 import { AccountDetail, ExpenseDetail, KeyValue, PaginateAccountDetail, PaginateExpenseDetail } from 'src/app/core/api/models';
 import { PageEvent } from '@angular/material/paginator';
 import { FormGroup, Validators } from '@angular/forms';
 import { date } from 'src/app/core/service/utilities.service';
-import { DetailedView } from 'src/app/shared/components/generic/detailed-view/detailed-view.model';
+import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { filterFormChange, scrollToFirstInvalidControl } from 'src/app/core/service/form.service';
-import { Accordion } from 'src/app/shared/components/generic/accordion-list/accordion';
+import { Accordion } from 'src/app/shared/utils/accordion';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
 import { SCOPE } from 'src/app/core/constant/auth-scope.const';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
-import { SearchAndAdvancedSearchModel } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search.model';
+import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
 import { expenseDetailSection, expenseHighLevelView, expenseListSection, expenseTabHeader } from './tabs/expense.tab';
 import { accountDetailSection, accountHighLevelView, accountSearchInput, accountTabHeader, bankDetailSection, transferAmountSection, upiDetailSection } from './tabs/account.tab';
 @Component({

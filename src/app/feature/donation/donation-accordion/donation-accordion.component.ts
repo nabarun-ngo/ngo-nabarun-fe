@@ -8,7 +8,7 @@ import { compareObjects, getNonNullValues } from 'src/app/core/service/utilities
 import { ModalService } from 'src/app/core/service/modal.service';
 import { AppDialog } from 'src/app/core/constant/app-dialog.const';
 import { Subject } from 'rxjs';
-import { AlertData } from 'src/app/shared/components/generic/alert/alert.model';
+import { AlertData } from 'src/app/shared/model/alert.model';
 import { AppAlert, interpolate } from 'src/app/core/constant/app-alert.const';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 import { SCOPE } from 'src/app/core/constant/auth-scope.const';

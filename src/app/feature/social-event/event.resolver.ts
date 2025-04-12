@@ -2,9 +2,12 @@ import { inject } from '@angular/core';
 import { ResolveFn } from '@angular/router';
 import { EventsService } from './events.service';
 import { CommonService } from 'src/app/shared/services/common.service';
+import { DefaultValue, eventTabs } from './events.conts';
 
 export const eventListResolver: ResolveFn<any> = (route, state) => {
-  return inject(EventsService).getSocialEventList();
+  let tab = (route.data['tab'] || DefaultValue.tabName) as eventTabs;
+    let completed = tab == 'completed_events'
+  return inject(EventsService).getSocialEventList(DefaultValue.pageNumber,DefaultValue.pageSize,completed);
 };
 
 export const eventRefDataResolver: ResolveFn<any> = (route, state) => {

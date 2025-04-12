@@ -6,7 +6,7 @@ import { SCOPE } from 'src/app/core/constant/auth-scope.const';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 import { getGreetings } from 'src/app/core/service/utilities.service';
-import { TileInfo } from 'src/app/shared/components/generic/item-tile-list/tile-info.model';
+import { TileInfo } from 'src/app/shared/model/tile-info.model';
 import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({

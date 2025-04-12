@@ -3,12 +3,12 @@ import { FormGroup, Validators } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { EventDetail, PaginateEventDetail } from 'src/app/core/api/models';
 import { date } from 'src/app/core/service/utilities.service';
-import { Accordion } from 'src/app/shared/components/generic/accordion-list/accordion';
+import { Accordion } from 'src/app/shared/utils/accordion';
 import {
   AccordionCell,
   AccordionButton,
-} from 'src/app/shared/components/generic/accordion-list/accordion-list.model';
-import { DetailedView } from 'src/app/shared/components/generic/detailed-view/detailed-view.model';
+} from 'src/app/shared/model/accordion-list.model';
+import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { EventsService } from '../../events.service';
 import { eventDetailSection } from '../../social-event.field';
 
@@ -29,6 +29,13 @@ export class UpcomingEventsTabComponent
       this.setContent(page.content!, page.totalSize);
     }
   }
+
+  // @Input({ required: true }) search(value: string) {
+  //   if (page) {
+  //     this.setContent(page.content!, page.totalSize);
+  //   }
+  // }
+  
 
   ngOnInit(): void {
     this.setHeaderRow([
@@ -79,13 +86,13 @@ export class UpcomingEventsTabComponent
     console.log('data', data);
     return [
       eventDetailSection(data),
-      {
-        section_name: 'Event Expenses',
-        section_html_id: 'event-expenses',
-        section_type: 'key_value',
-        section_form: new FormGroup({}),
-        hide_section: isCreate,
-      },
+      // {
+      //   section_name: 'Event Expenses',
+      //   section_html_id: 'event-expenses',
+      //   section_type: 'key_value',
+      //   section_form: new FormGroup({}),
+      //   hide_section: isCreate,
+      // },
     ];
   }
   protected override prepareDefaultButtons(
@@ -113,7 +120,14 @@ export class UpcomingEventsTabComponent
     ];
   }
 
-  override handlePageEvent($event: PageEvent): void {}
+  override handlePageEvent($event: PageEvent): void {
+    console.log('pageEvent', $event);
+    this.eventService
+      .getSocialEventList($event.pageIndex, $event.pageSize, false)
+      .subscribe((data) => {
+        this.setContent(data!.content!, data!.totalSize);
+      });
+  }
 
   protected override onClick(event: {
     buttonId: string;

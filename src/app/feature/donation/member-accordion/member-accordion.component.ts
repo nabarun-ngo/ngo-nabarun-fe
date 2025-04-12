@@ -7,7 +7,7 @@ import { DonationDefaultValue } from '../donation.const';
 import { Subject } from 'rxjs';
 import { ModalService } from 'src/app/core/service/modal.service';
 import { SearchAndAdvancedSearchFormComponent } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search-form.component';
-import { SearchAndAdvancedSearchModel } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search.model';
+import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
 import { MemberProfileComponent } from '../../member/member-profile/member-profile.component';
 import { ProfileViewComponent } from 'src/app/shared/components/profile-view/profile-view.component';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';

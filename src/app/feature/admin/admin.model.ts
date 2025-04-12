@@ -1,4 +1,4 @@
-import { UniversalInputModel } from "src/app/shared/components/generic/universal-input/universal-input.model";
+import { UniversalInputModel } from "src/app/shared/model/universal-input.model";
 
 export interface AdminServiceInfo{
     id:string;

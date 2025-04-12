@@ -1,13 +1,15 @@
 import { PageEvent } from "@angular/material/paginator";
-import { Paginator } from "src/app/shared/model/paginator";
-import { AccordionButton, AccordionCell, AccordionList, AccordionRow } from "./accordion-list.model";
-import { DetailedView, DetailedViewField } from "../detailed-view/detailed-view.model";
+import { Paginator } from "src/app/shared/utils/paginator";
+import { AccordionButton, AccordionCell, AccordionList, AccordionRow } from "../model/accordion-list.model";
+import { DetailedView, DetailedViewField } from "../model/detailed-view.model";
 import { KeyValue, WorkDetail } from "src/app/core/api/models";
 import { FormControl } from "@angular/forms";
 import { BehaviorSubject, take } from "rxjs";
-import { FileUpload } from "../file-upload/file-upload.component";
+import { FileUpload } from "../components/generic/file-upload/file-upload.component";
+import { Input } from "@angular/core";
 
 export abstract class Accordion<NumType> extends Paginator {
+  
   private accordionList: AccordionList = {
     contents: [],
     searchValue: ''

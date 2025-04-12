@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { AccordionList, AccordionRow } from './accordion-list.model';
+import { AccordionList, AccordionRow } from '../../../model/accordion-list.model';
 
 @Component({
   selector: 'app-accordion-list',
