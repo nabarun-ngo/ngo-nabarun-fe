@@ -8,7 +8,7 @@ import { AccordionList, AccordionRow } from './accordion-list.model';
 })
 export class AccordionListComponent {
 
-
+  Math = Math;
 
   @Input()
   accordionList!:AccordionList;

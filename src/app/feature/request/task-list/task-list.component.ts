@@ -245,7 +245,7 @@ export class TaskListComponent extends Accordion<WorkDetail> implements OnInit {
       case 'UPDATE':
         let work = this.workItemList.content![$event.rowIndex];
         this.addSectionInAccordion(getWorkActionDetailSection(work!), $event.rowIndex)
-        this.showForm($event.rowIndex, ['action_details']);
+        this.showEditForm($event.rowIndex, ['action_details']);
         this.actionName = $event.buttonId;
         break;
       case 'CONFIRM':

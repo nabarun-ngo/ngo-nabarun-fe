@@ -171,7 +171,7 @@ export class AccountDashboardComponent extends Accordion<AccountDetail | Expense
               return {key:m.id,displayValue:`${m.accountHolderName} (${m.id})`} as KeyValue;
             })
           })
-          expenseList.accordion?.object.showForm(data.rowIndex, ['expense_item_detail']);
+          expenseList.accordion?.object.showEditForm(data.rowIndex, ['expense_item_detail']);
         }
         console.log(data)
       })
@@ -378,16 +378,16 @@ export class AccountDashboardComponent extends Accordion<AccountDetail | Expense
     let item = this.accountList.content![$event.rowIndex];
     switch ($event.buttonId) {
       case 'UPDATE_EXPENSE':
-        this.showForm($event.rowIndex, ['expense_detail']);
+        this.showEditForm($event.rowIndex, ['expense_detail']);
         this.actionName = $event.buttonId;
         break;
       case 'UPDATE_ACCOUNT':
         // this.addSectionInAccordion(getAccountDetailSection(item!), $event.rowIndex)
-        this.showForm($event.rowIndex, ['account_detail']);
+        this.showEditForm($event.rowIndex, ['account_detail']);
         this.actionName = $event.buttonId;
         break;
       case 'UPDATE_BANK_UPI':
-        this.showForm($event.rowIndex, ['bank_detail', 'upi_detail']);
+        this.showEditForm($event.rowIndex, ['bank_detail', 'upi_detail']);
         this.actionName = $event.buttonId;
         let bankForm=this.getSectionForm('bank_detail',$event.rowIndex)
         bankForm?.valueChanges.subscribe(data=>{
@@ -499,7 +499,7 @@ export class AccountDashboardComponent extends Accordion<AccountDetail | Expense
   performTransaction(rowIndex: number) {
     let account = this.accountList.content![rowIndex];
     this.addSectionInAccordion(transferAmountSection(account),rowIndex);
-    this.showForm(rowIndex, ['transfer_amt']);
+    this.showEditForm(rowIndex, ['transfer_amt']);
     this.accountService.fetchAccounts(this.pageNumber, this.pageSize).subscribe(data => {
       let selectList = this.getSectionField('transfer_amt', 'transferTo', rowIndex)?.form_input?.selectList;
       selectList?.splice(0);

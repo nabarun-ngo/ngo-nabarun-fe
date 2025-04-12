@@ -34,6 +34,7 @@ export interface DetailedViewField {
     field_html_id?:string;
     field_name?: string;
     field_value: string;
+    field_display_value?: string;
     field_value_splitter?: string;
     hide_field?: boolean;
     editable?:boolean;

@@ -312,7 +312,7 @@ export class DonationDashboardNewComponent extends Accordion<DonationDetail | Us
   onClick($event: { buttonId: string; rowIndex: number; }) {
     switch ($event.buttonId) {
       case 'UPDATE_DONATION':
-        this.showForm($event.rowIndex, ['donation_detail']);
+        this.showEditForm($event.rowIndex, ['donation_detail']);
         //this.actionName = $event.buttonId;
         break;
       case 'CANCEL':

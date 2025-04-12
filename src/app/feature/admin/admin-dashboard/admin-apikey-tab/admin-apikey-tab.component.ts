@@ -189,7 +189,7 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDetail> implements 
             //   let url= m.details.requestMappingConditions.patterns[0];
             //   return {key:url,displayValue:url}as KeyValue;
             // })
-            this.showForm($event.rowIndex, ['api_key_detail']);
+            this.showEditForm($event.rowIndex, ['api_key_detail']);
             this.getSectionField('api_key_detail','api_key_scope',$event.rowIndex).form_input!.selectList=d;
           })
           break;
