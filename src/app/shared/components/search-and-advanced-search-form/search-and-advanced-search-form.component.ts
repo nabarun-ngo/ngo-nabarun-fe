@@ -4,6 +4,7 @@ import { SearchAndAdvancedSearchModel } from '../../model/search-and-advanced-se
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { SharedDataService } from 'src/app/core/service/shared-data.service';
 
 @Component({
   selector: 'app-search-and-advanced-search-form',
@@ -14,7 +15,7 @@ export class SearchAndAdvancedSearchFormComponent implements OnInit {
   adv_search: boolean = false;
   colLength!: number;
 
-  constructor(@Inject(MAT_DIALOG_DATA) input: SearchAndAdvancedSearchModel) {
+  constructor(@Inject(MAT_DIALOG_DATA) input: SearchAndAdvancedSearchModel,private sharedData:SharedDataService) {
     this.inputInit(input);
   }
 
@@ -59,6 +60,7 @@ export class SearchAndAdvancedSearchFormComponent implements OnInit {
   normalSearch($event: Event) {
     let input = $event.target as HTMLInputElement;
     this.onSearch.emit({ advancedSearch: false, reset: false, value: input.value })
+    this.sharedData.setSearchValue(input.value);
   }
 
   advSearchReset() {

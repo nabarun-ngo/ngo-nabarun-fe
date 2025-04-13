@@ -6,12 +6,13 @@ import { KeyValue, WorkDetail } from "src/app/core/api/models";
 import { FormControl } from "@angular/forms";
 import { BehaviorSubject, take } from "rxjs";
 import { FileUpload } from "../components/generic/file-upload/file-upload.component";
-import { Component, Input } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 
 @Component({
   template: 'app-base-accordion',
 })
-export abstract class Accordion<NumType> extends Paginator {
+export abstract class Accordion<NumType> extends Paginator implements OnInit{
+  abstract ngOnInit(): void;
   
   private accordionList: AccordionList = {
     contents: [],
