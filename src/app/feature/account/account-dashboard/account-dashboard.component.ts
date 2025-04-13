@@ -1,21 +1,21 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
-import { AccordionButton, AccordionCell } from 'src/app/shared/components/generic/accordion-list/accordion-list.model';
+import { AccordionButton, AccordionCell } from 'src/app/shared/model/accordion-list.model';
 import { AccountService } from '../account.service';
 import { AccountConstant, AccountDefaultValue, accountTab } from '../account.const';
 import { AccountDetail, ExpenseDetail, KeyValue, PaginateAccountDetail, PaginateExpenseDetail } from 'src/app/core/api/models';
 import { PageEvent } from '@angular/material/paginator';
 import { FormGroup, Validators } from '@angular/forms';
 import { date } from 'src/app/core/service/utilities.service';
-import { DetailedView } from 'src/app/shared/components/generic/detailed-view/detailed-view.model';
+import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { filterFormChange, scrollToFirstInvalidControl } from 'src/app/core/service/form.service';
-import { Accordion } from 'src/app/shared/components/generic/accordion-list/accordion';
+import { Accordion } from 'src/app/shared/utils/accordion';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
 import { SCOPE } from 'src/app/core/constant/auth-scope.const';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
-import { SearchAndAdvancedSearchModel } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search.model';
+import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
 import { expenseDetailSection, expenseHighLevelView, expenseListSection, expenseTabHeader } from './tabs/expense.tab';
 import { accountDetailSection, accountHighLevelView, accountSearchInput, accountTabHeader, bankDetailSection, transferAmountSection, upiDetailSection } from './tabs/account.tab';
 @Component({
@@ -171,7 +171,7 @@ export class AccountDashboardComponent extends Accordion<AccountDetail | Expense
               return {key:m.id,displayValue:`${m.accountHolderName} (${m.id})`} as KeyValue;
             })
           })
-          expenseList.accordion?.object.showForm(data.rowIndex, ['expense_item_detail']);
+          expenseList.accordion?.object.showEditForm(data.rowIndex, ['expense_item_detail']);
         }
         console.log(data)
       })
@@ -378,16 +378,16 @@ export class AccountDashboardComponent extends Accordion<AccountDetail | Expense
     let item = this.accountList.content![$event.rowIndex];
     switch ($event.buttonId) {
       case 'UPDATE_EXPENSE':
-        this.showForm($event.rowIndex, ['expense_detail']);
+        this.showEditForm($event.rowIndex, ['expense_detail']);
         this.actionName = $event.buttonId;
         break;
       case 'UPDATE_ACCOUNT':
         // this.addSectionInAccordion(getAccountDetailSection(item!), $event.rowIndex)
-        this.showForm($event.rowIndex, ['account_detail']);
+        this.showEditForm($event.rowIndex, ['account_detail']);
         this.actionName = $event.buttonId;
         break;
       case 'UPDATE_BANK_UPI':
-        this.showForm($event.rowIndex, ['bank_detail', 'upi_detail']);
+        this.showEditForm($event.rowIndex, ['bank_detail', 'upi_detail']);
         this.actionName = $event.buttonId;
         let bankForm=this.getSectionForm('bank_detail',$event.rowIndex)
         bankForm?.valueChanges.subscribe(data=>{
@@ -499,7 +499,7 @@ export class AccountDashboardComponent extends Accordion<AccountDetail | Expense
   performTransaction(rowIndex: number) {
     let account = this.accountList.content![rowIndex];
     this.addSectionInAccordion(transferAmountSection(account),rowIndex);
-    this.showForm(rowIndex, ['transfer_amt']);
+    this.showEditForm(rowIndex, ['transfer_amt']);
     this.accountService.fetchAccounts(this.pageNumber, this.pageSize).subscribe(data => {
       let selectList = this.getSectionField('transfer_amt', 'transferTo', rowIndex)?.form_input?.selectList;
       selectList?.splice(0);

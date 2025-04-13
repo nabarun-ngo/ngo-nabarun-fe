@@ -3,9 +3,9 @@ import { FormGroup, Validators } from "@angular/forms";
 import { PageEvent } from "@angular/material/paginator";
 import { ExpenseItemDetail, WorkDetail } from "src/app/core/api/models";
 import { ExpenseDetail } from "src/app/core/api/models/expense-detail";
-import { Accordion } from "src/app/shared/components/generic/accordion-list/accordion";
-import { AccordionButton, AccordionCell } from "src/app/shared/components/generic/accordion-list/accordion-list.model";
-import { DetailedView } from "src/app/shared/components/generic/detailed-view/detailed-view.model";
+import { Accordion } from "src/app/shared/utils/accordion";
+import { AccordionButton, AccordionCell } from "src/app/shared/model/accordion-list.model";
+import { DetailedView } from "src/app/shared/model/detailed-view.model";
 
 export const expenseTabHeader = [
   {

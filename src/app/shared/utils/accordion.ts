@@ -1,13 +1,18 @@
 import { PageEvent } from "@angular/material/paginator";
-import { Paginator } from "src/app/shared/model/paginator";
-import { AccordionButton, AccordionCell, AccordionList, AccordionRow } from "./accordion-list.model";
-import { DetailedView, DetailedViewField } from "../detailed-view/detailed-view.model";
+import { Paginator } from "src/app/shared/utils/paginator";
+import { AccordionButton, AccordionCell, AccordionData, AccordionList, AccordionRow } from "../model/accordion-list.model";
+import { DetailedView, DetailedViewField } from "../model/detailed-view.model";
 import { KeyValue, WorkDetail } from "src/app/core/api/models";
 import { FormControl } from "@angular/forms";
 import { BehaviorSubject, take } from "rxjs";
-import { FileUpload } from "../file-upload/file-upload.component";
+import { FileUpload } from "../components/generic/file-upload/file-upload.component";
+import { Component, Input } from "@angular/core";
 
+@Component({
+  template: 'app-base-accordion',
+})
 export abstract class Accordion<NumType> extends Paginator {
+  
   private accordionList: AccordionList = {
     contents: [],
     searchValue: ''
@@ -23,12 +28,19 @@ export abstract class Accordion<NumType> extends Paginator {
     }
   ];
   private functionButtons: AccordionButton[] = [];
-
+  protected activeButtonId: string |undefined = undefined;
   protected abstract prepareHighLevelView(data: NumType, options?: { [key: string]: any }): AccordionCell[];
   protected abstract prepareDetailedView(data: NumType, options?: { [key: string]: any }): DetailedView[];
   protected abstract prepareDefaultButtons(data: NumType, options?: { [key: string]: any }): AccordionButton[];
   protected abstract onClick(event:{ buttonId: string; rowIndex: number; }):void;
   protected abstract onAccordionOpen(event: { rowIndex: number }):void;
+  protected readonly itemList: NumType[]=[];
+
+  @Input({ required: false }) set accordionData(page: AccordionData<NumType>) { 
+    if (page) {
+      this.setContent(page.content!, page.totalSize);
+    }
+  }
 
   getAccordionList() {
     return this.accordionList;
@@ -55,6 +67,7 @@ export abstract class Accordion<NumType> extends Paginator {
    */
   clearContents() {
     this.accordionList.contents.splice(0);
+    this.itemList.splice(0);   
   }
 
   setContent(dataList: NumType[], totalSize?: number) {
@@ -72,15 +85,31 @@ export abstract class Accordion<NumType> extends Paginator {
    * 
    * @param data 
    */
-  addContentRow(data: NumType) {
+  addContentRow(data: NumType,insert_top:boolean = false) {
     let row = {
       columns: this.prepareHighLevelView(data),
       detailed: this.prepareDetailedView(data),
       buttons: this.prepareDefaultButtons(data)
     } as AccordionRow;
-    this.accordionList.contents.push(row);
+    //console.log(row);
+    if (insert_top) {
+      this.accordionList.contents.unshift(row);
+      this.itemList.unshift(data);
+    }else{
+      this.accordionList.contents.push(row);
+      this.itemList.push(data);
+    }
   }
 
+  updateContentRow(data: NumType, rowIndex: number) {
+    let row = {
+      columns: this.prepareHighLevelView(data),
+      detailed: this.prepareDetailedView(data),
+      buttons: this.prepareDefaultButtons(data)
+    } as AccordionRow;
+    this.accordionList.contents[rowIndex] = row;
+    this.itemList[rowIndex] = data;
+  }
 
   protected addSectionInAccordion(section_detail: DetailedView, rowIndex: number, create?: boolean) {
     section_detail.content?.forEach(m1 => {
@@ -206,11 +235,8 @@ export abstract class Accordion<NumType> extends Paginator {
       return m;
     });
   }
-  // protected hideCreateForm() {
-  //   this.accordionList.addContent = undefined;
-  // }
 
-  showForm(rowIndex: number, section_ids: string[]) {
+  showEditForm(rowIndex: number, section_ids: string[]) {
     this.accordionList.contents[rowIndex].detailed.filter(f => section_ids.includes(f.section_html_id!)).map(m => {
       console.log(m)
       m.show_form = true;
@@ -240,7 +266,7 @@ export abstract class Accordion<NumType> extends Paginator {
     } else {
       this.accordionList.contents[rowIndex].detailed.map(m => {
         m.show_form = false;
-        m.section_form?.reset();
+        //EXPERIMENTAL//m.section_form?.reset();
         return m;
       });
       this.accordionList.contents[rowIndex].buttons?.splice(0);
@@ -267,34 +293,4 @@ export abstract class Accordion<NumType> extends Paginator {
     }
     return subject.value;
   }
- 
-
-  // protected updateButtonText(id: string, name: string): void {
-  //   this.accordionList.contents.map(m1 => {
-  //     m1.buttons?.filter(f => f.button_id == id).map(m => {
-  //       m.button_name = name;
-  //       return m;
-  //     });
-  //     return m1;
-  //   })
-  // }
-
-  // protected updateContent(rowIndex: number, sectionId: string, updates: { highLevelInfo?: AccordionCell[], detailedInfo?: DetailedViewField[] }) {
-  //   if (updates.highLevelInfo) {
-
-  //   } else if (updates.detailedInfo) {
-  //     let content_index = this.accordionList.contents[rowIndex].detailed.findIndex(f => f.section_html_id == sectionId);
-  //     this.accordionList.contents[rowIndex].detailed[content_index].content?.map(m => {
-  //       let info = updates.detailedInfo?.find(f => f.field_html_id == m.field_html_id);
-  //       if (info) {
-  //         m.field_value = info.field_value;
-  //       }
-  //       return m;
-  //     })
-  //   }
-  // }
-
-  
-
-
 } 

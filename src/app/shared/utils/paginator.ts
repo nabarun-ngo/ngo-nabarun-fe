@@ -1,6 +1,10 @@
+import { Component } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { BehaviorSubject, Observable } from 'rxjs';
 
+@Component({
+  template: 'app-base-paginator',
+})
 export abstract class Paginator {
 
   protected pageNumber: number = 0;

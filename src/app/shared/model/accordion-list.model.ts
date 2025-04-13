@@ -1,5 +1,5 @@
 import { KeyValue } from "src/app/core/api/models";
-import { DetailedView } from "../detailed-view/detailed-view.model";
+import { DetailedView } from "./detailed-view.model";
 import { Pipe } from "@angular/core";
 
 export interface AccordionList{
@@ -34,5 +34,16 @@ export interface AccordionCell{
 export interface AccordionButton{
     button_name:string;
     button_id:string;
+}
+
+export interface AccordionData<NumType>{
+    currentSize?: number;
+    nextPageIndex?: number;
+    pageIndex?: number;
+    pageSize?: number;
+    prevPageIndex?: number;
+    totalPages?: number;
+    totalSize?: number;
+    content?: Array<NumType>;
 }
 

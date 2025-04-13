@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { SearchAndAdvancedSearchModel } from './search-and-advanced-search.model';
+import { SearchAndAdvancedSearchModel } from '../../model/search-and-advanced-search.model';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';

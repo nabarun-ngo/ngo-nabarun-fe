@@ -1,10 +1,10 @@
 import { FormGroup, ValidatorFn } from "@angular/forms";
-import { UniversalInputModel, inputType } from "../universal-input/universal-input.model";
+import { UniversalInputModel, inputType } from "./universal-input.model";
 import { DocumentDetail, KeyValue } from "src/app/core/api/models";
-import { AccordionList } from "../accordion-list/accordion-list.model";
-import { Accordion } from "../accordion-list/accordion";
+import { AccordionList } from "./accordion-list.model";
+import { Accordion } from "../utils/accordion";
 import { EventEmitter } from "@angular/core";
-import { FileUpload } from "../file-upload/file-upload.component";
+import { FileUpload } from "../components/generic/file-upload/file-upload.component";
 
 export interface DetailedView {
 
@@ -34,6 +34,7 @@ export interface DetailedViewField {
     field_html_id?:string;
     field_name?: string;
     field_value: string;
+    field_display_value?: string;
     field_value_splitter?: string;
     hide_field?: boolean;
     editable?:boolean;

@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { AccordionRow } from '../components/generic/accordion-list/accordion-list.model';
+import { AccordionRow } from '../model/accordion-list.model';
 import { concatMapTo } from 'rxjs';
 
 @Pipe({

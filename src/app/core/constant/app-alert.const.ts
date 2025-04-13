@@ -1,4 +1,4 @@
-import { AlertData } from "src/app/shared/components/generic/alert/alert.model";
+import { AlertData } from "src/app/shared/model/alert.model";
 import { AlertType } from "../component/notification-modal/notification-modal.component";
 
 export const AppAlert = {

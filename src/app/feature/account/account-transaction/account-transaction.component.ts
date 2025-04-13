@@ -3,16 +3,16 @@ import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { TransactionDefaultValue } from '../account.const';
 import { ActivatedRoute } from '@angular/router';
 import { KeyValue, PaginateTransactionDetail, TransactionDetail } from 'src/app/core/api/models';
-import { Accordion } from 'src/app/shared/components/generic/accordion-list/accordion';
+import { Accordion } from 'src/app/shared/utils/accordion';
 import { PageEvent } from '@angular/material/paginator';
-import { AccordionCell, AccordionButton } from 'src/app/shared/components/generic/accordion-list/accordion-list.model';
-import { DetailedView } from 'src/app/shared/components/generic/detailed-view/detailed-view.model';
+import { AccordionCell, AccordionButton } from 'src/app/shared/model/accordion-list.model';
+import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { FormGroup } from '@angular/forms';
 import { date } from 'src/app/core/service/utilities.service';
 import { AccountService } from '../account.service';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
-import { SearchAndAdvancedSearchModel } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search.model';
+import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
 
 @Component({
   selector: 'app-account-transaction',

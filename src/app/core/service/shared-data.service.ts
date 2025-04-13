@@ -25,4 +25,9 @@ export class SharedDataService {
     [key: string]: KeyValue[];
   }) { this.refDataMap.set(name, data) }
   getRefData(name: string) { return this.refDataMap.get(name) }
+
+  private searchValueSource = new BehaviorSubject('');
+  searchValue = this.searchValueSource.asObservable();
+  setSearchValue(value: string) { this.searchValueSource.next(value) }
+
 }

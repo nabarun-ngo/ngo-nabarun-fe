@@ -1,10 +1,10 @@
 import { KeyValue } from "src/app/core/api/models/key-value";
 import { AccountConstant, accountTab } from "../../account.const";
-import { SearchAndAdvancedSearchModel } from "src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search.model";
-import { AccordionCell } from "src/app/shared/components/generic/accordion-list/accordion-list.model";
+import { SearchAndAdvancedSearchModel } from "src/app/shared/model/search-and-advanced-search.model";
+import { AccordionCell } from "src/app/shared/model/accordion-list.model";
 import { AccountDetail } from "src/app/core/api/models/account-detail";
 import { ExpenseDetail } from "src/app/core/api/models";
-import { DetailedView } from "src/app/shared/components/generic/detailed-view/detailed-view.model";
+import { DetailedView } from "src/app/shared/model/detailed-view.model";
 import { FormGroup, Validators } from "@angular/forms";
 import { constant } from "tests/data/constant";
 import { date } from "src/app/core/service/utilities.service";

@@ -5,9 +5,9 @@ import { DonationDefaultValue, DonationRefData, donationTab } from '../donation.
 import { DonationService } from '../donation.service';
 import { PageEvent } from '@angular/material/paginator';
 import { DonationDetail, DonationSummary, KeyValue, PaginateDonationDetail, PaginateUserDetail, UserDetail } from 'src/app/core/api/models';
-import { Accordion } from 'src/app/shared/components/generic/accordion-list/accordion';
-import { AccordionCell, AccordionButton } from 'src/app/shared/components/generic/accordion-list/accordion-list.model';
-import { DetailedView } from 'src/app/shared/components/generic/detailed-view/detailed-view.model';
+import { Accordion } from 'src/app/shared/utils/accordion';
+import { AccordionCell, AccordionButton } from 'src/app/shared/model/accordion-list.model';
+import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { date } from 'src/app/core/service/utilities.service';
 import { FormGroup } from '@angular/forms';
 
@@ -312,7 +312,7 @@ export class DonationDashboardNewComponent extends Accordion<DonationDetail | Us
   onClick($event: { buttonId: string; rowIndex: number; }) {
     switch ($event.buttonId) {
       case 'UPDATE_DONATION':
-        this.showForm($event.rowIndex, ['donation_detail']);
+        this.showEditForm($event.rowIndex, ['donation_detail']);
         //this.actionName = $event.buttonId;
         break;
       case 'CANCEL':

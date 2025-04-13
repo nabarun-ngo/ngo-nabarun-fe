@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { map, Observable, startWith } from 'rxjs';
 import { KeyValue } from 'src/app/core/api/models';
 import { getErrorMessage, injectNgControl } from 'src/app/core/service/form.service';
-import { inputType, UniversalInputModel } from 'src/app/shared/components/generic/universal-input/universal-input.model';
+import { inputType, UniversalInputModel } from 'src/app/shared/model/universal-input.model';
 
 
 @Component({
