@@ -3,13 +3,15 @@ import { SocialEventControllerService } from 'src/app/core/api/services';
 import { DefaultValue } from './events.conts';
 import { map } from 'rxjs';
 import { EventDetail, EventDetailFilter } from 'src/app/core/api/models';
+import { getNonNullValues, removeNullFields } from 'src/app/core/service/utilities.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EventsService {
   advancedSearch(criteria: EventDetailFilter) {
-    return this.eventController.getSocialEvents({eventFilter:criteria}).pipe(map(d => d.responsePayload));
+    let filter = removeNullFields(criteria);
+    return this.eventController.getSocialEvents({eventFilter:filter}).pipe(map(d => d.responsePayload));
   }
   
   defaultValue = DefaultValue;

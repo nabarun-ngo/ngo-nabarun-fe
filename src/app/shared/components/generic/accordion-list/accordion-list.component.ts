@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AccordionList, AccordionRow } from '../../../model/accordion-list.model';
+import { SharedDataService } from 'src/app/core/service/shared-data.service';
 
 @Component({
   selector: 'app-accordion-list',
@@ -9,9 +10,14 @@ import { AccordionList, AccordionRow } from '../../../model/accordion-list.model
 export class AccordionListComponent {
 
   Math = Math;
+  @Input({alias:'accordionList'}) accordionList!: AccordionList;
 
-  @Input()
-  accordionList!:AccordionList;
+  constructor(private sharedDataService: SharedDataService){
+    sharedDataService.searchValue.subscribe((value)=>{
+      this.accordionList.searchValue= value || '';
+    })
+  }
+
   @Output() onButtonClick: EventEmitter<{ buttonId: string;rowIndex: number }> = new EventEmitter();
   @Output() onAccordionOpen: EventEmitter<{rowIndex: number }> = new EventEmitter();
 

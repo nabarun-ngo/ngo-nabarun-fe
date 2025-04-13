@@ -7,8 +7,8 @@ import { Component } from '@angular/core';
   template: 'app-base-tabbed-page',
 })
 export abstract class TabbedPage<T> implements OnInit {
-  tabIndex: number = 0;
-  abstract tabMapping: T[];
+  protected tabIndex: number = 0;
+  protected abstract tabMapping: T[];
 
   constructor(protected route: ActivatedRoute) {}
 
@@ -40,7 +40,7 @@ export abstract class TabbedPage<T> implements OnInit {
    * Handles tab changes.
    * @param index The new tab index.
    */
-  tabChanged(index: number): void {
+  protected tabChanged(index: number): void {
     this.tabIndex = index;
     this.onTabChanged();
   }
@@ -48,6 +48,6 @@ export abstract class TabbedPage<T> implements OnInit {
   /**
    * Hook for child classes to handle tab changes.
    */
-  abstract onTabChanged(): void;
+  protected abstract onTabChanged(): void;
 
 }

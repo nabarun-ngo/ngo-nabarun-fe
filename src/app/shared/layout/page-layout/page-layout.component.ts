@@ -12,7 +12,3 @@ export class PageLayoutComponent {
   @Input() navigations: NavigationButtonModel[]  = [];
 
 }
-
-export interface PageNavigation {
-  navigations: NavigationButtonModel[];
-}

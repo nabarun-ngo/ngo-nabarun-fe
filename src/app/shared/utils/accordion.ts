@@ -1,13 +1,16 @@
 import { PageEvent } from "@angular/material/paginator";
 import { Paginator } from "src/app/shared/utils/paginator";
-import { AccordionButton, AccordionCell, AccordionList, AccordionRow } from "../model/accordion-list.model";
+import { AccordionButton, AccordionCell, AccordionData, AccordionList, AccordionRow } from "../model/accordion-list.model";
 import { DetailedView, DetailedViewField } from "../model/detailed-view.model";
 import { KeyValue, WorkDetail } from "src/app/core/api/models";
 import { FormControl } from "@angular/forms";
 import { BehaviorSubject, take } from "rxjs";
 import { FileUpload } from "../components/generic/file-upload/file-upload.component";
-import { Input } from "@angular/core";
+import { Component, Input } from "@angular/core";
 
+@Component({
+  template: 'app-base-accordion',
+})
 export abstract class Accordion<NumType> extends Paginator {
   
   private accordionList: AccordionList = {
@@ -31,7 +34,13 @@ export abstract class Accordion<NumType> extends Paginator {
   protected abstract prepareDefaultButtons(data: NumType, options?: { [key: string]: any }): AccordionButton[];
   protected abstract onClick(event:{ buttonId: string; rowIndex: number; }):void;
   protected abstract onAccordionOpen(event: { rowIndex: number }):void;
-  protected itemList: NumType[]=[];
+  protected readonly itemList: NumType[]=[];
+
+  @Input({ required: false }) set accordionData(page: AccordionData<NumType>) { 
+    if (page) {
+      this.setContent(page.content!, page.totalSize);
+    }
+  }
 
   getAccordionList() {
     return this.accordionList;
@@ -284,34 +293,4 @@ export abstract class Accordion<NumType> extends Paginator {
     }
     return subject.value;
   }
- 
-
-  // protected updateButtonText(id: string, name: string): void {
-  //   this.accordionList.contents.map(m1 => {
-  //     m1.buttons?.filter(f => f.button_id == id).map(m => {
-  //       m.button_name = name;
-  //       return m;
-  //     });
-  //     return m1;
-  //   })
-  // }
-
-  // protected updateContent(rowIndex: number, sectionId: string, updates: { highLevelInfo?: AccordionCell[], detailedInfo?: DetailedViewField[] }) {
-  //   if (updates.highLevelInfo) {
-
-  //   } else if (updates.detailedInfo) {
-  //     let content_index = this.accordionList.contents[rowIndex].detailed.findIndex(f => f.section_html_id == sectionId);
-  //     this.accordionList.contents[rowIndex].detailed[content_index].content?.map(m => {
-  //       let info = updates.detailedInfo?.find(f => f.field_html_id == m.field_html_id);
-  //       if (info) {
-  //         m.field_value = info.field_value;
-  //       }
-  //       return m;
-  //     })
-  //   }
-  // }
-
-  
-
-
 } 

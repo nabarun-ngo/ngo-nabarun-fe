@@ -24,18 +24,6 @@ export class UpcomingEventsTabComponent
   constructor(private eventService: EventsService) {
     super();
   }
-  @Input({ required: true }) set eventListDetail(page: PaginateEventDetail) {
-    if (page) {
-      this.setContent(page.content!, page.totalSize);
-    }
-  }
-
-  // @Input({ required: true }) search(value: string) {
-  //   if (page) {
-  //     this.setContent(page.content!, page.totalSize);
-  //   }
-  // }
-  
 
   ngOnInit(): void {
     this.setHeaderRow([

@@ -5,10 +5,10 @@
     <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" (selectedTabChange)="tabChanged($event.index)"
         [(selectedIndex)]="tabIndex">
         <mat-tab id="upcoming_events" label="Upcoming Events">
-            <app-upcoming-events-tab [eventListDetail]="eventListDetail"></app-upcoming-events-tab>
+            <app-upcoming-events-tab [accordionData]="eventListDetail"></app-upcoming-events-tab>
         </mat-tab>
         <mat-tab id="completed_events" label="Completed Events">
-            <app-completed-events-tab [eventListDetail]="eventListDetail"></app-completed-events-tab>
+            <app-completed-events-tab [accordionData]="eventListDetail"></app-completed-events-tab>
         </mat-tab>
     </mat-tab-group>
 </app-page-layout>

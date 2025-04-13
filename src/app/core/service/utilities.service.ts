@@ -169,6 +169,15 @@ export function sanitizeBase64(base64:string){
   return base64;
 }
 
+export function removeNullFields<T extends Record<string, any>>(obj: T): T {
+  if (typeof obj !== 'object' || obj === null) {
+    throw new Error('Input must be a non-null object');
+  }
+  return Object.fromEntries(
+    Object.entries(obj).filter(([_, value]) => value !== null && value !== undefined && value !== '')
+  ) as T;
+}
+
 
 
 

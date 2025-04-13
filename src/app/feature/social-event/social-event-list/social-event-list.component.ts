@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
-import { PageNavigation } from 'src/app/shared/layout/page-layout/page-layout.component';
 import { TabbedPage } from 'src/app/shared/utils/tab';
 import { ActivatedRoute } from '@angular/router';
-import { PaginateEventDetail } from 'src/app/core/api/models';
+import { EventDetailFilter, PaginateEventDetail } from 'src/app/core/api/models';
 import { DefaultValue, eventTabs } from '../events.conts';
 import { EventsService } from '../events.service';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
+import { SharedDataService } from 'src/app/core/service/shared-data.service';
 
 @Component({
   selector: 'app-social-event-list',
@@ -16,18 +16,16 @@ import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-ad
 })
 export class SocialEventListComponent
   extends TabbedPage<eventTabs>
-  implements PageNavigation
 {
-  tabMapping: eventTabs[] = ['upcoming_events','completed_events'];
-
-  navigations: NavigationButtonModel[] = [
+  protected eventListDetail!: PaginateEventDetail;
+  protected tabMapping: eventTabs[] = ['upcoming_events','completed_events'];
+  protected navigations: NavigationButtonModel[] = [
     {
       displayName: 'Back to Dashboard',
       routerLink: AppRoute.secured_dashboard_page.url,
     },
   ];
-
-  searchInput:SearchAndAdvancedSearchModel= {
+  protected searchInput:SearchAndAdvancedSearchModel= {
     normalSearchPlaceHolder:'Search Event Number',
     advancedSearch:{
       searchFormFields:[
@@ -60,16 +58,24 @@ export class SocialEventListComponent
             tagName: 'input',
           },
           validations: [],
+        },
+        {
+          formControlName: 'toDate',
+          inputModel:{
+            html_id: 'event-to-date',
+            placeholder: 'To Date',
+            inputType: 'date',
+            tagName: 'input',
+          },
+          validations: [],
         }
-      ],
+      ]
     }
   }
 
-  eventListDetail!: PaginateEventDetail;
-  searchValue: string = '';
-
-  constructor(protected override route: ActivatedRoute, protected eventService:EventsService) {
+  constructor(protected override route: ActivatedRoute, protected eventService:EventsService,private sharedData:SharedDataService) {
     super(route);
+    sharedData.setPageName('Social Events');
   }
 
   override handleRouteData(): void {
@@ -80,6 +86,7 @@ export class SocialEventListComponent
     }
     console.log(this.eventListDetail);
   }
+
   override onTabChanged(): void {
     this.eventService.getSocialEventList(DefaultValue.pageNumber,DefaultValue.pageSize,this.tabMapping[this.tabIndex] == 'completed_events').subscribe(data=>{
       this.eventListDetail = data!;
@@ -87,22 +94,19 @@ export class SocialEventListComponent
   }
 
   onSearch($event: { advancedSearch: boolean; reset: boolean; value: any; }) {
-    if($event.reset){
-     
-    }else{
-      
-    }
-
+    console.log($event)
     if ($event.advancedSearch && !$event.reset) {
-      this.onTabChanged();
-    }
-    else if ($event.advancedSearch && $event.reset) {
-      this.eventService.advancedSearch($event.value).subscribe(data=>{
+      let criteria = $event.value as EventDetailFilter;
+      criteria.completed = this.tabMapping[this.tabIndex] == 'completed_events';
+      this.eventService.advancedSearch(criteria).subscribe(data=>{
         this.eventListDetail = data!;
       })
     }
+    else if ($event.advancedSearch && $event.reset) {
+      this.onTabChanged();
+    }
     else {
-      this.searchValue = $event.value as string;
+      this.sharedData.setSearchValue($event.value as string);
     }
   }
 }
