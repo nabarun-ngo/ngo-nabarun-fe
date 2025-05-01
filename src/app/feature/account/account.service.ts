@@ -78,7 +78,7 @@ export class AccountService {
     }
   ) {
     let filterS: AccountDetailFilter = {};
-    filterS.status = ['ACTIVE'];
+    //filterS.status = ['ACTIVE'];
     filterS.includeBalance = true;
     filterS.includePaymentDetail = true;
     if (filter?.accountNo) {
