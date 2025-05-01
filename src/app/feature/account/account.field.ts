@@ -1,5 +1,5 @@
 import { KeyValue } from "src/app/core/api/models/key-value";
-import { AccountConstant, accountTab } from "../../account.const";
+import { AccountConstant, accountTab } from "./account.const";
 import { SearchAndAdvancedSearchModel } from "src/app/shared/model/search-and-advanced-search.model";
 import { AccordionCell } from "src/app/shared/model/accordion-list.model";
 import { AccountDetail } from "src/app/core/api/models/account-detail";
@@ -396,7 +396,7 @@ export const upiDetailSection = (m: AccountDetail,) => {
     } as DetailedView;
 }
 
-export const transferAmountSection = (m: AccountDetail) => {
+export const transferAmountSection = () => {
     return {
         section_form: new FormGroup({}),
         section_name: 'Transfer Amount',

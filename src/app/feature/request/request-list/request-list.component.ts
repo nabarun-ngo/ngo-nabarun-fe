@@ -366,6 +366,8 @@ export class RequestListComponent extends Accordion<RequestDetail> implements On
   protected override onAccordionOpen($event: { rowIndex: number; }) {
     let item = this.requestList.content![$event.rowIndex];
     let accordion = new class extends Accordion<WorkDetail> {
+      override ngOnInit(): void {
+      }
       protected override onClick(event: { buttonId: string; rowIndex: number; }): void {
       }
       protected override onAccordionOpen(event: { rowIndex: number; }): void {

@@ -5,7 +5,6 @@
             Expense</button>
     </div>
 </div>
-<h2 class="text-purple-700 font-bold text-center mt-4">Expense List</h2>
 <app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)"
     (onAccordionOpen)="onAccordionOpen($event)"></app-accordion-list>
 <mat-paginator class="mt-4" style="background-color: transparent;" (page)="handlePageEvent($event)"

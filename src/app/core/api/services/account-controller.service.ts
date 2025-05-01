@@ -25,13 +25,16 @@ import { getExpenses } from '../fn/account-controller/get-expenses';
 import { GetExpenses$Params } from '../fn/account-controller/get-expenses';
 import { getMyAccounts } from '../fn/account-controller/get-my-accounts';
 import { GetMyAccounts$Params } from '../fn/account-controller/get-my-accounts';
+import { getMyExpenses } from '../fn/account-controller/get-my-expenses';
+import { GetMyExpenses$Params } from '../fn/account-controller/get-my-expenses';
 import { getMyTransactions } from '../fn/account-controller/get-my-transactions';
 import { GetMyTransactions$Params } from '../fn/account-controller/get-my-transactions';
 import { getTransactions } from '../fn/account-controller/get-transactions';
 import { GetTransactions$Params } from '../fn/account-controller/get-transactions';
+import { settleExpense } from '../fn/account-controller/settle-expense';
+import { SettleExpense$Params } from '../fn/account-controller/settle-expense';
 import { SuccessResponseAccountDetail } from '../models/success-response-account-detail';
 import { SuccessResponseExpenseDetail } from '../models/success-response-expense-detail';
-import { SuccessResponseExpenseItemDetail } from '../models/success-response-expense-item-detail';
 import { SuccessResponsePaginateAccountDetail } from '../models/success-response-paginate-account-detail';
 import { SuccessResponsePaginateExpenseDetail } from '../models/success-response-paginate-expense-detail';
 import { SuccessResponsePaginateTransactionDetail } from '../models/success-response-paginate-transaction-detail';
@@ -247,6 +250,39 @@ export class AccountControllerService extends BaseService {
     );
   }
 
+  /** Path part for operation `settleExpense()` */
+  static readonly SettleExpensePath = '/api/account/expense/{id}/settle';
+
+  /**
+   * Settle expense.
+   *
+   * Authorities : hasAuthority('SCOPE_create:expense_settle')
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `settleExpense()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  settleExpense$Response(params: SettleExpense$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseExpenseDetail>> {
+    return settleExpense(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Settle expense.
+   *
+   * Authorities : hasAuthority('SCOPE_create:expense_settle')
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `settleExpense$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  settleExpense(params: SettleExpense$Params, context?: HttpContext): Observable<SuccessResponseExpenseDetail> {
+    return this.settleExpense$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseExpenseDetail>): SuccessResponseExpenseDetail => r.body)
+    );
+  }
+
   /** Path part for operation `finalizeExpense()` */
   static readonly FinalizeExpensePath = '/api/account/expense/{id}/finalize';
 
@@ -260,7 +296,7 @@ export class AccountControllerService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  finalizeExpense$Response(params: FinalizeExpense$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseExpenseItemDetail>> {
+  finalizeExpense$Response(params: FinalizeExpense$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseExpenseDetail>> {
     return finalizeExpense(this.http, this.rootUrl, params, context);
   }
 
@@ -274,9 +310,9 @@ export class AccountControllerService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  finalizeExpense(params: FinalizeExpense$Params, context?: HttpContext): Observable<SuccessResponseExpenseItemDetail> {
+  finalizeExpense(params: FinalizeExpense$Params, context?: HttpContext): Observable<SuccessResponseExpenseDetail> {
     return this.finalizeExpense$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseExpenseItemDetail>): SuccessResponseExpenseItemDetail => r.body)
+      map((r: StrictHttpResponse<SuccessResponseExpenseDetail>): SuccessResponseExpenseDetail => r.body)
     );
   }
 
@@ -441,6 +477,39 @@ export class AccountControllerService extends BaseService {
    */
   getExpenses(params: GetExpenses$Params, context?: HttpContext): Observable<SuccessResponsePaginateExpenseDetail> {
     return this.getExpenses$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponsePaginateExpenseDetail>): SuccessResponsePaginateExpenseDetail => r.body)
+    );
+  }
+
+  /** Path part for operation `getMyExpenses()` */
+  static readonly GetMyExpensesPath = '/api/account/expense/list/self';
+
+  /**
+   * Retrieve list of expenses of logged in user.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getMyExpenses()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getMyExpenses$Response(params: GetMyExpenses$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePaginateExpenseDetail>> {
+    return getMyExpenses(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Retrieve list of expenses of logged in user.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getMyExpenses$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getMyExpenses(params: GetMyExpenses$Params, context?: HttpContext): Observable<SuccessResponsePaginateExpenseDetail> {
+    return this.getMyExpenses$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponsePaginateExpenseDetail>): SuccessResponsePaginateExpenseDetail => r.body)
     );
   }

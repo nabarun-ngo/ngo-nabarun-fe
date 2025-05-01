@@ -23,6 +23,7 @@ export const SCOPE = {
         expense: 'create:expense',
         account: 'create:account',
         expense_final: 'create:expense_final',
+        expense_settle: 'create:expense_settle',
         servicerun: 'create:servicerun',
         apikey: 'create:apikey',
         donation: 'create:donation',

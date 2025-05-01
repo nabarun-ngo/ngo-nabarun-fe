@@ -11,22 +11,30 @@ import {
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { EventsService } from '../../events.service';
 import { eventDetailSection } from '../../social-event.field';
+import { DefaultValue } from '../../events.conts';
 
 @Component({
   selector: 'app-upcoming-events-tab',
   templateUrl: './upcoming-events-tab.component.html',
   styleUrls: ['./upcoming-events-tab.component.scss'],
 })
-export class UpcomingEventsTabComponent
-  extends Accordion<EventDetail>
-  implements OnInit
-{
+export class UpcomingEventsTabComponent extends Accordion<EventDetail> {
   constructor(private eventService: EventsService) {
     super();
+    super.init(
+      DefaultValue.pageNumber,
+      DefaultValue.pageSize,
+      DefaultValue.pageSizeOptions
+    );
   }
 
-  ngOnInit(): void {
+  override ngOnInit(): void {
     this.setHeaderRow([
+      {
+        type: 'text',
+        value: 'Event Id',
+        rounded: true,
+      },
       {
         type: 'text',
         value: 'Event Title',
@@ -41,7 +49,7 @@ export class UpcomingEventsTabComponent
         type: 'date',
         value: 'Event Date',
         rounded: true,
-      }
+      },
     ]);
   }
 
@@ -53,8 +61,12 @@ export class UpcomingEventsTabComponent
       {
         type: 'text',
         bgColor: 'bg-purple-200',
-        value: data ? data.eventTitle! : '',
+        value: data ? data.id! : '',
         rounded: true,
+      },
+      {
+        type: 'text',
+        value: data ? data.eventTitle! : '',
       },
       {
         type: 'text',
@@ -143,7 +155,7 @@ export class UpcomingEventsTabComponent
         break;
       case 'CONFIRM':
         if (this.activeButtonId === 'edit') {
-          var editForm = this.getSectionForm('event-detail',event.rowIndex)!;
+          var editForm = this.getSectionForm('event-detail', event.rowIndex)!;
           console.log('editForm', editForm);
           editForm.markAllAsTouched();
           if (editForm.valid) {
@@ -175,5 +187,7 @@ export class UpcomingEventsTabComponent
     });
   }
 
-  protected override onAccordionOpen(event: { rowIndex: number }): void {}
+  protected override onAccordionOpen(event: { rowIndex: number }): void {
+    
+  }
 }

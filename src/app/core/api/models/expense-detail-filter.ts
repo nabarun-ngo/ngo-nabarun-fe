@@ -4,5 +4,6 @@
 
 export interface ExpenseDetailFilter {
   endDate?: string;
+  expenseRefId?: string;
   startDate?: string;
 }

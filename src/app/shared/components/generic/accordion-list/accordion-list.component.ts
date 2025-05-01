@@ -13,8 +13,10 @@ export class AccordionListComponent {
   @Input({alias:'accordionList'}) accordionList!: AccordionList;
 
   constructor(private sharedDataService: SharedDataService){
-    sharedDataService.searchValue.subscribe((value)=>{
-      this.accordionList.searchValue= value || '';
+    sharedDataService?.searchValue?.subscribe((value)=>{
+      if(this.accordionList){
+        this.accordionList.searchValue= value || '';
+      }
     })
   }
 
