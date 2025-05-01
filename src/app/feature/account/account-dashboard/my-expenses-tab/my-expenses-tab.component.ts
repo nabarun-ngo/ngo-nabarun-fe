@@ -52,6 +52,7 @@ export class MyExpensesTabComponent extends Accordion<ExpenseDetail> {
     this.setHeaderRow(expenseTabHeader);
   }
 
+  
   protected override prepareHighLevelView(
     data: ExpenseDetail,
     options?: { [key: string]: any }
