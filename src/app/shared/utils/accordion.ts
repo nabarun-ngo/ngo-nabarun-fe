@@ -35,7 +35,7 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit{
   protected abstract prepareDefaultButtons(data: NumType, options?: { [key: string]: any }): AccordionButton[];
   protected abstract onClick(event:{ buttonId: string; rowIndex: number; }):void;
   protected abstract onAccordionOpen(event: { rowIndex: number }):void;
-  protected readonly itemList: NumType[]=[];
+  public readonly itemList: NumType[]=[];
 
   @Input({ required: false }) set accordionData(page: AccordionData<NumType>) { 
     if (page) {
@@ -112,6 +112,11 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit{
     this.itemList[rowIndex] = data;
   }
 
+  removeContentRow(rowIndex: number) {
+    this.accordionList.contents.splice(rowIndex, 1);
+    this.itemList.splice(rowIndex, 1);
+  }
+
   protected addSectionInAccordion(section_detail: DetailedView, rowIndex: number, create?: boolean) {
     section_detail.content?.forEach(m1 => {
       section_detail.section_form?.setControl(m1.form_control_name!, new FormControl(m1.field_value, m1.form_input_validation));
@@ -145,6 +150,16 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit{
       if (indexAddDet != -1) {
         this.accordionList.contents[rowIndex]?.detailed.splice(indexAddDet, 1);
       }
+    }
+  }
+
+  protected getSectionInAccordion(section_id: string, rowIndex: number, create?: boolean) {
+    if (create) {
+      let indexAddDet = this.accordionList.addContent?.detailed.findIndex(f => f.section_html_id == section_id)!;
+      return this.accordionList.addContent?.detailed[indexAddDet];
+    } else {
+      let indexAddDet = this.accordionList.contents[rowIndex].detailed.findIndex(f => f.section_html_id == section_id);
+      return this.accordionList.contents[rowIndex]?.detailed[indexAddDet];
     }
   }
 
@@ -233,6 +248,11 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit{
         }
         return m;
       })
+      if(m.section_type == 'doc_list'){
+        m.doc!.docList= new BehaviorSubject<FileUpload[]>([]);
+        m.doc!.docChange.subscribe(m.doc!.docList)
+        console.log("Testt")
+      }
       return m;
     });
   }
@@ -246,6 +266,10 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit{
         //m.hide_field = false;
         return m;
       })
+      if(m.section_type == 'doc_list'){
+        m.doc!.docList= new BehaviorSubject<FileUpload[]>([]);
+        m.doc!.docChange.subscribe(m.doc!.docList)
+      }
       return m;
     });
     //console.log(this.accordionList.contents)
@@ -286,12 +310,20 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit{
   }
 
   getSectionDocuments(sectionId: string, rowIndex: number, create?: boolean) {
-    let subject = new BehaviorSubject<FileUpload[]>([]);
     if (create) {
-      this.accordionList.addContent?.detailed.find(f => f.section_html_id == sectionId)?.doc?.docChange.subscribe(subject);
+      return this.accordionList.addContent?.detailed.find(f => f.section_html_id == sectionId)?.doc?.docList.value;
     }else{
-      this.accordionList.contents[rowIndex]?.detailed.find(f => f.section_html_id == sectionId)?.doc?.docChange.subscribe(subject);
+      return this.accordionList.contents[rowIndex]?.detailed.find(f => f.section_html_id == sectionId)?.doc?.docList.value;
     }
-    return subject.value;
+  }
+
+  removeButton(buttonId: string, rowIndex: number, create?: boolean) {
+    if (create) {
+      let index = this.accordionList.addContent?.buttons?.findIndex(f => f.button_id == buttonId)!;
+      return this.accordionList.addContent?.buttons?.splice(index,1);
+    }else{
+      let index = this.accordionList.contents[rowIndex]?.buttons?.findIndex(f => f.button_id == buttonId)!;
+      return this.accordionList.contents[rowIndex]?.buttons?.splice(index,1);
+    }
   }
 } 

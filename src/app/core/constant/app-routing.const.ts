@@ -90,6 +90,13 @@ export const AppRoute = {
     feature: 'account',
     path: 'list',
   },
+  secured_manage_account_page: {
+    id: 'secured_manage_account_page',
+    url: '/secured/account/manage',
+    parent: 'secured',
+    feature: 'account',
+    path: 'manage',
+  },
   secured_account_transaction_page: {
     id: 'secured_account_transaction_page',
     url: '/secured/account/:id/transactions',

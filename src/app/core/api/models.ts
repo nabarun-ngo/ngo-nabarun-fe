@@ -53,7 +53,6 @@ export { SuccessResponseDonationDetail } from './models/success-response-donatio
 export { SuccessResponseDonationSummary } from './models/success-response-donation-summary';
 export { SuccessResponseEventDetail } from './models/success-response-event-detail';
 export { SuccessResponseExpenseDetail } from './models/success-response-expense-detail';
-export { SuccessResponseExpenseItemDetail } from './models/success-response-expense-item-detail';
 export { SuccessResponseListAdditionalField } from './models/success-response-list-additional-field';
 export { SuccessResponseListApiKeyDetail } from './models/success-response-list-api-key-detail';
 export { SuccessResponseListDocumentDetail } from './models/success-response-list-document-detail';

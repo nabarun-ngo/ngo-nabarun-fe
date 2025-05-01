@@ -1,4 +1,4 @@
-export type accountTab = 'my_accounts' | 'all_accounts' | 'expense_list';
+export type accountTab = 'my_accounts' | 'my_expenses' | 'all_accounts' | 'expense_list';
 
 
 export const AccountDefaultValue = {
