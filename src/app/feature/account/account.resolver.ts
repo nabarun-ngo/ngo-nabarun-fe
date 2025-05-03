@@ -20,7 +20,7 @@ export const manageAccountResolver: ResolveFn<any> = (route, state) => {
   if (tab == 'all_accounts') {
     return inject(AccountService).fetchAccounts(AccountDefaultValue.pageNumber, AccountDefaultValue.pageSize);
   } else if (tab == 'expense_list') {
-    return inject(AccountService).fetchExpenses(AccountDefaultValue.pageNumber, AccountDefaultValue.pageSize,{});
+    return inject(AccountService).fetchExpenses(AccountDefaultValue.pageNumber, AccountDefaultValue.pageSize);
   }
   return;
 };

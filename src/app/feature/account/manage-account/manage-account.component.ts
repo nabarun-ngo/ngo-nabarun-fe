@@ -102,7 +102,6 @@ export class ManageAccountComponent extends TabbedPage<accountTab> {
         .fetchExpenses(
           AccountDefaultValue.pageNumber,
           AccountDefaultValue.pageSize,
-          {}
         )
         .subscribe((s) => {
           this.expenseList = s!;
@@ -120,7 +119,7 @@ export class ManageAccountComponent extends TabbedPage<accountTab> {
       console.log($event.value);
       if (this.tabMapping[this.tabIndex] == 'all_accounts') {
         this.accountService
-          .fetchAccounts(undefined, undefined, $event.value)
+          .fetchAccounts(undefined,undefined,removeNullFields($event.value))
           .subscribe((s) => {
             this.accountList = s!;
           });
@@ -142,6 +141,16 @@ export class ManageAccountComponent extends TabbedPage<accountTab> {
           (f) => f.inputModel.html_id == 'account_Owner'
         )!.inputModel.selectList = users;
       });
+      if (this.tabMapping[this.tabIndex] == 'expense_list') {
+        this.accountService.fetchEvents().subscribe((s) => {
+          let events = s?.content?.map((m) => {
+            return { key: m.id, displayValue: m.eventTitle } as KeyValue;
+          });
+          this.searchInput.advancedSearch!.searchFormFields.find(
+            (f) => f.inputModel.html_id == 'event_Id'
+          )!.inputModel.selectList = events;
+        });
+      }
     }
   }
 }

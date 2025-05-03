@@ -2,9 +2,8 @@ import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular
 import { FormControl, FormGroup } from '@angular/forms';
 import { SearchAndAdvancedSearchModel } from '../../model/search-and-advanced-search.model';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatDatepicker } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
+import { isEmptyObject, removeNullFields } from 'src/app/core/service/utilities.service';
 
 @Component({
   selector: 'app-search-and-advanced-search-form',
@@ -13,6 +12,7 @@ import { SharedDataService } from 'src/app/core/service/shared-data.service';
 })
 export class SearchAndAdvancedSearchFormComponent implements OnInit {
 
+  isSearchDisabled=true;
   adv_search: boolean = false;
   colLength!: number;
 
@@ -50,7 +50,12 @@ export class SearchAndAdvancedSearchFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    //this.normalSearchPlaceHolder='Enter donation number, donor name , donation type, donation status to begin search';
+    this.searchformGroup.valueChanges.subscribe(d=>{
+      this.isSearchDisabled = !this.searchformGroup.valid || isEmptyObject(removeNullFields(d));
+      console.log(isEmptyObject(removeNullFields(d)))
+      console.log('Disabled',this.isSearchDisabled)
+
+    })
   }
 
   advSearch() {

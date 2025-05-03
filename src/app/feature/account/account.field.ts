@@ -3,13 +3,9 @@ import { AccountConstant, accountTab } from './account.const';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
 import { AccordionCell } from 'src/app/shared/model/accordion-list.model';
 import { AccountDetail } from 'src/app/core/api/models/account-detail';
-import { ExpenseDetail } from 'src/app/core/api/models';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { FormGroup, Validators } from '@angular/forms';
-import { constant } from 'tests/data/constant';
 import { date } from 'src/app/core/service/utilities.service';
-import { UniversalInputComponent } from 'src/app/shared/components/generic/universal-input/universal-input.component';
-import { UniversalInputModel } from 'src/app/shared/model/universal-input.model';
 
 export const accountTabHeader = (tab: accountTab) => {
   return [
@@ -44,11 +40,11 @@ export const accountSearchInput = (
   }
 ): SearchAndAdvancedSearchModel => {
   let model: SearchAndAdvancedSearchModel = {
-    normalSearchPlaceHolder: 'Search Account attributes here',
+    normalSearchPlaceHolder: 'Search for anything related to accounts here',
     advancedSearch: {
       searchFormFields: [
         {
-          formControlName: 'accountNo',
+          formControlName: 'accountId',
           inputModel: {
             tagName: 'input',
             inputType: 'text',
@@ -84,7 +80,7 @@ export const accountSearchInput = (
   };
   if(tab == 'all_accounts'){
     model.advancedSearch?.searchFormFields.push({
-      formControlName: 'accountOwner',
+      formControlName: 'accountHolderId',
       inputModel: {
         html_id: 'account_Owner',
         tagName: 'input',

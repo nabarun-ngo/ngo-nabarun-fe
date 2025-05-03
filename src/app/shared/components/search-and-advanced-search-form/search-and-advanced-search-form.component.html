@@ -37,7 +37,7 @@
 
 
         <div class="pt-4 mt-2 bg-gray-100 text-center sm:px-6 rounded-lg">
-            <button (click)="advSearch()"
+            <button (click)="advSearch()" [disabled]="isSearchDisabled"
                 class="bg-indigo-600 py-3 px-5 mx-2 text-white font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">
                  {{search.advancedSearch?.buttonText?.search?search.advancedSearch?.buttonText?.search:'Search'}}
             </button>

@@ -476,9 +476,10 @@ export const expenseSearchInput = (
       formControlName: 'expenseRefId',
       inputModel: {
         html_id: 'event_Id',
-        tagName: 'input',
-        inputType: 'text',
-        labelName:'Event Id',
+        tagName: 'select',
+        inputType: '',
+        labelName:'Select Event',
+        selectList:[],
         placeholder: 'Ex. NEV1224',
       }
     })
