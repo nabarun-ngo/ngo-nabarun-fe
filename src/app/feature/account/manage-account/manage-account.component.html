@@ -4,7 +4,7 @@
     </div>
     <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" (selectedTabChange)="tabChanged($event.index)"
         [(selectedIndex)]="tabIndex">
-        <mat-tab id="allAccount" label="Manage Accounts" [disabled]="!permissions.canCreateAccount">
+        <mat-tab id="allAccount" label="Manage Accounts">
             <app-manage-accounts-tab [accordionData]="accountList"></app-manage-accounts-tab>
         </mat-tab>
         <mat-tab id="expenses" label="Manage Expenses">

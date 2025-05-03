@@ -3,17 +3,15 @@ import { PageEvent } from '@angular/material/paginator';
 import {
   AccountDetail,
   ExpenseDetail,
-  ExpenseItemDetail,
   KeyValue,
-  UserDetail,
 } from 'src/app/core/api/models';
 import { AccordionButton } from 'src/app/shared/model/accordion-list.model';
 import { MyExpensesTabComponent } from '../../account-dashboard/my-expenses-tab/my-expenses-tab.component';
-import { AppAlert } from 'src/app/core/constant/app-alert.const';
 import { AppDialog } from 'src/app/core/constant/app-dialog.const';
 import { rejectionModal } from '../../expense.field';
 import { SearchAndAdvancedSearchFormComponent } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search-form.component';
 import { MatDialogRef } from '@angular/material/dialog';
+import { SCOPE } from 'src/app/core/constant/auth-scope.const';
 
 @Component({
   selector: 'app-manage-expense-tab',
@@ -55,11 +53,13 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
         button_id: 'UPDATE_EXPENSE',
         button_name: 'Update',
       });
-      buttons.push({
-        button_id: 'FINALIZE_EXPENSE',
-        button_name: 'Finalize',
-      });
-    } else if (data.status == 'FINALIZED') {
+      if(this.userIdentity.isAccrediatedTo(SCOPE.create.expense_final)){
+        buttons.push({
+          button_id: 'FINALIZE_EXPENSE',
+          button_name: 'Finalize',
+        });
+      }
+    } else if (data.status == 'FINALIZED' && this.userIdentity.isAccrediatedTo(SCOPE.create.expense_settle)) {
       buttons.push({
         button_id: 'SETTLE_EXPENSE',
         button_name: 'Settle',
@@ -105,7 +105,7 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
           let expense_form = this.getSectionForm(
             'expense_detail',
             $event.rowIndex
-          );
+          )!;
           expense_form?.markAllAsTouched();
           console.log(documents);
           if (documents?.length == 0) {
@@ -211,7 +211,7 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
             var id = this.itemList[$event.rowIndex].id!;
             //s.value.remarks
             this.accountService
-              .updateExpense(id, { status: 'REJECTED' })
+              .updateExpense(id, { status: 'REJECTED', remarks: s.value.remarks })
               .subscribe((d) => this.updateContentRow(d!, $event.rowIndex));
           }
         });

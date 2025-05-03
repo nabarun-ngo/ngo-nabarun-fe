@@ -21,6 +21,9 @@ export interface ExpenseDetail {
   isDeligated?: boolean;
   name?: string;
   paidBy?: UserDetail;
+  rejectedBy?: UserDetail;
+  rejectedOn?: string;
+  remarks?: string;
   settledBy?: UserDetail;
   settledOn?: string;
   settlementAccount?: AccountDetail;

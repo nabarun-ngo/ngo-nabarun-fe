@@ -39,62 +39,42 @@ export class AccountService {
       .pipe(map((d) => d.responsePayload));
   }
   fetchAccounts(
-    pageIndex: number = 0,
-    pageSize: number = 100,
-    filter?: {
-      status?: string[];
-      type?: string[];
-      accountNo?: string;
-    }
+    pageIndex?: number,
+    pageSize?: number,
+    filter?: AccountDetailFilter
   ) {
-    let filterS: AccountDetailFilter = {};
-    filterS.status = ['ACTIVE'];
-    filterS.includeBalance = true;
-    if (filter?.accountNo) {
-      filterS.accountId = filter?.accountNo;
-    }
-    if (filter?.status && filter?.status.length > 0) {
-      filterS.status = filter?.status as any;
-    }
-    if (filter?.type && filter?.type.length > 0) {
-      filterS.type = filter?.type as any;
-    }
+    filter = filter ? filter : {};
+    filter.status = filter?.status ? filter.status : ['ACTIVE'];
+    filter.includeBalance = filter?.includeBalance
+      ? filter.includeBalance
+      : true;
     return this.accountController
       .getAccounts({
         pageIndex: pageIndex,
         pageSize: pageSize,
-        filter: filterS,
+        filter: filter,
       })
       .pipe(map((d) => d.responsePayload));
   }
 
   fetchMyAccounts(
-    pageIndex: number = 0,
-    pageSize: number = 100,
-    filter?: {
-      status?: string[];
-      type?: string[];
-      accountNo?: string;
-    }
+    pageIndex?: number,
+    pageSize?: number,
+    filter?: AccountDetailFilter
   ) {
-    let filterS: AccountDetailFilter = {};
-    filterS.status = ['ACTIVE'];
-    filterS.includeBalance = true;
-    filterS.includePaymentDetail = true;
-    if (filter?.accountNo) {
-      filterS.accountId = filter?.accountNo;
-    }
-    if (filter?.status && filter?.status.length > 0) {
-      filterS.status = filter?.status as any;
-    }
-    if (filter?.type && filter?.type.length > 0) {
-      filterS.type = filter?.type as any;
-    }
+    filter = filter ? filter : {};
+    filter.includeBalance = filter?.includeBalance
+      ? filter.includeBalance
+      : true;
+    filter.includePaymentDetail = filter?.includePaymentDetail
+      ? filter?.includePaymentDetail
+      : true;
+
     return this.accountController
       .getMyAccounts({
         pageIndex: pageIndex,
         pageSize: pageSize,
-        filter: filterS,
+        filter: filter,
       })
       .pipe(map((d) => d.responsePayload));
   }
@@ -158,97 +138,49 @@ export class AccountService {
 
   fetchTransactions(
     id: string,
-    pageIndex: number = 0,
-    pageSize: number = 100,
-    filter?: {
-      txnNo?: string;
-      txnType?: string;
-      txnRef?: string;
-      startDate?: string;
-      endDate?: string;
-    }
+    pageIndex?: number,
+    pageSize?: number,
+    filter?: TransactionDetailFilter
   ) {
-    let txnFilter: TransactionDetailFilter = {};
-    if (filter) {
-      if (filter?.endDate) {
-        txnFilter.endDate = filter?.endDate;
-      }
-      if (filter?.startDate) {
-        txnFilter.startDate = filter?.startDate;
-      }
-      if (filter?.txnNo) {
-        txnFilter.txnId = filter?.txnNo;
-      }
-      if (filter?.txnRef) {
-        txnFilter.txnRefType = filter?.txnRef as any;
-      }
-      if (filter?.txnType) {
-        txnFilter.txnType = filter?.txnType as any;
-      }
-      return this.accountController
-        .getTransactions({
-          id: id,
-          filter: txnFilter,
-        })
-        .pipe(map((d) => d.responsePayload));
-    } else {
-      return this.accountController
-        .getTransactions({
-          id: id,
-          pageIndex: pageIndex,
-          pageSize: pageSize,
-          filter: txnFilter,
-        })
-        .pipe(map((d) => d.responsePayload));
+    filter = filter ? filter : {};
+    if (filter?.endDate) {
+      filter.endDate = date(filter?.endDate, 'yyyy-MM-dd');
     }
+    if (filter?.startDate) {
+      filter.startDate = date(filter?.startDate, 'yyyy-MM-dd');
+    }
+    
+    return this.accountController
+      .getTransactions({
+        id: id,
+        pageIndex: pageIndex,
+        pageSize: pageSize,
+        filter: filter,
+      })
+      .pipe(map((d) => d.responsePayload));
   }
 
   fetchMyTransactions(
     id: string,
-    pageIndex: number = 0,
-    pageSize: number = 100,
-    filter?: {
-      txnNo?: string;
-      txnType?: string;
-      txnRef?: string;
-      startDate?: string;
-      endDate?: string;
-    }
+    pageIndex?: number,
+    pageSize?: number,
+    filter?: TransactionDetailFilter
   ) {
-    let txnFilter: TransactionDetailFilter = {};
-    if (filter) {
-      console.log(filter);
-      if (filter?.endDate) {
-        txnFilter.endDate = date(filter?.endDate, 'yyyy-MM-dd');
-      }
-      if (filter?.startDate) {
-        txnFilter.startDate = date(filter?.startDate, 'yyyy-MM-dd');
-      }
-      if (filter?.txnNo) {
-        txnFilter.txnId = filter?.txnNo;
-      }
-      if (filter?.txnRef) {
-        txnFilter.txnRefType = filter?.txnRef as any;
-      }
-      if (filter?.txnType) {
-        txnFilter.txnType = filter?.txnType as any;
-      }
-      return this.accountController
-        .getMyTransactions({
-          id: id,
-          filter: txnFilter,
-        })
-        .pipe(map((d) => d.responsePayload));
-    } else {
-      return this.accountController
-        .getMyTransactions({
-          id: id,
-          pageIndex: pageIndex,
-          pageSize: pageSize,
-          filter: txnFilter,
-        })
-        .pipe(map((d) => d.responsePayload));
+    filter = filter ? filter : {};
+    if (filter?.endDate) {
+      filter.endDate = date(filter?.endDate, 'yyyy-MM-dd');
     }
+    if (filter?.startDate) {
+      filter.startDate = date(filter?.startDate, 'yyyy-MM-dd');
+    }
+    return this.accountController
+      .getMyTransactions({
+        id: id,
+        pageIndex: pageIndex,
+        pageSize: pageSize,
+        filter: filter,
+      })
+      .pipe(map((d) => d.responsePayload));
   }
 
   performTransaction(from: AccountDetail, value: any) {
@@ -271,22 +203,38 @@ export class AccountService {
   }
 
   fetchExpenses(
-    pageNumber: number,
-    pageSize: number,
-    filter:
-      | { status?: string[]; type?: string[]; accountNo?: string }
-      | undefined
+    pageNumber?: number,
+    pageSize?: number,
+    filter?: ExpenseDetailFilter
   ) {
+    filter = filter ? filter : {};
+    if (filter?.endDate) {
+      filter.endDate = date(filter?.endDate, 'yyyy-MM-dd');
+    }
+    if (filter?.startDate) {
+      filter.startDate = date(filter?.startDate, 'yyyy-MM-dd');
+    }
     return this.accountController
-      .getExpenses({ pageIndex: pageNumber, pageSize: pageSize, filter: {} })
+      .getExpenses({
+        pageIndex: pageNumber,
+        pageSize: pageSize,
+        filter: filter,
+      })
       .pipe(map((d) => d.responsePayload));
   }
 
   fetchMyExpenses(
-    pageNumber: number,
-    pageSize: number,
-    filter: ExpenseDetailFilter
+    pageNumber?: number,
+    pageSize?: number,
+    filter?: ExpenseDetailFilter
   ) {
+    filter = filter ? filter : {};
+    if (filter?.endDate) {
+      filter.endDate = date(filter?.endDate, 'yyyy-MM-dd');
+    }
+    if (filter?.startDate) {
+      filter.startDate = date(filter?.startDate, 'yyyy-MM-dd');
+    }
     return this.accountController
       .getMyExpenses({
         pageIndex: pageNumber,

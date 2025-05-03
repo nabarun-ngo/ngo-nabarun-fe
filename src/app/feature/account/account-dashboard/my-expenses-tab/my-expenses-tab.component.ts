@@ -191,9 +191,9 @@ export class MyExpensesTabComponent extends Accordion<ExpenseDetail> {
             isDeligated:
               expenseForm.value.expense_by !=
               this.userIdentity.loggedInUser.profile_id,
-            paidBy: this.users.find(
+            paidBy: this.users ? this.users.find(
               (f) => f.id == (this.isAdmin ? expenseForm?.value.expense_by : this.userIdentity.loggedInUser.profile_id)
-            ),
+            ):undefined,
             status: 'SUBMITTED',
           } as ExpenseDetail;
           if ($event.buttonId == 'CREATE_CONFIRM') {
