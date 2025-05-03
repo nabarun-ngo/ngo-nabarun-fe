@@ -2,7 +2,7 @@ import { FormGroup, Validators } from "@angular/forms";
 import { AdditionalField, DocumentDetail, KeyValue, RequestDetail, WorkDetail } from "src/app/core/api/models";
 import { date } from "src/app/core/service/utilities.service";
 import { RequestConstant, workListTab } from "./request.const";
-import { DetailedView, DetailedViewField } from "src/app/shared/components/generic/detailed-view/detailed-view.model";
+import { DetailedView, DetailedViewField } from "src/app/shared/model/detailed-view.model";
 
 const refDataKey=RequestConstant.refDataKey
 

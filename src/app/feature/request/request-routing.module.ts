@@ -4,7 +4,7 @@ import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { RequestListComponent } from './request-list/request-list.component';
 import { requestListResolver, requestRefDataResolver, taskListResolver } from './request.resolver';
 import { TaskListComponent } from './task-list/task-list.component';
-
+ 
 const route_data = AppRoute;
 
 const routes: Routes = [

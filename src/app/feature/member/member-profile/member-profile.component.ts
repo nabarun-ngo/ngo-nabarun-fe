@@ -8,7 +8,7 @@ import { OperationMode, UserConstant } from '../member.const';
 import { Location } from '@angular/common';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { ModalService } from 'src/app/core/service/modal.service';
-import { AlertData } from 'src/app/shared/components/generic/alert/alert.model';
+import { AlertData } from 'src/app/shared/model/alert.model';
 import { AppAlert } from 'src/app/core/constant/app-alert.const';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MemberProfileModel } from './member-profile.model';

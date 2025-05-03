@@ -9,14 +9,14 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 import { ServiceDetail } from '../../models/service-detail';
-import { SuccessResponseVoid } from '../../models/success-response-void';
+import { SuccessResponseMapStringObject } from '../../models/success-response-map-string-object';
 
 export interface RunService$Params {
   'Correlation-Id'?: string;
       body: ServiceDetail
 }
 
-export function runService(http: HttpClient, rootUrl: string, params: RunService$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
+export function runService(http: HttpClient, rootUrl: string, params: RunService$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseMapStringObject>> {
   const rb = new RequestBuilder(rootUrl, runService.PATH, 'post');
   if (params) {
     rb.header('Correlation-Id', params['Correlation-Id'], {});
@@ -28,7 +28,7 @@ export function runService(http: HttpClient, rootUrl: string, params: RunService
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseVoid>;
+      return r as StrictHttpResponse<SuccessResponseMapStringObject>;
     })
   );
 }

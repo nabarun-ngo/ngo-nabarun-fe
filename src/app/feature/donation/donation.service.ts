@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, combineLatest, firstValueFrom, forkJoin, map } from 'rxjs';
 import { DocumentDetailUpload, DonationDetail, DonationDetailFilter, DonationStatus, DonationType, RefDataType, UserDetailFilter } from 'src/app/core/api/models';
-import { AccountControllerService, CommonControllerService, DonationControllerService, EventControllerService, UserControllerService } from 'src/app/core/api/services';
+import { AccountControllerService, CommonControllerService, DonationControllerService, SocialEventControllerService, UserControllerService } from 'src/app/core/api/services';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 import { date } from 'src/app/core/service/utilities.service';
 
@@ -15,7 +15,7 @@ export class DonationService {
     private donationController: DonationControllerService,
     private userController: UserControllerService,
     private commonController: CommonControllerService,
-    private eventController: EventControllerService,
+    private eventController: SocialEventControllerService,
     private identityService: UserIdentityService,
     private accountController: AccountControllerService,
 
@@ -66,7 +66,7 @@ export class DonationService {
   }
 
   fetchEvents() {
-    return this.eventController.getSocialEvents().pipe(map(m => m.responsePayload));
+    return this.eventController.getSocialEvents({eventFilter:{}}).pipe(map(m => m.responsePayload));
   }
 
   // fetchRefData(type?:DonationType,status?:DonationStatus) {

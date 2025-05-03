@@ -1,25 +1,24 @@
-
 export const AppRoute = {
   welcome_page: {
     id: 'welcome_page',
     url: '',
     parent: '',
     feature: '',
-    path: ''
+    path: '',
   },
   login_page: {
     id: 'welcome_page',
     url: '/login',
     parent: '',
     feature: '',
-    path: 'login'
+    path: 'login',
   },
   login_callback_page: {
     id: 'login_callback_page',
     url: '/callback',
     parent: '',
     feature: '',
-    path: 'callback'
+    path: 'callback',
   },
   secured_dashboard_page: {
     id: 'secured_dashboard_page',
@@ -44,7 +43,7 @@ export const AppRoute = {
   },
   secured_member_profile_page: {
     id: 'secured_member_profile_page',
-    url: '/secured/member',// /:id to be added dynamically
+    url: '/secured/member', // /:id to be added dynamically
     parent: 'secured',
     feature: 'member',
     path: ':id',
@@ -91,6 +90,13 @@ export const AppRoute = {
     feature: 'account',
     path: 'list',
   },
+  secured_manage_account_page: {
+    id: 'secured_manage_account_page',
+    url: '/secured/account/manage',
+    parent: 'secured',
+    feature: 'account',
+    path: 'manage',
+  },
   secured_account_transaction_page: {
     id: 'secured_account_transaction_page',
     url: '/secured/account/:id/transactions',
@@ -126,7 +132,11 @@ export const AppRoute = {
     feature: 'admin',
     path: 'dashboard',
   },
-}
-
-
-
+  secured_event_list_page: {
+    id: 'secured_event_list_page',
+    url: '/secured/socialevents/list',
+    parent: 'secured',
+    feature: 'socialevents',
+    path: 'list'
+  },
+};

@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute } from '@angular/router';
-import { Paginator } from 'src/app/core/component/paginator';
+import { Paginator } from 'src/app/shared/utils/paginator';
 import { NoticeDefaultValue } from '../notice.const';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { NoticeService } from '../notice.service';
 import { NoticeDetail, PaginateNoticeDetail } from 'src/app/core/api/models';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { GoogleCalendarService } from 'src/app/core/service/google-calendar.service';
-import { SearchAndAdvancedSearchModel } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search.model';
+import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
 
 @Component({
