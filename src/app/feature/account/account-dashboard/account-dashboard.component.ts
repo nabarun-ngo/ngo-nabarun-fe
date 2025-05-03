@@ -15,6 +15,8 @@ import { UserIdentityService } from 'src/app/core/service/user-identity.service'
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
 import { accountSearchInput } from '../account.field';
 import { TabbedPage } from 'src/app/shared/utils/tab';
+import { expenseSearchInput } from '../expense.field';
+import { removeNullFields } from 'src/app/core/service/utilities.service';
 @Component({
   selector: 'app-account-dashboard',
   templateUrl: './account-dashboard.component.html',
@@ -80,7 +82,7 @@ export class AccountDashboardComponent extends TabbedPage<accountTab> {
           this.accountList = s!;
         });
     } else if (this.tabMapping[this.tabIndex] == 'my_expenses') {
-      //this.searchInput = accountSearchInput(this.refData);
+      this.searchInput = expenseSearchInput(this.tabMapping[this.tabIndex],this.refData);
       this.accountService
         .fetchMyExpenses(
           AccountDefaultValue.pageNumber,
@@ -100,15 +102,20 @@ export class AccountDashboardComponent extends TabbedPage<accountTab> {
   }) {
     if ($event.advancedSearch && !$event.reset) {
       console.log($event.value);
-      this.accountService
-        .fetchMyAccounts(undefined, undefined, {
-          accountNo: $event.value.accountNo,
-          status: $event.value.status,
-          type: $event.value.type,
-        })
+      if (this.tabMapping[this.tabIndex] == 'my_accounts') {
+        this.accountService
+        .fetchMyAccounts(undefined, undefined, $event.value)
         .subscribe((s) => {
           this.accountList = s!;
         });
+      }
+      else if (this.tabMapping[this.tabIndex] == 'my_expenses') {
+        this.accountService
+        .fetchMyExpenses(undefined, undefined, removeNullFields($event.value))
+        .subscribe((s) => {
+          this.expenseList = s!;
+        });
+      }
     } else if ($event.advancedSearch && $event.reset) {
       this.onTabChanged();
     } 

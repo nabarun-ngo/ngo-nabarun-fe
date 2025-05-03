@@ -275,27 +275,25 @@ export class AccountService {
   }
 
   fetchExpenses(
-    pageNumber: number,
-    pageSize: number,
-    filter:
-      | { status?: string[]; type?: string[]; accountNo?: string }
-      | undefined
+    pageNumber?: number,
+    pageSize?: number,
+    filter?:ExpenseDetailFilter
   ) {
     return this.accountController
-      .getExpenses({ pageIndex: pageNumber, pageSize: pageSize, filter: {} })
+      .getExpenses({ pageIndex: pageNumber, pageSize: pageSize, filter: filter! })
       .pipe(map((d) => d.responsePayload));
   }
 
   fetchMyExpenses(
-    pageNumber: number,
-    pageSize: number,
-    filter: ExpenseDetailFilter
+    pageNumber?: number,
+    pageSize?: number,
+    filter?: ExpenseDetailFilter
   ) {
     return this.accountController
       .getMyExpenses({
         pageIndex: pageNumber,
         pageSize: pageSize,
-        filter: filter,
+        filter: filter!,
       })
       .pipe(map((d) => d.responsePayload));
   }

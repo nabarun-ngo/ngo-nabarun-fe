@@ -424,53 +424,72 @@ export const expenseSearchInput = (
   }
 ): SearchAndAdvancedSearchModel => {
   let model: SearchAndAdvancedSearchModel = {
-    normalSearchPlaceHolder: 'Search Account attributes here',
+    normalSearchPlaceHolder: 'Search for anything related to expenses here',
     advancedSearch: {
       searchFormFields: [
         {
-          formControlName: 'accountNo',
+          formControlName: 'expenseId',
           inputModel: {
             tagName: 'input',
             inputType: 'text',
-            html_id: 'accountNo',
-            labelName: 'Account Number',
-            placeholder: 'Enter Account Number',
+            html_id: 'expense_Id',
+            labelName: 'Expense Id',
+            placeholder: 'Enter Expense Id',
           },
         },
         {
-          formControlName: 'type',
+          formControlName: 'expenseStatus',
           inputModel: {
             tagName: 'select',
             inputType: 'multiselect',
             html_id: 'type',
-            labelName: 'Account Type',
-            placeholder: 'Select Account Type',
-            selectList: refData['accountTypes'],
+            labelName: 'Expense Status',
+            placeholder: 'Select Expense Status',
+            selectList: refData['expenseStatuses'],
           },
         },
         {
-          formControlName: 'status',
+          formControlName: 'startDate',
           inputModel: {
-            tagName: 'select',
-            inputType: 'multiselect',
-            html_id: 'status',
-            labelName: 'Account Status',
-            placeholder: 'Select Account Status',
-            selectList: refData['accountStatuses'],
+            tagName: 'input',
+            inputType: 'date',
+            html_id: 'startDate',
+            labelName: 'Start Date',
+            placeholder: 'Select Start Date',
+          },
+        },
+        {
+          formControlName: 'endDate',
+          inputModel: {
+            tagName: 'input',
+            inputType: 'date',
+            html_id: 'endDate',
+            labelName: 'End Date',
+            placeholder: 'Select End Date',
           },
         },
       ],
     },
   };
-  if(tab == 'all_accounts'){
+  if(tab == 'expense_list'){
     model.advancedSearch?.searchFormFields.push({
-      formControlName: 'accountOwner',
+      formControlName: 'expenseRefId',
+      inputModel: {
+        html_id: 'event_Id',
+        tagName: 'input',
+        inputType: 'text',
+        labelName:'Event Id',
+        placeholder: 'Ex. NEV1224',
+      }
+    })
+    model.advancedSearch?.searchFormFields.push({
+      formControlName: 'payerId',
       inputModel: {
         html_id: 'account_Owner',
         tagName: 'input',
         inputType: 'text',
         autocomplete: true,
-        labelName:'Account Owner',
+        labelName:'Expense Payer',
         selectList: [],
         placeholder: 'Ex. Sonal Gupta',
       }
