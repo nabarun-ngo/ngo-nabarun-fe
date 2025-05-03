@@ -149,6 +149,7 @@ export class AccountService {
     if (filter?.startDate) {
       filter.startDate = date(filter?.startDate, 'yyyy-MM-dd');
     }
+    
     return this.accountController
       .getTransactions({
         id: id,
