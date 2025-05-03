@@ -56,7 +56,7 @@ export class AccountTransactionComponent extends Accordion<TransactionDetail> im
     }
 
     this.searchInput={
-      normalSearchPlaceHolder:'Search Transaction Number',
+      normalSearchPlaceHolder:'Search Transaction attributes here',
       advancedSearch:{
         searchFormFields:[{
           formControlName: 'txnNo',

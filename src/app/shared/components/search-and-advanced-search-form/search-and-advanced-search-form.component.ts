@@ -12,6 +12,7 @@ import { SharedDataService } from 'src/app/core/service/shared-data.service';
   styleUrls: ['./search-and-advanced-search-form.component.scss'],
 })
 export class SearchAndAdvancedSearchFormComponent implements OnInit {
+
   adv_search: boolean = false;
   colLength!: number;
 
@@ -24,7 +25,8 @@ export class SearchAndAdvancedSearchFormComponent implements OnInit {
   @Output() onSearch: EventEmitter<{
     advancedSearch: boolean,
     reset: boolean,
-    value: any
+    value: any,
+    buttonName?:string
   }> = new EventEmitter();
   searchformGroup: FormGroup = new FormGroup({});
 
@@ -59,14 +61,20 @@ export class SearchAndAdvancedSearchFormComponent implements OnInit {
 
   normalSearch($event: Event) {
     let input = $event.target as HTMLInputElement;
-    this.onSearch.emit({ advancedSearch: false, reset: false, value: input.value })
+    this.onSearch.emit({ advancedSearch: false, reset: false, value: input.value , buttonName: 'CLOSE'})
     this.sharedData.setSearchValue(input.value);
   }
 
   advSearchReset() {
     this.searchformGroup.reset()
-    this.onSearch.emit({ advancedSearch: true, reset: true, value: this.searchformGroup.value })
+    this.onSearch.emit({ advancedSearch: true, reset: true, value: this.searchformGroup.value, buttonName: 'SEARCH' })
     this.adv_search=false
+  }
+
+  clickAdvSearchBtn() {
+    this.adv_search=true
+    this.onSearch.emit({ advancedSearch: false, reset: false, value:{} , buttonName: 'ADVANCED_SEARCH'})
+
   }
 }
 

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PaginateAccountDetail, PaginateExpenseDetail } from 'src/app/core/api/models';
+import { KeyValue, PaginateAccountDetail, PaginateExpenseDetail } from 'src/app/core/api/models';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
@@ -32,9 +32,7 @@ export class ManageAccountComponent extends TabbedPage<accountTab> {
       routerLink: AppRoute.secured_account_list_page.url,
     },
   ];
-  protected searchInput: SearchAndAdvancedSearchModel= {
-    normalSearchPlaceHolder:'Search anything here'
-  };
+  protected searchInput!: SearchAndAdvancedSearchModel;
   private refData: any;
 
   constructor(
@@ -72,6 +70,7 @@ export class ManageAccountComponent extends TabbedPage<accountTab> {
     if (this.route.snapshot.data['ref_data']) {
       this.refData = this.route.snapshot.data['ref_data'];
     }
+    this.searchInput = accountSearchInput('all_accounts',this.refData);
   }
 
   protected tabMapping: accountTab[] = [
@@ -80,7 +79,7 @@ export class ManageAccountComponent extends TabbedPage<accountTab> {
   ];
   protected override onTabChanged(): void {
     if (this.tabMapping[this.tabIndex] == 'all_accounts') {
-      this.searchInput = accountSearchInput(this.refData);
+      this.searchInput = accountSearchInput('all_accounts',this.refData);
       this.accountService
         .fetchAccounts(
           AccountDefaultValue.pageNumber,
@@ -90,7 +89,7 @@ export class ManageAccountComponent extends TabbedPage<accountTab> {
           this.accountList = s!;
         });
     } else if (this.tabMapping[this.tabIndex] == 'expense_list') {
-      this.searchInput = accountSearchInput(this.refData);
+    //  this.searchInput = accountSearchInput(this.refData);
       this.accountService
         .fetchExpenses(
           AccountDefaultValue.pageNumber,
@@ -103,7 +102,7 @@ export class ManageAccountComponent extends TabbedPage<accountTab> {
     }
   }
 
-  onSearch($event: { advancedSearch: boolean; reset: boolean; value: any }) {
+  onSearch($event: { advancedSearch: boolean; reset: boolean; value: any,buttonName?: string;}) {
     if ($event.advancedSearch && !$event.reset) {
       console.log($event.value);
       this.accountService
@@ -111,12 +110,22 @@ export class ManageAccountComponent extends TabbedPage<accountTab> {
           accountNo: $event.value.accountNo,
           status: $event.value.status,
           type: $event.value.type,
+          accountHolderId: $event.value.accountOwner
         })
         .subscribe((s) => {
           this.accountList = s!;
         });
     } else if ($event.advancedSearch && $event.reset) {
       this.onTabChanged();
+    }else if ($event.buttonName == 'ADVANCED_SEARCH') {
+      this.accountService.fetchUsers().subscribe((s) => {
+        let users = s?.content?.map((m) => {
+          return { key: m.id, displayValue: m.fullName } as KeyValue;
+        });
+        this.searchInput.advancedSearch!.searchFormFields.find(
+          (f) => f.inputModel.html_id == 'account_Owner'
+        )!.inputModel.selectList = users;
+      });
     }
   }
 }

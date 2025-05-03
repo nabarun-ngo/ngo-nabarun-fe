@@ -4,7 +4,6 @@ import { PageEvent } from '@angular/material/paginator';
 import {
   ExpenseItemDetail,
   KeyValue,
-  WorkDetail,
 } from 'src/app/core/api/models';
 import { ExpenseDetail } from 'src/app/core/api/models/expense-detail';
 import { Accordion } from 'src/app/shared/utils/accordion';
@@ -18,6 +17,7 @@ import {
 } from 'src/app/shared/model/detailed-view.model';
 import { date } from 'src/app/core/service/utilities.service';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
+import { accountTab } from './account.const';
 
 export const expenseTabHeader = [
   {
@@ -125,7 +125,7 @@ export const expenseDetailSection = (
         form_input_validation: [Validators.required],
       },
       {
-        field_name: 'Paid by',
+        field_name: 'Paid By',
         field_value: m?.paidBy?.id,
         editable: m?.status != 'FINALIZED' && (isCreate || isAdminView),
         field_display_value: m?.paidBy?.fullName,
@@ -140,6 +140,18 @@ export const expenseDetailSection = (
           selectList: [],
         },
         form_input_validation: [Validators.required],
+      },
+      {
+        field_name: 'Created By',
+        field_value: m?.createdBy?.id,
+        field_display_value: m?.createdBy?.fullName,
+        hide_field: !m?.createdBy        
+      },
+      {
+        field_name: 'Expense Amount',
+        field_value: m?.finalAmount,
+        field_display_value: `₹ ${m?.finalAmount}`,
+        hide_field: !m?.finalAmount       
       },
       {
         field_name: 'Is this any event releted expense?',
@@ -161,10 +173,20 @@ export const expenseDetailSection = (
         form_input_validation: [Validators.required],
       },
       {
+        field_name: 'Finalized By',
+        field_value: m?.finalizedBy?.fullName,
+        hide_field: !m?.finalizedBy        
+      },
+      {
+        field_name: 'Settled By',
+        field_value: m?.settledBy?.fullName,
+        hide_field: !m?.settledBy        
+      },
+      {
         field_name: 'Settlement Account',
         field_value: m?.settlementAccount?.id,
         editable: m?.status == 'FINALIZED',
-        hide_field: !(m?.status == 'FINALIZED' || m?.status == 'SETTLED'),
+        hide_field: m == undefined || !(m?.status == 'FINALIZED' || m?.status == 'SETTLED'),
         field_display_value: `${m?.settlementAccount?.id} (${m?.settlementAccount?.accountHolderName})`,
         field_html_id: 'settlement_account',
         form_control_name: 'settlement_acc',
@@ -176,6 +198,16 @@ export const expenseDetailSection = (
           selectList: [],
         },
         form_input_validation: [Validators.required],
+      },
+      {
+        field_name: 'Rejected By',
+        field_value: m?.rejectedBy?.fullName,
+        hide_field: !m?.rejectedBy        
+      },
+      {
+        field_name: 'Remarks',
+        field_value: m?.remarks,
+        hide_field: !m?.remarks        
       },
     ],
   } as DetailedView;
@@ -384,3 +416,66 @@ export const rejectionModal =():SearchAndAdvancedSearchModel =>{
     }
   }
 };
+
+export const expenseSearchInput = (
+  tab: accountTab,
+  refData: {
+    [name: string]: KeyValue[];
+  }
+): SearchAndAdvancedSearchModel => {
+  let model: SearchAndAdvancedSearchModel = {
+    normalSearchPlaceHolder: 'Search Account attributes here',
+    advancedSearch: {
+      searchFormFields: [
+        {
+          formControlName: 'accountNo',
+          inputModel: {
+            tagName: 'input',
+            inputType: 'text',
+            html_id: 'accountNo',
+            labelName: 'Account Number',
+            placeholder: 'Enter Account Number',
+          },
+        },
+        {
+          formControlName: 'type',
+          inputModel: {
+            tagName: 'select',
+            inputType: 'multiselect',
+            html_id: 'type',
+            labelName: 'Account Type',
+            placeholder: 'Select Account Type',
+            selectList: refData['accountTypes'],
+          },
+        },
+        {
+          formControlName: 'status',
+          inputModel: {
+            tagName: 'select',
+            inputType: 'multiselect',
+            html_id: 'status',
+            labelName: 'Account Status',
+            placeholder: 'Select Account Status',
+            selectList: refData['accountStatuses'],
+          },
+        },
+      ],
+    },
+  };
+  if(tab == 'all_accounts'){
+    model.advancedSearch?.searchFormFields.push({
+      formControlName: 'accountOwner',
+      inputModel: {
+        html_id: 'account_Owner',
+        tagName: 'input',
+        inputType: 'text',
+        autocomplete: true,
+        labelName:'Account Owner',
+        selectList: [],
+        placeholder: 'Ex. Sonal Gupta',
+      }
+    })
+  }
+  return model;
+};
+

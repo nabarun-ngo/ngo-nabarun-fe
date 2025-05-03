@@ -45,6 +45,7 @@ export class AccountService {
       status?: string[];
       type?: string[];
       accountNo?: string;
+      accountHolderId?:string;
     }
   ) {
     let filterS: AccountDetailFilter = {};
@@ -58,6 +59,9 @@ export class AccountService {
     }
     if (filter?.type && filter?.type.length > 0) {
       filterS.type = filter?.type as any;
+    }
+    if (filter?.accountHolderId) {
+      filterS.accountHolderId = filter?.accountHolderId;
     }
     return this.accountController
       .getAccounts({
