@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit,AfterViewInit {
     if (this.isCodeError) {
       this.identityService.loginWith('password', 'login',redirect_to);
     } else {
-      this.identityService.loginWith('password','none',redirect_to);
+      this.identityService.loginWith('password',undefined,redirect_to);
     }
   }
 
@@ -62,7 +62,7 @@ export class LoginComponent implements OnInit,AfterViewInit {
     if (this.isCodeError) {
       this.identityService.loginWith('email', 'login',redirect_to);
     } else {
-      this.identityService.loginWith('email','none',redirect_to);
+      this.identityService.loginWith('email',undefined,redirect_to);
     }
   }
 }
