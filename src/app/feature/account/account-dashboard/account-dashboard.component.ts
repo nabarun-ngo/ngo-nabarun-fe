@@ -104,7 +104,7 @@ export class AccountDashboardComponent extends TabbedPage<accountTab> {
       console.log($event.value);
       if (this.tabMapping[this.tabIndex] == 'my_accounts') {
         this.accountService
-        .fetchMyAccounts(undefined, undefined, $event.value)
+        .fetchMyAccounts(undefined, undefined, removeNullFields($event.value))
         .subscribe((s) => {
           this.accountList = s!;
         });
