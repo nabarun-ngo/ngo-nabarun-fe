@@ -12,6 +12,7 @@ import { AlertData } from 'src/app/shared/model/alert.model';
 import { AppAlert, interpolate } from 'src/app/core/constant/app-alert.const';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 import { SCOPE } from 'src/app/core/constant/auth-scope.const';
+import { UniversalInputModel } from 'src/app/shared/model/universal-input.model';
 
 @Component({
   selector: 'app-donation-accordion',
@@ -33,6 +34,11 @@ export class DonationAccordionComponent implements OnInit {
 
   alertList:AlertData[]=[];
   canUpdateDonation!: boolean;
+  checkboxInput: UniversalInputModel={
+    inputType:'check',
+    html_id:'id',
+    tagName:'input'
+  };
 
 
   constructor(
