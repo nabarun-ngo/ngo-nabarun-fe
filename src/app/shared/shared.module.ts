@@ -133,6 +133,7 @@ import { PageLayoutComponent } from './layout/page-layout/page-layout.component'
     HistoryComponent,
     PageNavigationButtonsComponent,
     PageLayoutComponent,
+    MatCheckboxModule,
   ],
   providers: [{
     provide: MAT_RADIO_DEFAULT_OPTIONS,
