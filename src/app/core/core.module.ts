@@ -20,6 +20,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { MatNativeDateModule } from '@angular/material/core';
 import { IonicModule } from '@ionic/angular';
 import { AuthHttpInterceptor, AuthModule } from '@auth0/auth0-angular';
+import { BaseModalComponent } from './component/base-modal/base-modal.component';
 
 
 
@@ -35,6 +36,7 @@ import { AuthHttpInterceptor, AuthModule } from '@auth0/auth0-angular';
     SecuredLayoutComponent,
     ModalComponent,
     DateDiffPipe,
+    BaseModalComponent,
   ],
   imports: [
     CommonModule,

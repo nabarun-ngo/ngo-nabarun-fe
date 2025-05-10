@@ -11,6 +11,14 @@ export const AppDialog = {
     title: 'Error',
     description: 'There is some errors in role selection.',
   },
+  err_sel_don_nt_sm_typ:{
+    title: 'Error',
+    description: 'All selected donations must have the same type.',
+  },
+  err_sel_don_nt_sm_sts:{
+    title: 'Error',
+    description: 'All selected donations must have the same status.',
+  },
   err_no_change_made: {
     title: 'Error',
     description: 'No changes has been made.',

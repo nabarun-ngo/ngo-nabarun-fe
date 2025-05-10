@@ -46,8 +46,10 @@
     </mat-expansion-panel>
 
     <mat-expansion-panel class="m-2" *ngFor="let don of donations | donationSearch:searchValue" (opened)="accordionOpened(don.donation!)">
+        <!-- <app-universal-input formControlName="don" [inputModel]="checkboxInput"></app-universal-input> -->
         <mat-expansion-panel-header class="min-h-auto w-full items-center my-2">
             <mat-panel-description class="w-full">
+                <mat-checkbox *ngIf="tabName == 'member_donation'" [(ngModel)]="don.selected"></mat-checkbox>
                 <ng-container *ngTemplateOutlet="headerTemplate;context:{donation:don.donation}"></ng-container>
             </mat-panel-description>
         </mat-expansion-panel-header>
@@ -67,7 +69,7 @@
             <div *ngIf="tabName !== 'self_donation'" class="mx-4">
                 <button (click)="showHistory(don.donation!)" mat-button color="primary" class="text-green-600">Show changes</button>
                 <button *ngIf="don.action == 'edit'" mat-button color="primary" class="text-green-600" (click)="donationEdit(don.donation!,false)">Cancel</button>
-                <button mat-button color="primary" class="text-green-600" *ngIf="canUpdateDonation" (click)="donationEdit(don.donation!,true)">{{don.action == 'edit' ? 'Confirm':'Update'}}</button>
+                <button mat-button color="primary" class="text-green-600" *ngIf="canUpdateDonation && !don.selected" (click)="donationEdit(don.donation!,true)">{{don.action == 'edit' ? 'Confirm':'Update'}}</button>
             </div>
         </mat-action-row>
     </mat-expansion-panel>
