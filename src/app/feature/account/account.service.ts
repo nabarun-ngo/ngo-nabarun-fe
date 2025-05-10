@@ -12,6 +12,7 @@ import {
   AccountDetailFilter,
   BankDetail,
   DocumentDetailUpload,
+  DocumentMapping,
   ExpenseDetail,
   ExpenseDetailFilter,
   ExpenseItemDetail,
@@ -26,6 +27,7 @@ import { date } from 'src/app/core/service/utilities.service';
   providedIn: 'root',
 })
 export class AccountService {
+ 
   constructor(
     private accountController: AccountControllerService,
     private commonController: CommonControllerService,
@@ -183,7 +185,8 @@ export class AccountService {
       .pipe(map((d) => d.responsePayload));
   }
 
-  performTransaction(from: AccountDetail, value: any) {
+  performTransfer(from: AccountDetail, value: any) {
+  
     return this.accountController
       .createTransaction({
         body: {
@@ -192,7 +195,7 @@ export class AccountService {
             id: value.transferTo,
           },
           txnAmount: value.amount,
-          // txnDate: new Date().toDateString(),
+          txnDate: value.transferDate,
           txnDescription: value.description,
           txnType: 'TRANSFER',
           txnRefType: 'NONE',
@@ -200,6 +203,22 @@ export class AccountService {
         },
       })
       .pipe(map((d) => d.responsePayload));
+  }
+
+  performMoneyIn(accountTo: AccountDetail, value: any) {
+    return this.accountController
+    .createTransaction({
+      body: {
+        transferTo: accountTo,
+        txnAmount: value.amount,
+        txnDate: value.inDate,
+        txnDescription: value.description,
+        txnType: 'IN',
+        txnRefType: 'NONE',
+        txnStatus: 'SUCCESS',
+      },
+    })
+    .pipe(map((d) => d.responsePayload));
   }
 
   fetchExpenses(
@@ -300,12 +319,10 @@ export class AccountService {
       .pipe(map((m) => m.responsePayload));
   }
 
-  uploadDocuments(id: string, documents: DocumentDetailUpload[]) {
+  uploadDocuments(documents: DocumentDetailUpload[]) {
     return this.commonController
       .uploadDocuments({
-        body: documents,
-        docIndexId: id,
-        docIndexType: 'EXPENSE',
+        body: documents
       })
       .pipe(map((d) => d.responsePayload));
   }

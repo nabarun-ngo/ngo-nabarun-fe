@@ -12,6 +12,7 @@ import {
   accountHighLevelView,
   accountTabHeader,
   bankDetailSection,
+  moneyInSection,
   transferAmountSection,
   upiDetailSection,
 } from '../../account.field';
@@ -83,6 +84,10 @@ export class MyAccountsTabComponent extends Accordion<AccountDetail> {
         button_name: 'Transfer',
       },
       {
+        button_id: 'MONEY_IN',
+        button_name: 'Money In',
+      },
+      {
         button_id: 'UPDATE_BANK_UPI',
         button_name: 'Update Bank and UPI Detail',
       },
@@ -112,6 +117,11 @@ export class MyAccountsTabComponent extends Accordion<AccountDetail> {
         this.initTransferForm(event.rowIndex);
         this.activeButtonId = event.buttonId;
         break;
+      case 'MONEY_IN':
+        this.addSectionInAccordion(moneyInSection(), event.rowIndex);
+        this.showEditForm(event.rowIndex, ['money_in_acc']);
+        this.activeButtonId = event.buttonId;
+        break;
       case 'UPDATE_BANK_UPI':
         this.showEditForm(event.rowIndex, ['bank_detail', 'upi_detail']);
         this.initBankingUPIForm(event.rowIndex);
@@ -127,10 +137,28 @@ export class MyAccountsTabComponent extends Accordion<AccountDetail> {
         if (this.activeButtonId == 'TRANSFER') {
           this.performTransferAction(event.rowIndex);
         }
+        if (this.activeButtonId == 'MONEY_IN') {
+          this.performMoneyInAction(event.rowIndex);
+        }
         if (this.activeButtonId == 'UPDATE_BANK_UPI') {
           this.performBankUpiDetailUpdate(event.rowIndex);
         }
         break;
+    }
+  }
+  performMoneyInAction(rowIndex: number) {
+    let money_in_acc = this.getSectionForm('money_in_acc', rowIndex);
+    money_in_acc?.markAllAsTouched();
+    if (money_in_acc?.valid) {
+      let account = this.itemList[rowIndex];
+      this.accountService
+        .performMoneyIn(account, money_in_acc.value)
+        .subscribe((d) => {
+          console.log(d);
+          this.hideForm(rowIndex);
+          this.removeSectionInAccordion('money_in_acc', rowIndex);
+          this.updateContentRow(d?.transferTo!,rowIndex);
+        });
     }
   }
 
@@ -161,7 +189,7 @@ export class MyAccountsTabComponent extends Accordion<AccountDetail> {
     if (transfer_form?.valid) {
       let account = this.itemList[rowIndex];
       this.accountService
-        .performTransaction(account, transfer_form.value)
+        .performTransfer(account, transfer_form.value)
         .subscribe((d) => {
           console.log(d);
           this.hideForm(rowIndex);

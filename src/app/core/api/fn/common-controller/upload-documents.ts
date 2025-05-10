@@ -12,8 +12,6 @@ import { DocumentDetailUpload } from '../../models/document-detail-upload';
 import { SuccessResponseVoid } from '../../models/success-response-void';
 
 export interface UploadDocuments$Params {
-  docIndexId: string;
-  docIndexType: 'DONATION' | 'EVENT' | 'NOTICE' | 'USER' | 'PROFILE_PHOTO' | 'EVENT_COVER' | 'REQUEST' | 'EXPENSE';
   'Correlation-Id'?: string;
       body: Array<DocumentDetailUpload>
 }
@@ -21,8 +19,6 @@ export interface UploadDocuments$Params {
 export function uploadDocuments(http: HttpClient, rootUrl: string, params: UploadDocuments$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
   const rb = new RequestBuilder(rootUrl, uploadDocuments.PATH, 'post');
   if (params) {
-    rb.query('docIndexId', params.docIndexId, {});
-    rb.query('docIndexType', params.docIndexType, {});
     rb.header('Correlation-Id', params['Correlation-Id'], {});
     rb.body(params.body, 'application/json');
   }

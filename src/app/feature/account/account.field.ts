@@ -407,7 +407,74 @@ export const transferAmountSection = () => {
         form_input_validation: [Validators.required, Validators.min(1)],
       },
       {
+        field_name: 'Transfer Date',
+        field_html_id: 'transfer_date',
+        showDisplayValue: true,
+        form_control_name: 'transferDate',
+        editable: true,
+        form_input: {
+          tagName: 'input',
+          inputType: 'date',
+          placeholder: 'Ex. 13/07/2000',
+        },
+        form_input_validation: [Validators.required],
+      },
+      {
         field_name: 'Transfer Description',
+        field_value: '',
+        form_control_name: 'description',
+        editable: true,
+        field_html_id: 'description',
+        form_input: {
+          html_id: 'description_i',
+          inputType: 'text',
+          tagName: 'input',
+          placeholder: 'Ex. Monthly donation',
+        },
+        form_input_validation: [Validators.required],
+      },
+    ],
+  } as DetailedView;
+};
+
+
+export const moneyInSection = () => {
+  return {
+    section_form: new FormGroup({}),
+    section_name: 'Money In to Account',
+    section_type: 'key_value',
+    section_html_id: 'money_in_acc',
+    hide_section: true,
+    content: [
+      {
+        field_name: 'IN Amount',
+        field_value: '',
+        form_control_name: 'amount',
+        editable: true,
+        field_html_id: 'amount',
+        form_input: {
+          html_id: 'amount_i',
+          inputType: 'number',
+          tagName: 'input',
+          placeholder: 'Ex. 500',
+        },
+        form_input_validation: [Validators.required, Validators.min(1)],
+      },
+      {
+        field_name: 'In Date',
+        field_html_id: 'in_date',
+        showDisplayValue: true,
+        form_control_name: 'inDate',
+        editable: true,
+        form_input: {
+          tagName: 'input',
+          inputType: 'date',
+          placeholder: 'Ex. 13/07/2000',
+        },
+        form_input_validation: [Validators.required],
+      },
+      {
+        field_name: 'Money In Description',
         field_value: '',
         form_control_name: 'description',
         editable: true,
