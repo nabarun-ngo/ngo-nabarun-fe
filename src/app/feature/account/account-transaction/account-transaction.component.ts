@@ -35,12 +35,7 @@ export class AccountTransactionComponent
   defaultValue = TransactionDefaultValue;
   refData: { [name: string]: KeyValue[] } | undefined;
   transactionList!: PaginateTransactionDetail;
-  navigations: NavigationButtonModel[] = [
-    {
-      displayName: 'Back to Accounts',
-      routerLink: AppRoute.secured_account_list_page.url,
-    },
-  ];
+  navigations!: NavigationButtonModel[];
   searchInput!: SearchAndAdvancedSearchModel;
   constructor(
     private sharedDataService: SharedDataService,
@@ -73,6 +68,18 @@ export class AccountTransactionComponent
         this.transactionList.content!,
         this.transactionList?.totalSize!
       );
+
+      this.navigations = [
+        this.route.snapshot.queryParams['self'] == 'Y'
+          ? {
+              displayName: 'Back to Accounts & Finance',
+              routerLink: AppRoute.secured_account_list_page.url,
+            }
+          : {
+              displayName: 'Back to Manage Accounts & Finance',
+              routerLink: AppRoute.secured_manage_account_page.url,
+            },
+      ];
     }
 
     this.searchInput = {
@@ -292,15 +299,18 @@ export class AccountTransactionComponent
     this.fetchDetails();
   }
 
-  onClick($event: { buttonId: string; rowIndex: number }) {
-   
-  }
+  onClick($event: { buttonId: string; rowIndex: number }) {}
 
   onAccordionOpen($event: { rowIndex: number }) {
     let item = this.itemList![$event.rowIndex];
-    this.accountService.getTransactionDocuments(item.txnId!).subscribe((data) => {
-      this.addSectionInAccordion(accountDocumentSection(data!),$event.rowIndex);
-    });
+    this.accountService
+      .getTransactionDocuments(item.txnId!)
+      .subscribe((data) => {
+        this.addSectionInAccordion(
+          accountDocumentSection(data!),
+          $event.rowIndex
+        );
+      });
   }
 
   onSearch($event: { advancedSearch: boolean; reset: boolean; value: any }) {
@@ -309,7 +319,12 @@ export class AccountTransactionComponent
       let id = atob(this.route.snapshot.params['id']);
       if (this.route.snapshot.queryParams['self'] == 'Y') {
         this.accountService
-          .fetchMyTransactions(id, undefined,undefined,removeNullFields($event.value))
+          .fetchMyTransactions(
+            id,
+            undefined,
+            undefined,
+            removeNullFields($event.value)
+          )
           .subscribe((data) => {
             this.transactionList = data!;
             this.setContent(
@@ -319,7 +334,12 @@ export class AccountTransactionComponent
           });
       } else {
         this.accountService
-          .fetchTransactions(id, undefined,undefined,removeNullFields($event.value))
+          .fetchTransactions(
+            id,
+            undefined,
+            undefined,
+            removeNullFields($event.value)
+          )
           .subscribe((data) => {
             this.transactionList = data!;
             this.setContent(
