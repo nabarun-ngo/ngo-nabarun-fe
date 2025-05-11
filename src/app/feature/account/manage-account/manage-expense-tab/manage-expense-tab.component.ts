@@ -53,13 +53,16 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
         button_id: 'UPDATE_EXPENSE',
         button_name: 'Update',
       });
-      if(this.userIdentity.isAccrediatedTo(SCOPE.create.expense_final)){
+      if (this.userIdentity.isAccrediatedTo(SCOPE.create.expense_final)) {
         buttons.push({
           button_id: 'FINALIZE_EXPENSE',
           button_name: 'Finalize',
         });
       }
-    } else if (data.status == 'FINALIZED' && this.userIdentity.isAccrediatedTo(SCOPE.create.expense_settle)) {
+    } else if (
+      data.status == 'FINALIZED' &&
+      this.userIdentity.isAccrediatedTo(SCOPE.create.expense_settle)
+    ) {
       buttons.push({
         button_id: 'SETTLE_EXPENSE',
         button_name: 'Settle',
@@ -133,14 +136,23 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
                   })
                   .subscribe((s) => {
                     this.accountService
-                      .uploadDocuments(
-                        itemData.id!,
-                        documents?.map((m) => m.detail)!
-                      )
+                      .uploadDocuments(documents?.map((m) => {
+                        m.detail.documentMapping=[
+                          {
+                            docIndexId: itemData.id!,
+                            docIndexType: 'EXPENSE',
+                          },
+                          {
+                            docIndexId: s?.txnNumber!,
+                            docIndexType: 'TRANSACTION',
+                          },
+                        ]
+                        return m.detail;
+                      })!)
                       .subscribe(() => {
                         this.updateContentRow(s!, $event.rowIndex);
                         this.hideForm($event.rowIndex);
-                        this.removeButton('SETTLE_EXPENSE',$event.rowIndex)
+                        this.removeButton('SETTLE_EXPENSE', $event.rowIndex);
                       });
                   });
               });
@@ -211,7 +223,10 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
             var id = this.itemList[$event.rowIndex].id!;
             //s.value.remarks
             this.accountService
-              .updateExpense(id, { status: 'REJECTED', remarks: s.value.remarks })
+              .updateExpense(id, {
+                status: 'REJECTED',
+                remarks: s.value.remarks,
+              })
               .subscribe((d) => this.updateContentRow(d!, $event.rowIndex));
           }
         });
@@ -221,6 +236,4 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
         break;
     }
   }
-
-  protected override onAccordionOpen($event: { rowIndex: number }) {}
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, combineLatest, firstValueFrom, forkJoin, map } from 'rxjs';
-import { DocumentDetailUpload, DonationDetail, DonationDetailFilter, DonationStatus, DonationType, RefDataType, UserDetailFilter } from 'src/app/core/api/models';
+import { DocumentDetailUpload, DocumentMapping, DonationDetail, DonationDetailFilter, DonationStatus, DonationType, RefDataType, UserDetailFilter } from 'src/app/core/api/models';
 import { AccountControllerService, CommonControllerService, DonationControllerService, SocialEventControllerService, UserControllerService } from 'src/app/core/api/services';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 import { date } from 'src/app/core/service/utilities.service';
@@ -77,9 +77,13 @@ export class DonationService {
     return this.donationController.updateDonation({ id: id, body: details }).pipe(map(d => d.responsePayload));
   }
 
-  uploadDocuments(id:string,documents:DocumentDetailUpload[]){
-    return this.commonController.uploadDocuments({body:documents,docIndexId:id,docIndexType:'DONATION'}).pipe(map(d => d.responsePayload));
-  }
+  uploadDocuments(documents: DocumentDetailUpload[]) {
+      return this.commonController
+        .uploadDocuments({
+          body: documents
+        })
+        .pipe(map((d) => d.responsePayload));
+    }
 
   updatePaymentInfo(id:string,action:string,donation:DonationDetail){
     return this.donationController.payments({action:action,id:id,body:{

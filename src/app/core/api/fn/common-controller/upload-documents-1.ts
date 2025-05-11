@@ -12,7 +12,7 @@ import { SuccessResponseVoid } from '../../models/success-response-void';
 
 export interface UploadDocuments1$Params {
   docIndexId: string;
-  docIndexType: 'DONATION' | 'EVENT' | 'NOTICE' | 'USER' | 'PROFILE_PHOTO' | 'EVENT_COVER' | 'REQUEST' | 'EXPENSE';
+  docIndexType: 'DONATION' | 'EVENT' | 'NOTICE' | 'USER' | 'PROFILE_PHOTO' | 'EVENT_COVER' | 'REQUEST' | 'EXPENSE' | 'TRANSACTION';
   files: Array<Blob>;
   'Correlation-Id'?: string;
 }
