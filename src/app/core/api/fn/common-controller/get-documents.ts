@@ -12,7 +12,7 @@ import { SuccessResponseListDocumentDetail } from '../../models/success-response
 
 export interface GetDocuments$Params {
   docIndexId: string;
-  docIndexType: 'DONATION' | 'EVENT' | 'NOTICE' | 'USER' | 'PROFILE_PHOTO' | 'EVENT_COVER' | 'REQUEST' | 'EXPENSE';
+  docIndexType: 'DONATION' | 'EVENT' | 'NOTICE' | 'USER' | 'PROFILE_PHOTO' | 'EVENT_COVER' | 'REQUEST' | 'EXPENSE' | 'TRANSACTION';
   'Correlation-Id'?: string;
 }
 

@@ -14,7 +14,7 @@ export interface TransactionDetail {
   txnId?: string;
   txnParticulars?: string;
   txnRefId?: string;
-  txnRefType?: 'DONATION' | 'NONE' | 'EVENT1' | 'EXPENSE';
+  txnRefType?: 'DONATION' | 'NONE' | 'EXPENSE';
   txnStatus?: 'SUCCESS' | 'FAILURE' | 'REVERT';
   txnType?: 'IN' | 'OUT' | 'TRANSFER';
 }

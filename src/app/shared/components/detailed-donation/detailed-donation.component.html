@@ -267,7 +267,7 @@
             <app-document-list [documents]="documents"></app-document-list>
             <div *ngIf="mode == 'view' 
             && donationTab == 'self_donation' 
-            && (donation.status == donationStatus.Raised || donation.status == donationStatus.Pending)" class="bg-white p-3 shadow-lg rounded-sm">
+            && (donation?.status == donationStatus.Raised || donation?.status == donationStatus.Pending)" class="bg-white p-3 shadow-lg rounded-sm">
                 <div class="flex items-center space-x-2 font-semibold text-gray-900 leading-8">
                     <span clas="text-green-500">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
