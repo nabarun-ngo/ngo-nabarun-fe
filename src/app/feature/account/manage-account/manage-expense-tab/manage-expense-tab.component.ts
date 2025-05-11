@@ -236,6 +236,4 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
         break;
     }
   }
-
-  protected override onAccordionOpen($event: { rowIndex: number }) {}
 }

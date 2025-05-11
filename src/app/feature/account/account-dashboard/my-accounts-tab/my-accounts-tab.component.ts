@@ -9,6 +9,7 @@ import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { Accordion } from 'src/app/shared/utils/accordion';
 import {
   accountDetailSection,
+  accountDocumentSection,
   accountHighLevelView,
   accountTabHeader,
   bankDetailSection,
@@ -20,6 +21,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AccountDefaultValue } from '../../account.const';
 import { AccountService } from '../../account.service';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
+import { ModalService } from 'src/app/core/service/modal.service';
+import { AppDialog } from 'src/app/core/constant/app-dialog.const';
 
 @Component({
   selector: 'app-my-accounts-tab',
@@ -31,7 +34,8 @@ export class MyAccountsTabComponent extends Accordion<AccountDetail> {
   constructor(
     protected route: ActivatedRoute,
     protected accountService: AccountService,
-    protected router: Router
+    protected router: Router,
+    protected modalService: ModalService
   ) {
     super();
     //Set Ref Data
@@ -81,11 +85,11 @@ export class MyAccountsTabComponent extends Accordion<AccountDetail> {
       },
       {
         button_id: 'TRANSFER',
-        button_name: 'Transfer',
+        button_name: 'Transfer Funds',
       },
       {
         button_id: 'MONEY_IN',
-        button_name: 'Money In',
+        button_name: 'Add Funds',
       },
       {
         button_id: 'UPDATE_BANK_UPI',
@@ -113,13 +117,15 @@ export class MyAccountsTabComponent extends Accordion<AccountDetail> {
         break;
       case 'TRANSFER':
         this.addSectionInAccordion(transferAmountSection(), event.rowIndex);
-        this.showEditForm(event.rowIndex, ['transfer_amt']);
+        this.addSectionInAccordion(accountDocumentSection([]), event.rowIndex);
+        this.showEditForm(event.rowIndex, ['transfer_amt', 'document_list']);
         this.initTransferForm(event.rowIndex);
         this.activeButtonId = event.buttonId;
         break;
       case 'MONEY_IN':
         this.addSectionInAccordion(moneyInSection(), event.rowIndex);
-        this.showEditForm(event.rowIndex, ['money_in_acc']);
+        this.addSectionInAccordion(accountDocumentSection([]), event.rowIndex);
+        this.showEditForm(event.rowIndex, ['money_in_acc', 'document_list']);
         this.activeButtonId = event.buttonId;
         break;
       case 'UPDATE_BANK_UPI':
@@ -131,6 +137,11 @@ export class MyAccountsTabComponent extends Accordion<AccountDetail> {
         this.hideForm(event.rowIndex);
         if (this.activeButtonId == 'TRANSFER') {
           this.removeSectionInAccordion('transfer_amt', event.rowIndex);
+          this.removeSectionInAccordion('document_list', event.rowIndex);
+        }
+        if (this.activeButtonId == 'MONEY_IN') {
+          this.removeSectionInAccordion('money_in_acc', event.rowIndex);
+          this.removeSectionInAccordion('document_list', event.rowIndex);
         }
         break;
       case 'CONFIRM':
@@ -150,15 +161,44 @@ export class MyAccountsTabComponent extends Accordion<AccountDetail> {
     let money_in_acc = this.getSectionForm('money_in_acc', rowIndex);
     money_in_acc?.markAllAsTouched();
     if (money_in_acc?.valid) {
+      let document_list = this.getSectionDocuments('document_list', rowIndex);
+      if (document_list?.length == 0) {
+        this.modalService.openNotificationModal(
+          AppDialog.err_min_1_doc,
+          'notification',
+          'error'
+        );
+        return;
+      }
       let account = this.itemList[rowIndex];
-      this.accountService
-        .performMoneyIn(account, money_in_acc.value)
-        .subscribe((d) => {
-          console.log(d);
-          this.hideForm(rowIndex);
-          this.removeSectionInAccordion('money_in_acc', rowIndex);
-          this.updateContentRow(d?.transferTo!,rowIndex);
-        });
+      let message = {
+        title: 'Confirm',
+        description: `I confirm that I have received ${money_in_acc.value.amount} in my account ${account.id}`,
+      };
+      let modal = this.modalService.openNotificationModal(
+        message,
+        'confirmation',
+        'warning'
+      );
+      modal.onAccept$.subscribe(() => {
+        this.accountService
+          .performMoneyIn(account, money_in_acc?.value)
+          .subscribe((d) => {
+            console.log(d);
+            this.hideForm(rowIndex);
+            this.removeSectionInAccordion('money_in_acc', rowIndex);
+            this.removeSectionInAccordion('document_list', rowIndex);
+            this.updateContentRow(d?.transferTo!, rowIndex);
+             let files = document_list?.map(m=>{
+              m.detail.documentMapping=[{
+                docIndexId: d?.txnId,
+                docIndexType:'TRANSACTION'
+              }];
+              return m.detail;
+            })!;
+            this.accountService.uploadDocuments(files).subscribe();
+          });
+      });
     }
   }
 
@@ -179,7 +219,7 @@ export class MyAccountsTabComponent extends Accordion<AccountDetail> {
         .updateBankingAndUPIDetail(item.id!, bankForm?.value, upiForm?.value)
         .subscribe((d) => {
           this.hideForm(rowIndex);
-          this.updateContentRow(d!,rowIndex);
+          this.updateContentRow(d!, rowIndex);
         });
     }
   }
@@ -187,15 +227,44 @@ export class MyAccountsTabComponent extends Accordion<AccountDetail> {
     let transfer_form = this.getSectionForm('transfer_amt', rowIndex);
     transfer_form?.markAllAsTouched();
     if (transfer_form?.valid) {
+      let document_list = this.getSectionDocuments('document_list', rowIndex);
+      if (document_list?.length == 0) {
+        this.modalService.openNotificationModal(
+          AppDialog.err_min_1_doc,
+          'notification',
+          'error'
+        );
+        return;
+      }
       let account = this.itemList[rowIndex];
-      this.accountService
-        .performTransfer(account, transfer_form.value)
-        .subscribe((d) => {
-          console.log(d);
-          this.hideForm(rowIndex);
-          this.removeSectionInAccordion('transfer_amt', rowIndex);
-          this.updateContentRow(d?.transferFrom!,rowIndex);
-        });
+      let message = {
+        title: 'Confirm',
+        description: `I confirm that I have transferred ${transfer_form.value.amount} to account ${transfer_form.value.transferTo} and uploaded related document.`,
+      };
+      let modal = this.modalService.openNotificationModal(
+        message,
+        'confirmation',
+        'warning'
+      );
+      modal.onAccept$.subscribe(() => {
+        this.accountService
+          .performTransfer(account, transfer_form?.value)
+          .subscribe((d) => {
+            console.log(d);
+            this.hideForm(rowIndex);
+            this.removeSectionInAccordion('transfer_amt', rowIndex);
+            this.removeSectionInAccordion('document_list', rowIndex);
+            this.updateContentRow(d?.transferFrom!, rowIndex);
+            let files = document_list?.map(m=>{
+              m.detail.documentMapping=[{
+                docIndexId: d?.txnId,
+                docIndexType:'TRANSACTION'
+              }];
+              return m.detail;
+            })!;
+            this.accountService.uploadDocuments(files).subscribe();
+          });
+      });
     }
   }
   private initTransferForm(rowIndex: number) {

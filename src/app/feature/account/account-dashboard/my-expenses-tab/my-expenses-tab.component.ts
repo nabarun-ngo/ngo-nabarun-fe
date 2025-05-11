@@ -67,9 +67,9 @@ export class MyExpensesTabComponent extends Accordion<ExpenseDetail> {
     var expenseList = expenseListSection(data, isCreate);
     this.handleExpenseItemEvents(expenseList, isCreate);
     return [
-      expenseDetailSection(data, isCreate,this.isAdmin),
+      expenseDetailSection(data, isCreate, this.isAdmin),
       expenseList,
-      expenseDocumentSection(data, isCreate),
+      expenseDocumentSection([], isCreate),
     ];
   }
 
@@ -191,9 +191,15 @@ export class MyExpensesTabComponent extends Accordion<ExpenseDetail> {
             isDeligated:
               expenseForm.value.expense_by !=
               this.userIdentity.loggedInUser.profile_id,
-            paidBy: this.users ? this.users.find(
-              (f) => f.id == (this.isAdmin ? expenseForm?.value.expense_by : this.userIdentity.loggedInUser.profile_id)
-            ):undefined,
+            paidBy: this.users
+              ? this.users.find(
+                  (f) =>
+                    f.id ==
+                    (this.isAdmin
+                      ? expenseForm?.value.expense_by
+                      : this.userIdentity.loggedInUser.profile_id)
+                )
+              : undefined,
             status: 'SUBMITTED',
           } as ExpenseDetail;
           if ($event.buttonId == 'CREATE_CONFIRM') {
@@ -219,7 +225,14 @@ export class MyExpensesTabComponent extends Accordion<ExpenseDetail> {
     }
   }
 
-  protected override onAccordionOpen($event: { rowIndex: number }) {}
+  protected override onAccordionOpen($event: { rowIndex: number }) {
+    let item = this.itemList![$event.rowIndex];
+    this.accountService.getExpenseDocuments(item.id!).subscribe((data) => {
+      let accordion=this.getSectionInAccordion('expense_doc_list',$event.rowIndex)!;
+      accordion.documents = data;
+      accordion.hide_section = false;
+    });
+  }
 
   protected handleExpenseItemEvents(
     expenseList: DetailedView,

@@ -6,6 +6,8 @@ import { AccountDetail } from 'src/app/core/api/models/account-detail';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { FormGroup, Validators } from '@angular/forms';
 import { date } from 'src/app/core/service/utilities.service';
+import { DocumentDetail } from 'src/app/core/api/models';
+import { EventEmitter } from '@angular/core';
 
 export const accountTabHeader = (tab: accountTab) => {
   return [
@@ -427,8 +429,8 @@ export const transferAmountSection = () => {
         field_html_id: 'description',
         form_input: {
           html_id: 'description_i',
-          inputType: 'text',
-          tagName: 'input',
+          inputType: '',
+          tagName: 'textarea',
           placeholder: 'Ex. Monthly donation',
         },
         form_input_validation: [Validators.required],
@@ -441,13 +443,13 @@ export const transferAmountSection = () => {
 export const moneyInSection = () => {
   return {
     section_form: new FormGroup({}),
-    section_name: 'Money In to Account',
+    section_name: 'Add Funds to Account',
     section_type: 'key_value',
     section_html_id: 'money_in_acc',
     hide_section: true,
     content: [
       {
-        field_name: 'IN Amount',
+        field_name: 'Amount to Add',
         field_value: '',
         form_control_name: 'amount',
         editable: true,
@@ -461,7 +463,7 @@ export const moneyInSection = () => {
         form_input_validation: [Validators.required, Validators.min(1)],
       },
       {
-        field_name: 'In Date',
+        field_name: 'Addition Date',
         field_html_id: 'in_date',
         showDisplayValue: true,
         form_control_name: 'inDate',
@@ -474,19 +476,34 @@ export const moneyInSection = () => {
         form_input_validation: [Validators.required],
       },
       {
-        field_name: 'Money In Description',
+        field_name: 'Fund Description',
         field_value: '',
         form_control_name: 'description',
         editable: true,
         field_html_id: 'description',
         form_input: {
           html_id: 'description_i',
-          inputType: 'text',
-          tagName: 'input',
+          inputType: '',
+          tagName: 'textarea',
           placeholder: 'Ex. Monthly donation',
         },
         form_input_validation: [Validators.required],
       },
     ],
+  } as DetailedView;
+};
+
+export const accountDocumentSection = (
+  docs: DocumentDetail[]
+) => {
+  return {
+    section_name: 'Documents',
+    section_type: 'doc_list',
+    section_html_id: 'document_list',
+    section_form: new FormGroup({}),
+    documents: docs,
+    doc: {
+      docChange: new EventEmitter(),
+    },
   } as DetailedView;
 };

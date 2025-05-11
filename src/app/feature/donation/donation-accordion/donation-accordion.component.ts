@@ -54,10 +54,10 @@ export class DonationAccordionComponent implements OnInit {
 
   alertList: AlertData[] = [];
   canUpdateDonation!: boolean;
-  checkboxInput: UniversalInputModel={
-    inputType:'check',
-    html_id:'id',
-    tagName:'input'
+  checkboxInput: UniversalInputModel = {
+    inputType: 'check',
+    html_id: 'id',
+    tagName: 'input',
   };
 
   constructor(
@@ -128,26 +128,21 @@ export class DonationAccordionComponent implements OnInit {
                       {
                         docIndexId: data?.transactionRef!,
                         docIndexType: 'TRANSACTION',
-                      }
+                      },
                     ];
                     return m.detail;
                   })!;
                   this.alertList.push(AppAlert.donation_updated);
                   this.donationService
                     .uploadDocuments(files!)
-                    .subscribe((data) => {
-                      this.donationService
-                        .fetchDocuments(donation.id!)
-                        .subscribe((docs) => {
-                          this.donations
-                            .filter((f) => f.donation?.id == donation.id)
-                            .map((item) => {
-                              item.action = 'view';
-                              item.update = undefined;
-                              item.donation = data;
-                              item.documents = docs;
-                              return item;
-                            });
+                    .subscribe((data1) => {
+                      this.donations
+                        .filter((f) => f.donation?.id == donation.id)
+                        .map((item) => {
+                          item.action = 'view';
+                          item.update = undefined;
+                          item.donation = data;
+                          return item;
                         });
                     });
                 });

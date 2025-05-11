@@ -21,6 +21,7 @@ import { AccountService } from '../account.service';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
+import { accountDocumentSection } from '../account.field';
 
 @Component({
   selector: 'app-account-transaction',
@@ -291,9 +292,16 @@ export class AccountTransactionComponent
     this.fetchDetails();
   }
 
-  onClick($event: { buttonId: string; rowIndex: number }) {}
+  onClick($event: { buttonId: string; rowIndex: number }) {
+   
+  }
 
-  onAccordionOpen($event: { rowIndex: number }) {}
+  onAccordionOpen($event: { rowIndex: number }) {
+    let item = this.itemList![$event.rowIndex];
+    this.accountService.getTransactionDocuments(item.txnId!).subscribe((data) => {
+      this.addSectionInAccordion(accountDocumentSection(data!),$event.rowIndex);
+    });
+  }
 
   onSearch($event: { advancedSearch: boolean; reset: boolean; value: any }) {
     if ($event.advancedSearch && !$event.reset) {

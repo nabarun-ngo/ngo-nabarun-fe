@@ -2,6 +2,7 @@ import { EventEmitter } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import {
+  DocumentDetail,
   ExpenseItemDetail,
   KeyValue,
 } from 'src/app/core/api/models';
@@ -214,15 +215,16 @@ export const expenseDetailSection = (
 };
 
 export const expenseDocumentSection = (
-  m: ExpenseDetail,
+  docs: DocumentDetail[],
   isCreate: boolean = false
 ) => {
   return {
-    section_name: 'Upload Document',
+    section_name: 'Documents',
     section_type: 'doc_list',
     section_html_id: 'expense_doc_list',
     section_form: new FormGroup({}),
     hide_section: true,
+    documents: docs,
     doc: {
       docChange: new EventEmitter(),
     },

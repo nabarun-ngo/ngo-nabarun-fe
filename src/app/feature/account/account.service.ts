@@ -27,7 +27,6 @@ import { date } from 'src/app/core/service/utilities.service';
   providedIn: 'root',
 })
 export class AccountService {
- 
   constructor(
     private accountController: AccountControllerService,
     private commonController: CommonControllerService,
@@ -151,7 +150,7 @@ export class AccountService {
     if (filter?.startDate) {
       filter.startDate = date(filter?.startDate, 'yyyy-MM-dd');
     }
-    
+
     return this.accountController
       .getTransactions({
         id: id,
@@ -186,7 +185,6 @@ export class AccountService {
   }
 
   performTransfer(from: AccountDetail, value: any) {
-  
     return this.accountController
       .createTransaction({
         body: {
@@ -207,18 +205,18 @@ export class AccountService {
 
   performMoneyIn(accountTo: AccountDetail, value: any) {
     return this.accountController
-    .createTransaction({
-      body: {
-        transferTo: accountTo,
-        txnAmount: value.amount,
-        txnDate: value.inDate,
-        txnDescription: value.description,
-        txnType: 'IN',
-        txnRefType: 'NONE',
-        txnStatus: 'SUCCESS',
-      },
-    })
-    .pipe(map((d) => d.responsePayload));
+      .createTransaction({
+        body: {
+          transferTo: accountTo,
+          txnAmount: value.amount,
+          txnDate: value.inDate,
+          txnDescription: value.description,
+          txnType: 'IN',
+          txnRefType: 'NONE',
+          txnStatus: 'SUCCESS',
+        },
+      })
+      .pipe(map((d) => d.responsePayload));
   }
 
   fetchExpenses(
@@ -322,8 +320,20 @@ export class AccountService {
   uploadDocuments(documents: DocumentDetailUpload[]) {
     return this.commonController
       .uploadDocuments({
-        body: documents
+        body: documents,
       })
+      .pipe(map((d) => d.responsePayload));
+  }
+
+  getExpenseDocuments(id: string) {
+    return this.commonController
+      .getDocuments({ docIndexId: id, docIndexType: 'EXPENSE' })
+      .pipe(map((d) => d.responsePayload));
+  }
+
+  getTransactionDocuments(id: string) {
+    return this.commonController
+      .getDocuments({ docIndexId: id, docIndexType: 'TRANSACTION' })
       .pipe(map((d) => d.responsePayload));
   }
 }
