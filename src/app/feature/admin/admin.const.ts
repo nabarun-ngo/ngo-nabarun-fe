@@ -14,7 +14,7 @@ export const AdminConstant = {
         importantLinks: 'importantLinks',
     },
     enum: {
-        
+         
     }
 
 }
