@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { EventDetail, PaginateEventDetail } from 'src/app/core/api/models';
-import { date } from 'src/app/core/service/utilities.service';
+import { date, removeNullFields } from 'src/app/core/service/utilities.service';
 import { Accordion } from 'src/app/shared/utils/accordion';
 import {
   AccordionCell,
@@ -12,6 +12,7 @@ import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { EventsService } from '../../events.service';
 import { eventDetailSection } from '../../social-event.field';
 import { DefaultValue } from '../../events.conts';
+import { remove } from 'fs-extra';
 
 @Component({
   selector: 'app-upcoming-events-tab',
@@ -173,7 +174,7 @@ export class UpcomingEventsTabComponent extends Accordion<EventDetail> {
   private updateEvent(rowIndex: number, value: EventDetail) {
     let eventDetail = this.itemList[rowIndex];
     this.eventService
-      .editSocialEvent(eventDetail.id!, value)
+      .editSocialEvent(eventDetail.id!, removeNullFields(value))
       .subscribe((data) => {
         this.hideForm(rowIndex);
         this.updateContentRow(data!, rowIndex);
@@ -181,7 +182,7 @@ export class UpcomingEventsTabComponent extends Accordion<EventDetail> {
   }
 
   private createEvent(value: EventDetail) {
-    this.eventService.createSocialEvent(value).subscribe((data) => {
+    this.eventService.createSocialEvent(removeNullFields(value)).subscribe((data) => {
       this.hideForm(0, true);
       this.addContentRow(data!, true);
     });
