@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { DonationDetail, UserDetail } from 'src/app/core/api/models';
 import { DonationList, MemberList } from './donation.model';
+import { isEmptyObject } from 'src/app/core/service/utilities.service';
 
 @Pipe({
   name: 'donationSearch'
@@ -14,7 +14,10 @@ export class DonationPipe implements PipeTransform {
     if(!searchValue){
       return donations;
     }
-    //console.log(searchValue)
+    if(isEmptyObject(searchValue)){
+      return donations; 
+    }
+    console.log(searchValue)
     searchValue=searchValue.toLowerCase();
     return donations.filter((donation:DonationList)=>
       

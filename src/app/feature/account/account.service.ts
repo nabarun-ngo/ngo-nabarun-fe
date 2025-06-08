@@ -32,7 +32,7 @@ export class AccountService {
     private commonController: CommonControllerService,
     private userController: UserControllerService,
     private eventController: SocialEventControllerService
-  ) {}
+  ) { }
 
   fetchAllAccounts() {
     return this.accountController
@@ -127,11 +127,22 @@ export class AccountService {
         .getUsers({ filter: { status: ['ACTIVE'] } })
         .pipe(map((d) => d.responsePayload));
     }
+    if (accountType == 'DONATION') {
+      return this.userController
+        .getUsers({
+          filter: {
+            status: ['ACTIVE'],
+            roles: ['ASSISTANT_CASHIER', 'CASHIER'],
+          },
+        })
+        .pipe(map((d) => d.responsePayload));
+    }
+
     return this.userController
       .getUsers({
         filter: {
           status: ['ACTIVE'],
-          roles: ['ASSISTANT_CASHIER', 'CASHIER', 'TREASURER'],
+          roles: ['TREASURER'],
         },
       })
       .pipe(map((d) => d.responsePayload));

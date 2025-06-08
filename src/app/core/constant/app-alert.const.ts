@@ -5,22 +5,22 @@ export const AppAlert = {
     profile_updated_self: {
         message: 'Your profile data has been successfully updated.',
         alertType: 'success' as AlertType,
-        destroyAfter: 5
+        destroyAfter: 10
     },
     donation_updated: {
         message: 'Donation details have been successfully updated.',
         alertType: 'success' as AlertType,
-        destroyAfter: 5
+        destroyAfter: 10
     },
     donation_created: {
         message: 'Donation <b>{donationId}</b> has been successfully created.',
         alertType: 'success' as AlertType,
-        destroyAfter: 5
+        destroyAfter: 10
     },
     payment_notified: {
         message: 'Your payment has been successfully notified.',
         alertType: 'success' as AlertType,
-        destroyAfter: 5
+        destroyAfter: 10
     },
 }
 
