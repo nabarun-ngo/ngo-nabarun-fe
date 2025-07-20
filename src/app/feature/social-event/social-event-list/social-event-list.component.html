@@ -1,14 +1,15 @@
 <app-page-layout [navigations]="navigations">
     <div class="flex lg:flex-row p-2 lg:p-4 justify-center items-start lg:items-stretch w-full">
-        <app-search-and-advanced-search-form [searchInput]="{
-            normalSearchPlaceHolder:'Search Request Number'
-        }"></app-search-and-advanced-search-form>
-        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center"
-        (selectedTabChange)="tabChanged($event.index)" [(selectedIndex)]="tabIndex">
+        <app-search-and-advanced-search-form [searchInput]="searchInput"
+            (onSearch)="onSearch($event)"></app-search-and-advanced-search-form>
+    </div>
+    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" (selectedTabChange)="tabChanged($event.index)"
+        [(selectedIndex)]="tabIndex">
         <mat-tab id="upcoming_events" label="Upcoming Events">
+            <app-upcoming-events-tab [accordionData]="eventListDetail"></app-upcoming-events-tab>
         </mat-tab>
         <mat-tab id="completed_events" label="Completed Events">
+            <app-completed-events-tab [accordionData]="eventListDetail"></app-completed-events-tab>
         </mat-tab>
     </mat-tab-group>
-    </div>
-</app-page-layout> 
+</app-page-layout>

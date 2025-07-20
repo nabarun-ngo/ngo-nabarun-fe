@@ -4,5 +4,9 @@
 
 export interface ExpenseDetailFilter {
   endDate?: string;
+  expenseId?: string;
+  expenseRefId?: string;
+  expenseStatus?: Array<'DRAFT' | 'SUBMITTED' | 'FINALIZED' | 'SETTLED' | 'REJECTED'>;
+  payerId?: string;
   startDate?: string;
 }

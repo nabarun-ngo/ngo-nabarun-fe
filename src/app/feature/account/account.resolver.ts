@@ -7,10 +7,20 @@ import { RefDataType } from 'src/app/core/api/models';
 
 export const accountDashboardResolver: ResolveFn<any> = (route, state) => {
   let tab = (route.data['tab'] || AccountDefaultValue.tabName) as accountTab;
+  if (tab == 'my_accounts') {
+    return inject(AccountService).fetchMyAccounts(AccountDefaultValue.pageNumber, AccountDefaultValue.pageSize);
+  }else if (tab == 'my_expenses') {
+    return inject(AccountService).fetchMyExpenses(AccountDefaultValue.pageNumber, AccountDefaultValue.pageSize,{});
+  }
+  return;
+};
+
+export const manageAccountResolver: ResolveFn<any> = (route, state) => {
+  let tab = (route.data['tab'] || 'all_accounts') as accountTab;
   if (tab == 'all_accounts') {
     return inject(AccountService).fetchAccounts(AccountDefaultValue.pageNumber, AccountDefaultValue.pageSize);
-  } else if (tab == 'my_accounts') {
-    return inject(AccountService).fetchMyAccounts(AccountDefaultValue.pageNumber, AccountDefaultValue.pageSize);
+  } else if (tab == 'expense_list') {
+    return inject(AccountService).fetchExpenses(AccountDefaultValue.pageNumber, AccountDefaultValue.pageSize);
   }
   return;
 };

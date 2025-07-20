@@ -6,7 +6,6 @@ import { AccountDetail } from '../models/account-detail';
 import { ExpenseItemDetail } from '../models/expense-item-detail';
 import { UserDetail } from '../models/user-detail';
 export interface ExpenseDetail {
-  account?: AccountDetail;
   createdBy?: UserDetail;
   createdOn?: string;
   description?: string;
@@ -15,10 +14,19 @@ export interface ExpenseDetail {
   expenseRefId?: string;
   expenseRefType?: 'EVENT' | 'OTHER';
   finalAmount?: number;
-  finalized?: boolean;
   finalizedBy?: UserDetail;
+  finalizedOn?: string;
   id?: string;
+  isAdmin?: boolean;
+  isDeligated?: boolean;
   name?: string;
-  status?: 'SUBMITTED' | 'PAID' | 'CLOSED';
+  paidBy?: UserDetail;
+  rejectedBy?: UserDetail;
+  rejectedOn?: string;
+  remarks?: string;
+  settledBy?: UserDetail;
+  settledOn?: string;
+  settlementAccount?: AccountDetail;
+  status?: 'DRAFT' | 'SUBMITTED' | 'FINALIZED' | 'SETTLED' | 'REJECTED';
   txnNumber?: string;
 }

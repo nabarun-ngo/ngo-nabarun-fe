@@ -12,6 +12,7 @@ export interface DonationList {
     upload?:FileUpload[];
     eventSubject:Subject<any>
     histories?: HistoryDetail[];
+    selected?:boolean;
 }
 
 export interface MemberList {

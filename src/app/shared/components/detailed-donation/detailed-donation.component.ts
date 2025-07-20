@@ -18,7 +18,7 @@ import { CommonService } from '../../services/common.service';
 export class DetailedDonationComponent implements OnInit {
 
 
-  protected donationForm: FormGroup = new FormGroup({});
+  donationForm: FormGroup = new FormGroup({});
   protected donationRefData = DonationRefData;
   protected donationType = DonationType;
   protected donationStatus = DonationStatus;

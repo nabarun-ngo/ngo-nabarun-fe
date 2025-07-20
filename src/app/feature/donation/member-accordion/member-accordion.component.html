@@ -74,6 +74,7 @@
             <div class="flex justify-end p-2">
                 <mat-icon *ngIf="canCreateDonation" (click)="mem.showcreateDonation=true"
                     class="bg-purple-500 mx-2 mt-2">add</mat-icon>
+                <mat-icon *ngIf="canUpdateDonation && isBulkEdit(mem.donations!)" (click)="performBulkEdit(mem.member?.id!,mem.donations!)" class="bg-purple-500 mx-2 mt-2">edit</mat-icon>
                 <mat-form-field appearance="outline" class="dense-3">
                     <!-- <mat-label>Search here</mat-label> -->
                     <input type="text" matInput [(ngModel)]="mem.searchValue" placeholder="Search here">
@@ -81,7 +82,7 @@
                 <button mat-button *ngIf="!mem.advancedSearch" color="primary" class="text-green-600 m-1" (click)="donationFilter(mem)">Filter</button>
                 <button mat-button *ngIf="mem.advancedSearch" color="primary" class="text-green-600 m-1"  (click)="donationFilter(mem,true)">Clear Filter</button>
             </div>
-            <app-donation-accordion [member]="mem.member!" [donations]="mem.donations!" [searchValue]="mem.searchValue!"
+            <app-donation-accordion [tabName]="'member_donation'" [member]="mem.member!" [donations]="mem.donations!" [searchValue]="mem.searchValue!"
                 [(createDonation)]="mem.showcreateDonation!"></app-donation-accordion>
             <mat-paginator class="mt-4" style="background-color: transparent;"
                 (page)="handlePageEvent(mem.member!,$event)" [length]="mem.total" [pageSize]="mem.size"

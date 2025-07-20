@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
 import { UserControllerService } from './services/user-controller.service';
-import { EventControllerService } from './services/event-controller.service';
+import { SocialEventControllerService } from './services/social-event-controller.service';
 import { RequestControllerService } from './services/request-controller.service';
 import { NoticeControllerService } from './services/notice-controller.service';
 import { DonationControllerService } from './services/donation-controller.service';
@@ -26,7 +26,7 @@ import { ActuatorService } from './services/actuator.service';
   declarations: [],
   providers: [
     UserControllerService,
-    EventControllerService,
+    SocialEventControllerService,
     RequestControllerService,
     NoticeControllerService,
     DonationControllerService,

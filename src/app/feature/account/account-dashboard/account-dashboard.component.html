@@ -1,50 +1,21 @@
-<main class="p-4 m-4 bg-gray-200 rounded-lg">
-    <div class="flex flex-col">
-        <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-            <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                <div class="flex lg:flex-row p-2 lg:p-4 justify-center items-start lg:items-stretch w-full">
-                    <app-search-and-advanced-search-form [searchInput]="searchInput" (onSearch)="onSearch($event)"></app-search-and-advanced-search-form>
-                </div>
-                <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center"
-                    (selectedTabChange)="tabChanged($event.index)" [(selectedIndex)]="tabIndex">
-                    <mat-tab id="myAccount" label="My Accounts">
-                        <h2 class="text-purple-700 font-bold text-center mt-4">My Account List</h2>
-                        <app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)"
-                            (onAccordionOpen)="accordionOpened($event)"></app-accordion-list>
-                    </mat-tab>
-                    <mat-tab id="allAccount" label="Manage Accounts" [disabled]="!canViewAccounts">
-                        <div class="flex justify-end mx-4 my-2" *ngIf="canCreateAccount">
-                            <div class="mx-1 px-2">
-                                <button (click)="createAccount();"
-                                    class="bg-indigo-600 py-3 px-6 w-full text-white font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">Create Account</button>
-                            </div>
-                        </div>
-                        <h2 class="text-purple-700 font-bold text-center mt-4">Account List</h2>
-                        <app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)"
-                            (onAccordionOpen)="accordionOpened($event)"></app-accordion-list>
-                    </mat-tab>
-                    <!-- <mat-tab id="expenses" label="Manage Expenses" >
-                        <div class="flex justify-end mx-4 my-2">
-                            <div class="mx-1 px-2">
-                                <button (click)="createExpense()"
-                                    class="bg-indigo-600 py-3 px-6 w-full text-white font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">Create Expense</button>
-                            </div>
-                        </div>
-                        <h2 class="text-purple-700 font-bold text-center mt-4">Expense List</h2>
-                        <app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)"
-                            (onAccordionOpen)="accordionOpened($event)"></app-accordion-list>
-                    </mat-tab> -->
-                    <mat-tab id="expenses" label="Manage Expenses" [disabled]="true">
-                        <app-expense-tab [expenseList]="expenseList"></app-expense-tab>
-                    </mat-tab>
-                </mat-tab-group>
-                <mat-paginator class="mt-4" style="background-color: transparent;" (page)="handlePageEvent($event)"
-                    [length]="itemLength$ | async" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
-                    [pageIndex]="pageNumber" aria-label="Select page">
-                </mat-paginator>
-            </div>
+<app-page-layout [navigations]="navigations">
+    <div class="flex lg:flex-row p-2 lg:p-4 justify-center items-start lg:items-stretch w-full">
+        <app-search-and-advanced-search-form [searchInput]="searchInput" (onSearch)="onSearch($event)"></app-search-and-advanced-search-form>
+    </div>
+    <div class="flex justify-end mx-4 my-2" *ngIf="permissions.canManageAccounts">
+        <div class="mx-1 px-2">
+            <button [routerLink]="[AppRoute.secured_manage_account_page.url]"
+                class="bg-indigo-600 py-3 px-6 w-full text-white font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">Manage Accounts & Finance</button>
         </div>
     </div>
-    <app-page-navigation-buttons [navigations]="navigations"
-    ></app-page-navigation-buttons>
-</main>
+    
+    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" (selectedTabChange)="tabChanged($event.index)"
+        [(selectedIndex)]="tabIndex">
+        <mat-tab id="myAccount" label="My Accounts">
+            <app-my-accounts-tab [accordionData]="accountList"></app-my-accounts-tab>
+        </mat-tab>
+        <mat-tab id="myExpense" label="My Expense">
+            <app-my-expenses-tab [accordionData]="expenseList"></app-my-expenses-tab>
+        </mat-tab>
+    </mat-tab-group>
+</app-page-layout>

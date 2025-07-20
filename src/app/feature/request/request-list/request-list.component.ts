@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { Paginator } from 'src/app/shared/model/paginator';
+import { Paginator } from 'src/app/shared/utils/paginator';
 import { RequestConstant, RequestDefaultValue, RequestField, requestTab, TaskField } from '../request.const';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { ActivatedRoute } from '@angular/router';
 import { RequestService } from '../request.service';
 import { AdditionalField, KeyValue, PaginateRequestDetail, RequestDetail, RequestType, UserDetail, WorkDetail } from 'src/app/core/api/models';
-import { AccordionButton, AccordionCell, AccordionList, AccordionRow } from 'src/app/shared/components/generic/accordion-list/accordion-list.model';
+import { AccordionButton, AccordionCell, AccordionList, AccordionRow } from 'src/app/shared/model/accordion-list.model';
 import { FormGroup, Validators } from '@angular/forms';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
-import { Accordion } from 'src/app/shared/components/generic/accordion-list/accordion';
-import { DetailedView, DetailedViewField } from 'src/app/shared/components/generic/detailed-view/detailed-view.model';
+import { Accordion } from 'src/app/shared/utils/accordion';
+import { DetailedView, DetailedViewField } from 'src/app/shared/model/detailed-view.model';
 import { filterFormChange, scrollToFirstInvalidControl } from 'src/app/core/service/form.service';
 import { ModalService } from 'src/app/core/service/modal.service';
 import { AppAlert } from 'src/app/core/constant/app-alert.const';
@@ -363,9 +363,15 @@ export class RequestListComponent extends Accordion<RequestDetail> implements On
   }
 
 
-  onAccordionOpen($event: { rowIndex: number; }) {
+  protected override onAccordionOpen($event: { rowIndex: number; }) {
     let item = this.requestList.content![$event.rowIndex];
     let accordion = new class extends Accordion<WorkDetail> {
+      override ngOnInit(): void {
+      }
+      protected override onClick(event: { buttonId: string; rowIndex: number; }): void {
+      }
+      protected override onAccordionOpen(event: { rowIndex: number; }): void {
+      }
       prepareHighLevelView(item: WorkDetail, options?: { [key: string]: any }): AccordionCell[] {
         return [
           {
@@ -425,11 +431,6 @@ export class RequestListComponent extends Accordion<RequestDetail> implements On
         accordionList: accordion.getAccordionList()
       }, $event.rowIndex)
     })
-
-  }
-
-  clickkk($event:any){
-    console.log($event)
   }
 
 }

@@ -8,16 +8,16 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { ExpenseItemDetail } from '../../models/expense-item-detail';
-import { SuccessResponseExpenseItemDetail } from '../../models/success-response-expense-item-detail';
+import { ExpenseDetail } from '../../models/expense-detail';
+import { SuccessResponseExpenseDetail } from '../../models/success-response-expense-detail';
 
 export interface FinalizeExpense$Params {
   id: string;
   'Correlation-Id'?: string;
-      body: ExpenseItemDetail
+      body: ExpenseDetail
 }
 
-export function finalizeExpense(http: HttpClient, rootUrl: string, params: FinalizeExpense$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseExpenseItemDetail>> {
+export function finalizeExpense(http: HttpClient, rootUrl: string, params: FinalizeExpense$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseExpenseDetail>> {
   const rb = new RequestBuilder(rootUrl, finalizeExpense.PATH, 'patch');
   if (params) {
     rb.path('id', params.id, {});
@@ -30,7 +30,7 @@ export function finalizeExpense(http: HttpClient, rootUrl: string, params: Final
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseExpenseItemDetail>;
+      return r as StrictHttpResponse<SuccessResponseExpenseDetail>;
     })
   );
 }

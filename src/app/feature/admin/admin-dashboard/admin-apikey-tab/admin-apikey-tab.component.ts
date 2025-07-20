@@ -2,9 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { AdminConstant, AdminDefaultValue } from '../../admin.const';
 import { AdminService } from '../../admin.service';
 import { ApiKeyDetail, KeyValue } from 'src/app/core/api/models';
-import { Accordion } from 'src/app/shared/components/generic/accordion-list/accordion';
-import { AccordionButton, AccordionCell } from 'src/app/shared/components/generic/accordion-list/accordion-list.model';
-import { DetailedView } from 'src/app/shared/components/generic/detailed-view/detailed-view.model';
+import { Accordion } from 'src/app/shared/utils/accordion';
+import { AccordionButton, AccordionCell } from 'src/app/shared/model/accordion-list.model';
+import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { FormGroup, Validators } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
@@ -149,7 +149,7 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDetail> implements 
 
 
   override handlePageEvent($event: PageEvent): void { }
-  accordionOpened($event: { rowIndex: number; }) { }
+  onAccordionOpen($event: { rowIndex: number; }) { }
 
   onClick($event: { buttonId: string; rowIndex: number; }) {
     switch ($event.buttonId) {
@@ -189,7 +189,7 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDetail> implements 
             //   let url= m.details.requestMappingConditions.patterns[0];
             //   return {key:url,displayValue:url}as KeyValue;
             // })
-            this.showForm($event.rowIndex, ['api_key_detail']);
+            this.showEditForm($event.rowIndex, ['api_key_detail']);
             this.getSectionField('api_key_detail','api_key_scope',$event.rowIndex).form_input!.selectList=d;
           })
           break;
