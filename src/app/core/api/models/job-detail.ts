@@ -4,7 +4,7 @@
 
 export interface JobDetail {
   duration?: number;
-  end?: string;
+  endAt?: string;
   error?: {
 'cause'?: {
 'stackTrace'?: Array<{
@@ -71,7 +71,8 @@ export interface JobDetail {
   output?: {
 };
   queue?: number;
-  start?: string;
-  status?: 'QUEUED' | 'IN_PROGRESS' | 'COMPLETED' | 'SKIPPED';
+  startAt?: string;
+  status?: 'QUEUED' | 'IN_PROGRESS' | 'COMPLETED' | 'SKIPPED' | 'FAILED';
+  submitAt?: string;
   triggerId?: string;
 }

@@ -99,10 +99,9 @@ export class ManageAccountComponent extends TabbedPage<accountTab> {
         this.refData
       );
       this.accountService
-        .fetchExpenses(
-          AccountDefaultValue.pageNumber,
-          AccountDefaultValue.pageSize,
-        )
+        .fetchExpenses(AccountDefaultValue.pageNumber,AccountDefaultValue.pageSize,{
+          expenseStatus:['FINALIZED','SUBMITTED','DRAFT']
+        })
         .subscribe((s) => {
           this.expenseList = s!;
         });

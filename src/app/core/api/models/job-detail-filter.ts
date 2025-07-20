@@ -7,6 +7,6 @@ export interface JobDetailFilter {
   id?: string;
   name?: string;
   start?: string;
-  status?: Array<'QUEUED' | 'IN_PROGRESS' | 'COMPLETED' | 'SKIPPED'>;
+  status?: Array<'QUEUED' | 'IN_PROGRESS' | 'COMPLETED' | 'SKIPPED' | 'FAILED'>;
   triggerId?: string;
 }

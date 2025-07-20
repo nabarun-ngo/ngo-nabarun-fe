@@ -61,16 +61,17 @@ export class SocialEventListComponent extends TabbedPage<eventTabs> {
   }
 
   protected searchInput: SearchAndAdvancedSearchModel = {
-    normalSearchPlaceHolder: 'Search Event Number',
+    normalSearchPlaceHolder: 'Search for anything related to social events here',
     advancedSearch: {
       searchFormFields: [
         {
           formControlName: 'id',
           inputModel: {
             html_id: 'event-id',
-            placeholder: 'Event Id',
+            placeholder: 'Enter Event Id',
             inputType: 'text',
             tagName: 'input',
+            labelName:'Event Id', 
           },
           validations: [],
         },
@@ -78,9 +79,10 @@ export class SocialEventListComponent extends TabbedPage<eventTabs> {
           formControlName: 'eventTitle',
           inputModel: {
             html_id: 'event-title',
-            placeholder: 'Event Title',
+            placeholder: 'Enter Event Title',
             inputType: 'text',
             tagName: 'input',
+            labelName: 'Event Title',
           },
           validations: [],
         },
@@ -88,9 +90,10 @@ export class SocialEventListComponent extends TabbedPage<eventTabs> {
           formControlName: 'fromDate',
           inputModel: {
             html_id: 'event-from-date',
-            placeholder: 'From Date',
+            placeholder: 'Select From Date',
             inputType: 'date',
             tagName: 'input',
+            labelName: 'From Date',
           },
           validations: [],
         },
@@ -98,9 +101,10 @@ export class SocialEventListComponent extends TabbedPage<eventTabs> {
           formControlName: 'toDate',
           inputModel: {
             html_id: 'event-to-date',
-            placeholder: 'To Date',
+            placeholder: 'Select To Date',
             inputType: 'date',
             tagName: 'input',
+            labelName: 'To Date',
           },
           validations: [],
         },

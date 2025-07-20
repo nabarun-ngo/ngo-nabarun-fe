@@ -6,7 +6,8 @@ export interface TransactionDetailFilter {
   endDate?: string;
   startDate?: string;
   txnId?: string;
-  txnRefType?: 'DONATION' | 'NONE' | 'EVENT1' | 'EXPENSE';
+  txnRefId?: string;
+  txnRefType?: 'DONATION' | 'NONE' | 'EXPENSE';
   txnStatus?: Array<'SUCCESS' | 'FAILURE' | 'REVERT'>;
   txnType?: Array<'IN' | 'OUT' | 'TRANSFER'>;
 }

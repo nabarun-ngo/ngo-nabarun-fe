@@ -10,6 +10,7 @@ export { BankDetail } from './models/bank-detail';
 export { ChangeDetail } from './models/change-detail';
 export { DocumentDetail } from './models/document-detail';
 export { DocumentDetailUpload } from './models/document-detail-upload';
+export { DocumentMapping } from './models/document-mapping';
 export { DonationDetail } from './models/donation-detail';
 export { DonationDetailFilter } from './models/donation-detail-filter';
 export { DonationStatus } from './models/donation-status';

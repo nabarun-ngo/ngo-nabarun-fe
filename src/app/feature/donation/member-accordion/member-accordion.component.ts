@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit } from '@angular/core';
 import { DonationList, MemberList } from '../donation.model';
 import {
+  DocumentMapping,
   DonationDetail,
   DonationStatus,
   PaymentMethod,
@@ -224,7 +225,7 @@ export class MemberAccordionComponent implements OnInit {
         compInstnc.docChange.subscribe(docList);
       });
 
-      modal.componentInstance.onbuttonClick.subscribe((d) => {
+      modal.componentInstance.onbuttonClick.subscribe(async (d) => {
         if (d == 'SUBMIT') {
           let compInstnc = modal.componentInstance.bodyComponentInstance;
           compInstnc?.donationForm?.controls!['amount']?.disable();
@@ -242,6 +243,7 @@ export class MemberAccordionComponent implements OnInit {
                 'error'
               );
             } else {
+              let docMap: DocumentMapping[] = [];
               for (let donId of donIds) {
                 let donation: DonationDetail = {
                   status: formValue.status,
@@ -256,29 +258,39 @@ export class MemberAccordionComponent implements OnInit {
                   paymentMethod: formValue.paymentMethod,
                   remarks: formValue.remarks,
                 };
-                this.donationService
-                  .updateDonation(donId!, removeNullFields(donation))
-                  .subscribe((data) => {
-                    let member = this.members.find(
-                      (f) => f.member?.id == memId
-                    );
-                    if (docList.value.length > 0) {
-                      this.donationService
-                        .uploadDocuments(
-                          donId!,
-                          docList.value.map((m) => m.detail)
-                        )
-                        .subscribe((d) => {});
-                    }
-                    member
-                      ?.donations!.filter((f) => f.donation?.id == donId)
-                      .map((item) => {
-                        item.action = 'view';
-                        item.update = undefined;
-                        item.donation = data;
-                        return item;
-                      });
+                let updatedDonation = await firstValueFrom(
+                  this.donationService.updateDonation(
+                    donId!,
+                    removeNullFields(donation)
+                  )
+                );
+                let member = this.members.find((f) => f.member?.id == memId);
+                member
+                  ?.donations!.filter((f) => f.donation?.id == donId)
+                  .map((item) => {
+                    item.action = 'view';
+                    item.update = undefined;
+                    item.donation = updatedDonation;
+                    return item;
                   });
+                docMap.push({
+                  docIndexId: donId,
+                  docIndexType: 'DONATION',
+                });
+                docMap.push({
+                  docIndexId: updatedDonation?.transactionRef,
+                  docIndexType: 'TRANSACTION',
+                });
+              }
+              if (docList.value.length > 0) {
+                this.donationService
+                  .uploadDocuments(
+                    docList.value.map((m) => {
+                      m.detail.documentMapping = docMap;
+                      return m.detail;
+                    })
+                  )
+                  .subscribe((d) => {});
               }
               modal.close();
             }
