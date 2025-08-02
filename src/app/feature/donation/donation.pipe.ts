@@ -49,7 +49,11 @@ export class MemberSearchPipe implements PipeTransform {
     if(!searchValue){
       return profiles;
     }
-    //console.log(searchValue)
+     
+    if(isEmptyObject(searchValue)){
+      return profiles; 
+    }
+    console.log(searchValue)
     searchValue=searchValue.toLowerCase();
     return profiles.filter((profile:MemberList)=>
 
