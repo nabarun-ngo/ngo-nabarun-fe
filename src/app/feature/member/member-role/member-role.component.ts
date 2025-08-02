@@ -13,7 +13,7 @@ import { NavigationButtonModel } from 'src/app/shared/components/generic/page-na
 import { AdminService } from '../../admin/admin.service';
 import { FormGroup, Validators } from '@angular/forms';
 import { SearchAndAdvancedSearchFormComponent } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search-form.component';
-import { SearchAndAdvancedSearchModel } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search.model';
+import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
 
 @Component({
   selector: 'app-member-role',

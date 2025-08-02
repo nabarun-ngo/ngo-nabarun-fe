@@ -30,6 +30,7 @@ export interface UserDetail {
   pictureBase64?: string;
   presentAndPermanentAddressSame?: boolean;
   primaryNumber?: string;
+  profileCompleted?: boolean;
   publicProfile?: boolean;
   roleString?: string;
   roles?: Array<UserRole>;

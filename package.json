@@ -1,11 +1,12 @@
 {
   "name": "ngo-nabarun-fe",
-  "version": "0.0.5-test",
+  "version": "0.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0 --disable-host-check",
+    "start:stage": "ng serve --configuration stage --port 5201",
     "build": "ng build && npx cap sync",
-    "buildstage": "ng build --configuration stage && npx cap sync",
+    "build:stage": "ng build --configuration stage && npx cap sync",
     "watch": "ng build --watch --configuration development",
     "test": "npx playwright test --grep '@sanity'",
     "sync:api": "ng-openapi-gen --input http://localhost:8082/v3/api-docs --output src/app/core/api",

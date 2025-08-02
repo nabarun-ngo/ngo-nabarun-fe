@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AdminServiceInfo } from '../../admin.model';
-import { Accordion } from 'src/app/shared/components/generic/accordion-list/accordion';
+import { Accordion } from 'src/app/shared/utils/accordion';
 import { AdminConstant, AdminDefaultValue } from '../../admin.const';
 import { AdminService } from '../../admin.service';
-import { AccordionButton, AccordionCell } from 'src/app/shared/components/generic/accordion-list/accordion-list.model';
-import { DetailedView, DetailedViewField } from 'src/app/shared/components/generic/detailed-view/detailed-view.model';
+import { AccordionButton, AccordionCell } from 'src/app/shared/model/accordion-list.model';
+import { DetailedView, DetailedViewField } from 'src/app/shared/model/detailed-view.model';
 import { FormGroup, Validators } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { JsonPipe } from '@angular/common';
@@ -98,7 +98,7 @@ export class AdminServiceTabComponent extends Accordion<AdminServiceInfo> implem
 
 
   override handlePageEvent($event: PageEvent): void {}
-  accordionOpened($event: { rowIndex: number; }) {}
+  protected override onAccordionOpen($event: { rowIndex: number; }) {}
 
   onClick($event: { buttonId: string; rowIndex: number; }) {
     let formdata = this.getSectionForm('service_input', $event.rowIndex);

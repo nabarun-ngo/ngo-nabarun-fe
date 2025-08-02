@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { TileInfo } from './tile-info.model';
+import { TileInfo } from '../../../model/tile-info.model';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 
 @Component({

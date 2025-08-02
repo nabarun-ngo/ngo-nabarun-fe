@@ -17,7 +17,7 @@ jobs:
    uses: nabarun-ngo/ngo-nabarun-templates/.github/workflows/Build-Test.yml@main
    with:
       platform: "node"
-      command: "npm install && npm run ${{ github.base_ref == 'master' && 'build' || 'buildstage' }}"
+      command: "npm install && npm run ${{ github.base_ref == 'master' && 'build' || 'build:stage' }}"
       
   create_release:
     if: github.event.pull_request.merged == true
@@ -34,7 +34,7 @@ jobs:
     uses: nabarun-ngo/ngo-nabarun-templates/.github/workflows/Trigger-Workflow.yml@main    
     with:
       repository: ${{ github.base_ref == 'master' && 'nabarun-ngo/ngo-nabarun-prodops' || 'nabarun-ngo/ngo-nabarun-ops' }}
-      event_type: Trigger-Deploy-Sync-Test
+      event_type: Trigger-DeployFE-Sync-Test
       input_json: |-
         {
           "fe_deploy": true,

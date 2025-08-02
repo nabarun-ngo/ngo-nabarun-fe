@@ -17,7 +17,7 @@
                             <!-- {{!field.hide_field}}{{field.hide_field}} -->
                             <div class="grid grid-cols-2" *ngIf="!field.hide_field">
                                 <div class="px-2 py-2 font-semibold">{{field.field_name}}</div>
-                                <div class="px-2 py-2" *ngIf="!(field.editable && view.show_form)" [innerHtml]="(field.show_display_value ? displayValue(field.ref_data_section,field.field_value) : field.field_value) | replaceNull"></div>
+                                <div class="px-2 py-2" *ngIf="!(field.editable && view.show_form)" [innerHtml]="(field.show_display_value ? displayValue(field.ref_data_section,field.field_value) : (field.field_display_value != undefined ? field.field_display_value : field.field_value)) | replaceNull"></div>
 
                                 <div class="px-2 dense-3" *ngIf="field.editable && view.show_form">
                                     <app-universal-input [formControlName]="field.form_control_name!" [inputModel]="field.form_input!" />
