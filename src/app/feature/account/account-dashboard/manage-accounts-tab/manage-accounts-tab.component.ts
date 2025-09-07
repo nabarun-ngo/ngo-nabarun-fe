@@ -3,7 +3,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { AccountDetail, KeyValue } from 'src/app/core/api/models';
 import { filterFormChange } from 'src/app/core/service/form.service';
 import { accountTabHeader } from '../../account.field';
-import { MyAccountsTabComponent } from '../../account-dashboard/my-accounts-tab/my-accounts-tab.component';
+import { MyAccountsTabComponent } from '../my-accounts-tab/my-accounts-tab.component';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { AccordionButton } from 'src/app/shared/model/accordion-list.model';
 

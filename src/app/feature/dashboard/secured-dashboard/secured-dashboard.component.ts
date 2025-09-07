@@ -12,9 +12,13 @@ import { CommonService } from 'src/app/shared/services/common.service';
 @Component({
   selector: 'app-secured-dashboard',
   templateUrl: './secured-dashboard.component.html',
-  styleUrls: ['./secured-dashboard.component.scss']
+  styleUrls: ['./secured-dashboard.component.scss'],
 })
 export class SecuredDashboardComponent implements OnInit {
+reload() {
+  // Temporary stub to prevent runtime error. Implement real reload logic as needed.
+  console.warn('Dashboard reload is not yet implemented.');
+}
   protected route = AppRoute;
   protected scope = SCOPE;
   greetings!: string;
@@ -28,60 +32,8 @@ export class SecuredDashboardComponent implements OnInit {
 
   get tiles(){return SecuredDashboardComponent.tileList;}
 
-  async ngOnInit(): Promise<void> {
-    let user = await this.identityService.getUser();
-    if(!user.profile_updated){
-      console.log("Profile Not updated")
-    }
-    this.greetings = getGreetings(user.given_name || user.nickname || user.name);
-    this.sharedDataService.setPageName("WELCOME TO NABARUN'S SECURED DASHBOARD");
-    if(SecuredDashboardComponent.tileList.length == 0){
-      SecuredDashboardComponent.tileList = [
-        {
-          tile_html_id: 'donationTile',
-          tile_name: 'Donations',
-          tile_icon: 'icon_rupee',
-          tile_link: this.route.secured_donation_dashboard_page.url,
-          additional_info: {
-            tile_label: 'My Pending Donations',
-            tile_show_badge: false,
-            tile_is_loading: true
-          }
-        },
-        {
-          tile_html_id: 'accountTile',
-          tile_name: 'Accounts & Finance',
-          tile_icon: 'icon_book',
-          tile_link: this.route.secured_account_list_page.url,
-          additional_info: {
-            tile_label: 'My Available Amount',
-            tile_show_badge: false,
-            tile_is_loading: true
-          }
-        },
-        {
-          tile_html_id: 'requestTile',
-          tile_name: 'Requests',
-          tile_icon: 'icon_presentation',
-          tile_link: this.route.secured_request_list_page.url,
-          additional_info: {
-            tile_label: 'My Pending Requests',
-            tile_show_badge: false,
-            tile_is_loading: true
-          }
-        },
-        {
-          tile_html_id: 'worklistTile',
-          tile_name: 'Tasks',
-          tile_icon: 'icon_group',
-          tile_link: this.route.secured_task_list_page.url,
-          additional_info: {
-            tile_label: 'My Pending Tasks',
-            tile_show_badge: false,
-            tile_is_loading: true
-          }
-        },
-        {
+  secondryTileList:TileInfo[]=[
+    {
           tile_html_id: 'memberTile',
           tile_name: 'Members',
           tile_icon: 'icon_group',
@@ -104,7 +56,62 @@ export class SecuredDashboardComponent implements OnInit {
           tile_name: 'Admin Console',
           tile_icon: 'icon_group',
           tile_link: this.route.secured_admin_dashboard_page.url,
-        }
+        }]
+
+  async ngOnInit(): Promise<void> {
+    let user = await this.identityService.getUser();
+    if(!user.profile_updated){
+      // console.log("Profile Not updated")
+    }
+    this.greetings = getGreetings(user.given_name || user.nickname || user.name);
+    this.sharedDataService.setPageName("WELCOME TO NABARUN'S SECURED DASHBOARD");
+    if(SecuredDashboardComponent.tileList.length == 0){
+      SecuredDashboardComponent.tileList = [
+        {
+          tile_html_id: 'donationTile',
+          tile_name: 'Donations',
+          tile_icon: 'icon_rupee',
+          tile_link: this.route.secured_donation_dashboard_page.url,
+          additional_info: {
+            tile_label: 'My Pending Donations',
+            tile_show_badge: false,
+            tile_is_loading: true
+          }
+        },
+        {
+          tile_html_id: 'accountTile',
+          tile_name: 'Accounts',
+          tile_icon: 'icon_book',
+          tile_link: this.route.secured_account_list_page.url,
+          additional_info: {
+            tile_label: 'My Account Balance',
+            tile_show_badge: false,
+            tile_is_loading: true
+          }
+        },
+        {
+          tile_html_id: 'expenseTile',
+          tile_name: 'Expense',
+          tile_icon: 'icon_presentation',
+          tile_link: this.route.secured_request_list_page.url,
+          additional_info: {
+            tile_label: 'My Unsettled Expenses',
+            tile_show_badge: false,
+            tile_is_loading: true
+          }
+        },
+        {
+          tile_html_id: 'worklistTile',
+          tile_name: 'Tasks',
+          tile_icon: 'icon_group',
+          tile_link: this.route.secured_task_list_page.url,
+          additional_info: {
+            tile_label: 'My Pending Tasks',
+            tile_show_badge: false,
+            tile_is_loading: true
+          }
+        },
+       
       ];
     }
    

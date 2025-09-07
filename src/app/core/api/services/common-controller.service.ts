@@ -23,9 +23,12 @@ import { getReferenceData } from '../fn/common-controller/get-reference-data';
 import { GetReferenceData$Params } from '../fn/common-controller/get-reference-data';
 import { getReferenceField } from '../fn/common-controller/get-reference-field';
 import { GetReferenceField$Params } from '../fn/common-controller/get-reference-field';
+import { getUsefulLinks } from '../fn/common-controller/get-useful-links';
+import { GetUsefulLinks$Params } from '../fn/common-controller/get-useful-links';
 import { manageNotification } from '../fn/common-controller/manage-notification';
 import { ManageNotification$Params } from '../fn/common-controller/manage-notification';
 import { SuccessResponseDocumentDetail } from '../models/success-response-document-detail';
+import { SuccessResponseImportantLinks } from '../models/success-response-important-links';
 import { SuccessResponseListAdditionalField } from '../models/success-response-list-additional-field';
 import { SuccessResponseListDocumentDetail } from '../models/success-response-list-document-detail';
 import { SuccessResponseMapStringListKeyValue } from '../models/success-response-map-string-list-key-value';
@@ -140,6 +143,39 @@ export class CommonControllerService extends BaseService {
   uploadDocuments1(params: UploadDocuments1$Params, context?: HttpContext): Observable<SuccessResponseVoid> {
     return this.uploadDocuments1$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseVoid>): SuccessResponseVoid => r.body)
+    );
+  }
+
+  /** Path part for operation `getUsefulLinks()` */
+  static readonly GetUsefulLinksPath = '/api/common/useful-links';
+
+  /**
+   * Retrieve useful links.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getUsefulLinks()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUsefulLinks$Response(params?: GetUsefulLinks$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseImportantLinks>> {
+    return getUsefulLinks(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Retrieve useful links.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getUsefulLinks$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUsefulLinks(params?: GetUsefulLinks$Params, context?: HttpContext): Observable<SuccessResponseImportantLinks> {
+    return this.getUsefulLinks$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseImportantLinks>): SuccessResponseImportantLinks => r.body)
     );
   }
 

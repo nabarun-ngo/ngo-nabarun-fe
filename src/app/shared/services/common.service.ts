@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { deleteToken, getToken, Messaging, onMessage } from '@angular/fire/messaging';
 import { SpinnerVisibilityService } from 'ng-http-loader';
-import { map, Observable, shareReplay, Subject } from 'rxjs';
-import { DonationStatus, DonationType, KeyValue, RefDataType, RequestType } from 'src/app/core/api/models';
+import { filter, map, Observable, shareReplay, Subject, tap } from 'rxjs';
+import { DonationStatus, DonationType, ImportantLinks, KeyValue, RefDataType, RequestType } from 'src/app/core/api/models';
 import { CommonControllerService, UserControllerService } from 'src/app/core/api/services';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 import { environment } from 'src/environments/environment';
@@ -12,6 +12,7 @@ import { runInThisContext } from 'vm';
   providedIn: 'root'
 })
 export class CommonService {
+  
   cachedObservable!: Observable<{
     [key: string]: KeyValue[];
   }>;
@@ -112,6 +113,16 @@ export class CommonService {
     return this.commonController.getNotification({ pageIndex: 0, pageSize: 5 }).pipe(map(m => m.responsePayload))
   }
 
- 
+  getUsefulLink(){
+    return this.commonController.getUsefulLinks().pipe(
+            tap(res => {  console.warn('Useful links payload ', res); }),
+
+      map(m => m.responsePayload),
+      // Only emit if responsePayload exists
+      // If you want to log when undefined, add tap below
+      tap(res => { if(!res) console.warn('Useful links payload was undefined', res); }),
+      filter(res => res !== undefined && res !== null)
+    );
+  }
 
 }

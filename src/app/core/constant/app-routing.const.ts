@@ -27,6 +27,13 @@ export const AppRoute = {
     feature: 'dashboard',
     path: '',
   },
+  secured_dashboard_help_page: {
+    id: 'secured_dashboard_help_page',
+    url: '/secured/dashboard/help',
+    parent: 'secured',
+    feature: 'dashboard',
+    path: 'help',
+  },
   secured_donation_dashboard_page: {
     id: 'secured_donation_dashboard_page',
     url: '/secured/donation/dashboard',

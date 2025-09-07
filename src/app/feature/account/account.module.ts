@@ -6,9 +6,9 @@ import { AccountRoutingModule } from './account-routing.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ManageExpenseTabComponent } from './manage-account/manage-expense-tab/manage-expense-tab.component';
 import { MyAccountsTabComponent } from './account-dashboard/my-accounts-tab/my-accounts-tab.component';
-import { MyExpensesTabComponent } from './account-dashboard/my-expenses-tab/my-expenses-tab.component';
-import { ManageAccountsTabComponent } from './manage-account/manage-accounts-tab/manage-accounts-tab.component';
+import { MyExpensesTabComponent } from './manage-account/my-expenses-tab/my-expenses-tab.component';
 import { ManageAccountComponent } from './manage-account/manage-account.component';
+import { ManageAccountsTabComponent } from './account-dashboard/manage-accounts-tab/manage-accounts-tab.component';
 
 
 
