@@ -4,12 +4,22 @@ import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { RequestListComponent } from './request-list/request-list.component';
 import { requestListResolver, requestRefDataResolver, taskListResolver } from './request.resolver';
 import { TaskListComponent } from './task-list/task-list.component';
+import { RequestDashboardComponent } from './request-dashboard/request-dashboard.component';
  
 const route_data = AppRoute;
 
 const routes: Routes = [
   {
     path: route_data.secured_request_list_page.path,
+    component: RequestDashboardComponent,
+    resolve:{
+      data:requestListResolver,
+      ref_data:requestRefDataResolver
+    }
+  },
+  // Keep old component for backward compatibility if needed
+  {
+    path: 'legacy-list',
     component: RequestListComponent,
     resolve:{
       data:requestListResolver,

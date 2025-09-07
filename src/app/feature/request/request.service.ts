@@ -27,10 +27,18 @@ export class RequestService {
   }
 
 
-  findRequests(delegated: boolean = false,
-    pageNumber:number=RequestDefaultValue.pageNumber,
-    pageSize:number= RequestDefaultValue.pageSize) {
-    return this.requestController.getMyRequests({ filter:{isDelegated: delegated}, pageIndex: pageNumber, pageSize: pageSize }).pipe(map(d => d.responsePayload));
+  findRequests(
+    delegated: boolean = false,
+    pageNumber: number = RequestDefaultValue.pageNumber,
+    pageSize: number = RequestDefaultValue.pageSize,
+    additionalFilter?: any
+  ) {
+    let filter = { isDelegated: delegated, ...additionalFilter };
+    return this.requestController.getMyRequests({ 
+      filter: filter, 
+      pageIndex: pageNumber, 
+      pageSize: pageSize 
+    }).pipe(map(d => d.responsePayload));
   }
 
   findRefField(type: string) {
