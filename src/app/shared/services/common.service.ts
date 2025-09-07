@@ -114,14 +114,9 @@ export class CommonService {
   }
 
   getUsefulLink(){
-    return this.commonController.getUsefulLinks().pipe(
-            tap(res => {  console.warn('Useful links payload ', res); }),
-
-      map(m => m.responsePayload),
-      // Only emit if responsePayload exists
-      // If you want to log when undefined, add tap below
-      tap(res => { if(!res) console.warn('Useful links payload was undefined', res); }),
-      filter(res => res !== undefined && res !== null)
+  return this.commonController.getUsefulLinks().pipe(
+    map(m => m.responsePayload),
+    filter(res => res !== undefined && res !== null)
     );
   }
 
