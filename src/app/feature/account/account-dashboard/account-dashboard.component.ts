@@ -15,8 +15,8 @@ import { UserIdentityService } from 'src/app/core/service/user-identity.service'
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
 import { accountSearchInput } from '../account.field';
 import { TabbedPage } from 'src/app/shared/utils/tab';
-import { expenseSearchInput } from '../expense.field';
 import { removeNullFields } from 'src/app/core/service/utilities.service';
+import { expenseSearchInput } from '../expense.field';
 @Component({
   selector: 'app-account-dashboard',
   templateUrl: './account-dashboard.component.html',
@@ -27,7 +27,6 @@ export class AccountDashboardComponent extends TabbedPage<accountTab> {
   protected permissions!: {
     canManageAccounts: boolean;
   };
-  protected expenseList!: PaginateExpenseDetail;
   protected accountList!: PaginateAccountDetail;
   protected navigations: NavigationButtonModel[] = [
     {
@@ -66,13 +65,13 @@ export class AccountDashboardComponent extends TabbedPage<accountTab> {
     if (this.route.snapshot.data['ref_data']) {
       this.refData = this.route.snapshot.data['ref_data'];
     }
-    this.searchInput = accountSearchInput('my_accounts', this.refData);
+    this.searchInput = accountSearchInput(this.tabMapping[this.tabIndex], this.refData);
   }
 
-  protected tabMapping: accountTab[] = ['my_accounts', 'my_expenses'];
+  protected tabMapping: accountTab[] = ['my_accounts', 'all_accounts'];
   protected override onTabChanged(): void {
+    this.searchInput = accountSearchInput(this.tabMapping[this.tabIndex], this.refData);
     if (this.tabMapping[this.tabIndex] == 'my_accounts') {
-      this.searchInput = accountSearchInput('my_accounts', this.refData);
       this.accountService
         .fetchMyAccounts(
           AccountDefaultValue.pageNumber,
@@ -81,21 +80,21 @@ export class AccountDashboardComponent extends TabbedPage<accountTab> {
         .subscribe((s) => {
           this.accountList = s!;
         });
-    } else if (this.tabMapping[this.tabIndex] == 'my_expenses') {
-      this.searchInput = expenseSearchInput(this.tabMapping[this.tabIndex],this.refData);
+    } else if (this.tabMapping[this.tabIndex] == 'all_accounts') {
       this.accountService
-        .fetchMyExpenses(
+        .fetchAccounts(
           AccountDefaultValue.pageNumber,
-          AccountDefaultValue.pageSize,
-          {}
+          AccountDefaultValue.pageSize
         )
         .subscribe((s) => {
-          this.expenseList = s!;
+          this.accountList = s!;
         });
     }
+   
   }
 
   onSearch($event: {
+    buttonName?: string;
     advancedSearch: boolean;
     reset: boolean;
     value: any;
@@ -109,15 +108,24 @@ export class AccountDashboardComponent extends TabbedPage<accountTab> {
           this.accountList = s!;
         });
       }
-      else if (this.tabMapping[this.tabIndex] == 'my_expenses') {
+      else if (this.tabMapping[this.tabIndex] == 'all_accounts') {
         this.accountService
-        .fetchMyExpenses(undefined, undefined, removeNullFields($event.value))
-        .subscribe((s) => {
-          this.expenseList = s!;
-        });
+          .fetchAccounts(undefined,undefined,removeNullFields($event.value))
+          .subscribe((s) => {
+            this.accountList = s!;
+          });
       }
     } else if ($event.advancedSearch && $event.reset) {
       this.onTabChanged();
-    } 
+    } else if ($event?.buttonName == 'ADVANCED_SEARCH' && this.tabMapping[this.tabIndex] == 'all_accounts') {
+          this.accountService.fetchUsers().subscribe((s) => {
+            let users = s?.content?.map((m) => {
+              return { key: m.id, displayValue: m.fullName } as KeyValue;
+            });
+            this.searchInput.advancedSearch!.searchFormFields.find(
+              (f) => f.inputModel.html_id == 'account_Owner'
+            )!.inputModel.selectList = users;
+          });
+        }
   }
 }

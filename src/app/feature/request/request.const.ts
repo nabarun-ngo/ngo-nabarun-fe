@@ -4,7 +4,7 @@ export const RequestDefaultValue={
     pageNumber: 0,
     pageSize:20,
     pageSizeOptions: [20, 50, 75,100],
-    pageTitle:'Requests',
+    pageTitle:'Support Requests',
     tabName:'self_request'
 }
 

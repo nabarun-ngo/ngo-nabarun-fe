@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { AccountDashboardComponent } from './account-dashboard/account-dashboard.component';
-import { accountDashboardResolver, accountRefDataResolver, accountTransactionResolver, manageAccountResolver } from './account.resolver';
+import { accountDashboardResolver, accountRefDataResolver, accountTransactionResolver, expenseDashboardResolver } from './account.resolver';
 import { AccountTransactionComponent } from './account-transaction/account-transaction.component';
-import { ManageAccountComponent } from './manage-account/manage-account.component';
+import { ExpenseDashboardComponent } from './expense-dashboard/expense-dashboard.component';
 
 const route_data = AppRoute;
 
@@ -19,9 +19,9 @@ const routes: Routes = [
   },
   {
     path: route_data.secured_manage_account_page.path,
-    component: ManageAccountComponent,
+    component: ExpenseDashboardComponent,
     resolve:{
-      data:manageAccountResolver,
+      data:expenseDashboardResolver,
       ref_data:accountRefDataResolver
     }
   },
