@@ -114,10 +114,7 @@ export class CommonService {
   }
 
   getUsefulLink(){
-  return this.commonController.getUsefulLinks().pipe(
-    map(m => m.responsePayload),
-    filter(res => res !== undefined && res !== null)
-    );
+  return this.commonController.getUsefulLinks().pipe(map(m => m.responsePayload));
   }
 
 }
