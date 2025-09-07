@@ -19,11 +19,11 @@ import { expenseSearchInput } from '../expense.field';
 import { removeNullFields } from 'src/app/core/service/utilities.service';
 
 @Component({
-  selector: 'app-manage-account',
-  templateUrl: './manage-account.component.html',
-  styleUrls: ['./manage-account.component.scss'],
+  selector: 'app-expense-dashboard',
+  templateUrl: './expense-dashboard.component.html',
+  styleUrls: ['./expense-dashboard.component.scss'],
 })
-export class ManageAccountComponent extends TabbedPage<accountTab> {
+export class ExpenseDashboardComponent extends TabbedPage<accountTab> {
   protected permissions!: {
     canViewTransactions: boolean;
     canUpdateAccount: boolean;
@@ -31,15 +31,15 @@ export class ManageAccountComponent extends TabbedPage<accountTab> {
     canViewAccounts: boolean;
   };
   protected expenseList!: PaginateExpenseDetail;
-  protected accountList!: PaginateAccountDetail;
   protected navigations: NavigationButtonModel[] = [
     {
-      displayName: 'Back to Accounts & Expense',
-      routerLink: AppRoute.secured_account_list_page.url,
+      displayName: 'Back to Dashboard',
+      routerLink: AppRoute.secured_dashboard_page.url,
     },
   ];
   protected searchInput!: SearchAndAdvancedSearchModel;
   private refData: any;
+  protected AppRoute = AppRoute;
 
   constructor(
     private sharedDataService: SharedDataService,
@@ -48,9 +48,7 @@ export class ManageAccountComponent extends TabbedPage<accountTab> {
     private identityService: UserIdentityService
   ) {
     super(route);
-    this.sharedDataService.setPageName(
-      'Manage ' + AccountDefaultValue.pageTitle
-    );
+    this.sharedDataService.setPageName("Expenses");
 
     // Setup permissions
     this.permissions = {
@@ -71,33 +69,30 @@ export class ManageAccountComponent extends TabbedPage<accountTab> {
 
   override handleRouteData(): void {
     if (this.route.snapshot.data['data']) {
-      this.accountList = this.route.snapshot.data[
+      this.expenseList = this.route.snapshot.data[
         'data'
       ] as PaginateAccountDetail;
     }
     if (this.route.snapshot.data['ref_data']) {
       this.refData = this.route.snapshot.data['ref_data'];
     }
-    this.searchInput = accountSearchInput('all_accounts', this.refData);
+    this.searchInput = expenseSearchInput(this.tabMapping[this.tabIndex], this.refData);
   }
 
-  protected tabMapping: accountTab[] = ['all_accounts', 'expense_list'];
+  protected tabMapping: accountTab[] = ['my_expenses', 'expense_list'];
   protected override onTabChanged(): void {
-    if (this.tabMapping[this.tabIndex] == 'all_accounts') {
-      this.searchInput = accountSearchInput('all_accounts', this.refData);
+    this.searchInput = expenseSearchInput(this.tabMapping[this.tabIndex],this.refData);
+    if (this.tabMapping[this.tabIndex] == 'my_expenses') {
       this.accountService
-        .fetchAccounts(
+        .fetchMyExpenses(
           AccountDefaultValue.pageNumber,
-          AccountDefaultValue.pageSize
+          AccountDefaultValue.pageSize,
+          {}
         )
         .subscribe((s) => {
-          this.accountList = s!;
+          this.expenseList = s!;
         });
-    } else if (this.tabMapping[this.tabIndex] == 'expense_list') {
-      this.searchInput = expenseSearchInput(
-        this.tabMapping[this.tabIndex],
-        this.refData
-      );
+    }else if (this.tabMapping[this.tabIndex] == 'expense_list') {
       this.accountService
         .fetchExpenses(AccountDefaultValue.pageNumber,AccountDefaultValue.pageSize,{
           expenseStatus:['FINALIZED','SUBMITTED','DRAFT']
@@ -116,13 +111,13 @@ export class ManageAccountComponent extends TabbedPage<accountTab> {
   }) {
     if ($event.advancedSearch && !$event.reset) {
       console.log($event.value);
-      if (this.tabMapping[this.tabIndex] == 'all_accounts') {
+      if (this.tabMapping[this.tabIndex] == 'my_expenses') {
         this.accountService
-          .fetchAccounts(undefined,undefined,removeNullFields($event.value))
-          .subscribe((s) => {
-            this.accountList = s!;
-          });
-      } else if (this.tabMapping[this.tabIndex] == 'expense_list') {
+        .fetchMyExpenses(undefined, undefined, removeNullFields($event.value))
+        .subscribe((s) => {
+          this.expenseList = s!;
+        });
+      }else if (this.tabMapping[this.tabIndex] == 'expense_list') {
         this.accountService
           .fetchExpenses(undefined, undefined, removeNullFields($event.value))
           .subscribe((s) => {
@@ -132,16 +127,8 @@ export class ManageAccountComponent extends TabbedPage<accountTab> {
     } else if ($event.advancedSearch && $event.reset) {
       this.onTabChanged();
     } else if ($event.buttonName == 'ADVANCED_SEARCH') {
-      this.accountService.fetchUsers().subscribe((s) => {
-        let users = s?.content?.map((m) => {
-          return { key: m.id, displayValue: m.fullName } as KeyValue;
-        });
-        this.searchInput.advancedSearch!.searchFormFields.find(
-          (f) => f.inputModel.html_id == 'account_Owner'
-        )!.inputModel.selectList = users;
-      });
-      if (this.tabMapping[this.tabIndex] == 'expense_list') {
-        this.accountService.fetchEvents().subscribe((s) => {
+      
+      this.accountService.fetchEvents().subscribe((s) => {
           let events = s?.content?.map((m) => {
             return { key: m.id, displayValue: m.eventTitle } as KeyValue;
           });
@@ -149,6 +136,15 @@ export class ManageAccountComponent extends TabbedPage<accountTab> {
             (f) => f.inputModel.html_id == 'event_Id'
           )!.inputModel.selectList = events;
         });
+      if (this.tabMapping[this.tabIndex] == 'expense_list') {
+        this.accountService.fetchUsers().subscribe((s) => {
+        let users = s?.content?.map((m) => {
+          return { key: m.id, displayValue: m.fullName } as KeyValue;
+        });
+        this.searchInput.advancedSearch!.searchFormFields.find(
+          (f) => f.inputModel.html_id == 'account_Owner'
+        )!.inputModel.selectList = users;
+      });
       }
     }
   }

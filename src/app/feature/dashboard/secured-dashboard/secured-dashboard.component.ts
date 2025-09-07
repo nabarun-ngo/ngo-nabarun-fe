@@ -33,30 +33,7 @@ reload() {
   get tiles(){return SecuredDashboardComponent.tileList;}
 
   secondryTileList:TileInfo[]=[
-    {
-          tile_html_id: 'memberTile',
-          tile_name: 'Members',
-          tile_icon: 'icon_group',
-          tile_link: this.route.secured_member_members_page.url,
-        },
-        {
-          tile_html_id: 'noticeTile',
-          tile_name: 'Notices',
-          tile_icon: 'icon_group',
-          tile_link: this.route.secured_notice_notices_page.url,
-        },
-        {
-          tile_html_id: 'eventTile',
-          tile_name: 'Social Events',
-          tile_icon: 'icon_group',
-          tile_link: this.route.secured_event_list_page.url,
-        },
-        {
-          tile_html_id: 'adminTile',
-          tile_name: 'Admin Console',
-          tile_icon: 'icon_group',
-          tile_link: this.route.secured_admin_dashboard_page.url,
-        }]
+    ]
 
   async ngOnInit(): Promise<void> {
     let user = await this.identityService.getUser();
@@ -93,7 +70,7 @@ reload() {
           tile_html_id: 'expenseTile',
           tile_name: 'Expense',
           tile_icon: 'icon_presentation',
-          tile_link: this.route.secured_request_list_page.url,
+          tile_link: this.route.secured_manage_account_page.url,
           additional_info: {
             tile_label: 'My Unsettled Expenses',
             tile_show_badge: false,
@@ -111,6 +88,36 @@ reload() {
             tile_is_loading: true
           }
         },
+        {
+          tile_html_id: 'memberTile',
+          tile_name: 'Members',
+          tile_icon: 'icon_group',
+          tile_link: this.route.secured_member_members_page.url,
+        },
+        {
+          tile_html_id: 'requestTile',
+          tile_name: 'Support Requests',
+          tile_icon: 'icon_group',
+          tile_link: this.route.secured_request_list_page.url,
+        },
+        {
+          tile_html_id: 'noticeTile',
+          tile_name: 'Notices',
+          tile_icon: 'icon_group',
+          tile_link: this.route.secured_notice_notices_page.url,
+        },
+        {
+          tile_html_id: 'eventTile',
+          tile_name: 'Social Events',
+          tile_icon: 'icon_group',
+          tile_link: this.route.secured_event_list_page.url,
+        },
+        {
+          tile_html_id: 'adminTile',
+          tile_name: 'Admin Console',
+          tile_icon: 'icon_group',
+          tile_link: this.route.secured_admin_dashboard_page.url,
+        }
        
       ];
     }

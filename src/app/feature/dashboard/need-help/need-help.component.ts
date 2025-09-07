@@ -21,6 +21,8 @@ export class NeedHelpComponent implements OnInit{
       },
     ];
 
+  protected AppRoutes = AppRoute;
+
   links: ImportantLinks = {policies:[],userGuides:[]};
 
    constructor(

@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { AccountDetail, KeyValue } from 'src/app/core/api/models';
 import { filterFormChange } from 'src/app/core/service/form.service';
-import { accountTabHeader } from '../../account.field';
+import { accountHighLevelView, accountTabHeader } from '../../account.field';
 import { MyAccountsTabComponent } from '../my-accounts-tab/my-accounts-tab.component';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
-import { AccordionButton } from 'src/app/shared/model/accordion-list.model';
+import { AccordionButton, AccordionCell } from 'src/app/shared/model/accordion-list.model';
 
 @Component({
   selector: 'app-manage-accounts-tab',
@@ -16,6 +16,13 @@ export class ManageAccountsTabComponent extends MyAccountsTabComponent {
   override ngOnInit(): void {
     this.setHeaderRow(accountTabHeader('all_accounts'));
   }
+
+   protected override prepareHighLevelView(
+      data: AccountDetail,
+      options?: { [key: string]: any }
+    ): AccordionCell[] {
+      return accountHighLevelView(data, 'all_accounts', this.refData);
+    }
 
   protected override prepareDefaultButtons(
     data: AccountDetail,

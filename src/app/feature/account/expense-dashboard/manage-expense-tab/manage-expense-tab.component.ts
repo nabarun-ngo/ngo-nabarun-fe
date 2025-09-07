@@ -6,12 +6,12 @@ import {
   KeyValue,
 } from 'src/app/core/api/models';
 import { AccordionButton } from 'src/app/shared/model/accordion-list.model';
-import { MyExpensesTabComponent } from '../my-expenses-tab/my-expenses-tab.component';
 import { AppDialog } from 'src/app/core/constant/app-dialog.const';
 import { rejectionModal } from '../../expense.field';
 import { SearchAndAdvancedSearchFormComponent } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search-form.component';
 import { MatDialogRef } from '@angular/material/dialog';
 import { SCOPE } from 'src/app/core/constant/auth-scope.const';
+import { MyExpensesTabComponent } from '../my-expenses-tab/my-expenses-tab.component';
 
 @Component({
   selector: 'app-manage-expense-tab',
