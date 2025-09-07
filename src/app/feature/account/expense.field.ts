@@ -39,6 +39,27 @@ export const expenseTabHeader = [
   },
 ];
 
+export const manageExpenseTabHeader = [
+  {
+    value: 'Expense Id',
+    rounded: true,
+  },
+  {
+    value: 'Expense Amount',
+    rounded: true,
+  },
+  {
+    value: 'Expense Payer Name',
+    rounded: true,
+  },
+  {
+    value: 'Expense Status',
+    rounded: true,
+  },
+];
+
+  
+
 export const expenseHighLevelView = (item: ExpenseDetail): AccordionCell[] => {
   return [
     {
@@ -58,7 +79,32 @@ export const expenseHighLevelView = (item: ExpenseDetail): AccordionCell[] => {
     {
       type: 'text',
       value: item?.status + '',
-      //bgColor: item?.finalized ? 'bg-green-300' : 'bg-purple-200',
+      bgColor: item?.settledOn ? 'bg-green-300' : 'bg-purple-200',
+      rounded: true,
+    },
+  ];
+};
+
+export const manageExpenseHighLevelView = (item: ExpenseDetail): AccordionCell[] => {
+  return [
+    {
+      type: 'text',
+      value: item?.id!,
+      bgColor: 'bg-purple-200',
+      rounded: true,
+    },
+    {
+      type: 'text',
+      value: '₹ ' + item?.finalAmount,
+    },
+    {
+      type: 'text',
+      value: item?.paidBy?.fullName!,
+    },
+    {
+      type: 'text',
+      value: item?.status + '',
+      bgColor: item?.settledOn ? 'bg-green-300' : 'bg-purple-200',
       rounded: true,
     },
   ];
