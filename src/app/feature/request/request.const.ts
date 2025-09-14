@@ -2,8 +2,8 @@ export type requestTab = 'self_request' | 'delegated_request';
 
 export const RequestDefaultValue={
     pageNumber: 0,
-    pageSize:20,
-    pageSizeOptions: [20, 50, 75,100],
+    pageSize:10,
+    pageSizeOptions: [10,20, 50,100],
     pageTitle:'Support Requests',
     tabName:'self_request'
 }
@@ -35,8 +35,8 @@ export type workListTab = 'pending_worklist' | 'completed_worklist';
 
 export const TaskDefaultValue={
     pageNumber: 0,
-    pageSize:20,
-    pageSizeOptions: [20, 50,100],
+    pageSize:10,
+    pageSizeOptions: [10,20, 50,100],
     pageTitle:'My Tasks',
     tabName:'pending_worklist'
 }

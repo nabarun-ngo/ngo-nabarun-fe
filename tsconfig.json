@@ -25,6 +25,10 @@
     ],
     "resolveJsonModule": true,
     "esModuleInterop": true,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "incremental": true,
+    "tsBuildInfoFile": "./dist/.tsbuildinfo",
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

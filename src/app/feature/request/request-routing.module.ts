@@ -5,6 +5,7 @@ import { RequestListComponent } from './request-list/request-list.component';
 import { requestListResolver, requestRefDataResolver, taskListResolver } from './request.resolver';
 import { TaskListComponent } from './task-list/task-list.component';
 import { RequestDashboardComponent } from './request-dashboard/request-dashboard.component';
+import { TaskDashboardComponent } from './task-dashboard/task-dashboard.component';
  
 const route_data = AppRoute;
 
@@ -28,6 +29,15 @@ const routes: Routes = [
   },
   {
     path: route_data.secured_task_list_page.path,
+    component: TaskDashboardComponent,
+    resolve:{
+      data:taskListResolver,
+      ref_data:requestRefDataResolver
+    }
+  },
+  // Keep legacy component for backward compatibility
+  {
+    path: 'legacy-task-list',
     component: TaskListComponent,
     resolve:{
       data:taskListResolver,

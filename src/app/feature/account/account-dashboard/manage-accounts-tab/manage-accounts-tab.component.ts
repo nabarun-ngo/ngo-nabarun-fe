@@ -1,11 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { AccountDetail, KeyValue } from 'src/app/core/api/models';
+import { AccountDetail, KeyValue, PaginateAccountDetail } from 'src/app/core/api/models';
 import { filterFormChange } from 'src/app/core/service/form.service';
 import { accountHighLevelView, accountTabHeader } from '../../account.field';
 import { MyAccountsTabComponent } from '../my-accounts-tab/my-accounts-tab.component';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { AccordionButton, AccordionCell } from 'src/app/shared/model/accordion-list.model';
+import { TabComponentInterface, SearchEvent } from 'src/app/shared/interfaces/tab-component.interface';
+import { removeNullFields } from 'src/app/core/service/utilities.service';
+import { AccountDefaultValue } from '../../account.const';
 
 @Component({
   selector: 'app-manage-accounts-tab',
@@ -13,8 +16,69 @@ import { AccordionButton, AccordionCell } from 'src/app/shared/model/accordion-l
   styleUrls: ['./manage-accounts-tab.component.scss'],
 })
 export class ManageAccountsTabComponent extends MyAccountsTabComponent {
+  
+  @Input() override initialData?: PaginateAccountDetail;
+  @Input() override refData: any;
+
+  protected override dataLoaded = false;
+
   override ngOnInit(): void {
     this.setHeaderRow(accountTabHeader('all_accounts'));
+    //Set Ref Data
+    if (this.refData) {
+      this.setRefData(this.refData);
+    }
+  }
+
+  override ngAfterViewInit(): void {
+    // Use initial data from resolver if available, but don't auto-load data
+    if (this.initialData && !this.dataLoaded) {
+      this.setContent(this.initialData.content!, this.initialData.totalSize);
+      this.dataLoaded = true;
+    }
+  }
+
+  /**
+   * Load data for this tab - required by TabComponentInterface
+   */
+  override loadData(): void {
+    if (!this.dataLoaded) {
+      this.accountService
+        .fetchAccounts(
+          AccountDefaultValue.pageNumber,
+          AccountDefaultValue.pageSize
+        )
+        .subscribe((data) => {
+          this.setContent(data?.content!, data?.totalSize);
+          this.dataLoaded = true;
+        });
+    }
+  }
+
+  /**
+   * Trigger data loading - called by parent when tab becomes active
+   */
+  override triggerDataLoad(): void {
+    this.loadData();
+  }
+
+  /**
+   * Handle search events forwarded from parent
+   */
+  override onSearch(event: SearchEvent): void {
+    if (event.advancedSearch && !event.reset) {
+      this.accountService
+        .fetchAccounts(undefined, undefined, removeNullFields(event.value))
+        .subscribe((data) => {
+          this.setContent(data?.content!, data?.totalSize);
+        });
+    } else if (event.advancedSearch && event.reset) {
+      this.triggerDataLoad();
+    } else if (event?.buttonName == 'ADVANCED_SEARCH') {
+      this.accountService.fetchUsers().subscribe((s) => {
+        // Handle users fetch for advanced search
+      });
+    }
   }
 
    protected override prepareHighLevelView(
