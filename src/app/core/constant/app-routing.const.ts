@@ -27,6 +27,13 @@ export const AppRoute = {
     feature: 'dashboard',
     path: '',
   },
+  secured_dashboard_help_page: {
+    id: 'secured_dashboard_help_page',
+    url: '/secured/dashboard/help',
+    parent: 'secured',
+    feature: 'dashboard',
+    path: 'help',
+  },
   secured_donation_dashboard_page: {
     id: 'secured_donation_dashboard_page',
     url: '/secured/donation/dashboard',
@@ -92,10 +99,10 @@ export const AppRoute = {
   },
   secured_manage_account_page: {
     id: 'secured_manage_account_page',
-    url: '/secured/account/manage',
+    url: '/secured/account/expense',
     parent: 'secured',
     feature: 'account',
-    path: 'manage',
+    path: 'expense',
   },
   secured_account_transaction_page: {
     id: 'secured_account_transaction_page',

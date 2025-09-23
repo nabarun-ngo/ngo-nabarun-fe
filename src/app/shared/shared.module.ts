@@ -48,6 +48,7 @@ import { HistoryComponent } from './components/generic/history/history.component
 import { DisplayValueFilterPipe } from './pipes/display-value-filter.pipe';
 import { PageNavigationButtonsComponent } from './components/generic/page-navigation-buttons/page-navigation-buttons.component';
 import { PageLayoutComponent } from './layout/page-layout/page-layout.component';
+import { DocumentLinkComponent } from './components/document-link/document-link.component';
 
 @NgModule({
   declarations: [
@@ -73,6 +74,7 @@ import { PageLayoutComponent } from './layout/page-layout/page-layout.component'
     DisplayValueFilterPipe,
     PageNavigationButtonsComponent,
     PageLayoutComponent,
+    DocumentLinkComponent,
   ],
   imports: [
     CommonModule,
@@ -134,6 +136,7 @@ import { PageLayoutComponent } from './layout/page-layout/page-layout.component'
     PageNavigationButtonsComponent,
     PageLayoutComponent,
     MatCheckboxModule,
+    DocumentLinkComponent
   ],
   providers: [{
     provide: MAT_RADIO_DEFAULT_OPTIONS,

@@ -1,0 +1,16 @@
+<div class="notice-board-container p-4 rounded-3xl bg-yellow-50 border-2 border-yellow-300 mb-4 flex flex-col items-center">
+  <h3 class="text-lg font-bold text-yellow-800 mb-2 text-center">Notice Board</h3>
+  <div class="w-full">
+    <div class="flex w-full font-semibold text-yellow-900 px-2 py-1 border-b border-yellow-300 bg-yellow-200 rounded-t">
+      <span class="flex-1 text-left">Title</span>
+      <span class="w-28 text-left">Date</span>
+    </div>
+    <ul class="w-full max-h-48 md:max-h-64 overflow-y-auto border-x border-b rounded-b bg-yellow-100 divide-y divide-yellow-300">
+      <li *ngFor="let notice of notices" class="py-2 px-2 flex items-center">
+        <a href="#" class="flex-1 font-semibold text-yellow-700 hover:text-yellow-900 text-left hover:bg-yellow-200 rounded transition">{{ notice.title }}</a>
+        <span class="w-28 text-left text-yellow-800 text-sm">{{ notice.date }}</span>
+      </li>
+    </ul>
+  </div>
+  <a href="#" class="mt-2 text-blue-600 font-semibold hover:underline text-center">View All Notices</a>
+</div>

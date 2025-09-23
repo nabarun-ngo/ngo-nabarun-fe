@@ -1,0 +1,13 @@
+<div class="documents-page">
+    <!-- <h2 class="section-title">Policies</h2> -->
+    <div *ngFor="let category of categories" class="category-card">
+      <h3 class="category-title">{{ category.name }}</h3>
+      <ul class="documents-list">
+        <li *ngFor="let doc of category.documents" class="document-item">
+          <a [href]="doc.displayValue" target="_blank" rel="noopener" class="document-link" title="Open {{ doc.description }}">
+            {{ doc.description }}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>

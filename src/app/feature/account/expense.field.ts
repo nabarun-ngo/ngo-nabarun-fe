@@ -470,21 +470,21 @@ export const expenseSearchInput = (
             placeholder: 'Select End Date',
           },
         },
+        {
+          formControlName: 'expenseRefId',
+          inputModel: {
+            html_id: 'event_Id',
+            tagName: 'select',
+            inputType: '',
+            labelName:'Select Event',
+            selectList:[],
+            placeholder: 'Ex. NEV1224',
+          }
+        }
       ],
     },
   };
   if(tab == 'expense_list'){
-    model.advancedSearch?.searchFormFields.push({
-      formControlName: 'expenseRefId',
-      inputModel: {
-        html_id: 'event_Id',
-        tagName: 'select',
-        inputType: '',
-        labelName:'Select Event',
-        selectList:[],
-        placeholder: 'Ex. NEV1224',
-      }
-    })
     model.advancedSearch?.searchFormFields.push({
       formControlName: 'payerId',
       inputModel: {
