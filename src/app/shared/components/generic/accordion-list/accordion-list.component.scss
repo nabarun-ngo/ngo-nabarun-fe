@@ -1,15 +1,123 @@
-::ng-deep mat-expansion-panel-header {
-    height: fit-content !important;
-   // min-height: 20% !important;
-    align-items: center !important; /* Align content at the top */
-
+/* Modern Accordion Design */
+::ng-deep .mat-accordion {
+  .mat-expansion-panel {
+    margin: 0.75rem 0 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    border: 1px solid #e5e7eb !important;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    
+    &:hover {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+      transform: translateY(-2px) !important;
+      border-color: #3b82f6 !important;
+    }
+    
+    &.mat-expanded {
+      box-shadow: 0 8px 24px rgba(59, 130, 246, 0.15) !important;
+      border-color: #3b82f6 !important;
+      background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%) !important;
+    }
   }
+  
+  .mat-expansion-panel-header {
+    height: fit-content !important;
+    align-items: center !important;
+    padding: 1rem 1.25rem !important;
+    border-radius: 12px !important;
+    background: transparent !important;
+    transition: all 0.3s ease !important;
+    
+    &:hover {
+      background: rgba(59, 130, 246, 0.05) !important;
+    }
+    
+    .mat-expansion-panel-header-title {
+      font-weight: 600 !important;
+      color: #1f2937 !important;
+      font-size: 0.95rem !important;
+    }
+    
+    .mat-expansion-indicator {
+      color: #6b7280 !important;
+      transition: all 0.3s ease !important;
+      
+      &::after {
+        border-color: #6b7280 !important;
+        border-width: 2px !important;
+      }
+    }
+  }
+  
+  .mat-expansion-panel-body {
+    padding: 1.25rem !important;
+    background: rgba(248, 250, 252, 0.5) !important;
+    border-radius: 0 0 12px 12px !important;
+  }
+  
+  .mat-action-row {
+    padding: 1rem 1.25rem !important;
+    background: rgba(248, 250, 252, 0.8) !important;
+    border-top: 1px solid #e5e7eb !important;
+    border-radius: 0 0 12px 12px !important;
+    
+    .mat-button {
+      border-radius: 8px !important;
+      font-weight: 500 !important;
+      text-transform: none !important;
+      transition: all 0.2s ease !important;
+      margin: 0.25rem !important;
+      
+      &:hover {
+        transform: translateY(-1px) !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+      }
+    }
+  }
+}
+
+/* Modern Grid Styling */
+::ng-deep .mat-accordion .grid {
+  .col-span-1 {
+    span {
+      border-radius: 8px !important;
+      font-weight: 500 !important;
+      transition: all 0.2s ease !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+      
+      &:hover {
+        transform: translateY(-1px) !important;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15) !important;
+      }
+    }
+  }
+}
+
+/* Header Section Styling */
+::ng-deep .mat-accordion .mat-elevation-z2 {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3) !important;
+  margin-bottom: 1rem !important;
+  
+  span {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+    font-weight: 600 !important;
+    backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  }
+}
 
 /* Mobile responsive improvements for accordion */
 @media (max-width: 640px) {
   ::ng-deep .mat-expansion-panel {
+    margin: 0.5rem 0 !important;
+    border-radius: 8px !important;
+    
     .mat-expansion-panel-header {
-      padding: 0.5rem 0.75rem !important;
+      padding: 0.75rem 1rem !important;
       min-height: 3rem !important;
       
       .mat-expansion-panel-header-title {
@@ -23,7 +131,7 @@
     }
     
     .mat-expansion-panel-body {
-      padding: 0.5rem 0.75rem !important;
+      padding: 0.75rem 1rem !important;
     }
   }
   
@@ -47,7 +155,7 @@
   
   /* Mobile-friendly action buttons */
   ::ng-deep .mat-action-row {
-    padding: 0.5rem !important;
+    padding: 0.75rem 1rem !important;
     
     .mat-button {
       min-width: auto !important;
