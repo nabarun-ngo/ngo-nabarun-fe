@@ -1,7 +1,7 @@
 <mat-accordion class="mat-table" multi>
     <section class="mat-elevation-z2 bg-white py-3" *ngIf="accordionList.headers">
         <div class="px-4 sm:px-6">
-            <div class="grid grid-cols-{{accordionList.headers.length}} md:grid-cols-{{Math.min(accordionList.headers.length, 2)}} lg:grid-cols-{{Math.min(accordionList.headers.length, 4)}} gap-2 w-full text-center">
+            <div class="grid grid-cols-1 sm:grid-cols-{{Math.min(accordionList.headers.length, 2)}} md:grid-cols-{{Math.min(accordionList.headers.length, 3)}} lg:grid-cols-{{Math.min(accordionList.headers.length, 4)}} gap-2 w-full text-center sm:text-center">
                 <div class="col-span-1" *ngFor="let header of accordionList.headers;let i=index;">
                     <span class="px-4 py-1 inline-flex leading-5 font-bold {{header.rounded ? 'rounded-full': ''}} {{header.bgColor ? header.bgColor :'bg-purple-100'}} {{header.textColor ? header.textColor:'text-gray-900'}} uppercase">
                         {{header.showDisplayValue ? displayValue(header.refDataSection,header.value) : header.value}} 
@@ -34,7 +34,7 @@
     <mat-expansion-panel *ngFor="let content of accordionList.contents | accordionFilter:accordionList.searchValue;" (opened)="accordionOpened(content)">
         <mat-expansion-panel-header class="w-full items-center my-2">
             <mat-panel-description class="w-full">
-                <div  class="grid grid-cols-{{content.columns.length}} md:grid-cols-{{Math.min(content.columns.length, 2)}} lg:grid-cols-{{Math.min(content.columns.length, 4)}} gap-2 w-full text-center">
+                <div  class="grid grid-cols-1 sm:grid-cols-{{Math.min(content.columns.length, 2)}} md:grid-cols-{{Math.min(content.columns.length, 3)}} lg:grid-cols-{{Math.min(content.columns.length, 4)}} gap-2 w-full text-center sm:text-center">
                     <div *ngFor="let item of content.columns;" class="col-span-1">
                         
                         <span *ngIf="item.type == 'text'" class="px-2 py-1 inline-flex leading-5 font-medium {{item.rounded ? 'rounded-full': ''}} {{item.bgColor ? item.bgColor :''}} {{item.textColor ? item.textColor:'text-gray-900'}} uppercase ">

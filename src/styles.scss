@@ -58,3 +58,206 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     display: none;
     /* Chrome, Safari and Opera */
 }
+
+/* --- Global mobile-friendly adjustments --- */
+img, video, canvas, svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Prevent horizontal scroll on small screens */
+html, body {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+
+/* Utility: clamp long words/urls in tables and cards */
+.break-anywhere {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Refine default container paddings at small sizes */
+@media (max-width: 640px) {
+  .container,
+  .max-w-7xl,
+  .max-w-6xl,
+  .max-w-5xl,
+  .max-w-4xl,
+  .max-w-3xl,
+  .max-w-2xl,
+  .max-w-xl,
+  .max-w-lg {
+    padding-left: 0.75rem; /* 12px */
+    padding-right: 0.75rem; /* 12px */
+  }
+}
+
+/* Reduce large headings a bit on mobile for better fit */
+@media (max-width: 640px) {
+  h1 { font-size: 1.5rem; line-height: 2rem; }
+  h2 { font-size: 1.25rem; line-height: 1.75rem; }
+  h3 { font-size: 1.125rem; line-height: 1.5rem; }
+}
+
+/* --- Angular Material Responsive Improvements --- */
+
+/* Mat-Accordion Mobile Responsive */
+@media (max-width: 640px) {
+  ::ng-deep .mat-accordion {
+    .mat-expansion-panel {
+      margin: 0.25rem !important; /* Reduce margin on mobile */
+      
+      .mat-expansion-panel-header {
+        padding: 0.5rem 0.75rem !important; /* Reduce padding */
+        min-height: 3rem !important; /* Smaller minimum height */
+        
+        .mat-expansion-panel-header-title {
+          font-size: 0.875rem !important; /* Smaller text */
+        }
+        
+        .mat-expansion-indicator {
+          margin-right: 0.5rem !important;
+        }
+      }
+      
+      .mat-expansion-panel-body {
+        padding: 0.5rem 0.75rem !important; /* Reduce body padding */
+      }
+    }
+  }
+  
+  /* Accordion grid responsive - stack on mobile */
+  ::ng-deep .mat-accordion .grid {
+    grid-template-columns: 1fr !important; /* Force single column on mobile */
+    gap: 0.5rem !important;
+    
+    .col-span-1 {
+      text-align: left !important; /* Left align on mobile */
+      
+      span {
+        font-size: 0.75rem !important; /* Smaller text */
+        padding: 0.25rem 0.5rem !important; /* Reduce padding */
+        display: block !important; /* Stack vertically */
+        margin-bottom: 0.25rem !important;
+      }
+    }
+  }
+}
+
+/* Mat-Tab-Group Mobile Responsive */
+@media (max-width: 640px) {
+  ::ng-deep .mat-tab-group {
+    .mat-tab-header {
+      .mat-tab-label-container {
+        .mat-tab-list {
+          .mat-tab-labels {
+            .mat-tab-label {
+              min-width: auto !important;
+              padding: 0 0.75rem !important; /* Reduce padding */
+              font-size: 0.75rem !important; /* Smaller text */
+              height: 2.5rem !important; /* Smaller height */
+              
+              .mat-tab-label-content {
+                font-size: 0.75rem !important;
+                white-space: nowrap !important;
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
+              }
+            }
+          }
+        }
+      }
+    }
+    
+    .mat-tab-body-wrapper {
+      .mat-tab-body {
+        .mat-tab-body-content {
+          padding: 0.5rem !important; /* Reduce content padding */
+        }
+      }
+    }
+  }
+  
+  /* Tab group with scroll on mobile */
+  ::ng-deep .mat-tab-group.mat-tab-group-mobile-scroll {
+    .mat-tab-header {
+      .mat-tab-label-container {
+        overflow-x: auto !important;
+        scrollbar-width: thin !important;
+        
+        .mat-tab-list {
+          flex-wrap: nowrap !important;
+          min-width: max-content !important;
+        }
+      }
+    }
+  }
+}
+
+/* Mat-Table Mobile Responsive (if used in accordions) */
+@media (max-width: 640px) {
+  ::ng-deep .mat-table {
+    .mat-header-row {
+      .mat-header-cell {
+        padding: 0.5rem 0.25rem !important;
+        font-size: 0.75rem !important;
+      }
+    }
+    
+    .mat-row {
+      .mat-cell {
+        padding: 0.5rem 0.25rem !important;
+        font-size: 0.75rem !important;
+      }
+    }
+  }
+}
+
+/* Mat-Button Mobile Responsive */
+@media (max-width: 640px) {
+  ::ng-deep .mat-button,
+  ::ng-deep .mat-raised-button,
+  ::ng-deep .mat-flat-button,
+  ::ng-deep .mat-stroked-button {
+    min-width: auto !important;
+    padding: 0.25rem 0.5rem !important;
+    font-size: 0.75rem !important;
+    line-height: 1.25rem !important;
+  }
+}
+
+/* Mat-Card Mobile Responsive */
+@media (max-width: 640px) {
+  ::ng-deep .mat-card {
+    margin: 0.25rem !important;
+    padding: 0.75rem !important;
+    
+    .mat-card-header {
+      .mat-card-title {
+        font-size: 1rem !important;
+      }
+      
+      .mat-card-subtitle {
+        font-size: 0.75rem !important;
+      }
+    }
+    
+    .mat-card-content {
+      padding: 0.5rem 0 !important;
+      font-size: 0.875rem !important;
+    }
+    
+    .mat-card-actions {
+      padding: 0.5rem 0 0 0 !important;
+      
+      .mat-button,
+      .mat-raised-button,
+      .mat-flat-button,
+      .mat-stroked-button {
+        margin: 0.125rem !important;
+      }
+    }
+  }
+}

@@ -3,7 +3,7 @@
         <app-search-and-advanced-search-form [searchInput]="searchInput" (onSearch)="onSearch($event)"></app-search-and-advanced-search-form>
     </div>
     
-    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" (selectedTabChange)="tabChanged($event.index)"
+    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" class="mat-tab-group-mobile-scroll" (selectedTabChange)="tabChanged($event.index)"
         [(selectedIndex)]="tabIndex">
         <mat-tab id="myAccount" label="My Accounts">
             <app-my-accounts-tab [initialData]="getInitialDataForTab('my_accounts')" [refData]="refData"></app-my-accounts-tab>

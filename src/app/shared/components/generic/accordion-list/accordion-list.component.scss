@@ -3,5 +3,58 @@
    // min-height: 20% !important;
     align-items: center !important; /* Align content at the top */
 
-  } 
+  }
+
+/* Mobile responsive improvements for accordion */
+@media (max-width: 640px) {
+  ::ng-deep .mat-expansion-panel {
+    .mat-expansion-panel-header {
+      padding: 0.5rem 0.75rem !important;
+      min-height: 3rem !important;
+      
+      .mat-expansion-panel-header-title {
+        font-size: 0.875rem !important;
+        line-height: 1.25rem !important;
+      }
+      
+      .mat-expansion-indicator {
+        margin-right: 0.5rem !important;
+      }
+    }
+    
+    .mat-expansion-panel-body {
+      padding: 0.5rem 0.75rem !important;
+    }
+  }
+  
+  /* Stack accordion content on mobile */
+  ::ng-deep .mat-accordion .grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.5rem !important;
+    
+    .col-span-1 {
+      text-align: left !important;
+      
+      span {
+        font-size: 0.75rem !important;
+        padding: 0.25rem 0.5rem !important;
+        display: block !important;
+        margin-bottom: 0.25rem !important;
+        line-height: 1.25rem !important;
+      }
+    }
+  }
+  
+  /* Mobile-friendly action buttons */
+  ::ng-deep .mat-action-row {
+    padding: 0.5rem !important;
+    
+    .mat-button {
+      min-width: auto !important;
+      padding: 0.25rem 0.5rem !important;
+      font-size: 0.75rem !important;
+      margin: 0.125rem !important;
+    }
+  }
+}
   
