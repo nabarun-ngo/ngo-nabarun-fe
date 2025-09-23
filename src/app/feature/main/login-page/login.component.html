@@ -1,6 +1,6 @@
 <section class="text-gray-600 body-font bg-gray-50">
     <div class="container ">
-        <div class="h-screen w-screen bg-gray-400">
+        <div class="h-screen bg-gray-400">
 
             <!-- modal -->
             <div class="fixed grid place-items-center backdrop-blur-sm top-0 right-0 left-0 z-50 w-full inset-0 h-modal h-full justify-center items-center">
@@ -8,12 +8,12 @@
                     <div class="m-auto md:w-7/12">
                         <div class="rounded-xl bg-white dark:bg-gray-800 shadow-xl">
                             <div class="p-8">
-                                <div class="space-y-4">
+                                <div class="space-y-4 flex flex-col justify-center items-center">
                                     <div class="flex w-full justify-center items-center">
-                                        <img src="/assets/logo.png" loading="lazy" width="150" height="300">
+                                        <img src="/assets/logo.png" loading="lazy" class="w-24 md:w-36">
                                     </div>
                                     <div class="text-center" style="max-width:500px;">
-                                        <p class="mb-3 text-2xl font-semibold text-slate-900">Welcome to Nabarun
+                                        <p class="mb-3 text-xl sm:text-2xl font-semibold text-slate-900">Welcome to Nabarun
                                             <!-- {{ isCodeError ? 'Login Failed' : 'Welcome to Nabarun'}} -->
                                         </p>
                                         <div *ngIf="!isCodeError && !isAuthenticated" class="p-4 mb-4 text-sm font-medium text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
