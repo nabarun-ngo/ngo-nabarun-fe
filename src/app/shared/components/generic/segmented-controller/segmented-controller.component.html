@@ -1,4 +1,4 @@
-<mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" (selectedTabChange)="onClickOrChange($event)" [(selectedIndex)]="selectedTabIndex">
+<mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" class="mat-tab-group-mobile-scroll" (selectedTabChange)="onClickOrChange($event)" [(selectedIndex)]="selectedTabIndex">
     <mat-tab *ngFor="let segment of segments" [id]="segment.segment_html_id" [label]="segment.segment_name" [hidden]="segment.hide_segment">
         <ng-content select="[segment1]"></ng-content>
         <!-- <ng-content select="[segment2]"></ng-content>

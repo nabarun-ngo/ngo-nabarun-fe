@@ -1,0 +1,21 @@
+<div class="container-fluid p-0">
+  <div class="row">
+    <div class="col">
+      <app-accordion-list 
+        [accordionList]="getAccordionList()" 
+        (onButtonClick)="onRowClick($event)"
+        (onAccordionOpen)="onAccordionOpen($event)">
+      </app-accordion-list>
+      <mat-paginator 
+        class="mt-4" 
+        style="background-color: transparent;" 
+        (page)="handlePageEvent($event)" 
+        [length]="itemLength$ | async" 
+        [pageSize]="pageSize" 
+        [pageSizeOptions]="pageSizeOptions" 
+        [pageIndex]="pageNumber" 
+        aria-label="Select page">
+      </mat-paginator>
+    </div>
+  </div>
+</div>

@@ -83,10 +83,13 @@
             "development": {
               "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": false,
+              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": false,
-              "namedChunks": false
+              "namedChunks": true,
+              "commonChunk": true,
+              "aot": false,
+              "preserveSymlinks": true
             }
           },
           "defaultConfiguration": "production"

@@ -5,9 +5,9 @@ import {
   ExpenseDetail,
   KeyValue,
 } from 'src/app/core/api/models';
-import { AccordionButton } from 'src/app/shared/model/accordion-list.model';
+import { AccordionButton, AccordionCell } from 'src/app/shared/model/accordion-list.model';
 import { AppDialog } from 'src/app/core/constant/app-dialog.const';
-import { rejectionModal } from '../../expense.field';
+import { manageExpenseHighLevelView, manageExpenseTabHeader, rejectionModal } from '../../expense.field';
 import { SearchAndAdvancedSearchFormComponent } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search-form.component';
 import { MatDialogRef } from '@angular/material/dialog';
 import { SCOPE } from 'src/app/core/constant/auth-scope.const';
@@ -21,6 +21,18 @@ import { MyExpensesTabComponent } from '../my-expenses-tab/my-expenses-tab.compo
 export class ManageExpenseTabComponent extends MyExpensesTabComponent {
   protected override isAdmin: boolean = true;
   protected accounts: AccountDetail[] = [];
+
+   override ngOnInit(): void {
+      this.setHeaderRow(manageExpenseTabHeader);
+    }
+  
+    protected override prepareHighLevelView(
+      data: ExpenseDetail,
+      options?: { [key: string]: any }
+    ): AccordionCell[] {
+      return manageExpenseHighLevelView(data);
+    }
+
   protected override prepareDefaultButtons(
     data: ExpenseDetail,
     options?: { [key: string]: any }

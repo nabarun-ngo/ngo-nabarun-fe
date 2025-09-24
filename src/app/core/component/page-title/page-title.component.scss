@@ -1,0 +1,108 @@
+/* Modern Page Title Styling */
+.page-title-container {
+  position: relative;
+  overflow: hidden;
+  background: var(--gradient-primary);
+  padding: var(--space-xl) 0;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(255,255,255,0.05) 0%, transparent 50%);
+    opacity: 0.6;
+  }
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-2xl);
+  transition: all var(--transition-normal);
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.title-text {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.subtitle-text {
+  font-weight: 500;
+  opacity: 0.9;
+  transition: opacity var(--transition-normal);
+  
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.icon-container {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transition: all var(--transition-normal);
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+  }
+}
+
+.decorative-dot {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 640px) {
+  .page-title-container {
+    padding: var(--space-lg) 0;
+  }
+  
+  .title-text {
+    font-size: var(--font-size-xl);
+  }
+  
+  .subtitle-text {
+    font-size: var(--font-size-sm);
+  }
+  
+  .glass-card {
+    padding: var(--space-md) var(--space-lg);
+  }
+}
+
+/* Wave Animation */
+.wave-svg {
+  animation: wave 3s ease-in-out infinite;
+}
+
+@keyframes wave {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-10px);
+  }
+}
