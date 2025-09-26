@@ -1,10 +1,8 @@
-<main class="min-h-screen" style="background: linear-gradient(135deg, var(--secondary-50) 0%, var(--primary-50) 100%);">
+<main class="p-4 m-4 bg-gray-200 rounded-lg">
     <div class="w-full px-2 sm:px-4 py-4">
         <div class="w-full" style="background: transparent;">
             <ng-content></ng-content>
         </div>
     </div>
-    <div class="fixed bottom-6 right-6 z-40">
-        <app-page-navigation-buttons [navigations]="navigations"></app-page-navigation-buttons>
-    </div>
+    <app-page-navigation-buttons [navigations]="navigations"></app-page-navigation-buttons>
 </main>
