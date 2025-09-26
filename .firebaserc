@@ -1,7 +1,8 @@
 {
   "projects": {
-    "staging": "nabarun-test",
-    "prod": "wengonabarun"
+    "staging": "ngonabarun-stage",
+    "prod": "wengonabarun",
+    "default": "ngonabarun-stage"
   },
   "targets": {
     "nabarun-test": {
@@ -15,6 +16,13 @@
       "hosting": {
         "ngo-nabarun-fe": [
           "wengonabarun"
+        ]
+      }
+    },
+    "ngonabarun-stage": {
+      "hosting": {
+        "ngo-nabarun-fe": [
+          "ngonabarun-stage"
         ]
       }
     }
