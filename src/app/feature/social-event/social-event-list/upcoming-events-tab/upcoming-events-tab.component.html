@@ -1,10 +1,6 @@
-<div class="flex justify-end mx-4 my-2">
-    <div class="mx-1 px-2">
-        <button (click)="showCreateForm()"
-            class="bg-indigo-600 py-3 px-6 w-full text-white font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">Create
-            Event</button>
-    </div>
-</div>
+
+<app-floating-action-button [icon]="'add'" (buttonClick)="showCreateForm()"></app-floating-action-button>
+
 <app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)"
     (onAccordionOpen)="onAccordionOpen($event)"></app-accordion-list>
 <mat-paginator class="mt-4" style="background-color: transparent;" (page)="handlePageEvent($event)"

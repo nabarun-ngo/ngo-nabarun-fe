@@ -32,6 +32,9 @@ export class AccountTransactionComponent
   extends Accordion<TransactionDetail>
   implements OnInit
 {
+export() {
+throw new Error('Method not implemented.');
+}
   defaultValue = TransactionDefaultValue;
   refData: { [name: string]: KeyValue[] } | undefined;
   transactionList!: PaginateTransactionDetail;
@@ -70,15 +73,10 @@ export class AccountTransactionComponent
       );
 
       this.navigations = [
-        this.route.snapshot.queryParams['self'] == 'Y'
-          ? {
-              displayName: 'Back to Accounts & Finance',
+        {
+              displayName: 'Back to Accounts',
               routerLink: AppRoute.secured_account_list_page.url,
-            }
-          : {
-              displayName: 'Back to Manage Accounts & Finance',
-              routerLink: AppRoute.secured_manage_account_page.url,
-            },
+        }
       ];
     }
 

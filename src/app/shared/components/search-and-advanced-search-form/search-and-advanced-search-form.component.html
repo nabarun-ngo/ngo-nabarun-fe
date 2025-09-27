@@ -12,13 +12,13 @@
 
         <!-- Advanced Search Button -->
         <button (click)="clickAdvSearchBtn()"
-            class="bg-indigo-600 py-3 px-5 w-full sm:w-auto text-white font-semibold rounded-lg hover:shadow-lg transition duration-300 cursor-pointer">
+            class="bg-indigo-500 py-3 px-5 w-full sm:w-auto text-white font-semibold rounded-lg hover:shadow-lg transition duration-300 cursor-pointer">
             {{search.normalSearchButtonText ? search.normalSearchButtonText : 'Advanced Search'}} 
         </button>
     </div>
 
     <div *ngIf="search.showOnlyAdvancedSearch || adv_search"
-        class="flex flex-col bg-gray-100 p-4 w-full space-x-4 rounded-lg">
+        class="flex flex-col bg-gray-100 p-4 w-full rounded-lg">
         <div class="text-lg font-medium leading-6 mb-4 text-center text-gray-900">{{search.advancedSearch?.title ? search.advancedSearch?.title :'Advanced Search'}}</div>
         <form [formGroup]="searchformGroup">
             <div class="shadow overflow-hidden sm:rounded-md">
@@ -43,7 +43,7 @@
 
         <div class="pt-4 mt-2 bg-gray-100 text-center sm:px-6 rounded-lg">
             <button (click)="advSearch()" [disabled]="isSearchDisabled"
-                class="bg-indigo-600 py-3 px-5 mx-2 text-white font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">
+                class="bg-indigo-500 py-3 px-5 mx-2 text-white font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">
                  {{search.advancedSearch?.buttonText?.search?search.advancedSearch?.buttonText?.search:'Search'}}
             </button>
             <button (click)="advSearchReset()"

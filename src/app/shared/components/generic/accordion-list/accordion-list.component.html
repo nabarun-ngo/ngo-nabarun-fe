@@ -1,9 +1,9 @@
 <mat-accordion class="mat-table" multi>
-    <section class="mat-elevation-z2 bg-white py-3" *ngIf="accordionList.headers">
+    <section class="mat-elevation-z2 py-3" *ngIf="accordionList.headers" style="background: var(--gradient-primary); border-radius: var(--radius-xl); margin-bottom: var(--space-lg);">
         <div class="px-4 sm:px-6">
-            <div class="grid grid-cols-{{accordionList.headers.length}} md:grid-cols-{{Math.min(accordionList.headers.length, 2)}} lg:grid-cols-{{Math.min(accordionList.headers.length, 4)}} gap-2 w-full text-center">
+            <div class="grid grid-cols-1 sm:grid-cols-{{Math.min(accordionList.headers.length, 2)}} md:grid-cols-{{Math.min(accordionList.headers.length, 3)}} lg:grid-cols-{{Math.min(accordionList.headers.length, 4)}} gap-2 w-full text-center sm:text-center">
                 <div class="col-span-1" *ngFor="let header of accordionList.headers;let i=index;">
-                    <span class="px-4 py-1 inline-flex leading-5 font-bold {{header.rounded ? 'rounded-full': ''}} {{header.bgColor ? header.bgColor :'bg-purple-100'}} {{header.textColor ? header.textColor:'text-gray-900'}} uppercase">
+                    <span class="px-4 py-2 inline-flex leading-5 font-bold rounded-full text-white" style="background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3);">
                         {{header.showDisplayValue ? displayValue(header.refDataSection,header.value) : header.value}} 
                     </span>
                 </div>
@@ -11,8 +11,8 @@
         </div>
     </section>
    
-    <mat-expansion-panel class="m-2" [expanded]="true" *ngIf="accordionList.addContent" id="create">
-        <mat-expansion-panel-header class="w-full items-center my-2" style="pointer-events: none;">
+    <mat-expansion-panel class="mb-4" [expanded]="true" *ngIf="accordionList.addContent" id="create" style="border-radius: var(--radius-xl); box-shadow: var(--shadow-lg);">
+        <mat-expansion-panel-header class="w-full items-center my-2" style="pointer-events: none; background: var(--gradient-success); border-radius: var(--radius-xl) var(--radius-xl) 0 0;">
             <!-- <mat-panel-description class="w-full">
                 <div class="grid grid-cols-{{accordionList.addContent.columns.length}} gap-10 w-full text-center">
                     <div *ngFor="let item of accordionList.addContent.columns;" class="col-span-1">
@@ -23,34 +23,36 @@
                 </div>
             </mat-panel-description> -->
         </mat-expansion-panel-header>
-        <app-detailed-view [detailedViews]="accordionList.addContent.detailed" [refData]="accordionList.refData!"></app-detailed-view>
-        <!-- {{accordionList.addContent.detailed | json}} -->
-        <mat-action-row>
-            <div class="mx-4">
-                <button mat-button *ngFor="let button of accordionList.addContent.buttons" [id]="button.button_id+'_add'" class="text-green-600" (click)="onButtonClick.emit({buttonId:button.button_id,rowIndex:0})">{{button.button_name}}</button>
-            </div>
-        </mat-action-row>
+        <div style="background: white; border-radius: 0 0 var(--radius-xl) var(--radius-xl);">
+            <app-detailed-view [detailedViews]="accordionList.addContent.detailed" [refData]="accordionList.refData!"></app-detailed-view>
+            <!-- {{accordionList.addContent.detailed | json}} -->
+            <mat-action-row style="background: var(--secondary-50); border-radius: 0 0 var(--radius-xl) var(--radius-xl);">
+                <div class="mx-4">
+                    <button mat-button *ngFor="let button of accordionList.addContent.buttons" [id]="button.button_id+'_add'" class="text-green-600" (click)="onButtonClick.emit({buttonId:button.button_id,rowIndex:0})">{{button.button_name}}</button>
+                </div>
+            </mat-action-row>
+        </div>
     </mat-expansion-panel>
-    <mat-expansion-panel *ngFor="let content of accordionList.contents | accordionFilter:accordionList.searchValue;" (opened)="accordionOpened(content)">
-        <mat-expansion-panel-header class="w-full items-center my-2">
+    <mat-expansion-panel *ngFor="let content of accordionList.contents | accordionFilter:accordionList.searchValue;" (opened)="accordionOpened(content)" class="mb-3" style="border-radius: var(--radius-xl); box-shadow: var(--shadow-md);">
+        <mat-expansion-panel-header class="w-full items-center my-2" style="border-radius: var(--radius-xl);">
             <mat-panel-description class="w-full">
-                <div  class="grid grid-cols-{{content.columns.length}} md:grid-cols-{{Math.min(content.columns.length, 2)}} lg:grid-cols-{{Math.min(content.columns.length, 4)}} gap-2 w-full text-center">
+                <div  class="grid grid-cols-1 sm:grid-cols-{{Math.min(content.columns.length, 2)}} md:grid-cols-{{Math.min(content.columns.length, 3)}} lg:grid-cols-{{Math.min(content.columns.length, 4)}} gap-2 w-full text-center sm:text-center">
                     <div *ngFor="let item of content.columns;" class="col-span-1">
                         
-                        <span *ngIf="item.type == 'text'" class="px-2 py-1 inline-flex leading-5 font-medium {{item.rounded ? 'rounded-full': ''}} {{item.bgColor ? item.bgColor :''}} {{item.textColor ? item.textColor:'text-gray-900'}} uppercase ">
+                        <span *ngIf="item.type == 'text'" class="px-3 py-2 inline-flex leading-5 font-medium rounded-lg" style="background: var(--secondary-100); color: var(--secondary-800); box-shadow: var(--shadow-sm);">
                             {{(item.showDisplayValue ? displayValue(item.refDataSection,item.value) : item.value) | replaceNull}}
                         </span>
-                        <span *ngIf="item.type == 'date'" class="px-2 py-1 inline-flex leading-5 font-medium {{item.rounded ? 'rounded-full': ''}} {{item.bgColor ? item.bgColor :''}} {{item.textColor ? item.textColor:'text-gray-900'}} uppercase ">
+                        <span *ngIf="item.type == 'date'" class="px-3 py-2 inline-flex leading-5 font-medium rounded-lg" style="background: var(--primary-100); color: var(--primary-800); box-shadow: var(--shadow-sm);">
                             {{item.value | date | replaceNull}}
                         </span>
                         <div *ngIf="item.type == 'icon'" class="flex justify-end pt-2 px-2">
-                            <mat-icon class="ml-2">{{item.props!['icon']}}</mat-icon>
+                            <mat-icon class="ml-2" style="color: var(--primary-500);">{{item.props!['icon']}}</mat-icon>
                         </div>
                         <div class="flex items-center" *ngIf="item.type == 'user'">
                             <div class="flex-shrink-0 h-10 w-10">
-                                <img class="h-10 w-10 rounded-full" [src]="item.props!['picture']" alt="img">
+                                <img class="h-10 w-10 rounded-full ring-2 ring-white" [src]="item.props!['picture']" alt="img" style="box-shadow: var(--shadow-md);">
                             </div>
-                            <span class="px-2 mx-2 inline-flex leading-5 font-medium rounded-full bg-purple-100 text-purple-800 uppercase">
+                            <span class="px-3 py-2 mx-2 inline-flex leading-5 font-medium rounded-lg" style="background: var(--accent-purple); color: white; box-shadow: var(--shadow-sm);">
                                 {{item.value | replaceNull}}
                             </span>
                         </div>
@@ -58,14 +60,23 @@
                 </div>
             </mat-panel-description>
         </mat-expansion-panel-header>
-        <app-detailed-view [detailedViews]="content.detailed" [refData]="this.accordionList.refData!"></app-detailed-view>
-        <mat-action-row>
-            <div class="mx-4">
-                <button mat-button *ngFor="let button of content.buttons" [id]="button.button_id" class="text-green-600" (click)="buttonClicked(content,button.button_id)">{{button.button_name}}</button>
-            </div>
-        </mat-action-row>
+        <div style="background: white; border-radius: 0 0 var(--radius-xl) var(--radius-xl);">
+            <app-detailed-view [detailedViews]="content.detailed" [refData]="this.accordionList.refData!"></app-detailed-view>
+            <mat-action-row style="background: var(--secondary-50); border-radius: 0 0 var(--radius-xl) var(--radius-xl);">
+                <div class="mx-4">
+                    <button mat-button *ngFor="let button of content.buttons" [id]="button.button_id" class="text-green-600" (click)="buttonClicked(content,button.button_id)">{{button.button_name}}</button>
+                </div>
+            </mat-action-row>
+        </div>
     </mat-expansion-panel>
-    <mat-card class="border-2" *ngIf="accordionList?.contents?.length == 0 || (accordionList.contents && (accordionList.contents?.length != 0 && (accordionList.contents | accordionFilter:accordionList.searchValue).length === 0))">
-        <div class="m-2 p-2 text-center">No records found.</div>
-    </mat-card>
+    <div *ngIf="accordionList?.contents?.length == 0 || (accordionList.contents && (accordionList.contents?.length != 0 && (accordionList.contents | accordionFilter:accordionList.searchValue).length === 0))" 
+         class="text-center py-12" style="background: white; border-radius: var(--radius-xl); box-shadow: var(--shadow-md); margin-top: var(--space-lg);">
+        <div class="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center" style="background: var(--secondary-100);">
+            <svg class="w-8 h-8" style="color: var(--secondary-400);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+        </div>
+        <h3 class="text-lg font-semibold mb-2" style="color: var(--secondary-700);">No records found</h3>
+        <p class="text-sm p-2" style="color: var(--secondary-500);">Try adjusting your search criteria or check back later.</p>
+    </div>
 </mat-accordion>

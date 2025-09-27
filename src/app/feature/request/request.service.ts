@@ -27,10 +27,18 @@ export class RequestService {
   }
 
 
-  findRequests(delegated: boolean = false,
-    pageNumber:number=RequestDefaultValue.pageNumber,
-    pageSize:number= RequestDefaultValue.pageSize) {
-    return this.requestController.getMyRequests({ filter:{isDelegated: delegated}, pageIndex: pageNumber, pageSize: pageSize }).pipe(map(d => d.responsePayload));
+  findRequests(
+    delegated: boolean = false,
+    pageNumber: number = RequestDefaultValue.pageNumber,
+    pageSize: number = RequestDefaultValue.pageSize,
+    additionalFilter?: any
+  ) {
+    let filter = { isDelegated: delegated, ...additionalFilter };
+    return this.requestController.getMyRequests({ 
+      filter: filter, 
+      pageIndex: pageNumber, 
+      pageSize: pageSize 
+    }).pipe(map(d => d.responsePayload));
   }
 
   findRefField(type: string) {
@@ -91,6 +99,20 @@ export class RequestService {
   withdrawRequest(id: string) {
     return this.requestController.updateRequest({ id:id , body:{status:'CANCELLED'} }).pipe(map(d => d.responsePayload));
   }
- 
+
+  /**
+   * Advanced search for requests - placeholder implementation
+   * In a real scenario, this would call a backend API with advanced search capabilities
+   */
+  advancedSearchRequests(
+    delegated: boolean = false, 
+    searchParams: any,
+    pageNumber: number = RequestDefaultValue.pageNumber,
+    pageSize: number = RequestDefaultValue.pageSize
+  ) {
+    // For now, delegate to regular findRequests with additional filter
+    // This would be replaced with a proper advanced search API call
+    return this.findRequests(delegated, pageNumber, pageSize, searchParams);
+  }
 
 }

@@ -1,0 +1,9 @@
+<!-- Floating action button will be used instead of the old Create Request button -->
+<app-floating-action-button [icon]="'add'" (buttonClick)="initCreateRequestForm()"></app-floating-action-button>
+<!-- <h2 class="text-purple-700 font-bolnter mt-4">My Requests</h2> -->
+<app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)"
+    (onAccordionOpen)="onAccordionOpen($event)"></app-accordion-list>
+<mat-paginator class="mt-4" style="background-color: transparent;" (page)="handlePageEvent($event)"
+    [length]="itemLength$ | async" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" [pageIndex]="pageNumber"
+    aria-label="Select page">
+</mat-paginator>
