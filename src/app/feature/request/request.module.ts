@@ -2,10 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { RequestRoutingModule } from './request-routing.module';
-import { RequestListComponent } from './request-list/request-list.component';
-import { WorkflowListComponent } from './workflow-list/workflow-list.component';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { TaskListComponent } from './task-list/task-list.component';
 import { TaskSearchPipe } from './task.pipe';
 // New dashboard components
 import { RequestDashboardComponent } from './request-dashboard/request-dashboard.component';
@@ -19,9 +16,6 @@ import { CompletedTasksTabComponent } from './task-dashboard/completed-tasks-tab
 
 @NgModule({
   declarations: [
-    RequestListComponent,
-    WorkflowListComponent,
-    TaskListComponent,
     TaskSearchPipe,
     // New dashboard components
     RequestDashboardComponent,

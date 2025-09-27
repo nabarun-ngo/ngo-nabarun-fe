@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
-import { RequestListComponent } from './request-list/request-list.component';
 import { requestListResolver, requestRefDataResolver, taskListResolver } from './request.resolver';
-import { TaskListComponent } from './task-list/task-list.component';
 import { RequestDashboardComponent } from './request-dashboard/request-dashboard.component';
 import { TaskDashboardComponent } from './task-dashboard/task-dashboard.component';
+import { RequestListComponent } from './deleted/request-list/request-list.component';
+import { TaskListComponent } from './deleted/task-list/task-list.component';
  
 const route_data = AppRoute;
 

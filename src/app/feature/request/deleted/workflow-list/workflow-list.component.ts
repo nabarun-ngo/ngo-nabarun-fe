@@ -4,14 +4,14 @@ import { AccordionCell, AccordionList, AccordionRow } from 'src/app/shared/model
 import { PaginateWorkDetail } from 'src/app/core/api/models';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { ActivatedRoute } from '@angular/router';
-import { RequestService } from '../request.service';
+import { RequestService } from '../../request.service';
 import { PageEvent } from '@angular/material/paginator';
 import { FormGroup } from '@angular/forms';
 import { date } from 'src/app/core/service/utilities.service';
 import { scrollToFirstInvalidControl } from 'src/app/core/service/form.service';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
-import { workListTab } from '../request.const';
+import { workListTab } from '../../request.const';
 
 @Component({
   selector: 'app-workflow-list',

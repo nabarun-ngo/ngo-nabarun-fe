@@ -38,6 +38,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { NgxMatInputTelComponent } from 'ngx-mat-input-tel';
+import { FloatingActionButtonComponent } from './components/floating-action-button/floating-action-button.component';
 import { MAT_CHECKBOX_DEFAULT_OPTIONS, MatCheckboxModule } from '@angular/material/checkbox';
 import { DynamicInjectPipe } from './pipes/dynamic-inject.pipe';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -75,6 +76,7 @@ import { DocumentLinkComponent } from './components/document-link/document-link.
     PageNavigationButtonsComponent,
     PageLayoutComponent,
     DocumentLinkComponent,
+    FloatingActionButtonComponent,
   ],
   imports: [
     CommonModule,
@@ -136,7 +138,8 @@ import { DocumentLinkComponent } from './components/document-link/document-link.
     PageNavigationButtonsComponent,
     PageLayoutComponent,
     MatCheckboxModule,
-    DocumentLinkComponent
+  DocumentLinkComponent,
+  FloatingActionButtonComponent
   ],
   providers: [{
     provide: MAT_RADIO_DEFAULT_OPTIONS,
