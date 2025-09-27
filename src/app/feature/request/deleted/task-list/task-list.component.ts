@@ -12,9 +12,9 @@ import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { Accordion } from 'src/app/shared/utils/accordion';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
-import { RequestConstant, TaskDefaultValue, TaskField, workListTab } from '../request.const';
-import { RequestService } from '../request.service';
-import { getDocumentDetailSection, getRequestAdditionalDetailSection, getRequestDetailSection, getWorkActionDetailSection, getWorkDetailSection } from '../request.field';
+import { RequestConstant, TaskDefaultValue, TaskField, workListTab } from '../../request.const';
+import { RequestService } from '../../request.service';
+import { getDocumentDetailSection, getRequestAdditionalDetailSection, getRequestDetailSection, getWorkActionDetailSection, getWorkDetailSection } from '../../request.field';
 
 @Component({
   selector: 'app-task-list',

@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Paginator } from 'src/app/shared/utils/paginator';
-import { RequestConstant, RequestDefaultValue, RequestField, requestTab, TaskField } from '../request.const';
+import { RequestConstant, RequestDefaultValue, RequestField, requestTab, TaskField } from '../../request.const';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { ActivatedRoute } from '@angular/router';
-import { RequestService } from '../request.service';
 import { AdditionalField, KeyValue, PaginateRequestDetail, RequestDetail, RequestType, UserDetail, WorkDetail } from 'src/app/core/api/models';
 import { AccordionButton, AccordionCell, AccordionList, AccordionRow } from 'src/app/shared/model/accordion-list.model';
 import { FormGroup, Validators } from '@angular/forms';
@@ -16,8 +15,9 @@ import { filterFormChange, scrollToFirstInvalidControl } from 'src/app/core/serv
 import { ModalService } from 'src/app/core/service/modal.service';
 import { AppAlert } from 'src/app/core/constant/app-alert.const';
 import { AppDialog } from 'src/app/core/constant/app-dialog.const';
-import { getRequestAdditionalDetailSection, getRequestDetailSection, getWorkActionDetailSection, getWorkDetailSection } from '../request.field';
+import { getRequestAdditionalDetailSection, getRequestDetailSection, getWorkActionDetailSection, getWorkDetailSection } from '../../request.field';
 import { date } from 'src/app/core/service/utilities.service';
+import { RequestService } from '../../request.service';
 
 @Component({
   selector: 'app-request-list',
