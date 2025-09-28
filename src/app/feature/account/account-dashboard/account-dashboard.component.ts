@@ -26,7 +26,7 @@ export class AccountDashboardComponent extends StandardTabbedDashboard<accountTa
   /**
    * Declaring variables
    */
-  protected permissions!: {
+  protected permissions: {
     canManageAccounts: boolean;
   };
   protected navigations: NavigationButtonModel[] = [
@@ -50,7 +50,7 @@ export class AccountDashboardComponent extends StandardTabbedDashboard<accountTa
   }
 
   protected get defaultTab(): accountTab {
-    return 'my_accounts';
+    return AccountDefaultValue.tabName as accountTab;
   }
 
   constructor(
@@ -72,11 +72,6 @@ export class AccountDashboardComponent extends StandardTabbedDashboard<accountTa
   }
 
   protected override onHandleRouteData(): void {
-    // Set reference data in shared service
-    if (this.refData) {
-      this.sharedDataService.setRefData('ACCOUNT', this.refData);
-    }
-    // Initialize search input
     this.searchInput = this.getSearchInput();
   }
 
@@ -84,25 +79,18 @@ export class AccountDashboardComponent extends StandardTabbedDashboard<accountTa
     this.searchInput = this.getSearchInput();
     // Trigger data load in the newly active tab after a slight delay to ensure view is updated
     setTimeout(() => {
-      this.tabComponents[this.currentTab]?.loadData();
+      this.tabComponents[this.getCurrentTab()]?.loadData();
     });
   }
 
   private getSearchInput(): SearchAndAdvancedSearchModel {
-    return accountSearchInput(this.tabMapping[this.tabIndex], this.refData!);
+    return accountSearchInput(this.getCurrentTab(), this.refData!);
   }
 
   onSearch(event: SearchEvent): void {
     // Forward search to the active tab component
     //i.e., MyAccountsTabComponent or ManageAccountsTabComponent
     this.forwardSearchToActiveTab(event);
-  }
-
-  /**
-   * Get the current active tab type based on tabIndex
-   */
-  private get currentTab(): accountTab {
-    return this.tabMapping[this.tabIndex];
   }
 
 }

@@ -12,6 +12,9 @@ import { SearchAndAdvancedSearchFormComponent } from 'src/app/shared/components/
 import { MatDialogRef } from '@angular/material/dialog';
 import { SCOPE } from 'src/app/core/constant/auth-scope.const';
 import { MyExpensesTabComponent } from '../my-expenses-tab/my-expenses-tab.component';
+import { SearchEvent } from 'src/app/shared/interfaces/tab-component.interface';
+import { removeNullFields } from 'src/app/core/service/utilities.service';
+import { ExpenseDefaultValue } from '../../account.const';
 
 @Component({
   selector: 'app-manage-expense-tab',
@@ -22,16 +25,36 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
   protected override isAdmin: boolean = true;
   protected accounts: AccountDetail[] = [];
 
-   override ngOnInit(): void {
-      this.setHeaderRow(manageExpenseTabHeader);
+  override onSearch($event: SearchEvent): void {
+    if ($event.advancedSearch && !$event.reset) {
+      this.accountService
+        .fetchExpenses(undefined, undefined, removeNullFields($event.value))
+        .subscribe((s) => {
+          this.setContent(s!.content!, s?.totalSize!);
+        });
+    } else if ($event.advancedSearch && $event.reset) {
+      this.loadData();
     }
-  
-    protected override prepareHighLevelView(
-      data: ExpenseDetail,
-      options?: { [key: string]: any }
-    ): AccordionCell[] {
-      return manageExpenseHighLevelView(data);
-    }
+  }
+
+  override loadData(): void {
+    this.accountService
+      .fetchExpenses(ExpenseDefaultValue.pageNumber, ExpenseDefaultValue.pageSize, {})
+      .subscribe((data) => {
+        this.setContent(data?.content!, data?.totalSize);
+      });
+  }
+
+  override ngOnInit(): void {
+    this.setHeaderRow(manageExpenseTabHeader);
+  }
+
+  protected override prepareHighLevelView(
+    data: ExpenseDetail,
+    options?: { [key: string]: any }
+  ): AccordionCell[] {
+    return manageExpenseHighLevelView(data);
+  }
 
   protected override prepareDefaultButtons(
     data: ExpenseDetail,
@@ -149,7 +172,7 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
                   .subscribe((s) => {
                     this.accountService
                       .uploadDocuments(documents?.map((m) => {
-                        m.detail.documentMapping=[
+                        m.detail.documentMapping = [
                           {
                             docIndexId: itemData.id!,
                             docIndexType: 'EXPENSE',

@@ -58,7 +58,7 @@ export abstract class StandardTabbedDashboard<TTab extends string | number, TDat
   /**
    * Handle resolver data in a standardized way
    */
-  override handleRouteData(): void {
+   override handleRouteData(): void {
     // Extract data from resolver
     if (this.route.snapshot.data['data']) {
       this.initialData = this.route.snapshot.data['data'] as TData;

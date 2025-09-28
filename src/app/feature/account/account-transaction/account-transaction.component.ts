@@ -32,13 +32,15 @@ export class AccountTransactionComponent
   extends Accordion<TransactionDetail>
   implements OnInit
 {
-export() {
-throw new Error('Method not implemented.');
-}
   defaultValue = TransactionDefaultValue;
   refData: { [name: string]: KeyValue[] } | undefined;
   transactionList!: PaginateTransactionDetail;
-  navigations!: NavigationButtonModel[];
+  navigations: NavigationButtonModel[]=[
+        {
+              displayName: 'Back to Accounts',
+              routerLink: AppRoute.secured_account_list_page.url,
+        }
+      ];
   searchInput!: SearchAndAdvancedSearchModel;
   constructor(
     private sharedDataService: SharedDataService,
@@ -71,13 +73,6 @@ throw new Error('Method not implemented.');
         this.transactionList.content!,
         this.transactionList?.totalSize!
       );
-
-      this.navigations = [
-        {
-              displayName: 'Back to Accounts',
-              routerLink: AppRoute.secured_account_list_page.url,
-        }
-      ];
     }
 
     this.searchInput = {

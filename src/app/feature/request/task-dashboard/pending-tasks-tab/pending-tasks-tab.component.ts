@@ -21,7 +21,7 @@ import { TabComponentInterface, SearchEvent } from 'src/app/shared/interfaces/ta
 })
 export class PendingTasksTabComponent extends Accordion<WorkDetail> implements AfterViewInit, TabComponentInterface<PaginateWorkDetail> {
 
-  @Input() initialData?: PaginateWorkDetail;
+  @Input() initialData!: PaginateWorkDetail;
   protected workItemList!: PaginateWorkDetail;
   protected actionName!: string;
   refData!: { [key: string]: KeyValue[]; };
