@@ -8,6 +8,7 @@ import { UserIdentityService } from 'src/app/core/service/user-identity.service'
 import { getGreetings } from 'src/app/core/service/utilities.service';
 import { TileInfo } from 'src/app/shared/model/tile-info.model';
 import { CommonService } from 'src/app/shared/services/common.service';
+import { DashboardDataService } from 'src/app/core/service/dashboard-data.service';
 
 @Component({
   selector: 'app-secured-dashboard',
@@ -23,11 +24,12 @@ reload() {
   protected scope = SCOPE;
   greetings!: string;
   static tileList: TileInfo[]=[];
+
   constructor(
     private identityService: UserIdentityService,
     private sharedDataService: SharedDataService,
     private commonService: CommonService,
-
+    // private dashboardDataService: DashboardDataService
   ) { }
 
   get tiles(){return SecuredDashboardComponent.tileList;}
@@ -52,7 +54,8 @@ reload() {
           additional_info: {
             tile_label: 'My Pending Donations',
             tile_show_badge: false,
-            tile_is_loading: true
+            tile_is_loading: true,
+            tile_value: ''
           }
         },
         {
@@ -93,6 +96,12 @@ reload() {
           tile_name: 'Members',
           tile_icon: 'icon_group',
           tile_link: this.route.secured_member_members_page.url,
+          additional_info: {
+            tile_label: 'Total Members',
+            tile_show_badge: false,
+            tile_is_loading: true,
+            tile_value: ''
+          }
         },
         {
           tile_html_id: 'requestTile',
@@ -118,10 +127,26 @@ reload() {
           tile_icon: 'icon_group',
           tile_link: this.route.secured_admin_dashboard_page.url,
         }
-       
       ];
     }
-   
+
+    // Fetch counts from Firebase and update tiles
+    // Donations count
+    // this.dashboardDataService.getCount('/counts/donations').subscribe(count => {
+    //   const donationTile = SecuredDashboardComponent.tileList.find(tile => tile.tile_html_id === 'donationTile');
+    //   if (donationTile && donationTile.additional_info) {
+    //     donationTile.additional_info.tile_value = count !== null ? count.toString() : '-';
+    //     donationTile.additional_info.tile_is_loading = false;
+    //   }
+    // });
+    // // Members count
+    // this.dashboardDataService.getCount('/counts/members').subscribe(count => {
+    //   const memberTile = SecuredDashboardComponent.tileList.find(tile => tile.tile_html_id === 'memberTile');
+    //   if (memberTile && memberTile.additional_info) {
+    //     memberTile.additional_info.tile_value = count !== null ? count.toString() : '-';
+    //     memberTile.additional_info.tile_is_loading = false;
+    //   }
+    // });
   }
 
 }
