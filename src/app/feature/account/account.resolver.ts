@@ -2,7 +2,7 @@ import { ActivatedRoute, ResolveFn } from '@angular/router';
 import { AccountService } from './account.service';
 import { Inject, inject } from '@angular/core';
 import { CommonService } from 'src/app/shared/services/common.service';
-import { AccountDefaultValue, accountTab, TransactionDefaultValue } from './account.const';
+import { AccountDefaultValue, accountTab, expenseTab, TransactionDefaultValue } from './account.const';
 import { RefDataType } from 'src/app/core/api/models';
 
 export const accountDashboardResolver: ResolveFn<any> = (route, state) => {
@@ -16,7 +16,7 @@ export const accountDashboardResolver: ResolveFn<any> = (route, state) => {
 };
 
 export const expenseDashboardResolver: ResolveFn<any> = (route, state) => {
-  let tab = (route.data['tab'] || 'my_expenses') as accountTab;
+  let tab = (route.data['tab'] || 'my_expenses') as expenseTab;
   if (tab == 'my_expenses') {
     return inject(AccountService).fetchMyExpenses(AccountDefaultValue.pageNumber, AccountDefaultValue.pageSize,{});
   }

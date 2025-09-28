@@ -33,10 +33,10 @@ import { removeNullFields } from 'src/app/core/service/utilities.service';
 })
 export class MyAccountsTabComponent extends Accordion<AccountDetail> implements TabComponentInterface<PaginateAccountDetail> {
   
-  @Input() initialData?: PaginateAccountDetail;
-  @Input() refData: any;
+  @Input({required:true}) initialData!: PaginateAccountDetail;
+  @Input() refData?: { [key: string]: KeyValue[] };
 
-  protected dataLoaded = false;
+ // protected dataLoaded = false;
 
   constructor(
     protected route: ActivatedRoute,
@@ -63,9 +63,8 @@ export class MyAccountsTabComponent extends Accordion<AccountDetail> implements 
 
   ngAfterViewInit(): void {
     // Use initial data from resolver if available, but don't auto-load data
-    if (this.initialData && !this.dataLoaded) {
+    if (this.initialData) {
       this.setContent(this.initialData.content!, this.initialData.totalSize);
-      this.dataLoaded = true;
     }
   }
 
@@ -73,24 +72,14 @@ export class MyAccountsTabComponent extends Accordion<AccountDetail> implements 
    * Load data for this tab - required by TabComponentInterface
    */
   loadData(): void {
-    if (!this.dataLoaded) {
-      this.accountService
+    this.accountService
         .fetchMyAccounts(
           AccountDefaultValue.pageNumber,
           AccountDefaultValue.pageSize
         )
         .subscribe((data) => {
           this.setContent(data?.content!, data?.totalSize);
-          this.dataLoaded = true;
         });
-    }
-  }
-
-  /**
-   * Trigger data loading - called by parent when tab becomes active
-   */
-  triggerDataLoad(): void {
-    this.loadData();
   }
 
   /**
@@ -104,7 +93,7 @@ export class MyAccountsTabComponent extends Accordion<AccountDetail> implements 
           this.setContent(data?.content!, data?.totalSize);
         });
     } else if (event.advancedSearch && event.reset) {
-      this.triggerDataLoad();
+      this.loadData();
     }
   }
 
@@ -112,7 +101,7 @@ export class MyAccountsTabComponent extends Accordion<AccountDetail> implements 
     data: AccountDetail,
     options?: { [key: string]: any }
   ): AccordionCell[] {
-    return accountHighLevelView(data, 'my_accounts', this.refData);
+    return accountHighLevelView(data, 'my_accounts', this.refData!);
   }
 
   protected override prepareDetailedView(
@@ -121,7 +110,7 @@ export class MyAccountsTabComponent extends Accordion<AccountDetail> implements 
   ): DetailedView[] {
     let isCreate = options && options['create'];
     return [
-      accountDetailSection(data, this.refData, isCreate),
+      accountDetailSection(data, this.refData!, isCreate),
       bankDetailSection(data),
       upiDetailSection(data),
     ];

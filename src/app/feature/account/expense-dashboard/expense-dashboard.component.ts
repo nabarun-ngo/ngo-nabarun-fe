@@ -8,7 +8,7 @@ import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
-import { AccountDefaultValue, accountTab } from '../account.const';
+import { AccountDefaultValue, accountTab, expenseTab } from '../account.const';
 import { TabbedPage } from 'src/app/shared/utils/tab';
 import { ActivatedRoute } from '@angular/router';
 import { AccountService } from '../account.service';
@@ -23,7 +23,7 @@ import { removeNullFields } from 'src/app/core/service/utilities.service';
   templateUrl: './expense-dashboard.component.html',
   styleUrls: ['./expense-dashboard.component.scss'],
 })
-export class ExpenseDashboardComponent extends TabbedPage<accountTab> {
+export class ExpenseDashboardComponent extends TabbedPage<expenseTab> {
   protected permissions!: {
     canViewTransactions: boolean;
     canUpdateAccount: boolean;
@@ -79,7 +79,7 @@ export class ExpenseDashboardComponent extends TabbedPage<accountTab> {
     this.searchInput = expenseSearchInput(this.tabMapping[this.tabIndex], this.refData);
   }
 
-  protected tabMapping: accountTab[] = ['my_expenses', 'expense_list'];
+  protected tabMapping: expenseTab[] = ['my_expenses', 'expense_list'];
   protected override onTabChanged(): void {
     this.searchInput = expenseSearchInput(this.tabMapping[this.tabIndex],this.refData);
     if (this.tabMapping[this.tabIndex] == 'my_expenses') {

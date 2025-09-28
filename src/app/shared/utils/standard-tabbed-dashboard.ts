@@ -2,6 +2,7 @@ import { AfterViewInit, Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TabbedPage } from './tab';
 import { SearchEvent, TabComponentInterface } from '../interfaces/tab-component.interface';
+import { KeyValue } from 'src/app/core/api/models';
 
 /**
  * Standardized base class for all tabbed dashboard components.
@@ -26,7 +27,7 @@ export abstract class StandardTabbedDashboard<TTab extends string | number, TDat
   /**
    * Reference data from resolver (if available)
    */
-  protected refData?: { [key: string]: any };
+  protected refData?: { [key: string]: KeyValue[] };
 
   /**
    * Track visited tabs for lazy loading (optional feature)

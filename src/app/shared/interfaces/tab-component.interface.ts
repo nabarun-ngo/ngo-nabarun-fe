@@ -1,4 +1,5 @@
 import { Observable } from 'rxjs';
+import { KeyValue } from 'src/app/core/api/models';
 
 /**
  * Standard interface that all tab components should implement
@@ -8,6 +9,11 @@ export interface TabComponentInterface<TData = any> {
    * Initial data passed from parent component (usually from resolver)
    */
   initialData?: TData;
+
+  /**
+   * Initial data passed from parent component (usually from resolver)
+   */
+  refData?: { [key: string]: KeyValue[] };
 
   /**
    * Handle search operations for this tab

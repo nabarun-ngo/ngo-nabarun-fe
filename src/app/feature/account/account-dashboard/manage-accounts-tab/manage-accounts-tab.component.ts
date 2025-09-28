@@ -16,11 +16,6 @@ import { AccountDefaultValue } from '../../account.const';
   styleUrls: ['./manage-accounts-tab.component.scss'],
 })
 export class ManageAccountsTabComponent extends MyAccountsTabComponent {
-  
-  @Input() override initialData?: PaginateAccountDetail;
-  @Input() override refData: any;
-
-  protected override dataLoaded = false;
 
   override ngOnInit(): void {
     this.setHeaderRow(accountTabHeader('all_accounts'));
@@ -32,9 +27,8 @@ export class ManageAccountsTabComponent extends MyAccountsTabComponent {
 
   override ngAfterViewInit(): void {
     // Use initial data from resolver if available, but don't auto-load data
-    if (this.initialData && !this.dataLoaded) {
+    if (this.initialData) {
       this.setContent(this.initialData.content!, this.initialData.totalSize);
-      this.dataLoaded = true;
     }
   }
 
@@ -42,24 +36,14 @@ export class ManageAccountsTabComponent extends MyAccountsTabComponent {
    * Load data for this tab - required by TabComponentInterface
    */
   override loadData(): void {
-    if (!this.dataLoaded) {
-      this.accountService
+    this.accountService
         .fetchAccounts(
           AccountDefaultValue.pageNumber,
           AccountDefaultValue.pageSize
         )
         .subscribe((data) => {
           this.setContent(data?.content!, data?.totalSize);
-          this.dataLoaded = true;
         });
-    }
-  }
-
-  /**
-   * Trigger data loading - called by parent when tab becomes active
-   */
-  override triggerDataLoad(): void {
-    this.loadData();
   }
 
   /**
@@ -73,7 +57,7 @@ export class ManageAccountsTabComponent extends MyAccountsTabComponent {
           this.setContent(data?.content!, data?.totalSize);
         });
     } else if (event.advancedSearch && event.reset) {
-      this.triggerDataLoad();
+      this.loadData();
     } else if (event?.buttonName == 'ADVANCED_SEARCH') {
       this.accountService.fetchUsers().subscribe((s) => {
         // Handle users fetch for advanced search
@@ -85,7 +69,7 @@ export class ManageAccountsTabComponent extends MyAccountsTabComponent {
       data: AccountDetail,
       options?: { [key: string]: any }
     ): AccordionCell[] {
-      return accountHighLevelView(data, 'all_accounts', this.refData);
+      return accountHighLevelView(data, 'all_accounts', this.refData!);
     }
 
   protected override prepareDefaultButtons(

@@ -6,10 +6,10 @@
     <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" class="mat-tab-group-mobile-scroll" (selectedTabChange)="tabChanged($event.index)"
         [(selectedIndex)]="tabIndex">
         <mat-tab id="myAccount" label="My Accounts">
-            <app-my-accounts-tab [initialData]="getInitialDataForTab('my_accounts')" [refData]="refData"></app-my-accounts-tab>
+            <app-my-accounts-tab [initialData]="getInitialDataForTab('my_accounts')!" [refData]="refData"></app-my-accounts-tab>
         </mat-tab>
         <mat-tab id="allAccount" label="Manage Accounts">
-            <app-manage-accounts-tab [initialData]="getInitialDataForTab('all_accounts')" [refData]="refData"></app-manage-accounts-tab>
+            <app-manage-accounts-tab [initialData]="getInitialDataForTab('all_accounts')!" [refData]="refData"></app-manage-accounts-tab>
         </mat-tab>
     </mat-tab-group>
 </app-page-layout>

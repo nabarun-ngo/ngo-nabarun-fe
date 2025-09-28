@@ -1,13 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
-import { AccountService } from '../account.service';
 import { AccountDefaultValue, accountTab } from '../account.const';
-import {
-  AccountDetail,
-  KeyValue,
-  PaginateAccountDetail,
-} from 'src/app/core/api/models';
+import { PaginateAccountDetail} from 'src/app/core/api/models';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
 import { SCOPE } from 'src/app/core/constant/auth-scope.const';
@@ -15,7 +10,6 @@ import { UserIdentityService } from 'src/app/core/service/user-identity.service'
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
 import { accountSearchInput } from '../account.field';
 import { StandardTabbedDashboard } from 'src/app/shared/utils/standard-tabbed-dashboard';
-import { removeNullFields } from 'src/app/core/service/utilities.service';
 import { MyAccountsTabComponent } from './my-accounts-tab/my-accounts-tab.component';
 import { ManageAccountsTabComponent } from './manage-accounts-tab/manage-accounts-tab.component';
 import { SearchEvent, TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
@@ -29,13 +23,12 @@ export class AccountDashboardComponent extends StandardTabbedDashboard<accountTa
   @ViewChild(MyAccountsTabComponent) myAccountsTab!: MyAccountsTabComponent;
   @ViewChild(ManageAccountsTabComponent) manageAccountsTab!: ManageAccountsTabComponent;
 
-  protected AppRoute = AppRoute;
+  /**
+   * Declaring variables
+   */
   protected permissions!: {
     canManageAccounts: boolean;
   };
-  
-  protected tabMapping: accountTab[] = ['my_accounts', 'all_accounts'];
-  
   protected navigations: NavigationButtonModel[] = [
     {
       displayName: 'Back to Dashboard',
@@ -43,9 +36,12 @@ export class AccountDashboardComponent extends StandardTabbedDashboard<accountTa
     },
   ];
   
+  /**
+   * Overriding variables from StandardTabbedDashboard
+   */
+  protected tabMapping: accountTab[] = ['my_accounts', 'all_accounts'];
   protected searchInput!: SearchAndAdvancedSearchModel;
 
-  // Implement abstract properties
   protected get tabComponents(): { [key in accountTab]?: TabComponentInterface<PaginateAccountDetail> } {
     return {
       my_accounts: this.myAccountsTab,
@@ -54,7 +50,7 @@ export class AccountDashboardComponent extends StandardTabbedDashboard<accountTa
   }
 
   protected get defaultTab(): accountTab {
-    return this.tabMapping[0]; // 'my_accounts'
+    return 'my_accounts';
   }
 
   constructor(
@@ -80,17 +76,16 @@ export class AccountDashboardComponent extends StandardTabbedDashboard<accountTa
     if (this.refData) {
       this.sharedDataService.setRefData('ACCOUNT', this.refData);
     }
-
     // Initialize search input
     this.searchInput = this.getSearchInput();
   }
 
   protected override onTabChangedHook(): void {
-    // Update search input for the new tab
     this.searchInput = this.getSearchInput();
-    
-    // Trigger data loading for the active tab (lazy loading)
-    this.triggerTabDataLoad();
+    // Trigger data load in the newly active tab after a slight delay to ensure view is updated
+    setTimeout(() => {
+      this.tabComponents[this.currentTab]?.loadData();
+    });
   }
 
   private getSearchInput(): SearchAndAdvancedSearchModel {
@@ -99,6 +94,7 @@ export class AccountDashboardComponent extends StandardTabbedDashboard<accountTa
 
   onSearch(event: SearchEvent): void {
     // Forward search to the active tab component
+    //i.e., MyAccountsTabComponent or ManageAccountsTabComponent
     this.forwardSearchToActiveTab(event);
   }
 
@@ -107,42 +103,6 @@ export class AccountDashboardComponent extends StandardTabbedDashboard<accountTa
    */
   private get currentTab(): accountTab {
     return this.tabMapping[this.tabIndex];
-  }
-
-  /**
-   * Check if current tab is my accounts
-   */
-  private get isMyAccountsTab(): boolean {
-    return this.currentTab === 'my_accounts';
-  }
-
-  /**
-   * Check if current tab is manage accounts  
-   */
-  private get isManageAccountsTab(): boolean {
-    return this.currentTab === 'all_accounts';
-  }
-
-  /**
-   * Get initial data for a specific tab from resolver data
-   * Returns data only if resolver data matches the requested tab
-   */
-  override getInitialDataForTab(tabType: accountTab): PaginateAccountDetail | undefined {
-    return super.getInitialDataForTab(tabType);
-  }
-
-  /**
-   * Trigger data loading for the currently active tab
-   */
-  private triggerTabDataLoad(): void {
-    // Use setTimeout to ensure ViewChild components are ready
-    setTimeout(() => {
-      if (this.isMyAccountsTab && this.myAccountsTab) {
-        this.myAccountsTab.triggerDataLoad();
-      } else if (this.isManageAccountsTab && this.manageAccountsTab) {
-        this.manageAccountsTab.triggerDataLoad();
-      }
-    });
   }
 
 }
