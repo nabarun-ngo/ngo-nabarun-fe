@@ -1,12 +1,12 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { AccountDetail, KeyValue, PaginateAccountDetail } from 'src/app/core/api/models';
+import { AccountDetail, KeyValue } from 'src/app/core/api/models';
 import { filterFormChange } from 'src/app/core/service/form.service';
 import { accountHighLevelView, accountTabHeader } from '../../account.field';
 import { MyAccountsTabComponent } from '../my-accounts-tab/my-accounts-tab.component';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { AccordionButton, AccordionCell } from 'src/app/shared/model/accordion-list.model';
-import { TabComponentInterface, SearchEvent } from 'src/app/shared/interfaces/tab-component.interface';
+import { SearchEvent } from 'src/app/shared/interfaces/tab-component.interface';
 import { removeNullFields } from 'src/app/core/service/utilities.service';
 import { AccountDefaultValue } from '../../account.const';
 
@@ -18,18 +18,8 @@ import { AccountDefaultValue } from '../../account.const';
 export class ManageAccountsTabComponent extends MyAccountsTabComponent {
 
   override ngOnInit(): void {
+    super.ngOnInit();
     this.setHeaderRow(accountTabHeader('all_accounts'));
-    //Set Ref Data
-    if (this.refData) {
-      this.setRefData(this.refData);
-    }
-  }
-
-  override ngAfterViewInit(): void {
-    // Use initial data from resolver if available, but don't auto-load data
-    if (this.initialData) {
-      this.setContent(this.initialData.content!, this.initialData.totalSize);
-    }
   }
 
   /**
@@ -58,10 +48,6 @@ export class ManageAccountsTabComponent extends MyAccountsTabComponent {
         });
     } else if (event.advancedSearch && event.reset) {
       this.loadData();
-    } else if (event?.buttonName == 'ADVANCED_SEARCH') {
-      this.accountService.fetchUsers().subscribe((s) => {
-        // Handle users fetch for advanced search
-      });
     }
   }
 

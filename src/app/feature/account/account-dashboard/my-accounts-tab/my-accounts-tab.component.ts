@@ -33,11 +33,6 @@ import { removeNullFields } from 'src/app/core/service/utilities.service';
 })
 export class MyAccountsTabComponent extends Accordion<AccountDetail> implements TabComponentInterface<PaginateAccountDetail> {
   
-  @Input({required:true}) initialData!: PaginateAccountDetail;
-  @Input() refData?: { [key: string]: KeyValue[] };
-
- // protected dataLoaded = false;
-
   constructor(
     protected route: ActivatedRoute,
     protected accountService: AccountService,
@@ -45,27 +40,16 @@ export class MyAccountsTabComponent extends Accordion<AccountDetail> implements 
     protected modalService: ModalService
   ) {
     super();
+  }
+
+  override ngOnInit(): void {
+    this.setHeaderRow(accountTabHeader('my_accounts'));
     //Init Pagination
     this.init(
       AccountDefaultValue.pageNumber,
       AccountDefaultValue.pageSize,
       AccountDefaultValue.pageSizeOptions
     );
-  }
-
-  override ngOnInit(): void {
-    this.setHeaderRow(accountTabHeader('my_accounts'));
-    //Set Ref Data
-    if (this.refData) {
-      this.setRefData(this.refData);
-    }
-  }
-
-  ngAfterViewInit(): void {
-    // Use initial data from resolver if available, but don't auto-load data
-    if (this.initialData) {
-      this.setContent(this.initialData.content!, this.initialData.totalSize);
-    }
   }
 
   /**

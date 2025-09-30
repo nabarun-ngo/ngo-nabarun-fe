@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { AfterViewInit } from '@angular/core';
 import { KeyValue } from 'src/app/core/api/models';
 
 /**
@@ -6,22 +6,12 @@ import { KeyValue } from 'src/app/core/api/models';
  */
 export interface TabComponentInterface<TData = any> {
   /**
-   * Initial data passed from parent component (usually from resolver)
-   */
-  initialData?: TData;
-
-  /**
-   * Initial data passed from parent component (usually from resolver)
-   */
-  refData?: { [key: string]: KeyValue[] };
-
-  /**
    * Handle search operations for this tab
    */
-  onSearch(event: SearchEvent): void;
+  onSearch($event: SearchEvent): void;
 
   /**
-   * Load data for this tab (called when no initial data is provided)
+   * Load data for this tab (called when no initial data is provided or on tab switch)
    */
   loadData(): void;
 }
@@ -34,19 +24,4 @@ export interface SearchEvent {
   advancedSearch: boolean;
   reset: boolean;
   value: any;
-}
-
-/**
- * Base configuration for tab components
- */
-export interface TabComponentConfig<TData = any> {
-  /**
-   * Reference to the tab component instance
-   */
-  component: TabComponentInterface<TData>;
-
-  /**
-   * Initial data for this tab (if available)
-   */
-  initialData?: TData;
 }

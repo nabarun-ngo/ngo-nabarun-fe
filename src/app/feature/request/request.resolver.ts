@@ -18,5 +18,5 @@ export const requestRefDataResolver: ResolveFn<any> = (route, state) => {
 export const taskListResolver: ResolveFn<any> = (route, state) => {
   let tab = (route.data['tab'] || TaskDefaultValue.tabName) as workListTab;
   let completed = tab == 'completed_worklist'
-  return inject(RequestService).findMyWorkList({isCompleted:completed});
+  return inject(RequestService).findMyWorkList(completed);
 };

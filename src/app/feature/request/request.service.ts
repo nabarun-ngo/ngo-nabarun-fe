@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CommonControllerService, RequestControllerService, UserControllerService } from 'src/app/core/api/services';
 import { RequestDefaultValue, TaskDefaultValue } from './request.const';
 import { Observable, map } from 'rxjs';
-import { RefDataType, RequestDetail, WorkDetail, WorkDetailFilter } from 'src/app/core/api/models';
+import { RefDataType, RequestDetail, RequestDetailFilter, WorkDetail, WorkDetailFilter } from 'src/app/core/api/models';
 import { date } from 'src/app/core/service/utilities.service';
 
 @Injectable({
@@ -10,17 +10,11 @@ import { date } from 'src/app/core/service/utilities.service';
 })
 export class RequestService {
  
- 
-
   constructor(
     private requestController: RequestControllerService,
     private commonController: CommonControllerService,
     private userController:UserControllerService,
   ) { }
-
-  // findRequestRefData(workflowType?: string) {
-  //   return this.commonController.getReferenceData({ names: [RefDataType.Workflow], workflowType: workflowType as any }).pipe(map(d => d.responsePayload));
-  // }
 
   getUsers() {
     return this.userController.getUsers({filter:{}}).pipe(map(d => d.responsePayload));
@@ -28,10 +22,10 @@ export class RequestService {
 
 
   findRequests(
-    delegated: boolean = false,
-    pageNumber: number = RequestDefaultValue.pageNumber,
-    pageSize: number = RequestDefaultValue.pageSize,
-    additionalFilter?: any
+    delegated: boolean,
+    pageNumber?: number,
+    pageSize?: number,
+    additionalFilter?: RequestDetailFilter
   ) {
     let filter = { isDelegated: delegated, ...additionalFilter };
     return this.requestController.getMyRequests({ 
@@ -50,15 +44,13 @@ export class RequestService {
   }
 
   
-  findMyWorkList(filter: {
-    isCompleted: boolean
-    requestId?: string,
-    workId?: string,
-    fromDate?: string,
-    toDate?: string,
-  }, pageIndex = TaskDefaultValue.pageNumber, pageSize = TaskDefaultValue.pageSize) {
+  findMyWorkList( 
+    isCompleted: boolean,
+    pageNumber?: number,
+    pageSize?: number,
+    filter?: WorkDetailFilter) {
     let filter_:WorkDetailFilter ={};
-    filter_.completed=filter.isCompleted;
+    filter_.completed=isCompleted;
 
     if(filter?.requestId){
       filter_.requestId=filter?.requestId;
@@ -75,7 +67,7 @@ export class RequestService {
     console.log(filter_)
     return this.requestController.getMyWorkItems({
       filter: filter_,
-      pageIndex: pageIndex, pageSize: pageSize
+      pageIndex: pageNumber, pageSize: pageSize
     }).pipe(map(d => d.responsePayload));
   }
 

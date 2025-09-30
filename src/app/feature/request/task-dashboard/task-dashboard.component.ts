@@ -10,6 +10,7 @@ import { PendingTasksTabComponent } from './pending-tasks-tab/pending-tasks-tab.
 import { CompletedTasksTabComponent } from './completed-tasks-tab/completed-tasks-tab.component';
 import { KeyValue, PaginateWorkDetail } from 'src/app/core/api/models';
 import { SearchEvent, TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
+import { taskSearchInput } from '../request.field';
 
 @Component({
   selector: 'app-task-dashboard',
@@ -22,7 +23,6 @@ export class TaskDashboardComponent extends StandardTabbedDashboard<workListTab,
   @ViewChild(CompletedTasksTabComponent) completedTasksTab!: CompletedTasksTabComponent;
 
   protected tabMapping: workListTab[] = ['pending_worklist', 'completed_worklist'];
-
   protected navigations: NavigationButtonModel[] = [
     {
       displayName: 'Back to Dashboard',
@@ -48,127 +48,22 @@ export class TaskDashboardComponent extends StandardTabbedDashboard<workListTab,
     protected override route: ActivatedRoute,
   ) {
     super(route);
+  }
+
+  protected override onInitHook(): void {
     this.sharedDataService.setPageName(TaskDefaultValue.pageTitle);
+    this.searchInput = taskSearchInput(this.getCurrentTab(), this.refData!);
   }
 
-  protected override onHandleRouteData(): void {
-    // Set reference data in shared service
-    if (this.refData) {
-      this.sharedDataService.setRefData('TASK', this.refData);
-    }
-
-    // Initialize search input
-    this.searchInput = this.getSearchInput();
-  }
 
   protected override onTabChangedHook(): void {
-    // Update search input for the new tab
-    this.searchInput = this.getSearchInput();
-    
-    // Trigger data loading for the active tab (lazy loading)
-    this.triggerTabDataLoad();
+    this.searchInput = taskSearchInput(this.getCurrentTab(), this.refData!);
   }
 
-
-  private getSearchInput(): SearchAndAdvancedSearchModel {
-    return {
-      normalSearchPlaceHolder: 'Search by Work Id, Request Id, Work Type',
-      advancedSearch: {
-        searchFormFields: [
-          {
-            formControlName: 'workId',
-            inputModel: {
-              tagName: 'input' as const,
-              inputType: 'text' as const,
-              html_id: 'workId',
-              labelName: 'Work Id',
-              placeholder: 'Enter Work Id',
-              cssInputClass: 'bg-white'
-            },
-          },
-          {
-            formControlName: 'requestId',
-            inputModel: {
-              tagName: 'input' as const,
-              inputType: 'text' as const,
-              html_id: 'requestId',
-              labelName: 'Request Id',
-              placeholder: 'Enter Request Id',
-            },
-          },
-          {
-            formControlName: 'fromDate',
-            inputModel: {
-              tagName: 'input' as const,
-              inputType: 'date' as const,
-              html_id: 'startDate',
-              labelName: 'From Date',
-              placeholder: 'Enter From Date',
-            },
-          },
-          {
-            formControlName: 'toDate',
-            inputModel: {
-              tagName: 'input' as const,
-              inputType: 'date' as const,
-              html_id: 'endDate',
-              labelName: 'To Date',
-              placeholder: 'Enter To Date',
-            },
-          },
-        ]
-      }
-    };
-  }
 
   onSearch(event: SearchEvent): void {
     // Forward search to the active tab component
     this.forwardSearchToActiveTab(event);
-  }
-
-  /**
-   * Get the current active tab type based on tabIndex
-   */
-  private get currentTab(): workListTab {
-    return this.tabMapping[this.tabIndex];
-  }
-
-  /**
-   * Check if current tab is pending tasks
-   */
-  private get isPendingTab(): boolean {
-    return this.currentTab === 'pending_worklist';
-  }
-
-  /**
-   * Check if current tab is completed tasks  
-   */
-  private get isCompletedTab(): boolean {
-    return this.currentTab === 'completed_worklist';
-  }
-
-
-
-  /**
-   * Get initial data for a specific tab from resolver data
-   * Returns data only if resolver data matches the requested tab
-   */
-  override getInitialDataForTab(tabType: workListTab): PaginateWorkDetail | undefined {
-    return super.getInitialDataForTab(tabType);
-  }
-
-  /**
-   * Trigger data loading for the currently active tab
-   */
-  private triggerTabDataLoad(): void {
-    // Use setTimeout to ensure ViewChild components are ready
-    setTimeout(() => {
-      if (this.isPendingTab && this.pendingTasksTab) {
-        this.pendingTasksTab.triggerDataLoad();
-      } else if (this.isCompletedTab && this.completedTasksTab) {
-        this.completedTasksTab.triggerDataLoad();
-      }
-    });
   }
 
 }

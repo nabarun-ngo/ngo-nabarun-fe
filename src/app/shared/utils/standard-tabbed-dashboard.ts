@@ -1,8 +1,9 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TabbedPage } from './tab';
 import { SearchEvent, TabComponentInterface } from '../interfaces/tab-component.interface';
 import { KeyValue } from 'src/app/core/api/models';
+import { StandardDashboard } from './standard-dashboard';
 
 /**
  * Standardized base class for all tabbed dashboard components.
@@ -15,19 +16,12 @@ import { KeyValue } from 'src/app/core/api/models';
 @Component({
   template: ''
 })
-export abstract class StandardTabbedDashboard<TTab extends string | number, TData = any> 
-  extends TabbedPage<TTab> 
-  implements AfterViewInit {
+export abstract class StandardTabbedDashboard<TTab extends string | number, TData=any>
+  extends StandardDashboard<TData>
+  implements AfterViewInit,OnInit {
 
-  /**
-   * Initial data from resolver (if available)
-   */
-  protected initialData?: TData;
-
-  /**
-   * Reference data from resolver (if available)
-   */
-  protected refData?: { [key: string]: KeyValue[] };
+  protected tabIndex: number = 0;
+  protected abstract tabMapping: TTab[];
 
   /**
    * Track visited tabs for lazy loading (optional feature)
@@ -46,42 +40,43 @@ export abstract class StandardTabbedDashboard<TTab extends string | number, TDat
    */
   protected abstract get defaultTab(): TTab;
 
-  constructor(protected override route: ActivatedRoute) {
-    super(route);
-  }
+  constructor(protected override route: ActivatedRoute) {super(route);}
 
-  ngAfterViewInit(): void {
-    // Allow child components to perform additional initialization
-    this.onAfterViewInit();
+
+  override ngOnInit(): void {
+    this.initializeTabIndex();
+    super.ngOnInit();
   }
 
   /**
-   * Handle resolver data in a standardized way
+   * Initializes the tab index based on the route data.
    */
-   override handleRouteData(): void {
-    // Extract data from resolver
-    if (this.route.snapshot.data['data']) {
-      this.initialData = this.route.snapshot.data['data'] as TData;
+  private initializeTabIndex(): void {
+    const tab = this.route.snapshot.data['tab'] as TTab | undefined;
+    if (tab) {
+      this.tabMapping.forEach((value: TTab, key: number) => {
+        if (tab === value) {
+          this.tabIndex = key;
+        }
+      });
     }
-    
-    if (this.route.snapshot.data['ref_data']) {
-      this.refData = this.route.snapshot.data['ref_data'];
-    }
-
-    // Allow child classes to perform additional route data handling
-    this.onHandleRouteData();
   }
 
   /**
    * Standard tab change handling
    */
-  protected override onTabChanged(): void {
+  protected tabChanged(index: number): void {
+    this.tabIndex = index;
     // Mark current tab as visited for lazy loading
     this.visitedTabs.add(this.getCurrentTab());
-    
+
     // Allow child classes to perform tab-specific operations
-    this.onTabChangedHook();
-    
+    // Trigger data load in the newly active tab after a slight delay to ensure view is updated
+    setTimeout(() => {
+      this.tabComponents[this.getCurrentTab()]?.loadData();
+      this.onTabChangedHook();
+    });
+
     // Child components will handle their own data loading
     // No direct API calls from parent needed
   }
@@ -92,7 +87,7 @@ export abstract class StandardTabbedDashboard<TTab extends string | number, TDat
   protected forwardSearchToActiveTab(event: SearchEvent): void {
     const currentTab = this.getCurrentTab();
     const activeTabComponent = this.tabComponents[currentTab];
-    
+
     if (activeTabComponent) {
       activeTabComponent.onSearch(event);
     }
@@ -136,20 +131,13 @@ export abstract class StandardTabbedDashboard<TTab extends string | number, TDat
   // Hooks for child classes to implement
 
   /**
-   * Hook called after view initialization
-   * Override in child classes for additional setup
-   */
-  protected onAfterViewInit(): void {
-    // Default implementation - no action needed
-  }
-
-  /**
    * Hook called during route data handling
    * Override in child classes for additional route data processing
    */
-  protected onHandleRouteData(): void {
+  protected override onHandleRouteDataHook(): void {
     // Mark initial tab as visited for lazy loading
     this.visitedTabs.add(this.getCurrentTab());
+    super.onHandleRouteDataHook();
     // Default implementation - no action needed
   }
 
@@ -157,13 +145,5 @@ export abstract class StandardTabbedDashboard<TTab extends string | number, TDat
    * Hook called when tab changes
    * Override in child classes for tab-specific operations
    */
-  protected onTabChangedHook(): void {
-    // Default implementation - no action needed
-  }
-
-  /**
-   * Abstract method for handling search events
-   * Must be implemented by child classes
-   */
-  abstract onSearch(event: SearchEvent): void;
+  protected abstract onTabChangedHook(): void;
 }

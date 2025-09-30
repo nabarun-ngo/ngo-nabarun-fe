@@ -3,7 +3,7 @@
         <app-search-and-advanced-search-form [searchInput]="searchInput"
             (onSearch)="onSearch($event)"></app-search-and-advanced-search-form>
     </div>
-    <app-floating-action-button [icon]="'assignment_returned'" (buttonClick)="export()"></app-floating-action-button>
+    <app-floating-action-button [icon]="'assignment_returned'"></app-floating-action-button>
     <app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)"
         (onAccordionOpen)="onAccordionOpen($event)"></app-accordion-list>
     <mat-paginator class="mt-4" style="background-color: transparent;" (page)="handlePageEvent($event)"

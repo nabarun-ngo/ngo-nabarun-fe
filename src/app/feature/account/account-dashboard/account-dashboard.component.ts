@@ -13,6 +13,7 @@ import { StandardTabbedDashboard } from 'src/app/shared/utils/standard-tabbed-da
 import { MyAccountsTabComponent } from './my-accounts-tab/my-accounts-tab.component';
 import { ManageAccountsTabComponent } from './manage-accounts-tab/manage-accounts-tab.component';
 import { SearchEvent, TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
+
 @Component({
   selector: 'app-account-dashboard',
   templateUrl: './account-dashboard.component.html',
@@ -26,7 +27,7 @@ export class AccountDashboardComponent extends StandardTabbedDashboard<accountTa
   /**
    * Declaring variables
    */
-  protected permissions: {
+  protected permissions!: {
     canManageAccounts: boolean;
   };
   protected navigations: NavigationButtonModel[] = [
@@ -57,8 +58,10 @@ export class AccountDashboardComponent extends StandardTabbedDashboard<accountTa
     private sharedDataService: SharedDataService,
     protected override route: ActivatedRoute,
     private identityService: UserIdentityService
-  ) {
-    super(route);
+  ) {super(route);}
+
+  protected override onInitHook(): void {
+    this.searchInput = this.getSearchInput();
     this.sharedDataService.setPageName(AccountDefaultValue.pageTitle);
 
     // Setup permissions
@@ -71,16 +74,8 @@ export class AccountDashboardComponent extends StandardTabbedDashboard<accountTa
     };
   }
 
-  protected override onHandleRouteData(): void {
-    this.searchInput = this.getSearchInput();
-  }
-
   protected override onTabChangedHook(): void {
     this.searchInput = this.getSearchInput();
-    // Trigger data load in the newly active tab after a slight delay to ensure view is updated
-    setTimeout(() => {
-      this.tabComponents[this.getCurrentTab()]?.loadData();
-    });
   }
 
   private getSearchInput(): SearchAndAdvancedSearchModel {

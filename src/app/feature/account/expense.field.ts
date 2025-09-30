@@ -282,6 +282,7 @@ export const expenseListSection = (
   isCreate: boolean = false
 ) => {
   let accordion = new (class extends Accordion<ExpenseItemDetail> {
+    
     override ngOnInit(): void {}
     protected override onClick(event: {
       buttonId: string;

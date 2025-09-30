@@ -33,7 +33,6 @@ export class AccountTransactionComponent
   implements OnInit
 {
   defaultValue = TransactionDefaultValue;
-  refData: { [name: string]: KeyValue[] } | undefined;
   transactionList!: PaginateTransactionDetail;
   navigations: NavigationButtonModel[]=[
         {

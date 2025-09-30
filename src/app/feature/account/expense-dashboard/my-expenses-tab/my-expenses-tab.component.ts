@@ -37,8 +37,6 @@ import { removeNullFields } from 'src/app/core/service/utilities.service';
 })
 export class MyExpensesTabComponent extends Accordion<ExpenseDetail> implements TabComponentInterface<PaginateExpenseDetail> {
 
-  @Input() initialData!: PaginateExpenseDetail;
-  @Input() refData!: { [key: string]: KeyValue[]; };
   /**
    * Initialize variables
    */
@@ -50,14 +48,16 @@ export class MyExpensesTabComponent extends Accordion<ExpenseDetail> implements 
     protected userIdentity: UserIdentityService
   ) {
     super();
-    super.init(
+  }
+
+  ngOnInit(): void {
+    this.init(
       AccountDefaultValue.pageNumber,
       AccountDefaultValue.pageSize,
       AccountDefaultValue.pageSizeOptions
     );
+    this.setHeaderRow(expenseTabHeader);
   }
-
-
 
   onSearch($event: SearchEvent): void {
     if ($event.advancedSearch && !$event.reset) {
@@ -70,17 +70,13 @@ export class MyExpensesTabComponent extends Accordion<ExpenseDetail> implements 
       this.loadData();
     }
   }
-  
+
   loadData(): void {
     this.accountService
       .fetchMyExpenses(AccountDefaultValue.pageNumber, AccountDefaultValue.pageSize, {})
       .subscribe((data) => {
         this.setContent(data?.content!, data?.totalSize);
       });
-  }
-
-  ngOnInit(): void {
-    this.setHeaderRow(expenseTabHeader);
   }
 
   protected override prepareHighLevelView(
@@ -134,6 +130,7 @@ export class MyExpensesTabComponent extends Accordion<ExpenseDetail> implements 
     }
     return buttons;
   }
+
   override handlePageEvent($event: PageEvent): void {
     this.accountService
       .fetchExpenses($event.pageIndex, $event.pageSize, {})

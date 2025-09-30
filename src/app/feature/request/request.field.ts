@@ -1,10 +1,11 @@
 import { FormGroup, Validators } from "@angular/forms";
 import { AdditionalField, DocumentDetail, KeyValue, RequestDetail, WorkDetail } from "src/app/core/api/models";
 import { date } from "src/app/core/service/utilities.service";
-import { RequestConstant, workListTab } from "./request.const";
+import { RequestConstant, requestTab, workListTab } from "./request.const";
 import { DetailedView, DetailedViewField } from "src/app/shared/model/detailed-view.model";
+import { SearchAndAdvancedSearchModel } from "src/app/shared/model/search-and-advanced-search.model";
 
-const refDataKey=RequestConstant.refDataKey
+const refDataKey = RequestConstant.refDataKey
 
 const getAdditionalField = (fields: AdditionalField[]) => {
     return fields?.map(m1 => {
@@ -58,7 +59,7 @@ export const getWorkDetailSection = (m: WorkDetail, tab: workListTab): DetailedV
             {
                 field_name: 'Assigned to',
                 field_html_id: 'pending_with',
-                field_value: m.pendingWith?.map(m=>m.fullName).join(', ')!,
+                field_value: m.pendingWith?.map(m => m.fullName).join(', ')!,
                 hide_field: tab == 'completed_worklist'
             },
             {
@@ -82,7 +83,7 @@ export const getWorkActionDetailSection = (m: WorkDetail): DetailedView => {
         section_name: 'Task Action Detail',
         section_type: 'key_value',
         section_html_id: 'action_details',
-        hide_section:m.additionalFields?.length == 0,
+        hide_section: m.additionalFields?.length == 0,
         section_form: new FormGroup({}),
         content: getAdditionalField(m.additionalFields!)
     };
@@ -104,14 +105,14 @@ export const getRequestDetailSection = (request: RequestDetail): DetailedView =>
             {
                 field_name: 'Request Type',
                 field_value: request?.type!,
-                show_display_value:true,
-                ref_data_section:refDataKey.workflowTypes
+                show_display_value: true,
+                ref_data_section: refDataKey.workflowTypes
             },
             {
                 field_name: 'Request Status',
                 field_value: request?.status!,
-                show_display_value:true,
-                ref_data_section:refDataKey.workflowSteps
+                show_display_value: true,
+                ref_data_section: refDataKey.workflowSteps
             },
             {
                 field_name: 'Requester Name',
@@ -150,21 +151,180 @@ export const getRequestAdditionalDetailSection = (m: RequestDetail): DetailedVie
         section_name: 'Request Additional Details',
         section_type: 'key_value',
         section_html_id: 'request_add_detail',
-        hide_section : m.additionalFields?.length == 0,
+        hide_section: m.additionalFields?.length == 0,
         section_form: new FormGroup({}),
         content: getAdditionalField(m.additionalFields!)
     };
 }
 
-export const getDocumentDetailSection=(m: DocumentDetail[]): DetailedView =>{
+export const getDocumentDetailSection = (m: DocumentDetail[]): DetailedView => {
     return {
         section_name: 'Documents',
         section_type: 'doc_list',
         section_html_id: 'request_docs',
-        hide_section : m.length == 0,
+        hide_section: m.length == 0,
         section_form: new FormGroup({}),
-        documents:m
+        documents: m
     };
 }
 
 
+export const requestSearchInput = (
+    tab: requestTab,
+    refData: {
+        [name: string]: KeyValue[];
+    }
+): SearchAndAdvancedSearchModel => {
+
+    return {
+        normalSearchPlaceHolder: 'Search by Request ID, Type, or Description',
+        advancedSearch: {
+            title: 'Advanced Request Search',
+            buttonText: {
+                search: 'Search Requests',
+                close: 'Clear & Close'
+            },
+            searchFormFields: [
+                {
+                    formControlName: 'requestId',
+                    inputModel: {
+                        tagName: 'input',
+                        inputType: 'text',
+                        html_id: 'requestId',
+                        labelName: 'Request ID',
+                        placeholder: 'Enter Request ID',
+                        cssInputClass: 'bg-white'
+                    }
+                },
+                {
+                    formControlName: 'requestType',
+                    inputModel: {
+                        tagName: 'select',
+                        inputType: '',
+                        html_id: 'requestType',
+                        labelName: 'Request Type',
+                        placeholder: 'Select Request Type',
+                        selectList: refData?.[RequestConstant.refDataKey.workflowTypes] || [],
+                        cssInputClass: 'bg-white'
+                    }
+                },
+                {
+                    formControlName: 'status',
+                    inputModel: {
+                        tagName: 'select',
+                        inputType: '',
+                        html_id: 'status',
+                        labelName: 'Request Status',
+                        placeholder: 'Select Status',
+                        selectList: refData?.[RequestConstant.refDataKey.workflowSteps] || [],
+                        cssInputClass: 'bg-white'
+                    }
+                },
+                {
+                    formControlName: 'fromDate',
+                    inputModel: {
+                        tagName: 'input',
+                        inputType: 'date',
+                        html_id: 'fromDate',
+                        labelName: 'From Date',
+                        placeholder: 'Select from date',
+                        cssInputClass: 'bg-white'
+                    }
+                },
+                {
+                    formControlName: 'toDate',
+                    inputModel: {
+                        tagName: 'input',
+                        inputType: 'date',
+                        html_id: 'toDate',
+                        labelName: 'To Date',
+                        placeholder: 'Select to date',
+                        cssInputClass: 'bg-white'
+                    }
+                },
+                // Only show for delegated requests tab
+                {
+                    formControlName: 'requesterName',
+                    inputModel: {
+                        tagName: 'input',
+                        inputType: 'text',
+                        html_id: 'requesterName',
+                        labelName: 'Requester Name',
+                        placeholder: 'Enter requester name',
+                        cssInputClass: 'bg-white'
+                    },
+                    hidden: tab !== 'delegated_request'
+                },
+                {
+                    formControlName: 'description',
+                    inputModel: {
+                        tagName: 'textarea',
+                        inputType: '',
+                        html_id: 'description',
+                        labelName: 'Description Contains',
+                        placeholder: 'Enter keywords from description',
+                        cssInputClass: 'bg-white',
+                        props: { rows: 3 }
+                    }
+                }
+            ]
+        }
+    };
+};
+
+export const taskSearchInput = (
+    tab: workListTab,
+    refData: {
+        [name: string]: KeyValue[];
+    }
+): SearchAndAdvancedSearchModel => {
+
+    return {
+        normalSearchPlaceHolder: 'Search by Work Id, Request Id, Work Type',
+        advancedSearch: {
+            searchFormFields: [
+                {
+                    formControlName: 'workId',
+                    inputModel: {
+                        tagName: 'input' as const,
+                        inputType: 'text' as const,
+                        html_id: 'workId',
+                        labelName: 'Work Id',
+                        placeholder: 'Enter Work Id',
+                        cssInputClass: 'bg-white'
+                    },
+                },
+                {
+                    formControlName: 'requestId',
+                    inputModel: {
+                        tagName: 'input' as const,
+                        inputType: 'text' as const,
+                        html_id: 'requestId',
+                        labelName: 'Request Id',
+                        placeholder: 'Enter Request Id',
+                    },
+                },
+                {
+                    formControlName: 'fromDate',
+                    inputModel: {
+                        tagName: 'input' as const,
+                        inputType: 'date' as const,
+                        html_id: 'startDate',
+                        labelName: 'From Date',
+                        placeholder: 'Enter From Date',
+                    },
+                },
+                {
+                    formControlName: 'toDate',
+                    inputModel: {
+                        tagName: 'input' as const,
+                        inputType: 'date' as const,
+                        html_id: 'endDate',
+                        labelName: 'To Date',
+                        placeholder: 'Enter To Date',
+                    },
+                },
+            ]
+        }
+    };
+};

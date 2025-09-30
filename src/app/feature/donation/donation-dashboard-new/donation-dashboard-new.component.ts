@@ -18,12 +18,12 @@ import { FormGroup } from '@angular/forms';
 })
 export class DonationDashboardNewComponent extends Accordion<DonationDetail | UserDetail> implements OnInit {
 
+
   protected tabIndex!: number;
   protected tabMapping: donationTab[] = ['self_donation', 'guest_donation', 'member_donation'];
   defaultValue = DonationDefaultValue;
   protected mySummary: DonationSummary | undefined;
   constants = DonationRefData;
-  refData: any;
   userList!: UserDetail[];
 
 
@@ -54,7 +54,7 @@ export class DonationDashboardNewComponent extends Accordion<DonationDetail | Us
 
     if (this.route.snapshot.data['ref_data']) {
       this.refData = this.route.snapshot.data['ref_data'];
-      this.sharedDataService.setRefData('DONATION', this.refData);
+      this.sharedDataService.setRefData('DONATION', this.refData!);
       //console.log(refData,6)
       this.setRefData(this.refData);
     }

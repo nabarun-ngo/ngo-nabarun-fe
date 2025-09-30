@@ -21,7 +21,6 @@ import { ManageExpenseTabComponent } from './manage-expense-tab/manage-expense-t
   styleUrls: ['./expense-dashboard.component.scss'],
 })
 export class ExpenseDashboardComponent extends StandardTabbedDashboard<expenseTab, PaginateExpenseDetail> {
-
   /**
    * Declariring variables
    */
@@ -62,8 +61,14 @@ export class ExpenseDashboardComponent extends StandardTabbedDashboard<expenseTa
     protected override route: ActivatedRoute,
     private identityService: UserIdentityService,
     private accountService: AccountService
-  ) {
+  ) 
+  {
     super(route);
+  }
+
+  
+ protected override onInitHook(): void {
+    this.searchInput = expenseSearchInput(this.getCurrentTab(), this.refData!);
     this.sharedDataService.setPageName(ExpenseDefaultValue.pageTitle);
 
     // Setup permissions
@@ -82,17 +87,9 @@ export class ExpenseDashboardComponent extends StandardTabbedDashboard<expenseTa
       ),
     };
   }
-
-  protected override onHandleRouteData(): void {
-    this.searchInput = expenseSearchInput(this.getCurrentTab(), this.refData!);
-  }
-
+  
   protected override onTabChangedHook(): void {
     this.searchInput = expenseSearchInput(this.getCurrentTab(), this.refData!);
-    // Trigger data load in the newly active tab after a slight delay to ensure view is updated
-    setTimeout(() => {
-      this.tabComponents[this.getCurrentTab()]?.loadData();
-    });
   }
 
   onSearch($event: SearchEvent) {
@@ -119,6 +116,5 @@ export class ExpenseDashboardComponent extends StandardTabbedDashboard<expenseTa
         });
       }
     }
-    
   }
 }

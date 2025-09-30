@@ -46,6 +46,7 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
   }
 
   override ngOnInit(): void {
+    super.ngOnInit();
     this.setHeaderRow(manageExpenseTabHeader);
   }
 

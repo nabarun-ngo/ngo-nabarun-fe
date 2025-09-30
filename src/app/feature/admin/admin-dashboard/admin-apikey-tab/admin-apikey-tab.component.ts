@@ -10,24 +10,16 @@ import { PageEvent } from '@angular/material/paginator';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { ModalService } from 'src/app/core/service/modal.service';
 import { AppDialog } from 'src/app/core/constant/app-dialog.const';
+import { SearchEvent, TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
 
 @Component({
   selector: 'app-admin-apikey-tab',
   templateUrl: './admin-apikey-tab.component.html',
   styleUrls: ['./admin-apikey-tab.component.scss']
 })
-export class AdminApikeyTabComponent extends Accordion<ApiKeyDetail> implements OnInit {
-
+export class AdminApikeyTabComponent extends Accordion<ApiKeyDetail> implements TabComponentInterface<ApiKeyDetail> {
   defaultValue = AdminDefaultValue;
   constant = AdminConstant;
-  apiKeys: ApiKeyDetail[]=[];
-
-  @Input({ required: true }) set apiKeyList(list: ApiKeyDetail[]) {
-    if (list) {
-      this.apiKeys=list;
-      this.setContent(list!, list.length);
-    }
-  }
 
   constructor(
     private sharedData: SharedDataService,
@@ -36,12 +28,18 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDetail> implements 
 
   ) {
     super();
-    super.init(this.defaultValue.pageNumber, this.defaultValue.pageSize, this.defaultValue.pageSizeOptions)
+  }
+  onSearch($event: SearchEvent): void {}
+  
+  loadData(): void {
+    this.adminService.getAPIKeyList().subscribe(data => {
+        this.setContent(data!, data?.length);
+      });
   }
 
-  ngOnInit(): void {
-    this.setRefData(this.sharedData.getRefData('ACCOUNT'));
+  override ngOnInit(): void {
     this.setHeaderRow([{value:'API Key Name'},{value:'API Key Scope'}])
+        this.init(this.defaultValue.pageNumber, this.defaultValue.pageSize, this.defaultValue.pageSizeOptions)
   }
 
   protected override prepareHighLevelView(data: ApiKeyDetail, options?: { [key: string]: any; }): AccordionCell[] {
@@ -159,7 +157,6 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDetail> implements 
           this.adminService.createAPIKey(api_key_detail.value).subscribe(s => {
             this.hideForm(0, true)
             this.addContentRow(s!)
-            this.apiKeys.push(s!)
             window.navigator.clipboard.writeText(s?.apiKey!)
             this.modalService.openNotificationModal({
               title:'API Key Generated',
@@ -179,8 +176,8 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDetail> implements 
       case 'REVOKE':
         let modal=this.modalService.openNotificationModal(AppDialog.warning_confirm_revoke,'confirmation','warning')
         modal.onAccept$.subscribe(s=>{
-          let id =this.apiKeys[$event.rowIndex].id!;
-          this.adminService.revokeAPIKey(id).subscribe(s=>{});
+          let apiKey =this.itemList[$event.rowIndex];
+          this.adminService.revokeAPIKey(apiKey.id!).subscribe(s=>{});
         })
         break;
       case 'UPDATE':
@@ -194,8 +191,7 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDetail> implements 
           })
           break;
       case 'CONFIRM':
-        console.log(this.apiKeys)
-        let id =this.apiKeys[$event.rowIndex].id!;
+        let id =this.itemList[$event.rowIndex].id!;
         let api_key_detail_update = this.getSectionForm('api_key_detail', $event.rowIndex);
         if(api_key_detail_update?.valid){
           this.adminService.updateAPIKeyDetail(id,api_key_detail_update.value).subscribe(d=>{
@@ -214,14 +210,5 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDetail> implements 
     this.adminService.getScopeList().subscribe(d=>{
       this.getSectionField('api_key_detail','api_key_scope',0,true).form_input!.selectList=d;
     })
-    // this.adminService.getEndpointList().subscribe(d=>{
-    //   let list = d.filter((p: any)=> p.details ).map((m: any)=>{
-    //     let url= m.details.requestMappingConditions.patterns[0];
-    //     return {key:url,displayValue:url}as KeyValue;
-    //   })
-    //   this.getSectionField('api_key_detail','api_key_scope',0,true).form_input!.selectList=list;
-    // })
-
-    
   }
 }
