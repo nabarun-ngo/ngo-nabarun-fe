@@ -292,7 +292,7 @@ export class MyRequestsTabComponent extends Accordion<RequestDetail> implements 
       }();
 
       // Set up the nested accordion
-      workAccordion.setRefData(this.refData);
+      workAccordion.setRefData(this.getRefData()!);
       workAccordion.setHeaderRow([
         {
           value: 'Work Id',
@@ -339,7 +339,7 @@ export class MyRequestsTabComponent extends Accordion<RequestDetail> implements 
  * Get filtered workflow types excluding JOIN_REQUEST_USER for My Requests tab
  */
   protected getFilteredWorkflowTypes(): KeyValue[] {
-    const allTypes = this.refData?.['visibleWorkflowTypes'] || [];
+    const allTypes = this.getRefData()?.['visibleWorkflowTypes'] || [];
     return allTypes.filter((type: KeyValue) => type.key !== RequestType.JoinRequestUser);
   }
 

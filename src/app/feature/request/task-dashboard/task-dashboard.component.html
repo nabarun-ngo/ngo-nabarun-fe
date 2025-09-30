@@ -8,10 +8,10 @@
                 
                 <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" class="mat-tab-group-mobile-scroll" (selectedTabChange)="tabChanged($event.index)" [(selectedIndex)]="tabIndex">
         <mat-tab id="pendingTask" label="Pending Tasks">
-            <app-pending-tasks-tab [accordionData]="initialData" [refData]="refData"></app-pending-tasks-tab>
+            <app-pending-tasks-tab [accordionData]="initialData!" [refData]="refData"></app-pending-tasks-tab>
         </mat-tab>
         <mat-tab id="completedTask" label="Completed Tasks">
-            <app-completed-tasks-tab [accordionData]="initialData" [refData]="refData"></app-completed-tasks-tab>
+            <app-completed-tasks-tab [accordionData]="initialData!" [refData]="refData"></app-completed-tasks-tab>
         </mat-tab>
                 </mat-tab-group>
             </div>

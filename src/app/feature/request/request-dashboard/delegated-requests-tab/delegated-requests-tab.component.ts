@@ -132,7 +132,7 @@ export class DelegatedRequestsTabComponent extends MyRequestsTabComponent {
                 tagName: 'select',
                 inputType: '',
                 placeholder: 'Select Request type',
-                selectList: this.refData!['visibleWorkflowTypes'] // Include all types
+                selectList: this.getRefData()!['visibleWorkflowTypes'] // Include all types
               },
               form_input_validation: [Validators.required]
             },

@@ -85,7 +85,7 @@ export class MyAccountsTabComponent extends Accordion<AccountDetail> implements 
     data: AccountDetail,
     options?: { [key: string]: any }
   ): AccordionCell[] {
-    return accountHighLevelView(data, 'my_accounts', this.refData!);
+    return accountHighLevelView(data, 'my_accounts', this.getRefData()!);
   }
 
   protected override prepareDetailedView(
@@ -93,8 +93,9 @@ export class MyAccountsTabComponent extends Accordion<AccountDetail> implements 
     options?: { [key: string]: any }
   ): DetailedView[] {
     let isCreate = options && options['create'];
+    console.log(this.getRefData());
     return [
-      accountDetailSection(data, this.refData!, isCreate),
+      accountDetailSection(data, this.getRefData()!, isCreate),
       bankDetailSection(data),
       upiDetailSection(data),
     ];

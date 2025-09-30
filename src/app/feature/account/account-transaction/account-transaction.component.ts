@@ -41,6 +41,7 @@ export class AccountTransactionComponent
         }
       ];
   searchInput!: SearchAndAdvancedSearchModel;
+  refData: any;
   constructor(
     private sharedDataService: SharedDataService,
     private route: ActivatedRoute,
@@ -112,7 +113,7 @@ export class AccountTransactionComponent
               html_id: 'txnType',
               labelName: 'Transaction Type',
               placeholder: 'Select Transaction Type',
-              selectList: this.refData!['transactionRefTypes'],
+              selectList: this.getRefData()!['transactionRefTypes'],
             },
           },
           {

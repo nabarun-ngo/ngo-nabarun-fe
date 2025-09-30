@@ -1,29 +1,43 @@
-import { PageEvent } from "@angular/material/paginator";
 import { Paginator } from "src/app/shared/utils/paginator";
 import { AccordionButton, AccordionCell, AccordionData, AccordionList, AccordionRow } from "../model/accordion-list.model";
 import { DetailedView, DetailedViewField } from "../model/detailed-view.model";
-import { KeyValue, WorkDetail } from "src/app/core/api/models";
+import { KeyValue } from "src/app/core/api/models";
 import { FormControl } from "@angular/forms";
-import { BehaviorSubject, take } from "rxjs";
+import { BehaviorSubject } from "rxjs";
 import { FileUpload } from "../components/generic/file-upload/file-upload.component";
-import { AfterViewInit, Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 
 @Component({
   template: 'app-base-accordion',
 })
-export abstract class Accordion<NumType> extends Paginator implements OnInit{
-  @Input({ required: false }) set accordionData(page: AccordionData<NumType>) { 
-    if (page) {
-      this.setContent(page.content!, page.totalSize);
+export abstract class Accordion<NumType> extends Paginator implements OnInit {
+
+  private refDataInitialized = false;
+  private pendingContent: AccordionData<NumType> | null = null;
+
+  @Input({ required: true, alias: 'refData' }) set referenceDataInput(data: { [name: string]: KeyValue[]; } | undefined) {
+    this.setRefData(data);
+    this.refDataInitialized = true;
+    // If setContent was called before refData, process it now
+    if (this.pendingContent) {
+      this.setContent(this.pendingContent.content!, this.pendingContent.totalSize);
+      this.pendingContent = null;
     }
   }
 
-  @Input({ required: false }) set refData(data: { [name: string]: KeyValue[]; } | undefined) {
-    this.setRefData(data);
+  @Input({ required: true }) set accordionData(page: AccordionData<NumType>) {
+    if (page) {
+      if (this.refDataInitialized) {
+        this.setContent(page.content!, page.totalSize);
+      } else {
+        // Save content until refData is initialized
+        this.pendingContent = page;
+      }
+    }
   }
-  
+
   abstract ngOnInit(): void;
-  
+
   private accordionList: AccordionList = {
     contents: [],
     searchValue: ''
@@ -39,13 +53,13 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit{
     }
   ];
   private functionButtons: AccordionButton[] = [];
-  protected activeButtonId: string |undefined = undefined;
+  protected activeButtonId: string | undefined = undefined;
   protected abstract prepareHighLevelView(data: NumType, options?: { [key: string]: any }): AccordionCell[];
   protected abstract prepareDetailedView(data: NumType, options?: { [key: string]: any }): DetailedView[];
   protected abstract prepareDefaultButtons(data: NumType, options?: { [key: string]: any }): AccordionButton[];
-  protected abstract onClick(event:{ buttonId: string; rowIndex: number; }):void;
-  protected abstract onAccordionOpen(event: { rowIndex: number }):void;
-  public readonly itemList: NumType[]=[];
+  protected abstract onClick(event: { buttonId: string; rowIndex: number; }): void;
+  protected abstract onAccordionOpen(event: { rowIndex: number }): void;
+  public readonly itemList: NumType[] = [];
 
   getAccordionList() {
     return this.accordionList;
@@ -67,22 +81,26 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit{
     this.accordionList.refData = data;
   }
 
+  getRefData() {
+    return this.accordionList.refData;
+  }
+
   /**
    * 
    */
   clearContents() {
     this.accordionList.contents.splice(0);
-    this.itemList.splice(0);   
+    this.itemList.splice(0);
   }
 
   setContent(dataList: NumType[], totalSize?: number) {
     this.clearContents()
-    if(dataList){
+    if (dataList) {
       dataList.forEach(e => {
         this.addContentRow(e);
       })
     }
-   
+
     this.itemLengthSubs.next(totalSize!);
   }
 
@@ -90,7 +108,7 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit{
    * 
    * @param data 
    */
-  addContentRow(data: NumType,insert_top:boolean = false) {
+  addContentRow(data: NumType, insert_top: boolean = false) {
     let row = {
       columns: this.prepareHighLevelView(data),
       detailed: this.prepareDetailedView(data),
@@ -100,7 +118,7 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit{
     if (insert_top) {
       this.accordionList.contents.unshift(row);
       this.itemList.unshift(data);
-    }else{
+    } else {
       this.accordionList.contents.push(row);
       this.itemList.push(data);
     }
@@ -187,12 +205,12 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit{
       let section = this.accordionList.addContent?.detailed.find(f => f.section_html_id == sectionId);
       let indexAddDet = section?.content?.findIndex(f => f.field_html_id == field_detail.field_html_id)!;
       if (indexAddDet == -1) {
-        console.log(section,1)
+        console.log(section, 1)
         section?.section_form?.setControl(field_detail.form_control_name!, new FormControl(field_detail.field_value, field_detail.form_input_validation));
         section?.content?.push(field_detail)
         console.log(section?.content)
       } else {
-        console.log(section,2)
+        console.log(section, 2)
         section!.content![indexAddDet] = field_detail;
       }
     } else {
@@ -207,7 +225,7 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit{
     }
   }
 
-  
+
   protected removeSectionField(sectionId: string, field_id: string, rowIndex: number, create?: boolean) {
     if (create) {
       let section = this.accordionList.addContent?.detailed.find(f => f.section_html_id == sectionId);
@@ -252,8 +270,8 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit{
         }
         return m;
       })
-      if(m.section_type == 'doc_list'){
-        m.doc!.docList= new BehaviorSubject<FileUpload[]>([]);
+      if (m.section_type == 'doc_list') {
+        m.doc!.docList = new BehaviorSubject<FileUpload[]>([]);
         m.doc!.docChange.subscribe(m.doc!.docList)
         console.log("Testt")
       }
@@ -270,8 +288,8 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit{
         //m.hide_field = false;
         return m;
       })
-      if(m.section_type == 'doc_list'){
-        m.doc!.docList= new BehaviorSubject<FileUpload[]>([]);
+      if (m.section_type == 'doc_list') {
+        m.doc!.docList = new BehaviorSubject<FileUpload[]>([]);
         m.doc!.docChange.subscribe(m.doc!.docList)
       }
       return m;
@@ -303,7 +321,7 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit{
         this.accordionList.contents[rowIndex].buttons?.push(b);
       })
     }
-    
+
   }
 
   getSectionAccordion(sectionId: string, rowIndex: number, create?: boolean) {
@@ -316,7 +334,7 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit{
   getSectionDocuments(sectionId: string, rowIndex: number, create?: boolean) {
     if (create) {
       return this.accordionList.addContent?.detailed.find(f => f.section_html_id == sectionId)?.doc?.docList.value;
-    }else{
+    } else {
       return this.accordionList.contents[rowIndex]?.detailed.find(f => f.section_html_id == sectionId)?.doc?.docList.value;
     }
   }
@@ -324,10 +342,10 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit{
   removeButton(buttonId: string, rowIndex: number, create?: boolean) {
     if (create) {
       let index = this.accordionList.addContent?.buttons?.findIndex(f => f.button_id == buttonId)!;
-      return this.accordionList.addContent?.buttons?.splice(index,1);
-    }else{
+      return this.accordionList.addContent?.buttons?.splice(index, 1);
+    } else {
       let index = this.accordionList.contents[rowIndex]?.buttons?.findIndex(f => f.button_id == buttonId)!;
-      return this.accordionList.contents[rowIndex]?.buttons?.splice(index,1);
+      return this.accordionList.contents[rowIndex]?.buttons?.splice(index, 1);
     }
   }
 } 

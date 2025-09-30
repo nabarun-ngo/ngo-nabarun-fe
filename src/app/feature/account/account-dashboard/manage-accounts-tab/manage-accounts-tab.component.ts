@@ -9,6 +9,7 @@ import { AccordionButton, AccordionCell } from 'src/app/shared/model/accordion-l
 import { SearchEvent } from 'src/app/shared/interfaces/tab-component.interface';
 import { removeNullFields } from 'src/app/core/service/utilities.service';
 import { AccountDefaultValue } from '../../account.const';
+import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 
 @Component({
   selector: 'app-manage-accounts-tab',
@@ -51,11 +52,15 @@ export class ManageAccountsTabComponent extends MyAccountsTabComponent {
     }
   }
 
+  protected override prepareDetailedView(data: AccountDetail, options?: { [key: string]: any; }): DetailedView[] {
+    return super.prepareDetailedView(data, options);
+  }
+
    protected override prepareHighLevelView(
       data: AccountDetail,
       options?: { [key: string]: any }
     ): AccordionCell[] {
-      return accountHighLevelView(data, 'all_accounts', this.refData!);
+      return accountHighLevelView(data, 'all_accounts', this.getRefData()!);
     }
 
   protected override prepareDefaultButtons(
