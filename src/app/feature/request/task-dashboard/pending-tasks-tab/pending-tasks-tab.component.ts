@@ -9,7 +9,8 @@ import { Accordion } from 'src/app/shared/utils/accordion';
 import { RequestConstant, TaskDefaultValue, TaskField } from '../../request.const';
 import { RequestService } from '../../request.service';
 import { getDocumentDetailSection, getRequestAdditionalDetailSection, getRequestDetailSection, getWorkActionDetailSection, getWorkDetailSection } from '../../request.field';
-import { TabComponentInterface, SearchEvent } from 'src/app/shared/interfaces/tab-component.interface';
+import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
+import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 
 @Component({
   selector: 'app-pending-tasks-tab',
@@ -167,21 +168,4 @@ export class PendingTasksTabComponent extends Accordion<WorkDetail> implements T
         this.setContent(s?.content!, s?.totalSize!);
       })
   }
-
-
-  // onFormCancel($event: { rowIndex: number }) {
-  //   // Handle form cancel event
-  //   this.hideForm($event.rowIndex);
-  // }
-
-  // onFormSubmit($event: { buttonId: string; rowIndex: number; }) {
-  //   // Handle form submit event
-  //   this.onClick($event);
-  // }
-
-  // onRowClick($event: { buttonId: string; rowIndex: number; }) {
-  //   // Handle row click event
-  //   this.onClick($event);
-  // }
-
 }

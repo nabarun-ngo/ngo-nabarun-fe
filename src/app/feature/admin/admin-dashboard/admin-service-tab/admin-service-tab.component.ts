@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AdminServiceInfo } from '../../admin.model';
 import { Accordion } from 'src/app/shared/utils/accordion';
 import { AdminConstant, AdminDefaultValue } from '../../admin.const';
@@ -8,8 +8,8 @@ import { DetailedView, DetailedViewField } from 'src/app/shared/model/detailed-v
 import { FormGroup, Validators } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { JsonPipe } from '@angular/common';
-import { SearchEvent, TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
-import { KeyValue } from 'src/app/core/api/models';
+import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
+import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 
 @Component({
   selector: 'app-admin-service-tab',

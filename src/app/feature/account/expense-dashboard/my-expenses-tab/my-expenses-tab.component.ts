@@ -27,8 +27,9 @@ import { filterFormChange } from 'src/app/core/service/form.service';
 import { ModalService } from 'src/app/core/service/modal.service';
 import { AppDialog } from 'src/app/core/constant/app-dialog.const';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
-import { SearchEvent, TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
+import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
 import { removeNullFields } from 'src/app/core/service/utilities.service';
+import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 
 @Component({
   selector: 'app-my-expenses-tab',

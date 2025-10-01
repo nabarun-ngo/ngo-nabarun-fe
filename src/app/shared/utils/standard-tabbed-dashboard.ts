@@ -1,9 +1,8 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { TabbedPage } from './tab';
-import { SearchEvent, TabComponentInterface } from '../interfaces/tab-component.interface';
-import { KeyValue } from 'src/app/core/api/models';
+import { TabComponentInterface } from '../interfaces/tab-component.interface';
 import { StandardDashboard } from './standard-dashboard';
+import { SearchEvent } from '../components/search-and-advanced-search-form/search-event.model';
 
 /**
  * Standardized base class for all tabbed dashboard components.

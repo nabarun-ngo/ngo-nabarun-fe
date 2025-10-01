@@ -1,4 +1,4 @@
-import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
@@ -8,9 +8,10 @@ import { StandardTabbedDashboard } from 'src/app/shared/utils/standard-tabbed-da
 import { TaskDefaultValue, workListTab } from '../request.const';
 import { PendingTasksTabComponent } from './pending-tasks-tab/pending-tasks-tab.component';
 import { CompletedTasksTabComponent } from './completed-tasks-tab/completed-tasks-tab.component';
-import { KeyValue, PaginateWorkDetail } from 'src/app/core/api/models';
-import { SearchEvent, TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
+import { PaginateWorkDetail } from 'src/app/core/api/models';
+import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
 import { taskSearchInput } from '../request.field';
+import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 
 @Component({
   selector: 'app-task-dashboard',

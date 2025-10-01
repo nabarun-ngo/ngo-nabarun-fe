@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { KeyValue } from 'src/app/core/api/models';
-import { SearchEvent, TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
+import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
+import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
 
 @Component({
   selector: 'app-admin-global-config-tab',

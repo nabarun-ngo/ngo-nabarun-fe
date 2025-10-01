@@ -11,9 +11,10 @@ import { SCOPE } from 'src/app/core/constant/auth-scope.const';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 import { expenseSearchInput } from '../expense.field';
 import { StandardTabbedDashboard } from 'src/app/shared/utils/standard-tabbed-dashboard';
-import { SearchEvent, TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
+import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
 import { MyExpensesTabComponent } from './my-expenses-tab/my-expenses-tab.component';
 import { ManageExpenseTabComponent } from './manage-expense-tab/manage-expense-tab.component';
+import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 
 @Component({
   selector: 'app-expense-dashboard',

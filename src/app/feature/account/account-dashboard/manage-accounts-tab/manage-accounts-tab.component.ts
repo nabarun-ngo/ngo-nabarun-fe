@@ -6,10 +6,10 @@ import { accountHighLevelView, accountTabHeader } from '../../account.field';
 import { MyAccountsTabComponent } from '../my-accounts-tab/my-accounts-tab.component';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { AccordionButton, AccordionCell } from 'src/app/shared/model/accordion-list.model';
-import { SearchEvent } from 'src/app/shared/interfaces/tab-component.interface';
 import { removeNullFields } from 'src/app/core/service/utilities.service';
 import { AccountDefaultValue } from '../../account.const';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
+import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 
 @Component({
   selector: 'app-manage-accounts-tab',

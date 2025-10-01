@@ -12,7 +12,8 @@ import { accountSearchInput } from '../account.field';
 import { StandardTabbedDashboard } from 'src/app/shared/utils/standard-tabbed-dashboard';
 import { MyAccountsTabComponent } from './my-accounts-tab/my-accounts-tab.component';
 import { ManageAccountsTabComponent } from './manage-accounts-tab/manage-accounts-tab.component';
-import { SearchEvent, TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
+import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
+import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 
 @Component({
   selector: 'app-account-dashboard',

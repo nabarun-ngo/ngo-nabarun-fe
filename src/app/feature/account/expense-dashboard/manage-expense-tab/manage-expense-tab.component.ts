@@ -12,9 +12,9 @@ import { SearchAndAdvancedSearchFormComponent } from 'src/app/shared/components/
 import { MatDialogRef } from '@angular/material/dialog';
 import { SCOPE } from 'src/app/core/constant/auth-scope.const';
 import { MyExpensesTabComponent } from '../my-expenses-tab/my-expenses-tab.component';
-import { SearchEvent } from 'src/app/shared/interfaces/tab-component.interface';
 import { removeNullFields } from 'src/app/core/service/utilities.service';
 import { ExpenseDefaultValue } from '../../account.const';
+import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 
 @Component({
   selector: 'app-manage-expense-tab',

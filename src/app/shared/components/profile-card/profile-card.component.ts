@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Router } from '@angular/router';
 import { KeyValue, UserDetail } from 'src/app/core/api/models';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 
@@ -9,6 +10,7 @@ import { AppRoute } from 'src/app/core/constant/app-routing.const';
 })
 export class ProfileCardComponent {
 
+  constructor(private router: Router) { }
   route_data =AppRoute; 
 
   @Input({required:true})
@@ -24,5 +26,10 @@ export class ProfileCardComponent {
 
   @Output()
   onAddnlBtnClick:EventEmitter<{buttonId:string,profile?:UserDetail}> = new EventEmitter();
+
+
+  view() {
+    this.router.navigate([this.route_data.secured_member_profile_page.url,btoa(this.profile.id!)]);
+}
 
 }

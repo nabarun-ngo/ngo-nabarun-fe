@@ -1,7 +1,5 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { TabbedPage } from './tab';
-import { SearchEvent, TabComponentInterface } from '../interfaces/tab-component.interface';
 import { KeyValue } from 'src/app/core/api/models';
 
 /**
@@ -42,12 +40,12 @@ export abstract class StandardDashboard<TData=any>
   /**
    * Handle resolver data in a standardized way
    */
-  protected handleRouteData(): void {
+  private handleRouteData(): void {
     // Extract data from resolver
     if (this.route.snapshot.data['data']) {
       this.initialData = this.route.snapshot.data['data'] as TData;
     }
-
+    console.log(this.route.snapshot.data);
     if (this.route.snapshot.data['ref_data']) {
       this.refData = this.route.snapshot.data['ref_data'];
     }

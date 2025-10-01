@@ -11,7 +11,8 @@ import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { EventsService } from '../../events.service';
 import { eventDetailSection } from '../../social-event.field';
 import { DefaultValue } from '../../events.conts';
-import { SearchEvent, TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
+import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
+import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 
 @Component({
   selector: 'app-upcoming-events-tab',

@@ -51,7 +51,6 @@ export class NoticeListComponent extends Paginator implements OnInit {
     if (this.route.snapshot.data['ref_data']) {
       this.refData = this.route.snapshot.data['ref_data'];
       this.sharedDataService.setRefData('NOTICE', this.refData);
-      console.log(this.refData)
     }
 
     if (this.route.snapshot.data['data']) {

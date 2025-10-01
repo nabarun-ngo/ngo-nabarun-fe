@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input } from '@angular/core';
+import { Component, EventEmitter } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, Validators } from '@angular/forms';
@@ -11,13 +11,13 @@ import { DetailedView, DetailedViewField } from 'src/app/shared/model/detailed-v
 import { Accordion } from 'src/app/shared/utils/accordion';
 import { RequestConstant, RequestDefaultValue, RequestField } from '../../request.const';
 import { RequestService } from '../../request.service';
-import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { ModalService } from 'src/app/core/service/modal.service';
 import { AppDialog } from 'src/app/core/constant/app-dialog.const';
 import { getRequestAdditionalDetailSection, getRequestDetailSection, getWorkActionDetailSection, getWorkDetailSection } from '../../request.field';
 import { date } from 'src/app/core/service/utilities.service';
 import { filterFormChange } from 'src/app/core/service/form.service';
-import { SearchEvent, TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
+import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
+import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 
 @Component({
   selector: 'app-my-requests-tab',

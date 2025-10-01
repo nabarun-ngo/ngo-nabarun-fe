@@ -4,6 +4,9 @@ import { SearchAndAdvancedSearchModel } from '../../model/search-and-advanced-se
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { isEmptyObject, removeNullFields } from 'src/app/core/service/utilities.service';
+import { SearchEvent } from './search-event.model';
+
+
 
 @Component({
   selector: 'app-search-and-advanced-search-form',
@@ -22,12 +25,7 @@ export class SearchAndAdvancedSearchFormComponent implements OnInit {
 
   search!: SearchAndAdvancedSearchModel;
 
-  @Output() onSearch: EventEmitter<{
-    advancedSearch: boolean,
-    reset: boolean,
-    value: any,
-    buttonName?:string
-  }> = new EventEmitter();
+  @Output() onSearch: EventEmitter<SearchEvent> = new EventEmitter();
   searchformGroup: FormGroup = new FormGroup({});
 
 

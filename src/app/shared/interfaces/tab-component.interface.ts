@@ -1,5 +1,4 @@
-import { AfterViewInit } from '@angular/core';
-import { KeyValue } from 'src/app/core/api/models';
+import { SearchEvent } from "../components/search-and-advanced-search-form/search-event.model";
 
 /**
  * Standard interface that all tab components should implement
@@ -16,12 +15,3 @@ export interface TabComponentInterface<TData = any> {
   loadData(): void;
 }
 
-/**
- * Standard search event structure
- */
-export interface SearchEvent {
-  buttonName?: string;
-  advancedSearch: boolean;
-  reset: boolean;
-  value: any;
-}
