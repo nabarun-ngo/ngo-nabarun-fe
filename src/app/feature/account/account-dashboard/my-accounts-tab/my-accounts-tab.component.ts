@@ -26,6 +26,7 @@ import { AppDialog } from 'src/app/core/constant/app-dialog.const';
 import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
 import { removeNullFields } from 'src/app/core/service/utilities.service';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
+import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 
 @Component({
   selector: 'app-my-accounts-tab',
@@ -38,7 +39,8 @@ export class MyAccountsTabComponent extends Accordion<AccountDetail> implements 
     protected route: ActivatedRoute,
     protected accountService: AccountService,
     protected router: Router,
-    protected modalService: ModalService
+    protected modalService: ModalService,
+    protected userIdentityService: UserIdentityService
   ) {
     super();
   }

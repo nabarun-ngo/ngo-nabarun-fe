@@ -45,7 +45,6 @@ export abstract class StandardDashboard<TData=any>
     if (this.route.snapshot.data['data']) {
       this.initialData = this.route.snapshot.data['data'] as TData;
     }
-    console.log(this.route.snapshot.data);
     if (this.route.snapshot.data['ref_data']) {
       this.refData = this.route.snapshot.data['ref_data'];
     }

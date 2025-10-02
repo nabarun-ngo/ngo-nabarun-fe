@@ -18,7 +18,7 @@ export const memberRefDataResolver: ResolveFn<any> = (route, state) => {
 
 export const memberResolver: ResolveFn<any> = (route, state) => {
  // console.log(route,state)
-  return inject(MemberService).getUserDetail(route.params['id']);
+  return inject(MemberService).getUserDetail(atob(route.params['id']));
 };
 
 export const myProfileResolver: ResolveFn<any> = (route, state) => {

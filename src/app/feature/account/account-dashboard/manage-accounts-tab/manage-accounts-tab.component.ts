@@ -8,8 +8,8 @@ import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { AccordionButton, AccordionCell } from 'src/app/shared/model/accordion-list.model';
 import { removeNullFields } from 'src/app/core/service/utilities.service';
 import { AccountDefaultValue } from '../../account.const';
-import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
+import { SCOPE } from 'src/app/core/constant/auth-scope.const';
 
 @Component({
   selector: 'app-manage-accounts-tab',
@@ -18,9 +18,22 @@ import { SearchEvent } from 'src/app/shared/components/search-and-advanced-searc
 })
 export class ManageAccountsTabComponent extends MyAccountsTabComponent {
 
+  protected permissions!: {
+    canCreateAccount: boolean;
+    canUpdateAccount: boolean;
+    canReadTransactions: boolean;
+  };
+
   override ngOnInit(): void {
     super.ngOnInit();
     this.setHeaderRow(accountTabHeader('all_accounts'));
+  
+    // Setup permissions
+    this.permissions = {
+      canCreateAccount: this.userIdentityService.isAccrediatedTo(SCOPE.create.account),
+      canUpdateAccount: this.userIdentityService.isAccrediatedTo(SCOPE.update.account),
+      canReadTransactions: this.userIdentityService.isAccrediatedTo(SCOPE.read.transactions)
+    };
   }
 
   /**
@@ -52,10 +65,6 @@ export class ManageAccountsTabComponent extends MyAccountsTabComponent {
     }
   }
 
-  protected override prepareDetailedView(data: AccountDetail, options?: { [key: string]: any; }): DetailedView[] {
-    return super.prepareDetailedView(data, options);
-  }
-
    protected override prepareHighLevelView(
       data: AccountDetail,
       options?: { [key: string]: any }
@@ -84,10 +93,12 @@ export class ManageAccountsTabComponent extends MyAccountsTabComponent {
       {
         button_id: 'VIEW_TRANSACTIONS',
         button_name: 'View Transactions',
+        props:{disabled: !this.permissions.canReadTransactions }
       },
       {
         button_id: 'UPDATE_ACCOUNT',
         button_name: 'Update Account',
+        props:{disabled: !this.permissions.canUpdateAccount }
       },  
     ];
   }

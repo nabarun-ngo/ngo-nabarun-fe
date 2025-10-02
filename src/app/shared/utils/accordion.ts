@@ -5,38 +5,36 @@ import { KeyValue } from "src/app/core/api/models";
 import { FormControl } from "@angular/forms";
 import { BehaviorSubject } from "rxjs";
 import { FileUpload } from "../components/generic/file-upload/file-upload.component";
-import { Component, Input, OnInit } from "@angular/core";
+import { AfterContentInit, AfterViewInit, Component, Input, OnInit } from "@angular/core";
 
 @Component({
   template: 'app-base-accordion',
 })
-export abstract class Accordion<NumType> extends Paginator implements OnInit {
+export abstract class Accordion<NumType> extends Paginator implements OnInit, AfterContentInit {
 
-  private refDataInitialized = false;
-  private pendingContent: AccordionData<NumType> | null = null;
+
+  private viewInitialized = false;
+  private page!: AccordionData<NumType>;
 
   @Input({ required: true, alias: 'refData' }) set referenceDataInput(data: { [name: string]: KeyValue[]; } | undefined) {
     this.setRefData(data);
-    this.refDataInitialized = true;
-    // If setContent was called before refData, process it now
-    if (this.pendingContent) {
-      this.setContent(this.pendingContent.content!, this.pendingContent.totalSize);
-      this.pendingContent = null;
-    }
   }
 
   @Input({ required: true }) set accordionData(page: AccordionData<NumType>) {
     if (page) {
-      if (this.refDataInitialized) {
+      this.page = page;
+      if (this.viewInitialized) {
         this.setContent(page.content!, page.totalSize);
-      } else {
-        // Save content until refData is initialized
-        this.pendingContent = page;
       }
     }
   }
 
   abstract ngOnInit(): void;
+
+  ngAfterContentInit(): void {
+    this.setContent(this.page.content!, this.page.totalSize);
+    this.viewInitialized = true;
+  }
 
   private accordionList: AccordionList = {
     contents: [],

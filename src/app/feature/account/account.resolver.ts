@@ -6,22 +6,25 @@ import { AccountDefaultValue, accountTab, expenseTab, TransactionDefaultValue } 
 import { RefDataType } from 'src/app/core/api/models';
 
 export const accountDashboardResolver: ResolveFn<any> = (route, state) => {
-  let tab = (route.data['tab'] || AccountDefaultValue.tabName) as accountTab;
+  let tab = (route.queryParams['tab'] || AccountDefaultValue.tabName) as accountTab;
+  let id = route.queryParams['id'] as string;
   if (tab == 'my_accounts') {
-    return inject(AccountService).fetchMyAccounts(AccountDefaultValue.pageNumber, AccountDefaultValue.pageSize);
-  }else if (tab == 'all_accounts') {
-    return inject(AccountService).fetchAccounts(AccountDefaultValue.pageNumber, AccountDefaultValue.pageSize);
-  } 
+    return inject(AccountService).fetchMyAccounts(AccountDefaultValue.pageNumber, AccountDefaultValue.pageSize,{ accountId: id ? atob(id) : undefined });
+  } else if (tab == 'all_accounts') {
+    return inject(AccountService).fetchAccounts(AccountDefaultValue.pageNumber, AccountDefaultValue.pageSize, { accountId: id ? atob(id) : undefined });
+  }
   return;
 };
 
 export const expenseDashboardResolver: ResolveFn<any> = (route, state) => {
-  let tab = (route.data['tab'] || 'my_expenses') as expenseTab;
+  let tab = (route.queryParams['tab'] || 'my_expenses') as expenseTab;
+  let id = route.queryParams['id'] as string;
+
   if (tab == 'my_expenses') {
-    return inject(AccountService).fetchMyExpenses(AccountDefaultValue.pageNumber, AccountDefaultValue.pageSize,{});
+    return inject(AccountService).fetchMyExpenses(AccountDefaultValue.pageNumber, AccountDefaultValue.pageSize, {expenseId: id ? atob(id) : undefined});
   }
   else if (tab == 'expense_list') {
-    return inject(AccountService).fetchExpenses(AccountDefaultValue.pageNumber, AccountDefaultValue.pageSize);
+    return inject(AccountService).fetchExpenses(AccountDefaultValue.pageNumber, AccountDefaultValue.pageSize,{expenseId: id ? atob(id) : undefined});
   }
   return;
 };
@@ -32,7 +35,7 @@ export const accountTransactionResolver: ResolveFn<any> = (route, state) => {
   console.log(self)
   if (self == 'Y') {
     return inject(AccountService).fetchMyTransactions(atob(route.params['id']), TransactionDefaultValue.pageNumber, TransactionDefaultValue.pageSize);
-  }else{
+  } else {
     return inject(AccountService).fetchTransactions(atob(route.params['id']), TransactionDefaultValue.pageNumber, TransactionDefaultValue.pageSize);
   }
 };

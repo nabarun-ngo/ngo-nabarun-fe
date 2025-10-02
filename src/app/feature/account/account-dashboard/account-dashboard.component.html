@@ -8,7 +8,7 @@
         <mat-tab id="myAccount" label="My Accounts">
             <app-my-accounts-tab [accordionData]="initialData!" [refData]="refData"></app-my-accounts-tab>
         </mat-tab>
-        <mat-tab id="allAccount" label="Manage Accounts">
+        <mat-tab id="allAccount" label="Manage Accounts" [disabled]="!permissions.canManageAccounts || false">
             <app-manage-accounts-tab [accordionData]="initialData!" [refData]="refData"></app-manage-accounts-tab>
         </mat-tab>
     </mat-tab-group>

@@ -68,9 +68,9 @@ export class AccountDashboardComponent extends StandardTabbedDashboard<accountTa
     // Setup permissions
     this.permissions = {
       canManageAccounts: this.identityService.isAccrediatedToAny(
-        SCOPE.create.expense_final,
-        SCOPE.create.expense_settle,
-        SCOPE.create.account
+        SCOPE.update.account,
+        SCOPE.create.account,
+        SCOPE.read.transactions
       ),
     };
   }

@@ -51,7 +51,7 @@ export abstract class StandardTabbedDashboard<TTab extends string | number, TDat
    * Initializes the tab index based on the route data.
    */
   private initializeTabIndex(): void {
-    const tab = this.route.snapshot.data['tab'] as TTab | undefined;
+    const tab = this.route.snapshot.queryParams['tab'] as TTab | undefined;
     if (tab) {
       this.tabMapping.forEach((value: TTab, key: number) => {
         if (tab === value) {

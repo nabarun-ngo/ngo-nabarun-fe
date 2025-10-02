@@ -17,7 +17,6 @@ export class UserGuardService {
     }
     async canActivate(route: ActivatedRouteSnapshot,state: RouterStateSnapshot): Promise<boolean> {   
       let isProfileUpdated =await this.identityService.isProfileUpdated();  
-      console.log("Testtttttt")
       if (isProfileUpdated) {
         return true;
       }
