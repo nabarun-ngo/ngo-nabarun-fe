@@ -29,10 +29,7 @@ export class ExpenseDashboardComponent extends StandardTabbedDashboard<expenseTa
   @ViewChild(ManageExpenseTabComponent) expenseListTab!: ManageExpenseTabComponent;
 
   protected permissions!: {
-    canViewTransactions: boolean;
-    canUpdateAccount: boolean;
-    canCreateAccount: boolean;
-    canViewAccounts: boolean;
+    canManageExpense: boolean;
   };
   protected navigations: NavigationButtonModel[] = [
     {
@@ -74,18 +71,10 @@ export class ExpenseDashboardComponent extends StandardTabbedDashboard<expenseTa
 
     // Setup permissions
     this.permissions = {
-      canViewAccounts: this.identityService.isAccrediatedTo(
-        SCOPE.read.accounts
-      ),
-      canCreateAccount: this.identityService.isAccrediatedTo(
-        SCOPE.create.account
-      ),
-      canUpdateAccount: this.identityService.isAccrediatedTo(
-        SCOPE.update.account
-      ),
-      canViewTransactions: this.identityService.isAccrediatedTo(
-        SCOPE.read.transactions
-      ),
+      canManageExpense: this.identityService.isAccrediatedToAny(
+        SCOPE.create.expense_final,
+        SCOPE.create.expense_settle,
+      )
     };
   }
   

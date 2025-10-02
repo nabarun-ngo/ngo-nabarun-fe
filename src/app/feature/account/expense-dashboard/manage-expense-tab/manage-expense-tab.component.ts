@@ -25,6 +25,12 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
   protected override isAdmin: boolean = true;
   protected accounts: AccountDetail[] = [];
 
+  protected permissions!: {
+    canCreateExpense: boolean;
+    canFinalizeExpense: boolean;
+    canSettleExpense: boolean;
+  };
+
   override onSearch($event: SearchEvent): void {
     if ($event.advancedSearch && !$event.reset) {
       this.accountService
@@ -48,6 +54,17 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
   override ngOnInit(): void {
     super.ngOnInit();
     this.setHeaderRow(manageExpenseTabHeader);
+    this.permissions = {
+      canCreateExpense: this.userIdentity.isAccrediatedTo(
+        SCOPE.create.expense
+      ),
+      canFinalizeExpense: this.userIdentity.isAccrediatedTo(
+        SCOPE.create.expense_final
+      ),
+      canSettleExpense: this.userIdentity.isAccrediatedTo(
+        SCOPE.create.expense_settle
+      )
+    };
   }
 
   protected override prepareHighLevelView(
@@ -89,7 +106,7 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
         button_id: 'UPDATE_EXPENSE',
         button_name: 'Update',
       });
-      if (this.userIdentity.isAccrediatedTo(SCOPE.create.expense_final)) {
+      if (this.permissions.canFinalizeExpense) {
         buttons.push({
           button_id: 'FINALIZE_EXPENSE',
           button_name: 'Finalize',
@@ -97,7 +114,7 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
       }
     } else if (
       data.status == 'FINALIZED' &&
-      this.userIdentity.isAccrediatedTo(SCOPE.create.expense_settle)
+      this.permissions.canSettleExpense
     ) {
       buttons.push({
         button_id: 'SETTLE_EXPENSE',

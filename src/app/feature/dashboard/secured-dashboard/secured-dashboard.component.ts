@@ -1,6 +1,5 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 // import { Messaging, getToken, onMessage } from '@angular/fire/messaging';
-import { BehaviorSubject } from 'rxjs';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { SCOPE } from 'src/app/core/constant/auth-scope.const';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
@@ -8,7 +7,6 @@ import { UserIdentityService } from 'src/app/core/service/user-identity.service'
 import { getGreetings } from 'src/app/core/service/utilities.service';
 import { TileInfo } from 'src/app/shared/model/tile-info.model';
 import { CommonService } from 'src/app/shared/services/common.service';
-import { DashboardDataService } from 'src/app/core/service/dashboard-data.service';
 
 @Component({
   selector: 'app-secured-dashboard',
@@ -96,12 +94,6 @@ reload() {
           tile_name: 'Members',
           tile_icon: 'icon_group',
           tile_link: this.route.secured_member_members_page.url,
-          additional_info: {
-            tile_label: 'Total Members',
-            tile_show_badge: false,
-            tile_is_loading: true,
-            tile_value: ''
-          }
         },
         {
           tile_html_id: 'requestTile',
@@ -126,6 +118,13 @@ reload() {
           tile_name: 'Admin Console',
           tile_icon: 'icon_group',
           tile_link: this.route.secured_admin_dashboard_page.url,
+          hide_tile: !this.identityService.isAccrediatedToAny(
+            SCOPE.read.actuator,
+            SCOPE.read.apikey,
+            SCOPE.create.apikey,
+            SCOPE.update.apikey,
+            SCOPE.create.servicerun
+          )
         }
       ];
     }
