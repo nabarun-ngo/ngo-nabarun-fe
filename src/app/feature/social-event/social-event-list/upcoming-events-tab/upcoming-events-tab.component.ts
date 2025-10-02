@@ -1,5 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { Component } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { EventDetail, PaginateEventDetail } from 'src/app/core/api/models';
 import { date, removeNullFields } from 'src/app/core/service/utilities.service';
@@ -12,24 +11,27 @@ import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { EventsService } from '../../events.service';
 import { eventDetailSection } from '../../social-event.field';
 import { DefaultValue } from '../../events.conts';
-import { remove } from 'fs-extra';
+import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
+import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 
 @Component({
   selector: 'app-upcoming-events-tab',
   templateUrl: './upcoming-events-tab.component.html',
   styleUrls: ['./upcoming-events-tab.component.scss'],
 })
-export class UpcomingEventsTabComponent extends Accordion<EventDetail> {
+export class UpcomingEventsTabComponent extends Accordion<EventDetail> implements TabComponentInterface<PaginateEventDetail> {
+
+  protected isCompleted: boolean = false;
   constructor(private eventService: EventsService) {
     super();
-    super.init(
+  }
+
+  override ngOnInit(): void {
+    this.init(
       DefaultValue.pageNumber,
       DefaultValue.pageSize,
       DefaultValue.pageSizeOptions
     );
-  }
-
-  override ngOnInit(): void {
     this.setHeaderRow([
       {
         type: 'text',
@@ -53,6 +55,29 @@ export class UpcomingEventsTabComponent extends Accordion<EventDetail> {
       },
     ]);
   }
+
+  onSearch($event: SearchEvent): void {
+    if ($event.advancedSearch && !$event.reset) {
+      this.eventService
+        .getSocialEventList(this.isCompleted, undefined, undefined, removeNullFields($event.value))
+        .subscribe((data) => {
+          this.setContent(data!.content!, data!.totalSize);
+        });
+    } else if ($event.advancedSearch && $event.reset) {
+      this.loadData();
+    } else {
+      this.getAccordionList().searchValue = $event.value as string;
+    }
+  }
+
+  loadData(): void {
+    this.eventService
+      .getSocialEventList(this.isCompleted, DefaultValue.pageNumber, DefaultValue.pageSize)
+      .subscribe((data) => {
+        this.setContent(data!.content!, data!.totalSize);
+      });
+  }
+
 
   protected override prepareHighLevelView(
     data: EventDetail,
@@ -87,13 +112,6 @@ export class UpcomingEventsTabComponent extends Accordion<EventDetail> {
     console.log('data', data);
     return [
       eventDetailSection(data),
-      // {
-      //   section_name: 'Event Expenses',
-      //   section_html_id: 'event-expenses',
-      //   section_type: 'key_value',
-      //   section_form: new FormGroup({}),
-      //   hide_section: isCreate,
-      // },
     ];
   }
   protected override prepareDefaultButtons(
@@ -122,9 +140,10 @@ export class UpcomingEventsTabComponent extends Accordion<EventDetail> {
   }
 
   override handlePageEvent($event: PageEvent): void {
-    console.log('pageEvent', $event);
+    this.pageSize = $event.pageSize;
+    this.pageNumber = $event.pageIndex;
     this.eventService
-      .getSocialEventList($event.pageIndex, $event.pageSize, false)
+      .getSocialEventList(this.isCompleted, this.pageNumber, this.pageSize)
       .subscribe((data) => {
         this.setContent(data!.content!, data!.totalSize);
       });
@@ -189,6 +208,5 @@ export class UpcomingEventsTabComponent extends Accordion<EventDetail> {
   }
 
   protected override onAccordionOpen(event: { rowIndex: number }): void {
-    
   }
 }

@@ -3,7 +3,7 @@ import { SocialEventControllerService } from 'src/app/core/api/services';
 import { DefaultValue } from './events.conts';
 import { map } from 'rxjs';
 import { EventDetail, EventDetailFilter } from 'src/app/core/api/models';
-import { date, getNonNullValues, removeNullFields } from 'src/app/core/service/utilities.service';
+import { date, removeNullFields } from 'src/app/core/service/utilities.service';
 
 @Injectable({
   providedIn: 'root'
@@ -25,8 +25,14 @@ export class EventsService {
 
   constructor(private eventController: SocialEventControllerService) { }
 
-  getSocialEventList(pageIndex: number = this.defaultValue.pageNumber, pageSize: number = this.defaultValue.pageSize, isCompleted: boolean) {
-    return this.eventController.getSocialEvents({ pageIndex: pageIndex, pageSize: pageSize, eventFilter: { completed: isCompleted } }).pipe(map(d => d.responsePayload));
+  getSocialEventList(isCompleted: boolean, pageIndex?: number, pageSize?: number, filter?: EventDetailFilter) {
+    if (filter?.fromDate) {
+      filter.fromDate = date(filter?.fromDate, 'yyyy-MM-dd');
+    }
+    if (filter?.toDate) {
+      filter.toDate = date(filter?.toDate, 'yyyy-MM-dd');
+    }
+    return this.eventController.getSocialEvents({ pageIndex: pageIndex, pageSize: pageSize, eventFilter: { completed: isCompleted, ...filter } }).pipe(map(d => d.responsePayload));
   }
 
   createSocialEvent(body: EventDetail) {

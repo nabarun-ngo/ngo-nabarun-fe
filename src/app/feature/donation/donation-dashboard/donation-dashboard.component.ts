@@ -75,7 +75,6 @@ export class DonationDashboardComponent implements OnInit {
     if (this.route.snapshot.data['ref_data']) {
       this.refData = this.route.snapshot.data['ref_data'];
       this.sharedDataService.setRefData('DONATION', this.refData);
-      console.log(this.refData)
     }
 
     if (this.route.snapshot.data['data'] && this.tabMapping[this.tabIndex] == 'member_donation') {

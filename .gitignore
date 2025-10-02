@@ -55,3 +55,6 @@ Thumbs.db
 /my-reports/
 /allure-report/
 /allure-results/
+
+
+/.vscode/launch.json

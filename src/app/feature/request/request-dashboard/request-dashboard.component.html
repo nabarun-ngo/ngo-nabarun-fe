@@ -6,10 +6,10 @@
     <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" class="mat-tab-group-mobile-scroll" (selectedTabChange)="tabChanged($event.index)"
         [(selectedIndex)]="tabIndex">
         <mat-tab id="myRequestTab" label="My Requests">
-            <app-my-requests-tab [accordionData]="requestList"></app-my-requests-tab>
+            <app-my-requests-tab [accordionData]="initialData!" [refData]="refData!"></app-my-requests-tab>
         </mat-tab>
         <mat-tab id="delegatedRequestTab" label="Requests for Others">
-            <app-delegated-requests-tab [accordionData]="requestList"></app-delegated-requests-tab>
+            <app-delegated-requests-tab [accordionData]="initialData!" [refData]="refData!"></app-delegated-requests-tab>
         </mat-tab>
     </mat-tab-group>
 </app-page-layout>

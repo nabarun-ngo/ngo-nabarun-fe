@@ -1,5 +1,4 @@
-<app-floating-action-button *ngIf="permissions?.canCreateAccount"  [icon]="'add'" (buttonClick)="initCreateAccountForm()"></app-floating-action-button>
-<!-- <h2 class="text-purple-700 font-bold text-center mt-4">Account List</h2> -->
+<app-floating-action-button [icon]="'assignment_returned'"></app-floating-action-button>
 <app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)"
     (onAccordionOpen)="onAccordionOpen($event)"></app-accordion-list>
 <mat-paginator class="mt-4" style="background-color: transparent;" (page)="handlePageEvent($event)"

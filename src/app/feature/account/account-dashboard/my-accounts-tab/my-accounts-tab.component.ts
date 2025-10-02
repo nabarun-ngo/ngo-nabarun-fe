@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { AccountDetail, KeyValue, PaginateAccountDetail } from 'src/app/core/api/models';
+import { AccountDetail, AccountDetailFilter, KeyValue, PaginateAccountDetail } from 'src/app/core/api/models';
 import {
   AccordionCell,
   AccordionButton,
@@ -23,8 +23,10 @@ import { AccountService } from '../../account.service';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { ModalService } from 'src/app/core/service/modal.service';
 import { AppDialog } from 'src/app/core/constant/app-dialog.const';
-import { TabComponentInterface, SearchEvent } from 'src/app/shared/interfaces/tab-component.interface';
+import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
 import { removeNullFields } from 'src/app/core/service/utilities.service';
+import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
+import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 
 @Component({
   selector: 'app-my-accounts-tab',
@@ -33,18 +35,18 @@ import { removeNullFields } from 'src/app/core/service/utilities.service';
 })
 export class MyAccountsTabComponent extends Accordion<AccountDetail> implements TabComponentInterface<PaginateAccountDetail> {
   
-  @Input() initialData?: PaginateAccountDetail;
-  @Input() refData: any;
-
-  protected dataLoaded = false;
-
   constructor(
     protected route: ActivatedRoute,
     protected accountService: AccountService,
     protected router: Router,
-    protected modalService: ModalService
+    protected modalService: ModalService,
+    protected userIdentityService: UserIdentityService
   ) {
     super();
+  }
+
+  override ngOnInit(): void {
+    this.setHeaderRow(accountTabHeader('my_accounts'));
     //Init Pagination
     this.init(
       AccountDefaultValue.pageNumber,
@@ -53,44 +55,11 @@ export class MyAccountsTabComponent extends Accordion<AccountDetail> implements 
     );
   }
 
-  override ngOnInit(): void {
-    this.setHeaderRow(accountTabHeader('my_accounts'));
-    //Set Ref Data
-    if (this.refData) {
-      this.setRefData(this.refData);
-    }
-  }
-
-  ngAfterViewInit(): void {
-    // Use initial data from resolver if available, but don't auto-load data
-    if (this.initialData && !this.dataLoaded) {
-      this.setContent(this.initialData.content!, this.initialData.totalSize);
-      this.dataLoaded = true;
-    }
-  }
-
   /**
    * Load data for this tab - required by TabComponentInterface
    */
   loadData(): void {
-    if (!this.dataLoaded) {
-      this.accountService
-        .fetchMyAccounts(
-          AccountDefaultValue.pageNumber,
-          AccountDefaultValue.pageSize
-        )
-        .subscribe((data) => {
-          this.setContent(data?.content!, data?.totalSize);
-          this.dataLoaded = true;
-        });
-    }
-  }
-
-  /**
-   * Trigger data loading - called by parent when tab becomes active
-   */
-  triggerDataLoad(): void {
-    this.loadData();
+    this.fetchData(AccountDefaultValue.pageNumber,AccountDefaultValue.pageSize); 
   }
 
   /**
@@ -98,21 +67,31 @@ export class MyAccountsTabComponent extends Accordion<AccountDetail> implements 
    */
   onSearch(event: SearchEvent): void {
     if (event.advancedSearch && !event.reset) {
-      this.accountService
-        .fetchMyAccounts(undefined, undefined, removeNullFields(event.value))
+      this.fetchData(undefined, undefined, removeNullFields(event.value));
+    } else if (event.advancedSearch && event.reset) {
+      this.loadData();
+    }else if(event.buttonName == 'ADVANCED_SEARCH'){
+      this.getAccordionList().searchValue='';
+    }
+  }
+
+  private fetchData(pageNumber?: number, pageSize?: number,filter?: AccountDetailFilter) {  
+     this.accountService
+        .fetchMyAccounts(
+          pageNumber,
+          pageSize,
+          filter
+        )
         .subscribe((data) => {
           this.setContent(data?.content!, data?.totalSize);
         });
-    } else if (event.advancedSearch && event.reset) {
-      this.triggerDataLoad();
-    }
   }
 
   protected override prepareHighLevelView(
     data: AccountDetail,
     options?: { [key: string]: any }
   ): AccordionCell[] {
-    return accountHighLevelView(data, 'my_accounts', this.refData);
+    return accountHighLevelView(data, 'my_accounts', this.getRefData()!);
   }
 
   protected override prepareDetailedView(
@@ -121,7 +100,7 @@ export class MyAccountsTabComponent extends Accordion<AccountDetail> implements 
   ): DetailedView[] {
     let isCreate = options && options['create'];
     return [
-      accountDetailSection(data, this.refData, isCreate),
+      accountDetailSection(data, this.getRefData()!, isCreate),
       bankDetailSection(data),
       upiDetailSection(data),
     ];
@@ -354,10 +333,6 @@ export class MyAccountsTabComponent extends Accordion<AccountDetail> implements 
   protected override onAccordionOpen(event: { rowIndex: number }): void {}
 
   override handlePageEvent($event: PageEvent): void {
-    this.accountService
-      .fetchMyAccounts($event.pageIndex, $event.pageSize)
-      .subscribe((data) => {
-        this.setContent(data?.content!, data?.totalSize);
-      });
+    this.fetchData($event.pageIndex, $event.pageSize);
   }
 }

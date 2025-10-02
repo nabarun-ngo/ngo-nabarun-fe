@@ -1,6 +1,5 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 // import { Messaging, getToken, onMessage } from '@angular/fire/messaging';
-import { BehaviorSubject } from 'rxjs';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { SCOPE } from 'src/app/core/constant/auth-scope.const';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
@@ -23,11 +22,12 @@ reload() {
   protected scope = SCOPE;
   greetings!: string;
   static tileList: TileInfo[]=[];
+
   constructor(
     private identityService: UserIdentityService,
     private sharedDataService: SharedDataService,
     private commonService: CommonService,
-
+    // private dashboardDataService: DashboardDataService
   ) { }
 
   get tiles(){return SecuredDashboardComponent.tileList;}
@@ -52,7 +52,8 @@ reload() {
           additional_info: {
             tile_label: 'My Pending Donations',
             tile_show_badge: false,
-            tile_is_loading: true
+            tile_is_loading: true,
+            tile_value: ''
           }
         },
         {
@@ -117,11 +118,34 @@ reload() {
           tile_name: 'Admin Console',
           tile_icon: 'icon_group',
           tile_link: this.route.secured_admin_dashboard_page.url,
+          hide_tile: !this.identityService.isAccrediatedToAny(
+            SCOPE.read.actuator,
+            SCOPE.read.apikey,
+            SCOPE.create.apikey,
+            SCOPE.update.apikey,
+            SCOPE.create.servicerun
+          )
         }
-       
       ];
     }
-   
+
+    // Fetch counts from Firebase and update tiles
+    // Donations count
+    // this.dashboardDataService.getCount('/counts/donations').subscribe(count => {
+    //   const donationTile = SecuredDashboardComponent.tileList.find(tile => tile.tile_html_id === 'donationTile');
+    //   if (donationTile && donationTile.additional_info) {
+    //     donationTile.additional_info.tile_value = count !== null ? count.toString() : '-';
+    //     donationTile.additional_info.tile_is_loading = false;
+    //   }
+    // });
+    // // Members count
+    // this.dashboardDataService.getCount('/counts/members').subscribe(count => {
+    //   const memberTile = SecuredDashboardComponent.tileList.find(tile => tile.tile_html_id === 'memberTile');
+    //   if (memberTile && memberTile.additional_info) {
+    //     memberTile.additional_info.tile_value = count !== null ? count.toString() : '-';
+    //     memberTile.additional_info.tile_is_loading = false;
+    //   }
+    // });
   }
 
 }

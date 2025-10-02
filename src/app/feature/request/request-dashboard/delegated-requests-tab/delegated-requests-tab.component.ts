@@ -1,14 +1,11 @@
-import { Component, EventEmitter } from '@angular/core';
+import { Component } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { FormGroup, Validators } from '@angular/forms';
-import { RequestDetail, WorkDetail } from 'src/app/core/api/models';
+import { RequestDetail } from 'src/app/core/api/models';
 import { AccordionCell, AccordionButton } from 'src/app/shared/model/accordion-list.model';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
-import { Accordion } from 'src/app/shared/utils/accordion';
-import { RequestConstant, RequestDefaultValue, RequestField } from '../../request.const';
+import { RequestConstant, RequestField } from '../../request.const';
 import { MyRequestsTabComponent } from '../my-requests-tab/my-requests-tab.component';
-import { date } from 'src/app/core/service/utilities.service';
-import { getRequestAdditionalDetailSection, getRequestDetailSection, getWorkActionDetailSection, getWorkDetailSection } from '../../request.field';
 
 @Component({
   selector: 'app-delegated-requests-tab',
@@ -17,7 +14,10 @@ import { getRequestAdditionalDetailSection, getRequestDetailSection, getWorkActi
 })
 export class DelegatedRequestsTabComponent extends MyRequestsTabComponent {
   
+  protected override isDelegatedRequest: boolean = true;
+
   override ngOnInit(): void {
+    super.ngOnInit();
     this.setHeaderRow([
       {
         value: RequestField.requestId,
@@ -132,7 +132,7 @@ export class DelegatedRequestsTabComponent extends MyRequestsTabComponent {
                 tagName: 'select',
                 inputType: '',
                 placeholder: 'Select Request type',
-                selectList: this.refData!['visibleWorkflowTypes'] // Include all types
+                selectList: this.getRefData()!['visibleWorkflowTypes'] // Include all types
               },
               form_input_validation: [Validators.required]
             },

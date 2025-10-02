@@ -2,7 +2,7 @@ import { Component, EventEmitter } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, Validators } from '@angular/forms';
-import { RequestDetail, KeyValue, UserDetail, AdditionalField, WorkDetail } from 'src/app/core/api/models';
+import { RequestDetail, KeyValue, UserDetail, AdditionalField, WorkDetail, PaginateRequestDetail, RequestType } from 'src/app/core/api/models';
 import {
   AccordionCell,
   AccordionButton,
@@ -11,31 +11,24 @@ import { DetailedView, DetailedViewField } from 'src/app/shared/model/detailed-v
 import { Accordion } from 'src/app/shared/utils/accordion';
 import { RequestConstant, RequestDefaultValue, RequestField } from '../../request.const';
 import { RequestService } from '../../request.service';
-import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { ModalService } from 'src/app/core/service/modal.service';
 import { AppDialog } from 'src/app/core/constant/app-dialog.const';
 import { getRequestAdditionalDetailSection, getRequestDetailSection, getWorkActionDetailSection, getWorkDetailSection } from '../../request.field';
 import { date } from 'src/app/core/service/utilities.service';
 import { filterFormChange } from 'src/app/core/service/form.service';
+import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
+import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 
 @Component({
   selector: 'app-my-requests-tab',
   templateUrl: './my-requests-tab.component.html',
   styleUrls: ['./my-requests-tab.component.scss'],
 })
-export class MyRequestsTabComponent extends Accordion<RequestDetail> {
-  refData: any;
-  userList: UserDetail[] | undefined;
+export class MyRequestsTabComponent extends Accordion<RequestDetail> implements TabComponentInterface<PaginateRequestDetail> {
+
+  protected userList: UserDetail[] | undefined;
   protected isDelegatedRequest: boolean = false; // Track if creating delegated request
 
-  /**
-   * Get filtered workflow types excluding JOIN_REQUEST_USER for My Requests tab
-   */
-  protected getFilteredWorkflowTypes(): KeyValue[] {
-    const allTypes = this.refData?.['visibleWorkflowTypes'] || [];
-    return allTypes.filter((type: KeyValue) => type.key !== 'JOIN_REQUEST_USER');
-  }
-  
   constructor(
     protected route: ActivatedRoute,
     protected requestService: RequestService,
@@ -43,17 +36,27 @@ export class MyRequestsTabComponent extends Accordion<RequestDetail> {
     protected modalService: ModalService
   ) {
     super();
-    //Set Ref Data
-    if (this.route.snapshot.data['ref_data']) {
-      this.refData = this.route.snapshot.data['ref_data'];
-      this.setRefData(this.refData);
+  }
+
+  onSearch($event: SearchEvent): void {
+    if ($event.advancedSearch && !$event.reset) {
+      this.requestService
+        .findRequests(false, RequestDefaultValue.pageNumber, RequestDefaultValue.pageSize)
+        .subscribe((s) => {
+          this.setContent(s?.content!, s?.totalSize);
+        });
+    } else if ($event.advancedSearch && $event.reset) {
+      console.log('Resetting search');
+      this.loadData();
     }
-    //Init Pagination
-    this.init(
-      RequestDefaultValue.pageNumber,
-      RequestDefaultValue.pageSize,
-      RequestDefaultValue.pageSizeOptions
-    );
+  }
+
+  loadData(): void {
+    this.requestService
+      .findRequests(false, RequestDefaultValue.pageNumber, RequestDefaultValue.pageSize)
+      .subscribe((s) => {
+        this.setContent(s?.content!, s?.totalSize);
+      });
   }
 
   override ngOnInit(): void {
@@ -75,6 +78,11 @@ export class MyRequestsTabComponent extends Accordion<RequestDetail> {
         rounded: true
       }
     ]);
+    this.init(
+      RequestDefaultValue.pageNumber,
+      RequestDefaultValue.pageSize,
+      RequestDefaultValue.pageSizeOptions
+    );
   }
 
   protected override prepareHighLevelView(
@@ -99,7 +107,7 @@ export class MyRequestsTabComponent extends Accordion<RequestDetail> {
         showDisplayValue: true,
         refDataSection: RequestConstant.refDataKey.workflowSteps
       },
-      { 
+      {
         type: 'text',
         value: date(data.createdOn!)
       }
@@ -213,7 +221,7 @@ export class MyRequestsTabComponent extends Accordion<RequestDetail> {
         type: request_form?.value.requestType,
         description: request_form?.value.description,
         delegated: this.isDelegatedRequest,
-        requester: (this.isDelegatedRequest && request_form?.value.requestType !== 'JOIN_REQUEST_USER') ? 
+        requester: (this.isDelegatedRequest && request_form?.value.requestType !== 'JOIN_REQUEST_USER') ?
           this.userList?.find(f => f.id == request_form?.value.delegation_user) : undefined,
         additionalFields: additionalFields,
       };
@@ -229,8 +237,8 @@ export class MyRequestsTabComponent extends Accordion<RequestDetail> {
 
   private performWithdrawRequest(rowIndex: number) {
     let decision = this.modalService.openNotificationModal(
-      AppDialog.warn_confirm_withdraw, 
-      'confirmation', 
+      AppDialog.warn_confirm_withdraw,
+      'confirmation',
       'warning'
     );
     decision.onAccept$.subscribe(d => {
@@ -245,10 +253,10 @@ export class MyRequestsTabComponent extends Accordion<RequestDetail> {
     this.requestService.getWorkDetails(item.id!).subscribe(s => {
       // Create a nested accordion for work details
       let workAccordion = new class extends Accordion<WorkDetail> {
-        override ngOnInit(): void {}
-        protected override onClick(event: { buttonId: string; rowIndex: number; }): void {}
-        protected override onAccordionOpen(event: { rowIndex: number; }): void {}
-        
+        override ngOnInit(): void { }
+        protected override onClick(event: { buttonId: string; rowIndex: number; }): void { }
+        protected override onAccordionOpen(event: { rowIndex: number; }): void { }
+
         prepareHighLevelView(item: WorkDetail, options?: { [key: string]: any }): AccordionCell[] {
           return [
             {
@@ -266,7 +274,7 @@ export class MyRequestsTabComponent extends Accordion<RequestDetail> {
             }
           ];
         }
-        
+
         prepareDetailedView(data: WorkDetail, options?: { [key: string]: any }): DetailedView[] {
           return data.stepCompleted ? [
             getWorkDetailSection(data, 'completed_worklist'),
@@ -275,16 +283,16 @@ export class MyRequestsTabComponent extends Accordion<RequestDetail> {
             getWorkDetailSection(data, 'pending_worklist')
           ];
         }
-        
+
         prepareDefaultButtons(data: WorkDetail, options?: { [key: string]: any }): AccordionButton[] {
           return [];
         }
-        
-        handlePageEvent($event: PageEvent): void {}
+
+        handlePageEvent($event: PageEvent): void { }
       }();
-      
+
       // Set up the nested accordion
-      workAccordion.setRefData(this.refData);
+      workAccordion.setRefData(this.getRefData()!);
       workAccordion.setHeaderRow([
         {
           value: 'Work Id',
@@ -299,10 +307,10 @@ export class MyRequestsTabComponent extends Accordion<RequestDetail> {
           rounded: true
         }
       ]);
-      
+
       // Set the content
       workAccordion.setContent(s!, s?.length);
-      
+
       // Add the section with properly initialized accordion
       this.addSectionInAccordion({
         section_name: 'Work Detail',
@@ -312,8 +320,8 @@ export class MyRequestsTabComponent extends Accordion<RequestDetail> {
         accordionList: workAccordion.getAccordionList(),
         accordion: {
           object: workAccordion,
-          accordionOpened: new EventEmitter<{rowIndex: number}>(),
-          buttonClick: new EventEmitter<{buttonId: string; rowIndex: number}>()
+          accordionOpened: new EventEmitter<{ rowIndex: number }>(),
+          buttonClick: new EventEmitter<{ buttonId: string; rowIndex: number }>()
         }
       }, event.rowIndex);
     });
@@ -325,6 +333,14 @@ export class MyRequestsTabComponent extends Accordion<RequestDetail> {
       .subscribe((data) => {
         this.setContent(data?.content!, data?.totalSize);
       });
+  }
+
+  /**
+ * Get filtered workflow types excluding JOIN_REQUEST_USER for My Requests tab
+ */
+  protected getFilteredWorkflowTypes(): KeyValue[] {
+    const allTypes = this.getRefData()?.['visibleWorkflowTypes'] || [];
+    return allTypes.filter((type: KeyValue) => type.key !== RequestType.JoinRequestUser);
   }
 
   initCreateRequestForm(isDelegated: boolean = false) {

@@ -18,7 +18,7 @@ import {
 } from 'src/app/shared/model/detailed-view.model';
 import { date } from 'src/app/core/service/utilities.service';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
-import { accountTab } from './account.const';
+import { accountTab, expenseTab } from './account.const';
 
 export const expenseTabHeader = [
   {
@@ -282,6 +282,7 @@ export const expenseListSection = (
   isCreate: boolean = false
 ) => {
   let accordion = new (class extends Accordion<ExpenseItemDetail> {
+    
     override ngOnInit(): void {}
     protected override onClick(event: {
       buttonId: string;
@@ -466,7 +467,7 @@ export const rejectionModal =():SearchAndAdvancedSearchModel =>{
 };
 
 export const expenseSearchInput = (
-  tab: accountTab,
+  tab: expenseTab,
   refData: {
     [name: string]: KeyValue[];
   }
