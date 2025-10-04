@@ -18,12 +18,12 @@ import { FormGroup } from '@angular/forms';
 })
 export class DonationDashboardNewComponent extends Accordion<DonationDetail | UserDetail> implements OnInit {
 
+
   protected tabIndex!: number;
   protected tabMapping: donationTab[] = ['self_donation', 'guest_donation', 'member_donation'];
   defaultValue = DonationDefaultValue;
   protected mySummary: DonationSummary | undefined;
   constants = DonationRefData;
-  refData: any;
   userList!: UserDetail[];
 
 
@@ -52,12 +52,12 @@ export class DonationDashboardNewComponent extends Accordion<DonationDetail | Us
 
     // this.sharedDataService.setPageName(this.defaultValue.pageTitle + " kk");
 
-    if (this.route.snapshot.data['ref_data']) {
-      this.refData = this.route.snapshot.data['ref_data'];
-      this.sharedDataService.setRefData('DONATION', this.refData);
-      //console.log(refData,6)
-      this.setRefData(this.refData);
-    }
+    // if (this.route.snapshot.data['ref_data']) {
+    //   this.refData = this.route.snapshot.data['ref_data'];
+    //   this.sharedDataService.setRefData('DONATION', this.refData!);
+    //   //console.log(refData,6)
+    //   this.setRefData(this.refData);
+    // }
 
     this.setAccordionHeader()
     if (this.route.snapshot.data['data'] && this.tabMapping[this.tabIndex] == 'member_donation') {
@@ -396,7 +396,7 @@ export class DonationDashboardNewComponent extends Accordion<DonationDetail | Us
           form_input: {
             inputType: '',
             tagName: 'select',
-            selectList: this.refData![this.constants.refDataKey.nextStatus]
+            selectList: this.getRefData()![this.constants.refDataKey.nextStatus]
           }
         },
         {
@@ -427,7 +427,7 @@ export class DonationDashboardNewComponent extends Accordion<DonationDetail | Us
           form_input: {
             inputType: '',
             tagName: 'select',
-            selectList: this.refData![this.constants.refDataKey.paymentMethod]
+            selectList: this.getRefData()![this.constants.refDataKey.paymentMethod]
           }
         },
         {
@@ -441,7 +441,7 @@ export class DonationDashboardNewComponent extends Accordion<DonationDetail | Us
           form_input: {
             inputType: '',
             tagName: 'select',
-            selectList: this.refData![this.constants.refDataKey.upiOps]
+            selectList: this.getRefData()![this.constants.refDataKey.upiOps]
           },
           hide_field: !donation.paidUsingUPI
         },

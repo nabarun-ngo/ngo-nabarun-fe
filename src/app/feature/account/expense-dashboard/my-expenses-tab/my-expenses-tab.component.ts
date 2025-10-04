@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import {
   ExpenseDetail,
   ExpenseItemDetail,
   KeyValue,
+  PaginateExpenseDetail,
   UserDetail,
 } from 'src/app/core/api/models';
 import { Accordion } from 'src/app/shared/utils/accordion';
@@ -26,13 +27,20 @@ import { filterFormChange } from 'src/app/core/service/form.service';
 import { ModalService } from 'src/app/core/service/modal.service';
 import { AppDialog } from 'src/app/core/constant/app-dialog.const';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
+import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
+import { removeNullFields } from 'src/app/core/service/utilities.service';
+import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 
 @Component({
   selector: 'app-my-expenses-tab',
   templateUrl: './my-expenses-tab.component.html',
   styleUrls: ['./my-expenses-tab.component.scss'],
 })
-export class MyExpensesTabComponent extends Accordion<ExpenseDetail> {
+export class MyExpensesTabComponent extends Accordion<ExpenseDetail> implements TabComponentInterface<PaginateExpenseDetail> {
+
+  /**
+   * Initialize variables
+   */
   protected users!: UserDetail[];
   protected isAdmin: boolean = false;
   constructor(
@@ -41,15 +49,35 @@ export class MyExpensesTabComponent extends Accordion<ExpenseDetail> {
     protected userIdentity: UserIdentityService
   ) {
     super();
-    super.init(
+  }
+
+  ngOnInit(): void {
+    this.init(
       AccountDefaultValue.pageNumber,
       AccountDefaultValue.pageSize,
       AccountDefaultValue.pageSizeOptions
     );
+    this.setHeaderRow(expenseTabHeader);
   }
 
-  ngOnInit(): void {
-    this.setHeaderRow(expenseTabHeader);
+  onSearch($event: SearchEvent): void {
+    if ($event.advancedSearch && !$event.reset) {
+      this.accountService
+        .fetchMyExpenses(undefined, undefined, removeNullFields($event.value))
+        .subscribe((s) => {
+          this.setContent(s!.content!, s?.totalSize!);
+        });
+    } else if ($event.advancedSearch && $event.reset) {
+      this.loadData();
+    }
+  }
+
+  loadData(): void {
+    this.accountService
+      .fetchMyExpenses(AccountDefaultValue.pageNumber, AccountDefaultValue.pageSize, {})
+      .subscribe((data) => {
+        this.setContent(data?.content!, data?.totalSize);
+      });
   }
 
   protected override prepareHighLevelView(
@@ -103,6 +131,7 @@ export class MyExpensesTabComponent extends Accordion<ExpenseDetail> {
     }
     return buttons;
   }
+
   override handlePageEvent($event: PageEvent): void {
     this.accountService
       .fetchExpenses($event.pageIndex, $event.pageSize, {})
@@ -139,11 +168,11 @@ export class MyExpensesTabComponent extends Accordion<ExpenseDetail> {
       0,
       true
     ).form_input!.selectList = [
-      {
-        displayValue: this.userIdentity.loggedInUser.name,
-        key: this.userIdentity.loggedInUser.profile_id,
-      },
-    ];
+        {
+          displayValue: this.userIdentity.loggedInUser.name,
+          key: this.userIdentity.loggedInUser.profile_id,
+        },
+      ];
     this.users = [
       {
         id: this.userIdentity.loggedInUser.profile_id,
@@ -193,12 +222,12 @@ export class MyExpensesTabComponent extends Accordion<ExpenseDetail> {
               this.userIdentity.loggedInUser.profile_id,
             paidBy: this.users
               ? this.users.find(
-                  (f) =>
-                    f.id ==
-                    (this.isAdmin
-                      ? expenseForm?.value.expense_by
-                      : this.userIdentity.loggedInUser.profile_id)
-                )
+                (f) =>
+                  f.id ==
+                  (this.isAdmin
+                    ? expenseForm?.value.expense_by
+                    : this.userIdentity.loggedInUser.profile_id)
+              )
               : undefined,
             status: 'SUBMITTED',
           } as ExpenseDetail;
@@ -228,7 +257,7 @@ export class MyExpensesTabComponent extends Accordion<ExpenseDetail> {
   protected override onAccordionOpen($event: { rowIndex: number }) {
     let item = this.itemList![$event.rowIndex];
     this.accountService.getExpenseDocuments(item.id!).subscribe((data) => {
-      let accordion=this.getSectionInAccordion('expense_doc_list',$event.rowIndex)!;
+      let accordion = this.getSectionInAccordion('expense_doc_list', $event.rowIndex)!;
       accordion.documents = data;
       accordion.hide_section = false;
     });

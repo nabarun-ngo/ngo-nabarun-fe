@@ -5,12 +5,14 @@
                 <mat-card class="m-4 p-4">
                     <h2 class="text-purple-700 font-bold text-center">Important links</h2>
                     <div class="text-gray-700">
-                        <div class="grid md:grid-cols-1 text-sm">
-                            <div class="grid grid-cols-8 gap-2" *ngFor="let data of refData[constant.refDataKey.importantLinks]">
-                                <div class="py-2 font-semibold col-span-1">{{data.key}}</div>
-                                <div class="py-2 col-span-6">{{data.description}}</div>
-                                <div class="py-2 col-span-1 text-center">
-                                    <a class="text-blue-700" [href]="data.displayValue" target="_blank">Click here</a>
+                        <div class="grid text-sm">
+                            <div 
+                                class="grid grid-cols-1 sm:grid-cols-8 gap-2 items-center border-b border-gray-300 py-2"
+                                *ngFor="let data of refData![constant.refDataKey.importantLinks]">
+                                <div class="font-semibold sm:col-span-1">{{data.key}}</div>
+                                <div class="sm:col-span-6">{{data.description}}</div>
+                                <div class="text-center sm:col-span-1 mt-2 sm:mt-0">
+                                    <a class="text-blue-700 break-all" [href]="data.displayValue" target="_blank">Click here</a>
                                 </div>
                             </div>
                         </div>
@@ -19,10 +21,13 @@
                 <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center"
                     (selectedTabChange)="tabChanged($event.index)" [(selectedIndex)]="tabIndex">
                     <mat-tab id="admin_services" label="Services">
-                        <app-admin-service-tab [serviceList]="serviceList!"></app-admin-service-tab>
+                        <app-admin-service-tab [accordionData]="initialData" [refData]="refData"></app-admin-service-tab>
                     </mat-tab>
                     <mat-tab id="apiKey" label="Manage API keys">
-                        <app-admin-apikey-tab [apiKeyList]="apiKeyList!"></app-admin-apikey-tab>
+                        <app-admin-apikey-tab [accordionData]="initialData" [refData]="refData"></app-admin-apikey-tab>
+                    </mat-tab>
+                    <mat-tab id="config" label="Manage Global Config">
+                        <app-admin-global-config-tab [initialData]="initialData" [refData]="refData"></app-admin-global-config-tab>
                     </mat-tab>
                 </mat-tab-group>
             </div>

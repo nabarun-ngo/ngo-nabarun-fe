@@ -12,52 +12,55 @@ const routes: Routes = [
   {
     path: route_data.secured_member_members_page.path,
     component: MemberListComponent,
-    resolve:{
-      data:membersResolver,
-      ref_data:memberRefDataResolver
+    resolve: {
+      data: membersResolver,
+      ref_data: memberRefDataResolver
     }
   },
   {
     path: route_data.secured_member_my_profile_page.path,
     component: MemberProfileComponent,
-    resolve:{
-      data:myProfileResolver,
-      ref_data:memberRefDataResolver,
+    resolve: {
+      data: myProfileResolver,
+      ref_data: memberRefDataResolver,
     },
-    data:{
-      self_profile:true
+    data: {
+      self_profile: true
     }
   },
   {
     path: route_data.secured_member_complete_my_profile_page.path,
     component: MemberProfileComponent,
-    resolve:{
-      data:myProfileResolver,
-      ref_data:memberRefDataResolver,
+    resolve: {
+      data: myProfileResolver,
+      ref_data: memberRefDataResolver,
     },
-    data:{
-      self_profile:true,
-      complete_flag:true
+    data: {
+      self_profile: true,
+      complete_flag: true
     }
   },
   {
     path: route_data.secured_member_roles_page.path,
     component: MemberRoleComponent,
-    resolve:{
+    resolve: {
       //data:memberResolver,
-      ref_data:memberRefDataResolver
+      ref_data: memberRefDataResolver
     }
   },
   {
     path: route_data.secured_member_profile_page.path,
     component: MemberProfileComponent,
-    resolve:{
-      data:memberResolver,
-      ref_data:memberRefDataResolver
+    resolve: {
+      data: memberResolver,
+      ref_data: memberRefDataResolver,
+    },
+    data: {
+      encodeParams: ['id']
     }
   },
- 
- 
+
+
 ];
 
 @NgModule({

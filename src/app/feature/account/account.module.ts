@@ -9,6 +9,7 @@ import { MyAccountsTabComponent } from './account-dashboard/my-accounts-tab/my-a
 import { MyExpensesTabComponent } from './expense-dashboard/my-expenses-tab/my-expenses-tab.component';
 import { ExpenseDashboardComponent } from './expense-dashboard/expense-dashboard.component';
 import { ManageAccountsTabComponent } from './account-dashboard/manage-accounts-tab/manage-accounts-tab.component';
+import { TransactionAccordionComponent } from './account-transaction/transaction-accordion/transaction-accordion.component';
 
 
 
@@ -21,6 +22,7 @@ import { ManageAccountsTabComponent } from './account-dashboard/manage-accounts-
     ManageAccountsTabComponent,
     MyExpensesTabComponent,
     ExpenseDashboardComponent,
+    TransactionAccordionComponent,
   ],
   imports: [
     CommonModule,

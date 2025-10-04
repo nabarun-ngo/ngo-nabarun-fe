@@ -12,6 +12,9 @@ import { SearchAndAdvancedSearchFormComponent } from 'src/app/shared/components/
 import { MatDialogRef } from '@angular/material/dialog';
 import { SCOPE } from 'src/app/core/constant/auth-scope.const';
 import { MyExpensesTabComponent } from '../my-expenses-tab/my-expenses-tab.component';
+import { removeNullFields } from 'src/app/core/service/utilities.service';
+import { ExpenseDefaultValue } from '../../account.const';
+import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 
 @Component({
   selector: 'app-manage-expense-tab',
@@ -22,16 +25,54 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
   protected override isAdmin: boolean = true;
   protected accounts: AccountDetail[] = [];
 
-   override ngOnInit(): void {
-      this.setHeaderRow(manageExpenseTabHeader);
+  protected permissions!: {
+    canCreateExpense: boolean;
+    canFinalizeExpense: boolean;
+    canSettleExpense: boolean;
+  };
+
+  override onSearch($event: SearchEvent): void {
+    if ($event.advancedSearch && !$event.reset) {
+      this.accountService
+        .fetchExpenses(undefined, undefined, removeNullFields($event.value))
+        .subscribe((s) => {
+          this.setContent(s!.content!, s?.totalSize!);
+        });
+    } else if ($event.advancedSearch && $event.reset) {
+      this.loadData();
     }
-  
-    protected override prepareHighLevelView(
-      data: ExpenseDetail,
-      options?: { [key: string]: any }
-    ): AccordionCell[] {
-      return manageExpenseHighLevelView(data);
-    }
+  }
+
+  override loadData(): void {
+    this.accountService
+      .fetchExpenses(ExpenseDefaultValue.pageNumber, ExpenseDefaultValue.pageSize, {})
+      .subscribe((data) => {
+        this.setContent(data?.content!, data?.totalSize);
+      });
+  }
+
+  override ngOnInit(): void {
+    super.ngOnInit();
+    this.setHeaderRow(manageExpenseTabHeader);
+    this.permissions = {
+      canCreateExpense: this.userIdentity.isAccrediatedTo(
+        SCOPE.create.expense
+      ),
+      canFinalizeExpense: this.userIdentity.isAccrediatedTo(
+        SCOPE.create.expense_final
+      ),
+      canSettleExpense: this.userIdentity.isAccrediatedTo(
+        SCOPE.create.expense_settle
+      )
+    };
+  }
+
+  protected override prepareHighLevelView(
+    data: ExpenseDetail,
+    options?: { [key: string]: any }
+  ): AccordionCell[] {
+    return manageExpenseHighLevelView(data);
+  }
 
   protected override prepareDefaultButtons(
     data: ExpenseDetail,
@@ -65,7 +106,7 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
         button_id: 'UPDATE_EXPENSE',
         button_name: 'Update',
       });
-      if (this.userIdentity.isAccrediatedTo(SCOPE.create.expense_final)) {
+      if (this.permissions.canFinalizeExpense) {
         buttons.push({
           button_id: 'FINALIZE_EXPENSE',
           button_name: 'Finalize',
@@ -73,7 +114,7 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
       }
     } else if (
       data.status == 'FINALIZED' &&
-      this.userIdentity.isAccrediatedTo(SCOPE.create.expense_settle)
+      this.permissions.canSettleExpense
     ) {
       buttons.push({
         button_id: 'SETTLE_EXPENSE',
@@ -149,7 +190,7 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
                   .subscribe((s) => {
                     this.accountService
                       .uploadDocuments(documents?.map((m) => {
-                        m.detail.documentMapping=[
+                        m.detail.documentMapping = [
                           {
                             docIndexId: itemData.id!,
                             docIndexType: 'EXPENSE',

@@ -34,6 +34,7 @@ export interface AccordionCell{
 export interface AccordionButton{
     button_name:string;
     button_id:string;
+    props ? :{[key:string] : any};
 }
 
 export interface AccordionData<NumType>{

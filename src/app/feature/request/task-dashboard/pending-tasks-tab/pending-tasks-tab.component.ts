@@ -1,47 +1,35 @@
-import { Component, ElementRef, AfterViewInit, Input } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, ElementRef } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { ActivatedRoute } from '@angular/router';
 import { scrollToFirstInvalidControl } from 'src/app/core/service/form.service';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { AccordionButton, AccordionCell } from 'src/app/shared/model/accordion-list.model';
-import { KeyValue, PaginateWorkDetail, WorkDetail } from 'src/app/core/api/models';
-import { SharedDataService } from 'src/app/core/service/shared-data.service';
-import { date } from 'src/app/core/service/utilities.service';
+import { PaginateWorkDetail, WorkDetail } from 'src/app/core/api/models';
+import { date, removeNullFields } from 'src/app/core/service/utilities.service';
 import { Accordion } from 'src/app/shared/utils/accordion';
 import { RequestConstant, TaskDefaultValue, TaskField } from '../../request.const';
 import { RequestService } from '../../request.service';
 import { getDocumentDetailSection, getRequestAdditionalDetailSection, getRequestDetailSection, getWorkActionDetailSection, getWorkDetailSection } from '../../request.field';
-import { TabComponentInterface, SearchEvent } from 'src/app/shared/interfaces/tab-component.interface';
+import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
+import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 
 @Component({
   selector: 'app-pending-tasks-tab',
   templateUrl: './pending-tasks-tab.component.html',
   styleUrls: ['./pending-tasks-tab.component.scss']
 })
-export class PendingTasksTabComponent extends Accordion<WorkDetail> implements AfterViewInit, TabComponentInterface<PaginateWorkDetail> {
+export class PendingTasksTabComponent extends Accordion<WorkDetail> implements TabComponentInterface<PaginateWorkDetail> {
 
-  @Input() initialData?: PaginateWorkDetail;
-  protected workItemList!: PaginateWorkDetail;
   protected actionName!: string;
-  refData!: { [key: string]: KeyValue[]; };
-
+  protected isCompleted: boolean = false;
   constructor(
-    private sharedDataService: SharedDataService,
-    private route: ActivatedRoute,
-    private taskService: RequestService,
-    private el: ElementRef,
+    protected taskService: RequestService,
+    protected el: ElementRef,
   ) {
     super();
-    super.init(TaskDefaultValue.pageNumber, TaskDefaultValue.pageSize, TaskDefaultValue.pageSizeOptions);
-    
-    if (this.route.snapshot.data['ref_data']) {
-      this.refData = this.route.snapshot.data['ref_data'];
-      this.setRefData(this.refData);
-    }
   }
 
   override ngOnInit(): void {
+    super.init(TaskDefaultValue.pageNumber, TaskDefaultValue.pageSize, TaskDefaultValue.pageSizeOptions);
     this.setHeaderRow([
       {
         value: TaskField.workId,
@@ -62,42 +50,24 @@ export class PendingTasksTabComponent extends Accordion<WorkDetail> implements A
     ]);
   }
 
-  ngAfterViewInit(): void {
-    // Use initial data if provided (from resolver), but don't auto-load otherwise
-    if (this.initialData) {
-      this.workItemList = this.initialData;
-      this.setContent(this.initialData.content!, this.initialData.totalSize);
-    }
-    // Note: Don't auto-load data here - wait for parent to trigger loading
-  }
-
-  /**
-   * Trigger data loading - called by parent component when tab is activated
-   */
-  triggerDataLoad(): void {
-    if (!this.initialData && !this.workItemList) {
+  onSearch(event: SearchEvent): void {
+    if (event.advancedSearch && !event.reset) {
+      this.taskService.findMyWorkList(this.isCompleted, undefined, undefined, removeNullFields(event.value))
+        .subscribe(s => {
+          this.setContent(s?.content!, s?.totalSize!);
+        })
+    } else if (event.advancedSearch && event.reset) {
       this.loadData();
+    } else {
+      this.getAccordionList().searchValue = event.value as string;
     }
   }
 
   loadData(): void {
-    this.fetchDetails();
-  }
-
-  onSearch(event: SearchEvent): void {
-    if (event.advancedSearch && !event.reset) {
-      console.log('Pending Tasks - Advanced Search:', event.value);
-      this.fetchDetails({
-        requestId: event.value.requestId,
-        workId: event.value.workId,
-        fromDate: event.value.fromDate,
-        toDate: event.value.toDate
-      });
-    } else if (event.advancedSearch && event.reset) {
-      console.log('Pending Tasks - Reset Search');
-      this.fetchDetails();
-    }
-    // Normal search could be implemented here if needed
+    this.taskService.findMyWorkList(this.isCompleted, TaskDefaultValue.pageNumber, TaskDefaultValue.pageSize)
+      .subscribe(s => {
+        this.setContent(s?.content!, s?.totalSize!);
+      })
   }
 
   protected override prepareHighLevelView(item: WorkDetail, options?: { [key: string]: any }): AccordionCell[] {
@@ -142,13 +112,13 @@ export class PendingTasksTabComponent extends Accordion<WorkDetail> implements A
   protected override onClick($event: { buttonId: string; rowIndex: number; }) {
     switch ($event.buttonId) {
       case 'UPDATE':
-        let work = this.workItemList.content![$event.rowIndex];
+        let work = this.itemList![$event.rowIndex];
         this.addSectionInAccordion(getWorkActionDetailSection(work!), $event.rowIndex)
         this.showEditForm($event.rowIndex, ['action_details']);
         this.actionName = $event.buttonId;
         break;
       case 'CONFIRM':
-        let item = this.workItemList.content![$event.rowIndex];
+        let item = this.itemList![$event.rowIndex];
         let form_action_detail = this.getSectionForm('action_details', $event.rowIndex);
         if (form_action_detail?.valid) {
           let detail: WorkDetail = {};
@@ -162,7 +132,7 @@ export class PendingTasksTabComponent extends Accordion<WorkDetail> implements A
           })
           this.taskService.updateWorkItem(item.id!, detail).subscribe(data => {
             this.hideForm($event.rowIndex)
-            this.fetchDetails();
+            this.loadData();
           })
         } else {
           form_action_detail?.markAllAsTouched();
@@ -177,7 +147,7 @@ export class PendingTasksTabComponent extends Accordion<WorkDetail> implements A
   }
 
   protected override onAccordionOpen(event: { rowIndex: number; }): void {
-    let item = this.workItemList.content![event.rowIndex];
+    let item = this.itemList![event.rowIndex];
     this.taskService.getRequestDetail(item.workflowId!).subscribe(request => {
       /**
        * Inserting request request details at top
@@ -187,47 +157,15 @@ export class PendingTasksTabComponent extends Accordion<WorkDetail> implements A
       this.taskService.getDocuments(item.workflowId!).subscribe(data => {
         this.addSectionInAccordion(getDocumentDetailSection(data!), event.rowIndex)
       })
-    }) 
+    })
   }
 
   override handlePageEvent($event: PageEvent): void {
     this.pageNumber = $event.pageIndex;
     this.pageSize = $event.pageSize;
-    this.fetchDetails();
+    this.taskService.findMyWorkList(this.isCompleted, this.pageNumber, this.pageSize)
+      .subscribe(s => {
+        this.setContent(s?.content!, s?.totalSize!);
+      })
   }
-
-  fetchDetails(filter?: {
-    requestId?: string,
-    workId?: string,
-    fromDate?: string,
-    toDate?: string,
-  }) {
-    this.getAccordionList().searchValue = '';
-    this.taskService.findMyWorkList({
-      isCompleted: false,
-      requestId: filter?.requestId,
-      workId: filter?.workId,
-      fromDate: filter?.fromDate,
-      toDate: filter?.toDate,
-    }, this.pageNumber, this.pageSize).subscribe(s => {
-      this.workItemList = s!;
-      this.setContent(this.workItemList.content!, this.workItemList?.totalSize!);
-    })
-  }
-
-  onFormCancel($event: { rowIndex: number }) {
-    // Handle form cancel event
-    this.hideForm($event.rowIndex);
-  }
-
-  onFormSubmit($event: { buttonId: string; rowIndex: number; }) {
-    // Handle form submit event
-    this.onClick($event);
-  }
-
-  onRowClick($event: { buttonId: string; rowIndex: number; }) {
-    // Handle row click event
-    this.onClick($event);
-  }
-
 }

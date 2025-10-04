@@ -1,14 +1,15 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { AccountDetail, KeyValue, PaginateAccountDetail } from 'src/app/core/api/models';
+import { AccountDetail, KeyValue } from 'src/app/core/api/models';
 import { filterFormChange } from 'src/app/core/service/form.service';
 import { accountHighLevelView, accountTabHeader } from '../../account.field';
 import { MyAccountsTabComponent } from '../my-accounts-tab/my-accounts-tab.component';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { AccordionButton, AccordionCell } from 'src/app/shared/model/accordion-list.model';
-import { TabComponentInterface, SearchEvent } from 'src/app/shared/interfaces/tab-component.interface';
 import { removeNullFields } from 'src/app/core/service/utilities.service';
 import { AccountDefaultValue } from '../../account.const';
+import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
+import { SCOPE } from 'src/app/core/constant/auth-scope.const';
 
 @Component({
   selector: 'app-manage-accounts-tab',
@@ -16,50 +17,37 @@ import { AccountDefaultValue } from '../../account.const';
   styleUrls: ['./manage-accounts-tab.component.scss'],
 })
 export class ManageAccountsTabComponent extends MyAccountsTabComponent {
-  
-  @Input() override initialData?: PaginateAccountDetail;
-  @Input() override refData: any;
 
-  protected override dataLoaded = false;
+  protected permissions!: {
+    canCreateAccount: boolean;
+    canUpdateAccount: boolean;
+    canReadTransactions: boolean;
+  };
 
   override ngOnInit(): void {
+    super.ngOnInit();
     this.setHeaderRow(accountTabHeader('all_accounts'));
-    //Set Ref Data
-    if (this.refData) {
-      this.setRefData(this.refData);
-    }
-  }
-
-  override ngAfterViewInit(): void {
-    // Use initial data from resolver if available, but don't auto-load data
-    if (this.initialData && !this.dataLoaded) {
-      this.setContent(this.initialData.content!, this.initialData.totalSize);
-      this.dataLoaded = true;
-    }
+  
+    // Setup permissions
+    this.permissions = {
+      canCreateAccount: this.userIdentityService.isAccrediatedTo(SCOPE.create.account),
+      canUpdateAccount: this.userIdentityService.isAccrediatedTo(SCOPE.update.account),
+      canReadTransactions: this.userIdentityService.isAccrediatedTo(SCOPE.read.transactions)
+    };
   }
 
   /**
    * Load data for this tab - required by TabComponentInterface
    */
   override loadData(): void {
-    if (!this.dataLoaded) {
-      this.accountService
+    this.accountService
         .fetchAccounts(
           AccountDefaultValue.pageNumber,
           AccountDefaultValue.pageSize
         )
         .subscribe((data) => {
           this.setContent(data?.content!, data?.totalSize);
-          this.dataLoaded = true;
         });
-    }
-  }
-
-  /**
-   * Trigger data loading - called by parent when tab becomes active
-   */
-  override triggerDataLoad(): void {
-    this.loadData();
   }
 
   /**
@@ -73,11 +61,7 @@ export class ManageAccountsTabComponent extends MyAccountsTabComponent {
           this.setContent(data?.content!, data?.totalSize);
         });
     } else if (event.advancedSearch && event.reset) {
-      this.triggerDataLoad();
-    } else if (event?.buttonName == 'ADVANCED_SEARCH') {
-      this.accountService.fetchUsers().subscribe((s) => {
-        // Handle users fetch for advanced search
-      });
+      this.loadData();
     }
   }
 
@@ -85,7 +69,7 @@ export class ManageAccountsTabComponent extends MyAccountsTabComponent {
       data: AccountDetail,
       options?: { [key: string]: any }
     ): AccordionCell[] {
-      return accountHighLevelView(data, 'all_accounts', this.refData);
+      return accountHighLevelView(data, 'all_accounts', this.getRefData()!);
     }
 
   protected override prepareDefaultButtons(
@@ -109,10 +93,12 @@ export class ManageAccountsTabComponent extends MyAccountsTabComponent {
       {
         button_id: 'VIEW_TRANSACTIONS',
         button_name: 'View Transactions',
+        props:{disabled: !this.permissions.canReadTransactions }
       },
       {
         button_id: 'UPDATE_ACCOUNT',
         button_name: 'Update Account',
+        props:{disabled: !this.permissions.canUpdateAccount }
       },  
     ];
   }
