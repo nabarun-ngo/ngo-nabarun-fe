@@ -13,6 +13,52 @@
             "source": "**",
             "destination": "/index.html"
         }]
+    },
+    {
+      "site": "ngonabarun",
+      "public": "out",
+        "ignore": [
+            "firebase.json",
+            "**/.*",
+            "**/node_modules/**"
+        ],
+        "rewrites": []
+    },
+    {
+      "site": "ngonabarun-stage",
+      "public": "out",
+        "ignore": [
+            "firebase.json",
+            "**/.*",
+            "**/node_modules/**"
+        ],
+        "rewrites": []
+    },
+    {
+      "site": "ngonabarun-portal",
+      "public": "dist/ngo-nabarun-fe",
+        "ignore": [
+            "firebase.json",
+            "**/.*",
+            "**/node_modules/**"
+        ],
+        "rewrites": [{
+            "source": "**",
+            "destination": "/index.html"
+        }]
+    },
+    {
+      "site": "ngonabarun-portal-stage",
+      "public": "dist/ngo-nabarun-fe",
+        "ignore": [
+            "firebase.json",
+            "**/.*",
+            "**/node_modules/**"
+        ],
+        "rewrites": [{
+            "source": "**",
+            "destination": "/index.html"
+        }]
     }
   ]
 }
