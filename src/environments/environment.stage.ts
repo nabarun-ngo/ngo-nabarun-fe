@@ -2,21 +2,19 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-import { Capacitor } from "@capacitor/core";
-import config from "capacitor.config";
 import { getScopes } from "src/app/core/constant/auth-scope.const";
 import { version } from "./version";
 import { AuthConfig } from "@auth0/auth0-angular";
 
 const authDomain = 'sso-nabarun-test.us.auth0.com';
-const authClientId = Capacitor.isNativePlatform() ? 'JWk5uhtVVP2clxe9At7xdor9vbGakFv2':'RAcWqnITnhfXPTLhFLVtAzWxeujR5Znk';
+const authClientId = 'RAcWqnITnhfXPTLhFLVtAzWxeujR5Znk';
 const apiBaseUrl='https://ngonabarun-stage.appspot.com';
 
 const auth_config:AuthConfig={
   domain: authDomain,
   clientId: authClientId,
   authorizationParams: {
-    redirect_uri: Capacitor.isNativePlatform() ? `${config.appId}://${authDomain}/capacitor/${config.appId}/callback` : window.location.origin ,  
+    redirect_uri: window.location.origin ,  
     scope: 'openid profile email offline_access api auth_time family_name given_name email_verified exp phone_number picture sub iss iat aud ' + getScopes(), 
     audience: 'https://nabarun.resourceserver.api' ,
   },
@@ -65,7 +63,6 @@ export const environment = {
   firebase_config: firebaseConfig,
   firebase_vapidKey:'BBDkLXhO325xFYbQ9v2yDhAlxRCBwB-MERVALRhUsiPjKWNAFiR1LVxgdxB8M8VVXD6ZBMQllGFdfjmIG0CGvig',
   inactivityTimeOut: 30*60,
-  gapi_config:gapiConfig
 };
 
 

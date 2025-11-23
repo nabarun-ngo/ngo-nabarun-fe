@@ -18,7 +18,6 @@ import { ModalComponent } from './component/modal/modal.component';
 import { DateDiffPipe } from './pipe/date-diff.pipe';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatNativeDateModule } from '@angular/material/core';
-import { IonicModule } from '@ionic/angular';
 import { AuthHttpInterceptor, AuthModule } from '@auth0/auth0-angular';
 import { BaseModalComponent } from './component/base-modal/base-modal.component';
 
@@ -42,7 +41,6 @@ import { BaseModalComponent } from './component/base-modal/base-modal.component'
     CommonModule,
     HttpClientModule,
     AuthModule.forRoot(environment.auth_config),
-    IonicModule.forRoot(),
     MatDialogModule,
     ApiModule.forRoot({
       rootUrl: environment.api_base_url

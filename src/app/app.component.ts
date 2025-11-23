@@ -34,14 +34,6 @@ export class AppComponent {
      * Configuring App callback
      */
     this.identityService.configure();
-    /**
-     * 
-     */
-    // if (Capacitor.isNativePlatform()) {
-    //   //this.identityService.mobileCallback();
-    // }else{
-
-    // }
    
     /**
      * configuring idle timeout
@@ -55,7 +47,7 @@ export class AppComponent {
         this.identityService.logout();
       }
     });
-    await this.googleService.initialize();
+    //await this.googleService.initialize();
   }
 
 }

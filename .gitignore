@@ -58,3 +58,6 @@ Thumbs.db
 
 
 /.vscode/launch.json
+.editorconfig
+.qodo
+.vscode

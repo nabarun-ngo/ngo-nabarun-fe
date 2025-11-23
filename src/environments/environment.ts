@@ -3,20 +3,18 @@
 // The list of file replacements can be found in `angular.json`.
 
 import { getScopes } from "src/app/core/constant/auth-scope.const";
-import { Capacitor } from '@capacitor/core';
-import config from '../../capacitor.config';
 import { version } from "./version";
 import { AuthConfig } from "@auth0/auth0-angular";
 
 const authDomain = 'dev-u2aco2py.us.auth0.com';
-const authClientId = Capacitor.isNativePlatform() ? 'eTrMFsU97X71Dve76lbYuZmUN6k3PN66': '8DLWlfdUodZhM8nW2HRKFYL7GjBxMbGH';
-const apiBaseUrl=Capacitor.isNativePlatform() ? `${config.appId}://${authDomain}/capacitor/${config.appId}/callback` : 'http://localhost:8082';
+const authClientId = '8DLWlfdUodZhM8nW2HRKFYL7GjBxMbGH';
+const apiBaseUrl= 'http://localhost:8082';
 
 const auth_config:AuthConfig={
   domain: authDomain,
   clientId: authClientId,
   authorizationParams: {
-    redirect_uri: Capacitor.isNativePlatform() ? `${config.appId}://${authDomain}/capacitor/${config.appId}/callback` : window.location.origin ,  
+    redirect_uri: window.location.origin ,  
     scope: 'openid profile email offline_access api auth_time family_name given_name email_verified exp phone_number picture sub iss iat aud ' + getScopes(), 
     audience: 'https://nabarun.resourceserver.api' ,
   },
@@ -60,6 +58,5 @@ export const environment = {
   firebase_config: firebaseConfig,
   firebase_vapidKey:'BBDkLXhO325xFYbQ9v2yDhAlxRCBwB-MERVALRhUsiPjKWNAFiR1LVxgdxB8M8VVXD6ZBMQllGFdfjmIG0CGvig',
   inactivityTimeOut: 120*60,
-  gapi_config:gapiConfig,
   auth_config:auth_config,
 };
