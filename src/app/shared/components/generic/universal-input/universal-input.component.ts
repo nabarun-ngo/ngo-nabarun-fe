@@ -39,6 +39,17 @@ export class UniversalInputComponent {
     }
     return '';
   }
+
+  onDialCodeSelect(code: string) {
+  const number = this.ngControl.control?.value || '';
+
+  if (this.inputModel.props?.['separateDialCode'] === false) {
+    // prefix phone number with code inside the input
+    if (!number.startsWith(code)) {
+      this.ngControl.control?.setValue(`${code} ${number.replace(/^\+\d+\s*/, '')}`);
+    }
+  }
+}
   
 
 }

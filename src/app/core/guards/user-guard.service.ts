@@ -8,25 +8,25 @@ import { AppRoute } from '../constant/app-routing.const';
 })
 export class UserGuardService {
 
-  AppRoutes= AppRoute;
+  AppRoutes = AppRoute;
   constructor(
-      private identityService: UserIdentityService,
-      private router: Router,
-      ) {
-      
+    private identityService: UserIdentityService,
+    private router: Router,
+  ) {
+
+  }
+  async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
+    let isProfileUpdated = await this.identityService.isProfileUpdated();
+    if (isProfileUpdated) {
+      return true;
     }
-    async canActivate(route: ActivatedRouteSnapshot,state: RouterStateSnapshot): Promise<boolean> {   
-      let isProfileUpdated =await this.identityService.isProfileUpdated();  
-      if (isProfileUpdated) {
-        return true;
-      }
-      else if(state.url == this.AppRoutes.secured_member_complete_my_profile_page.url){
-        return true;
-      }
-      else{
-        this.router.navigateByUrl(this.AppRoutes.secured_member_complete_my_profile_page.url);     
-        return false;
-      }
-    
+    else if (state.url == this.AppRoutes.secured_member_complete_my_profile_page.url) {
+      return true;
     }
+    else {
+      this.router.navigateByUrl(this.AppRoutes.secured_member_complete_my_profile_page.url);
+      return false;
+    }
+
+  }
 }

@@ -10,11 +10,11 @@
                         <a [routerLink]="[app_route.secured_member_roles_page.url]" class="bg-indigo-600 py-3 px-6 w-full text-white font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">Manage Roles</a>
                     </div>
                 </div>
-                <mat-card class="p-4 m-4" *ngIf="memberList.content?.length == 0  || (memberList.content?.length != 0 && (memberList.content | memberSearch:searchValue).length === 0)">
+                <mat-card class="p-4 m-4" *ngIf="memberList.items.length == 0  || (memberList.items.length != 0 && (memberList.items | memberSearch:searchValue).length === 0)">
                     <div class="text-center">No member found.</div>
                 </mat-card>
                 <div class="container mx-auto grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 pt-6 gap-4">
-                    <app-profile-card *ngFor="let profile of memberList.content | memberSearch:searchValue" [profile]="profile"></app-profile-card>
+                    <app-profile-card *ngFor="let profile of memberList.items | memberSearch:searchValue" [profile]="profile" ></app-profile-card>
                 </div>
                 <mat-paginator class="mt-4" style="background-color: transparent;" (page)="handlePageEvent($event)" [length]="itemLength$ | async" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" [pageIndex]="pageNumber" aria-label="Select page">
                 </mat-paginator>

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { KeyValue } from '../api/models';
+import { KeyValue as KeyValue2 } from '../api/models';
 
 @Injectable({
   providedIn: 'root'
@@ -15,14 +15,14 @@ export class SharedDataService {
   //isAuthenticated = this.isAuthenticatedSource.asObservable();
 
   private refDataMap: Map<string, {
-    [key: string]: KeyValue[];
+    [key: string]:  KeyValue2[] ;
   }> = new Map();
 
   setPageName(param: string) { this.pageNameSource.next(param) }
   //setAuthenticated(param: boolean) { this.isAuthenticatedSource.next(param) }
 
   setRefData(name: string, data: {
-    [key: string]: KeyValue[];
+    [key: string]: KeyValue2[];
   }) { this.refDataMap.set(name, data) }
   getRefData(name: string) { return this.refDataMap.get(name) }
 

@@ -1,0 +1,36 @@
+<mat-form-field [appearance]="appearance" class="app-phone-number-field">
+
+  <div class="phone-wrapper">
+
+    <!-- Custom trigger — not the input itself -->
+    <button type="button"
+            class="country-trigger"
+            matPrefix
+            (click)="countrySelect.open()"
+            [disabled]="disabled">
+      {{ selectedCountry.flag }} {{ selectedCountry.name }} ({{ selectedCountry.dialCode }})
+      <mat-icon class="arrow">arrow_drop_down</mat-icon>
+    </button>
+
+    <!-- Hidden actual select -->
+    <mat-select #countrySelect
+                [(value)]="selectedCountry"
+                (selectionChange)="updateValue()"
+                class="hidden-select">
+      <mat-option *ngFor="let c of countries" [value]="c">
+        {{ c.flag }} {{ c.name }} ({{ c.dialCode }})
+      </mat-option>
+    </mat-select>
+
+    <!-- Phone text box -->
+    <input matInput
+           type="tel"
+           [(ngModel)]="phone"
+           [placeholder]="placeholder"
+           (input)="updateValue()"
+           [disabled]="disabled"
+            />
+  </div>
+
+
+</mat-form-field>

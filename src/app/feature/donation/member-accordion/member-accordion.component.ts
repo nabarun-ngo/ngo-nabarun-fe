@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { DonationList, MemberList } from '../donation.model';
 import {
   DocumentMapping,
@@ -15,17 +15,14 @@ import { ModalService } from 'src/app/core/service/modal.service';
 import { SearchAndAdvancedSearchFormComponent } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search-form.component';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
 import { MemberProfileComponent } from '../../member/member-profile/member-profile.component';
-import { ProfileViewComponent } from 'src/app/shared/components/profile-view/profile-view.component';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { MemberProfileModel } from '../../member/member-profile/member-profile.model';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 import { SCOPE } from 'src/app/core/constant/auth-scope.const';
 import { DetailedDonationComponent } from 'src/app/shared/components/detailed-donation/detailed-donation.component';
-import { DonationAccordionComponent } from '../donation-accordion/donation-accordion.component';
 import { FileUpload } from 'src/app/shared/components/generic/file-upload/file-upload.component';
 import { removeNullFields } from 'src/app/core/service/utilities.service';
 import { AppDialog } from 'src/app/core/constant/app-dialog.const';
-import { AppAlert } from 'src/app/core/constant/app-alert.const';
 
 @Component({
   selector: 'app-member-accordion',
@@ -164,9 +161,9 @@ export class MemberAccordionComponent implements OnInit {
         fullScreen: true,
       }
     );
-    modal.componentInstance.dialogClose.subscribe((d) => {
-      modal.close();
-    });
+    // modal.componentInstance.dialogClose.subscribe((d) => {
+    //   modal.close();
+    // });
   }
 
   isBulkEdit(donations: DonationList[]): boolean {

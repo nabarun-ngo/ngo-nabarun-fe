@@ -59,6 +59,7 @@ export const environment = {
   name:'STAGE-WEB '+version,
   max_idle_time_in_sec: 10,
   api_base_url: apiBaseUrl,
+  api_base_url2: 'https://nabarun-be-nest-vwwodl3alq-uc.a.run.app',
   auth_config: auth_config,
   firebase_config: firebaseConfig,
   firebase_vapidKey:'BBDkLXhO325xFYbQ9v2yDhAlxRCBwB-MERVALRhUsiPjKWNAFiR1LVxgdxB8M8VVXD6ZBMQllGFdfjmIG0CGvig',

@@ -9,6 +9,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { NotificationModalComponent, SnackComponent } from './component/notification-modal/notification-modal.component';
 import { environment } from 'src/environments/environment';
 import { ApiModule } from './api/api.module';
+import { ApiModule as ApiClientModule } from './api-client/api.module';
 import { HttpErrorIntercepterService } from './intercepter/http-error-intercepter.service';
 import { NgHttpLoaderModule } from 'ng-http-loader';
 import { RouterModule } from '@angular/router';
@@ -44,6 +45,9 @@ import { BaseModalComponent } from './component/base-modal/base-modal.component'
     MatDialogModule,
     ApiModule.forRoot({
       rootUrl: environment.api_base_url
+    }),
+    ApiClientModule.forRoot({
+      rootUrl: environment.api_base_url2
     }),
     NgHttpLoaderModule.forRoot(),
     RouterModule,

@@ -9,6 +9,7 @@ import { AuthConfig } from "@auth0/auth0-angular";
 const authDomain = 'dev-u2aco2py.us.auth0.com';
 const authClientId = '8DLWlfdUodZhM8nW2HRKFYL7GjBxMbGH';
 const apiBaseUrl= 'http://localhost:8082';
+const apiBaseUrl2= 'http://localhost:8080';
 
 const auth_config:AuthConfig={
   domain: authDomain,
@@ -19,7 +20,7 @@ const auth_config:AuthConfig={
     audience: 'https://nabarun.resourceserver.api' ,
   },
   httpInterceptor:{
-    allowedList:['http://localhost:8082/api/*']
+    allowedList:[`${apiBaseUrl}/api/*`,`${apiBaseUrl2}/api/*`]
   },
 }
 
@@ -55,6 +56,7 @@ export const environment = {
   name:'DEV-WEB '+version,
   max_idle_time_in_sec: 10,
   api_base_url: apiBaseUrl,
+  api_base_url2: apiBaseUrl2,
   firebase_config: firebaseConfig,
   firebase_vapidKey:'BBDkLXhO325xFYbQ9v2yDhAlxRCBwB-MERVALRhUsiPjKWNAFiR1LVxgdxB8M8VVXD6ZBMQllGFdfjmIG0CGvig',
   inactivityTimeOut: 120*60,
