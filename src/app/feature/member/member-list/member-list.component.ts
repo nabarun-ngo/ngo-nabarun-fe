@@ -2,17 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MemberService } from '../member.service';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
-import { KeyValue, PaginateUserDetail } from 'src/app/core/api/models';
 import { MemberDefaultValue } from '../member.const';
 import { PageEvent } from '@angular/material/paginator';
-import { BehaviorSubject, Observable } from 'rxjs';
 import { Paginator } from 'src/app/shared/utils/paginator';
-import { FormGroup } from '@angular/forms';
-import { UniversalInputModel } from 'src/app/shared/model/universal-input.model';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
-import { MemberSearchPipe } from '../member.pipe';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
+import { KeyValue, PagedResultUserDto } from 'src/app/core/api-client/models';
 
 @Component({
   selector: 'app-member-list',
@@ -21,7 +17,7 @@ import { NavigationButtonModel } from 'src/app/shared/components/generic/page-na
 })
 export class MemberListComponent extends Paginator implements OnInit {
 
-  memberList!: PaginateUserDetail;
+  memberList!: PagedResultUserDto;
   searchValue!: string;
   refData!: { [key: string]: KeyValue[]; };
   protected app_route = AppRoute;
@@ -51,8 +47,8 @@ export class MemberListComponent extends Paginator implements OnInit {
     }
 
     if (this.route.snapshot.data['data']) {
-      this.memberList = this.route.snapshot.data['data'] as PaginateUserDetail;
-      this.itemLengthSubs.next(this.memberList?.totalSize!);
+      this.memberList = this.route.snapshot.data['data'] as PagedResultUserDto;
+      this.itemLengthSubs.next(this.memberList?.total!);
       //console.log(this.memberList)
     }
 
@@ -129,7 +125,7 @@ export class MemberListComponent extends Paginator implements OnInit {
     this.pageSize = $event.pageSize;
     this.memberService.fetchMembers(this.pageNumber, this.pageSize).subscribe(data => {
       this.memberList = data!;
-      this.itemLengthSubs.next(data?.totalSize!);
+      this.itemLengthSubs.next(data?.total!);
     });
 
   }
@@ -143,8 +139,11 @@ export class MemberListComponent extends Paginator implements OnInit {
         firstName: $event.value.firstName,
         lastName: $event.value.lastName,
         phoneNumber: $event.value.phoneNumber,
-        role: $event.value.role
-      }).subscribe(data => this.memberList = data!)
+        role: $event.value.role as string[]
+      }).subscribe(data => {
+        this.memberList = data!
+        console.log(this.memberList)
+      })
     }
     else if ($event.advancedSearch && $event.reset) {
       console.log($event.value)

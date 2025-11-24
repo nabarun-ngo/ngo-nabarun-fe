@@ -48,6 +48,7 @@ import { DisplayValueFilterPipe } from './pipes/display-value-filter.pipe';
 import { PageNavigationButtonsComponent } from './components/generic/page-navigation-buttons/page-navigation-buttons.component';
 import { PageLayoutComponent } from './layout/page-layout/page-layout.component';
 import { DocumentLinkComponent } from './components/document-link/document-link.component';
+import { AppPhoneNumberComponent } from './components/generic/phone-number/app-phone-number.component';
 
 @NgModule({
   declarations: [
@@ -73,6 +74,7 @@ import { DocumentLinkComponent } from './components/document-link/document-link.
     PageLayoutComponent,
     DocumentLinkComponent,
     FloatingActionButtonComponent,
+    AppPhoneNumberComponent
   ],
   imports: [
     CommonModule,
@@ -132,32 +134,33 @@ import { DocumentLinkComponent } from './components/document-link/document-link.
     PageNavigationButtonsComponent,
     PageLayoutComponent,
     MatCheckboxModule,
-  DocumentLinkComponent,
-  FloatingActionButtonComponent
+    DocumentLinkComponent,
+    FloatingActionButtonComponent,
+    AppPhoneNumberComponent
   ],
   providers: [{
     provide: MAT_RADIO_DEFAULT_OPTIONS,
     useValue: { color: 'primary' },
-  }, 
+  },
   {
     provide: MAT_CHECKBOX_DEFAULT_OPTIONS,
     useValue: { color: 'primary' },
   },
   {
-    provide:MAT_DIALOG_DATA,
-    useValue:{}
+    provide: MAT_DIALOG_DATA,
+    useValue: {}
   },
-  // {
-  //   provide:MAT_SELECT_SCROLL_STRATEGY,
-  //   useValue:{}
-  // },
-  // {
-  //   provide:MatDatepicker,
-  //   useValue:{}
-  // }
-  //MemberSearchPipe,
-],
-  
+    // {
+    //   provide:MAT_SELECT_SCROLL_STRATEGY,
+    //   useValue:{}
+    // },
+    // {
+    //   provide:MatDatepicker,
+    //   useValue:{}
+    // }
+    //MemberSearchPipe,
+  ],
+
 
 })
 export class SharedModule { }

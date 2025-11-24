@@ -29,6 +29,14 @@ export class HttpErrorIntercepterService implements HttpInterceptor {
         }
       })
     }
+
+    if(request.url.includes(environment.api_base_url2)){
+      request = request.clone({
+        setHeaders:{
+          'Correlation-Id': uuid.v4()
+        }
+      })
+    }
     
     //console.log(request.headers.get('Correlation-Id'))
 

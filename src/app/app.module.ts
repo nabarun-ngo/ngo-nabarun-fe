@@ -13,8 +13,6 @@ import { provideDatabase, getDatabase } from '@angular/fire/database';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { environment } from 'src/environments/environment';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { RouteReuseStrategy } from '@angular/router';
-import { IonicRouteStrategy } from '@ionic/angular';
 
 @NgModule({
   declarations: [
@@ -26,16 +24,16 @@ import { IonicRouteStrategy } from '@ionic/angular';
     CommonModule,
     BrowserAnimationsModule,
     CoreModule,
-  provideFirebaseApp(() => initializeApp(environment.firebase_config)),
-  provideMessaging(() => getMessaging()),
-  provideDatabase(() => getDatabase()),
-  provideAuth(() => getAuth()),
+    provideFirebaseApp(() => initializeApp(environment.firebase_config)),
+    provideMessaging(() => getMessaging()),
+    provideDatabase(() => getDatabase()),
+    provideAuth(() => getAuth()),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       registrationStrategy: 'registerWhenStable:30000'
     }),
   ],
-  providers: [BnNgIdleService,{provide:RouteReuseStrategy,useClass:IonicRouteStrategy}],
+  providers: [BnNgIdleService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

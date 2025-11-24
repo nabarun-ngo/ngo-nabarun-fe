@@ -14,8 +14,8 @@ export interface JobDetail {
 'methodName'?: string;
 'fileName'?: string;
 'lineNumber'?: number;
-'className'?: string;
 'nativeMethod'?: boolean;
+'className'?: string;
 }>;
 'message'?: string;
 'suppressed'?: Array<{
@@ -26,8 +26,8 @@ export interface JobDetail {
 'methodName'?: string;
 'fileName'?: string;
 'lineNumber'?: number;
-'className'?: string;
 'nativeMethod'?: boolean;
+'className'?: string;
 }>;
 'message'?: string;
 'localizedMessage'?: string;
@@ -41,8 +41,8 @@ export interface JobDetail {
 'methodName'?: string;
 'fileName'?: string;
 'lineNumber'?: number;
-'className'?: string;
 'nativeMethod'?: boolean;
+'className'?: string;
 }>;
 'message'?: string;
 'suppressed'?: Array<{
@@ -53,8 +53,8 @@ export interface JobDetail {
 'methodName'?: string;
 'fileName'?: string;
 'lineNumber'?: number;
-'className'?: string;
 'nativeMethod'?: boolean;
+'className'?: string;
 }>;
 'message'?: string;
 'localizedMessage'?: string;

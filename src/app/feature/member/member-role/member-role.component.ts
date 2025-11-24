@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MemberService } from '../member.service';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { KeyValue, UserDetail } from 'src/app/core/api/models';
+import { KeyValue } from 'src/app/core/api/models';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { lastValueFrom } from 'rxjs';
 import { ModalService } from 'src/app/core/service/modal.service';
@@ -14,6 +14,7 @@ import { AdminService } from '../../admin/admin.service';
 import { FormGroup, Validators } from '@angular/forms';
 import { SearchAndAdvancedSearchFormComponent } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search-form.component';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
+import { UserDto } from 'src/app/core/api-client/models';
 
 @Component({
   selector: 'app-member-role',
@@ -27,7 +28,7 @@ export class MemberRoleComponent implements OnInit {
 
   roleUserMaping: { [roleCode: string]: {
     previousUsersId:string[];
-    currentUsers:UserDetail[];
+    currentUsers:UserDto[];
     errors?: { hasError: boolean, message: string, duplicates: string[] };
   } }={};
   userSearch:SearchAndAdvancedSearchModel={
@@ -53,7 +54,7 @@ export class MemberRoleComponent implements OnInit {
 
   rolesToEdit!: KeyValue[];
   navigations!: NavigationButtonModel[];
-  allMembers!: UserDetail[];
+  allMembers!: UserDto[];
 
   constructor(
     private sharedDataService: SharedDataService,
@@ -71,18 +72,18 @@ export class MemberRoleComponent implements OnInit {
       this.refData = this.route.snapshot.data['ref_data'];
     }
 
-    this.rolesToEdit = this.refData['availableRoles'];
+    this.rolesToEdit = this.refData['availableRoles'].filter(f=>f.key != 'MEMBER');
 
     for (const f of this.rolesToEdit) {
-      const data = await lastValueFrom(this.memberService.fetchMembersByRole(f.key!));
+      const data = await lastValueFrom(this.memberService.fetchMembersByRole([f.key!]));
 
       this.roleUserMaping[f.key!]={
-        currentUsers:data?.content!,
-        previousUsersId:data?.content!.map(m=>m.userId) as string[],
+        currentUsers:data?.items!,
+        previousUsersId:data?.items!.map(m=>m.userId) as string[],
       }
 
     }
-    this.allMembers = (await lastValueFrom(this.memberService.fetchAllMembers()))?.content!;
+    this.allMembers = (await lastValueFrom(this.memberService.fetchAllMembers()))?.items!;
 
     this.navigations = [
       {
@@ -94,7 +95,7 @@ export class MemberRoleComponent implements OnInit {
 
 
 
-  drop(event: CdkDragDrop<UserDetail[]>) {
+  drop(event: CdkDragDrop<UserDto[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -108,7 +109,7 @@ export class MemberRoleComponent implements OnInit {
     this.checkDuplicate()
   }
 
-  clone(key: string, profile: UserDetail) {
+  clone(key: string, profile: UserDto) {
     this.roleUserMaping[key].currentUsers.push(profile)
     this.checkDuplicate()
   }
@@ -132,7 +133,7 @@ export class MemberRoleComponent implements OnInit {
 
   }
 
-  remove(key: string, profile: UserDetail) {
+  remove(key: string, profile: UserDto) {
     let index = this.roleUserMaping[key].currentUsers.indexOf(profile);
     this.roleUserMaping[key].currentUsers.splice(index, 1)
     this.checkDuplicate()
@@ -183,9 +184,9 @@ export class MemberRoleComponent implements OnInit {
         }
       }
       if (isChanged) {
-        this.adminService.clearCache(['auth0_role_users']).subscribe(data => {
+       // this.adminService.clearCache(['auth0_role_users']).subscribe(data => {
           this.router.navigateByUrl(this.app_route.secured_member_members_page.url)
-        })
+       // })
       } else {
         this.modalService.openNotificationModal(AppDialog.err_no_change_made, 'notification', 'error');
       }

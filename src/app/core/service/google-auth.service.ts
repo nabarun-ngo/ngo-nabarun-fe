@@ -11,18 +11,18 @@ export class GoogleAuthService {
   constructor(protected zone: NgZone) {}
 
   private initClient() {
-    const updateSigninStatus = this.updateSigninStatus.bind(this);
-    gapi.client
-      .init(environment.gapi_config)
-      .then(() => {
-        this.zone.run(() => {
-          // Listen for sign-in state changes.
-          gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+    //const updateSigninStatus = this.updateSigninStatus.bind(this);
+    // gapi.client
+    //   .init(environment.gapi_config)
+    //   .then(() => {
+    //     this.zone.run(() => {
+    //       // Listen for sign-in state changes.
+    //       gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
 
-          // Handle the initial sign-in state.
-          updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-        });
-      });
+    //       // Handle the initial sign-in state.
+    //       updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+    //     });
+    //   });
   }
 
   updateSigninStatus(isSignedIn: boolean) {
@@ -53,6 +53,6 @@ export class GoogleAuthService {
   async initialize() {
     console.log('Hellociation')
     await this.loadGapi();
-    gapi.load('client:auth2', this.initClient.bind(this));
+    //gapi.load('client:auth2', this.initClient.bind(this));
   }
 }
