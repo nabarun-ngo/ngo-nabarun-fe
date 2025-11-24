@@ -7,6 +7,7 @@ export interface WorkflowInstanceDto {
   completedAt?: string;
   createdAt: string;
   currentStepId?: string | null;
+  description: string;
   failureReason?: string;
   id: string;
   initiatedById?: string;

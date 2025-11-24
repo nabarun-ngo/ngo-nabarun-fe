@@ -34,6 +34,7 @@ const gapiConfig ={
 const authDomain = 'sso-nabarun.us.auth0.com';
 const authClientId ='8AzSWAAYeZdRC7taAICQkkxqpbtc3Bqm';
 const apiBaseUrl='https://ngonabarun.appspot.com';
+const apiBaseUrl2='';
 
 const auth_config:AuthConfig={
   domain: authDomain,
@@ -60,7 +61,7 @@ export const environment = {
   name:version,
   max_idle_time_in_sec: 600,
   api_base_url: apiBaseUrl,
-  api_base_url2: 'http://localhost:8080',
+  api_base_url2: apiBaseUrl2,
   auth_config: auth_config,
   firebase_config: firebaseConfig,
   firebase_vapidKey:'BG5qo111TmZDK1avMtzLlbzw3w5lsN6-iAyrg-giZ7RSAmm9xh9CvapLAdTmz4JXLboiQ8_c9toYK7PDxHDWzSs',
