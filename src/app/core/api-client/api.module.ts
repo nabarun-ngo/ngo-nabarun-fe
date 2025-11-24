@@ -12,7 +12,7 @@ import { OAuthService } from './services/o-auth.service';
 import { ApiKeyService } from './services/api-key.service';
 import { WorkflowsService } from './services/workflows.service';
 import { DonationsService } from './services/donations.service';
-import { DocumentManagementSystemDmsService } from './services/document-management-system-dms.service';
+import { DmsService } from './services/dms.service';
 import { PublicService } from './services/public.service';
 import { HealthService } from './services/health.service';
 
@@ -30,7 +30,7 @@ import { HealthService } from './services/health.service';
     ApiKeyService,
     WorkflowsService,
     DonationsService,
-    DocumentManagementSystemDmsService,
+    DmsService,
     PublicService,
     HealthService,
     ApiConfiguration

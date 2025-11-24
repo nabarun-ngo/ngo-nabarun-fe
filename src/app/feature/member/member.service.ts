@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
 import { UserDto, UserUpdateAdminDto, UserUpdateDto } from 'src/app/core/api-client/models';
-import { DocumentManagementSystemDmsService, UserService } from 'src/app/core/api-client/services';
+import { DmsService, UserService } from 'src/app/core/api-client/services';
 import { CommonControllerService, UserControllerService } from 'src/app/core/api/services';
 
 @Injectable({
@@ -13,7 +13,7 @@ export class MemberService {
     private userController: UserControllerService,
     private commonController: CommonControllerService,
     private userService: UserService,
-    private dmsService: DocumentManagementSystemDmsService,
+    private dmsService: DmsService,
 
   ) { }
 

@@ -8,6 +8,6 @@ export { OAuthService } from './services/o-auth.service';
 export { ApiKeyService } from './services/api-key.service';
 export { WorkflowsService } from './services/workflows.service';
 export { DonationsService } from './services/donations.service';
-export { DocumentManagementSystemDmsService } from './services/document-management-system-dms.service';
+export { DmsService } from './services/dms.service';
 export { PublicService } from './services/public.service';
 export { HealthService } from './services/health.service';

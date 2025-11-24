@@ -4,5 +4,6 @@
 
 export interface DocMapDto {
   entityId: string;
-  entityType: string;
+  entityType: {
+};
 }

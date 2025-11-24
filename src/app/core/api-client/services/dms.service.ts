@@ -11,19 +11,19 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { dmsControllerDownloadDocument } from '../fn/document-management-system-dms/dms-controller-download-document';
-import { DmsControllerDownloadDocument$Params } from '../fn/document-management-system-dms/dms-controller-download-document';
-import { dmsControllerGetDocuments } from '../fn/document-management-system-dms/dms-controller-get-documents';
-import { DmsControllerGetDocuments$Params } from '../fn/document-management-system-dms/dms-controller-get-documents';
-import { dmsControllerUploadFile } from '../fn/document-management-system-dms/dms-controller-upload-file';
-import { DmsControllerUploadFile$Params } from '../fn/document-management-system-dms/dms-controller-upload-file';
-import { dmsControllerViewDocument } from '../fn/document-management-system-dms/dms-controller-view-document';
-import { DmsControllerViewDocument$Params } from '../fn/document-management-system-dms/dms-controller-view-document';
+import { dmsControllerDownloadDocument } from '../fn/dms/dms-controller-download-document';
+import { DmsControllerDownloadDocument$Params } from '../fn/dms/dms-controller-download-document';
+import { dmsControllerGetDocuments } from '../fn/dms/dms-controller-get-documents';
+import { DmsControllerGetDocuments$Params } from '../fn/dms/dms-controller-get-documents';
+import { dmsControllerUploadFile } from '../fn/dms/dms-controller-upload-file';
+import { DmsControllerUploadFile$Params } from '../fn/dms/dms-controller-upload-file';
+import { dmsControllerViewDocument } from '../fn/dms/dms-controller-view-document';
+import { DmsControllerViewDocument$Params } from '../fn/dms/dms-controller-view-document';
 import { SuccessResponse } from '../models/success-response';
 import { SuccessResponseDocumentDto } from '../models/success-response-document-dto';
 
 @Injectable({ providedIn: 'root' })
-export class DocumentManagementSystemDmsService extends BaseService {
+export class DmsService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
   }
