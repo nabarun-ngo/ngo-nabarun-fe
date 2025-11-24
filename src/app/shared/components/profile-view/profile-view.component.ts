@@ -194,9 +194,7 @@ export class ProfileViewComponent implements OnInit {
     this.socialMedia.twitterSM = this.profile.socialMediaLinks?.find(f => f.linkType == 'twitter');
     this.socialMedia.whatsappSM = this.profile.socialMediaLinks?.find(f => f.linkType == 'whatsapp');
 
-    this.applicableLM = this.refData[this.constant.refDataKey.loginMethods].filter(f=>
-      !this.profile.loginMethod.includes(f.key!)
-    )
+    
   }
 
 
@@ -227,6 +225,13 @@ export class ProfileViewComponent implements OnInit {
     }
     this.onUpdate.emit({ actionName: 'CHANGE_MODE', mode: 'edit_self', id: this.profile.id! })
 
+  }
+
+  editAdmin(){
+    this.applicableLM = this.refData[this.constant.refDataKey.loginMethods].filter(f=>
+      !this.profile.loginMethod.includes(f.key!)
+    )
+    this.onUpdate.emit({ actionName: 'CHANGE_MODE',mode:'edit_admin'})
   }
 
   updateDetailAdmin() {
@@ -341,7 +346,7 @@ export class ProfileViewComponent implements OnInit {
 
       console.log(this.editSelfForm.value)
       if (this.pictureBase64) {
-        //userDetail.pictureBase64 = sanitizeBase64(this.pictureBase64);
+        userDetail.picture = sanitizeBase64(this.pictureBase64);
       }
       this.onUpdate.emit({ actionName: 'SELF_UPDATE', profile: userDetail, id: this.profile.id! })
     } else {

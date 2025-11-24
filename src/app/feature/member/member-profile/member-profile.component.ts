@@ -11,6 +11,7 @@ import { AppAlert } from 'src/app/core/constant/app-alert.const';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 import { UserDto, UserUpdateAdminDto, UserUpdateDto } from 'src/app/core/api-client/models';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-member-profile',
@@ -80,21 +81,28 @@ export class MemberProfileComponent implements OnInit {
   }
 
   onNavigationClick($event: NavigationButtonModel) {
-    
+
   }
 
-  onUpdate($event: {
+  async onUpdate($event: {
     actionName: "SELF_UPDATE" | "CHANGE_MODE" | 'ADMIN_UPDATE' | "CHANGE_PASSWORD";
     profile?: UserUpdateAdminDto | UserUpdateDto;
     mode?: OperationMode;
     id?: string;
   }) {
     if ($event.actionName == 'SELF_UPDATE' || $event.actionName == 'CHANGE_PASSWORD') {
-      let userDetail: UserDto = compareObjects($event.profile, this.member);
+      //let userDetail: UserDto = compareObjects($event.profile, this.member);
       // if (this.isSelfCompleteProfile) {
       //   userDetail.profileCompleted = true;
       // }
-      this.memberService.updateMyProfiledetail($event.profile as UserUpdateDto).subscribe(data => {
+      let user = $event.profile as UserUpdateDto;
+
+      if (user.picture) {
+        const pic = await firstValueFrom(this.memberService.uploadPicture($event.id!, user.picture));
+        user.picture = pic.fileUrl;
+      }
+
+      this.memberService.updateMyProfiledetail(user).subscribe(data => {
         this.member = data!
         this.mode = 'view_self';
         this.alertList.push(AppAlert.profile_updated_self)
