@@ -3,6 +3,7 @@ export const SCOPE = {
         transactions: 'read:transactions',
         accounts: 'read:accounts',
         expenses: 'read:expenses',
+        earnings: 'read:earnings',
         apikey: 'read:apikey',
         document_list: 'read:document_list',
         donation_documents: 'read:donation_documents',
@@ -22,6 +23,7 @@ export const SCOPE = {
         user: 'create:user',
         transaction: 'create:transaction',
         expense: 'create:expense',
+        earning: 'create:earning',
         account: 'create:account',
         expense_final: 'create:expense_final',
         expense_settle: 'create:expense_settle',
@@ -34,6 +36,7 @@ export const SCOPE = {
     update: {
         account: 'update:account',
         expense: 'update:expense',
+        earning: 'update:earning',
         apikey: 'update:apikey',
         donation: 'update:donation',
         notice: 'update:notice',
