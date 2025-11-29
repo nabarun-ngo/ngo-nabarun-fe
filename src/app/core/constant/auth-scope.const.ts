@@ -3,6 +3,7 @@ export const SCOPE = {
         transactions: 'read:transactions',
         accounts: 'read:accounts',
         expenses: 'read:expenses',
+        earnings: 'read:earnings',
         apikey: 'read:apikey',
         document_list: 'read:document_list',
         donation_documents: 'read:donation_documents',
@@ -16,11 +17,12 @@ export const SCOPE = {
         work: 'read:work',
         user: 'read:user',
         users: 'read:users',
-        actuator:'read:actuator'
+        actuator: 'read:actuator'
     },
     create: {
         transaction: 'create:transaction',
         expense: 'create:expense',
+        earning: 'create:earning',
         account: 'create:account',
         expense_final: 'create:expense_final',
         expense_settle: 'create:expense_settle',
@@ -33,6 +35,7 @@ export const SCOPE = {
     update: {
         account: 'update:account',
         expense: 'update:expense',
+        earning: 'update:earning',
         apikey: 'update:apikey',
         donation: 'update:donation',
         notice: 'update:notice',
@@ -40,19 +43,19 @@ export const SCOPE = {
         work: 'update:work',
         user: 'update:user',
         user_role: 'update:user_role',
-        actuator:'update:actuator'
+        actuator: 'update:actuator'
     },
     delete: {
         document: 'delete:document',
     }
 };
 
-export function getScopes(){
-    var scope='';
+export function getScopes() {
+    var scope = '';
 
     Object.values(SCOPE).forEach(level1 => {
-        Object.values(level1).forEach(level2=>{
-            scope=scope+' '+level2;
+        Object.values(level1).forEach(level2 => {
+            scope = scope + ' ' + level2;
         })
     })
     //console.log('Additional scope : '+scope)
