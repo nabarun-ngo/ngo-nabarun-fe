@@ -16,9 +16,10 @@ export const SCOPE = {
         work: 'read:work',
         user: 'read:user',
         users: 'read:users',
-        actuator:'read:actuator'
+        actuator: 'read:actuator'
     },
     create: {
+        user: 'create:user',
         transaction: 'create:transaction',
         expense: 'create:expense',
         account: 'create:account',
@@ -40,19 +41,19 @@ export const SCOPE = {
         work: 'update:work',
         user: 'update:user',
         user_role: 'update:user_role',
-        actuator:'update:actuator'
+        actuator: 'update:actuator'
     },
     delete: {
         document: 'delete:document',
     }
 };
 
-export function getScopes(){
-    var scope='';
+export function getScopes() {
+    var scope = '';
 
     Object.values(SCOPE).forEach(level1 => {
-        Object.values(level1).forEach(level2=>{
-            scope=scope+' '+level2;
+        Object.values(level1).forEach(level2 => {
+            scope = scope + ' ' + level2;
         })
     })
     //console.log('Additional scope : '+scope)

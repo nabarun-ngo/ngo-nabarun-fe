@@ -8,19 +8,19 @@ import { AuthConfig } from "@auth0/auth0-angular";
 
 const authDomain = 'sso-nabarun-test.us.auth0.com';
 const authClientId = 'RAcWqnITnhfXPTLhFLVtAzWxeujR5Znk';
-const apiBaseUrl='https://ngonabarun-stage.appspot.com';
-const apiBaseUrl2='https://nabarun-be-nest-vwwodl3alq-uc.a.run.app';
+const apiBaseUrl = 'https://ngonabarun-stage.appspot.com';
+const apiBaseUrl2 = 'https://api-dot-ngonabarun-stage.appspot.com';
 
-const auth_config:AuthConfig={
+const auth_config: AuthConfig = {
   domain: authDomain,
   clientId: authClientId,
   authorizationParams: {
-    redirect_uri: window.location.origin ,  
-    scope: 'openid profile email offline_access api auth_time family_name given_name email_verified exp phone_number picture sub iss iat aud ' + getScopes(), 
-    audience: 'https://nabarun.resourceserver.api' ,
+    redirect_uri: window.location.origin,
+    scope: 'openid profile email offline_access api auth_time family_name given_name email_verified exp phone_number picture sub iss iat aud ' + getScopes(),
+    audience: 'https://nabarun.resourceserver.api',
   },
-  httpInterceptor:{
-    allowedList:[
+  httpInterceptor: {
+    allowedList: [
       {
         uriMatcher(uri) {
           return uri.includes(apiBaseUrl) || uri.includes(apiBaseUrl2)
@@ -43,7 +43,7 @@ const firebaseConfig = {
   measurementId: "G-PT9V4XMXWY"
 };
 
-const gapiConfig ={
+const gapiConfig = {
   apiKey: 'AIzaSyDEQ5433AfdAoTOOCqjlK9K-Ep0FD8sdwg',
   clientId:
     '595475200212-gibsoge21ed013o9obcreldfpfncgops.apps.googleusercontent.com',
@@ -51,20 +51,20 @@ const gapiConfig ={
     'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest',
   ],
   scope: 'https://www.googleapis.com/auth/calendar.readonly',
-  plugin_name:'nabarun_app'
-  
+  plugin_name: 'nabarun_app'
+
 };
 
 export const environment = {
   production: false,
-  name:'STAGE-WEB '+version,
+  name: 'STAGE-WEB ' + version,
   max_idle_time_in_sec: 10,
   api_base_url: apiBaseUrl,
   api_base_url2: apiBaseUrl2,
   auth_config: auth_config,
   firebase_config: firebaseConfig,
-  firebase_vapidKey:'BBDkLXhO325xFYbQ9v2yDhAlxRCBwB-MERVALRhUsiPjKWNAFiR1LVxgdxB8M8VVXD6ZBMQllGFdfjmIG0CGvig',
-  inactivityTimeOut: 30*60,
+  firebase_vapidKey: 'BBDkLXhO325xFYbQ9v2yDhAlxRCBwB-MERVALRhUsiPjKWNAFiR1LVxgdxB8M8VVXD6ZBMQllGFdfjmIG0CGvig',
+  inactivityTimeOut: 30 * 60,
 };
 
 
