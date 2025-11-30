@@ -162,7 +162,7 @@ export class HeaderComponent implements OnInit {
   }
 
   async copy(){
-    const token = this.identityService.getAccessToken();
+    const token = await this.identityService.getAccessToken();
     await navigator.clipboard.writeText(token);
     alert('Token successfully copied.')
   }
