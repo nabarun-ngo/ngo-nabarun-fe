@@ -130,6 +130,10 @@ export class UserIdentityService {
     return await firstValueFrom(this.oAuthService.isAuthenticated$);
   }
 
+  async getAccessToken(){
+    return await firstValueFrom(this.oAuthService.getAccessTokenSilently());
+  }
+
   isAccrediatedTo(access: string): boolean {
     let scopes = this.grantedScopes;
     var result = scopes.includes(access);
