@@ -6,15 +6,19 @@ import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core
 import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
-import { JobMonitoringService } from './services/job-monitoring.service';
-import { UserService } from './services/user.service';
-import { OAuthService } from './services/o-auth.service';
-import { ApiKeyService } from './services/api-key.service';
-import { WorkflowsService } from './services/workflows.service';
-import { DonationsService } from './services/donations.service';
-import { DmsService } from './services/dms.service';
-import { PublicService } from './services/public.service';
-import { HealthService } from './services/health.service';
+import { JobMonitoringControllerService } from './services/job-monitoring-controller.service';
+import { UserControllerService } from './services/user-controller.service';
+import { OAuthControllerService } from './services/o-auth-controller.service';
+import { ApiKeyControllerService } from './services/api-key-controller.service';
+import { WorkflowControllerService } from './services/workflow-controller.service';
+import { DonationControllerService } from './services/donation-controller.service';
+import { AccountControllerService } from './services/account-controller.service';
+import { ExpenseControllerService } from './services/expense-controller.service';
+import { EarningControllerService } from './services/earning-controller.service';
+import { DmsControllerService } from './services/dms-controller.service';
+import { PublicControllerService } from './services/public-controller.service';
+import { CallbackControllerService } from './services/callback-controller.service';
+import { HealthControllerService } from './services/health-controller.service';
 
 /**
  * Module that provides all services and configuration.
@@ -24,15 +28,19 @@ import { HealthService } from './services/health.service';
   exports: [],
   declarations: [],
   providers: [
-    JobMonitoringService,
-    UserService,
-    OAuthService,
-    ApiKeyService,
-    WorkflowsService,
-    DonationsService,
-    DmsService,
-    PublicService,
-    HealthService,
+    JobMonitoringControllerService,
+    UserControllerService,
+    OAuthControllerService,
+    ApiKeyControllerService,
+    WorkflowControllerService,
+    DonationControllerService,
+    AccountControllerService,
+    ExpenseControllerService,
+    EarningControllerService,
+    DmsControllerService,
+    PublicControllerService,
+    CallbackControllerService,
+    HealthControllerService,
     ApiConfiguration
   ],
 })
