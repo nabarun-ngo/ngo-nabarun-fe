@@ -33,7 +33,7 @@
                                 <div class="grid grid-cols-1">
                                     <div class="py-2 text-center justify-center font-bold text-purple-700">Please pay your outstanding donation amount to the below account(s)</div>
 
-                                    <div class="grid divide-x-4 mt-4" *ngFor="let account of mySummary?.payableAccounts" [ngClass]="true ? 'grid-cols-12' : 'grid-cols-6'">
+                                    <div class="grid divide-x-4 mt-4" *ngFor="let account of payableAccounts" [ngClass]="true ? 'grid-cols-12' : 'grid-cols-6'">
                                         <div class="col-span-6" *ngIf="true">
                                             <div class="flex items-center justify-center space-x-2 font-semibold text-gray-900 leading-8">
                                                 <span clas="text-green-500">

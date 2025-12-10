@@ -9,7 +9,7 @@ import { date } from 'src/app/core/service/utilities.service';
   providedIn: 'root'
 })
 export class DonationService {
- 
+
 
   constructor(
     private donationController: DonationControllerService,
@@ -23,9 +23,9 @@ export class DonationService {
 
 
   async fetchMyDonations(pageIndex: number = 0, pageSize: number = 100) {
-    let id =  (await this.identityService.getUser()).profile_id;
+    let id = (await this.identityService.getUser()).profile_id;
     return firstValueFrom(combineLatest({
-      donations: this.donationController.getLoggedInUserDonations({ pageIndex: pageIndex, pageSize: pageSize, filter:{}}).pipe(map(d => d.responsePayload)),
+      donations: this.donationController.getLoggedInUserDonations({ pageIndex: pageIndex, pageSize: pageSize, filter: {} }).pipe(map(d => d.responsePayload)),
       summary: this.donationController.getDonationSummary({ donorId: id, includeOutstandingMonths: true, includePayableAccount: true }).pipe(map(d => d.responsePayload)),
     }))
   }
@@ -36,27 +36,27 @@ export class DonationService {
   fetchDonations(pageIndex: number = 0, pageSize: number = 100) {
     return this.donationController.getDonations({ pageIndex: pageIndex, pageSize: pageSize, filter: {} }).pipe(map(d => d.responsePayload));
   }
-  fetchMembers(pageIndex: number = 0, pageSize: number = 100,filter?:{firstName?:string;lastName?:string,status?:string[]}) {
-    let memberFilter:UserDetailFilter={};
-    if(filter){
-      if(filter.firstName){
-        memberFilter.firstName=filter.firstName
+  fetchMembers(pageIndex: number = 0, pageSize: number = 100, filter?: { firstName?: string; lastName?: string, status?: string[] }) {
+    let memberFilter: UserDetailFilter = {};
+    if (filter) {
+      if (filter.firstName) {
+        memberFilter.firstName = filter.firstName
       }
-      if(filter.lastName){
-        memberFilter.lastName=filter.lastName
+      if (filter.lastName) {
+        memberFilter.lastName = filter.lastName
       }
-      if(filter.status){
-        memberFilter.status=filter.status as any
+      if (filter.status) {
+        memberFilter.status = filter.status as any
       }
-    }else{
-      memberFilter.status=['ACTIVE','INACTIVE']
+    } else {
+      memberFilter.status = ['ACTIVE', 'INACTIVE']
     }
-    return this.userController.getUsers({ pageIndex: pageIndex, pageSize: pageSize ,filter:memberFilter}).pipe(map(m => m.responsePayload));
+    return this.userController.getUsers({ pageIndex: pageIndex, pageSize: pageSize, filter: memberFilter }).pipe(map(m => m.responsePayload));
   }
 
   fetchUserDonations(id: string, pageIndex: number = 0, pageSize: number = 100) {
     return combineLatest({
-      donations: this.donationController.getDonations({ filter:{ donorId: id }, pageIndex: pageIndex, pageSize: pageSize }).pipe(map(d => d.responsePayload)),
+      donations: this.donationController.getDonations({ filter: { donorId: id }, pageIndex: pageIndex, pageSize: pageSize }).pipe(map(d => d.responsePayload)),
       summary: this.donationController.getDonationSummary({ donorId: id, includeOutstandingMonths: true }).pipe(map(d => d.responsePayload))
     })
   }
@@ -66,82 +66,84 @@ export class DonationService {
   }
 
   fetchEvents() {
-    return this.eventController.getSocialEvents({eventFilter:{}}).pipe(map(m => m.responsePayload));
+    return this.eventController.getSocialEvents({ eventFilter: {} }).pipe(map(m => m.responsePayload));
   }
 
-  // fetchRefData(type?:DonationType,status?:DonationStatus) {
-  //   return this.commonController.getReferenceData({ names: [RefDataType.Donation,RefDataType.User], currentDonationStatus:status,donationType:type}).pipe(map(d => d.responsePayload));
-  // }
+  fetchRefData(type?: DonationType, status?: DonationStatus) {
+    return this.commonController.getReferenceData({ names: [RefDataType.Donation, RefDataType.User], currentDonationStatus: status, donationType: type }).pipe(map(d => d.responsePayload));
+  }
 
   updateDonation(id: string, details: DonationDetail) {
     return this.donationController.updateDonation({ id: id, body: details }).pipe(map(d => d.responsePayload));
   }
 
   uploadDocuments(documents: DocumentDetailUpload[]) {
-      return this.commonController
-        .uploadDocuments({
-          body: documents
-        })
-        .pipe(map((d) => d.responsePayload));
-    }
+    return this.commonController
+      .uploadDocuments({
+        body: documents
+      })
+      .pipe(map((d) => d.responsePayload));
+  }
 
-  updatePaymentInfo(id:string,action:string,donation:DonationDetail){
-    return this.donationController.payments({action:action,id:id,body:{
-      isPaymentNotified:donation.isPaymentNotified,
-    }}).pipe(map(d => d.responsePayload));
+  updatePaymentInfo(id: string, action: string, donation: DonationDetail) {
+    return this.donationController.payments({
+      action: action, id: id, body: {
+        isPaymentNotified: donation.isPaymentNotified,
+      }
+    }).pipe(map(d => d.responsePayload));
   }
 
   createDonation(donation: DonationDetail) {
-    return this.donationController.raiseDonation({body:donation}).pipe(map(d => d.responsePayload));
+    return this.donationController.raiseDonation({ body: donation }).pipe(map(d => d.responsePayload));
   }
 
   getPayableAccounts() {
-    return this.accountController.getAccounts({filter:{status:['ACTIVE'],type:['DONATION']}}).pipe(map(d => d.responsePayload));
+    return this.accountController.getAccounts({ filter: { status: ['ACTIVE'], type: ['DONATION'] } }).pipe(map(d => d.responsePayload));
   }
 
-  advancedSearch(filter:{
-    donationId?:string,
-    donationStatus?:string[],
-    donorName?:string,
-    startDate?:string,
-    endDate?:string,
-    donationType?:string[],
-    guest:boolean,
-    donorId?:string
-  }){
+  advancedSearch(filter: {
+    donationId?: string,
+    donationStatus?: string[],
+    donorName?: string,
+    startDate?: string,
+    endDate?: string,
+    donationType?: string[],
+    guest: boolean,
+    donorId?: string
+  }) {
     console.log(filter)
-    let filterOps:DonationDetailFilter={};
-    if(filter.donationId){
-      filterOps.donationId=filter.donationId
+    let filterOps: DonationDetailFilter = {};
+    if (filter.donationId) {
+      filterOps.donationId = filter.donationId
     }
-    if(filter.donationStatus){
-      filterOps.donationStatus=filter.donationStatus as any
+    if (filter.donationStatus) {
+      filterOps.donationStatus = filter.donationStatus as any
     }
-    if(filter.startDate){
-      filterOps.fromDate=date(filter.startDate,'yyyy-MM-dd')
+    if (filter.startDate) {
+      filterOps.fromDate = date(filter.startDate, 'yyyy-MM-dd')
     }
-    if(filter.endDate){
-      filterOps.toDate=date(filter.endDate,'yyyy-MM-dd')
+    if (filter.endDate) {
+      filterOps.toDate = date(filter.endDate, 'yyyy-MM-dd')
     }
-    if(filter.donationType){
-      filterOps.donationType=filter.donationType as any
+    if (filter.donationType) {
+      filterOps.donationType = filter.donationType as any
     }
-    if(filter.donorName){
-      filterOps.donorName=filter.donorName
+    if (filter.donorName) {
+      filterOps.donorName = filter.donorName
     }
-    if(filter.donorId){
-      filterOps.donorId=filter.donorId
+    if (filter.donorId) {
+      filterOps.donorId = filter.donorId
     }
-    filterOps.isGuest=filter.guest
-    return this.donationController.getDonations({ filter:filterOps}).pipe(map(d => d.responsePayload));
+    filterOps.isGuest = filter.guest
+    return this.donationController.getDonations({ filter: filterOps }).pipe(map(d => d.responsePayload));
   }
 
-  async getMyId(){
+  async getMyId() {
     return (await this.identityService.getUser()).profile_id;
   }
 
   getHistory(id: string) {
-    return this.donationController.getHistories({id:id}).pipe(map(d => d.responsePayload));
+    return this.donationController.getHistories({ id: id }).pipe(map(d => d.responsePayload));
   }
-  
+
 }
