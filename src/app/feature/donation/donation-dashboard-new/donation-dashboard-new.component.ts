@@ -52,7 +52,7 @@ export class DonationDashboardNewComponent extends StandardTabbedDashboard<donat
 
 
   protected get defaultTab(): donationTab {
-    return DonationDefaultValue.tabName as donationTab;
+    return 'self_donation';
   }
 
 
@@ -71,6 +71,7 @@ export class DonationDashboardNewComponent extends StandardTabbedDashboard<donat
 
   protected override onTabChangedHook(): void {
     this.searchInput = donationSearchInput(this.getCurrentTab(), this.refData!);
+    this.tabComponents[this.getCurrentTab()]?.loadData();
   }
 
 

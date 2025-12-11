@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { AccountDefaultValue, accountTab } from '../account.const';
-import { PaginateAccountDetail} from 'src/app/core/api/models';
+import { PaginateAccountDetail } from 'src/app/core/api/models';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
 import { SCOPE } from 'src/app/core/constant/auth-scope.const';
@@ -37,7 +37,7 @@ export class AccountDashboardComponent extends StandardTabbedDashboard<accountTa
       routerLink: AppRoute.secured_dashboard_page.url,
     },
   ];
-  
+
   /**
    * Overriding variables from StandardTabbedDashboard
    */
@@ -59,7 +59,7 @@ export class AccountDashboardComponent extends StandardTabbedDashboard<accountTa
     private sharedDataService: SharedDataService,
     protected override route: ActivatedRoute,
     private identityService: UserIdentityService
-  ) {super(route);}
+  ) { super(route); }
 
   protected override onInitHook(): void {
     this.searchInput = this.getSearchInput();
@@ -77,6 +77,7 @@ export class AccountDashboardComponent extends StandardTabbedDashboard<accountTa
 
   protected override onTabChangedHook(): void {
     this.searchInput = this.getSearchInput();
+    this.tabComponents[this.getCurrentTab()]?.loadData();
   }
 
   private getSearchInput(): SearchAndAdvancedSearchModel {

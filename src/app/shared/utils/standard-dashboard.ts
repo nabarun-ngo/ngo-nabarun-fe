@@ -2,6 +2,7 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { KeyValue } from 'src/app/core/api/models';
 
+
 /**
  * Standardized base class for all dashboard components.
  * Provides consistent patterns for:
@@ -12,19 +13,25 @@ import { KeyValue } from 'src/app/core/api/models';
 @Component({
   template: ''
 })
-export abstract class StandardDashboard<TData=any>
-  implements AfterViewInit,OnInit {
+export abstract class StandardDashboard<TData>
+  implements AfterViewInit, OnInit {
   /**
    * Initial data from resolver (if available)
    */
-  protected initialData?: TData;
+  #initialData?: TData;
+  get initialData(): TData | undefined {
+    return this.#initialData;
+  }
 
   /**
    * Reference data from resolver (if available)
    */
-  protected refData?: { [key: string]: KeyValue[] };
+  #refData?: { [key: string]: KeyValue[] };
+  get refData(): { [key: string]: KeyValue[] } | undefined {
+    return this.#refData;
+  }
 
-  constructor(protected route: ActivatedRoute) {}
+  constructor(protected route: ActivatedRoute) { }
 
   ngAfterViewInit(): void {
     // Allow child components to perform additional initialization
@@ -43,10 +50,10 @@ export abstract class StandardDashboard<TData=any>
   private handleRouteData(): void {
     // Extract data from resolver
     if (this.route.snapshot.data['data']) {
-      this.initialData = this.route.snapshot.data['data'] as TData;
+      this.#initialData = this.route.snapshot.data['data'] as TData;
     }
     if (this.route.snapshot.data['ref_data']) {
-      this.refData = this.route.snapshot.data['ref_data'];
+      this.#refData = this.route.snapshot.data['ref_data'];
     }
 
     // Allow child classes to perform additional route data handling

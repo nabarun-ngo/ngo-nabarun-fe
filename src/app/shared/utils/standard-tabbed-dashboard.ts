@@ -4,6 +4,9 @@ import { TabComponentInterface } from '../interfaces/tab-component.interface';
 import { StandardDashboard } from './standard-dashboard';
 import { SearchEvent } from '../components/search-and-advanced-search-form/search-event.model';
 
+type Final<T extends (...args: any[]) => any> =
+  T & { __finalBrand?: never };
+
 /**
  * Standardized base class for all tabbed dashboard components.
  * Provides consistent patterns for:
@@ -15,17 +18,26 @@ import { SearchEvent } from '../components/search-and-advanced-search-form/searc
 @Component({
   template: ''
 })
-export abstract class StandardTabbedDashboard<TTab extends string | number, TData=any>
+export abstract class StandardTabbedDashboard<TTab extends string | number, TData>
   extends StandardDashboard<TData>
-  implements AfterViewInit,OnInit {
+  implements AfterViewInit, OnInit {
 
-  protected tabIndex: number = 0;
+  #tabIndex: number = 0;
+
+  get tabIndex(): number {
+    return this.#tabIndex;
+  }
+
+  set tabIndex(value: number) {
+    this.#tabIndex = value;
+  }
+
   protected abstract tabMapping: TTab[];
 
   /**
    * Track visited tabs for lazy loading (optional feature)
    */
-  protected visitedTabs: Set<TTab> = new Set();
+  #visitedTabs: Set<TTab> = new Set();
 
   /**
    * Map of tab types to their corresponding components
@@ -39,7 +51,7 @@ export abstract class StandardTabbedDashboard<TTab extends string | number, TDat
    */
   protected abstract get defaultTab(): TTab;
 
-  constructor(protected override route: ActivatedRoute) {super(route);}
+  constructor(protected override route: ActivatedRoute) { super(route); }
 
 
   override ngOnInit(): void {
@@ -61,24 +73,15 @@ export abstract class StandardTabbedDashboard<TTab extends string | number, TDat
     }
   }
 
-  /**
-   * Standard tab change handling
-   */
-  protected tabChanged(index: number): void {
+  protected tabChanged: Final<(index: number) => void> = (index: number) => {
     this.tabIndex = index;
-    // Mark current tab as visited for lazy loading
-    this.visitedTabs.add(this.getCurrentTab());
+    this.#visitedTabs.add(this.getCurrentTab());
 
-    // Allow child classes to perform tab-specific operations
-    // Trigger data load in the newly active tab after a slight delay to ensure view is updated
     setTimeout(() => {
       this.tabComponents[this.getCurrentTab()]?.loadData();
       this.onTabChangedHook();
     });
-
-    // Child components will handle their own data loading
-    // No direct API calls from parent needed
-  }
+  };
 
   /**
    * Standard search forwarding to active tab
@@ -124,7 +127,7 @@ export abstract class StandardTabbedDashboard<TTab extends string | number, TDat
    * Override this method to implement custom lazy loading logic
    */
   protected shouldLoadTab(tab: TTab): boolean {
-    return this.visitedTabs.has(tab);
+    return this.#visitedTabs.has(tab);
   }
 
   // Hooks for child classes to implement
@@ -135,7 +138,7 @@ export abstract class StandardTabbedDashboard<TTab extends string | number, TDat
    */
   protected override onHandleRouteDataHook(): void {
     // Mark initial tab as visited for lazy loading
-    this.visitedTabs.add(this.getCurrentTab());
+    this.#visitedTabs.add(this.getCurrentTab());
     super.onHandleRouteDataHook();
     // Default implementation - no action needed
   }

@@ -25,6 +25,7 @@ export class SelfDonationTabComponent extends Accordion<DonationDto> implements 
   }
 
   override ngOnInit(): void {
+    console.log(this.accordionData)
     this.setHeaderRow([
       {
         value: 'Donation Type',

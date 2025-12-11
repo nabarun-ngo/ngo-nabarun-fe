@@ -15,7 +15,7 @@ import { AdminGlobalConfigTabComponent } from './admin-global-config-tab/admin-g
   templateUrl: './admin-dashboard.component.html',
   styleUrls: ['./admin-dashboard.component.scss']
 })
-export class AdminDashboardComponent extends StandardTabbedDashboard<adminTabs> {
+export class AdminDashboardComponent extends StandardTabbedDashboard<adminTabs, any> {
 
   /**
      * Declariring variables
