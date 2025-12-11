@@ -32,4 +32,4 @@ export function referenceData(http: HttpClient, rootUrl: string, params?: Refere
   );
 }
 
-referenceData.PATH = '/api/users/referenceData';
+referenceData.PATH = '/api/users/static/referenceData';

@@ -28,4 +28,4 @@ export function getReferenceData(http: HttpClient, rootUrl: string, params?: Get
   );
 }
 
-getReferenceData.PATH = '/api/donation/referenceData';
+getReferenceData.PATH = '/api/donation/static/referenceData';

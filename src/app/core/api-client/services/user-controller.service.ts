@@ -239,7 +239,7 @@ export class UserControllerService extends BaseService {
   }
 
   /** Path part for operation `referenceData()` */
-  static readonly ReferenceDataPath = '/api/users/referenceData';
+  static readonly ReferenceDataPath = '/api/users/static/referenceData';
 
   /**
    * Get logged in user.

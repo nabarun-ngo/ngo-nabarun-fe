@@ -305,7 +305,7 @@ export class DonationControllerService extends BaseService {
   }
 
   /** Path part for operation `getReferenceData()` */
-  static readonly GetReferenceDataPath = '/api/donation/referenceData';
+  static readonly GetReferenceDataPath = '/api/donation/static/referenceData';
 
   /**
    * Get donation reference data.

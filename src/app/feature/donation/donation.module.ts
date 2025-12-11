@@ -9,6 +9,9 @@ import { MemberAccordionComponent } from './member-accordion/member-accordion.co
 import { DonationDashboardNewComponent } from './donation-dashboard-new/donation-dashboard-new.component';
 import { DonationDashboardComponent } from './donation-dashboard/donation-dashboard.component';
 import { DonationPipe, MemberSearchPipe } from './donation.pipe';
+import { SelfDonationTabComponent } from './donation-dashboard-new/self-donation-tab/self-donation-tab.component';
+import { GuestDonationTabComponent } from './donation-dashboard-new/guest-donation-tab/guest-donation-tab.component';
+import { MemberDonationTabComponent } from './donation-dashboard-new/member-donation-tab/member-donation-tab.component';
 
 
 @NgModule({
@@ -18,7 +21,10 @@ import { DonationPipe, MemberSearchPipe } from './donation.pipe';
     DonationAccordionComponent,
     MemberAccordionComponent,
     DonationPipe,
-    MemberSearchPipe
+    MemberSearchPipe,
+    SelfDonationTabComponent,
+    GuestDonationTabComponent,
+    MemberDonationTabComponent
   ],
   imports: [
     CommonModule,

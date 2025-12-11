@@ -8,20 +8,40 @@ export interface PagedResultAccountDetailDto {
   /**
    * List of items for the current page
    */
-  items: Array<AccountDetailDto>;
+  content: Array<AccountDetailDto>;
+
+  /**
+   * Size of the current content
+   */
+  currentSize: number;
+
+  /**
+   * Next page index
+   */
+  nextPageIndex: number;
 
   /**
    * Current page index (1-based or 0-based depending on API)
    */
-  page: number;
+  pageIndex: number;
 
   /**
    * Page size (number of items per page)
    */
-  size: number;
+  pageSize: number;
+
+  /**
+   * Previous page index
+   */
+  prevPageIndex: number;
+
+  /**
+   * Total number of pages
+   */
+  totalPages: number;
 
   /**
    * Total number of items across all pages
    */
-  total: number;
+  totalSize: number;
 }

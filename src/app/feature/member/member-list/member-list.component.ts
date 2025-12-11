@@ -48,7 +48,7 @@ export class MemberListComponent extends Paginator implements OnInit {
 
     if (this.route.snapshot.data['data']) {
       this.memberList = this.route.snapshot.data['data'] as PagedResultUserDto;
-      this.itemLengthSubs.next(this.memberList?.total!);
+      this.itemLengthSubs.next(this.memberList?.totalSize!);
       //console.log(this.memberList)
     }
 
@@ -125,7 +125,7 @@ export class MemberListComponent extends Paginator implements OnInit {
     this.pageSize = $event.pageSize;
     this.memberService.fetchMembers(this.pageNumber, this.pageSize).subscribe(data => {
       this.memberList = data!;
-      this.itemLengthSubs.next(data?.total!);
+      this.itemLengthSubs.next(data?.totalSize!);
     });
 
   }
