@@ -3,8 +3,8 @@
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                 <div class="flex lg:flex-row p-2 lg:p-4 justify-center items-start lg:items-stretch w-full">
-                    <app-search-and-advanced-search-form
-                        [searchInput]="searchInput"></app-search-and-advanced-search-form>
+                    <app-search-and-advanced-search-form [searchInput]="searchInput"
+                        (onSearch)="onSearch($event)"></app-search-and-advanced-search-form>
                 </div>
                 <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" class="mat-tab-group-mobile-scroll"
                     (selectedTabChange)="tabChanged($event.index)" [(selectedIndex)]="tabIndex">

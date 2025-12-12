@@ -8,29 +8,29 @@ import { isEmpty } from 'src/app/core/service/utilities.service';
   templateUrl: './notification-modal.component.html',
   styleUrls: ['./notification-modal.component.scss']
 })
-export class NotificationModalComponent implements OnInit{
+export class NotificationModalComponent implements OnInit {
 
-  protected details!:NotificationData;
+  protected details!: NotificationData;
 
   protected acceptEvent = new Subject<NotificationModalComponent>();
   onAccept$ = this.acceptEvent.asObservable();
 
   protected declineEvent = new Subject<NotificationModalComponent>();
   onDecline$ = this.declineEvent.asObservable();
-  
+
   constructor(
     private dialogRef: MatDialogRef<NotificationModalComponent>,
-    @Inject(MAT_DIALOG_DATA) data:NotificationData
+    @Inject(MAT_DIALOG_DATA) data: NotificationData
   ) {
-    
+
     this.details = data;
-    this.details.buttons.accept =  isEmpty(this.details.buttons.accept) ?'Yes':this.details.buttons.accept;
-    this.details.buttons.decline =  isEmpty(this.details.buttons.decline) ?'No':this.details.buttons.decline;
-    this.details.buttons.okay =  isEmpty(this.details.buttons.okay) ?'Okay':this.details.buttons.okay; 
-   //console.log(this.details)
+    this.details.buttons.accept = isEmpty(this.details.buttons.accept) ? 'Yes' : this.details.buttons.accept;
+    this.details.buttons.decline = isEmpty(this.details.buttons.decline) ? 'No' : this.details.buttons.decline;
+    this.details.buttons.okay = isEmpty(this.details.buttons.okay) ? 'Okay' : this.details.buttons.okay;
+    ////console.log(this.details)
   }
   ngOnInit(): void {
-    
+
   }
 
   /**
@@ -41,38 +41,38 @@ export class NotificationModalComponent implements OnInit{
    * In confirmation mode => display accept(convensioned color based on info) & decline(normal color) 
    */
 
-  close(){
+  close() {
     this.dialogRef.close();
   }
 
-  protected onAccept(){
+  protected onAccept() {
     this.acceptEvent.next(this);
     this.dialogRef.close();
   }
-  protected onDecline(){
+  protected onDecline() {
     this.declineEvent.next(this);
     this.dialogRef.close();
   }
 
 }
 
-export type AlertType= 'error' | 'info' | 'warning' | 'success';
-export type AlertMode= 'notification' | 'confirmation';
+export type AlertType = 'error' | 'info' | 'warning' | 'success';
+export type AlertMode = 'notification' | 'confirmation';
 
 
 
-export interface NotificationData{
-    title: string;
-    type: AlertType;
-    mode: AlertMode;
-    description: string;
-    moreDetails: any| string;
-    buttons: { accept: string ; decline: string; okay: string; };
-  }
+export interface NotificationData {
+  title: string;
+  type: AlertType;
+  mode: AlertMode;
+  description: string;
+  moreDetails: any | string;
+  buttons: { accept: string; decline: string; okay: string; };
+}
 
-  @Component({
-    selector: 'app-notification-modal',
-    template: `
+@Component({
+  selector: 'app-notification-modal',
+  template: `
     <div id="toast-success" class="flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert">
     <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
         <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
@@ -89,10 +89,10 @@ export interface NotificationData{
     </button>
 </div>
     `,
-  })
-  export class SnackComponent{
+})
+export class SnackComponent {
 
-  }
+}
 
 
 

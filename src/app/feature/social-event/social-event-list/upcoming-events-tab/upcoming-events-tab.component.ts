@@ -111,7 +111,7 @@ export class UpcomingEventsTabComponent extends Accordion<EventDetail> implement
     options?: { [key: string]: any }
   ): DetailedView[] {
     let isCreate = options && options!['create'];
-    console.log('data', data);
+    //console.log('data', data);
     return [
       eventDetailSection(data),
     ];
@@ -154,9 +154,9 @@ export class UpcomingEventsTabComponent extends Accordion<EventDetail> implement
     buttonId: string;
     rowIndex: number;
   }): void {
-    console.log('buttonId', event.buttonId);
-    console.log('rowIndex', event.rowIndex);
-    console.log('activeButtonId', this.activeButtonId);
+    //console.log('buttonId', event.buttonId);
+    //console.log('rowIndex', event.rowIndex);
+    //console.log('activeButtonId', this.activeButtonId);
     switch (event.buttonId) {
       // Create Event
       case 'confirm_create':
@@ -177,7 +177,7 @@ export class UpcomingEventsTabComponent extends Accordion<EventDetail> implement
       case 'CONFIRM':
         if (this.activeButtonId === 'edit') {
           var editForm = this.getSectionForm('event-detail', event.rowIndex)!;
-          console.log('editForm', editForm);
+          //console.log('editForm', editForm);
           editForm.markAllAsTouched();
           if (editForm.valid) {
             this.updateEvent(event.rowIndex, editForm.value);

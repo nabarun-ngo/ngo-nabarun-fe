@@ -107,7 +107,7 @@ export class DonationDashboardNewComponent extends StandardTabbedDashboard<donat
   //   // if (this.route.snapshot.data['ref_data']) {
   //   //   this.refData = this.route.snapshot.data['ref_data'];
   //   //   this.sharedDataService.setRefData('DONATION', this.refData!);
-  //   //   //console.log(refData,6)
+  //   //   ////console.log(refData,6)
   //   //   this.setRefData(this.refData);
   //   // }
 
@@ -197,7 +197,7 @@ export class DonationDashboardNewComponent extends StandardTabbedDashboard<donat
   // }
 
   // protected override prepareHighLevelView(data: DonationDto | UserDto, options?: { [key: string]: any; }): AccordionCell[] {
-  //   //console.log(data)
+  //   ////console.log(data)
   //   if (this.tabMapping[this.tabIndex] == 'self_donation') {
   //     let donation = data as DonationDto;
   //     return [

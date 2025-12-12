@@ -12,7 +12,7 @@ import { runInThisContext } from 'vm';
   providedIn: 'root'
 })
 export class CommonService {
-  
+
   cachedObservable!: Observable<{
     [key: string]: KeyValue[];
   }>;
@@ -26,9 +26,9 @@ export class CommonService {
   getRefData(names?: RefDataType[], options?: {
     donationStatus?: DonationStatus,
     donationType?: DonationType,
-    countryCode?:string,
-    stateCode?:string,
-    workflowType?:RequestType
+    countryCode?: string,
+    stateCode?: string,
+    workflowType?: RequestType
   }) {
     if (options) {
       return this.commonController.getReferenceData({
@@ -36,8 +36,8 @@ export class CommonService {
         currentDonationStatus: options.donationStatus,
         donationType: options.donationType,
         countryCode: options.countryCode,
-        stateCode:options.stateCode,
-        workflowType:options.workflowType
+        stateCode: options.stateCode,
+        workflowType: options.workflowType
       }).pipe(map(m => m.responsePayload));
     }
     if (!this.cachedObservable) {
@@ -65,21 +65,21 @@ export class CommonService {
     Notification.requestPermission().then(
       (notificationPermissions: NotificationPermission) => {
         if (notificationPermissions === "granted") {
-          console.log("Granted");
+          //console.log("Granted");
           this.sendToken();
           onMessage(this.messageing, (message) => {
             this.notificationSub.next(message.data!);
-            //console.log("1",message.data);
+            ////console.log("1",message.data);
             //this.sound.play();
           });
           new BroadcastChannel('notification_data').onmessage = (item) => {
             this.notificationSub.next(item.data);
-            //console.log("2",item.data);
+            ////console.log("2",item.data);
             //this.sound.play();
           };
         }
         else if (notificationPermissions === "denied") {
-          console.log("Denied");
+          //console.log("Denied");
         }
       });
   }
@@ -96,7 +96,7 @@ export class CommonService {
           vapidKey: environment.firebase_vapidKey,
           serviceWorkerRegistration: serviceWorkerRegistration,
         }).then(async (token) => {
-          console.log('fcm token', token);
+          //console.log('fcm token', token);
           this.commonController.manageNotification({ action: 'SAVE_TOKEN_AND_GET_COUNTS', body: { 'token': token, 'profile_id': (await this.userDetail.getUser()).profile_id } }).subscribe(s => {
 
           })
@@ -113,8 +113,8 @@ export class CommonService {
     return this.commonController.getNotification({ pageIndex: 0, pageSize: 5 }).pipe(map(m => m.responsePayload))
   }
 
-  getUsefulLink(){
-  return this.commonController.getUsefulLinks().pipe(map(m => m.responsePayload));
+  getUsefulLink() {
+    return this.commonController.getUsefulLinks().pipe(map(m => m.responsePayload));
   }
 
 }

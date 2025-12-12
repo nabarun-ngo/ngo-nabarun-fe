@@ -6,24 +6,24 @@ import { NoticeDetail } from 'src/app/core/api/models';
 })
 export class NoticeSearchPipe implements PipeTransform {
 
-  transform(notices: NoticeDetail[] | undefined, searchValue:string): NoticeDetail[] {
-    console.log(notices,searchValue)
-    if(!notices){
+  transform(notices: NoticeDetail[] | undefined, searchValue: string): NoticeDetail[] {
+    //console.log(notices,searchValue)
+    if (!notices) {
       return [];
     }
-    if(!searchValue){
+    if (!searchValue) {
       return notices;
     }
-    //console.log(searchValue)
-    searchValue=searchValue.toLowerCase();
-    return notices.filter((notice:NoticeDetail)=>
+    ////console.log(searchValue)
+    searchValue = searchValue.toLowerCase();
+    return notices.filter((notice: NoticeDetail) =>
 
       (notice.id != null && notice.id.toLowerCase().includes(searchValue))
       ||
-      (notice.title != null && notice.title.toLowerCase().includes(searchValue)) 
+      (notice.title != null && notice.title.toLowerCase().includes(searchValue))
       ||
-      (notice.description != null && notice.description.toLowerCase().includes(searchValue)) 
-     
+      (notice.description != null && notice.description.toLowerCase().includes(searchValue))
+
     );
   }
 

@@ -162,7 +162,7 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
             $event.rowIndex
           )!;
           expense_form?.markAllAsTouched();
-          console.log(documents);
+          //console.log(documents);
           if (documents?.length == 0) {
             this.modalService.openNotificationModal(
               AppDialog.err_min_1_doc,
@@ -270,7 +270,7 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
         );
         dialog.componentInstance.onSearch.subscribe((s) => {
           dialog?.close();
-          console.log(s);
+          //console.log(s);
           if (!s.reset) {
             var id = this.itemList[$event.rowIndex].id!;
             //s.value.remarks

@@ -9,7 +9,7 @@ export const accountDashboardResolver: ResolveFn<any> = (route, state) => {
   let tab = (route.queryParams['tab'] || AccountDefaultValue.tabName) as accountTab;
   let id = route.queryParams['id'] as string;
   if (tab == 'my_accounts') {
-    return inject(AccountService).fetchMyAccounts(AccountDefaultValue.pageNumber, AccountDefaultValue.pageSize,{ accountId: id ? atob(id) : undefined });
+    return inject(AccountService).fetchMyAccounts(AccountDefaultValue.pageNumber, AccountDefaultValue.pageSize, { accountId: id ? atob(id) : undefined });
   } else if (tab == 'all_accounts') {
     return inject(AccountService).fetchAccounts(AccountDefaultValue.pageNumber, AccountDefaultValue.pageSize, { accountId: id ? atob(id) : undefined });
   }
@@ -21,18 +21,18 @@ export const expenseDashboardResolver: ResolveFn<any> = (route, state) => {
   let id = route.queryParams['id'] as string;
 
   if (tab == 'my_expenses') {
-    return inject(AccountService).fetchMyExpenses(AccountDefaultValue.pageNumber, AccountDefaultValue.pageSize, {expenseId: id ? atob(id) : undefined});
+    return inject(AccountService).fetchMyExpenses(AccountDefaultValue.pageNumber, AccountDefaultValue.pageSize, { expenseId: id ? atob(id) : undefined });
   }
   else if (tab == 'expense_list') {
-    return inject(AccountService).fetchExpenses(AccountDefaultValue.pageNumber, AccountDefaultValue.pageSize,{expenseId: id ? atob(id) : undefined});
+    return inject(AccountService).fetchExpenses(AccountDefaultValue.pageNumber, AccountDefaultValue.pageSize, { expenseId: id ? atob(id) : undefined });
   }
   return;
 };
 
 export const accountTransactionResolver: ResolveFn<any> = (route, state) => {
-  //console.log(route, state)
+  ////console.log(route, state)
   let self = route.queryParams['self'] as string;
-  console.log(self)
+  //console.log(self)
   if (self == 'Y') {
     return inject(AccountService).fetchMyTransactions(atob(route.params['id']), TransactionDefaultValue.pageNumber, TransactionDefaultValue.pageSize);
   } else {

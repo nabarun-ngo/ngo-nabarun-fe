@@ -50,7 +50,7 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDetail> implements 
   }
 
   protected override prepareHighLevelView(data: ApiKeyDetail, options?: { [key: string]: any; }): AccordionCell[] {
-    console.log(data)
+    //console.log(data)
 
     let apiKey = data as ApiKeyDetail;
     return [

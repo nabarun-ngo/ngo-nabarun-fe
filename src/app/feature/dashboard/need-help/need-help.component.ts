@@ -12,33 +12,33 @@ import { CommonService } from 'src/app/shared/services/common.service';
   templateUrl: './need-help.component.html',
   styleUrls: ['./need-help.component.scss']
 })
-export class NeedHelpComponent implements OnInit{
+export class NeedHelpComponent implements OnInit {
 
   protected navigations: NavigationButtonModel[] = [
-      {
-        displayName: 'Back to Dashboard',
-        routerLink: AppRoute.secured_dashboard_page.url,
-      },
-    ];
+    {
+      displayName: 'Back to Dashboard',
+      routerLink: AppRoute.secured_dashboard_page.url,
+    },
+  ];
 
   protected AppRoutes = AppRoute;
 
-  links: ImportantLinks = {policies:[],userGuides:[]};
+  links: ImportantLinks = { policies: [], userGuides: [] };
 
-   constructor(
-      private sharedData: SharedDataService,
-      private commonService: CommonService,
-      
-    ) {}
+  constructor(
+    private sharedData: SharedDataService,
+    private commonService: CommonService,
+
+  ) { }
 
   ngOnInit(): void {
     this.sharedData.setPageName('Help & Support');
     this.commonService.getUsefulLink().subscribe((res) => {
       this.links = res!;
-      console.log(res)
+      //console.log(res)
     });
   }
 
-    
-  
+
+
 }

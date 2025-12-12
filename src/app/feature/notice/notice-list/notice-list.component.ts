@@ -63,7 +63,7 @@ export class NoticeListComponent extends Paginator implements OnInit {
     if (this.route.snapshot.data['data']) {
       this.noticeList = this.route.snapshot.data['data'] as PaginateNoticeDetail;
       this.itemLengthSubs.next(this.noticeList?.totalSize!);
-      console.log(this.noticeList)
+      //console.log(this.noticeList)
     }
     //await this.googleCalService.init()
     this.searchInputData = {
@@ -137,12 +137,12 @@ export class NoticeListComponent extends Paginator implements OnInit {
 
 
   createNotice($event: { id?: string; formValue?: any; cancel?: boolean }) {
-    console.log($event)
+    //console.log($event)
     if ($event.cancel) {
       this.isCreateNotice = false;
     } else {
       this.noticeService.createNotice($event.formValue).subscribe(data => {
-        console.log(data)
+        //console.log(data)
         this.isCreateNotice = false;
         this.noticeService.retrieveNotices(this.pageNumber, this.pageSize).subscribe(data => {
           this.noticeList = data!;
@@ -152,7 +152,7 @@ export class NoticeListComponent extends Paginator implements OnInit {
     }
   }
   editNotice($event: { id?: string; formValue?: any; cancel?: boolean }) {
-    console.log($event)
+    //console.log($event)
     if ($event.id) {
       this.isCreateNotice = false;
     }
@@ -161,7 +161,7 @@ export class NoticeListComponent extends Paginator implements OnInit {
 
   onSearch($event: { advancedSearch: boolean; reset: boolean; value: any; }) {
     if ($event.advancedSearch && !$event.reset) {
-      // console.log($event.value)
+      // //console.log($event.value)
       this.noticeService.advancedSearch({
         noticeTitle: $event.value.noticeTitle,
         noticeNumber: $event.value.noticeNumber,

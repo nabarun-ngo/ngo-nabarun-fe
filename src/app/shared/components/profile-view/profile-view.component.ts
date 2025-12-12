@@ -23,7 +23,7 @@ export class ProfileViewComponent implements OnInit {
   @Input({ required: true, alias: 'profile' })
   set profileData(data: UserDto) {
     this.profile = data;
-    //console.log(this.profile)
+    ////console.log(this.profile)
     this.initValues();
   }
   constant = UserConstant
@@ -83,11 +83,11 @@ export class ProfileViewComponent implements OnInit {
       gender: new FormControl(this.profile.gender, [Validators.required]),
       dateOfBirth: new FormControl(this.profile.dateOfBirth ? new Date(this.profile.dateOfBirth) : '', [Validators.required]),
       email: new FormControl(this.profile.email, [Validators.required, Validators.email]),
-      phoneNumber_p: new FormControl(this.profile.primaryNumber? 
-        `+${this.profile.primaryNumber.code.trim()}-${this.profile.primaryNumber.number.trim()}` 
+      phoneNumber_p: new FormControl(this.profile.primaryNumber ?
+        `+${this.profile.primaryNumber.code.trim()}-${this.profile.primaryNumber.number.trim()}`
         : null, [Validators.required]),
-      phoneNumber_s: new FormControl(this.profile.secondaryNumber? 
-        `+${this.profile.secondaryNumber.code.trim()}-${this.profile.secondaryNumber.number.trim()}` 
+      phoneNumber_s: new FormControl(this.profile.secondaryNumber ?
+        `+${this.profile.secondaryNumber.code.trim()}-${this.profile.secondaryNumber.number.trim()}`
         : null, []),
       addressLine1_p: new FormControl(this.profile.presentAddress?.addressLine1, [Validators.required]),
       addressLine2_p: new FormControl(this.profile.presentAddress?.addressLine2, []),
@@ -194,7 +194,7 @@ export class ProfileViewComponent implements OnInit {
     this.socialMedia.twitterSM = this.profile.socialMediaLinks?.find(f => f.linkType == 'twitter');
     this.socialMedia.whatsappSM = this.profile.socialMediaLinks?.find(f => f.linkType == 'whatsapp');
 
-    
+
   }
 
 
@@ -204,7 +204,7 @@ export class ProfileViewComponent implements OnInit {
     reader.readAsDataURL(files[0]);
     reader.onload = () => {
       this.pictureBase64 = reader.result as string
-      //console.log()
+      ////console.log()
     }
   }
 
@@ -227,11 +227,11 @@ export class ProfileViewComponent implements OnInit {
 
   }
 
-  editAdmin(){
-    this.applicableLM = this.refData[this.constant.refDataKey.loginMethods].filter(f=>
+  editAdmin() {
+    this.applicableLM = this.refData[this.constant.refDataKey.loginMethods].filter(f =>
       !this.profile.loginMethod.includes(f.key!)
     )
-    this.onUpdate.emit({ actionName: 'CHANGE_MODE',mode:'edit_admin'})
+    this.onUpdate.emit({ actionName: 'CHANGE_MODE', mode: 'edit_admin' })
   }
 
   updateDetailAdmin() {
@@ -240,7 +240,7 @@ export class ProfileViewComponent implements OnInit {
       if (this.profile.status != this.editAdminForm.value.status) {
         userDetail.status = this.editAdminForm.value.status;
       }
-      console.log(this.editAdminForm.value.roles, this.profile.roles?.map(m => m.roleCode))
+      //console.log(this.editAdminForm.value.roles, this.profile.roles?.map(m => m.roleCode))
 
       userDetail.roleCodes = [];
       let roles = this.editAdminForm.value.roles as string[]
@@ -259,7 +259,7 @@ export class ProfileViewComponent implements OnInit {
   }
 
   updateSelfProfile() {
-    //console.log(this.editSelfForm)
+    ////console.log(this.editSelfForm)
     if (this.editSelfForm.valid) {
       let userDetail: UserUpdateDto = {
         title: this.editSelfForm.value.title,
@@ -275,7 +275,7 @@ export class ProfileViewComponent implements OnInit {
       };
 
       if (this.editSelfForm.value.phoneNumber_p) {
-        console.log(this.editSelfForm.value.phoneNumber_p)
+        //console.log(this.editSelfForm.value.phoneNumber_p)
         let pPhNo = parsePhoneNumber(this.editSelfForm.value.phoneNumber_p);
         userDetail.primaryNumber = {
           code: pPhNo.countryCallingCode,
@@ -344,7 +344,7 @@ export class ProfileViewComponent implements OnInit {
       userDetail.socialMediaLinks.push({ linkType: 'whatsapp', linkName: 'Whatsapp', linkValue: 'https://wa.me/' + this.editSelfForm.value.phoneNumber_p })
 
 
-      console.log(this.editSelfForm.value)
+      //console.log(this.editSelfForm.value)
       if (this.pictureBase64) {
         userDetail.picture = sanitizeBase64(this.pictureBase64);
       }
@@ -355,7 +355,7 @@ export class ProfileViewComponent implements OnInit {
   }
 
   changePassword() {
-    //console.log(this.editLoginInfoForm)
+    ////console.log(this.editLoginInfoForm)
     if (this.editLoginInfoForm.valid) {
       // let userDetail = {} as UserDetail;
       // userDetail.attributes = {};

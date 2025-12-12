@@ -114,7 +114,7 @@ export class AdminServiceTabComponent extends Accordion<AdminServiceInfo> implem
   }
 
   protected override prepareHighLevelView(data: AdminServiceInfo, options?: { [key: string]: any; }): AccordionCell[] {
-    console.log(data)
+    //console.log(data)
     let service = data as AdminServiceInfo
     return [
       {
@@ -186,7 +186,7 @@ export class AdminServiceTabComponent extends Accordion<AdminServiceInfo> implem
         })
         break;
       case 'SYNC_USER':
-        console.log(formdata)
+        //console.log(formdata)
         let sync_role = formdata?.value.syncRole as string;
         let userId = formdata?.value.userId as string;
         let userEmail = formdata?.value.userEmail as string;

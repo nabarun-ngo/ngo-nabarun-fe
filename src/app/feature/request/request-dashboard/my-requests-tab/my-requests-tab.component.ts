@@ -53,7 +53,7 @@ export class MyRequestsTabComponent extends Accordion<RequestDetail> implements 
           this.setContent(s?.content!, s?.totalSize);
         });
     } else if ($event.advancedSearch && $event.reset) {
-      console.log('Resetting search');
+      //console.log('Resetting search');
       this.loadData();
     }
   }

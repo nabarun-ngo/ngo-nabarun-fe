@@ -10,20 +10,20 @@ export const membersResolver: ResolveFn<any> = (route, state) => {
 };
 
 export const memberRefDataResolver: ResolveFn<any> = (route, state) => {
-  //console.log(route,state)
+  ////console.log(route,state)
   return inject(MemberService).fetchRefData();
   //return true
 };
 
 export const memberResolver: ResolveFn<any> = (route, state) => {
- // console.log(route,state)
+  // //console.log(route,state)
   return inject(MemberService).getUserDetail(atob(route.params['id']));
 };
 
 export const myProfileResolver: ResolveFn<any> = (route, state) => {
-  // console.log(route,state)
-   return inject(MemberService).getMyDetail();
- };
+  // //console.log(route,state)
+  return inject(MemberService).getMyDetail();
+};
 
- 
+
 

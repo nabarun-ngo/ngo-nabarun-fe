@@ -248,7 +248,7 @@ export class DonationDashboardComponent implements OnInit {
       case 'guest_donation': {
         this.donationService.fetchGuestDonations(this.pageNumber, this.pageSize).subscribe(donations => {
           donations?.content?.forEach(donation => this.donations.push({ donation: donation, action: 'view', eventSubject: new Subject<any>() }))
-          //console.log(this.donations)
+          ////console.log(this.donations)
           this.itemLengthSubs.next(donations?.totalSize!);
         });
         break;
@@ -265,7 +265,7 @@ export class DonationDashboardComponent implements OnInit {
       case 'all_donation': {
         this.donationService.fetchDonations(this.pageNumber, this.pageSize).subscribe(donations => {
           donations?.content?.forEach(donation => this.donations.push({ donation: donation, action: 'view', eventSubject: new Subject<any>() }))
-         // console.log(this.donations)
+          // //console.log(this.donations)
           this.itemLengthSubs.next(donations?.totalSize!);
         });
         break;

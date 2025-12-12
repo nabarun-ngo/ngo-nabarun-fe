@@ -20,12 +20,12 @@ export class UniversalInputComponent {
 
   @Input({ required: true, alias: 'inputModel' })
   set model(_model: UniversalInputModel) {
-    //console.log(_model)
+    ////console.log(_model)
     this.inputModel = _model;
     if (_model.autocomplete) {
-      // console.log(_model.selectList)
-     // this.autocompleteList = _model.selectList!;
-       //console.log(this.autocompleteList)
+      // //console.log(_model.selectList)
+      // this.autocompleteList = _model.selectList!;
+      ////console.log(this.autocompleteList)
     }
   }
 
@@ -34,22 +34,22 @@ export class UniversalInputComponent {
 
 
   displayFn(id: string): string {
-    if(this.inputModel && this.inputModel.selectList){
+    if (this.inputModel && this.inputModel.selectList) {
       return this.inputModel.selectList.find(f => f.key == id)?.displayValue!;
     }
     return '';
   }
 
   onDialCodeSelect(code: string) {
-  const number = this.ngControl.control?.value || '';
+    const number = this.ngControl.control?.value || '';
 
-  if (this.inputModel.props?.['separateDialCode'] === false) {
-    // prefix phone number with code inside the input
-    if (!number.startsWith(code)) {
-      this.ngControl.control?.setValue(`${code} ${number.replace(/^\+\d+\s*/, '')}`);
+    if (this.inputModel.props?.['separateDialCode'] === false) {
+      // prefix phone number with code inside the input
+      if (!number.startsWith(code)) {
+        this.ngControl.control?.setValue(`${code} ${number.replace(/^\+\d+\s*/, '')}`);
+      }
     }
   }
-}
-  
+
 
 }

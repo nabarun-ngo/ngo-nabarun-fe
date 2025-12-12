@@ -44,7 +44,7 @@ export class MemberAccordionComponent implements OnInit {
     private modalService: ModalService,
     private sharedDataService: SharedDataService,
     protected identityService: UserIdentityService
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.canCreateDonation = this.identityService.isAccrediatedTo(
       this.scope.create.donation
@@ -84,7 +84,7 @@ export class MemberAccordionComponent implements OnInit {
             item.size = data.donations?.pageSize!;
             item.total = data.donations?.totalSize!;
             item.donationSummary = data.summary;
-            // console.log(item)
+            // //console.log(item)
             return item;
           });
       });
@@ -287,7 +287,7 @@ export class MemberAccordionComponent implements OnInit {
                       return m.detail;
                     })
                   )
-                  .subscribe((d) => {});
+                  .subscribe((d) => { });
               }
               modal.close();
             }

@@ -187,7 +187,7 @@ export class ManageAccountsTabComponent extends MyAccountsTabComponent {
     account_form?.valueChanges
       .pipe(filterFormChange(account_form.value))
       .subscribe((val) => {
-        console.log(val);
+        //console.log(val);
         if (val['accountType']) {
           this.accountService
             .fetchUsers(val['accountType'])

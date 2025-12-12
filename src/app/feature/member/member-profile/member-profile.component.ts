@@ -48,7 +48,7 @@ export class MemberProfileComponent implements OnInit {
     if (this.route.snapshot.data['ref_data']) {
       let refData = this.route.snapshot.data['ref_data'];
       this.sharedDataService.setRefData('USER', refData);
-      console.log(refData)
+      //console.log(refData)
     }
 
     if (this.route.snapshot.data['data']) {

@@ -49,13 +49,13 @@ export class MemberListComponent extends Paginator implements OnInit {
     if (this.route.snapshot.data['ref_data']) {
       this.refData = this.route.snapshot.data['ref_data'];
       this.sharedDataService.setRefData('USER', this.refData);
-      // console.log(refData)
+      // //console.log(refData)
     }
 
     if (this.route.snapshot.data['data']) {
       this.memberList = this.route.snapshot.data['data'] as PagedResultUserDto;
       this.itemLengthSubs.next(this.memberList?.totalSize!);
-      //console.log(this.memberList)
+      ////console.log(this.memberList)
     }
 
     this.searchInputData = {
@@ -138,7 +138,7 @@ export class MemberListComponent extends Paginator implements OnInit {
 
   onSearch($event: { advancedSearch: boolean; reset: boolean; value: any; }) {
     if ($event.advancedSearch && !$event.reset) {
-      console.log($event.value)
+      //console.log($event.value)
       this.memberService.advancedSearch({
         email: $event.value.email,
         firstName: $event.value.firstName,
@@ -147,11 +147,11 @@ export class MemberListComponent extends Paginator implements OnInit {
         role: $event.value.role as string[]
       }).subscribe(data => {
         this.memberList = data!
-        console.log(this.memberList)
+        //console.log(this.memberList)
       })
     }
     else if ($event.advancedSearch && $event.reset) {
-      console.log($event.value)
+      //console.log($event.value)
       this.memberService.fetchMembers(this.pageNumber, this.pageSize).subscribe(data => this.memberList = data!)
     }
     else {

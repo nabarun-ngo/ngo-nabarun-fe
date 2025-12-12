@@ -33,11 +33,23 @@ export class DonationNewService {
 
     getSelfDonations(options: {
         pageIndex?: number,
-        pageSize?: number
+        pageSize?: number,
+        filter?: { donationId?: string, donationStatus?: string[], startDate?: string, endDate?: string, donationType?: string[] }
     }) {
+        const param: any = {};
+
+        if (options.filter) {
+            if (options.filter.donationId) param.donationId = options.filter.donationId;
+            if (options.filter.donationStatus?.length) param.status = [options.filter.donationStatus, 'default'];
+            if (options.filter.donationType?.length) param.type = [options.filter.donationType, 'default'];
+            if (options.filter.startDate) param.startDate = new Date(options.filter.startDate).toISOString();
+            if (options.filter.endDate) param.endDate = new Date(options.filter.endDate).toISOString();
+        }
+
         return this.donationController.getSelfDonations({
             pageIndex: options.pageIndex || DonationDefaultValue.pageNumber,
             pageSize: options.pageSize || DonationDefaultValue.pageSize,
+            ...param
         }).pipe(map(d => d.responsePayload));
     }
 

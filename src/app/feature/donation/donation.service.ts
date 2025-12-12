@@ -111,7 +111,7 @@ export class DonationService {
     guest: boolean,
     donorId?: string
   }) {
-    console.log(filter)
+    //console.log(filter)
     let filterOps: DonationDetailFilter = {};
     if (filter.donationId) {
       filterOps.donationId = filter.donationId

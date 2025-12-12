@@ -12,29 +12,29 @@ import { AuthService } from '@auth0/auth0-angular';
 })
 export class AppComponent {
   constructor(
-    private identityService:UserIdentityService,
+    private identityService: UserIdentityService,
     private googleService: GoogleAuthService,
     private bnIdle: BnNgIdleService,
     private authService: AuthService,
-    ){  
- 
-     
+  ) {
+
+
   }
   async ngOnInit(): Promise<void> {
-    console.log("Hiii")
+    //console.log("Hiii")
     /**
      * Disableing logs in production
      */
     if (environment.production) {
-      if(window){
-        window.console.log=function(){};
+      if (window) {
+        window.console.log = function () { };
       }
     }
     /**
      * Configuring App callback
      */
     this.identityService.configure();
-   
+
     /**
      * configuring idle timeout
      */

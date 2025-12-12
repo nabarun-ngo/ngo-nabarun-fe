@@ -19,7 +19,7 @@ isSupported().then(isSupported => {
     const messaging = getMessaging(app);
 
     onBackgroundMessage(messaging, ({ notification: { title, body, image } }) => {
-      //console.log(notification)
+      ////console.log(notification)
       self.registration.showNotification(title, { body, icon: image || '/assets/icons/icon-72x72.png' });
     });
 

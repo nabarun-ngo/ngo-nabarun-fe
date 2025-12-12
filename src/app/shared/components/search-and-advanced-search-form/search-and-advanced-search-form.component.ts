@@ -15,11 +15,11 @@ import { SearchEvent } from './search-event.model';
 })
 export class SearchAndAdvancedSearchFormComponent implements OnInit {
 
-  isSearchDisabled=true;
+  isSearchDisabled = true;
   adv_search: boolean = false;
   colLength!: number;
 
-  constructor(@Inject(MAT_DIALOG_DATA) input: SearchAndAdvancedSearchModel,private sharedData:SharedDataService) {
+  constructor(@Inject(MAT_DIALOG_DATA) input: SearchAndAdvancedSearchModel, private sharedData: SharedDataService) {
     this.inputInit(input);
   }
 
@@ -31,7 +31,7 @@ export class SearchAndAdvancedSearchFormComponent implements OnInit {
 
   @Input({ required: true }) set searchInput(input: SearchAndAdvancedSearchModel) {
     this.inputInit(input);
-    
+
   };
 
   inputInit(input: SearchAndAdvancedSearchModel) {
@@ -39,19 +39,19 @@ export class SearchAndAdvancedSearchFormComponent implements OnInit {
       this.searchformGroup.setControl(e.formControlName, new FormControl('', e.validations));
     })
     this.search = input;
-    let len=input.advancedSearch?.searchFormFields?.length!;
-    if(len == 1 || (len % 2) == 0){
-      this.colLength=len;
-    }else{
-      this.colLength=len+1;
+    let len = input.advancedSearch?.searchFormFields?.length!;
+    if (len == 1 || (len % 2) == 0) {
+      this.colLength = len;
+    } else {
+      this.colLength = len + 1;
     }
   }
 
   ngOnInit(): void {
-    this.searchformGroup.valueChanges.subscribe(d=>{
+    this.searchformGroup.valueChanges.subscribe(d => {
       this.isSearchDisabled = !this.searchformGroup.valid || isEmptyObject(removeNullFields(d));
-      console.log(isEmptyObject(removeNullFields(d)))
-      console.log('Disabled',this.isSearchDisabled)
+      //console.log(isEmptyObject(removeNullFields(d)))
+      //console.log('Disabled',this.isSearchDisabled)
 
     })
   }
@@ -64,19 +64,19 @@ export class SearchAndAdvancedSearchFormComponent implements OnInit {
 
   normalSearch($event: Event) {
     let input = $event.target as HTMLInputElement;
-    this.onSearch.emit({ advancedSearch: false, reset: false, value: input.value , buttonName: 'CLOSE'})
+    this.onSearch.emit({ advancedSearch: false, reset: false, value: input.value, buttonName: 'CLOSE' })
     this.sharedData.setSearchValue(input.value);
   }
 
   advSearchReset() {
     this.searchformGroup.reset()
     this.onSearch.emit({ advancedSearch: true, reset: true, value: this.searchformGroup.value, buttonName: 'SEARCH' })
-    this.adv_search=false
+    this.adv_search = false
   }
 
   clickAdvSearchBtn() {
-    this.adv_search=true
-    this.onSearch.emit({ advancedSearch: false, reset: false, value:{} , buttonName: 'ADVANCED_SEARCH'})
+    this.adv_search = true
+    this.onSearch.emit({ advancedSearch: false, reset: false, value: {}, buttonName: 'ADVANCED_SEARCH' })
 
   }
 }

@@ -7,7 +7,7 @@ import { AccordionCell, AccordionButton } from 'src/app/shared/model/accordion-l
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { Accordion } from 'src/app/shared/utils/accordion';
 import { DonationNewService } from '../../donation-new.service';
-import { date } from 'src/app/core/service/utilities.service';
+import { date, removeNullFields } from 'src/app/core/service/utilities.service';
 import { getDonationSection } from '../../donation.field';
 import { DonationDefaultValue, DonationRefData } from '../../donation.const';
 
@@ -94,7 +94,12 @@ export class SelfDonationTabComponent extends Accordion<DonationDto> implements 
     ];
   }
   protected override prepareDefaultButtons(data: DonationDto, options?: { [key: string]: any; }): AccordionButton[] {
-    return [];
+    return [
+      {
+        button_id: 'NOTIFY',
+        button_name: 'Notify',
+      }
+    ];
   }
   protected override onClick(event: { buttonId: string; rowIndex: number; }): void {
 
@@ -103,6 +108,7 @@ export class SelfDonationTabComponent extends Accordion<DonationDto> implements 
 
   }
   override handlePageEvent($event: PageEvent): void {
+    this.pageEvent = $event;
     this.donationService.getSelfDonations({
       pageIndex: $event.pageIndex,
       pageSize: $event.pageSize
@@ -112,9 +118,18 @@ export class SelfDonationTabComponent extends Accordion<DonationDto> implements 
   }
   onSearch($event: SearchEvent): void {
     console.log($event);
-    // this.donationService.getSelfDonations($event.pageIndex, $event.pageSize, $event.filter).subscribe(data => {
-    //   this.setContent(data.content, data.totalSize);
-    // });
+    if ($event.advancedSearch) {
+      this.donationService.getSelfDonations({
+        filter: removeNullFields($event.value)
+      }).subscribe(data => {
+        this.setContent(data.content, data.totalSize);
+      });
+    }
+    else if ($event.reset) {
+      this.donationService.getSelfDonations({}).subscribe(data => {
+        this.setContent(data.content, data.totalSize);
+      });
+    }
   }
   async loadData(): Promise<void> {
     const data = await this.donationService.fetchMyDonations({});

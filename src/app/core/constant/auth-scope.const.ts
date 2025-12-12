@@ -58,7 +58,7 @@ export function getScopes() {
             scope = scope + ' ' + level2;
         })
     })
-    //console.log('Additional scope : '+scope)
+    ////console.log('Additional scope : '+scope)
     return scope;
 }
 

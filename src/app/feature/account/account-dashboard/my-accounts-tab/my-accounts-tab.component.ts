@@ -219,7 +219,7 @@ export class MyAccountsTabComponent extends Accordion<AccountDetail> implements 
         this.accountService
           .performMoneyIn(account, money_in_acc?.value)
           .subscribe((d) => {
-            console.log(d);
+            //console.log(d);
             this.hideForm(rowIndex);
             this.removeSectionInAccordion('money_in_acc', rowIndex);
             this.removeSectionInAccordion('document_list', rowIndex);
@@ -285,7 +285,7 @@ export class MyAccountsTabComponent extends Accordion<AccountDetail> implements 
         this.accountService
           .performTransfer(account, transfer_form?.value)
           .subscribe((d) => {
-            console.log(d);
+            //console.log(d);
             this.hideForm(rowIndex);
             this.removeSectionInAccordion('transfer_amt', rowIndex);
             this.removeSectionInAccordion('document_list', rowIndex);

@@ -13,7 +13,7 @@ export class DetailedProfileComponent implements OnInit {
 
   @Input({ required: false, alias: 'member' }) profile!: UserDetail;
   @Output() profileChange: EventEmitter<{ valid?: boolean, member?: UserDetail }> = new EventEmitter();
-  @Input('triggerEvent') triggerEvent:Observable<any> | undefined;
+  @Input('triggerEvent') triggerEvent: Observable<any> | undefined;
 
   @Input({ required: true, alias: 'mode' }) mode!: OperationMode;
   protected memberForm!: FormGroup;
@@ -24,8 +24,8 @@ export class DetailedProfileComponent implements OnInit {
       email: new FormControl(this.profile?.email, []),
       primaryNumber: new FormControl(this.profile?.primaryNumber, []),
     });
-    this.triggerEvent?.subscribe(data=>{
-      console.log(data)
+    this.triggerEvent?.subscribe(data => {
+      //console.log(data)
       this.memberForm.markAllAsTouched();
     });
     this.memberForm.valueChanges.subscribe(() => {

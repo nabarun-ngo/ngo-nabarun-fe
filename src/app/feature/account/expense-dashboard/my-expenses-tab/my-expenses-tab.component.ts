@@ -202,7 +202,7 @@ export class MyExpensesTabComponent extends Accordion<ExpenseDetail> implements 
           $event.rowIndex,
           $event.buttonId == 'CREATE_CONFIRM' ? true : false
         )?.itemList as ExpenseItemDetail[];
-        console.log(expenseItems);
+        //console.log(expenseItems);
         expenseForm?.markAllAsTouched();
         if (expenseItems.length == 0) {
           this.modalService.openNotificationModal(
@@ -270,7 +270,7 @@ export class MyExpensesTabComponent extends Accordion<ExpenseDetail> implements 
     isCreate: boolean
   ) {
     expenseList.accordion?.buttonClick.subscribe((data) => {
-      console.log(data);
+      //console.log(data);
       switch (data.buttonId) {
         case 'SHOW_CREATE':
           expenseList.accordion?.object.showCreateForm();
@@ -330,7 +330,7 @@ export class MyExpensesTabComponent extends Accordion<ExpenseDetail> implements 
               'expense_list_detail',
               index
             )?.itemList as ExpenseItemDetail[];
-            console.log(expenseItems);
+            //console.log(expenseItems);
             if (expenseItems.length == 1) {
               this.modalService.openNotificationModal(
                 AppDialog.err_min_1_expense,

@@ -7,7 +7,7 @@ import { AppRoute } from '../../constant/app-routing.const';
 import { AppNotification } from '../../model/notification.model';
 import { Router } from '@angular/router';
 import { CommonService } from 'src/app/shared/services/common.service';
-import {Howl, Howler} from 'howler';
+import { Howl, Howler } from 'howler';
 import { SpinnerVisibilityService } from 'ng-http-loader';
 import { SecuredDashboardComponent } from 'src/app/feature/dashboard/secured-dashboard/secured-dashboard.component';
 
@@ -18,23 +18,23 @@ import { SecuredDashboardComponent } from 'src/app/feature/dashboard/secured-das
 })
 export class HeaderComponent implements OnInit {
 
-  protected app_route=AppRoute;
+  protected app_route = AppRoute;
   //isAuthenticated!: boolean;
   user!: AuthUser;
   //userId!:string;
   //notifications:  AppNotification[]=[];
-  notificationCount:string='0';
+  notificationCount: string = '0';
   constructor(
     private identityService: UserIdentityService,
-    private modalService:ModalService,
-    private commonService:CommonService,
+    private modalService: ModalService,
+    private commonService: CommonService,
 
   ) { }
 
 
   async ngOnInit(): Promise<void> {
     //this.isAuthenticated = this.identityService.isUserLoggedIn();
-    this.user=await this.identityService.getUser();
+    this.user = await this.identityService.getUser();
     // this.commonService.fetchNotification().subscribe(data=>{
     //   this.notifications=[];
     //   data?.content?.forEach(d=>{
@@ -42,14 +42,14 @@ export class HeaderComponent implements OnInit {
     //   })
     // })
     this.commonService.requestPermission();
-    this.commonService.liveNotifications$.subscribe(data=>{
-      if(data){
+    this.commonService.liveNotifications$.subscribe(data => {
+      if (data) {
         this.sound();
-        if(data && data['notificationCount']){
-          this.notificationCount=data['notificationCount'];
+        if (data && data['notificationCount']) {
+          this.notificationCount = data['notificationCount'];
         }
-        console.log(data)
-        
+        //console.log(data)
+
         if (data && data['needActionAccount']) {
           SecuredDashboardComponent.tileList.filter(f => f.tile_html_id == 'accountTile').map(m => {
             m.additional_info!.tile_show_badge = data['needActionAccount'] == 'Y' ? true : false;
@@ -68,7 +68,7 @@ export class HeaderComponent implements OnInit {
             return m;
           })
         }
-  
+
         if (data && data['needActionNotice']) {
           SecuredDashboardComponent.tileList.filter(f => f.tile_html_id == 'noticeTile').map(m => {
             m.additional_info!.tile_show_badge = data['needActionNotice'] == 'Y' ? true : false;
@@ -87,8 +87,8 @@ export class HeaderComponent implements OnInit {
             return m;
           })
         }
-        
-  
+
+
         if (data && data['donationAmount']) {
           SecuredDashboardComponent.tileList.filter(f => f.tile_html_id == 'donationTile').map(m => {
             m.additional_info!.tile_is_loading = false;
@@ -96,7 +96,7 @@ export class HeaderComponent implements OnInit {
             return m;
           });
         }
-  
+
         if (data && data['accountAmount']) {
           SecuredDashboardComponent.tileList.filter(f => f.tile_html_id == 'accountTile').map(m => {
             m.additional_info!.tile_is_loading = false;
@@ -104,7 +104,7 @@ export class HeaderComponent implements OnInit {
             return m;
           });
         }
-  
+
         if (data && data['requestCount']) {
           SecuredDashboardComponent.tileList.filter(f => f.tile_html_id == 'requestTile').map(m => {
             m.additional_info!.tile_is_loading = false;
@@ -119,7 +119,7 @@ export class HeaderComponent implements OnInit {
             return m;
           });
         }
-      }else{
+      } else {
         SecuredDashboardComponent.tileList.filter(f => f.tile_html_id == 'donationTile').map(m => {
           m.additional_info!.tile_is_loading = false;
           m.additional_info!.tile_value = '₹ 0';
@@ -141,26 +141,26 @@ export class HeaderComponent implements OnInit {
           return m;
         });
       }
-      
+
     });
   }
 
   logout() {
-    this.modalService.openNotificationModal(AppDialog.logout_dialog,'confirmation','warning').onAccept$.subscribe(data=>{
+    this.modalService.openNotificationModal(AppDialog.logout_dialog, 'confirmation', 'warning').onAccept$.subscribe(data => {
       this.identityService.logout();
     })
   }
 
-  sound(){
-    Howler.autoUnlock= false;
+  sound() {
+    Howler.autoUnlock = false;
     var sound = new Howl({
       src: ['/assets/mixkit-bell-notification-933.wav'],
-      preload:true,
+      preload: true,
     });
-    
+
     sound.play();
   }
 
-  
+
 
 }

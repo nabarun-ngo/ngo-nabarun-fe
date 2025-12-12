@@ -65,7 +65,7 @@ export class DonationAccordionComponent implements OnInit {
     private sharedDataService: SharedDataService,
     private modalService: ModalService,
     protected identityService: UserIdentityService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.refData = this.sharedDataService.getRefData('DONATION');
@@ -94,8 +94,8 @@ export class DonationAccordionComponent implements OnInit {
     let result = this.donations.find((f) => f.donation?.id == donation.id);
     if (result?.action == 'edit') {
       if (isConfirmed == true) {
-        console.log(result.update?.valid);
-        //console.log(result.update?.donation,result.donation)
+        //console.log(result.update?.valid);
+        ////console.log(result.update?.donation,result.donation)
         if (result.update?.valid) {
           let isFileNeeded =
             result.update?.donation.status == this.donationStatus.Paid &&
@@ -164,7 +164,7 @@ export class DonationAccordionComponent implements OnInit {
           }
         } else {
           let don = this.donations.find((f) => f.donation?.id == donation.id);
-          console.log(don);
+          //console.log(don);
           don?.eventSubject?.next('validate_form');
         }
       } else {
@@ -184,7 +184,7 @@ export class DonationAccordionComponent implements OnInit {
           item.action = 'edit';
           return item;
         });
-      console.log(this.donations);
+      //console.log(this.donations);
     }
   }
 
@@ -201,7 +201,7 @@ export class DonationAccordionComponent implements OnInit {
       this.donationService
         .updatePaymentInfo(donation.id!, 'NOTIFY', result?.update?.donation!)
         .subscribe((data) => {
-          console.log(data);
+          //console.log(data);
           if (isFileNeeded) {
             let files = result?.upload?.map((m) => {
               m.detail.documentMapping = [
@@ -214,7 +214,7 @@ export class DonationAccordionComponent implements OnInit {
             })!;
             this.donationService
               .uploadDocuments(files!)
-              .subscribe((data) => {});
+              .subscribe((data) => { });
           }
           this.donations
             .filter((f) => f.donation?.id == donation.id)
@@ -226,13 +226,13 @@ export class DonationAccordionComponent implements OnInit {
           this.alertList.push(AppAlert.payment_notified);
         });
     }
-    console.log(this.donations);
+    //console.log(this.donations);
     //this.donationService.updatePaymentAndDocuments
   }
 
   addDonation(isConfirmed: boolean) {
     if (isConfirmed) {
-      console.log(this.createDonationData);
+      //console.log(this.createDonationData);
       this.tabName == 'guest_donation';
       if (
         this.createDonationData.validDonation &&
@@ -243,7 +243,7 @@ export class DonationAccordionComponent implements OnInit {
         if (!donation.isGuest) {
           donation.donorDetails = this.member;
         }
-        //console.log(donation);
+        ////console.log(donation);
         this.donationService.createDonation(donation).subscribe((data) => {
           this.alertList.push(
             interpolate(AppAlert.donation_created, { donationId: data?.id! })
@@ -286,7 +286,7 @@ export class DonationAccordionComponent implements OnInit {
       this.createDonationData.donation = {};
     }
     this.createDonationData.donation.donorDetails = donor;
-    console.log(this.createDonationData.donation);
+    //console.log(this.createDonationData.donation);
   }
 
   onProfileChange(memberData: {
@@ -298,7 +298,7 @@ export class DonationAccordionComponent implements OnInit {
       this.createDonationData.donation = {};
     }
     this.createDonationData.donation.donorDetails = memberData.member;
-    console.log(this.createDonationData.donation);
+    //console.log(this.createDonationData.donation);
   }
 
   showHistory(donation: DonationDetail) {
