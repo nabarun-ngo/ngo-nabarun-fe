@@ -8,14 +8,16 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseArrayArray } from '../../models/success-response-array-array';
+import { SuccessResponseArrayAccountDetailDto } from '../../models/success-response-array-account-detail-dto';
 
-export interface GetGoogleScopes$Params {
+export interface PayableAccount$Params {
+  isTransfer?: boolean;
 }
 
-export function getGoogleScopes(http: HttpClient, rootUrl: string, params?: GetGoogleScopes$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayArray>> {
-  const rb = new RequestBuilder(rootUrl, getGoogleScopes.PATH, 'get');
+export function payableAccount(http: HttpClient, rootUrl: string, params?: PayableAccount$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayAccountDetailDto>> {
+  const rb = new RequestBuilder(rootUrl, payableAccount.PATH, 'get');
   if (params) {
+    rb.query('isTransfer', params.isTransfer, {});
   }
 
   return http.request(
@@ -23,9 +25,9 @@ export function getGoogleScopes(http: HttpClient, rootUrl: string, params?: GetG
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseArrayArray>;
+      return r as StrictHttpResponse<SuccessResponseArrayAccountDetailDto>;
     })
   );
 }
 
-getGoogleScopes.PATH = '/api/auth/oauth/google/scopes';
+payableAccount.PATH = '/api/account/payable-account';

@@ -16,6 +16,7 @@ import { DownloadDocument$Params } from '../fn/dms-controller/download-document'
 import { getDocuments } from '../fn/dms-controller/get-documents';
 import { GetDocuments$Params } from '../fn/dms-controller/get-documents';
 import { SuccessResponse } from '../models/success-response';
+import { SuccessResponseArrayDocumentDto } from '../models/success-response-array-document-dto';
 import { SuccessResponseDocumentDto } from '../models/success-response-document-dto';
 import { uploadFile } from '../fn/dms-controller/upload-file';
 import { UploadFile$Params } from '../fn/dms-controller/upload-file';
@@ -74,7 +75,7 @@ export class DmsControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getDocuments$Response(params: GetDocuments$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseDocumentDto>> {
+  getDocuments$Response(params: GetDocuments$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayDocumentDto>> {
     return getDocuments(this.http, this.rootUrl, params, context);
   }
 
@@ -88,9 +89,9 @@ export class DmsControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getDocuments(params: GetDocuments$Params, context?: HttpContext): Observable<SuccessResponseDocumentDto> {
+  getDocuments(params: GetDocuments$Params, context?: HttpContext): Observable<SuccessResponseArrayDocumentDto> {
     return this.getDocuments$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseDocumentDto>): SuccessResponseDocumentDto => r.body)
+      map((r: StrictHttpResponse<SuccessResponseArrayDocumentDto>): SuccessResponseArrayDocumentDto => r.body)
     );
   }
 

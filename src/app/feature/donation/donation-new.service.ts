@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { combineLatest, firstValueFrom, map, forkJoin } from 'rxjs';
+import { combineLatest, firstValueFrom, map, forkJoin, switchMap, of } from 'rxjs';
 import {
     DonationDto,
     DonationSummaryDto,
@@ -30,13 +30,23 @@ export class DonationNewService {
         private dmsService: DmsControllerService
     ) { }
 
+    getSelfDonations(pageIndex: number = 0, pageSize: number = 100) {
+        return this.donationController.getSelfDonations({ pageIndex: pageIndex, pageSize: pageSize }).pipe(map(d => d.responsePayload));
+    }
 
     async fetchMyDonations(pageIndex: number = 0, pageSize: number = 100) {
         let id = (await this.identityService.getUser()).profile_id;
         return firstValueFrom(combineLatest({
             donations: this.donationController.getSelfDonations({ pageIndex: pageIndex, pageSize: pageSize }).pipe(map(d => d.responsePayload)),
             summary: this.donationController.getDonationSummary({ donorId: id }).pipe(map(d => d.responsePayload)),
-        }))
+        }).pipe(switchMap(data => {
+            if (data.summary.hasOutstanding) {
+                return this.accountController.payableAccount({ isTransfer: false }).pipe(map(d => d.responsePayload)).pipe(
+                    map(accounts => ({ ...data, accounts }))
+                );
+            }
+            return of({ ...data, accounts: [] });
+        })))
     }
 
     fetchGuestDonations(pageIndex: number = 0, pageSize: number = 100) {
@@ -88,14 +98,6 @@ export class DonationNewService {
 
     createDonation(donation: any) {
         return this.donationController.createDonation({ body: donation }).pipe(map(d => d.responsePayload));
-    }
-
-    getPayableAccounts() {
-        return this.accountController.listAccounts({
-            status: ['ACTIVE'], type: ['DONATION'],
-            pageIndex: 0,
-            pageSize: 10000
-        }).pipe(map(d => d.responsePayload));
     }
 
     fetchRefData() {

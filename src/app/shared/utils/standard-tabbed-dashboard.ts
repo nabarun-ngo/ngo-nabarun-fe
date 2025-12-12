@@ -1,5 +1,6 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { AfterViewInit, Component, inject, DestroyRef, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TabComponentInterface } from '../interfaces/tab-component.interface';
 import { StandardDashboard } from './standard-dashboard';
 import { SearchEvent } from '../components/search-and-advanced-search-form/search-event.model';
@@ -43,7 +44,31 @@ export abstract class StandardTabbedDashboard<TTab extends string | number, TDat
    * Map of tab types to their corresponding components
    * Must be implemented by child classes
    */
+  /**
+   * Reference to dynamically loaded components
+   */
+  private dynamicTabComponents = new Map<TTab, TabComponentInterface<TData>>();
+
+  /**
+   * Map of tab types to their corresponding components
+   * Must be implemented by child classes
+   */
   protected abstract get tabComponents(): { [key in TTab]?: TabComponentInterface<TData> };
+
+  /**
+   * Register a dynamically loaded tab component.
+   * Call this from the template when using dynamic rendering.
+   */
+  onDynamicTabActivated(id: TTab, instance: TabComponentInterface<TData>): void {
+    this.dynamicTabComponents.set(id, instance);
+  }
+
+  /**
+   * Helper to get component from either static definition or dynamic registry
+   */
+  protected getActiveComponent(tab: TTab): TabComponentInterface<TData> | undefined {
+    return this.tabComponents[tab] || this.dynamicTabComponents.get(tab);
+  }
 
   /**
    * Default tab that receives initial resolver data
@@ -54,9 +79,22 @@ export abstract class StandardTabbedDashboard<TTab extends string | number, TDat
   constructor(protected override route: ActivatedRoute) { super(route); }
 
 
+  protected readonly router = inject(Router);
+  protected readonly destroyRef = inject(DestroyRef);
+
   override ngOnInit(): void {
     this.initializeTabIndex();
     super.ngOnInit();
+
+    // Subscribe to query params to handle tab changes (including back/forward button)
+    this.route.queryParams
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(params => {
+        const tab = params['tab'] as TTab | undefined;
+        if (tab) {
+          this.handleTabChangeFromUrl(tab);
+        }
+      });
   }
 
   /**
@@ -73,12 +111,43 @@ export abstract class StandardTabbedDashboard<TTab extends string | number, TDat
     }
   }
 
+  /**
+   * Handle tab change triggered by URL updates
+   */
+  private handleTabChangeFromUrl(tab: TTab): void {
+    const index = this.tabMapping.indexOf(tab);
+    if (index !== -1 && index !== this.tabIndex) {
+      this.tabIndex = index;
+      this.#visitedTabs.add(tab);
+
+      // Trigger data load and hooks
+      setTimeout(() => {
+        this.getActiveComponent(tab)?.loadData();
+        this.onTabChangedHook();
+      });
+    }
+  }
+
   protected tabChanged: Final<(index: number) => void> = (index: number) => {
+    // Navigate to update the URL
+    // The subscription will handle the actual state update if needed,
+    // but we also update local state immediately for responsiveness if relying on binding
+    const tab = this.tabMapping[index];
+
+    // Update URL which will trigger the subscription
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { tab },
+      queryParamsHandling: 'merge',
+    });
+
+    // Also run immediate logic in case the navigation is ignored (e.g. same URL)
+    // or to ensure immediate UI feedback patterns that might rely on side effects
     this.tabIndex = index;
-    this.#visitedTabs.add(this.getCurrentTab());
+    this.#visitedTabs.add(tab);
 
     setTimeout(() => {
-      this.tabComponents[this.getCurrentTab()]?.loadData();
+      this.getActiveComponent(tab)?.loadData();
       this.onTabChangedHook();
     });
   };
@@ -88,7 +157,7 @@ export abstract class StandardTabbedDashboard<TTab extends string | number, TDat
    */
   protected forwardSearchToActiveTab(event: SearchEvent): void {
     const currentTab = this.getCurrentTab();
-    const activeTabComponent = this.tabComponents[currentTab];
+    const activeTabComponent = this.getActiveComponent(currentTab);
 
     if (activeTabComponent) {
       activeTabComponent.onSearch(event);

@@ -32,6 +32,7 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
   abstract ngOnInit(): void;
 
   ngAfterContentInit(): void {
+    console.log(this.page);
     this.setContent(this.page.content!, this.page.totalSize);
     this.viewInitialized = true;
   }

@@ -71,7 +71,6 @@ export class DonationDashboardNewComponent extends StandardTabbedDashboard<donat
 
   protected override onTabChangedHook(): void {
     this.searchInput = donationSearchInput(this.getCurrentTab(), this.refData!);
-    this.tabComponents[this.getCurrentTab()]?.loadData();
   }
 
 

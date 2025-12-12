@@ -21,7 +21,6 @@ export class DonationService {
 
   ) { }
 
-
   async fetchMyDonations(pageIndex: number = 0, pageSize: number = 100) {
     let id = (await this.identityService.getUser()).profile_id;
     return firstValueFrom(combineLatest({
@@ -29,6 +28,7 @@ export class DonationService {
       summary: this.donationController.getDonationSummary({ donorId: id, includeOutstandingMonths: true, includePayableAccount: true }).pipe(map(d => d.responsePayload)),
     }))
   }
+
 
   fetchGuestDonations(pageIndex: number = 0, pageSize: number = 100) {
     return this.donationController.getDonations({ pageIndex: pageIndex, pageSize: pageSize, filter: { isGuest: true } }).pipe(map(d => d.responsePayload));

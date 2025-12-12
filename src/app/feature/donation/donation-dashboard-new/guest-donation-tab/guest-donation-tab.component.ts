@@ -14,31 +14,29 @@ import { Accordion } from 'src/app/shared/utils/accordion';
 })
 export class GuestDonationTabComponent extends Accordion<DonationDto> implements TabComponentInterface<PagedResultDonationDto> {
   override ngOnInit(): void {
-    throw new Error('Method not implemented.');
   }
   protected override prepareHighLevelView(data: DonationDto, options?: { [key: string]: any; }): AccordionCell[] {
-    throw new Error('Method not implemented.');
+    return [];
   }
   protected override prepareDetailedView(data: DonationDto, options?: { [key: string]: any; }): DetailedView[] {
-    throw new Error('Method not implemented.');
+    return [];
   }
   protected override prepareDefaultButtons(data: DonationDto, options?: { [key: string]: any; }): AccordionButton[] {
-    throw new Error('Method not implemented.');
+    return [];
   }
   protected override onClick(event: { buttonId: string; rowIndex: number; }): void {
-    throw new Error('Method not implemented.');
+
   }
   protected override onAccordionOpen(event: { rowIndex: number; }): void {
-    throw new Error('Method not implemented.');
+
   }
   override handlePageEvent($event: PageEvent): void {
-    throw new Error('Method not implemented.');
+
   }
   onSearch($event: SearchEvent): void {
-    throw new Error('Method not implemented.');
+
   }
   loadData(): void {
-    throw new Error('Method not implemented.');
   }
 
 }

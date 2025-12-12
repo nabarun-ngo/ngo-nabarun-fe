@@ -1,6 +1,6 @@
-import { Component, ElementRef } from '@angular/core';
+import { Component, ElementRef, Input } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { DonationDto, PagedResultDonationDto } from 'src/app/core/api-client/models';
+import { AccountDetailDto, DonationDto, DonationSummaryDto, PagedResultDonationDto } from 'src/app/core/api-client/models';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
 import { AccordionCell, AccordionButton } from 'src/app/shared/model/accordion-list.model';
@@ -9,6 +9,7 @@ import { Accordion } from 'src/app/shared/utils/accordion';
 import { DonationNewService } from '../../donation-new.service';
 import { date } from 'src/app/core/service/utilities.service';
 import { getDonationSection } from '../../donation.field';
+import { DonationRefData } from '../../donation.const';
 
 @Component({
   selector: 'app-self-donation-tab',
@@ -17,15 +18,19 @@ import { getDonationSection } from '../../donation.field';
 })
 export class SelfDonationTabComponent extends Accordion<DonationDto> implements TabComponentInterface<PagedResultDonationDto> {
 
+  @Input()
+  summary: DonationSummaryDto | undefined;
+  @Input()
+  payableAccounts: AccountDetailDto[] = [];
+
   constructor(
-    protected taskService: DonationNewService,
+    protected donationService: DonationNewService,
     protected el: ElementRef,
   ) {
     super();
   }
 
   override ngOnInit(): void {
-    console.log(this.accordionData)
     this.setHeaderRow([
       {
         value: 'Donation Type',
@@ -51,7 +56,7 @@ export class SelfDonationTabComponent extends Accordion<DonationDto> implements 
         type: 'text',
         value: data?.type!,
         showDisplayValue: true,
-        refDataSection: 'donationTypes'
+        refDataSection: DonationRefData.refDataKey.type
       },
       {
         type: 'text',
@@ -65,36 +70,40 @@ export class SelfDonationTabComponent extends Accordion<DonationDto> implements 
         type: 'text',
         value: data?.status!,
         showDisplayValue: true,
-        refDataSection: 'donationStatuses'
+        refDataSection: DonationRefData.refDataKey.status
       }
     ];
   }
   protected override prepareDetailedView(data: DonationDto, options?: { [key: string]: any; }): DetailedView[] {
     return [
       getDonationSection(data, {
-        mode: 'view',
+        isCreate: options && options['create'],
         refData: this.getRefData()
       })
     ];
   }
   protected override prepareDefaultButtons(data: DonationDto, options?: { [key: string]: any; }): AccordionButton[] {
-    return [
-
-    ];
+    return [];
   }
   protected override onClick(event: { buttonId: string; rowIndex: number; }): void {
-    throw new Error('Method not implemented.');
+
   }
   protected override onAccordionOpen(event: { rowIndex: number; }): void {
-    throw new Error('Method not implemented.');
+
   }
   override handlePageEvent($event: PageEvent): void {
-    throw new Error('Method not implemented.');
+    this.donationService.getSelfDonations($event.pageIndex, $event.pageSize).subscribe(data => {
+      this.setContent(data.content, data.totalSize);
+    });
   }
   onSearch($event: SearchEvent): void {
-    throw new Error('Method not implemented.');
+
   }
-  loadData(): void {
+  async loadData(): Promise<void> {
+    const data = await this.donationService.fetchMyDonations();
+    this.summary = data.summary;
+    this.payableAccounts = data.accounts;
+    this.setContent(data.donations.content, data.donations.totalSize);
   }
 
 }

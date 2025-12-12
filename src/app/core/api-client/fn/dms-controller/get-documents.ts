@@ -8,14 +8,14 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseDocumentDto } from '../../models/success-response-document-dto';
+import { SuccessResponseArrayDocumentDto } from '../../models/success-response-array-document-dto';
 
 export interface GetDocuments$Params {
   type: string;
   id: string;
 }
 
-export function getDocuments(http: HttpClient, rootUrl: string, params: GetDocuments$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseDocumentDto>> {
+export function getDocuments(http: HttpClient, rootUrl: string, params: GetDocuments$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayDocumentDto>> {
   const rb = new RequestBuilder(rootUrl, getDocuments.PATH, 'get');
   if (params) {
     rb.path('type', params.type, {});
@@ -27,7 +27,7 @@ export function getDocuments(http: HttpClient, rootUrl: string, params: GetDocum
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseDocumentDto>;
+      return r as StrictHttpResponse<SuccessResponseArrayDocumentDto>;
     })
   );
 }

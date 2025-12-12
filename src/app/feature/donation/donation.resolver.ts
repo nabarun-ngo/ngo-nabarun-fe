@@ -35,17 +35,17 @@ export const donationRefDataResolver: ResolveFn<any> =
 export const donationDashboardResolverNew: ResolveFn<any> =
     async (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
         //return of(true);
-        const donation = inject(DonationNewService);
         let tab = (route.data['tab'] || defaultValue.tabName) as donationTab;
         //console.log(route)
         if (tab == 'member_donation') {
-            return donation.fetchMembers(defaultValue.pageNumber, defaultValue.pageSize);
+            return inject(DonationNewService).fetchMembers(defaultValue.pageNumber, defaultValue.pageSize);
         }
         else if (tab == 'guest_donation') {
-            return donation.fetchGuestDonations(defaultValue.pageNumber, defaultValue.pageSize);
+            return inject(DonationNewService).fetchGuestDonations(defaultValue.pageNumber, defaultValue.pageSize);
 
         } else {
-            return await donation.fetchMyDonations(defaultValue.pageNumber, defaultValue.pageSize);
+            console.log("fetching my donations");
+            return await inject(DonationNewService).fetchMyDonations(defaultValue.pageNumber, defaultValue.pageSize);
         }
     };
 

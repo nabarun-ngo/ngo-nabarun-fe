@@ -15,7 +15,7 @@ import { getGmailAuthUrl } from '../fn/o-auth-controller/get-gmail-auth-url';
 import { GetGmailAuthUrl$Params } from '../fn/o-auth-controller/get-gmail-auth-url';
 import { getGoogleScopes } from '../fn/o-auth-controller/get-google-scopes';
 import { GetGoogleScopes$Params } from '../fn/o-auth-controller/get-google-scopes';
-import { SuccessResponseArray } from '../models/success-response-array';
+import { SuccessResponseArrayArray } from '../models/success-response-array-array';
 import { SuccessResponseString } from '../models/success-response-string';
 
 @Injectable({ providedIn: 'root' })
@@ -70,7 +70,7 @@ export class OAuthControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getGoogleScopes$Response(params?: GetGoogleScopes$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArray>> {
+  getGoogleScopes$Response(params?: GetGoogleScopes$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayArray>> {
     return getGoogleScopes(this.http, this.rootUrl, params, context);
   }
 
@@ -84,9 +84,9 @@ export class OAuthControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getGoogleScopes(params?: GetGoogleScopes$Params, context?: HttpContext): Observable<SuccessResponseArray> {
+  getGoogleScopes(params?: GetGoogleScopes$Params, context?: HttpContext): Observable<SuccessResponseArrayArray> {
     return this.getGoogleScopes$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseArray>): SuccessResponseArray => r.body)
+      map((r: StrictHttpResponse<SuccessResponseArrayArray>): SuccessResponseArrayArray => r.body)
     );
   }
 

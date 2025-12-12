@@ -44,7 +44,7 @@ export class AccountDashboardComponent extends StandardTabbedDashboard<accountTa
   protected tabMapping: accountTab[] = ['my_accounts', 'all_accounts'];
   protected searchInput!: SearchAndAdvancedSearchModel;
 
-  protected get tabComponents(): { [key in accountTab]?: TabComponentInterface<PaginateAccountDetail> } {
+  protected override get tabComponents(): { [key in accountTab]?: TabComponentInterface<PaginateAccountDetail> } {
     return {
       my_accounts: this.myAccountsTab,
       all_accounts: this.manageAccountsTab

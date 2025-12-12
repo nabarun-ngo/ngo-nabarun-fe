@@ -49,6 +49,7 @@ import { PageNavigationButtonsComponent } from './components/generic/page-naviga
 import { PageLayoutComponent } from './layout/page-layout/page-layout.component';
 import { DocumentLinkComponent } from './components/document-link/document-link.component';
 import { AppPhoneNumberComponent } from './components/generic/phone-number/app-phone-number.component';
+import { StandardTabGroupComponent } from './components/standard-tab-group/standard-tab-group.component';
 
 @NgModule({
   declarations: [
@@ -74,7 +75,8 @@ import { AppPhoneNumberComponent } from './components/generic/phone-number/app-p
     PageLayoutComponent,
     DocumentLinkComponent,
     FloatingActionButtonComponent,
-    AppPhoneNumberComponent
+    AppPhoneNumberComponent,
+    StandardTabGroupComponent
   ],
   imports: [
     CommonModule,
@@ -136,7 +138,8 @@ import { AppPhoneNumberComponent } from './components/generic/phone-number/app-p
     MatCheckboxModule,
     DocumentLinkComponent,
     FloatingActionButtonComponent,
-    AppPhoneNumberComponent
+    AppPhoneNumberComponent,
+    StandardTabGroupComponent
   ],
   providers: [{
     provide: MAT_RADIO_DEFAULT_OPTIONS,

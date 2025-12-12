@@ -21,7 +21,10 @@ import { listSelfAccounts } from '../fn/account-controller/list-self-accounts';
 import { ListSelfAccounts$Params } from '../fn/account-controller/list-self-accounts';
 import { listSelfAccountTransactions } from '../fn/account-controller/list-self-account-transactions';
 import { ListSelfAccountTransactions$Params } from '../fn/account-controller/list-self-account-transactions';
+import { payableAccount } from '../fn/account-controller/payable-account';
+import { PayableAccount$Params } from '../fn/account-controller/payable-account';
 import { SuccessResponseAccountDetailDto } from '../models/success-response-account-detail-dto';
+import { SuccessResponseArrayAccountDetailDto } from '../models/success-response-array-account-detail-dto';
 import { SuccessResponsePagedResultAccountDetailDto } from '../models/success-response-paged-result-account-detail-dto';
 import { SuccessResponsePagedResultTransactionDetailDto } from '../models/success-response-paged-result-transaction-detail-dto';
 import { updateAccount } from '../fn/account-controller/update-account';
@@ -263,6 +266,39 @@ export class AccountControllerService extends BaseService {
   listSelfAccountTransactions(params: ListSelfAccountTransactions$Params, context?: HttpContext): Observable<SuccessResponsePagedResultTransactionDetailDto> {
     return this.listSelfAccountTransactions$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponsePagedResultTransactionDetailDto>): SuccessResponsePagedResultTransactionDetailDto => r.body)
+    );
+  }
+
+  /** Path part for operation `payableAccount()` */
+  static readonly PayableAccountPath = '/api/account/payable-account';
+
+  /**
+   * Get account data for payable.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `payableAccount()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  payableAccount$Response(params?: PayableAccount$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayAccountDetailDto>> {
+    return payableAccount(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get account data for payable.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `payableAccount$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  payableAccount(params?: PayableAccount$Params, context?: HttpContext): Observable<SuccessResponseArrayAccountDetailDto> {
+    return this.payableAccount$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseArrayAccountDetailDto>): SuccessResponseArrayAccountDetailDto => r.body)
     );
   }
 

@@ -1,32 +1,28 @@
 <div class="container-fluid p-0">
     <div class="row">
         <div class="col">
-            <mat-card class="mb-4" *ngIf="mySummary">
+            <mat-card class="mb-4" *ngIf="summary?.hasOutstanding">
                 <div class="text-gray-700 m-4">
                     <div class="grid md:grid-cols-2 text-sm">
                         <div class="grid grid-cols-2">
                             <div class="py-2 font-semibold">Outstanding amount</div>
-                            <div class="py-2"> ₹ {{mySummary.outstandingAmount}}</div>
+                            <div class="py-2"> ₹ {{summary.outstandingAmount}}</div>
                         </div>
                         <div class="grid grid-cols-2">
                             <div class="py-2 font-semibold">Outstanding month(s)</div>
                             <div class="py-2">
                                 <span>
-                                    {{ mySummary.outstandingMonths?.length ==0 ? '-' :
-                                    mySummary.outstandingMonths?.join(', ') | replaceNull }}
+                                    {{ summary.outstandingMonths?.length ==0 ? '-' :
+                                    summary.outstandingMonths?.join(', ') | replaceNull }}
                                 </span>
                             </div>
                         </div>
                     </div>
-                </div>
-            </mat-card>
-            <mat-card class="mb-4" *ngIf="mySummary?.hasOutstanding">
-                <div class="text-gray-700 m-4">
-                    <div class="grid grid-cols-1">
+                    <div class="grid grid-cols-1 mt-4" *ngIf="payableAccounts?.length > 0">
                         <div class="py-2 text-center justify-center font-bold text-purple-700">Please pay your
                             outstanding donation amount to the below account(s)</div>
 
-                        <!-- <div class="grid divide-x-4 mt-4" *ngFor="let account of payableAccounts"
+                        <div class="grid divide-x-4 mt-4" *ngFor="let account of payableAccounts"
                             [ngClass]="true ? 'grid-cols-12' : 'grid-cols-6'">
                             <div class="col-span-6" *ngIf="true">
                                 <div
@@ -100,7 +96,7 @@
                                                 <div class="px-2 py-2">{{account.upiDetail?.upiId | replaceNull}}</div>
                                             </div>
                                         </div>
-                                        <div class="grid grid-cols-1">
+                                        <!-- <div class="grid grid-cols-1">
                                             <div class="grid grid-cols-2">
                                                 <div class="px-2 py-2 font-semibold">QR code</div>
                                                 <div class="qrcodeImage px-2 py-2">
@@ -112,16 +108,16 @@
                                                     </qrcode>
                                                 </div>
                                             </div>
-
-                                        </div>
+                                        </div> -->
 
                                     </div>
                                 </div>
                             </div>
-                        </div> -->
+                        </div>
                     </div>
                 </div>
             </mat-card>
+
             <app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)"
                 (onAccordionOpen)="onAccordionOpen($event)">
             </app-accordion-list>
