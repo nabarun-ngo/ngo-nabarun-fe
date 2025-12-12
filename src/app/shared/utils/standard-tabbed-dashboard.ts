@@ -4,9 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TabComponentInterface } from '../interfaces/tab-component.interface';
 import { StandardDashboard } from './standard-dashboard';
 import { SearchEvent } from '../components/search-and-advanced-search-form/search-event.model';
+import { Final } from './final';
 
-type Final<T extends (...args: any[]) => any> =
-  T & { __finalBrand?: never };
+
 
 /**
  * Standardized base class for all tabbed dashboard components.

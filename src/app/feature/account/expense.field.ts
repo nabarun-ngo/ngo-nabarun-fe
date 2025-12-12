@@ -18,7 +18,7 @@ import {
 } from 'src/app/shared/model/detailed-view.model';
 import { date } from 'src/app/core/service/utilities.service';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
-import { accountTab, expenseTab } from './account.const';
+import { accountTab, ExpenseDefaultValue, expenseTab } from './account.const';
 
 export const expenseTabHeader = [
   {
@@ -58,7 +58,7 @@ export const manageExpenseTabHeader = [
   },
 ];
 
-  
+
 
 export const expenseHighLevelView = (item: ExpenseDetail): AccordionCell[] => {
   return [
@@ -113,7 +113,7 @@ export const manageExpenseHighLevelView = (item: ExpenseDetail): AccordionCell[]
 export const expenseDetailSection = (
   m: ExpenseDetail,
   isCreate: boolean = false,
-  isAdminView:boolean =false
+  isAdminView: boolean = false
 ) => {
   return {
     section_name: 'Expense Detail',
@@ -192,13 +192,13 @@ export const expenseDetailSection = (
         field_name: 'Created By',
         field_value: m?.createdBy?.id,
         field_display_value: m?.createdBy?.fullName,
-        hide_field: !m?.createdBy        
+        hide_field: !m?.createdBy
       },
       {
         field_name: 'Expense Amount',
         field_value: m?.finalAmount,
         field_display_value: `₹ ${m?.finalAmount}`,
-        hide_field: !m?.finalAmount       
+        hide_field: !m?.finalAmount
       },
       {
         field_name: 'Is this any event releted expense?',
@@ -222,12 +222,12 @@ export const expenseDetailSection = (
       {
         field_name: 'Finalized By',
         field_value: m?.finalizedBy?.fullName,
-        hide_field: !m?.finalizedBy        
+        hide_field: !m?.finalizedBy
       },
       {
         field_name: 'Settled By',
         field_value: m?.settledBy?.fullName,
-        hide_field: !m?.settledBy        
+        hide_field: !m?.settledBy
       },
       {
         field_name: 'Settlement Account',
@@ -249,12 +249,12 @@ export const expenseDetailSection = (
       {
         field_name: 'Rejected By',
         field_value: m?.rejectedBy?.fullName,
-        hide_field: !m?.rejectedBy        
+        hide_field: !m?.rejectedBy
       },
       {
         field_name: 'Remarks',
         field_value: m?.remarks,
-        hide_field: !m?.remarks        
+        hide_field: !m?.remarks
       },
     ],
   } as DetailedView;
@@ -282,13 +282,20 @@ export const expenseListSection = (
   isCreate: boolean = false
 ) => {
   let accordion = new (class extends Accordion<ExpenseItemDetail> {
-    
-    override ngOnInit(): void {}
+    protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
+      return {
+        pageNumber: ExpenseDefaultValue.pageNumber,
+        pageSize: ExpenseDefaultValue.pageSize,
+        pageSizeOptions: ExpenseDefaultValue.pageSizeOptions
+      };
+    }
+
+    override onInitHook(): void { }
     protected override onClick(event: {
       buttonId: string;
       rowIndex: number;
-    }): void {}
-    protected override onAccordionOpen(event: { rowIndex: number }): void {}
+    }): void { }
+    protected override onAccordionOpen(event: { rowIndex: number }): void { }
     prepareHighLevelView(
       item: ExpenseItemDetail,
       options?: { [key: string]: any }
@@ -392,7 +399,7 @@ export const expenseListSection = (
       }
       return [];
     }
-    handlePageEvent($event: PageEvent): void {}
+    handlePageEvent($event: PageEvent): void { }
   })();
   accordion.setHeaderRow([
     {
@@ -444,23 +451,23 @@ export const expenseEventField = (events: KeyValue[]) => {
   } as DetailedViewField;
 };
 
-export const rejectionModal =():SearchAndAdvancedSearchModel =>{
+export const rejectionModal = (): SearchAndAdvancedSearchModel => {
   return {
-    normalSearchPlaceHolder:'',
-    showOnlyAdvancedSearch:true,
-    advancedSearch:{
-      buttonText:{search:'Reject',close:'Cancel'},
-      title:'Confirm Rejection',
-      searchFormFields:[{
-        formControlName:'remarks',
-        inputModel:{
-          html_id:'remarks',
-          labelName:'Reason for reject',
-          inputType:'text',
-          tagName:'textarea',
-          placeholder:'Enter reason for rejection',
+    normalSearchPlaceHolder: '',
+    showOnlyAdvancedSearch: true,
+    advancedSearch: {
+      buttonText: { search: 'Reject', close: 'Cancel' },
+      title: 'Confirm Rejection',
+      searchFormFields: [{
+        formControlName: 'remarks',
+        inputModel: {
+          html_id: 'remarks',
+          labelName: 'Reason for reject',
+          inputType: 'text',
+          tagName: 'textarea',
+          placeholder: 'Enter reason for rejection',
         },
-        validations:[Validators.required]
+        validations: [Validators.required]
       }]
     }
   }
@@ -523,15 +530,15 @@ export const expenseSearchInput = (
             html_id: 'event_Id',
             tagName: 'select',
             inputType: '',
-            labelName:'Select Event',
-            selectList:[],
+            labelName: 'Select Event',
+            selectList: [],
             placeholder: 'Ex. NEV1224',
           }
         }
       ],
     },
   };
-  if(tab == 'expense_list'){
+  if (tab == 'expense_list') {
     model.advancedSearch?.searchFormFields.push({
       formControlName: 'payerId',
       inputModel: {
@@ -539,7 +546,7 @@ export const expenseSearchInput = (
         tagName: 'input',
         inputType: 'text',
         autocomplete: true,
-        labelName:'Expense Payer',
+        labelName: 'Expense Payer',
         selectList: [],
         placeholder: 'Ex. Sonal Gupta',
       }

@@ -37,6 +37,13 @@ import { SearchEvent } from 'src/app/shared/components/search-and-advanced-searc
   styleUrls: ['./my-expenses-tab.component.scss'],
 })
 export class MyExpensesTabComponent extends Accordion<ExpenseDetail> implements TabComponentInterface<PaginateExpenseDetail> {
+  protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
+    return {
+      pageNumber: AccountDefaultValue.pageNumber,
+      pageSize: AccountDefaultValue.pageSize,
+      pageSizeOptions: AccountDefaultValue.pageSizeOptions
+    }
+  }
 
   /**
    * Initialize variables
@@ -51,12 +58,7 @@ export class MyExpensesTabComponent extends Accordion<ExpenseDetail> implements 
     super();
   }
 
-  ngOnInit(): void {
-    this.init(
-      AccountDefaultValue.pageNumber,
-      AccountDefaultValue.pageSize,
-      AccountDefaultValue.pageSizeOptions
-    );
+  override onInitHook(): void {
     this.setHeaderRow(expenseTabHeader);
   }
 

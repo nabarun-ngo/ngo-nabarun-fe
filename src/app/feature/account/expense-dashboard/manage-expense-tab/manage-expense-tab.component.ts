@@ -51,8 +51,7 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
       });
   }
 
-  override ngOnInit(): void {
-    super.ngOnInit();
+  override onInitHook(): void {
     this.setHeaderRow(manageExpenseTabHeader);
     this.permissions = {
       canCreateExpense: this.userIdentity.isAccrediatedTo(

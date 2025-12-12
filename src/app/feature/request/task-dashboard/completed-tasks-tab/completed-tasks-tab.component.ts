@@ -21,11 +21,10 @@ export class CompletedTasksTabComponent extends PendingTasksTabComponent {
     protected override taskService: RequestService,
     protected override el: ElementRef,
   ) {
-    super(taskService, el);  
+    super(taskService, el);
   }
 
-  override ngOnInit(): void {
-    super.ngOnInit();
+  override onInitHook(): void {
     this.setHeaderRow([
       {
         value: TaskField.workId,
@@ -82,5 +81,5 @@ export class CompletedTasksTabComponent extends PendingTasksTabComponent {
 
   protected override onClick($event: { buttonId: string; rowIndex: number; }) {
   }
-  
+
 }

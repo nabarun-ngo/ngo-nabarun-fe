@@ -38,14 +38,14 @@ export const donationDashboardResolverNew: ResolveFn<any> =
         let tab = (route.data['tab'] || defaultValue.tabName) as donationTab;
         //console.log(route)
         if (tab == 'member_donation') {
-            return inject(DonationNewService).fetchMembers(defaultValue.pageNumber, defaultValue.pageSize);
+            return inject(DonationNewService).fetchMembers({});
         }
         else if (tab == 'guest_donation') {
-            return inject(DonationNewService).fetchGuestDonations(defaultValue.pageNumber, defaultValue.pageSize);
+            return inject(DonationNewService).fetchGuestDonations({});
 
         } else {
             console.log("fetching my donations");
-            return await inject(DonationNewService).fetchMyDonations(defaultValue.pageNumber, defaultValue.pageSize);
+            return await inject(DonationNewService).fetchMyDonations({});
         }
     };
 

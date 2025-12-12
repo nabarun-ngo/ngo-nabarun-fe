@@ -4,7 +4,7 @@ import { KeyValue } from "src/app/core/api/models";
 import { date } from "src/app/core/service/utilities.service";
 import { DetailedView } from "src/app/shared/model/detailed-view.model";
 import { SearchAndAdvancedSearchModel } from "src/app/shared/model/search-and-advanced-search.model";
-import { DonationRefData, DonationStatus, DonationType, donationTab, OperationMode } from "./donation-new.const";
+import { DonationRefData, DonationStatus, DonationType, donationTab } from "./donation.const";
 
 
 export const donationSearchInput = (

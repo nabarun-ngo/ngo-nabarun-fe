@@ -19,6 +19,14 @@ import { SearchEvent } from 'src/app/shared/components/search-and-advanced-searc
 })
 export class TransactionAccordionComponent extends Accordion<TransactionDetail> {
 
+  protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
+    return {
+      pageNumber: this.defaultValue.pageNumber,
+      pageSize: this.defaultValue.pageSize,
+      pageSizeOptions: this.defaultValue.pageSizeOptions
+    }
+  }
+
 
   @Input({ required: true })
   accountId!: string;
@@ -32,12 +40,7 @@ export class TransactionAccordionComponent extends Accordion<TransactionDetail> 
     super();
   }
 
-  override ngOnInit(): void {
-    this.init(
-      this.defaultValue.pageNumber,
-      this.defaultValue.pageSize,
-      this.defaultValue.pageSizeOptions
-    );
+  override onInitHook(): void {
     this.setHeaderRow(transactionHeader);
   }
 
@@ -80,8 +83,7 @@ export class TransactionAccordionComponent extends Accordion<TransactionDetail> 
     return [];
   }
   override handlePageEvent($event: PageEvent): void {
-    this.pageNumber = $event.pageIndex;
-    this.pageSize = $event.pageSize;
+    this.pageEvent = $event;
     this.fetchDetails(this.pageNumber, this.pageSize);
   }
 

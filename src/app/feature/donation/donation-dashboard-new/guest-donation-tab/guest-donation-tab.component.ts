@@ -6,6 +6,7 @@ import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.i
 import { AccordionButton, AccordionCell } from 'src/app/shared/model/accordion-list.model';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { Accordion } from 'src/app/shared/utils/accordion';
+import { DonationDefaultValue } from '../../donation.const';
 
 @Component({
   selector: 'app-guest-donation-tab',
@@ -13,8 +14,39 @@ import { Accordion } from 'src/app/shared/utils/accordion';
   styleUrls: ['./guest-donation-tab.component.scss']
 })
 export class GuestDonationTabComponent extends Accordion<DonationDto> implements TabComponentInterface<PagedResultDonationDto> {
-  override ngOnInit(): void {
+  override onInitHook(): void {
+    this.setHeaderRow([
+      {
+        value: 'Donation Type',
+        rounded: true
+      },
+      {
+        value: 'Donation Amount',
+        rounded: true
+      },
+      {
+        value: 'Donation Period',
+        rounded: true
+      },
+      {
+        value: 'Donation Status',
+        rounded: true
+      }
+    ]);
   }
+  protected get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
+    return {
+      pageNumber: DonationDefaultValue.pageNumber,
+      pageSize: DonationDefaultValue.pageSize,
+      pageSizeOptions: DonationDefaultValue.pageSizeOptions
+    };
+  }
+
+  protected get tabComponents() {
+    return {};
+  }
+
+
   protected override prepareHighLevelView(data: DonationDto, options?: { [key: string]: any; }): AccordionCell[] {
     return [];
   }

@@ -19,6 +19,13 @@ import { SearchEvent } from 'src/app/shared/components/search-and-advanced-searc
   styleUrls: ['./admin-apikey-tab.component.scss']
 })
 export class AdminApikeyTabComponent extends Accordion<ApiKeyDetail> implements TabComponentInterface<ApiKeyDetail> {
+  protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
+    return {
+      pageNumber: this.defaultValue.pageNumber,
+      pageSize: this.defaultValue.pageSize,
+      pageSizeOptions: this.defaultValue.pageSizeOptions
+    };
+  }
   defaultValue = AdminDefaultValue;
   constant = AdminConstant;
 
@@ -30,17 +37,16 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDetail> implements 
   ) {
     super();
   }
-  onSearch($event: SearchEvent): void {}
-  
+  onSearch($event: SearchEvent): void { }
+
   loadData(): void {
     this.adminService.getAPIKeyList().subscribe(data => {
-        this.setContent(data!, data?.length);
-      });
+      this.setContent(data!, data?.length);
+    });
   }
 
-  override ngOnInit(): void {
-    this.setHeaderRow([{value:'API Key Name'},{value:'API Key Scope'}])
-        this.init(this.defaultValue.pageNumber, this.defaultValue.pageSize, this.defaultValue.pageSizeOptions)
+  override onInitHook(): void {
+    this.setHeaderRow([{ value: 'API Key Name' }, { value: 'API Key Scope' }])
   }
 
   protected override prepareHighLevelView(data: ApiKeyDetail, options?: { [key: string]: any; }): AccordionCell[] {
@@ -83,14 +89,14 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDetail> implements 
             html_id: 'ip_api_key_name',
             inputType: 'text',
             tagName: 'input',
-            placeholder:'Enter APIKey Name'
+            placeholder: 'Enter APIKey Name'
           }
         },
         {
           field_name: 'APIKey Scope',
           field_html_id: 'api_key_scope',
           field_value: apikey.scopes?.join(',')!,
-          field_value_splitter:',',
+          field_value_splitter: ',',
           editable: true,
           form_control_name: 'scopes',
           form_input_validation: [Validators.required],
@@ -98,16 +104,16 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDetail> implements 
             html_id: 'ip_api_key_scope',
             inputType: 'multiselect',
             tagName: 'select',
-            selectList:[],
-            placeholder:'Select APIKey Scope',
-            autocomplete:true
+            selectList: [],
+            placeholder: 'Select APIKey Scope',
+            autocomplete: true
           }
         },
         {
           field_name: 'Expire On',
           field_html_id: 'api_key_exp',
           field_value: apikey.expiryDate!,
-          hide_field: !(apikey.expireable|| isCreate),
+          hide_field: !(apikey.expireable || isCreate),
           editable: isCreate,
           form_control_name: 'expiryDate',
           form_input_validation: [],
@@ -115,7 +121,7 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDetail> implements 
             html_id: 'ip_api_key_exp',
             inputType: 'date',
             tagName: 'input',
-            placeholder:'Select Expire Date'
+            placeholder: 'Select Expire Date'
           }
         },
       ]
@@ -140,7 +146,7 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDetail> implements 
     return [{
       button_id: 'REVOKE',
       button_name: 'Revoke'
-    },{
+    }, {
       button_id: 'UPDATE',
       button_name: 'Update'
     }];
@@ -160,9 +166,9 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDetail> implements 
             this.addContentRow(s!)
             window.navigator.clipboard.writeText(s?.apiKey!)
             this.modalService.openNotificationModal({
-              title:'API Key Generated',
-              description:'The generated API key has been copied to your clipboard. Please save it securely, as it will not be shown again.<br><br><b>'+s?.apiKey+'</b>'
-            },'notification','success');
+              title: 'API Key Generated',
+              description: 'The generated API key has been copied to your clipboard. Please save it securely, as it will not be shown again.<br><br><b>' + s?.apiKey + '</b>'
+            }, 'notification', 'success');
           });
         } else {
           api_key_detail?.markAllAsTouched();
@@ -175,30 +181,30 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDetail> implements 
         this.hideForm(0, true);
         break;
       case 'REVOKE':
-        let modal=this.modalService.openNotificationModal(AppDialog.warning_confirm_revoke,'confirmation','warning')
-        modal.onAccept$.subscribe(s=>{
-          let apiKey =this.itemList[$event.rowIndex];
-          this.adminService.revokeAPIKey(apiKey.id!).subscribe(s=>{});
+        let modal = this.modalService.openNotificationModal(AppDialog.warning_confirm_revoke, 'confirmation', 'warning')
+        modal.onAccept$.subscribe(s => {
+          let apiKey = this.itemList[$event.rowIndex];
+          this.adminService.revokeAPIKey(apiKey.id!).subscribe(s => { });
         })
         break;
       case 'UPDATE':
-        this.adminService.getScopeList().subscribe(d=>{
-            // let list = d.filter((p: any)=> p.details ).map((m: any)=>{
-            //   let url= m.details.requestMappingConditions.patterns[0];
-            //   return {key:url,displayValue:url}as KeyValue;
-            // })
-            this.showEditForm($event.rowIndex, ['api_key_detail']);
-            this.getSectionField('api_key_detail','api_key_scope',$event.rowIndex).form_input!.selectList=d;
-          })
-          break;
+        this.adminService.getScopeList().subscribe(d => {
+          // let list = d.filter((p: any)=> p.details ).map((m: any)=>{
+          //   let url= m.details.requestMappingConditions.patterns[0];
+          //   return {key:url,displayValue:url}as KeyValue;
+          // })
+          this.showEditForm($event.rowIndex, ['api_key_detail']);
+          this.getSectionField('api_key_detail', 'api_key_scope', $event.rowIndex).form_input!.selectList = d;
+        })
+        break;
       case 'CONFIRM':
-        let id =this.itemList[$event.rowIndex].id!;
+        let id = this.itemList[$event.rowIndex].id!;
         let api_key_detail_update = this.getSectionForm('api_key_detail', $event.rowIndex);
-        if(api_key_detail_update?.valid){
-          this.adminService.updateAPIKeyDetail(id,api_key_detail_update.value).subscribe(d=>{
+        if (api_key_detail_update?.valid) {
+          this.adminService.updateAPIKeyDetail(id, api_key_detail_update.value).subscribe(d => {
             this.hideForm($event.rowIndex);
           })
-        }else {
+        } else {
           api_key_detail_update?.markAllAsTouched();
         }
         break;
@@ -208,8 +214,8 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDetail> implements 
 
   createAPIKey() {
     this.showCreateForm({})
-    this.adminService.getScopeList().subscribe(d=>{
-      this.getSectionField('api_key_detail','api_key_scope',0,true).form_input!.selectList=d;
+    this.adminService.getScopeList().subscribe(d => {
+      this.getSectionField('api_key_detail', 'api_key_scope', 0, true).form_input!.selectList = d;
     })
   }
 }

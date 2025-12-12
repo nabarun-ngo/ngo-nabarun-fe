@@ -20,18 +20,20 @@ import { SearchEvent } from 'src/app/shared/components/search-and-advanced-searc
   styleUrls: ['./upcoming-events-tab.component.scss'],
 })
 export class UpcomingEventsTabComponent extends Accordion<EventDetail> implements TabComponentInterface<PaginateEventDetail> {
+  protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
+    return {
+      pageNumber: DefaultValue.pageNumber,
+      pageSize: DefaultValue.pageSize,
+      pageSizeOptions: DefaultValue.pageSizeOptions,
+    };
+  }
 
   protected isCompleted: boolean = false;
   constructor(private eventService: EventsService) {
     super();
   }
 
-  override ngOnInit(): void {
-    this.init(
-      DefaultValue.pageNumber,
-      DefaultValue.pageSize,
-      DefaultValue.pageSizeOptions
-    );
+  override onInitHook(): void {
     this.setHeaderRow([
       {
         type: 'text',
@@ -140,8 +142,7 @@ export class UpcomingEventsTabComponent extends Accordion<EventDetail> implement
   }
 
   override handlePageEvent($event: PageEvent): void {
-    this.pageSize = $event.pageSize;
-    this.pageNumber = $event.pageIndex;
+    this.pageEvent = $event;
     this.eventService
       .getSocialEventList(this.isCompleted, this.pageNumber, this.pageSize)
       .subscribe((data) => {

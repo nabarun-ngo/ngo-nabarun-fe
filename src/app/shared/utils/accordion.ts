@@ -6,6 +6,7 @@ import { FormControl } from "@angular/forms";
 import { BehaviorSubject } from "rxjs";
 import { FileUpload } from "../components/generic/file-upload/file-upload.component";
 import { AfterContentInit, AfterViewInit, Component, Input, OnInit } from "@angular/core";
+import { Final } from "./final";
 
 @Component({
   template: 'app-base-accordion',
@@ -29,10 +30,15 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
     }
   }
 
-  abstract ngOnInit(): void;
+  ngOnInit: Final<() => void> = () => {
+    //super.ngOnInit();
+    this.onInitHook();
+  }
+
+
+  abstract onInitHook(): void;
 
   ngAfterContentInit(): void {
-    console.log(this.page);
     this.setContent(this.page.content!, this.page.totalSize);
     this.viewInitialized = true;
   }

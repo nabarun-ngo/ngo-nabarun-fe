@@ -16,6 +16,7 @@ import {
 } from 'src/app/core/api-client/services';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 import { date } from 'src/app/core/service/utilities.service';
+import { DonationDefaultValue } from './donation.const';
 
 @Injectable({
     providedIn: 'root'
@@ -30,14 +31,26 @@ export class DonationNewService {
         private dmsService: DmsControllerService
     ) { }
 
-    getSelfDonations(pageIndex: number = 0, pageSize: number = 100) {
-        return this.donationController.getSelfDonations({ pageIndex: pageIndex, pageSize: pageSize }).pipe(map(d => d.responsePayload));
+    getSelfDonations(options: {
+        pageIndex?: number,
+        pageSize?: number
+    }) {
+        return this.donationController.getSelfDonations({
+            pageIndex: options.pageIndex || DonationDefaultValue.pageNumber,
+            pageSize: options.pageSize || DonationDefaultValue.pageSize,
+        }).pipe(map(d => d.responsePayload));
     }
 
-    async fetchMyDonations(pageIndex: number = 0, pageSize: number = 100) {
+    async fetchMyDonations(options: {
+        pageIndex?: number,
+        pageSize?: number
+    }) {
         let id = (await this.identityService.getUser()).profile_id;
         return firstValueFrom(combineLatest({
-            donations: this.donationController.getSelfDonations({ pageIndex: pageIndex, pageSize: pageSize }).pipe(map(d => d.responsePayload)),
+            donations: this.donationController.getSelfDonations({
+                pageIndex: options.pageIndex || DonationDefaultValue.pageNumber,
+                pageSize: options.pageSize || DonationDefaultValue.pageSize
+            }).pipe(map(d => d.responsePayload)),
             summary: this.donationController.getDonationSummary({ donorId: id }).pipe(map(d => d.responsePayload)),
         }).pipe(switchMap(data => {
             if (data.summary.hasOutstanding) {
@@ -49,27 +62,50 @@ export class DonationNewService {
         })))
     }
 
-    fetchGuestDonations(pageIndex: number = 0, pageSize: number = 100) {
-        return this.donationController.listGuestDonations({ pageIndex: pageIndex, pageSize: pageSize }).pipe(map(d => d.responsePayload));
+    fetchGuestDonations(options: {
+        pageIndex?: number,
+        pageSize?: number
+    }) {
+        return this.donationController.listGuestDonations({
+            pageIndex: options.pageIndex || DonationDefaultValue.pageNumber,
+            pageSize: options.pageSize || DonationDefaultValue.pageSize
+        }).pipe(map(d => d.responsePayload));
     }
 
-    fetchDonations(pageIndex: number = 0, pageSize: number = 100) {
-        return this.donationController.list({ pageIndex: pageIndex, pageSize: pageSize }).pipe(map(d => d.responsePayload));
+    fetchDonations(options: {
+        pageIndex?: number,
+        pageSize?: number
+    }) {
+        return this.donationController.list({
+            pageIndex: options.pageIndex || DonationDefaultValue.pageNumber,
+            pageSize: options.pageSize || DonationDefaultValue.pageSize
+        }).pipe(map(d => d.responsePayload));
     }
 
-    fetchMembers(pageIndex: number = 0, pageSize: number = 100, filter?: { firstName?: string; lastName?: string, status?: string[] }) {
+    fetchMembers(options: {
+        pageIndex?: number,
+        pageSize?: number,
+        filter?: { firstName?: string; lastName?: string, status?: string[] }
+    }) {
         return this.userController.listUsers({
-            pageIndex: pageIndex,
-            pageSize: pageSize,
-            firstName: filter?.firstName,
-            lastName: filter?.lastName,
+            pageIndex: options.pageIndex || DonationDefaultValue.pageNumber,
+            pageSize: options.pageSize || DonationDefaultValue.pageSize,
+            firstName: options.filter?.firstName,
+            lastName: options.filter?.lastName,
             // status: filter?.status ? filter.status : ['ACTIVE'] 
         }).pipe(map(m => m.responsePayload));
     }
 
-    fetchUserDonations(id: string, pageIndex: number = 0, pageSize: number = 100) {
+    fetchUserDonations(id: string, options: {
+        pageIndex?: number,
+        pageSize?: number
+    }) {
         return combineLatest({
-            donations: this.donationController.getDonorDonations({ donorId: id, pageIndex: pageIndex, pageSize: pageSize }).pipe(map(d => d.responsePayload)),
+            donations: this.donationController.getDonorDonations({
+                donorId: id,
+                pageIndex: options.pageIndex || DonationDefaultValue.pageNumber,
+                pageSize: options.pageSize || DonationDefaultValue.pageSize
+            }).pipe(map(d => d.responsePayload)),
             summary: this.donationController.getDonationSummary({ donorId: id }).pipe(map(d => d.responsePayload))
         })
     }
@@ -114,6 +150,7 @@ export class DonationNewService {
         guest: boolean,
         donorId?: string
     }) {
+
         return this.donationController.list({
             donationId: filter.donationId,
             status: filter.donationStatus as any,
@@ -123,8 +160,8 @@ export class DonationNewService {
             type: filter.donationType as any,
             isGuest: filter.guest,
             donorId: filter.donorId,
-            pageIndex: 0,
-            pageSize: 10000
+            pageIndex: DonationDefaultValue.pageNumber,
+            pageSize: DonationDefaultValue.pageSize
         }).pipe(map(d => d.responsePayload));
     }
 

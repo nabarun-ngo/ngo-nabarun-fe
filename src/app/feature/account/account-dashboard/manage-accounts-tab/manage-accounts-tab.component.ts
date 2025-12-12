@@ -17,6 +17,13 @@ import { SCOPE } from 'src/app/core/constant/auth-scope.const';
   styleUrls: ['./manage-accounts-tab.component.scss'],
 })
 export class ManageAccountsTabComponent extends MyAccountsTabComponent {
+  protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
+    return {
+      pageNumber: AccountDefaultValue.pageNumber,
+      pageSize: AccountDefaultValue.pageSize,
+      pageSizeOptions: AccountDefaultValue.pageSizeOptions
+    };
+  }
 
   protected permissions!: {
     canCreateAccount: boolean;
@@ -24,10 +31,9 @@ export class ManageAccountsTabComponent extends MyAccountsTabComponent {
     canReadTransactions: boolean;
   };
 
-  override ngOnInit(): void {
-    super.ngOnInit();
+  override onInitHook(): void {
     this.setHeaderRow(accountTabHeader('all_accounts'));
-  
+
     // Setup permissions
     this.permissions = {
       canCreateAccount: this.userIdentityService.isAccrediatedTo(SCOPE.create.account),
@@ -41,13 +47,13 @@ export class ManageAccountsTabComponent extends MyAccountsTabComponent {
    */
   override loadData(): void {
     this.accountService
-        .fetchAccounts(
-          AccountDefaultValue.pageNumber,
-          AccountDefaultValue.pageSize
-        )
-        .subscribe((data) => {
-          this.setContent(data?.content!, data?.totalSize);
-        });
+      .fetchAccounts(
+        AccountDefaultValue.pageNumber,
+        AccountDefaultValue.pageSize
+      )
+      .subscribe((data) => {
+        this.setContent(data?.content!, data?.totalSize);
+      });
   }
 
   /**
@@ -65,12 +71,12 @@ export class ManageAccountsTabComponent extends MyAccountsTabComponent {
     }
   }
 
-   protected override prepareHighLevelView(
-      data: AccountDetail,
-      options?: { [key: string]: any }
-    ): AccordionCell[] {
-      return accountHighLevelView(data, 'all_accounts', this.getRefData()!);
-    }
+  protected override prepareHighLevelView(
+    data: AccountDetail,
+    options?: { [key: string]: any }
+  ): AccordionCell[] {
+    return accountHighLevelView(data, 'all_accounts', this.getRefData()!);
+  }
 
   protected override prepareDefaultButtons(
     data: AccountDetail,
@@ -93,13 +99,13 @@ export class ManageAccountsTabComponent extends MyAccountsTabComponent {
       {
         button_id: 'VIEW_TRANSACTIONS',
         button_name: 'View Transactions',
-        props:{disabled: !this.permissions.canReadTransactions }
+        props: { disabled: !this.permissions.canReadTransactions }
       },
       {
         button_id: 'UPDATE_ACCOUNT',
         button_name: 'Update Account',
-        props:{disabled: !this.permissions.canUpdateAccount }
-      },  
+        props: { disabled: !this.permissions.canUpdateAccount }
+      },
     ];
   }
 

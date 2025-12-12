@@ -16,6 +16,13 @@ import { KeyValue, PagedResultUserDto } from 'src/app/core/api-client/models';
   styleUrls: ['./member-list.component.scss']
 })
 export class MemberListComponent extends Paginator implements OnInit {
+  protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
+    return {
+      pageNumber: MemberDefaultValue.pageNumber,
+      pageSize: MemberDefaultValue.pageSize,
+      pageSizeOptions: MemberDefaultValue.pageSizeOptions
+    }
+  }
 
   memberList!: PagedResultUserDto;
   searchValue!: string;
@@ -31,7 +38,6 @@ export class MemberListComponent extends Paginator implements OnInit {
     private memberService: MemberService
   ) {
     super();
-    super.init(MemberDefaultValue.pageNumber, MemberDefaultValue.pageSize, MemberDefaultValue.pageSizeOptions)
   }
 
 
@@ -121,8 +127,7 @@ export class MemberListComponent extends Paginator implements OnInit {
   }
 
   handlePageEvent($event: PageEvent) {
-    this.pageNumber = $event.pageIndex;
-    this.pageSize = $event.pageSize;
+    this.pageEvent = $event;
     this.memberService.fetchMembers(this.pageNumber, this.pageSize).subscribe(data => {
       this.memberList = data!;
       this.itemLengthSubs.next(data?.totalSize!);

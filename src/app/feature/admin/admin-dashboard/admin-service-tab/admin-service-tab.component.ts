@@ -18,6 +18,14 @@ import { SearchEvent } from 'src/app/shared/components/search-and-advanced-searc
 })
 export class AdminServiceTabComponent extends Accordion<AdminServiceInfo> implements TabComponentInterface<AdminServiceInfo[]>, OnInit {
 
+  protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
+    return {
+      pageNumber: this.defaultValue.pageNumber,
+      pageSize: this.defaultValue.pageSize,
+      pageSizeOptions: this.defaultValue.pageSizeOptions
+    }
+  }
+
   defaultValue = AdminDefaultValue;
   constant = AdminConstant;
 
@@ -27,7 +35,7 @@ export class AdminServiceTabComponent extends Accordion<AdminServiceInfo> implem
     super();
   }
 
-  onSearch(event: SearchEvent): void {}
+  onSearch(event: SearchEvent): void { }
   loadData(): void {
     var serviceList = [
       {
@@ -90,8 +98,7 @@ export class AdminServiceTabComponent extends Accordion<AdminServiceInfo> implem
     this.setContent(serviceList, serviceList.length);
   }
 
-  override ngOnInit(): void {
-    this.init(this.defaultValue.pageNumber, this.defaultValue.pageSize, this.defaultValue.pageSizeOptions)
+  override onInitHook(): void {
     this.setHeaderRow([
       {
         type: 'text',

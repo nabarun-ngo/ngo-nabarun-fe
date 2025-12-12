@@ -1,15 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
-import { DonationDefaultValue, DonationRefData, donationTab } from '../donation-new.const';
-import { DonationNewService } from '../donation-new.service';
-import { PageEvent } from '@angular/material/paginator';
-import { AccountDetailDto, DonationDto, DonationSummaryDto, KeyValue, PagedResultDonationDto, PagedResultUserDto, UserDto } from 'src/app/core/api-client/models';
-import { Accordion } from 'src/app/shared/utils/accordion';
-import { AccordionCell, AccordionButton } from 'src/app/shared/model/accordion-list.model';
-import { DetailedView } from 'src/app/shared/model/detailed-view.model';
-import { date } from 'src/app/core/service/utilities.service';
-import { FormGroup } from '@angular/forms';
+import { PagedResultDonationDto } from 'src/app/core/api-client/models';
 import { StandardTabbedDashboard } from 'src/app/shared/utils/standard-tabbed-dashboard';
 import { SelfDonationTabComponent } from './self-donation-tab/self-donation-tab.component';
 import { GuestDonationTabComponent } from './guest-donation-tab/guest-donation-tab.component';
@@ -20,6 +12,7 @@ import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-ad
 import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { donationSearchInput } from '../donation.field';
+import { DonationDefaultValue, donationTab } from '../donation.const';
 
 @Component({
   selector: 'app-donation-dashboard-new',

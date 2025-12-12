@@ -34,7 +34,14 @@ import { UserIdentityService } from 'src/app/core/service/user-identity.service'
   styleUrls: ['./my-accounts-tab.component.scss'],
 })
 export class MyAccountsTabComponent extends Accordion<AccountDetail> implements TabComponentInterface<PaginateAccountDetail> {
-  
+  protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
+    return {
+      pageNumber: AccountDefaultValue.pageNumber,
+      pageSize: AccountDefaultValue.pageSize,
+      pageSizeOptions: AccountDefaultValue.pageSizeOptions
+    }
+  }
+
   constructor(
     protected route: ActivatedRoute,
     protected accountService: AccountService,
@@ -45,21 +52,17 @@ export class MyAccountsTabComponent extends Accordion<AccountDetail> implements 
     super();
   }
 
-  override ngOnInit(): void {
+  override onInitHook(): void {
     this.setHeaderRow(accountTabHeader('my_accounts'));
     //Init Pagination
-    this.init(
-      AccountDefaultValue.pageNumber,
-      AccountDefaultValue.pageSize,
-      AccountDefaultValue.pageSizeOptions
-    );
+
   }
 
   /**
    * Load data for this tab - required by TabComponentInterface
    */
   loadData(): void {
-    this.fetchData(AccountDefaultValue.pageNumber,AccountDefaultValue.pageSize); 
+    this.fetchData(AccountDefaultValue.pageNumber, AccountDefaultValue.pageSize);
   }
 
   /**
@@ -70,21 +73,21 @@ export class MyAccountsTabComponent extends Accordion<AccountDetail> implements 
       this.fetchData(undefined, undefined, removeNullFields(event.value));
     } else if (event.advancedSearch && event.reset) {
       this.loadData();
-    }else if(event.buttonName == 'ADVANCED_SEARCH'){
-      this.getAccordionList().searchValue='';
+    } else if (event.buttonName == 'ADVANCED_SEARCH') {
+      this.getAccordionList().searchValue = '';
     }
   }
 
-  private fetchData(pageNumber?: number, pageSize?: number,filter?: AccountDetailFilter) {  
-     this.accountService
-        .fetchMyAccounts(
-          pageNumber,
-          pageSize,
-          filter
-        )
-        .subscribe((data) => {
-          this.setContent(data?.content!, data?.totalSize);
-        });
+  private fetchData(pageNumber?: number, pageSize?: number, filter?: AccountDetailFilter) {
+    this.accountService
+      .fetchMyAccounts(
+        pageNumber,
+        pageSize,
+        filter
+      )
+      .subscribe((data) => {
+        this.setContent(data?.content!, data?.totalSize);
+      });
   }
 
   protected override prepareHighLevelView(
@@ -221,10 +224,10 @@ export class MyAccountsTabComponent extends Accordion<AccountDetail> implements 
             this.removeSectionInAccordion('money_in_acc', rowIndex);
             this.removeSectionInAccordion('document_list', rowIndex);
             this.updateContentRow(d?.transferTo!, rowIndex);
-             let files = document_list?.map(m=>{
-              m.detail.documentMapping=[{
+            let files = document_list?.map(m => {
+              m.detail.documentMapping = [{
                 docIndexId: d?.txnId,
-                docIndexType:'TRANSACTION'
+                docIndexType: 'TRANSACTION'
               }];
               return m.detail;
             })!;
@@ -287,10 +290,10 @@ export class MyAccountsTabComponent extends Accordion<AccountDetail> implements 
             this.removeSectionInAccordion('transfer_amt', rowIndex);
             this.removeSectionInAccordion('document_list', rowIndex);
             this.updateContentRow(d?.transferFrom!, rowIndex);
-            let files = document_list?.map(m=>{
-              m.detail.documentMapping=[{
+            let files = document_list?.map(m => {
+              m.detail.documentMapping = [{
                 docIndexId: d?.txnId,
-                docIndexType:'TRANSACTION'
+                docIndexType: 'TRANSACTION'
               }];
               return m.detail;
             })!;
@@ -330,7 +333,7 @@ export class MyAccountsTabComponent extends Accordion<AccountDetail> implements 
     });
   }
 
-  protected override onAccordionOpen(event: { rowIndex: number }): void {}
+  protected override onAccordionOpen(event: { rowIndex: number }): void { }
 
   override handlePageEvent($event: PageEvent): void {
     this.fetchData($event.pageIndex, $event.pageSize);

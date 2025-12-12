@@ -18,6 +18,13 @@ import { SearchEvent } from 'src/app/shared/components/search-and-advanced-searc
   styleUrls: ['./pending-tasks-tab.component.scss']
 })
 export class PendingTasksTabComponent extends Accordion<WorkDetail> implements TabComponentInterface<PaginateWorkDetail> {
+  protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
+    return {
+      pageNumber: TaskDefaultValue.pageNumber,
+      pageSize: TaskDefaultValue.pageSize,
+      pageSizeOptions: TaskDefaultValue.pageSizeOptions,
+    };
+  }
 
   protected actionName!: string;
   protected isCompleted: boolean = false;
@@ -28,8 +35,7 @@ export class PendingTasksTabComponent extends Accordion<WorkDetail> implements T
     super();
   }
 
-  override ngOnInit(): void {
-    super.init(TaskDefaultValue.pageNumber, TaskDefaultValue.pageSize, TaskDefaultValue.pageSizeOptions);
+  override onInitHook(): void {
     this.setHeaderRow([
       {
         value: TaskField.workId,
@@ -161,8 +167,7 @@ export class PendingTasksTabComponent extends Accordion<WorkDetail> implements T
   }
 
   override handlePageEvent($event: PageEvent): void {
-    this.pageNumber = $event.pageIndex;
-    this.pageSize = $event.pageSize;
+    this.pageEvent = $event;
     this.taskService.findMyWorkList(this.isCompleted, this.pageNumber, this.pageSize)
       .subscribe(s => {
         this.setContent(s?.content!, s?.totalSize!);
