@@ -22,6 +22,9 @@ import { DonationDefaultValue } from './donation.const';
     providedIn: 'root'
 })
 export class DonationNewService {
+    notifyPayment(rowIndex: number) {
+        throw new Error('Method not implemented.');
+    }
 
     constructor(
         private donationController: DonationControllerService,
@@ -139,7 +142,7 @@ export class DonationNewService {
 
     updatePaymentInfo(id: string, action: string, donation: UpdateDonationDto) {
         if (action === 'NOTIFY') {
-            //return this.donationController.notify({ id: id, body: donation }).pipe(map(d => d.responsePayload));
+            return
         }
         return this.donationController.update({ id: id, body: donation }).pipe(map(d => d.responsePayload));
     }

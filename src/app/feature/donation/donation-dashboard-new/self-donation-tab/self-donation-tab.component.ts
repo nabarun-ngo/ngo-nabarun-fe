@@ -94,15 +94,21 @@ export class SelfDonationTabComponent extends Accordion<DonationDto> implements 
     ];
   }
   protected override prepareDefaultButtons(data: DonationDto, options?: { [key: string]: any; }): AccordionButton[] {
-    return [
-      {
-        button_id: 'NOTIFY',
-        button_name: 'Notify',
-      }
-    ];
+    return data.status == 'RAISED' || data.status == 'PENDING' ?
+      [
+        {
+          button_id: 'NOTIFY',
+          button_name: 'Notify Payment',
+        }
+      ] : [];
   }
   protected override onClick(event: { buttonId: string; rowIndex: number; }): void {
-
+    if (event.buttonId == 'NOTIFY') {
+      const donation = this.itemList[event.rowIndex];
+      this.donationService.updatePaymentInfo(donation.id, 'NOTIFY', donation)?.subscribe(data => {
+        this.itemList[event.rowIndex] = data;
+      });
+    }
   }
   protected override onAccordionOpen(event: { rowIndex: number; }): void {
 

@@ -1,10 +1,10 @@
 import { FormGroup } from "@angular/forms";
-import { DonationDto } from "src/app/core/api-client/models";
-import { KeyValue } from "src/app/core/api/models";
+import { DocumentDto, DonationDto, KeyValue } from "src/app/core/api-client/models";
 import { date } from "src/app/core/service/utilities.service";
 import { DetailedView } from "src/app/shared/model/detailed-view.model";
 import { SearchAndAdvancedSearchModel } from "src/app/shared/model/search-and-advanced-search.model";
 import { DonationRefData, DonationStatus, DonationType, donationTab } from "./donation.const";
+import { EventEmitter } from "stream";
 
 
 export const donationSearchInput = (
@@ -316,4 +316,19 @@ export const getDonationSection = (
             }
         ]
     };
+};
+
+export const donationDocumentSection = (
+    docs: DocumentDto[]
+) => {
+    return {
+        section_name: 'Documents',
+        section_type: 'doc_list',
+        section_html_id: 'document_list',
+        section_form: new FormGroup({}),
+        documents: docs,
+        doc: {
+            // docChange: new EventEmitter(),
+        },
+    } as DetailedView;
 };

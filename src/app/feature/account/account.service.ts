@@ -1,27 +1,25 @@
+
 import { Injectable } from '@angular/core';
+import { forkJoin, map, of } from 'rxjs';
 import {
   AccountControllerService,
-  CommonControllerService,
-  SocialEventControllerService,
   UserControllerService,
-} from 'src/app/core/api/services';
-import { AccountDefaultValue, TransactionDefaultValue } from './account.const';
-import { map } from 'rxjs';
+  ExpenseControllerService,
+  DmsControllerService
+} from 'src/app/core/api-client/services';
 import {
-  AccountDetail,
-  AccountDetailFilter,
-  BankDetail,
-  DocumentDetailUpload,
-  DocumentMapping,
-  ExpenseDetail,
-  ExpenseDetailFilter,
-  ExpenseItemDetail,
-  RefDataType,
-  TransactionDetailFilter,
-  UpiDetail,
-} from 'src/app/core/api/models';
-import { DatePipe } from '@angular/common';
+  AccountDetailDto,
+  BankDetailDto,
+  UpiDetailDto,
+  ExpenseDetailDto,
+  ExpenseItemDetailDto,
+  DmsUploadDto,
+  TransactionDetailDto,
+  CreateExpenseDto,
+  CreateAccountDto
+} from 'src/app/core/api-client/models';
 import { date } from 'src/app/core/service/utilities.service';
+import { AccountDefaultValue } from './account.const';
 
 @Injectable({
   providedIn: 'root',
@@ -29,31 +27,37 @@ import { date } from 'src/app/core/service/utilities.service';
 export class AccountService {
   constructor(
     private accountController: AccountControllerService,
-    private commonController: CommonControllerService,
     private userController: UserControllerService,
-    private eventController: SocialEventControllerService
+    private expenseController: ExpenseControllerService,
+    private dmsController: DmsControllerService
   ) { }
 
   fetchAllAccounts() {
     return this.accountController
-      .getAccounts({ filter: {} })
+      .listAccounts({ pageIndex: 0, pageSize: 100000 })
       .pipe(map((d) => d.responsePayload));
   }
+
   fetchAccounts(
-    pageIndex?: number,
-    pageSize?: number,
-    filter?: AccountDetailFilter
+    options: {
+      type?: string[];
+      status?: string[];
+      accountId?: string;
+      accountHolderId?: string;
+      pageIndex?: number;
+      pageSize?: number;
+    }
   ) {
-    filter = filter ? filter : {};
-    filter.status = filter?.status ? filter.status : ['ACTIVE'];
-    filter.includeBalance = filter?.includeBalance
-      ? filter.includeBalance
-      : true;
     return this.accountController
-      .getAccounts({
-        pageIndex: pageIndex,
-        pageSize: pageSize,
-        filter: filter,
+      .listAccounts({
+        pageIndex: options.pageIndex || AccountDefaultValue.pageNumber,
+        pageSize: options.pageSize || AccountDefaultValue.pageSize,
+        accountHolderId: options.accountHolderId || undefined,
+        accountId: options.accountId || undefined,
+        status: options.status ? [...options.status as any] : ['ACTIVE'],
+        includeBalance: true,
+        includePaymentDetail: true,
+        type: options.type ? [...options.type as any] : [],
       })
       .pipe(map((d) => d.responsePayload));
   }
@@ -61,22 +65,20 @@ export class AccountService {
   fetchMyAccounts(
     pageIndex?: number,
     pageSize?: number,
-    filter?: AccountDetailFilter
+    filter?: any
   ) {
-    filter = filter ? filter : {};
-    filter.includeBalance = filter?.includeBalance
-      ? filter.includeBalance
-      : true;
-    filter.includePaymentDetail = filter?.includePaymentDetail
-      ? filter?.includePaymentDetail
-      : true;
+    const params: any = {
+      pageIndex: pageIndex,
+      pageSize: pageSize
+    };
+    if (filter) {
+      Object.assign(params, filter);
+    }
+    if (params.includeBalance === undefined) params.includeBalance = true;
+    if (params.includePaymentDetail === undefined) params.includePaymentDetail = true;
 
     return this.accountController
-      .getMyAccounts({
-        pageIndex: pageIndex,
-        pageSize: pageSize,
-        filter: filter,
-      })
+      .listSelfAccounts(params)
       .pipe(map((d) => d.responsePayload));
   }
 
@@ -86,65 +88,44 @@ export class AccountService {
         id: id,
         body: {
           accountStatus: value.status,
-        },
+        } as any,
       })
       .pipe(map((d) => d.responsePayload));
   }
 
-  updateBankingAndUPIDetail(id: string, banking: BankDetail, upi: UpiDetail) {
+  updateBankingAndUPIDetail(id: string, banking: BankDetailDto, upi: UpiDetailDto) {
     return this.accountController
-      .updateMyAccount({
+      .updateSelf({
         id: id,
         body: {
           bankDetail: banking,
           upiDetail: upi,
-        },
+        } as any,
       })
       .pipe(map((d) => d.responsePayload));
   }
 
-  createAccount(accountDetail: any, banking?: BankDetail, upi?: UpiDetail) {
-    let account = {
-      accountHolder: { id: accountDetail.accountHolder },
-      accountType: accountDetail.accountType,
-      currentBalance: accountDetail.openingBalance,
-      bankDetail: banking,
-      upiDetail: upi,
-    } as AccountDetail;
+  createAccount(accountDetail: CreateAccountDto, banking?: BankDetailDto, upi?: UpiDetailDto) {
     return this.accountController
-      .createAccount({ body: account })
+      .createAccount({ body: accountDetail })
       .pipe(map((d) => d.responsePayload));
   }
 
   fetchUsers(accountType?: string) {
-    if (!accountType) {
-      return this.userController
-        .getUsers({ filter: { status: ['ACTIVE'] } })
-        .pipe(map((d) => d.responsePayload));
-    }
-    if (accountType == 'PUBLIC_DONATION') {
-      return this.userController
-        .getUsers({ filter: { status: ['ACTIVE'] } })
-        .pipe(map((d) => d.responsePayload));
-    }
+    let filter: any = { status: ['ACTIVE'] };
+
     if (accountType == 'DONATION') {
-      return this.userController
-        .getUsers({
-          filter: {
-            status: ['ACTIVE'],
-            roles: ['ASSISTANT_CASHIER', 'CASHIER'],
-          },
-        })
-        .pipe(map((d) => d.responsePayload));
+      filter.roleCodes = ['ASSISTANT_CASHIER', 'CASHIER'];
+    } else if (accountType && accountType !== 'PUBLIC_DONATION') {
+      filter.roleCodes = ['TREASURER'];
     }
 
+    // Use listUsers and flattened params
     return this.userController
-      .getUsers({
-        filter: {
-          status: ['ACTIVE'],
-          roles: ['TREASURER'],
-        },
-      })
+      .listUsers({
+        status: filter.status,
+        roleCodes: filter.roleCodes
+      } as any)
       .pipe(map((d) => d.responsePayload));
   }
 
@@ -152,23 +133,25 @@ export class AccountService {
     id: string,
     pageIndex?: number,
     pageSize?: number,
-    filter?: TransactionDetailFilter
+    filter?: any
   ) {
-    filter = filter ? filter : {};
-    if (filter?.endDate) {
-      filter.endDate = date(filter?.endDate, 'yyyy-MM-dd');
-    }
-    if (filter?.startDate) {
-      filter.startDate = date(filter?.startDate, 'yyyy-MM-dd');
+    const params: any = {
+      id: id,
+      pageIndex: pageIndex,
+      pageSize: pageSize
+    };
+    if (filter) {
+      Object.assign(params, filter);
+      if (filter.endDate) {
+        params.endDate = date(filter.endDate, 'yyyy-MM-dd');
+      }
+      if (filter.startDate) {
+        params.startDate = date(filter.startDate, 'yyyy-MM-dd');
+      }
     }
 
     return this.accountController
-      .getTransactions({
-        id: id,
-        pageIndex: pageIndex,
-        pageSize: pageSize,
-        filter: filter,
-      })
+      .listAccountTransactions(params)
       .pipe(map((d) => d.responsePayload));
   }
 
@@ -176,126 +159,107 @@ export class AccountService {
     id: string,
     pageIndex?: number,
     pageSize?: number,
-    filter?: TransactionDetailFilter
+    filter?: any
   ) {
-    filter = filter ? filter : {};
-    if (filter?.endDate) {
-      filter.endDate = date(filter?.endDate, 'yyyy-MM-dd');
-    }
-    if (filter?.startDate) {
-      filter.startDate = date(filter?.startDate, 'yyyy-MM-dd');
+    const params: any = {
+      id: id,
+      pageIndex: pageIndex,
+      pageSize: pageSize
+    };
+    if (filter) {
+      Object.assign(params, filter);
+      if (filter.endDate) {
+        params.endDate = date(filter.endDate, 'yyyy-MM-dd');
+      }
+      if (filter.startDate) {
+        params.startDate = date(filter.startDate, 'yyyy-MM-dd');
+      }
     }
     return this.accountController
-      .getMyTransactions({
-        id: id,
-        pageIndex: pageIndex,
-        pageSize: pageSize,
-        filter: filter,
-      })
+      .listSelfAccountTransactions(params)
       .pipe(map((d) => d.responsePayload));
   }
 
-  performTransfer(from: AccountDetail, value: any) {
-    return this.accountController
-      .createTransaction({
-        body: {
-          transferFrom: from,
-          transferTo: {
-            id: value.transferTo,
-          },
-          txnAmount: value.amount,
-          txnDate: value.transferDate,
-          txnDescription: value.description,
-          txnType: 'TRANSFER',
-          txnRefType: 'NONE',
-          txnStatus: 'SUCCESS',
-        },
-      })
-      .pipe(map((d) => d.responsePayload));
+  performTransfer(from: AccountDetailDto, value: any) {
+    console.warn('performTransfer: createTransaction API is missing');
+    return of(null).pipe(map(() => null as any));
   }
 
-  performMoneyIn(accountTo: AccountDetail, value: any) {
-    return this.accountController
-      .createTransaction({
-        body: {
-          transferTo: accountTo,
-          txnAmount: value.amount,
-          txnDate: value.inDate,
-          txnDescription: value.description,
-          txnType: 'IN',
-          txnRefType: 'NONE',
-          txnStatus: 'SUCCESS',
-        },
-      })
-      .pipe(map((d) => d.responsePayload));
+  performMoneyIn(accountTo: AccountDetailDto, value: any) {
+    console.warn('performMoneyIn: createTransaction API is missing');
+    return of(null).pipe(map(() => null as any));
   }
 
   fetchExpenses(
     pageNumber?: number,
     pageSize?: number,
-    filter?: ExpenseDetailFilter
+    filter?: any
   ) {
-    filter = filter ? filter : {};
-    if (filter?.endDate) {
-      filter.endDate = date(filter?.endDate, 'yyyy-MM-dd');
+    const params: any = {
+      pageIndex: pageNumber,
+      pageSize: pageSize
+    };
+    if (filter) {
+      Object.assign(params, filter);
+      if (filter.endDate) {
+        params.endDate = date(filter.endDate, 'yyyy-MM-dd');
+      }
+      if (filter.startDate) {
+        params.startDate = date(filter.startDate, 'yyyy-MM-dd');
+      }
     }
-    if (filter?.startDate) {
-      filter.startDate = date(filter?.startDate, 'yyyy-MM-dd');
-    }
-    return this.accountController
-      .getExpenses({
-        pageIndex: pageNumber,
-        pageSize: pageSize,
-        filter: filter,
-      })
+    return this.expenseController
+      .listExpenses(params)
       .pipe(map((d) => d.responsePayload));
   }
 
   fetchMyExpenses(
     pageNumber?: number,
     pageSize?: number,
-    filter?: ExpenseDetailFilter
+    filter?: any
   ) {
-    filter = filter ? filter : {};
-    if (filter?.endDate) {
-      filter.endDate = date(filter?.endDate, 'yyyy-MM-dd');
+    const params: any = {
+      pageIndex: pageNumber,
+      pageSize: pageSize
+    };
+    if (filter) {
+      Object.assign(params, filter);
+      if (filter.endDate) {
+        params.endDate = date(filter.endDate, 'yyyy-MM-dd');
+      }
+      if (filter.startDate) {
+        params.startDate = date(filter.startDate, 'yyyy-MM-dd');
+      }
     }
-    if (filter?.startDate) {
-      filter.startDate = date(filter?.startDate, 'yyyy-MM-dd');
-    }
-    return this.accountController
-      .getMyExpenses({
-        pageIndex: pageNumber,
-        pageSize: pageSize,
-        filter: filter,
-      })
+    return this.expenseController
+      .listSelfExpenses(params)
       .pipe(map((d) => d.responsePayload));
   }
 
-  createExpenses(detail: ExpenseDetail) {
-    return this.accountController
+  createExpenses(detail: CreateExpenseDto) {
+    return this.expenseController
       .createExpense({ body: detail })
       .pipe(map((d) => d.responsePayload));
   }
 
-  updateExpense(id: string, expense: ExpenseDetail) {
+  updateExpense(id: string, expense: ExpenseDetailDto) {
     if (expense.status == 'FINALIZED') {
-      return this.accountController
-        .finalizeExpense({ id: id, body: expense })
+      return this.expenseController
+        .finalizeExpense({ id: id })
         .pipe(map((d) => d.responsePayload));
     }
     if (expense.status == 'SETTLED') {
-      return this.accountController
-        .settleExpense({ id: id, body: expense })
+      return this.expenseController
+        .settleExpense({ id: id })
         .pipe(map((d) => d.responsePayload));
     }
-    return this.accountController
+    return this.expenseController
       .updateExpense({ id: id, body: expense })
       .pipe(map((d) => d.responsePayload));
   }
 
   createExpenseItem(id: string, data: any) {
-    return this.accountController
+    return this.expenseController
       .updateExpense({
         id: id,
         body: {
@@ -306,45 +270,51 @@ export class AccountService {
               amount: data.amount,
             },
           ],
-        },
+        } as any,
       })
       .pipe(map((d) => d.responsePayload));
   }
 
-  updateExpenseItem(id: string, data: ExpenseItemDetail[]) {
-    return this.accountController
+  updateExpenseItem(id: string, data: ExpenseItemDetailDto[]) {
+    return this.expenseController
       .updateExpense({
         id: id,
         body: {
           expenseItems: data,
-        },
+        } as any,
       })
       .pipe(map((d) => d.responsePayload));
   }
 
   fetchEvents() {
-    return this.eventController
-      .getSocialEvents({ eventFilter: {} })
-      .pipe(map((m) => m.responsePayload));
+    return of([] as any);
   }
 
-  uploadDocuments(documents: DocumentDetailUpload[]) {
-    return this.commonController
-      .uploadDocuments({
-        body: documents,
-      })
-      .pipe(map((d) => d.responsePayload));
+  uploadDocuments(documents: any[]) {
+    const requests = documents.map(doc => {
+      const body: DmsUploadDto = {
+        filename: doc.fileName,
+        fileBase64: doc.fileBase64,
+        contentType: doc.fileType,
+        documentMapping: [{
+          entityId: doc.docIndexId,
+          entityType: doc.docIndexType
+        }]
+      };
+      return this.dmsController.uploadFile({ body }).pipe(map(d => d.responsePayload));
+    });
+    return forkJoin(requests);
   }
 
   getExpenseDocuments(id: string) {
-    return this.commonController
-      .getDocuments({ docIndexId: id, docIndexType: 'EXPENSE' })
+    return this.dmsController
+      .getDocuments({ id: id, type: 'EXPENSE' as any })
       .pipe(map((d) => d.responsePayload));
   }
 
   getTransactionDocuments(id: string) {
-    return this.commonController
-      .getDocuments({ docIndexId: id, docIndexType: 'TRANSACTION' })
+    return this.dmsController
+      .getDocuments({ id: id, type: 'TRANSACTION' as any })
       .pipe(map((d) => d.responsePayload));
   }
 }

@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { AccountDetail, KeyValue } from 'src/app/core/api/models';
 import { filterFormChange } from 'src/app/core/service/form.service';
 import { accountHighLevelView, accountTabHeader } from '../../account.field';
 import { MyAccountsTabComponent } from '../my-accounts-tab/my-accounts-tab.component';
@@ -48,8 +47,10 @@ export class ManageAccountsTabComponent extends MyAccountsTabComponent {
   override loadData(): void {
     this.accountService
       .fetchAccounts(
-        AccountDefaultValue.pageNumber,
-        AccountDefaultValue.pageSize
+        {
+          pageIndex: AccountDefaultValue.pageNumber,
+          pageSize: AccountDefaultValue.pageSize
+        }
       )
       .subscribe((data) => {
         this.setContent(data?.content!, data?.totalSize);
@@ -62,7 +63,7 @@ export class ManageAccountsTabComponent extends MyAccountsTabComponent {
   override onSearch(event: SearchEvent): void {
     if (event.advancedSearch && !event.reset) {
       this.accountService
-        .fetchAccounts(undefined, undefined, removeNullFields(event.value))
+        .fetchAccounts(removeNullFields(event.value))
         .subscribe((data) => {
           this.setContent(data?.content!, data?.totalSize);
         });

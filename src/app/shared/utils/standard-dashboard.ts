@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { KeyValue } from 'src/app/core/api/models';
+import { KeyValue } from 'src/app/core/api-client/models';
 
 
 /**
