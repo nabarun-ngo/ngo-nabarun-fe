@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AdminConstant, AdminDefaultValue } from '../../admin.const';
 import { AdminService } from '../../admin.service';
-import { ApiKeyDetail, KeyValue } from 'src/app/core/api/models';
+import { ApiKeyDetail, KeyValue } from 'src/app/core/api-client/models';
 import { Accordion } from 'src/app/shared/utils/accordion';
 import { AccordionButton, AccordionCell } from 'src/app/shared/model/accordion-list.model';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';

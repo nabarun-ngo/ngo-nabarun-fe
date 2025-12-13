@@ -2,8 +2,8 @@ import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot } from "@angular/router";
 import { DonationDefaultValue, donationTab } from "./donation.const";
 import { DonationService } from "./donation.service";
-import { CommonService } from "src/app/shared/services/common.service";
-import { RefDataType } from "src/app/core/api/models";
+import { CommonService } from "src/app/feature/dashboard/dashboard.service";
+import { RefDataType } from "src/app/core/api-client/models";
 import { of } from "rxjs";
 import { DonationNewService } from "./donation-new.service";
 

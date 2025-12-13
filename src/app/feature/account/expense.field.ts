@@ -5,8 +5,8 @@ import {
   DocumentDetail,
   ExpenseItemDetail,
   KeyValue,
-} from 'src/app/core/api/models';
-import { ExpenseDetail } from 'src/app/core/api/models/expense-detail';
+} from 'src/app/core/api-client/models';
+import { ExpenseDetail } from 'src/app/core/api-client/models/expense-detail';
 import { Accordion } from 'src/app/shared/utils/accordion';
 import {
   AccordionButton,

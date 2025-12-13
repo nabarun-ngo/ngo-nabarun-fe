@@ -3,7 +3,7 @@ import { NoticeControllerService, UserControllerService } from 'src/app/core/api
 import { NoticeDefaultValue } from './notice.const';
 import { concatMap, from, map } from 'rxjs';
 import { GoogleCalendarService } from 'src/app/core/service/google-calendar.service';
-import { MeetingDetail, NoticeDetail, NoticeDetailFilter } from 'src/app/core/api/models';
+import { MeetingDetail, NoticeDetail, NoticeDetailFilter } from 'src/app/core/api-client/models';
 
 @Injectable({
   providedIn: 'root'

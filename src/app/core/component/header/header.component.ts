@@ -4,12 +4,9 @@ import { AuthUser } from '../../model/auth-user.model';
 import { ModalService } from '../../service/modal.service';
 import { AppDialog } from '../../constant/app-dialog.const';
 import { AppRoute } from '../../constant/app-routing.const';
-import { AppNotification } from '../../model/notification.model';
-import { Router } from '@angular/router';
-import { CommonService } from 'src/app/shared/services/common.service';
 import { Howl, Howler } from 'howler';
-import { SpinnerVisibilityService } from 'ng-http-loader';
 import { SecuredDashboardComponent } from 'src/app/feature/dashboard/secured-dashboard/secured-dashboard.component';
+import { DashboardService } from 'src/app/feature/dashboard/dashboard.service';
 
 @Component({
   selector: 'app-header',
@@ -27,7 +24,7 @@ export class HeaderComponent implements OnInit {
   constructor(
     private identityService: UserIdentityService,
     private modalService: ModalService,
-    private commonService: CommonService,
+    private commonService: DashboardService,
 
   ) { }
 

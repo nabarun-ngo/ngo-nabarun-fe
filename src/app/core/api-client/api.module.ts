@@ -16,6 +16,7 @@ import { AccountControllerService } from './services/account-controller.service'
 import { ExpenseControllerService } from './services/expense-controller.service';
 import { EarningControllerService } from './services/earning-controller.service';
 import { DmsControllerService } from './services/dms-controller.service';
+import { StaticDocsControllerService } from './services/static-docs-controller.service';
 import { PublicControllerService } from './services/public-controller.service';
 import { CallbackControllerService } from './services/callback-controller.service';
 import { HealthControllerService } from './services/health-controller.service';
@@ -38,6 +39,7 @@ import { HealthControllerService } from './services/health-controller.service';
     ExpenseControllerService,
     EarningControllerService,
     DmsControllerService,
+    StaticDocsControllerService,
     PublicControllerService,
     CallbackControllerService,
     HealthControllerService,

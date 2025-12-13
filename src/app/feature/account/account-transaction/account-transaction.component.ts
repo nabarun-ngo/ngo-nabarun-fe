@@ -4,7 +4,7 @@ import { TransactionDefaultValue } from '../account.const';
 import { ActivatedRoute } from '@angular/router';
 import {
   PaginateTransactionDetail,
-} from 'src/app/core/api/models';
+} from 'src/app/core/api-client/models';
 import { AccountService } from '../account.service';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
@@ -38,13 +38,13 @@ export class AccountTransactionComponent
 
   constructor(
     private sharedDataService: SharedDataService,
-    protected override route: ActivatedRoute  ) {
+    protected override route: ActivatedRoute) {
     super(route);
   }
 
   protected override onInitHook(): void {
     this.sharedDataService.setPageName(TransactionDefaultValue.pageTitle);
-    this.searchInput=transactionSearchInput(this.refData!);
+    this.searchInput = transactionSearchInput(this.refData!);
   }
 
   protected override onHandleRouteDataHook(): void {

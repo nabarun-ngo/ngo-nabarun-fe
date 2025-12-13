@@ -8,7 +8,7 @@ import { sanitizeBase64 } from 'src/app/core/service/utilities.service';
 import { MemberService } from 'src/app/feature/member/member.service';
 import { UserDto } from 'src/app/core/api-client/models/user-dto';
 import { LinkDto, UserUpdateAdminDto, UserUpdateDto } from 'src/app/core/api-client/models';
-import { KeyValue } from 'src/app/core/api/models';
+import { KeyValue } from 'src/app/core/api-client/models';
 
 @Component({
   selector: 'app-profile-view',

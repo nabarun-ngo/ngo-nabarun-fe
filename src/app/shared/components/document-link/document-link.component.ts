@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { LinkCategoryDetail } from 'src/app/core/api/models';
+import { StaticDocumentDto } from 'src/app/core/api-client/models';
 
 @Component({
   selector: 'app-document-link',
@@ -8,7 +8,7 @@ import { LinkCategoryDetail } from 'src/app/core/api/models';
 })
 export class DocumentLinkComponent {
 
-  @Input({required:true})
-  categories: LinkCategoryDetail[] =[];
+  @Input({ required: true })
+  categories: StaticDocumentDto[] = [];
 }
 

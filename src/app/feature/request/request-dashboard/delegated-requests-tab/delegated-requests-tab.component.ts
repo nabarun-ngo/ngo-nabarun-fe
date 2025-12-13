@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { FormGroup, Validators } from '@angular/forms';
-import { RequestDetail } from 'src/app/core/api/models';
+import { RequestDetail } from 'src/app/core/api-client/models';
 import { AccordionCell, AccordionButton } from 'src/app/shared/model/accordion-list.model';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { RequestConstant, RequestField } from '../../request.const';

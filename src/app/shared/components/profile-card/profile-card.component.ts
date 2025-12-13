@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { RoleDto, UserDto } from 'src/app/core/api-client/models';
-import { KeyValue } from 'src/app/core/api/models';
+import { KeyValue } from 'src/app/core/api-client/models';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 
 @Component({
@@ -33,9 +33,9 @@ export class ProfileCardComponent {
     this.router.navigate([this.route_data.secured_member_profile_page.url, btoa(this.profile.id!)]);
   }
 
-  roleString(roles: RoleDto[]){
-    return roles.map(r=>r.roleName).join(', ')
+  roleString(roles: RoleDto[]) {
+    return roles.map(r => r.roleName).join(', ')
   }
-  
+
 }
 

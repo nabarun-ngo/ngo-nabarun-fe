@@ -1,21 +1,21 @@
-
 <app-page-layout [navigations]="navigations">
   <div style="display: flex; justify-content: center; margin: 24px 0;">
     <div style="max-width: 600px; text-align: center;">
       <span style="display: block; margin-bottom: 8px; font-size: 1.1em;">
         Can't find what you're looking for or need additional help?
       </span>
-      <a [routerLink]="[AppRoutes.secured_request_list_page.url]" style="font-weight: 600; color: #1976d2; text-decoration: underline; font-size: 1.13em;">
+      <a [routerLink]="[AppRoutes.secured_request_list_page.url]"
+        style="font-weight: 600; color: #1976d2; text-decoration: underline; font-size: 1.13em;">
         Submit a Support Request &rarr;
       </a>
     </div>
   </div>
-  <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" >
+  <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center">
     <mat-tab id="userGuide" label="User Guide">
-      <app-document-link [categories]="links.userGuides || []" ></app-document-link>
+      <app-document-link [categories]="userGuides || []"></app-document-link>
     </mat-tab>
     <mat-tab id="policy" label="Policy Hub">
-      <app-document-link  [categories]="links.policies || []"></app-document-link>
+      <app-document-link [categories]="policies || []"></app-document-link>
     </mat-tab>
   </mat-tab-group>
-</app-page-layout>   
+</app-page-layout>

@@ -12,7 +12,7 @@ import {
   DonationStatus,
   PaymentMethod,
   UserDetail,
-} from 'src/app/core/api/models';
+} from 'src/app/core/api-client/models';
 import { DonationRefData, donationTab } from '../donation.const';
 import { DonationService } from '../donation.service';
 import { DonationList } from '../donation.model';

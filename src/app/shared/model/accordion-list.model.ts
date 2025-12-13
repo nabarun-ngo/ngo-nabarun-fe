@@ -1,4 +1,4 @@
-import { KeyValue } from "src/app/core/api/models";
+import { KeyValue } from "src/app/core/api-client/models";
 import { DetailedView } from "./detailed-view.model";
 import { Pipe } from "@angular/core";
 

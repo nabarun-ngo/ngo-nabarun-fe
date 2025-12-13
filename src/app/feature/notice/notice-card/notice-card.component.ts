@@ -1,7 +1,7 @@
 import { Platform } from '@angular/cdk/platform';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { NoticeDetail } from 'src/app/core/api/models';
+import { NoticeDetail } from 'src/app/core/api-client/models';
 import { conditionalValidator } from 'src/app/core/service/form.service';
 import { date } from 'src/app/core/service/utilities.service';
 

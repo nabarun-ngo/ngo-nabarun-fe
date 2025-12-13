@@ -6,7 +6,7 @@ import { DonationService } from '../donation.service';
 import { PageEvent } from '@angular/material/paginator';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { DonationList, MemberList } from '../donation.model';
-import { DonationDetail, DonationSummary, KeyValue, PaginateDonationDetail, PaginateUserDetail } from 'src/app/core/api/models';
+import { DonationDetail, DonationSummary, KeyValue, PaginateDonationDetail, PaginateUserDetail } from 'src/app/core/api-client/models';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';

@@ -1,12 +1,12 @@
-import { KeyValue } from 'src/app/core/api/models/key-value';
+import { KeyValue } from 'src/app/core/api-client/models/key-value';
 import { AccountConstant, accountTab } from './account.const';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
 import { AccordionCell } from 'src/app/shared/model/accordion-list.model';
-import { AccountDetail } from 'src/app/core/api/models/account-detail';
+import { AccountDetail } from 'src/app/core/api-client/models/account-detail';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { FormGroup, Validators } from '@angular/forms';
 import { date } from 'src/app/core/service/utilities.service';
-import { DocumentDetail } from 'src/app/core/api/models';
+import { DocumentDetail } from 'src/app/core/api-client/models';
 import { EventEmitter } from '@angular/core';
 
 export const accountTabHeader = (tab: accountTab) => {
@@ -25,13 +25,13 @@ export const accountTabHeader = (tab: accountTab) => {
     },
     tab == 'my_accounts'
       ? {
-          value: 'Account Balance',
-          rounded: true,
-        }
+        value: 'Account Balance',
+        rounded: true,
+      }
       : {
-          value: 'Account Holder Name',
-          rounded: true,
-        },
+        value: 'Account Holder Name',
+        rounded: true,
+      },
   ];
 };
 
@@ -80,7 +80,7 @@ export const accountSearchInput = (
       ],
     },
   };
-  if(tab == 'all_accounts'){
+  if (tab == 'all_accounts') {
     model.advancedSearch?.searchFormFields.push({
       formControlName: 'accountHolderId',
       inputModel: {
@@ -88,7 +88,7 @@ export const accountSearchInput = (
         tagName: 'input',
         inputType: 'text',
         autocomplete: true,
-        labelName:'Account Owner',
+        labelName: 'Account Owner',
         selectList: [],
         placeholder: 'Ex. Sonal Gupta',
       }
@@ -122,13 +122,13 @@ export const accountHighLevelView = (
     },
     tab == 'my_accounts'
       ? {
-          type: 'text',
-          value: '₹ ' + item?.currentBalance,
-        }
+        type: 'text',
+        value: '₹ ' + item?.currentBalance,
+      }
       : {
-          type: 'text',
-          value: item?.accountHolderName!,
-        },
+        type: 'text',
+        value: item?.accountHolderName!,
+      },
   ];
 };
 

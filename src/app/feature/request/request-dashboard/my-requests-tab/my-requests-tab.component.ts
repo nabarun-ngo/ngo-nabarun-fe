@@ -2,7 +2,7 @@ import { Component, EventEmitter } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, Validators } from '@angular/forms';
-import { RequestDetail, KeyValue, UserDetail, AdditionalField, WorkDetail, PaginateRequestDetail, RequestType } from 'src/app/core/api/models';
+import { RequestDetail, KeyValue, UserDetail, AdditionalField, WorkDetail, PaginateRequestDetail, RequestType } from 'src/app/core/api-client/models';
 import {
   AccordionCell,
   AccordionButton,

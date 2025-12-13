@@ -6,7 +6,7 @@ import {
   KeyValue,
   PaginateExpenseDetail,
   UserDetail,
-} from 'src/app/core/api/models';
+} from 'src/app/core/api-client/models';
 import { Accordion } from 'src/app/shared/utils/accordion';
 import {
   AccordionCell,

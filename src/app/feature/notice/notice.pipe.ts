@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { NoticeDetail } from 'src/app/core/api/models';
+import { NoticeDetail } from 'src/app/core/api-client/models';
 
 @Pipe({
   name: 'noticeSearch'

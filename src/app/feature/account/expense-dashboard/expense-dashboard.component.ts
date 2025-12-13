@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { KeyValue, PaginateExpenseDetail } from 'src/app/core/api/models';
+import { KeyValue, PaginateExpenseDetail } from 'src/app/core/api-client/models';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
@@ -59,13 +59,12 @@ export class ExpenseDashboardComponent extends StandardTabbedDashboard<expenseTa
     protected override route: ActivatedRoute,
     private identityService: UserIdentityService,
     private accountService: AccountService
-  ) 
-  {
+  ) {
     super(route);
   }
 
-  
- protected override onInitHook(): void {
+
+  protected override onInitHook(): void {
     this.searchInput = expenseSearchInput(this.getCurrentTab(), this.refData!);
     this.sharedDataService.setPageName(ExpenseDefaultValue.pageTitle);
 
@@ -77,7 +76,7 @@ export class ExpenseDashboardComponent extends StandardTabbedDashboard<expenseTa
       )
     };
   }
-  
+
   protected override onTabChangedHook(): void {
     this.searchInput = expenseSearchInput(this.getCurrentTab(), this.refData!);
   }

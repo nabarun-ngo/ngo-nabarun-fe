@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { UserDetail } from 'src/app/core/api/models';
 import { OperationMode } from 'src/app/feature/donation/donation.const';
+import { UserDto } from 'src/app/core/api-client/models';
 
 @Component({
   selector: 'app-detailed-profile',
@@ -11,8 +11,8 @@ import { OperationMode } from 'src/app/feature/donation/donation.const';
 })
 export class DetailedProfileComponent implements OnInit {
 
-  @Input({ required: false, alias: 'member' }) profile!: UserDetail;
-  @Output() profileChange: EventEmitter<{ valid?: boolean, member?: UserDetail }> = new EventEmitter();
+  @Input({ required: false, alias: 'member' }) profile!: UserDto;
+  @Output() profileChange: EventEmitter<{ valid?: boolean, member?: UserDto }> = new EventEmitter();
   @Input('triggerEvent') triggerEvent: Observable<any> | undefined;
 
   @Input({ required: true, alias: 'mode' }) mode!: OperationMode;

@@ -5,7 +5,7 @@ import { Paginator } from 'src/app/shared/utils/paginator';
 import { NoticeDefaultValue } from '../notice.const';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { NoticeService } from '../notice.service';
-import { NoticeDetail, PaginateNoticeDetail } from 'src/app/core/api/models';
+import { NoticeDetail, PaginateNoticeDetail } from 'src/app/core/api-client/models';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { GoogleCalendarService } from 'src/app/core/service/google-calendar.service';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';

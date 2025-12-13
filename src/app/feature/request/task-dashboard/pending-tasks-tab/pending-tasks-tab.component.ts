@@ -3,7 +3,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { scrollToFirstInvalidControl } from 'src/app/core/service/form.service';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { AccordionButton, AccordionCell } from 'src/app/shared/model/accordion-list.model';
-import { PaginateWorkDetail, WorkDetail } from 'src/app/core/api/models';
+import { PaginateWorkDetail, WorkDetail } from 'src/app/core/api-client/models';
 import { date, removeNullFields } from 'src/app/core/service/utilities.service';
 import { Accordion } from 'src/app/shared/utils/accordion';
 import { RequestConstant, TaskDefaultValue, TaskField } from '../../request.const';

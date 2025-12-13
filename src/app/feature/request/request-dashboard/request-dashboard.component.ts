@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { RequestDefaultValue, requestTab } from '../request.const';
-import { PaginateRequestDetail } from 'src/app/core/api/models';
+import { PaginateRequestDetail } from 'src/app/core/api-client/models';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
@@ -42,7 +42,7 @@ export class RequestDashboardComponent extends StandardTabbedDashboard<requestTa
 
   protected override onInitHook(): void {
     this.sharedDataService.setPageName(RequestDefaultValue.pageTitle);
-    this.searchInput = requestSearchInput(this.getCurrentTab(),this.refData!);
+    this.searchInput = requestSearchInput(this.getCurrentTab(), this.refData!);
   }
 
   protected override get tabComponents(): { [key in requestTab]?: TabComponentInterface<PaginateRequestDetail> } {
@@ -52,11 +52,11 @@ export class RequestDashboardComponent extends StandardTabbedDashboard<requestTa
     };
   }
   protected override get defaultTab(): requestTab {
-    return RequestDefaultValue.tabName as requestTab; 
+    return RequestDefaultValue.tabName as requestTab;
   }
 
   protected override onTabChangedHook(): void {
-    this.searchInput = requestSearchInput(this.getCurrentTab(),this.refData!);
+    this.searchInput = requestSearchInput(this.getCurrentTab(), this.refData!);
   }
 
   onSearch($event: SearchEvent) {

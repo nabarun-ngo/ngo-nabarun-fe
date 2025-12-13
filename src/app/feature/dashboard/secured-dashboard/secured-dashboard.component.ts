@@ -6,7 +6,6 @@ import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 import { getGreetings } from 'src/app/core/service/utilities.service';
 import { TileInfo } from 'src/app/shared/model/tile-info.model';
-import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
   selector: 'app-secured-dashboard',
@@ -26,8 +25,6 @@ export class SecuredDashboardComponent implements OnInit {
   constructor(
     private identityService: UserIdentityService,
     private sharedDataService: SharedDataService,
-    private commonService: CommonService,
-    // private dashboardDataService: DashboardDataService
   ) { }
 
   get tiles() { return SecuredDashboardComponent.tileList; }

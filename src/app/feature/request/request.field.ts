@@ -1,5 +1,5 @@
 import { FormGroup, Validators } from "@angular/forms";
-import { AdditionalField, DocumentDetail, KeyValue, RequestDetail, WorkDetail } from "src/app/core/api/models";
+import { AdditionalField, DocumentDetail, KeyValue, RequestDetail, WorkDetail } from "src/app/core/api-client/models";
 import { date } from "src/app/core/service/utilities.service";
 import { RequestConstant, requestTab, workListTab } from "./request.const";
 import { DetailedView, DetailedViewField } from "src/app/shared/model/detailed-view.model";

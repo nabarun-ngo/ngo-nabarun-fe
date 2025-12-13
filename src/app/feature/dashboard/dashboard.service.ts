@@ -2,55 +2,25 @@ import { Injectable } from '@angular/core';
 import { deleteToken, getToken, Messaging, onMessage } from '@angular/fire/messaging';
 import { SpinnerVisibilityService } from 'ng-http-loader';
 import { filter, map, Observable, shareReplay, Subject, tap } from 'rxjs';
-import { DonationStatus, DonationType, ImportantLinks, KeyValue, RefDataType, RequestType } from 'src/app/core/api/models';
-import { CommonControllerService, UserControllerService } from 'src/app/core/api/services';
+import { KeyValue } from 'src/app/core/api-client/models';
+import { StaticDocsControllerService } from 'src/app/core/api-client/services';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 import { environment } from 'src/environments/environment';
-import { runInThisContext } from 'vm';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CommonService {
+export class DashboardService {
 
   cachedObservable!: Observable<{
     [key: string]: KeyValue[];
   }>;
 
   constructor(
-    private commonController: CommonControllerService,
+    private docsController: StaticDocsControllerService,
     private messageing: Messaging,
     private userDetail: UserIdentityService
   ) { }
-
-  getRefData(names?: RefDataType[], options?: {
-    donationStatus?: DonationStatus,
-    donationType?: DonationType,
-    countryCode?: string,
-    stateCode?: string,
-    workflowType?: RequestType
-  }) {
-    if (options) {
-      return this.commonController.getReferenceData({
-        names: names!,
-        currentDonationStatus: options.donationStatus,
-        donationType: options.donationType,
-        countryCode: options.countryCode,
-        stateCode: options.stateCode,
-        workflowType: options.workflowType
-      }).pipe(map(m => m.responsePayload));
-    }
-    if (!this.cachedObservable) {
-      this.cachedObservable = this.commonController.getReferenceData().pipe(
-        map(m => m.responsePayload!),
-        shareReplay(1) // Share the response with all subscribers
-      );
-    }
-    return this.cachedObservable;
-
-  }
-
-
 
 
   private notificationSub = new Subject<{ [key: string]: string; }>();
@@ -97,9 +67,9 @@ export class CommonService {
           serviceWorkerRegistration: serviceWorkerRegistration,
         }).then(async (token) => {
           //console.log('fcm token', token);
-          this.commonController.manageNotification({ action: 'SAVE_TOKEN_AND_GET_COUNTS', body: { 'token': token, 'profile_id': (await this.userDetail.getUser()).profile_id } }).subscribe(s => {
+          // this.commonController.manageNotification({ action: 'SAVE_TOKEN_AND_GET_COUNTS', body: { 'token': token, 'profile_id': (await this.userDetail.getUser()).profile_id } }).subscribe(s => {
 
-          })
+          // })
         });
       });
   }
@@ -109,12 +79,15 @@ export class CommonService {
     deleteToken(this.messageing);
   }
 
-  fetchNotification() {
-    return this.commonController.getNotification({ pageIndex: 0, pageSize: 5 }).pipe(map(m => m.responsePayload))
+  // fetchNotification() {
+  //   return this.commonController.getNotification({ pageIndex: 0, pageSize: 5 }).pipe(map(m => m.responsePayload))
+  // }
+
+  getPolicyLink() {
+    return this.docsController.getPolicies().pipe(map(m => m.responsePayload));
   }
 
-  getUsefulLink() {
-    return this.commonController.getUsefulLinks().pipe(map(m => m.responsePayload));
+  getUserGuideLink() {
+    return this.docsController.getUserGuides().pipe(map(m => m.responsePayload));
   }
-
 }

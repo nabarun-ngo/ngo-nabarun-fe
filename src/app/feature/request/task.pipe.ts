@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { WorkDetail } from 'src/app/core/api/models';
+import { WorkDetail } from 'src/app/core/api-client/models';
 
 @Pipe({
   name: 'taskSearch'

@@ -1,7 +1,7 @@
 import { Paginator } from "src/app/shared/utils/paginator";
 import { AccordionButton, AccordionCell, AccordionData, AccordionList, AccordionRow } from "../model/accordion-list.model";
 import { DetailedView, DetailedViewField } from "../model/detailed-view.model";
-import { KeyValue } from "src/app/core/api/models";
+import { KeyValue } from "src/app/core/api-client/models";
 import { FormControl } from "@angular/forms";
 import { BehaviorSubject } from "rxjs";
 import { FileUpload } from "../components/generic/file-upload/file-upload.component";

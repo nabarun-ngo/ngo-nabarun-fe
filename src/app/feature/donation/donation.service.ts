@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, combineLatest, firstValueFrom, forkJoin, map } from 'rxjs';
-import { DocumentDetailUpload, DocumentMapping, DonationDetail, DonationDetailFilter, DonationStatus, DonationType, RefDataType, UserDetailFilter } from 'src/app/core/api/models';
+import { DocumentDetailUpload, DocumentMapping, DonationDetail, DonationDetailFilter, DonationStatus, DonationType, RefDataType, UserDetailFilter } from 'src/app/core/api-client/models';
 import { AccountControllerService, CommonControllerService, DonationControllerService, SocialEventControllerService, UserControllerService } from 'src/app/core/api/services';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 import { date } from 'src/app/core/service/utilities.service';

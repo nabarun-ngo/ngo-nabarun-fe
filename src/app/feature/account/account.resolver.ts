@@ -1,9 +1,9 @@
 import { ActivatedRoute, ResolveFn } from '@angular/router';
 import { AccountService } from './account.service';
 import { Inject, inject } from '@angular/core';
-import { CommonService } from 'src/app/shared/services/common.service';
+import { CommonService } from 'src/app/feature/dashboard/dashboard.service';
 import { AccountDefaultValue, accountTab, expenseTab, TransactionDefaultValue } from './account.const';
-import { RefDataType } from 'src/app/core/api/models';
+import { RefDataType } from 'src/app/core/api-client/models';
 
 export const accountDashboardResolver: ResolveFn<any> = (route, state) => {
   let tab = (route.queryParams['tab'] || AccountDefaultValue.tabName) as accountTab;

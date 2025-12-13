@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CommonControllerService, RequestControllerService, UserControllerService } from 'src/app/core/api/services';
 import { RequestDefaultValue, TaskDefaultValue } from './request.const';
 import { Observable, map } from 'rxjs';
-import { RefDataType, RequestDetail, RequestDetailFilter, WorkDetail, WorkDetailFilter } from 'src/app/core/api/models';
+import { RefDataType, RequestDetail, RequestDetailFilter, WorkDetail, WorkDetailFilter } from 'src/app/core/api-client/models';
 import { date } from 'src/app/core/service/utilities.service';
 
 @Injectable({

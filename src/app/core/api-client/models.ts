@@ -39,12 +39,14 @@ export { ProcessDonationPaymentDto } from './models/process-donation-payment-dto
 export { RoleDto } from './models/role-dto';
 export { SignUpDto } from './models/sign-up-dto';
 export { StartWorkflowDto } from './models/start-workflow-dto';
+export { StaticDocumentDto } from './models/static-document-dto';
 export { SuccessResponse } from './models/success-response';
 export { SuccessResponseAccountDetailDto } from './models/success-response-account-detail-dto';
 export { SuccessResponseApiKeyDto } from './models/success-response-api-key-dto';
 export { SuccessResponseArrayAccountDetailDto } from './models/success-response-array-account-detail-dto';
 export { SuccessResponseArrayArray } from './models/success-response-array-array';
 export { SuccessResponseArrayDocumentDto } from './models/success-response-array-document-dto';
+export { SuccessResponseArrayStaticDocumentDto } from './models/success-response-array-static-document-dto';
 export { SuccessResponseDocumentDto } from './models/success-response-document-dto';
 export { SuccessResponseDonationDto } from './models/success-response-donation-dto';
 export { SuccessResponseDonationRefDataDto } from './models/success-response-donation-ref-data-dto';

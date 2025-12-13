@@ -20,8 +20,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DocumentListComponent } from './components/generic/document-list/document-list.component';
 import { AccordionListComponent } from './components/generic/accordion-list/accordion-list.component';
 import { DetailedViewComponent } from './components/generic/detailed-view/detailed-view.component';
-import { DetailedProfileComponent } from './components/detailed-profile/detailed-profile.component';
-import { DetailedDonationComponent } from './components/detailed-donation/detailed-donation.component';
 import { FileUploadComponent } from './components/generic/file-upload/file-upload.component';
 import { MAT_RADIO_DEFAULT_OPTIONS, MatRadioModule } from '@angular/material/radio';
 import { UniversalInputComponent } from './components/generic/universal-input/universal-input.component';
@@ -55,8 +53,6 @@ import { StandardTabGroupComponent } from './components/standard-tab-group/stand
   declarations: [
     ItemTileListComponent,
     SearchAndAdvancedSearchFormComponent,
-    DetailedDonationComponent,
-    DetailedProfileComponent,
     DocumentListComponent,
     AccordionListComponent,
     DetailedViewComponent,
@@ -116,8 +112,6 @@ import { StandardTabGroupComponent } from './components/standard-tab-group/stand
     ReactiveFormsModule,
     MatPaginatorModule,
     AccordionListComponent,
-    DetailedDonationComponent,
-    DetailedProfileComponent,
     FileUploadComponent,
     MatInputModule,
     ProfileCardComponent,

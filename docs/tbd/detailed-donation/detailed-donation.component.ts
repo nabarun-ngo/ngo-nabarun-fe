@@ -1,14 +1,14 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { AccountDetail, DocumentDetail, DocumentDetailUpload, DonationDetail, DonationStatus, DonationType, EventDetail, HistoryDetail, KeyValue, PaginateAccountDetail, PaymentMethod, RefDataType } from 'src/app/core/api/models';
+import { AccountDetail, DocumentDetail, DocumentDetailUpload, DonationDetail, DonationStatus, DonationType, EventDetail, HistoryDetail, KeyValue, PaginateAccountDetail, PaymentMethod, RefDataType } from 'src/app/core/api-client/models';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { getErrorMessage, setValidator } from 'src/app/core/service/form.service';
 import { DonationRefData, OperationMode, donationTab } from 'src/app/feature/donation/donation.const';
 import { DonationService } from 'src/app/feature/donation/donation.service';
-import { FileUpload } from '../generic/file-upload/file-upload.component';
+import { FileUpload } from '../../../src/app/shared/components/generic/file-upload/file-upload.component';
 import { DatePipe } from '@angular/common';
-import { CommonService } from '../../services/common.service';
+import { CommonService } from '../../../src/app/feature/dashboard/dashboard.service';
 
 @Component({
   selector: 'app-detailed-donation',

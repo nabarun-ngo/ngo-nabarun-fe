@@ -4,7 +4,7 @@ import {
   AccountDetail,
   ExpenseDetail,
   KeyValue,
-} from 'src/app/core/api/models';
+} from 'src/app/core/api-client/models';
 import { AccordionButton, AccordionCell } from 'src/app/shared/model/accordion-list.model';
 import { AppDialog } from 'src/app/core/constant/app-dialog.const';
 import { manageExpenseHighLevelView, manageExpenseTabHeader, rejectionModal } from '../../expense.field';

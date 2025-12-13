@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { AccountDetail, AccountDetailFilter, KeyValue, PaginateAccountDetail } from 'src/app/core/api/models';
+import { AccountDetail, AccountDetailFilter, KeyValue, PaginateAccountDetail } from 'src/app/core/api-client/models';
 import {
   AccordionCell,
   AccordionButton,

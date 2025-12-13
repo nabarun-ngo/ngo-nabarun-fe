@@ -6,7 +6,7 @@ import {
   DonationStatus,
   PaymentMethod,
   UserDetail,
-} from 'src/app/core/api/models';
+} from 'src/app/core/api-client/models';
 import { DonationService } from '../donation.service';
 import { PageEvent } from '@angular/material/paginator';
 import { DonationDefaultValue } from '../donation.const';
@@ -19,7 +19,7 @@ import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { MemberProfileModel } from '../../member/member-profile/member-profile.model';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 import { SCOPE } from 'src/app/core/constant/auth-scope.const';
-import { DetailedDonationComponent } from 'src/app/shared/components/detailed-donation/detailed-donation.component';
+import { DetailedDonationComponent } from 'docs/tbd/detailed-donation/detailed-donation.component';
 import { FileUpload } from 'src/app/shared/components/generic/file-upload/file-upload.component';
 import { removeNullFields } from 'src/app/core/service/utilities.service';
 import { AppDialog } from 'src/app/core/constant/app-dialog.const';
