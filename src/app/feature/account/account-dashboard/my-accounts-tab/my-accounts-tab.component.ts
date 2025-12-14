@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { AccountDetail, AccountDetailFilter, KeyValue, PaginateAccountDetail } from 'src/app/core/api-client/models';
 import {
   AccordionCell,
   AccordionButton,
@@ -27,13 +26,14 @@ import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.i
 import { removeNullFields } from 'src/app/core/service/utilities.service';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
+import { AccountDetailDto, PagedResultAccountDetailDto } from 'src/app/core/api-client/models';
 
 @Component({
   selector: 'app-my-accounts-tab',
   templateUrl: './my-accounts-tab.component.html',
   styleUrls: ['./my-accounts-tab.component.scss'],
 })
-export class MyAccountsTabComponent extends Accordion<AccountDetail> implements TabComponentInterface<PaginateAccountDetail> {
+export class MyAccountsTabComponent extends Accordion<AccountDetailDto> implements TabComponentInterface<PagedResultAccountDetailDto> {
   protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
     return {
       pageNumber: AccountDefaultValue.pageNumber,
@@ -54,8 +54,6 @@ export class MyAccountsTabComponent extends Accordion<AccountDetail> implements 
 
   override onInitHook(): void {
     this.setHeaderRow(accountTabHeader('my_accounts'));
-    //Init Pagination
-
   }
 
   /**
@@ -78,7 +76,7 @@ export class MyAccountsTabComponent extends Accordion<AccountDetail> implements 
     }
   }
 
-  private fetchData(pageNumber?: number, pageSize?: number, filter?: AccountDetailFilter) {
+  private fetchData(pageNumber?: number, pageSize?: number, filter?: any) {
     this.accountService
       .fetchMyAccounts(
         pageNumber,
@@ -91,14 +89,14 @@ export class MyAccountsTabComponent extends Accordion<AccountDetail> implements 
   }
 
   protected override prepareHighLevelView(
-    data: AccountDetail,
+    data: AccountDetailDto,
     options?: { [key: string]: any }
   ): AccordionCell[] {
     return accountHighLevelView(data, 'my_accounts', this.getRefData()!);
   }
 
   protected override prepareDetailedView(
-    data: AccountDetail,
+    data: AccountDetailDto,
     options?: { [key: string]: any }
   ): DetailedView[] {
     let isCreate = options && options['create'];
@@ -110,7 +108,7 @@ export class MyAccountsTabComponent extends Accordion<AccountDetail> implements 
   }
 
   protected override prepareDefaultButtons(
-    data: AccountDetail,
+    data: AccountDetailDto,
     options?: { [key: string]: any }
   ): AccordionButton[] {
     return [

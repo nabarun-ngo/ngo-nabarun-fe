@@ -2,7 +2,6 @@ import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { AccountDefaultValue, accountTab } from '../account.const';
-import { PaginateAccountDetail } from 'src/app/core/api-client/models';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
 import { SCOPE } from 'src/app/core/constant/auth-scope.const';
@@ -14,13 +13,14 @@ import { MyAccountsTabComponent } from './my-accounts-tab/my-accounts-tab.compon
 import { ManageAccountsTabComponent } from './manage-accounts-tab/manage-accounts-tab.component';
 import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
+import { PagedResultAccountDetailDto } from 'src/app/core/api-client/models';
 
 @Component({
   selector: 'app-account-dashboard',
   templateUrl: './account-dashboard.component.html',
   styleUrls: ['./account-dashboard.component.scss'],
 })
-export class AccountDashboardComponent extends StandardTabbedDashboard<accountTab, PaginateAccountDetail> {
+export class AccountDashboardComponent extends StandardTabbedDashboard<accountTab, PagedResultAccountDetailDto> {
 
   @ViewChild(MyAccountsTabComponent) myAccountsTab!: MyAccountsTabComponent;
   @ViewChild(ManageAccountsTabComponent) manageAccountsTab!: ManageAccountsTabComponent;
@@ -44,7 +44,7 @@ export class AccountDashboardComponent extends StandardTabbedDashboard<accountTa
   protected tabMapping: accountTab[] = ['my_accounts', 'all_accounts'];
   protected searchInput!: SearchAndAdvancedSearchModel;
 
-  protected override get tabComponents(): { [key in accountTab]?: TabComponentInterface<PaginateAccountDetail> } {
+  protected override get tabComponents(): { [key in accountTab]?: TabComponentInterface<PagedResultAccountDetailDto> } {
     return {
       my_accounts: this.myAccountsTab,
       all_accounts: this.manageAccountsTab
