@@ -1,11 +1,14 @@
 import { Component, Input } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import {
-  ExpenseDetail,
-  ExpenseItemDetail,
+  CreateExpenseDto,
+  ExpenseDetailDto,
+  ExpenseItemDetailDto,
   KeyValue,
-  PaginateExpenseDetail,
-  UserDetail,
+  PagedResultExpenseDetailDto,
+  UpdateEarningDto,
+  UserDto,
+
 } from 'src/app/core/api-client/models';
 import { Accordion } from 'src/app/shared/utils/accordion';
 import {
@@ -36,7 +39,7 @@ import { SearchEvent } from 'src/app/shared/components/search-and-advanced-searc
   templateUrl: './my-expenses-tab.component.html',
   styleUrls: ['./my-expenses-tab.component.scss'],
 })
-export class MyExpensesTabComponent extends Accordion<ExpenseDetail> implements TabComponentInterface<PaginateExpenseDetail> {
+export class MyExpensesTabComponent extends Accordion<ExpenseDetailDto> implements TabComponentInterface<PagedResultExpenseDetailDto> {
   protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
     return {
       pageNumber: AccountDefaultValue.pageNumber,
@@ -48,7 +51,7 @@ export class MyExpensesTabComponent extends Accordion<ExpenseDetail> implements 
   /**
    * Initialize variables
    */
-  protected users!: UserDetail[];
+  protected users!: Partial<UserDto>[];
   protected isAdmin: boolean = false;
   constructor(
     protected accountService: AccountService,
@@ -83,14 +86,14 @@ export class MyExpensesTabComponent extends Accordion<ExpenseDetail> implements 
   }
 
   protected override prepareHighLevelView(
-    data: ExpenseDetail,
+    data: ExpenseDetailDto,
     options?: { [key: string]: any }
   ): AccordionCell[] {
     return expenseHighLevelView(data);
   }
 
   protected override prepareDetailedView(
-    data: ExpenseDetail,
+    data: ExpenseDetailDto,
     options?: { [key: string]: any }
   ): DetailedView[] {
     let isCreate = options && options['create'];
@@ -104,7 +107,7 @@ export class MyExpensesTabComponent extends Accordion<ExpenseDetail> implements 
   }
 
   protected override prepareDefaultButtons(
-    data: ExpenseDetail,
+    data: ExpenseDetailDto,
     options?: { [key: string]: any }
   ): AccordionButton[] {
     if (options && options['create']) {
@@ -151,7 +154,7 @@ export class MyExpensesTabComponent extends Accordion<ExpenseDetail> implements 
         if (val['expense_source'] == 'EVENT') {
           this.accountService.fetchEvents().subscribe((data) => {
             let events: KeyValue[] = data?.content?.map((m) => {
-              return { key: m.id, displayValue: m.eventTitle } as KeyValue;
+              return { key: m.id, displayValue: m.name } as KeyValue;
             })!;
             this.addSectionField(
               'expense_detail',
@@ -201,7 +204,7 @@ export class MyExpensesTabComponent extends Accordion<ExpenseDetail> implements 
           'expense_list_detail',
           $event.rowIndex,
           $event.buttonId == 'CREATE_CONFIRM' ? true : false
-        )?.itemList as ExpenseItemDetail[];
+        )?.itemList as ExpenseItemDetailDto[];
         //console.log(expenseItems);
         expenseForm?.markAllAsTouched();
         if (expenseItems.length == 0) {
@@ -232,7 +235,7 @@ export class MyExpensesTabComponent extends Accordion<ExpenseDetail> implements 
               )
               : undefined,
             status: 'SUBMITTED',
-          } as ExpenseDetail;
+          } as CreateExpenseDto;
           if ($event.buttonId == 'CREATE_CONFIRM') {
             this.accountService.createExpenses(expenseDetail).subscribe((d) => {
               this.hideForm(0, true);
@@ -284,7 +287,7 @@ export class MyExpensesTabComponent extends Accordion<ExpenseDetail> implements 
           );
           expenseForm?.markAllAsTouched();
           if (expenseForm?.valid) {
-            let content = expenseForm.value as ExpenseItemDetail;
+            let content = expenseForm.value as ExpenseItemDetailDto;
             if (data.buttonId == 'CREATE_CONFIRM') {
               expenseList.accordion?.object.addContentRow(content);
             } else {

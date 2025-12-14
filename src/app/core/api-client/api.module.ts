@@ -6,7 +6,7 @@ import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core
 import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
-import { JobMonitoringControllerService } from './services/job-monitoring-controller.service';
+import { JobControllerService } from './services/job-controller.service';
 import { UserControllerService } from './services/user-controller.service';
 import { OAuthControllerService } from './services/o-auth-controller.service';
 import { ApiKeyControllerService } from './services/api-key-controller.service';
@@ -20,6 +20,7 @@ import { StaticDocsControllerService } from './services/static-docs-controller.s
 import { PublicControllerService } from './services/public-controller.service';
 import { CallbackControllerService } from './services/callback-controller.service';
 import { HealthControllerService } from './services/health-controller.service';
+import { ProjectControllerService } from './services/project-controller.service';
 
 /**
  * Module that provides all services and configuration.
@@ -29,7 +30,7 @@ import { HealthControllerService } from './services/health-controller.service';
   exports: [],
   declarations: [],
   providers: [
-    JobMonitoringControllerService,
+    JobControllerService,
     UserControllerService,
     OAuthControllerService,
     ApiKeyControllerService,
@@ -43,6 +44,7 @@ import { HealthControllerService } from './services/health-controller.service';
     PublicControllerService,
     CallbackControllerService,
     HealthControllerService,
+    ProjectControllerService,
     ApiConfiguration
   ],
 })

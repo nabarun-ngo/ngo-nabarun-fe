@@ -9,18 +9,18 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 
-export interface GetFailedJobs$Params {
+export interface RemoveJob$Params {
 
 /**
- * Number of failed jobs to return
+ * ID of the job to remove
  */
-  limit?: number;
+  jobId: string;
 }
 
-export function getFailedJobs(http: HttpClient, rootUrl: string, params?: GetFailedJobs$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, getFailedJobs.PATH, 'get');
+export function removeJob(http: HttpClient, rootUrl: string, params: RemoveJob$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, removeJob.PATH, 'delete');
   if (params) {
-    rb.query('limit', params.limit, {});
+    rb.path('jobId', params.jobId, {});
   }
 
   return http.request(
@@ -33,4 +33,4 @@ export function getFailedJobs(http: HttpClient, rootUrl: string, params?: GetFai
   );
 }
 
-getFailedJobs.PATH = '/api/jobs/failed';
+removeJob.PATH = '/api/jobs/{jobId}';

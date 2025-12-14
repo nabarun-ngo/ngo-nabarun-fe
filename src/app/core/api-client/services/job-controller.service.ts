@@ -11,136 +11,33 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { cleanOldJobs } from '../fn/job-monitoring-controller/clean-old-jobs';
-import { CleanOldJobs$Params } from '../fn/job-monitoring-controller/clean-old-jobs';
-import { getFailedJobs } from '../fn/job-monitoring-controller/get-failed-jobs';
-import { GetFailedJobs$Params } from '../fn/job-monitoring-controller/get-failed-jobs';
-import { getJobDetails } from '../fn/job-monitoring-controller/get-job-details';
-import { GetJobDetails$Params } from '../fn/job-monitoring-controller/get-job-details';
-import { getJobMetrics } from '../fn/job-monitoring-controller/get-job-metrics';
-import { GetJobMetrics$Params } from '../fn/job-monitoring-controller/get-job-metrics';
-import { getJobMetricsByName } from '../fn/job-monitoring-controller/get-job-metrics-by-name';
-import { GetJobMetricsByName$Params } from '../fn/job-monitoring-controller/get-job-metrics-by-name';
-import { getJobPerformanceMetrics } from '../fn/job-monitoring-controller/get-job-performance-metrics';
-import { GetJobPerformanceMetrics$Params } from '../fn/job-monitoring-controller/get-job-performance-metrics';
-import { getQueueStatistics } from '../fn/job-monitoring-controller/get-queue-statistics';
-import { GetQueueStatistics$Params } from '../fn/job-monitoring-controller/get-queue-statistics';
-import { pauseQueue } from '../fn/job-monitoring-controller/pause-queue';
-import { PauseQueue$Params } from '../fn/job-monitoring-controller/pause-queue';
-import { removeJob } from '../fn/job-monitoring-controller/remove-job';
-import { RemoveJob$Params } from '../fn/job-monitoring-controller/remove-job';
-import { retryAllFailedJobs } from '../fn/job-monitoring-controller/retry-all-failed-jobs';
-import { RetryAllFailedJobs$Params } from '../fn/job-monitoring-controller/retry-all-failed-jobs';
-import { retryJob } from '../fn/job-monitoring-controller/retry-job';
-import { RetryJob$Params } from '../fn/job-monitoring-controller/retry-job';
+import { cleanOldJobs } from '../fn/job-controller/clean-old-jobs';
+import { CleanOldJobs$Params } from '../fn/job-controller/clean-old-jobs';
+import { getJobDetails } from '../fn/job-controller/get-job-details';
+import { GetJobDetails$Params } from '../fn/job-controller/get-job-details';
+import { getJobs } from '../fn/job-controller/get-jobs';
+import { GetJobs$Params } from '../fn/job-controller/get-jobs';
+import { getQueueStatistics } from '../fn/job-controller/get-queue-statistics';
+import { GetQueueStatistics$Params } from '../fn/job-controller/get-queue-statistics';
+import { pauseQueue } from '../fn/job-controller/pause-queue';
+import { PauseQueue$Params } from '../fn/job-controller/pause-queue';
+import { removeJob } from '../fn/job-controller/remove-job';
+import { RemoveJob$Params } from '../fn/job-controller/remove-job';
+import { retryAllFailedJobs } from '../fn/job-controller/retry-all-failed-jobs';
+import { RetryAllFailedJobs$Params } from '../fn/job-controller/retry-all-failed-jobs';
+import { retryJob } from '../fn/job-controller/retry-job';
+import { RetryJob$Params } from '../fn/job-controller/retry-job';
+import { SuccessResponseArrayJobDetail } from '../models/success-response-array-job-detail';
+import { SuccessResponseJobDetail } from '../models/success-response-job-detail';
 
 @Injectable({ providedIn: 'root' })
-export class JobMonitoringControllerService extends BaseService {
+export class JobControllerService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
   }
 
-  /** Path part for operation `getJobMetrics()` */
-  static readonly GetJobMetricsPath = '/api/jobs/metrics';
-
-  /**
-   * Get job metrics.
-   *
-   *
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getJobMetrics()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getJobMetrics$Response(params?: GetJobMetrics$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    return getJobMetrics(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * Get job metrics.
-   *
-   *
-   *
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getJobMetrics$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getJobMetrics(params?: GetJobMetrics$Params, context?: HttpContext): Observable<void> {
-    return this.getJobMetrics$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
-    );
-  }
-
-  /** Path part for operation `getJobMetricsByName()` */
-  static readonly GetJobMetricsByNamePath = '/api/jobs/metrics/{jobName}';
-
-  /**
-   * Get job metrics by name.
-   *
-   *
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getJobMetricsByName()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getJobMetricsByName$Response(params: GetJobMetricsByName$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    return getJobMetricsByName(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * Get job metrics by name.
-   *
-   *
-   *
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getJobMetricsByName$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getJobMetricsByName(params: GetJobMetricsByName$Params, context?: HttpContext): Observable<void> {
-    return this.getJobMetricsByName$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
-    );
-  }
-
-  /** Path part for operation `getJobPerformanceMetrics()` */
-  static readonly GetJobPerformanceMetricsPath = '/api/jobs/performance';
-
-  /**
-   * Get job performance metrics.
-   *
-   *
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getJobPerformanceMetrics()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getJobPerformanceMetrics$Response(params?: GetJobPerformanceMetrics$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    return getJobPerformanceMetrics(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * Get job performance metrics.
-   *
-   *
-   *
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getJobPerformanceMetrics$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getJobPerformanceMetrics(params?: GetJobPerformanceMetrics$Params, context?: HttpContext): Observable<void> {
-    return this.getJobPerformanceMetrics$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
-    );
-  }
-
-  /** Path part for operation `getFailedJobs()` */
-  static readonly GetFailedJobsPath = '/api/jobs/failed';
+  /** Path part for operation `getJobs()` */
+  static readonly GetJobsPath = '/api/jobs';
 
   /**
    * Get failed jobs.
@@ -148,12 +45,12 @@ export class JobMonitoringControllerService extends BaseService {
    *
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getFailedJobs()` instead.
+   * To access only the response body, use `getJobs()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getFailedJobs$Response(params?: GetFailedJobs$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    return getFailedJobs(this.http, this.rootUrl, params, context);
+  getJobs$Response(params: GetJobs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayJobDetail>> {
+    return getJobs(this.http, this.rootUrl, params, context);
   }
 
   /**
@@ -162,13 +59,13 @@ export class JobMonitoringControllerService extends BaseService {
    *
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getFailedJobs$Response()` instead.
+   * To access the full response (for headers, for example), `getJobs$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getFailedJobs(params?: GetFailedJobs$Params, context?: HttpContext): Observable<void> {
-    return this.getFailedJobs$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+  getJobs(params: GetJobs$Params, context?: HttpContext): Observable<SuccessResponseArrayJobDetail> {
+    return this.getJobs$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseArrayJobDetail>): SuccessResponseArrayJobDetail => r.body)
     );
   }
 
@@ -185,7 +82,7 @@ export class JobMonitoringControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getJobDetails$Response(params: GetJobDetails$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  getJobDetails$Response(params: GetJobDetails$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseJobDetail>> {
     return getJobDetails(this.http, this.rootUrl, params, context);
   }
 
@@ -199,9 +96,9 @@ export class JobMonitoringControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getJobDetails(params: GetJobDetails$Params, context?: HttpContext): Observable<void> {
+  getJobDetails(params: GetJobDetails$Params, context?: HttpContext): Observable<SuccessResponseJobDetail> {
     return this.getJobDetails$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+      map((r: StrictHttpResponse<SuccessResponseJobDetail>): SuccessResponseJobDetail => r.body)
     );
   }
 

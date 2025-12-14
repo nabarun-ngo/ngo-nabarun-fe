@@ -5,6 +5,5 @@
 export interface ExpenseItemDetailDto {
   amount: number;
   description?: string;
-  id: string;
   itemName: string;
 }

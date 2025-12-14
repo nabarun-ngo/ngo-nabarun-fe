@@ -35,10 +35,10 @@ const routes: Routes = [
       //   path: route_data.secured_donation_dashboard_page.feature,
       //   loadChildren: () => import('./feature/donation/donation.module').then(m => m.DonationModule),
       // },
-      // {
-      //   path: route_data.secured_member_members_page.feature,
-      //   loadChildren: () => import('./feature/member/member.module').then(m => m.MemberModule),
-      // },
+      {
+        path: route_data.secured_member_members_page.feature,
+        loadChildren: () => import('./feature/member/member.module').then(m => m.MemberModule),
+      },
       // {
       //   path: route_data.secured_request_list_page.feature,
       //   loadChildren: () => import('./feature/request/request.module').then(m => m.RequestModule),

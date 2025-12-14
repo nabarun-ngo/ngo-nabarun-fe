@@ -15,7 +15,10 @@ import { getGmailAuthUrl } from '../fn/o-auth-controller/get-gmail-auth-url';
 import { GetGmailAuthUrl$Params } from '../fn/o-auth-controller/get-gmail-auth-url';
 import { getGoogleScopes } from '../fn/o-auth-controller/get-google-scopes';
 import { GetGoogleScopes$Params } from '../fn/o-auth-controller/get-google-scopes';
+import { getGoogleTokens } from '../fn/o-auth-controller/get-google-tokens';
+import { GetGoogleTokens$Params } from '../fn/o-auth-controller/get-google-tokens';
 import { SuccessResponseArrayArray } from '../models/success-response-array-array';
+import { SuccessResponseArrayAuthTokenDto } from '../models/success-response-array-auth-token-dto';
 import { SuccessResponseString } from '../models/success-response-string';
 
 @Injectable({ providedIn: 'root' })
@@ -87,6 +90,39 @@ export class OAuthControllerService extends BaseService {
   getGoogleScopes(params?: GetGoogleScopes$Params, context?: HttpContext): Observable<SuccessResponseArrayArray> {
     return this.getGoogleScopes$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseArrayArray>): SuccessResponseArrayArray => r.body)
+    );
+  }
+
+  /** Path part for operation `getGoogleTokens()` */
+  static readonly GetGoogleTokensPath = '/api/auth/oauth/tokens';
+
+  /**
+   * Get available OAuth tokens.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getGoogleTokens()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getGoogleTokens$Response(params?: GetGoogleTokens$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayAuthTokenDto>> {
+    return getGoogleTokens(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get available OAuth tokens.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getGoogleTokens$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getGoogleTokens(params?: GetGoogleTokens$Params, context?: HttpContext): Observable<SuccessResponseArrayAuthTokenDto> {
+    return this.getGoogleTokens$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseArrayAuthTokenDto>): SuccessResponseArrayAuthTokenDto => r.body)
     );
   }
 

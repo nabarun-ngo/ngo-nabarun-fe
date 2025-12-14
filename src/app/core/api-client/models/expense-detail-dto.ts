@@ -4,26 +4,26 @@
 
 import { AccountDetailDto } from '../models/account-detail-dto';
 import { ExpenseItemDetailDto } from '../models/expense-item-detail-dto';
+import { UserDto } from '../models/user-dto';
 export interface ExpenseDetailDto {
-  createdBy?: string;
+  createdBy?: UserDto;
   createdOn: string;
   description: string;
   expenseDate: string;
   expenseItems?: Array<ExpenseItemDetailDto>;
   expenseRefId?: string;
-  expenseRefType?: 'EVENT' | 'OTHER';
+  expenseRefType?: 'OTHER' | 'EVENT' | 'ADHOC' | 'OPERATIONAL' | 'ADMINISTRATIVE';
   finalAmount: number;
-  finalizedBy?: string;
+  finalizedBy?: UserDto;
   finalizedOn?: string;
   id: string;
-  isAdmin?: boolean;
   isDeligated?: boolean;
   name: string;
-  paidBy?: string;
-  rejectedBy?: string;
+  paidBy?: UserDto;
+  rejectedBy?: UserDto;
   rejectedOn?: string;
   remarks?: string;
-  settledBy?: string;
+  settledBy?: UserDto;
   settledOn?: string;
   settlementAccount?: AccountDetailDto;
   status: 'DRAFT' | 'SUBMITTED' | 'FINALIZED' | 'SETTLED' | 'REJECTED';

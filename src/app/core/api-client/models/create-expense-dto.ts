@@ -4,14 +4,12 @@
 
 import { ExpenseItemDetailDto } from '../models/expense-item-detail-dto';
 export interface CreateExpenseDto {
-  amount: number;
-  category: 'PROJECT' | 'EVENT' | 'ADHOC' | 'OPERATIONAL' | 'ADMINISTRATIVE';
-  currency: string;
+  currency?: string;
   description: string;
-  expenseDate: string;
+  expenseDate?: string;
   expenseItems?: Array<ExpenseItemDetailDto>;
   expenseRefId?: string;
-  expenseRefType?: 'EVENT' | 'OTHER';
+  expenseRefType: 'OTHER' | 'EVENT' | 'ADHOC' | 'OPERATIONAL' | 'ADMINISTRATIVE';
   name: string;
-  receiptUrl?: string;
+  payerId: string;
 }

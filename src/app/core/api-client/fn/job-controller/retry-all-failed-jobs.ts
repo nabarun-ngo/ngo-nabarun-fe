@@ -9,11 +9,11 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 
-export interface GetJobPerformanceMetrics$Params {
+export interface RetryAllFailedJobs$Params {
 }
 
-export function getJobPerformanceMetrics(http: HttpClient, rootUrl: string, params?: GetJobPerformanceMetrics$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, getJobPerformanceMetrics.PATH, 'get');
+export function retryAllFailedJobs(http: HttpClient, rootUrl: string, params?: RetryAllFailedJobs$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, retryAllFailedJobs.PATH, 'post');
   if (params) {
   }
 
@@ -27,4 +27,4 @@ export function getJobPerformanceMetrics(http: HttpClient, rootUrl: string, para
   );
 }
 
-getJobPerformanceMetrics.PATH = '/api/jobs/performance';
+retryAllFailedJobs.PATH = '/api/jobs/retry-all-failed';

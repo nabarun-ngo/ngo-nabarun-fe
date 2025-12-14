@@ -4,10 +4,9 @@
 
 import { ExpenseItemDetailDto } from '../models/expense-item-detail-dto';
 export interface UpdateExpenseDto {
-  amount?: number;
   description?: string;
   expenseDate?: string;
   expenseItems?: Array<ExpenseItemDetailDto>;
   name?: string;
-  receiptUrl?: string;
+  remarks?: string;
 }

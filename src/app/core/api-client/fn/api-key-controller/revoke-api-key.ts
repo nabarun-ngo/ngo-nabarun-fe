@@ -8,20 +8,16 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseJobDetail } from '../../models/success-response-job-detail';
+import { SuccessResponseBoolean } from '../../models/success-response-boolean';
 
-export interface GetJobDetails$Params {
-
-/**
- * ID of the job
- */
-  jobId: string;
+export interface RevokeApiKey$Params {
+  id: string;
 }
 
-export function getJobDetails(http: HttpClient, rootUrl: string, params: GetJobDetails$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseJobDetail>> {
-  const rb = new RequestBuilder(rootUrl, getJobDetails.PATH, 'get');
+export function revokeApiKey(http: HttpClient, rootUrl: string, params: RevokeApiKey$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseBoolean>> {
+  const rb = new RequestBuilder(rootUrl, revokeApiKey.PATH, 'delete');
   if (params) {
-    rb.path('jobId', params.jobId, {});
+    rb.path('id', params.id, {});
   }
 
   return http.request(
@@ -29,9 +25,9 @@ export function getJobDetails(http: HttpClient, rootUrl: string, params: GetJobD
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseJobDetail>;
+      return r as StrictHttpResponse<SuccessResponseBoolean>;
     })
   );
 }
 
-getJobDetails.PATH = '/api/jobs/details/{jobId}';
+revokeApiKey.PATH = '/api/auth/apikey/revoke/{id}';

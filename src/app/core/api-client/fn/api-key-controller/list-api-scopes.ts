@@ -8,20 +8,14 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseJobDetail } from '../../models/success-response-job-detail';
+import { SuccessResponseArrayArray } from '../../models/success-response-array-array';
 
-export interface GetJobDetails$Params {
-
-/**
- * ID of the job
- */
-  jobId: string;
+export interface ListApiScopes$Params {
 }
 
-export function getJobDetails(http: HttpClient, rootUrl: string, params: GetJobDetails$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseJobDetail>> {
-  const rb = new RequestBuilder(rootUrl, getJobDetails.PATH, 'get');
+export function listApiScopes(http: HttpClient, rootUrl: string, params?: ListApiScopes$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayArray>> {
+  const rb = new RequestBuilder(rootUrl, listApiScopes.PATH, 'get');
   if (params) {
-    rb.path('jobId', params.jobId, {});
   }
 
   return http.request(
@@ -29,9 +23,9 @@ export function getJobDetails(http: HttpClient, rootUrl: string, params: GetJobD
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseJobDetail>;
+      return r as StrictHttpResponse<SuccessResponseArrayArray>;
     })
   );
 }
 
-getJobDetails.PATH = '/api/jobs/details/{jobId}';
+listApiScopes.PATH = '/api/auth/apikey/scopes';

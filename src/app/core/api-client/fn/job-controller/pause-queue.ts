@@ -9,18 +9,14 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 
-export interface GetJobMetricsByName$Params {
-
-/**
- * Name of the job
- */
-  jobName: string;
+export interface PauseQueue$Params {
+  operation: string;
 }
 
-export function getJobMetricsByName(http: HttpClient, rootUrl: string, params: GetJobMetricsByName$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, getJobMetricsByName.PATH, 'get');
+export function pauseQueue(http: HttpClient, rootUrl: string, params: PauseQueue$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, pauseQueue.PATH, 'post');
   if (params) {
-    rb.path('jobName', params.jobName, {});
+    rb.path('operation', params.operation, {});
   }
 
   return http.request(
@@ -33,4 +29,4 @@ export function getJobMetricsByName(http: HttpClient, rootUrl: string, params: G
   );
 }
 
-getJobMetricsByName.PATH = '/api/jobs/metrics/{jobName}';
+pauseQueue.PATH = '/api/jobs/queue/{operation}';

@@ -1,12 +1,7 @@
 import { EventEmitter } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
-import {
-  DocumentDetail,
-  ExpenseItemDetail,
-  KeyValue,
-} from 'src/app/core/api-client/models';
-import { ExpenseDetail } from 'src/app/core/api-client/models/expense-detail';
+
 import { Accordion } from 'src/app/shared/utils/accordion';
 import {
   AccordionButton,
@@ -19,6 +14,7 @@ import {
 import { date } from 'src/app/core/service/utilities.service';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
 import { accountTab, ExpenseDefaultValue, expenseTab } from './account.const';
+import { DocumentDto, ExpenseDetailDto, ExpenseItemDetailDto, KeyValue } from 'src/app/core/api-client/models';
 
 export const expenseTabHeader = [
   {
@@ -60,7 +56,7 @@ export const manageExpenseTabHeader = [
 
 
 
-export const expenseHighLevelView = (item: ExpenseDetail): AccordionCell[] => {
+export const expenseHighLevelView = (item: ExpenseDetailDto): AccordionCell[] => {
   return [
     {
       type: 'text',
@@ -85,7 +81,7 @@ export const expenseHighLevelView = (item: ExpenseDetail): AccordionCell[] => {
   ];
 };
 
-export const manageExpenseHighLevelView = (item: ExpenseDetail): AccordionCell[] => {
+export const manageExpenseHighLevelView = (item: ExpenseDetailDto): AccordionCell[] => {
   return [
     {
       type: 'text',
@@ -111,7 +107,7 @@ export const manageExpenseHighLevelView = (item: ExpenseDetail): AccordionCell[]
 };
 
 export const expenseDetailSection = (
-  m: ExpenseDetail,
+  m: ExpenseDetailDto,
   isCreate: boolean = false,
   isAdminView: boolean = false
 ) => {
@@ -261,7 +257,7 @@ export const expenseDetailSection = (
 };
 
 export const expenseDocumentSection = (
-  docs: DocumentDetail[],
+  docs: DocumentDto[],
   isCreate: boolean = false
 ) => {
   return {
@@ -278,10 +274,10 @@ export const expenseDocumentSection = (
 };
 
 export const expenseListSection = (
-  m: ExpenseDetail,
+  m: ExpenseDetailDto,
   isCreate: boolean = false
 ) => {
-  let accordion = new (class extends Accordion<ExpenseItemDetail> {
+  let accordion = new (class extends Accordion<ExpenseItemDetailDto> {
     protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
       return {
         pageNumber: ExpenseDefaultValue.pageNumber,
@@ -297,7 +293,7 @@ export const expenseListSection = (
     }): void { }
     protected override onAccordionOpen(event: { rowIndex: number }): void { }
     prepareHighLevelView(
-      item: ExpenseItemDetail,
+      item: ExpenseItemDetailDto,
       options?: { [key: string]: any }
     ): AccordionCell[] {
       return [
@@ -312,7 +308,7 @@ export const expenseListSection = (
       ];
     }
     prepareDetailedView(
-      data: ExpenseItemDetail,
+      data: ExpenseItemDetailDto,
       options?: { [key: string]: any }
     ): DetailedView[] {
       return [
@@ -370,7 +366,7 @@ export const expenseListSection = (
       ];
     }
     prepareDefaultButtons(
-      data: ExpenseItemDetail,
+      data: ExpenseItemDetailDto,
       options?: { [key: string]: any }
     ): AccordionButton[] {
       if (options && options['create']) {

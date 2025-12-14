@@ -5,7 +5,8 @@ import {
   AccountControllerService,
   UserControllerService,
   ExpenseControllerService,
-  DmsControllerService
+  DmsControllerService,
+  ProjectControllerService
 } from 'src/app/core/api-client/services';
 import {
   AccountDetailDto,
@@ -29,7 +30,8 @@ export class AccountService {
     private accountController: AccountControllerService,
     private userController: UserControllerService,
     private expenseController: ExpenseControllerService,
-    private dmsController: DmsControllerService
+    private dmsController: DmsControllerService,
+    private projectController: ProjectControllerService
   ) { }
 
   fetchAllAccounts() {
@@ -287,7 +289,9 @@ export class AccountService {
   }
 
   fetchEvents() {
-    return of([] as any);
+    return this.projectController
+      .listActivities({})
+      .pipe(map((d) => d.responsePayload));
   }
 
   uploadDocuments(documents: any[]) {

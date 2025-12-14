@@ -9,11 +9,11 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 
-export interface GetJobMetrics$Params {
+export interface GetQueueStatistics$Params {
 }
 
-export function getJobMetrics(http: HttpClient, rootUrl: string, params?: GetJobMetrics$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, getJobMetrics.PATH, 'get');
+export function getQueueStatistics(http: HttpClient, rootUrl: string, params?: GetQueueStatistics$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, getQueueStatistics.PATH, 'get');
   if (params) {
   }
 
@@ -27,4 +27,4 @@ export function getJobMetrics(http: HttpClient, rootUrl: string, params?: GetJob
   );
 }
 
-getJobMetrics.PATH = '/api/jobs/metrics';
+getQueueStatistics.PATH = '/api/jobs/statistics';

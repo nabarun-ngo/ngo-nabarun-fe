@@ -1,7 +1,6 @@
 import { FormGroup } from "@angular/forms";
-import { KeyValue, TransactionDetail } from "src/app/core/api-client/models";
+import { KeyValue, TransactionDetailDto } from "src/app/core/api-client/models";
 import { date } from "src/app/core/service/utilities.service";
-import { AccordionCell } from "src/app/shared/model/accordion-list.model";
 import { DetailedView } from "src/app/shared/model/detailed-view.model";
 import { SearchAndAdvancedSearchModel } from "src/app/shared/model/search-and-advanced-search.model";
 
@@ -25,7 +24,7 @@ export const transactionHeader = [
   },
 ];
 
-export const transactionDetailSection = (data: TransactionDetail, refData: { [name: string]: KeyValue[] }): DetailedView => {
+export const transactionDetailSection = (data: TransactionDetailDto, refData: { [name: string]: KeyValue[] }): DetailedView => {
   return {
     section_form: new FormGroup({}),
     section_name: 'Transaction Detail',
