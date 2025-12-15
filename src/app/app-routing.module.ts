@@ -47,6 +47,10 @@ const routes: Routes = [
       //   path: route_data.secured_account_list_page.feature,
       //   loadChildren: () => import('./feature/account/account.module').then(m => m.AccountModule),
       // },
+      {
+        path: route_data.secured_account_list_page.feature,
+        loadChildren: () => import('./feature/finance/finance.module').then(m => m.FinanceModule),
+      },
       // {
       //   path: route_data.secured_notice_notices_page.feature,
       //   loadChildren: () => import('./feature/notice/notice.module').then(m => m.NoticeModule),

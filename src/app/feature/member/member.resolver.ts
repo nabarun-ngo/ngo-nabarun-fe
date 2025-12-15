@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { ResolveFn } from '@angular/router';
-import { MemberService } from './member.service';
+import { MemberService } from './service/member.service';
 import { MemberDefaultValue } from './member.const';
 
 const defaultValue = MemberDefaultValue;

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MemberService } from '../member.service';
+import { MemberService } from '../service/member.service';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { KeyValue } from 'src/app/core/api-client/models';
@@ -14,7 +14,7 @@ import { AdminService } from '../../admin/admin.service';
 import { FormGroup, Validators } from '@angular/forms';
 import { SearchAndAdvancedSearchFormComponent } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search-form.component';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
-import { UserDto } from 'src/app/core/api-client/models';
+import { User } from '../models/member.model';
 
 @Component({
   selector: 'app-member-role',
@@ -29,7 +29,7 @@ export class MemberRoleComponent implements OnInit {
   roleUserMaping: {
     [roleCode: string]: {
       previousUsersId: string[];
-      currentUsers: UserDto[];
+      currentUsers: User[];
       errors?: { hasError: boolean, message: string, duplicates: string[] };
     }
   } = {};
@@ -56,7 +56,7 @@ export class MemberRoleComponent implements OnInit {
 
   rolesToEdit!: KeyValue[];
   navigations!: NavigationButtonModel[];
-  allMembers!: UserDto[];
+  allMembers!: User[];
 
   constructor(
     private sharedDataService: SharedDataService,
@@ -97,7 +97,7 @@ export class MemberRoleComponent implements OnInit {
 
 
 
-  drop(event: CdkDragDrop<UserDto[]>) {
+  drop(event: CdkDragDrop<User[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -111,7 +111,7 @@ export class MemberRoleComponent implements OnInit {
     this.checkDuplicate()
   }
 
-  clone(key: string, profile: UserDto) {
+  clone(key: string, profile: User) {
     this.roleUserMaping[key].currentUsers.push(profile)
     this.checkDuplicate()
   }
@@ -135,7 +135,7 @@ export class MemberRoleComponent implements OnInit {
 
   }
 
-  remove(key: string, profile: UserDto) {
+  remove(key: string, profile: User) {
     let index = this.roleUserMaping[key].currentUsers.indexOf(profile);
     this.roleUserMaping[key].currentUsers.splice(index, 1)
     this.checkDuplicate()

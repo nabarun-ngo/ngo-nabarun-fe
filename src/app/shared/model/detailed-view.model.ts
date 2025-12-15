@@ -7,7 +7,7 @@ import { FileUpload } from "../components/generic/file-upload/file-upload.compon
 import { BehaviorSubject } from "rxjs";
 import { DocumentDto } from "src/app/core/api-client/models";
 
-export interface DetailedView {
+export interface DetailedView<NumType = any> {
 
 
     section_html_id?: string;
@@ -23,7 +23,7 @@ export interface DetailedView {
     accordion?: {
         parentId?: string;
         createBtn?: boolean;
-        object: Accordion<any>,
+        object: Accordion<NumType>,
         accordionOpened: EventEmitter<{ rowIndex: number; }>;
         buttonClick: EventEmitter<{ buttonId: string; rowIndex: number; }>
     };

@@ -105,8 +105,9 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
         this.addContentRow(e);
       })
     }
-
-    this.itemLengthSubs.next(totalSize!);
+    if (totalSize) {
+      this.totalItemLength = totalSize;
+    }
   }
 
   /**

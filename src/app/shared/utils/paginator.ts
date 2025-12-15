@@ -19,12 +19,17 @@ export abstract class Paginator {
   protected set pageEvent($event: PageEvent) {
     this.paginationConfig.pageNumber = $event.pageIndex;
     this.paginationConfig.pageSize = $event.pageSize;
+    this.totalItemLength = $event.length;
   }
 
-  protected itemLengthSubs: BehaviorSubject<number> = new BehaviorSubject(0);
-  protected itemLength$: Observable<number> = this.itemLengthSubs.asObservable();
+  protected set totalItemLength(totalSize: number) {
+    this.itemLengthSubs.next(totalSize);
+  }
 
+  private itemLengthSubs: BehaviorSubject<number> = new BehaviorSubject(0);
+  protected itemLength$: Observable<number> = this.itemLengthSubs.asObservable();
   protected abstract get paginationConfig(): { pageNumber: number, pageSize: number, pageSizeOptions: number[] };
+
 
   abstract handlePageEvent($event: PageEvent): void;
 }

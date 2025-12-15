@@ -5,7 +5,7 @@ import { conditionalValidator, matchFieldsValidator } from 'src/app/core/service
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { OperationMode, UserConstant } from 'src/app/feature/member/member.const';
 import { sanitizeBase64 } from 'src/app/core/service/utilities.service';
-import { MemberService } from 'src/app/feature/member/member.service';
+import { MemberService } from 'src/app/feature/member/service/member.service';
 import { UserDto } from 'src/app/core/api-client/models/user-dto';
 import { LinkDto, UserUpdateAdminDto, UserUpdateDto } from 'src/app/core/api-client/models';
 import { KeyValue } from 'src/app/core/api-client/models';

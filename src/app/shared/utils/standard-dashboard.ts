@@ -1,6 +1,9 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { KeyValue } from 'src/app/core/api-client/models';
+import { Paginator } from './paginator';
+import { PageEvent } from '@angular/material/paginator';
+import { PagedResult } from '../model/paged-result.model';
 
 
 /**
@@ -13,7 +16,7 @@ import { KeyValue } from 'src/app/core/api-client/models';
 @Component({
   template: ''
 })
-export abstract class StandardDashboard<TData>
+export abstract class StandardDashboard<TData> extends Paginator
   implements AfterViewInit, OnInit {
   /**
    * Initial data from resolver (if available)
@@ -31,7 +34,19 @@ export abstract class StandardDashboard<TData>
     return this.#refData;
   }
 
-  constructor(protected route: ActivatedRoute) { }
+  constructor(protected route: ActivatedRoute) {
+    super();
+  }
+
+  protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
+    return {
+      pageNumber: 0,
+      pageSize: 100,
+      pageSizeOptions: [10, 20, 50, 100]
+    }
+  }
+
+  override handlePageEvent($event: PageEvent): void { }
 
   ngAfterViewInit(): void {
     // Allow child components to perform additional initialization
@@ -51,11 +66,18 @@ export abstract class StandardDashboard<TData>
     // Extract data from resolver
     if (this.route.snapshot.data['data']) {
       this.#initialData = this.route.snapshot.data['data'] as TData;
+      const pagedData = this.#initialData && this.#initialData as PagedResult<any>
+      if (pagedData && pagedData.totalSize !== undefined) {
+        this.pageEvent = {
+          pageIndex: pagedData.pageIndex || 0,
+          pageSize: pagedData.pageSize || 100,
+          length: pagedData.totalSize
+        };
+      }
     }
     if (this.route.snapshot.data['ref_data']) {
       this.#refData = this.route.snapshot.data['ref_data'];
     }
-
     // Allow child classes to perform additional route data handling
     this.onHandleRouteDataHook();
   }
