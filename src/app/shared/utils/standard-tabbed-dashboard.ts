@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TabComponentInterface } from '../interfaces/tab-component.interface';
 import { StandardDashboard } from './standard-dashboard';
 import { SearchEvent } from '../components/search-and-advanced-search-form/search-event.model';
-import { Final } from './final';
 
 
 
@@ -128,7 +127,7 @@ export abstract class StandardTabbedDashboard<TTab extends string | number, TDat
     }
   }
 
-  protected tabChanged: Final<(index: number) => void> = (index: number) => {
+  protected tabChanged(index: number) {
     // Navigate to update the URL
     // The subscription will handle the actual state update if needed,
     // but we also update local state immediately for responsiveness if relying on binding

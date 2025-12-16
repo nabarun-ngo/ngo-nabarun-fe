@@ -69,7 +69,7 @@ export const accountTransactionResolver: ResolveFn<PagedTransactions> = (route, 
 export const accountRefDataResolver: ResolveFn<any> = (route, state) => {
   // TODO: Implement getRefData method in DashboardService or use appropriate API client
   // For now, return empty object to prevent build errors
-  return of({});
+  return inject(AccountService).getReferenceData();
 };
 
 

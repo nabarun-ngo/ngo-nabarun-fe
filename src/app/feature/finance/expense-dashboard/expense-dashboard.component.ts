@@ -16,6 +16,7 @@ import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.i
 import { MyExpensesTabComponent } from './my-expenses-tab/my-expenses-tab.component';
 import { ManageExpenseTabComponent } from './manage-expense-tab/manage-expense-tab.component';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
+import { User } from '../../member/models/member.model';
 
 @Component({
   selector: 'app-expense-dashboard',
@@ -97,7 +98,7 @@ export class ExpenseDashboardComponent extends StandardTabbedDashboard<expenseTa
       });
       if (this.tabMapping[this.tabIndex] == 'expense_list') {
         this.accountService.fetchUsers().subscribe((s) => {
-          let users = s?.content?.map((m: any) => {
+          let users = s?.map((m: User) => {
             return { key: m.id, displayValue: m.fullName } as KeyValue;
           });
           this.searchInput.advancedSearch!.searchFormFields.find(

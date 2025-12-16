@@ -77,7 +77,6 @@ export class AccountDashboardComponent extends StandardTabbedDashboard<accountTa
 
   protected override onTabChangedHook(): void {
     this.searchInput = this.getSearchInput();
-    this.tabComponents[this.getCurrentTab()]?.loadData();
   }
 
   private getSearchInput(): SearchAndAdvancedSearchModel {

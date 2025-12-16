@@ -16,6 +16,7 @@ import { MyExpensesTabComponent } from '../my-expenses-tab/my-expenses-tab.compo
 import { removeNullFields } from 'src/app/core/service/utilities.service';
 import { ExpenseDefaultValue } from '../../finance.const';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
+import { User } from 'src/app/feature/member/models/member.model';
 
 @Component({
   selector: 'app-manage-expense-tab',
@@ -136,8 +137,8 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
   createExpenseAdmin() {
     this.createExpense();
     this.accountService.fetchUsers().subscribe((data) => {
-      this.users = data?.items!;
-      let users: KeyValue[] = data?.items?.map((m: any) => {
+      this.users = data;
+      let users: KeyValue[] = data?.map((m: any) => {
         return { key: m.id, displayValue: m.fullName } as KeyValue;
       })!;
       this.getSectionField(
@@ -216,8 +217,8 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
         break;
       case 'UPDATE_EXPENSE':
         this.accountService.fetchUsers().subscribe((data) => {
-          this.users = data?.items!;
-          let users: KeyValue[] = data?.items?.map((m: any) => {
+          this.users = data;
+          let users: KeyValue[] = data?.map((m: User) => {
             return { key: m.id, displayValue: m.fullName } as KeyValue;
           })!;
           this.getSectionField(

@@ -27,6 +27,8 @@ import {
   ExpenseItem
 } from '../model';
 import { CreateExpenseDto, DmsUploadDto, UpdateExpenseDto } from 'src/app/core/api-client/models';
+import { User } from '../../member/models/member.model';
+import { mapPagedUserDtoToPagedUser, mapUserDtoToUser } from '../../member/models/member.mapper';
 
 @Injectable({
   providedIn: 'root',
@@ -172,11 +174,10 @@ export class AccountService {
       .createAccount({
         body: {
           currency: 'INR',
-          name: '',
-          initialBalance: 0,
+          name: `${accountDetail.accountType} Account`,
+          initialBalance: accountDetail.openingBalance,
           type: accountDetail.accountType,
-          accountHolderId: accountDetail.accountHolderId,
-          description: '',
+          accountHolderId: accountDetail.accountHolder,
           ...(banking && { bankDetail: banking }),
           ...(upi && { upiDetail: upi })
         }
@@ -192,7 +193,7 @@ export class AccountService {
    * @param accountType Type of account to filter users by role
    * @returns Observable of paged user results
    */
-  fetchUsers(accountType?: string): Observable<any> {
+  fetchUsers(accountType?: string): Observable<User[]> {
     const filter: { status: Array<'ACTIVE' | 'INACTIVE' | 'BLOCKED'>; roleCodes?: string[] } = {
       status: ['ACTIVE']
     };
@@ -205,10 +206,13 @@ export class AccountService {
 
     return this.userController
       .listUsers({
-        status: filter.status,
+        status: filter.status as any,
         roleCodes: filter.roleCodes
-      } as any)
-      .pipe(map((d) => d.responsePayload));
+      })
+      .pipe(
+        map((d) => d.responsePayload),
+        map((m) => m.content?.map(mapUserDtoToUser))
+      );
   }
 
   /**
@@ -523,6 +527,12 @@ export class AccountService {
   getTransactionDocuments(id: string) {
     return this.dmsController
       .getDocuments({ id: id, type: 'TRANSACTION' as any })
+      .pipe(map((d) => d.responsePayload));
+  }
+
+  getReferenceData() {
+    return this.accountController
+      .getAccountReferenceData()
       .pipe(map((d) => d.responsePayload));
   }
 }

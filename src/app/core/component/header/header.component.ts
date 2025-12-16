@@ -149,13 +149,13 @@ export class HeaderComponent implements OnInit {
   }
 
   sound() {
-    Howler.autoUnlock = false;
-    var sound = new Howl({
-      src: ['/assets/mixkit-bell-notification-933.wav'],
-      preload: true,
-    });
+    // Howler.autoUnlock = false;
+    // var sound = new Howl({
+    //   src: ['/assets/mixkit-bell-notification-933.wav'],
+    //   preload: true,
+    // });
 
-    sound.play();
+    // sound.play();
   }
 
 

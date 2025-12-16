@@ -218,6 +218,7 @@ export const accountDetailSection = (
         form_control_name: 'openingBalance',
         form_input: {
           tagName: 'input',
+          inputType: 'number',
           placeholder: 'Ex. 20',
         },
         form_input_validation: [],

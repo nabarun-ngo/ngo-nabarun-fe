@@ -11,6 +11,7 @@ import { SearchEvent } from 'src/app/shared/components/search-and-advanced-searc
 import { SCOPE } from 'src/app/core/constant/auth-scope.const';
 import { Account } from '../../model';
 import { KeyValue } from 'src/app/core/api-client/models';
+import { User } from 'src/app/feature/member/models/member.model';
 
 @Component({
   selector: 'app-manage-accounts-tab',
@@ -154,6 +155,7 @@ export class ManageAccountsTabComponent extends MyAccountsTabComponent {
     let accountForm = this.getSectionForm('account_detail', 0, true);
     accountForm?.markAllAsTouched();
     if (accountForm?.valid) {
+      console.log(accountForm.value);
       this.accountService.createAccount(accountForm.value).subscribe((d) => {
         this.hideForm(0, true);
         this.addContentRow(d!, true);
@@ -195,25 +197,30 @@ export class ManageAccountsTabComponent extends MyAccountsTabComponent {
       .subscribe((val) => {
         //console.log(val);
         if (val['accountType']) {
+          account_form?.get('account_holder')?.reset();
           this.accountService
             .fetchUsers(val['accountType'])
             .subscribe((data) => {
-              let selectList = this.getSectionField(
-                'account_detail',
-                'account_holder',
-                0,
-                true
-              )?.form_input?.selectList;
-              selectList?.splice(0);
-              data?.items?.forEach((element: any) => {
-                let val = {
-                  key: element.id,
-                  displayValue: element.fullName,
-                } as KeyValue;
-                selectList?.push(val);
-              });
+              this.updateMemberDropdown(data);
             });
         }
       });
+  }
+  private updateMemberDropdown(items: User[]) {
+    let selectList = this.getSectionField(
+      'account_detail',
+      'account_holder',
+      0,
+      true
+    )?.form_input?.selectList;
+    selectList?.splice(0);
+    console.log(selectList, items);
+    items?.forEach((element: any) => {
+      let val = {
+        key: element.id,
+        displayValue: element.fullName,
+      } as KeyValue;
+      selectList?.push(val);
+    });
   }
 }

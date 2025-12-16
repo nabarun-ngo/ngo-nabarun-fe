@@ -9,14 +9,14 @@ export interface Account {
   id: string;
   accountId?: string;
   accountHolderName?: string;
-  accountHolderId?: string;
+  accountHolder?: string;
   accountType: 'PRINCIPAL' | 'GENERAL' | 'DONATION' | 'PUBLIC_DONATION';
   status: 'ACTIVE' | 'INACTIVE' | 'BLOCKED';
   balance: number;
   activatedOn?: string;
   bankDetail?: BankDetail;
   upiDetail?: UpiDetail;
-
+  openingBalance?: number;
   // Computed properties for UI
   displayName: string;
   isActive: boolean;

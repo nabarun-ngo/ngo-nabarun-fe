@@ -13,6 +13,8 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { createAccount } from '../fn/account-controller/create-account';
 import { CreateAccount$Params } from '../fn/account-controller/create-account';
+import { getAccountReferenceData } from '../fn/account-controller/get-account-reference-data';
+import { GetAccountReferenceData$Params } from '../fn/account-controller/get-account-reference-data';
 import { listAccounts } from '../fn/account-controller/list-accounts';
 import { ListAccounts$Params } from '../fn/account-controller/list-accounts';
 import { listAccountTransactions } from '../fn/account-controller/list-account-transactions';
@@ -24,6 +26,7 @@ import { ListSelfAccountTransactions$Params } from '../fn/account-controller/lis
 import { payableAccount } from '../fn/account-controller/payable-account';
 import { PayableAccount$Params } from '../fn/account-controller/payable-account';
 import { SuccessResponseAccountDetailDto } from '../models/success-response-account-detail-dto';
+import { SuccessResponseAccountRefDataDto } from '../models/success-response-account-ref-data-dto';
 import { SuccessResponseArrayAccountDetailDto } from '../models/success-response-array-account-detail-dto';
 import { SuccessResponsePagedResultAccountDetailDto } from '../models/success-response-paged-result-account-detail-dto';
 import { SuccessResponsePagedResultTransactionDetailDto } from '../models/success-response-paged-result-transaction-detail-dto';
@@ -299,6 +302,39 @@ export class AccountControllerService extends BaseService {
   payableAccount(params?: PayableAccount$Params, context?: HttpContext): Observable<SuccessResponseArrayAccountDetailDto> {
     return this.payableAccount$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseArrayAccountDetailDto>): SuccessResponseArrayAccountDetailDto => r.body)
+    );
+  }
+
+  /** Path part for operation `getAccountReferenceData()` */
+  static readonly GetAccountReferenceDataPath = '/api/account/static/referenceData';
+
+  /**
+   * Get account reference data.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAccountReferenceData()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAccountReferenceData$Response(params?: GetAccountReferenceData$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseAccountRefDataDto>> {
+    return getAccountReferenceData(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get account reference data.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getAccountReferenceData$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAccountReferenceData(params?: GetAccountReferenceData$Params, context?: HttpContext): Observable<SuccessResponseAccountRefDataDto> {
+    return this.getAccountReferenceData$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseAccountRefDataDto>): SuccessResponseAccountRefDataDto => r.body)
     );
   }
 
