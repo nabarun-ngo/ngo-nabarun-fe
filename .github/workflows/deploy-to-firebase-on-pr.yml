@@ -1,5 +1,6 @@
 name: 'PR Merged: Release, Deploy to Firebase, Sync Env'
 on:
+  workflow_dispatch:
   pull_request:
     paths-ignore:
     - '.github/**'
@@ -13,7 +14,7 @@ permissions:
 
 jobs:
   build:
-   name: Build and Test
+   name: Build and Test Angular Application
    uses: nabarun-ngo/ngo-nabarun-templates/.github/workflows/Build-Test.yml@main
    with:
       platform: "node"

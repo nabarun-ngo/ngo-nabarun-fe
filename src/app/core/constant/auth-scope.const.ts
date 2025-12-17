@@ -20,6 +20,7 @@ export const SCOPE = {
         actuator: 'read:actuator'
     },
     create: {
+        user: 'create:user',
         transaction: 'create:transaction',
         expense: 'create:expense',
         earning: 'create:earning',

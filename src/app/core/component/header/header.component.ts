@@ -158,6 +158,12 @@ export class HeaderComponent implements OnInit {
     // sound.play();
   }
 
+  async copy(){
+    const token = await this.identityService.getAccessToken();
+    await navigator.clipboard.writeText(token);
+    alert('Token successfully copied.')
+  }
 
+  
 
 }
