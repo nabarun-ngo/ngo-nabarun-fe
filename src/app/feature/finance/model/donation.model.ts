@@ -63,3 +63,9 @@ export interface DonationSummary {
  */
 export type PagedDonations = PagedResult<Donation>;
 
+export interface DonationDashboardData {
+  donations: PagedDonations;
+  summary: DonationSummary;
+  accounts: Account[];
+}
+

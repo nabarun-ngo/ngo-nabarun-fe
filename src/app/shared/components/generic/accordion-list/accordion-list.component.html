@@ -81,14 +81,14 @@
                         <!-- ICON -->
                         <div *ngIf="item.type === 'icon'" class="flex justify-end pt-2 px-2">
                             <mat-icon style="color: var(--primary-500);">
-                                {{ item.props?.icon }}
+                                {{ item.props?.['icon'] }}
                             </mat-icon>
                         </div>
 
                         <!-- USER -->
                         <div *ngIf="item.type === 'user'" class="flex items-center">
                             <div class="flex-shrink-0 h-10 w-10">
-                                <img class="h-10 w-10 rounded-full ring-2 ring-white" [src]="item.props?.picture"
+                                <img class="h-10 w-10 rounded-full ring-2 ring-white" [src]="item.props?.['picture']"
                                     alt="img" style="box-shadow: var(--shadow-md);">
                             </div>
 

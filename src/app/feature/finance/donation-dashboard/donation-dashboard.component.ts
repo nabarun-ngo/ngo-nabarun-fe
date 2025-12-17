@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
-import { PagedDonations } from '../model';
+import { PagedDonations, DonationDashboardData } from '../model';
 import { StandardTabbedDashboard } from 'src/app/shared/utils/standard-tabbed-dashboard';
 import { SelfDonationTabComponent } from './self-donation-tab/self-donation-tab.component';
 import { GuestDonationTabComponent } from './guest-donation-tab/guest-donation-tab.component';
@@ -19,7 +19,7 @@ import { donationSearchInput } from '../fields/donation.field';
   templateUrl: './donation-dashboard.component.html',
   styleUrls: ['./donation-dashboard.component.scss']
 })
-export class DonationDashboardComponent extends StandardTabbedDashboard<donationTab, PagedDonations> {
+export class DonationDashboardComponent extends StandardTabbedDashboard<donationTab, DonationDashboardData> {
 
   protected tabMapping: donationTab[] = ['self_donation', 'guest_donation', 'member_donation'];
 
@@ -35,7 +35,7 @@ export class DonationDashboardComponent extends StandardTabbedDashboard<donation
   ];
   protected searchInput!: SearchAndAdvancedSearchModel;
 
-  protected get tabComponents(): { [key in donationTab]?: TabComponentInterface<PagedDonations> } {
+  protected get tabComponents(): { [key in donationTab]?: TabComponentInterface<DonationDashboardData> } {
     return {
       self_donation: this.selfDonationTab,
       guest_donation: this.guestDonationTab,

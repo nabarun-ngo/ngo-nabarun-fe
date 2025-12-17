@@ -6,19 +6,19 @@
                     <div class="grid md:grid-cols-2 text-sm">
                         <div class="grid grid-cols-2">
                             <div class="py-2 font-semibold">Outstanding amount</div>
-                            <div class="py-2"> ₹ {{summary.outstandingAmount}}</div>
+                            <div class="py-2"> ₹ {{summary?.outstandingAmount}}</div>
                         </div>
                         <div class="grid grid-cols-2">
                             <div class="py-2 font-semibold">Outstanding month(s)</div>
                             <div class="py-2">
                                 <span>
-                                    {{ summary.outstandingMonths?.length ==0 ? '-' :
-                                    summary.outstandingMonths?.join(', ') | replaceNull }}
+                                    {{ summary?.outstandingMonths?.length ==0 ? '-' :
+                                    summary?.outstandingMonths?.join(', ') | replaceNull }}
                                 </span>
                             </div>
                         </div>
                     </div>
-                    <div class="grid grid-cols-1 mt-4" *ngIf="payableAccounts?.length > 0">
+                    <div class="grid grid-cols-1 mt-4" *ngIf="(payableAccounts?.length || 0) > 0">
                         <div class="py-2 text-center justify-center font-bold text-purple-700">Please pay your
                             outstanding donation amount to the below Bank account or UPI</div>
 
@@ -44,22 +44,22 @@
                                         </div>
                                         <div class="grid grid-cols-2">
                                             <div class="px-2 py-2 font-semibold">Branch name</div>
-                                            <div class="px-2 py-2">{{account.bankDetail?.bankBranch | replaceNull}}
+                                            <div class="px-2 py-2">{{account.bankDetail?.branch | replaceNull}}
                                             </div>
                                         </div>
                                         <div class="grid grid-cols-2">
                                             <div class="px-2 py-2 font-semibold">IFSC number</div>
-                                            <div class="px-2 py-2">{{account.bankDetail?.IFSCNumber | replaceNull}}
+                                            <div class="px-2 py-2">{{account.bankDetail?.ifscNumber | replaceNull}}
                                             </div>
                                         </div>
                                         <div class="grid grid-cols-2">
                                             <div class="px-2 py-2 font-semibold">Account holder name</div>
-                                            <div class="px-2 py-2">{{account.bankDetail?.bankAccountHolderName |
+                                            <div class="px-2 py-2">{{account.bankDetail?.accountHolderName |
                                                 replaceNull}}</div>
                                         </div>
                                         <div class="grid grid-cols-2">
                                             <div class="px-2 py-2 font-semibold">Account number</div>
-                                            <div class="px-2 py-2">{{account.bankDetail?.bankAccountNumber |
+                                            <div class="px-2 py-2">{{account.bankDetail?.accountNumber |
                                                 replaceNull}}</div>
                                         </div>
                                     </div>

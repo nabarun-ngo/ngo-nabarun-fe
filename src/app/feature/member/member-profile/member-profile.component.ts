@@ -11,6 +11,7 @@ import { AppAlert } from 'src/app/core/constant/app-alert.const';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 import { firstValueFrom } from 'rxjs';
+import { UserUpdateAdminDto, UserUpdateDto } from 'src/app/core/api-client/models';
 import { User } from '../models/member.model';
 
 @Component({
@@ -86,7 +87,7 @@ export class MemberProfileComponent implements OnInit {
 
   async onUpdate($event: {
     actionName: "SELF_UPDATE" | "CHANGE_MODE" | 'ADMIN_UPDATE' | "CHANGE_PASSWORD";
-    profile?: User;
+    profile?: User | UserUpdateDto | UserUpdateAdminDto;
     mode?: OperationMode;
     id?: string;
   }) {

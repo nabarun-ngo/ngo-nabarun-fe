@@ -8,6 +8,7 @@ export interface Doc {
     id: string;
     isPublic: boolean;
     uploadedAt: string;
+    generatedDoc: boolean;
 }
 
 export function mapDocDtoToDoc(docDto: DocumentDto): Doc {
@@ -19,5 +20,6 @@ export function mapDocDtoToDoc(docDto: DocumentDto): Doc {
         id: docDto.id,
         isPublic: docDto.isPublic,
         uploadedAt: docDto.uploadedAt,
+        generatedDoc: false
     };
 }

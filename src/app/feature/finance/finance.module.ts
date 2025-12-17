@@ -11,6 +11,9 @@ import { ExpenseDashboardComponent } from './expense-dashboard/expense-dashboard
 import { ManageAccountsTabComponent } from './account-dashboard/manage-accounts-tab/manage-accounts-tab.component';
 import { TransactionAccordionComponent } from './account-transaction/transaction-accordion/transaction-accordion.component';
 import { DonationDashboardComponent } from './donation-dashboard/donation-dashboard.component';
+import { SelfDonationTabComponent } from './donation-dashboard/self-donation-tab/self-donation-tab.component';
+import { GuestDonationTabComponent } from './donation-dashboard/guest-donation-tab/guest-donation-tab.component';
+import { MemberDonationTabComponent } from './donation-dashboard/member-donation-tab/member-donation-tab.component';
 
 
 
@@ -25,6 +28,9 @@ import { DonationDashboardComponent } from './donation-dashboard/donation-dashbo
     ExpenseDashboardComponent,
     TransactionAccordionComponent,
     DonationDashboardComponent,
+    SelfDonationTabComponent,
+    GuestDonationTabComponent,
+    MemberDonationTabComponent,
   ],
   imports: [
     CommonModule,
