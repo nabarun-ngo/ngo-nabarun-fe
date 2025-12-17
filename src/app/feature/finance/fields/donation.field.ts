@@ -1,9 +1,11 @@
 import { FormGroup } from "@angular/forms";
-import { DocumentDto, DonationDto, KeyValue } from "src/app/core/api-client/models";
 import { date } from "src/app/core/service/utilities.service";
 import { DetailedView } from "src/app/shared/model/detailed-view.model";
 import { SearchAndAdvancedSearchModel } from "src/app/shared/model/search-and-advanced-search.model";
 import { DonationRefData, donationTab } from "../finance.const";
+import { Doc } from "src/app/shared/model/document.model";
+import { KeyValue } from "src/app/shared/model/key-value.model";
+import { Donation } from "../model";
 
 
 export const donationSearchInput = (
@@ -86,7 +88,7 @@ export const donationSearchInput = (
 };
 
 export const getDonationSection = (
-    donation: DonationDto,
+    donation: Donation,
     options: {
         isCreate?: boolean,
         refData?: { [name: string]: KeyValue[] }
@@ -318,7 +320,7 @@ export const getDonationSection = (
 };
 
 export const donationDocumentSection = (
-    docs: DocumentDto[]
+    docs: Doc[]
 ) => {
     return {
         section_name: 'Documents',

@@ -164,8 +164,8 @@ export class DonationService {
         pageSize?: number
     }): Observable<{ donations: PagedDonations; summary: DonationSummary }> {
         return combineLatest({
-            donations: this.donationController.getDonorDonations({
-                donorId: id,
+            donations: this.donationController.getMemberDonations({
+                memberId: id,
                 pageIndex: options.pageIndex || DonationDefaultValue.pageNumber,
                 pageSize: options.pageSize || DonationDefaultValue.pageSize
             }).pipe(

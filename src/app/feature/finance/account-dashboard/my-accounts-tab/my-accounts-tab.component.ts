@@ -151,14 +151,14 @@ export class MyAccountsTabComponent extends Accordion<Account> implements TabCom
         break;
       case 'TRANSFER':
         this.addSectionInAccordion(transferAmountSection(), event.rowIndex);
-        this.addSectionInAccordion(accountDocumentSection([]), event.rowIndex);
+        this.addSectionInAccordion(accountDocumentSection([], true), event.rowIndex);
         this.showEditForm(event.rowIndex, ['transfer_amt', 'document_list']);
         this.initTransferForm(event.rowIndex);
         this.activeButtonId = event.buttonId;
         break;
       case 'MONEY_IN':
         this.addSectionInAccordion(moneyInSection(), event.rowIndex);
-        this.addSectionInAccordion(accountDocumentSection([]), event.rowIndex);
+        this.addSectionInAccordion(accountDocumentSection([], true), event.rowIndex);
         this.showEditForm(event.rowIndex, ['money_in_acc', 'document_list']);
         this.activeButtonId = event.buttonId;
         break;
@@ -216,22 +216,14 @@ export class MyAccountsTabComponent extends Accordion<Account> implements TabCom
       );
       modal.onAccept$.subscribe(() => {
         this.accountService
-          .performMoneyIn(account, money_in_acc?.value)
+          .performMoneyIn(account, money_in_acc?.value, document_list || [])
           .subscribe((d) => {
             //console.log(d);
             this.hideForm(rowIndex);
             this.removeSectionInAccordion('money_in_acc', rowIndex);
             this.removeSectionInAccordion('document_list', rowIndex);
-            this.updateContentRow(d?.transferTo!, rowIndex);
-            let files = document_list?.map(m => {
-              const detail = m.detail as any;
-              detail.documentMapping = [{
-                docIndexId: d?.txnId,
-                docIndexType: 'TRANSACTION'
-              }];
-              return detail;
-            })!;
-            this.accountService.uploadDocuments(files).subscribe();
+            this.loadData();
+            //this.updateContentRow(d?.transferTo!, rowIndex);
           });
       });
     }
@@ -283,22 +275,14 @@ export class MyAccountsTabComponent extends Accordion<Account> implements TabCom
       );
       modal.onAccept$.subscribe(() => {
         this.accountService
-          .performTransfer(account, transfer_form?.value)
+          .performTransfer(account, transfer_form?.value, document_list!)
           .subscribe((d) => {
             //console.log(d);
             this.hideForm(rowIndex);
             this.removeSectionInAccordion('transfer_amt', rowIndex);
             this.removeSectionInAccordion('document_list', rowIndex);
-            this.updateContentRow(d?.transferFrom!, rowIndex);
-            let files = document_list?.map(m => {
-              const detail = m.detail as any;
-              detail.documentMapping = [{
-                docIndexId: d?.txnId,
-                docIndexType: 'TRANSACTION'
-              }];
-              return detail;
-            })!;
-            this.accountService.uploadDocuments(files).subscribe();
+            this.loadData();
+            //this.updateContentRow(d?.transferFrom!, rowIndex);
           });
       });
     }

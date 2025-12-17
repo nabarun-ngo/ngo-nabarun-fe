@@ -14,6 +14,9 @@ import { ManageAccountsTabComponent } from './manage-accounts-tab/manage-account
 import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { PagedAccounts } from '../model';
+import { AccountService } from '../service/account.service';
+import { KeyValue } from 'src/app/shared/model/key-value.model';
+import { User } from '../../member/models/member.model';
 
 @Component({
   selector: 'app-account-dashboard',
@@ -58,7 +61,8 @@ export class AccountDashboardComponent extends StandardTabbedDashboard<accountTa
   constructor(
     private sharedDataService: SharedDataService,
     protected override route: ActivatedRoute,
-    private identityService: UserIdentityService
+    private identityService: UserIdentityService,
+    private accountService: AccountService
   ) { super(route); }
 
   protected override onInitHook(): void {
@@ -77,6 +81,15 @@ export class AccountDashboardComponent extends StandardTabbedDashboard<accountTa
 
   protected override onTabChangedHook(): void {
     this.searchInput = this.getSearchInput();
+
+    if (this.getCurrentTab() == 'all_accounts') {
+      this.accountService.fetchUsers().subscribe((data) => {
+        this.searchInput.advancedSearch!.searchFormFields.find(f => f.inputModel.html_id == 'account_Owner')!
+          .inputModel.selectList = data.map((m: User) => {
+            return { key: m.id, displayValue: m.fullName } as KeyValue;
+          });
+      });
+    }
   }
 
   private getSearchInput(): SearchAndAdvancedSearchModel {

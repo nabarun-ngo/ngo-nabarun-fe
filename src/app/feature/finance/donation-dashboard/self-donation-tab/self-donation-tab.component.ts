@@ -88,43 +88,8 @@ export class SelfDonationTabComponent extends Accordion<Donation> implements Tab
   }
   protected override prepareDetailedView(data: Donation, options?: { [key: string]: any; }): DetailedView[] {
     // Convert domain model back to DTO for donation.field.ts functions
-    const donationDto: DonationDto = {
-      id: data.id,
-      donorId: data.donorId,
-      donorName: data.donorName,
-      donorEmail: data.donorEmail,
-      amount: data.amount,
-      currency: data.currency,
-      type: data.type,
-      status: data.status,
-      raisedOn: data.raisedOn,
-      startDate: data.startDate,
-      endDate: data.endDate,
-      paidOn: data.paidOn,
-      confirmedOn: data.confirmedOn,
-      paymentMethod: data.paymentMethod,
-      paidUsingUPI: data.paidUsingUPI,
-      transactionRef: data.transactionRef,
-      paidToAccount: data.paidToAccount ? {
-        id: data.paidToAccount.id,
-        accountType: data.paidToAccount.accountType,
-        accountStatus: data.paidToAccount.status,
-        currentBalance: data.paidToAccount.balance,
-        accountHolderName: data.paidToAccount.accountHolderName,
-        activatedOn: data.paidToAccount.activatedOn
-      } as any : undefined,
-      forEvent: data.forEvent,
-      isGuest: data.isGuest,
-      isPaymentNotified: data.isPaymentNotified,
-      confirmedBy: data.confirmedBy,
-      remarks: data.remarks,
-      cancelletionReason: data.cancelletionReason,
-      laterPaymentReason: data.laterPaymentReason,
-      paymentFailureDetail: data.paymentFailureDetail
-    };
-
     return [
-      getDonationSection(donationDto, {
+      getDonationSection(data, {
         isCreate: options && options['create'],
         refData: this.getRefData()
       })

@@ -2,10 +2,10 @@ import { ActivatedRoute, ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot 
 import { AccountService } from './service/account.service';
 import { Inject, inject } from '@angular/core';
 import { AccountDefaultValue, accountTab, DonationDefaultValue, donationTab, expenseTab, TransactionDefaultValue } from './finance.const';
-import { of } from 'rxjs';
-import { PagedAccounts, PagedExpenses, PagedTransactions } from './model';
+import { map, of } from 'rxjs';
+import { Account, PagedAccounts, PagedExpenses, PagedTransactions } from './model';
 import { DonationService } from './service/donation.service';
-import { DonationRefDataDto } from 'src/app/core/api-client/models';
+import { AccountRefDataDto, DonationRefDataDto } from 'src/app/core/api-client/models';
 
 export const accountDashboardResolver: ResolveFn<PagedAccounts | undefined> = (route, state) => {
   const tab = (route.queryParams['tab'] || AccountDefaultValue.tabName) as accountTab;
@@ -66,9 +66,19 @@ export const accountTransactionResolver: ResolveFn<PagedTransactions> = (route, 
   }
 };
 
-export const accountRefDataResolver: ResolveFn<any> = (route, state) => {
-  // TODO: Implement getRefData method in DashboardService or use appropriate API client
-  // For now, return empty object to prevent build errors
+export const accountInfoResolver: ResolveFn<PagedAccounts> = (route, state) => {
+  const self = route.queryParams['self'] as string;
+  const accountId = atob(route.params['id']);
+
+  if (self === 'Y') {
+    return inject(AccountService).fetchMyAccounts(undefined, undefined, { accountId });
+  } else {
+    return inject(AccountService).fetchAccounts({ accountId });
+  }
+};
+
+
+export const accountRefDataResolver: ResolveFn<AccountRefDataDto> = (route, state) => {
   return inject(AccountService).getReferenceData();
 };
 

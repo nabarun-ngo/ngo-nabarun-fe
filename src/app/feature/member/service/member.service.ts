@@ -40,7 +40,7 @@ export class MemberService {
         filename: 'profile_pic.png',
         documentMapping: [{
           entityId: id,
-          entityType: 'profile'
+          entityType: 'PROFILE'
         }]
       }
     }).pipe(map(d => d.responsePayload))

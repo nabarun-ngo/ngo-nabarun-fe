@@ -73,6 +73,9 @@ export class ManageAccountsTabComponent extends MyAccountsTabComponent {
     } else if (event.advancedSearch && event.reset) {
       this.loadData();
     }
+    else if (event.buttonName == 'ADVANCED_SEARCH') {
+      this.getAccordionList().searchValue = ''
+    }
   }
 
   protected override prepareHighLevelView(

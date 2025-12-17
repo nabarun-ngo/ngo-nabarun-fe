@@ -15,8 +15,8 @@ import { date } from 'src/app/core/service/utilities.service';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
 import { ExpenseDefaultValue, expenseTab } from '../finance.const';
 import { Expense, ExpenseItem } from '../model';
-import { DocumentDto, ExpenseItemDetailDto, KeyValue } from 'src/app/core/api-client/models';
 import { Doc } from 'src/app/shared/model/document.model';
+import { KeyValue } from 'src/app/shared/model/key-value.model';
 
 export const expenseTabHeader = [
   {
@@ -295,7 +295,7 @@ export const expenseListSection = (
     }): void { }
     protected override onAccordionOpen(event: { rowIndex: number }): void { }
     prepareHighLevelView(
-      item: ExpenseItemDetailDto,
+      item: ExpenseItem,
       options?: { [key: string]: any }
     ): AccordionCell[] {
       return [
@@ -310,7 +310,7 @@ export const expenseListSection = (
       ];
     }
     prepareDetailedView(
-      data: ExpenseItemDetailDto,
+      data: ExpenseItem,
       options?: { [key: string]: any }
     ): DetailedView[] {
       return [
@@ -368,7 +368,7 @@ export const expenseListSection = (
       ];
     }
     prepareDefaultButtons(
-      data: ExpenseItemDetailDto,
+      data: ExpenseItem,
       options?: { [key: string]: any }
     ): AccordionButton[] {
       if (options && options['create']) {

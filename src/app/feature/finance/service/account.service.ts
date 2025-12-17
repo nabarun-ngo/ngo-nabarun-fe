@@ -1,12 +1,13 @@
 
 import { Injectable } from '@angular/core';
-import { forkJoin, map, of, Observable } from 'rxjs';
+import { forkJoin, map, of, Observable, switchMap } from 'rxjs';
 import {
   AccountControllerService,
   UserControllerService,
   ExpenseControllerService,
   DmsControllerService,
-  ProjectControllerService
+  ProjectControllerService,
+  EarningControllerService
 } from 'src/app/core/api-client/services';
 import { date } from 'src/app/core/service/utilities.service';
 import { AccountDefaultValue } from '../finance.const';
@@ -22,24 +23,29 @@ import {
   mapExpenseDtoToExpense,
   mapPagedExpenseDtoToPagedExpenses,
   mapPagedTransactionDtoToPagedTransactions,
+  mapTransactionDtoToTransaction,
   BankDetail,
   UpiDetail,
   ExpenseItem
 } from '../model';
-import { CreateExpenseDto, DmsUploadDto, UpdateExpenseDto } from 'src/app/core/api-client/models';
+import { CreateExpenseDto, DmsUploadDto, EarningDetailDto, TransactionDetailDto, UpdateExpenseDto } from 'src/app/core/api-client/models';
 import { User } from '../../member/models/member.model';
 import { mapPagedUserDtoToPagedUser, mapUserDtoToUser } from '../../member/models/member.mapper';
+import { FileUpload } from 'src/app/shared/components/generic/file-upload/file-upload.component';
+import { mapDocDtoToDoc } from 'src/app/shared/model/document.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AccountService {
+
   constructor(
     private accountController: AccountControllerService,
     private userController: UserControllerService,
     private expenseController: ExpenseControllerService,
     private dmsController: DmsControllerService,
-    private projectController: ProjectControllerService
+    private projectController: ProjectControllerService,
+    private earnController: EarningControllerService
   ) { }
 
   /**
@@ -195,7 +201,7 @@ export class AccountService {
    */
   fetchUsers(accountType?: string): Observable<User[]> {
     const filter: { status: Array<'ACTIVE' | 'INACTIVE' | 'BLOCKED'>; roleCodes?: string[] } = {
-      status: ['ACTIVE']
+      status: ['ACTIVE'],
     };
 
     if (accountType === 'DONATION') {
@@ -207,7 +213,9 @@ export class AccountService {
     return this.userController
       .listUsers({
         status: filter.status as any,
-        roleCodes: filter.roleCodes
+        roleCodes: filter.roleCodes,
+        pageIndex: 0,
+        pageSize: 10000
       })
       .pipe(
         map((d) => d.responsePayload),
@@ -299,9 +307,53 @@ export class AccountService {
    * @param value Transfer details
    * @returns Observable of transaction result
    */
-  performTransfer(from: Account, value: any): Observable<any> {
-    console.warn('performTransfer: createTransaction API is missing');
-    return of(null).pipe(map(() => null as any));
+  performTransfer(from: Account, value: any, document_list: FileUpload[]): Observable<Transaction> {
+    return this.accountController.transferAmountSelf({
+      id: from.id,
+      body: {
+        amount: value.amount,
+        toAccountId: value.transferTo,
+        description: value.description,
+        transferDate: value.transferDate,
+      }
+    }).pipe(
+      map(response => response.responsePayload),
+      switchMap((transaction: TransactionDetailDto) => {
+        if (!document_list || document_list.length === 0) {
+          return of(mapTransactionDtoToTransaction(transaction));
+        }
+
+        const uploadRequests = document_list.map(doc => {
+          return this.dmsController.uploadFile({
+            body: {
+              contentType: doc.detail.contentType,
+              fileBase64: doc.detail.base64Content,
+              filename: doc.detail.originalFileName,
+              documentMapping: [{
+                entityId: transaction.txnId,
+                entityType: 'TRANSACTION'
+              }]
+            }
+          });
+        });
+
+        return forkJoin(uploadRequests).pipe(map(() => transaction));
+      }),
+      map(mapTransactionDtoToTransaction),
+    );
+  }
+
+  reverseTransaction(accId: string, txnId: string, reasonForReversal: string) {
+    return this.accountController.reverseTransaction({
+      id: accId,
+      body: {
+        comment: reasonForReversal,
+        transactionId: txnId
+      }
+    }).pipe(
+      map(response => response.responsePayload),
+      map(mapTransactionDtoToTransaction)
+    );
   }
 
   /**
@@ -310,9 +362,38 @@ export class AccountService {
    * @param value Money in details
    * @returns Observable of transaction result
    */
-  performMoneyIn(accountTo: Account, value: any): Observable<any> {
-    console.warn('performMoneyIn: createTransaction API is missing');
-    return of(null).pipe(map(() => null as any));
+  performMoneyIn(accountTo: Account, value: any, document_list: FileUpload[]): Observable<any> {
+    return this.accountController.addFundSelf({
+      id: accountTo.id,
+      body: {
+        amount: value.amount,
+        description: value.description,
+        transferDate: value.inDate,
+      }
+    }).pipe(
+      map(response => response.responsePayload),
+      switchMap((transaction: TransactionDetailDto) => {
+        if (!document_list || document_list.length === 0) {
+          return of(mapTransactionDtoToTransaction(transaction));
+        }
+
+        const uploadRequests = document_list.map(doc => {
+          return this.dmsController.uploadFile({
+            body: {
+              contentType: doc.detail.contentType,
+              fileBase64: doc.detail.base64Content,
+              filename: doc.detail.originalFileName,
+              documentMapping: [{
+                entityId: transaction.txnId!,
+                entityType: 'TRANSACTION'
+              }]
+            }
+          });
+        });
+
+        return forkJoin(uploadRequests).pipe(map(() => transaction));
+      }),
+    );
   }
 
   /**
@@ -520,14 +601,14 @@ export class AccountService {
 
   getExpenseDocuments(id: string) {
     return this.dmsController
-      .getDocuments({ id: id, type: 'EXPENSE' as any })
-      .pipe(map((d) => d.responsePayload));
+      .getDocuments({ id: id, type: 'EXPENSE' })
+      .pipe(map((d) => d.responsePayload), map(d => d.map(mapDocDtoToDoc)));
   }
 
   getTransactionDocuments(id: string) {
     return this.dmsController
-      .getDocuments({ id: id, type: 'TRANSACTION' as any })
-      .pipe(map((d) => d.responsePayload));
+      .getDocuments({ id: id, type: 'TRANSACTION' })
+      .pipe(map((d) => d.responsePayload), map(d => d.map(mapDocDtoToDoc)));
   }
 
   getReferenceData() {

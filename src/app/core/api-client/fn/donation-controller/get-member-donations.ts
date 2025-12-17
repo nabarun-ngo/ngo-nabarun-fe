@@ -10,10 +10,11 @@ import { RequestBuilder } from '../../request-builder';
 
 import { SuccessResponsePagedResultDonationDto } from '../../models/success-response-paged-result-donation-dto';
 
-export interface GetDonorDonations$Params {
-  donorId: string;
+export interface GetMemberDonations$Params {
+  memberId: string;
   pageIndex: number;
   pageSize: number;
+  donorId?: string;
   status?: Array<'RAISED' | 'PAID' | 'PENDING' | 'PAYMENT_FAILED' | 'PAY_LATER' | 'CANCELLED' | 'UPDATE_MISTAKE'>;
   type?: Array<'REGULAR' | 'ONETIME'>;
   isGuest?: boolean;
@@ -23,10 +24,10 @@ export interface GetDonorDonations$Params {
   donorName?: string;
 }
 
-export function getDonorDonations(http: HttpClient, rootUrl: string, params: GetDonorDonations$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultDonationDto>> {
-  const rb = new RequestBuilder(rootUrl, getDonorDonations.PATH, 'get');
+export function getMemberDonations(http: HttpClient, rootUrl: string, params: GetMemberDonations$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultDonationDto>> {
+  const rb = new RequestBuilder(rootUrl, getMemberDonations.PATH, 'get');
   if (params) {
-    rb.path('donorId', params.donorId, {});
+    rb.path('memberId', params.memberId, {});
     rb.query('pageIndex', params.pageIndex, {});
     rb.query('pageSize', params.pageSize, {});
     rb.query('donorId', params.donorId, {});
@@ -49,4 +50,4 @@ export function getDonorDonations(http: HttpClient, rootUrl: string, params: Get
   );
 }
 
-getDonorDonations.PATH = '/api/donation/{donorId}/list';
+getMemberDonations.PATH = '/api/donation/{memberId}/list';

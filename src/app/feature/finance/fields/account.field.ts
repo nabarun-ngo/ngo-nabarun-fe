@@ -5,8 +5,9 @@ import { Account } from '../model';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { FormGroup, Validators } from '@angular/forms';
 import { date } from 'src/app/core/service/utilities.service';
-import { DocumentDto, KeyValue } from 'src/app/core/api-client/models';
 import { EventEmitter } from '@angular/core';
+import { KeyValue } from 'src/app/shared/model/key-value.model';
+import { Doc } from 'src/app/shared/model/document.model';
 
 export const accountTabHeader = (tab: accountTab) => {
   return [
@@ -375,9 +376,14 @@ export const upiDetailSection = (m: Account) => {
 export const transferAmountSection = () => {
   return {
     section_form: new FormGroup({}),
-    section_name: 'Transfer Amount',
+    section_name: 'Record Amount Transfer',
     section_type: 'key_value',
     section_html_id: 'transfer_amt',
+    alertData: {
+      alertType: 'warning',
+      message: 'This action only records the already transferred amount.'
+    },
+    alertFlag: true,
     hide_section: true,
     content: [
       {
@@ -443,13 +449,18 @@ export const transferAmountSection = () => {
 export const moneyInSection = () => {
   return {
     section_form: new FormGroup({}),
-    section_name: 'Add Funds to Account',
+    section_name: 'Record Fund Addition',
     section_type: 'key_value',
     section_html_id: 'money_in_acc',
+    alertData: {
+      alertType: 'warning',
+      message: 'This action only records the already transferred amount.'
+    },
+    alertFlag: true,
     hide_section: true,
     content: [
       {
-        field_name: 'Amount to Add',
+        field_name: 'Fund Amount',
         field_value: '',
         form_control_name: 'amount',
         editable: true,
@@ -463,7 +474,7 @@ export const moneyInSection = () => {
         form_input_validation: [Validators.required, Validators.min(1)],
       },
       {
-        field_name: 'Addition Date',
+        field_name: 'Fund Date',
         field_html_id: 'in_date',
         showDisplayValue: true,
         form_control_name: 'inDate',
@@ -476,7 +487,7 @@ export const moneyInSection = () => {
         form_input_validation: [Validators.required],
       },
       {
-        field_name: 'Fund Description',
+        field_name: 'Fund Source',
         field_value: '',
         form_control_name: 'description',
         editable: true,
@@ -494,13 +505,19 @@ export const moneyInSection = () => {
 };
 
 export const accountDocumentSection = (
-  docs: DocumentDto[]
+  docs: Doc[],
+  showAlert: boolean = false
 ) => {
   return {
     section_name: 'Documents',
     section_type: 'doc_list',
     section_html_id: 'document_list',
     section_form: new FormGroup({}),
+    alertData: {
+      alertType: 'info',
+      message: 'Please upload the evidence of the transfer'
+    },
+    alertFlag: showAlert,
     documents: docs,
     doc: {
       docChange: new EventEmitter(),

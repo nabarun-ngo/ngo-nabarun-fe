@@ -5,6 +5,7 @@
 export { AccountDetailDto } from './models/account-detail-dto';
 export { AccountRefDataDto } from './models/account-ref-data-dto';
 export { ActivityDetailDto } from './models/activity-detail-dto';
+export { AddFundDto } from './models/add-fund-dto';
 export { AddressDto } from './models/address-dto';
 export { ApiKeyDto } from './models/api-key-dto';
 export { AuthTokenDto } from './models/auth-token-dto';
@@ -43,6 +44,7 @@ export { PagedResultWorkflowTaskDto } from './models/paged-result-workflow-task-
 export { PhoneNumberDto } from './models/phone-number-dto';
 export { ProcessDonationPaymentDto } from './models/process-donation-payment-dto';
 export { ProjectDetailDto } from './models/project-detail-dto';
+export { ReverseTransactionDto } from './models/reverse-transaction-dto';
 export { RoleDto } from './models/role-dto';
 export { SignUpDto } from './models/sign-up-dto';
 export { StartWorkflowDto } from './models/start-workflow-dto';
@@ -76,6 +78,7 @@ export { SuccessResponsePagedResultUserDto } from './models/success-response-pag
 export { SuccessResponsePagedResultWorkflowInstanceDto } from './models/success-response-paged-result-workflow-instance-dto';
 export { SuccessResponsePagedResultWorkflowTaskDto } from './models/success-response-paged-result-workflow-task-dto';
 export { SuccessResponseString } from './models/success-response-string';
+export { SuccessResponseTransactionDetailDto } from './models/success-response-transaction-detail-dto';
 export { SuccessResponseUserDto } from './models/success-response-user-dto';
 export { SuccessResponseUserRefDataDto } from './models/success-response-user-ref-data-dto';
 export { SuccessResponseVoid } from './models/success-response-void';
@@ -83,6 +86,7 @@ export { SuccessResponseWorkflowInstanceDto } from './models/success-response-wo
 export { SuccessResponseWorkflowTaskDto } from './models/success-response-workflow-task-dto';
 export { TaskAssignmentDto } from './models/task-assignment-dto';
 export { TransactionDetailDto } from './models/transaction-detail-dto';
+export { TransferDto } from './models/transfer-dto';
 export { UpdateAccountDto } from './models/update-account-dto';
 export { UpdateAccountSelfDto } from './models/update-account-self-dto';
 export { UpdateDonationDto } from './models/update-donation-dto';

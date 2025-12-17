@@ -2,7 +2,6 @@
  * Domain models for Transaction feature
  */
 
-import { Account } from './account.model';
 import { PagedResult } from '../../../shared/model/paged-result.model';
 
 export interface Transaction {
@@ -10,19 +9,19 @@ export interface Transaction {
   txnNumber?: string;
   txnDate: string;
   txnType: 'IN' | 'OUT' | 'TRANSFER';
-  txnStatus: 'SUCCESS' | 'FAILURE' | 'REVERT';
+  txnStatus: 'SUCCESS' | 'FAILURE' | 'REVERSED';
   txnAmount: number;
   txnDescription: string;
   txnParticulars?: string;
+  accTxnType?: string;
   txnRefId?: string;
   txnRefType?: 'DONATION' | 'NONE' | 'EXPENSE' | 'EARNING';
   accBalance?: number;
   comment?: string;
 
   // Account references
-  account?: Account;
-  transferFrom?: Account;
-  transferTo?: Account;
+  transferFrom?: string;
+  transferTo?: string;
 
   // Computed properties
   displayName: string;

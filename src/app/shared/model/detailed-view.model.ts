@@ -5,7 +5,8 @@ import { Accordion } from "../utils/accordion";
 import { EventEmitter } from "@angular/core";
 import { FileUpload } from "../components/generic/file-upload/file-upload.component";
 import { BehaviorSubject } from "rxjs";
-import { DocumentDto } from "src/app/core/api-client/models";
+import { AlertData } from "./alert.model";
+import { Doc } from "./document.model";
 
 export interface DetailedView<NumType = any> {
 
@@ -18,7 +19,7 @@ export interface DetailedView<NumType = any> {
     section_form: FormGroup;
     show_form?: boolean;
     documentHeader?: string;
-    documents?: DocumentDto[];
+    documents?: Doc[];
     accordionList?: AccordionList;
     accordion?: {
         parentId?: string;
@@ -27,6 +28,8 @@ export interface DetailedView<NumType = any> {
         accordionOpened: EventEmitter<{ rowIndex: number; }>;
         buttonClick: EventEmitter<{ buttonId: string; rowIndex: number; }>
     };
+    alertData?: AlertData;
+    alertFlag?: boolean;
     doc?: {
         docChange: EventEmitter<FileUpload[]>;
         docList: BehaviorSubject<FileUpload[]>;

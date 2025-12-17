@@ -1,8 +1,9 @@
 import { FormGroup } from "@angular/forms";
-import { KeyValue, TransactionDetailDto } from "src/app/core/api-client/models";
 import { date } from "src/app/core/service/utilities.service";
 import { DetailedView } from "src/app/shared/model/detailed-view.model";
 import { SearchAndAdvancedSearchModel } from "src/app/shared/model/search-and-advanced-search.model";
+import { Transaction } from "../model";
+import { KeyValue } from "src/app/shared/model/key-value.model";
 
 
 export const transactionHeader = [
@@ -24,7 +25,7 @@ export const transactionHeader = [
   },
 ];
 
-export const transactionDetailSection = (data: TransactionDetailDto, refData: { [name: string]: KeyValue[] }): DetailedView => {
+export const transactionDetailSection = (data: Transaction, refData: { [name: string]: KeyValue[] }): DetailedView => {
   return {
     section_form: new FormGroup({}),
     section_name: 'Transaction Detail',
@@ -80,13 +81,13 @@ export const transactionDetailSection = (data: TransactionDetailDto, refData: { 
       },
       {
         field_name: 'Transfer From Account',
-        field_value: data.transferFrom?.id!,
+        field_value: data.transferFrom!,
         field_html_id: 'txn_status',
         hide_field: data.txnType != 'TRANSFER',
       },
       {
         field_name: 'Transfer To Account',
-        field_value: data.transferTo?.id!,
+        field_value: data.transferTo!,
         field_html_id: 'txn_status',
         hide_field: data.txnType != 'TRANSFER',
       },
@@ -184,4 +185,30 @@ export const transactionSearchInput = (
     },
   };
 };
+
+
+export const reverseTransactionSection = (data: Transaction, refData: { [name: string]: KeyValue[] }): DetailedView => {
+  return {
+    section_form: new FormGroup({}),
+    section_name: 'Reverse Transaction',
+    section_type: 'key_value',
+    section_html_id: 'reverse_txn',
+    show_form: false,
+    content: [
+      {
+        field_name: 'Reason for Reversal',
+        field_value: '',
+        field_html_id: 'txn_id',
+        editable: true,
+        form_control_name: 'reasonForReversal',
+        form_input: {
+          tagName: 'textarea',
+          inputType: 'text',
+          html_id: 'txn_id',
+          placeholder: 'Enter Reason for Reversal',
+        }
+      },
+    ],
+  };
+}
 

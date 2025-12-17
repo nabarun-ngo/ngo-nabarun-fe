@@ -133,7 +133,8 @@ import { StandardTabGroupComponent } from './components/standard-tab-group/stand
     DocumentLinkComponent,
     FloatingActionButtonComponent,
     AppPhoneNumberComponent,
-    StandardTabGroupComponent
+    StandardTabGroupComponent,
+    DetailedViewComponent
   ],
   providers: [{
     provide: MAT_RADIO_DEFAULT_OPTIONS,

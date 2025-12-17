@@ -11,7 +11,15 @@ import { RequestBuilder } from '../../request-builder';
 import { SuccessResponseArrayDocumentDto } from '../../models/success-response-array-document-dto';
 
 export interface GetDocuments$Params {
-  type: string;
+
+/**
+ * Type of the entity
+ */
+  type: 'DONATION' | 'PROFILE' | 'TRANSACTION' | 'EXPENSE' | 'EARNING';
+
+/**
+ * ID of the entity
+ */
   id: string;
 }
 

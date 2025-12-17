@@ -5,11 +5,12 @@ import { AccordionCell, AccordionButton } from 'src/app/shared/model/accordion-l
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { Accordion } from 'src/app/shared/utils/accordion';
 import { TransactionDefaultValue } from '../../finance.const';
-import { transactionDetailSection, transactionHeader } from '../../fields/transaction.field';
+import { reverseTransactionSection, transactionDetailSection, transactionHeader } from '../../fields/transaction.field';
 import { removeNullFields } from 'src/app/core/service/utilities.service';
 import { AccountService } from '../../service/account.service';
 import { accountDocumentSection } from '../../fields/account.field';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
+import { ModalService } from 'src/app/core/service/modal.service';
 
 @Component({
   selector: 'app-transaction-accordion',
@@ -35,7 +36,9 @@ export class TransactionAccordionComponent extends Accordion<Transaction> {
 
   defaultValue = TransactionDefaultValue;
 
-  constructor(protected accountService: AccountService) {
+  constructor(protected accountService: AccountService,
+    protected modalService: ModalService
+  ) {
     super();
   }
 
@@ -59,7 +62,7 @@ export class TransactionAccordionComponent extends Accordion<Transaction> {
       },
       {
         type: 'text',
-        value: data?.txnParticulars || '',
+        value: data?.accTxnType || '',
       },
       {
         type: 'date',
@@ -71,33 +74,18 @@ export class TransactionAccordionComponent extends Accordion<Transaction> {
     data: Transaction,
     options?: { [key: string]: any }
   ): DetailedView[] {
-    // Convert domain model to format expected by transactionDetailSection
-    const transactionData = {
-      txnId: data.txnId,
-      txnNumber: data.txnNumber,
-      txnDate: data.txnDate,
-      txnType: data.txnType,
-      txnStatus: data.txnStatus,
-      txnAmount: data.txnAmount,
-      txnDescription: data.txnDescription,
-      txnParticulars: data.txnParticulars,
-      txnRefId: data.txnRefId,
-      txnRefType: data.txnRefType,
-      accBalance: data.accBalance,
-      comment: data.comment,
-      account: data.account,
-      transferFrom: data.transferFrom,
-      transferTo: data.transferTo
-    };
     return [
-      transactionDetailSection(transactionData as any, this.getRefData()!),
+      transactionDetailSection(data, this.getRefData()!),
     ];
   }
   protected override prepareDefaultButtons(
     data: Transaction,
     options?: { [key: string]: any }
   ): AccordionButton[] {
-    return [];
+    return this.isSelfAccount ? [] : [{
+      button_id: 'REVERSE',
+      button_name: 'Reverse Transaction',
+    }];
   }
   override handlePageEvent($event: PageEvent): void {
     this.pageEvent = $event;
@@ -105,7 +93,46 @@ export class TransactionAccordionComponent extends Accordion<Transaction> {
   }
 
 
-  onClick($event: { buttonId: string; rowIndex: number }) { }
+  onClick($event: { buttonId: string; rowIndex: number }) {
+    if ($event.buttonId == 'REVERSE') {
+      this.addSectionInAccordion(
+        reverseTransactionSection(this.itemList![$event.rowIndex], this.getRefData()!),
+        $event.rowIndex
+      );
+      this.showEditForm($event.rowIndex, ['reverse_txn']);
+    }
+    else if ($event.buttonId == 'CONFIRM') {
+      this.reverseTransaction($event.rowIndex);
+    }
+    else if ($event.buttonId == 'CANCEL') {
+      this.removeSectionInAccordion('reverse_txn', $event.rowIndex);
+      this.hideForm($event.rowIndex);
+    }
+  }
+
+  private reverseTransaction(rowIndex: number) {
+    let item = this.itemList![rowIndex];
+    const reverse_form = this.getSectionForm('reverse_txn', rowIndex);
+    if (reverse_form?.valid) {
+      const modalRef = this.modalService.openNotificationModal({
+        title: 'Reverse Transaction',
+        description: 'Are you sure you want to reverse this transaction?',
+      }, 'confirmation', 'warning');
+
+      modalRef.onAccept$.subscribe((data) => {
+        if (data) {
+          this.accountService.reverseTransaction(this.accountId, item.txnId, reverse_form?.value.reasonForReversal).subscribe((data) => {
+            this.removeSectionInAccordion('reverse_txn', rowIndex);
+            this.hideForm(rowIndex);
+            this.fetchDetails(this.pageNumber, this.pageSize);
+          });
+        }
+      });
+    } else {
+      reverse_form?.markAllAsTouched();
+    }
+
+  }
 
   onAccordionOpen($event: { rowIndex: number }) {
     let item = this.itemList![$event.rowIndex];

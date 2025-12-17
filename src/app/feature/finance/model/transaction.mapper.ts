@@ -66,9 +66,9 @@ export function mapTransactionDtoToTransaction(dto: TransactionDetailDto): Trans
     comment: dto.comment,
 
     // Account references
-    account: dto.account ? mapAccountDtoToAccount(dto.account) : undefined,
-    transferFrom: dto.transferFrom ? mapAccountDtoToAccount(dto.transferFrom) : undefined,
-    transferTo: dto.transferTo ? mapAccountDtoToAccount(dto.transferTo) : undefined,
+    transferFrom: dto.transferFrom,
+    transferTo: dto.transferTo,
+    accTxnType: dto.accTxnType,
 
     // Computed properties
     displayName: dto.txnDescription || dto.txnNumber || dto.txnId,

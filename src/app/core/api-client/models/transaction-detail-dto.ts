@@ -5,10 +5,11 @@
 import { AccountDetailDto } from '../models/account-detail-dto';
 export interface TransactionDetailDto {
   accBalance?: number;
+  accTxnType?: string;
   account?: AccountDetailDto;
   comment?: string;
-  transferFrom?: AccountDetailDto;
-  transferTo?: AccountDetailDto;
+  transferFrom?: string;
+  transferTo?: string;
   txnAmount: number;
   txnDate: string;
   txnDescription: string;
@@ -17,6 +18,6 @@ export interface TransactionDetailDto {
   txnParticulars?: string;
   txnRefId?: string;
   txnRefType?: 'DONATION' | 'NONE' | 'EXPENSE' | 'EARNING';
-  txnStatus: 'SUCCESS' | 'FAILURE' | 'REVERT';
+  txnStatus: 'SUCCESS' | 'FAILURE' | 'REVERSED';
   txnType: 'IN' | 'OUT' | 'TRANSFER';
 }

@@ -8,6 +8,7 @@ import { StaticDocumentDto } from 'src/app/core/api-client/models';
 })
 export class DocumentLinkComponent {
 
+  //TODO: Change this to StaticDoc[]`
   @Input({ required: true })
   categories: StaticDocumentDto[] = [];
 }

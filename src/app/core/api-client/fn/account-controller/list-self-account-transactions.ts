@@ -16,7 +16,7 @@ export interface ListSelfAccountTransactions$Params {
   pageSize: number;
   txnId?: string;
   txnType?: Array<'IN' | 'OUT' | 'TRANSFER'>;
-  txnStatus?: Array<'SUCCESS' | 'FAILURE' | 'REVERT'>;
+  txnStatus?: Array<'SUCCESS' | 'FAILURE' | 'REVERSED'>;
   txnRefId?: string;
   txnRefType?: 'DONATION' | 'NONE' | 'EXPENSE' | 'EARNING';
   startDate?: string;

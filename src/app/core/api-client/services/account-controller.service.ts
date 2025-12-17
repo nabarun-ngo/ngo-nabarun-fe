@@ -11,6 +11,8 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { addFundSelf } from '../fn/account-controller/add-fund-self';
+import { AddFundSelf$Params } from '../fn/account-controller/add-fund-self';
 import { createAccount } from '../fn/account-controller/create-account';
 import { CreateAccount$Params } from '../fn/account-controller/create-account';
 import { getAccountReferenceData } from '../fn/account-controller/get-account-reference-data';
@@ -25,11 +27,16 @@ import { listSelfAccountTransactions } from '../fn/account-controller/list-self-
 import { ListSelfAccountTransactions$Params } from '../fn/account-controller/list-self-account-transactions';
 import { payableAccount } from '../fn/account-controller/payable-account';
 import { PayableAccount$Params } from '../fn/account-controller/payable-account';
+import { reverseTransaction } from '../fn/account-controller/reverse-transaction';
+import { ReverseTransaction$Params } from '../fn/account-controller/reverse-transaction';
 import { SuccessResponseAccountDetailDto } from '../models/success-response-account-detail-dto';
 import { SuccessResponseAccountRefDataDto } from '../models/success-response-account-ref-data-dto';
 import { SuccessResponseArrayAccountDetailDto } from '../models/success-response-array-account-detail-dto';
 import { SuccessResponsePagedResultAccountDetailDto } from '../models/success-response-paged-result-account-detail-dto';
 import { SuccessResponsePagedResultTransactionDetailDto } from '../models/success-response-paged-result-transaction-detail-dto';
+import { SuccessResponseTransactionDetailDto } from '../models/success-response-transaction-detail-dto';
+import { transferAmountSelf } from '../fn/account-controller/transfer-amount-self';
+import { TransferAmountSelf$Params } from '../fn/account-controller/transfer-amount-self';
 import { updateAccount } from '../fn/account-controller/update-account';
 import { UpdateAccount$Params } from '../fn/account-controller/update-account';
 import { updateSelf } from '../fn/account-controller/update-self';
@@ -269,6 +276,105 @@ export class AccountControllerService extends BaseService {
   listSelfAccountTransactions(params: ListSelfAccountTransactions$Params, context?: HttpContext): Observable<SuccessResponsePagedResultTransactionDetailDto> {
     return this.listSelfAccountTransactions$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponsePagedResultTransactionDetailDto>): SuccessResponsePagedResultTransactionDetailDto => r.body)
+    );
+  }
+
+  /** Path part for operation `transferAmountSelf()` */
+  static readonly TransferAmountSelfPath = '/api/account/{id}/transfer/me';
+
+  /**
+   * Transfer amount to another account.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `transferAmountSelf()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  transferAmountSelf$Response(params: TransferAmountSelf$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseTransactionDetailDto>> {
+    return transferAmountSelf(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Transfer amount to another account.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `transferAmountSelf$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  transferAmountSelf(params: TransferAmountSelf$Params, context?: HttpContext): Observable<SuccessResponseTransactionDetailDto> {
+    return this.transferAmountSelf$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseTransactionDetailDto>): SuccessResponseTransactionDetailDto => r.body)
+    );
+  }
+
+  /** Path part for operation `addFundSelf()` */
+  static readonly AddFundSelfPath = '/api/account/{id}/addFund/me';
+
+  /**
+   * Add fund to account.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `addFundSelf()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  addFundSelf$Response(params: AddFundSelf$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseTransactionDetailDto>> {
+    return addFundSelf(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Add fund to account.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `addFundSelf$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  addFundSelf(params: AddFundSelf$Params, context?: HttpContext): Observable<SuccessResponseTransactionDetailDto> {
+    return this.addFundSelf$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseTransactionDetailDto>): SuccessResponseTransactionDetailDto => r.body)
+    );
+  }
+
+  /** Path part for operation `reverseTransaction()` */
+  static readonly ReverseTransactionPath = '/api/account/{id}/transaction/reverse';
+
+  /**
+   * Reverse transaction for account.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `reverseTransaction()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  reverseTransaction$Response(params: ReverseTransaction$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseTransactionDetailDto>> {
+    return reverseTransaction(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Reverse transaction for account.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `reverseTransaction$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  reverseTransaction(params: ReverseTransaction$Params, context?: HttpContext): Observable<SuccessResponseTransactionDetailDto> {
+    return this.reverseTransaction$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseTransactionDetailDto>): SuccessResponseTransactionDetailDto => r.body)
     );
   }
 

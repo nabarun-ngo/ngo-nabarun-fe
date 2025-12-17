@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { DocumentDto } from 'src/app/core/api-client/models';
 import { DmsControllerService } from 'src/app/core/api-client/services';
 import { openWindow } from 'src/app/core/service/utilities.service';
+import { Doc } from 'src/app/shared/model/document.model';
 
 @Component({
   selector: 'app-document-list',
@@ -10,7 +10,7 @@ import { openWindow } from 'src/app/core/service/utilities.service';
 })
 export class DocumentListComponent {
 
-  @Input('documents') documents: DocumentDto[] | undefined;
+  @Input('documents') documents: Doc[] | undefined;
   @Input('heading') documentHeading: string = 'Documents';
   @Input('showHeading') showHeading: boolean = true;
 
@@ -19,11 +19,11 @@ export class DocumentListComponent {
 
   constructor(private commonController: DmsControllerService) { }
 
-  deleteAttachment(document: DocumentDto) {
+  deleteAttachment(document: Doc) {
 
   }
 
-  downloadAttachment(document: DocumentDto) {
+  downloadAttachment(document: Doc) {
     this.commonController.downloadDocument({ id: document.id! }).subscribe(data => {
       // //console.log(data)
       //saveFromURL(data,document.originalFileName)
@@ -31,7 +31,7 @@ export class DocumentListComponent {
     })
   }
 
-  viewAttachment(document: DocumentDto) {
+  viewAttachment(document: Doc) {
     this.commonController.viewDocument({ id: document.id! }).subscribe((data) => {
       //console.log(data)
       openWindow(data.responsePayload!);

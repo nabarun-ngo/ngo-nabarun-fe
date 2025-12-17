@@ -15,8 +15,8 @@ import { createDonation } from '../fn/donation-controller/create-donation';
 import { CreateDonation$Params } from '../fn/donation-controller/create-donation';
 import { getDonationSummary } from '../fn/donation-controller/get-donation-summary';
 import { GetDonationSummary$Params } from '../fn/donation-controller/get-donation-summary';
-import { getDonorDonations } from '../fn/donation-controller/get-donor-donations';
-import { GetDonorDonations$Params } from '../fn/donation-controller/get-donor-donations';
+import { getMemberDonations } from '../fn/donation-controller/get-member-donations';
+import { GetMemberDonations$Params } from '../fn/donation-controller/get-member-donations';
 import { getReferenceData } from '../fn/donation-controller/get-reference-data';
 import { GetReferenceData$Params } from '../fn/donation-controller/get-reference-data';
 import { getSelfDonations } from '../fn/donation-controller/get-self-donations';
@@ -139,8 +139,8 @@ export class DonationControllerService extends BaseService {
     );
   }
 
-  /** Path part for operation `getDonorDonations()` */
-  static readonly GetDonorDonationsPath = '/api/donation/{donorId}/list';
+  /** Path part for operation `getMemberDonations()` */
+  static readonly GetMemberDonationsPath = '/api/donation/{memberId}/list';
 
   /**
    * Get donations by donor.
@@ -148,12 +148,12 @@ export class DonationControllerService extends BaseService {
    * Authorities : 'read:user_donations'
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getDonorDonations()` instead.
+   * To access only the response body, use `getMemberDonations()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getDonorDonations$Response(params: GetDonorDonations$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultDonationDto>> {
-    return getDonorDonations(this.http, this.rootUrl, params, context);
+  getMemberDonations$Response(params: GetMemberDonations$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultDonationDto>> {
+    return getMemberDonations(this.http, this.rootUrl, params, context);
   }
 
   /**
@@ -162,12 +162,12 @@ export class DonationControllerService extends BaseService {
    * Authorities : 'read:user_donations'
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getDonorDonations$Response()` instead.
+   * To access the full response (for headers, for example), `getMemberDonations$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getDonorDonations(params: GetDonorDonations$Params, context?: HttpContext): Observable<SuccessResponsePagedResultDonationDto> {
-    return this.getDonorDonations$Response(params, context).pipe(
+  getMemberDonations(params: GetMemberDonations$Params, context?: HttpContext): Observable<SuccessResponsePagedResultDonationDto> {
+    return this.getMemberDonations$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponsePagedResultDonationDto>): SuccessResponsePagedResultDonationDto => r.body)
     );
   }

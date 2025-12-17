@@ -82,9 +82,8 @@ export abstract class StandardTabbedDashboard<TTab extends string | number, TDat
   protected readonly destroyRef = inject(DestroyRef);
 
   override ngOnInit(): void {
-    this.initializeTabIndex();
+    //ORDER OF EXECUTION IS IMPORTANT
     super.ngOnInit();
-
     // Subscribe to query params to handle tab changes (including back/forward button)
     this.route.queryParams
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -94,6 +93,7 @@ export abstract class StandardTabbedDashboard<TTab extends string | number, TDat
           this.handleTabChangeFromUrl(tab);
         }
       });
+    this.initializeTabIndex();
   }
 
   /**
@@ -121,7 +121,9 @@ export abstract class StandardTabbedDashboard<TTab extends string | number, TDat
 
       // Trigger data load and hooks
       setTimeout(() => {
-        this.getActiveComponent(tab)?.loadData();
+        if (!this.initialData) {
+          this.getActiveComponent(tab)?.loadData();
+        }
         this.onTabChangedHook();
       });
     }
@@ -146,7 +148,7 @@ export abstract class StandardTabbedDashboard<TTab extends string | number, TDat
     this.#visitedTabs.add(tab);
 
     setTimeout(() => {
-      this.getActiveComponent(tab)?.loadData();
+      this.getActiveComponent(tab)?.loadData();//Experimental
       this.onTabChangedHook();
     });
   };
