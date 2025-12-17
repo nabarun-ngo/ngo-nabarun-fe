@@ -9,7 +9,7 @@ import { AuthConfig } from "@auth0/auth0-angular";
 const authDomain = 'sso-nabarun-test.us.auth0.com';
 const authClientId = 'RAcWqnITnhfXPTLhFLVtAzWxeujR5Znk';
 const apiBaseUrl = 'https://ngonabarun-stage.appspot.com';
-const apiBaseUrl2 = 'https://nabarun-be-nest-vwwodl3alq-uc.a.run.app';
+const apiBaseUrl2 = 'https://api-dot-ngonabarun-stage.appspot.com';
 
 const auth_config: AuthConfig = {
   domain: authDomain,
