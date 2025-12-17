@@ -6,7 +6,6 @@ import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 import { getGreetings } from 'src/app/core/service/utilities.service';
 import { TileInfo } from 'src/app/shared/model/tile-info.model';
-import { CommonService } from 'src/app/shared/services/common.service';
 
 @Component({
   selector: 'app-secured-dashboard',
@@ -14,35 +13,33 @@ import { CommonService } from 'src/app/shared/services/common.service';
   styleUrls: ['./secured-dashboard.component.scss'],
 })
 export class SecuredDashboardComponent implements OnInit {
-reload() {
-  // Temporary stub to prevent runtime error. Implement real reload logic as needed.
-  console.warn('Dashboard reload is not yet implemented.');
-}
+  reload() {
+    // Temporary stub to prevent runtime error. Implement real reload logic as needed.
+    console.warn('Dashboard reload is not yet implemented.');
+  }
   protected route = AppRoute;
   protected scope = SCOPE;
   greetings!: string;
-  static tileList: TileInfo[]=[];
+  static tileList: TileInfo[] = [];
 
   constructor(
     private identityService: UserIdentityService,
     private sharedDataService: SharedDataService,
-    private commonService: CommonService,
-    // private dashboardDataService: DashboardDataService
   ) { }
 
-  get tiles(){return SecuredDashboardComponent.tileList;}
+  get tiles() { return SecuredDashboardComponent.tileList; }
 
-  secondryTileList:TileInfo[]=[
-    ]
+  secondryTileList: TileInfo[] = [
+  ]
 
   async ngOnInit(): Promise<void> {
     let user = await this.identityService.getUser();
-    if(!user.profile_updated){
-      // console.log("Profile Not updated")
+    if (!user.profile_updated) {
+      // //console.log("Profile Not updated")
     }
     this.greetings = getGreetings(user.given_name || user.nickname || user.name);
     this.sharedDataService.setPageName("WELCOME TO NABARUN'S SECURED DASHBOARD");
-    if(SecuredDashboardComponent.tileList.length == 0){
+    if (SecuredDashboardComponent.tileList.length == 0) {
       SecuredDashboardComponent.tileList = [
         {
           tile_html_id: 'donationTile',

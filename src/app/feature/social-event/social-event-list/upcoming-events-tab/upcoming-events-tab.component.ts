@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { EventDetail, PaginateEventDetail } from 'src/app/core/api/models';
+import { EventDetail, PaginateEventDetail } from 'src/app/core/api-client/models';
 import { date, removeNullFields } from 'src/app/core/service/utilities.service';
 import { Accordion } from 'src/app/shared/utils/accordion';
 import {
@@ -20,18 +20,20 @@ import { SearchEvent } from 'src/app/shared/components/search-and-advanced-searc
   styleUrls: ['./upcoming-events-tab.component.scss'],
 })
 export class UpcomingEventsTabComponent extends Accordion<EventDetail> implements TabComponentInterface<PaginateEventDetail> {
+  protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
+    return {
+      pageNumber: DefaultValue.pageNumber,
+      pageSize: DefaultValue.pageSize,
+      pageSizeOptions: DefaultValue.pageSizeOptions,
+    };
+  }
 
   protected isCompleted: boolean = false;
   constructor(private eventService: EventsService) {
     super();
   }
 
-  override ngOnInit(): void {
-    this.init(
-      DefaultValue.pageNumber,
-      DefaultValue.pageSize,
-      DefaultValue.pageSizeOptions
-    );
+  override onInitHook(): void {
     this.setHeaderRow([
       {
         type: 'text',
@@ -109,7 +111,7 @@ export class UpcomingEventsTabComponent extends Accordion<EventDetail> implement
     options?: { [key: string]: any }
   ): DetailedView[] {
     let isCreate = options && options!['create'];
-    console.log('data', data);
+    //console.log('data', data);
     return [
       eventDetailSection(data),
     ];
@@ -140,8 +142,7 @@ export class UpcomingEventsTabComponent extends Accordion<EventDetail> implement
   }
 
   override handlePageEvent($event: PageEvent): void {
-    this.pageSize = $event.pageSize;
-    this.pageNumber = $event.pageIndex;
+    this.pageEvent = $event;
     this.eventService
       .getSocialEventList(this.isCompleted, this.pageNumber, this.pageSize)
       .subscribe((data) => {
@@ -153,9 +154,9 @@ export class UpcomingEventsTabComponent extends Accordion<EventDetail> implement
     buttonId: string;
     rowIndex: number;
   }): void {
-    console.log('buttonId', event.buttonId);
-    console.log('rowIndex', event.rowIndex);
-    console.log('activeButtonId', this.activeButtonId);
+    //console.log('buttonId', event.buttonId);
+    //console.log('rowIndex', event.rowIndex);
+    //console.log('activeButtonId', this.activeButtonId);
     switch (event.buttonId) {
       // Create Event
       case 'confirm_create':
@@ -176,7 +177,7 @@ export class UpcomingEventsTabComponent extends Accordion<EventDetail> implement
       case 'CONFIRM':
         if (this.activeButtonId === 'edit') {
           var editForm = this.getSectionForm('event-detail', event.rowIndex)!;
-          console.log('editForm', editForm);
+          //console.log('editForm', editForm);
           editForm.markAllAsTouched();
           if (editForm.valid) {
             this.updateEvent(event.rowIndex, editForm.value);

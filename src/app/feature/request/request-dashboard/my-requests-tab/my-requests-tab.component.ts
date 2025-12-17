@@ -2,14 +2,14 @@ import { Component, EventEmitter } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, Validators } from '@angular/forms';
-import { RequestDetail, KeyValue, UserDetail, AdditionalField, WorkDetail, PaginateRequestDetail, RequestType } from 'src/app/core/api/models';
+import { RequestDetail, KeyValue, UserDetail, AdditionalField, WorkDetail, PaginateRequestDetail, RequestType } from 'src/app/core/api-client/models';
 import {
   AccordionCell,
   AccordionButton,
 } from 'src/app/shared/model/accordion-list.model';
 import { DetailedView, DetailedViewField } from 'src/app/shared/model/detailed-view.model';
 import { Accordion } from 'src/app/shared/utils/accordion';
-import { RequestConstant, RequestDefaultValue, RequestField } from '../../request.const';
+import { RequestConstant, RequestDefaultValue, RequestField, TaskDefaultValue } from '../../request.const';
 import { RequestService } from '../../request.service';
 import { ModalService } from 'src/app/core/service/modal.service';
 import { AppDialog } from 'src/app/core/constant/app-dialog.const';
@@ -25,6 +25,13 @@ import { SearchEvent } from 'src/app/shared/components/search-and-advanced-searc
   styleUrls: ['./my-requests-tab.component.scss'],
 })
 export class MyRequestsTabComponent extends Accordion<RequestDetail> implements TabComponentInterface<PaginateRequestDetail> {
+  protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
+    return {
+      pageNumber: RequestDefaultValue.pageNumber,
+      pageSize: RequestDefaultValue.pageSize,
+      pageSizeOptions: RequestDefaultValue.pageSizeOptions,
+    };
+  }
 
   protected userList: UserDetail[] | undefined;
   protected isDelegatedRequest: boolean = false; // Track if creating delegated request
@@ -46,7 +53,7 @@ export class MyRequestsTabComponent extends Accordion<RequestDetail> implements 
           this.setContent(s?.content!, s?.totalSize);
         });
     } else if ($event.advancedSearch && $event.reset) {
-      console.log('Resetting search');
+      //console.log('Resetting search');
       this.loadData();
     }
   }
@@ -59,7 +66,7 @@ export class MyRequestsTabComponent extends Accordion<RequestDetail> implements 
       });
   }
 
-  override ngOnInit(): void {
+  override onInitHook(): void {
     this.setHeaderRow([
       {
         value: RequestField.requestId,
@@ -78,11 +85,7 @@ export class MyRequestsTabComponent extends Accordion<RequestDetail> implements 
         rounded: true
       }
     ]);
-    this.init(
-      RequestDefaultValue.pageNumber,
-      RequestDefaultValue.pageSize,
-      RequestDefaultValue.pageSizeOptions
-    );
+
   }
 
   protected override prepareHighLevelView(
@@ -253,7 +256,14 @@ export class MyRequestsTabComponent extends Accordion<RequestDetail> implements 
     this.requestService.getWorkDetails(item.id!).subscribe(s => {
       // Create a nested accordion for work details
       let workAccordion = new class extends Accordion<WorkDetail> {
-        override ngOnInit(): void { }
+        protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
+          return {
+            pageNumber: TaskDefaultValue.pageNumber,
+            pageSize: TaskDefaultValue.pageSize,
+            pageSizeOptions: TaskDefaultValue.pageSizeOptions,
+          };
+        }
+        override onInitHook(): void { }
         protected override onClick(event: { buttonId: string; rowIndex: number; }): void { }
         protected override onAccordionOpen(event: { rowIndex: number; }): void { }
 

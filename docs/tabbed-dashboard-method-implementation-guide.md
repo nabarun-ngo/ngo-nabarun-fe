@@ -359,12 +359,12 @@ export class FirstTabComponent implements TabComponentInterface, OnInit {
   
   private viewItem(item: any): void {
     // Implementation specific to this tab
-    console.log('Viewing item', item);
+    //console.log('Viewing item', item);
   }
   
   private editItem(item: any): void {
     // Implementation specific to this tab
-    console.log('Editing item', item);
+    //console.log('Editing item', item);
   }
 }
 ```

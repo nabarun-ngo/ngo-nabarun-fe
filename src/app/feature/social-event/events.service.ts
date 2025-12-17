@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { SocialEventControllerService } from 'src/app/core/api/services';
 import { DefaultValue } from './events.conts';
 import { map } from 'rxjs';
-import { EventDetail, EventDetailFilter } from 'src/app/core/api/models';
+import { EventDetail, EventDetailFilter } from 'src/app/core/api-client/models';
 import { date, removeNullFields } from 'src/app/core/service/utilities.service';
 
 @Injectable({

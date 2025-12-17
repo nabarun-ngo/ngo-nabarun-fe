@@ -1,3 +1,4 @@
+
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
@@ -8,7 +9,6 @@ import { PageTitleComponent } from './component/page-title/page-title.component'
 import { MatDialogModule } from '@angular/material/dialog';
 import { NotificationModalComponent, SnackComponent } from './component/notification-modal/notification-modal.component';
 import { environment } from 'src/environments/environment';
-import { ApiModule } from './api/api.module';
 import { ApiModule as ApiClientModule } from './api-client/api.module';
 import { HttpErrorIntercepterService } from './intercepter/http-error-intercepter.service';
 import { NgHttpLoaderModule } from 'ng-http-loader';
@@ -43,9 +43,6 @@ import { BaseModalComponent } from './component/base-modal/base-modal.component'
     HttpClientModule,
     AuthModule.forRoot(environment.auth_config),
     MatDialogModule,
-    ApiModule.forRoot({
-      rootUrl: environment.api_base_url
-    }),
     ApiClientModule.forRoot({
       rootUrl: environment.api_base_url2
     }),
@@ -82,4 +79,3 @@ export class CoreModule {
     }
   }
 }
-

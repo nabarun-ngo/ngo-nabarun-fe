@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { MemberService } from '../member.service';
+import { MemberService } from '../service/member.service';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { KeyValue } from 'src/app/core/api/models';
+import { KeyValue } from 'src/app/core/api-client/models';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { lastValueFrom } from 'rxjs';
 import { ModalService } from 'src/app/core/service/modal.service';
@@ -14,7 +14,7 @@ import { AdminService } from '../../admin/admin.service';
 import { FormGroup, Validators } from '@angular/forms';
 import { SearchAndAdvancedSearchFormComponent } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search-form.component';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
-import { UserDto } from 'src/app/core/api-client/models';
+import { User } from '../models/member.model';
 
 @Component({
   selector: 'app-member-role',
@@ -26,35 +26,37 @@ export class MemberRoleComponent implements OnInit {
   protected app_route = AppRoute;
   refData!: { [key: string]: KeyValue[]; };
 
-  roleUserMaping: { [roleCode: string]: {
-    previousUsersId:string[];
-    currentUsers:UserDto[];
-    errors?: { hasError: boolean, message: string, duplicates: string[] };
-  } }={};
-  userSearch:SearchAndAdvancedSearchModel={
-    normalSearchPlaceHolder:'',
-    showOnlyAdvancedSearch:true,
-    advancedSearch:{
-      buttonText:{search:'Add',close:'Close'},
-      title:'Search Members',
-      searchFormFields:[{
-        formControlName:'users',
-        inputModel:{
-          html_id:'user_search',
-          inputType:'text',
-          tagName:'input',
-          autocomplete:true,
-          placeholder:'Search members here',
-          selectList:[]
+  roleUserMaping: {
+    [roleCode: string]: {
+      previousUsersId: string[];
+      currentUsers: User[];
+      errors?: { hasError: boolean, message: string, duplicates: string[] };
+    }
+  } = {};
+  userSearch: SearchAndAdvancedSearchModel = {
+    normalSearchPlaceHolder: '',
+    showOnlyAdvancedSearch: true,
+    advancedSearch: {
+      buttonText: { search: 'Add', close: 'Close' },
+      title: 'Search Members',
+      searchFormFields: [{
+        formControlName: 'users',
+        inputModel: {
+          html_id: 'user_search',
+          inputType: 'text',
+          tagName: 'input',
+          autocomplete: true,
+          placeholder: 'Search members here',
+          selectList: []
         },
-        validations:[Validators.required]
+        validations: [Validators.required]
       }]
     }
   };
 
   rolesToEdit!: KeyValue[];
   navigations!: NavigationButtonModel[];
-  allMembers!: UserDto[];
+  allMembers!: User[];
 
   constructor(
     private sharedDataService: SharedDataService,
@@ -72,18 +74,18 @@ export class MemberRoleComponent implements OnInit {
       this.refData = this.route.snapshot.data['ref_data'];
     }
 
-    this.rolesToEdit = this.refData['availableRoles'].filter(f=>f.key != 'MEMBER');
+    this.rolesToEdit = this.refData['availableRoles'].filter(f => f.key != 'MEMBER');
 
     for (const f of this.rolesToEdit) {
       const data = await lastValueFrom(this.memberService.fetchMembersByRole([f.key!]));
 
-      this.roleUserMaping[f.key!]={
-        currentUsers:data?.items!,
-        previousUsersId:data?.items!.map(m=>m.userId) as string[],
+      this.roleUserMaping[f.key!] = {
+        currentUsers: data?.content!,
+        previousUsersId: data?.content!.map(m => m.userId) as string[],
       }
 
     }
-    this.allMembers = (await lastValueFrom(this.memberService.fetchAllMembers()))?.items!;
+    this.allMembers = (await lastValueFrom(this.memberService.fetchAllMembers()))?.content!;
 
     this.navigations = [
       {
@@ -95,7 +97,7 @@ export class MemberRoleComponent implements OnInit {
 
 
 
-  drop(event: CdkDragDrop<UserDto[]>) {
+  drop(event: CdkDragDrop<User[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -109,7 +111,7 @@ export class MemberRoleComponent implements OnInit {
     this.checkDuplicate()
   }
 
-  clone(key: string, profile: UserDto) {
+  clone(key: string, profile: User) {
     this.roleUserMaping[key].currentUsers.push(profile)
     this.checkDuplicate()
   }
@@ -133,38 +135,38 @@ export class MemberRoleComponent implements OnInit {
 
   }
 
-  remove(key: string, profile: UserDto) {
+  remove(key: string, profile: User) {
     let index = this.roleUserMaping[key].currentUsers.indexOf(profile);
     this.roleUserMaping[key].currentUsers.splice(index, 1)
     this.checkDuplicate()
   }
 
-  addUserToRole(roleId:string){
-      this.userSearch.advancedSearch?.searchFormFields.filter(f=>f.inputModel.html_id == 'user_search').map(m=>{
-        m.inputModel.selectList=this.allMembers?.map(m2=>{
-          return {key:m2.id,displayValue:m2.fullName} as KeyValue
-        })
+  addUserToRole(roleId: string) {
+    this.userSearch.advancedSearch?.searchFormFields.filter(f => f.inputModel.html_id == 'user_search').map(m => {
+      m.inputModel.selectList = this.allMembers?.map(m2 => {
+        return { key: m2.id, displayValue: m2.fullName } as KeyValue
       })
-      let modal = this.modalService.openComponentDialog(SearchAndAdvancedSearchFormComponent,
-        this.userSearch
-        , {
+    })
+    let modal = this.modalService.openComponentDialog(SearchAndAdvancedSearchFormComponent,
+      this.userSearch
+      , {
         height: 290,
         width: 700
       });
-      modal.componentInstance.onSearch.subscribe(data => {
-        if(data.reset){
+    modal.componentInstance.onSearch.subscribe(data => {
+      if (data.reset) {
+        modal.close();
+      }
+      else {
+        let profile = this.allMembers.find(f => f.id == data.value.users);
+        if (profile) {
+          this.roleUserMaping[roleId].currentUsers.push(profile!);
           modal.close();
+          this.checkDuplicate()
         }
-        else{
-          let profile = this.allMembers.find(f=>f.id == data.value.users);
-          if(profile){
-            this.roleUserMaping[roleId].currentUsers.push(profile!);
-            modal.close();
-            this.checkDuplicate()
-          }
-        }
-      })
-      
+      }
+    })
+
   }
 
   async saveRoles() {
@@ -174,19 +176,19 @@ export class MemberRoleComponent implements OnInit {
     if (noError) {
       let isChanged: boolean = false;
       for (const f of this.rolesToEdit) {
-        let currentUsers=this.roleUserMaping[f.key!].currentUsers.map(m => m.userId) as string[];
-        let pastUsers=this.roleUserMaping[f.key!].previousUsersId;
-        console.log(f.key!,currentUsers,pastUsers)      
+        let currentUsers = this.roleUserMaping[f.key!].currentUsers.map(m => m.userId) as string[];
+        let pastUsers = this.roleUserMaping[f.key!].previousUsersId;
+        //console.log(f.key!, currentUsers, pastUsers)
 
-        if (!arraysEqual(currentUsers , pastUsers)) {
+        if (!arraysEqual(currentUsers, pastUsers)) {
           isChanged = true;
           await lastValueFrom(this.memberService.saveRoleUserWise(f.key!, this.roleUserMaping[f.key!].currentUsers))
         }
       }
       if (isChanged) {
-       // this.adminService.clearCache(['auth0_role_users']).subscribe(data => {
-          this.router.navigateByUrl(this.app_route.secured_member_members_page.url)
-       // })
+        // this.adminService.clearCache(['auth0_role_users']).subscribe(data => {
+        this.router.navigateByUrl(this.app_route.secured_member_members_page.url)
+        // })
       } else {
         this.modalService.openNotificationModal(AppDialog.err_no_change_made, 'notification', 'error');
       }
@@ -195,7 +197,7 @@ export class MemberRoleComponent implements OnInit {
       this.modalService.openNotificationModal(AppDialog.err_incorrect_role, 'notification', 'error');
     }
 
-    console.log(noError)
+    //console.log(noError)
   }
 
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MemberService } from '../member.service';
+import { MemberService } from '../service/member.service';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { MemberDefaultValue } from '../member.const';
 import { PageEvent } from '@angular/material/paginator';
@@ -8,50 +8,46 @@ import { Paginator } from 'src/app/shared/utils/paginator';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
-import { KeyValue, PagedResultUserDto } from 'src/app/core/api-client/models';
+import { PagedUser } from '../models/member.model';
+import { KeyValue } from 'src/app/shared/model/key-value.model';
+import { StandardDashboard } from 'src/app/shared/utils/standard-dashboard';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-member-list',
   templateUrl: './member-list.component.html',
   styleUrls: ['./member-list.component.scss']
 })
-export class MemberListComponent extends Paginator implements OnInit {
+export class MemberListComponent extends StandardDashboard<PagedUser> {
 
-  memberList!: PagedResultUserDto;
   searchValue!: string;
-  refData!: { [key: string]: KeyValue[]; };
   protected app_route = AppRoute;
 
   searchInputData!: SearchAndAdvancedSearchModel;
   navigations!: NavigationButtonModel[];
+  memberList?: PagedUser;
 
   constructor(
     private sharedDataService: SharedDataService,
-    private route: ActivatedRoute,
+    protected override route: ActivatedRoute,
     private memberService: MemberService
   ) {
-    super();
-    super.init(MemberDefaultValue.pageNumber, MemberDefaultValue.pageSize, MemberDefaultValue.pageSizeOptions)
+    super(route);
+  }
+
+  protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
+    return {
+      pageNumber: MemberDefaultValue.pageNumber,
+      pageSize: MemberDefaultValue.pageSize,
+      pageSizeOptions: MemberDefaultValue.pageSizeOptions
+    }
   }
 
 
 
-  ngOnInit(): void {
-
-    this.sharedDataService.setPageName('MEMBERS');
-
-    if (this.route.snapshot.data['ref_data']) {
-      this.refData = this.route.snapshot.data['ref_data'];
-      this.sharedDataService.setRefData('USER', this.refData);
-      // console.log(refData)
-    }
-
-    if (this.route.snapshot.data['data']) {
-      this.memberList = this.route.snapshot.data['data'] as PagedResultUserDto;
-      this.itemLengthSubs.next(this.memberList?.total!);
-      //console.log(this.memberList)
-    }
-
+  protected override onInitHook(): void {
+    this.sharedDataService.setPageName('Members');
+    this.memberList = this.initialData;
     this.searchInputData = {
       normalSearchPlaceHolder: 'Search Member Name, Email, Mobile Number, Role',
       advancedSearch: {
@@ -105,7 +101,7 @@ export class MemberListComponent extends Paginator implements OnInit {
               html_id: 'role',
               labelName: 'Role',
               placeholder: 'Select Role',
-              selectList: this.refData['availableRoles']
+              selectList: this.refData?.['availableRoles']
             },
           }
         ]
@@ -120,12 +116,13 @@ export class MemberListComponent extends Paginator implements OnInit {
     ]
   }
 
-  handlePageEvent($event: PageEvent) {
-    this.pageNumber = $event.pageIndex;
-    this.pageSize = $event.pageSize;
+  override handlePageEvent($event: PageEvent) {
+    this.pageEvent = $event;
     this.memberService.fetchMembers(this.pageNumber, this.pageSize).subscribe(data => {
       this.memberList = data!;
-      this.itemLengthSubs.next(data?.total!);
+      if (data?.totalSize) {
+        this.totalItemLength = data.totalSize;
+      }
     });
 
   }
@@ -133,7 +130,7 @@ export class MemberListComponent extends Paginator implements OnInit {
 
   onSearch($event: { advancedSearch: boolean; reset: boolean; value: any; }) {
     if ($event.advancedSearch && !$event.reset) {
-      console.log($event.value)
+      //console.log($event.value)
       this.memberService.advancedSearch({
         email: $event.value.email,
         firstName: $event.value.firstName,
@@ -142,12 +139,20 @@ export class MemberListComponent extends Paginator implements OnInit {
         role: $event.value.role as string[]
       }).subscribe(data => {
         this.memberList = data!
-        console.log(this.memberList)
+        //console.log(this.memberList)
+        if (data?.totalSize) {
+          this.totalItemLength = data.totalSize;
+        }
       })
     }
     else if ($event.advancedSearch && $event.reset) {
-      console.log($event.value)
-      this.memberService.fetchMembers(this.pageNumber, this.pageSize).subscribe(data => this.memberList = data!)
+      //console.log($event.value)
+      this.memberService.fetchMembers(this.pageNumber, this.pageSize).subscribe(data => {
+        this.memberList = data!;
+        if (data?.totalSize) {
+          this.totalItemLength = data.totalSize;
+        }
+      })
     }
     else {
       this.searchValue = $event.value as string;

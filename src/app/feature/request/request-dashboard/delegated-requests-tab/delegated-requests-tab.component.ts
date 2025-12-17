@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { FormGroup, Validators } from '@angular/forms';
-import { RequestDetail } from 'src/app/core/api/models';
+import { RequestDetail } from 'src/app/core/api-client/models';
 import { AccordionCell, AccordionButton } from 'src/app/shared/model/accordion-list.model';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { RequestConstant, RequestField } from '../../request.const';
@@ -13,11 +13,10 @@ import { MyRequestsTabComponent } from '../my-requests-tab/my-requests-tab.compo
   styleUrls: ['./delegated-requests-tab.component.scss'],
 })
 export class DelegatedRequestsTabComponent extends MyRequestsTabComponent {
-  
+
   protected override isDelegatedRequest: boolean = true;
 
-  override ngOnInit(): void {
-    super.ngOnInit();
+  override onInitHook(): void {
     this.setHeaderRow([
       {
         value: RequestField.requestId,
@@ -58,7 +57,7 @@ export class DelegatedRequestsTabComponent extends MyRequestsTabComponent {
         type: 'text',
         value: data.requester?.fullName!
       },
-      { 
+      {
         type: 'text',
         value: data.status!,
         showDisplayValue: true,
@@ -83,7 +82,7 @@ export class DelegatedRequestsTabComponent extends MyRequestsTabComponent {
         }
       ];
     }
-    
+
     // Delegated requests may have different button options
     return [
       {

@@ -4,7 +4,7 @@ import { NavigationButtonModel } from 'src/app/shared/components/generic/page-na
 import { ActivatedRoute } from '@angular/router';
 import {
   PaginateEventDetail,
-} from 'src/app/core/api/models';
+} from 'src/app/core/api-client/models';
 import { DefaultValue, eventTabs } from '../events.conts';
 import { EventsService } from '../events.service';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
@@ -59,7 +59,7 @@ export class SocialEventListComponent extends StandardTabbedDashboard<eventTabs,
     this.sharedData.setPageName(DefaultValue.pageTitle);
     this.searchInput = eventSearchInput(this.getCurrentTab(), this.refData!)
   }
-  
+
   protected override onTabChangedHook(): void { }
 
   onSearch($event: SearchEvent) {

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
-import { MemberService } from '../member.service';
+import { MemberService } from '../service/member.service';
 import { compareObjects } from 'src/app/core/service/utilities.service';
 import { OperationMode, UserConstant } from '../member.const';
 import { Location } from '@angular/common';
@@ -10,8 +10,9 @@ import { AlertData } from 'src/app/shared/model/alert.model';
 import { AppAlert } from 'src/app/core/constant/app-alert.const';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
-import { UserDto, UserUpdateAdminDto, UserUpdateDto } from 'src/app/core/api-client/models';
 import { firstValueFrom } from 'rxjs';
+import { UserUpdateAdminDto, UserUpdateDto } from 'src/app/core/api-client/models';
+import { User } from '../models/member.model';
 
 @Component({
   selector: 'app-member-profile',
@@ -21,7 +22,7 @@ import { firstValueFrom } from 'rxjs';
 export class MemberProfileComponent implements OnInit {
 
 
-  member!: UserDto;
+  member!: User;
   isSelfProfile: boolean = false;
   mode!: OperationMode;
   navigations!: NavigationButtonModel[];
@@ -48,11 +49,11 @@ export class MemberProfileComponent implements OnInit {
     if (this.route.snapshot.data['ref_data']) {
       let refData = this.route.snapshot.data['ref_data'];
       this.sharedDataService.setRefData('USER', refData);
-      console.log(refData)
+      //console.log(refData)
     }
 
     if (this.route.snapshot.data['data']) {
-      this.member = this.route.snapshot.data['data'] as UserDto;
+      this.member = this.route.snapshot.data['data'] as User;
     }
 
     if (this.isSelfCompleteProfile) {
@@ -86,7 +87,7 @@ export class MemberProfileComponent implements OnInit {
 
   async onUpdate($event: {
     actionName: "SELF_UPDATE" | "CHANGE_MODE" | 'ADMIN_UPDATE' | "CHANGE_PASSWORD";
-    profile?: UserUpdateAdminDto | UserUpdateDto;
+    profile?: User | UserUpdateDto | UserUpdateAdminDto;
     mode?: OperationMode;
     id?: string;
   }) {
@@ -95,7 +96,7 @@ export class MemberProfileComponent implements OnInit {
       // if (this.isSelfCompleteProfile) {
       //   userDetail.profileCompleted = true;
       // }
-      let user = $event.profile as UserUpdateDto;
+      let user = $event.profile as User;
 
       if (user.picture) {
         const pic = await firstValueFrom(this.memberService.uploadPicture($event.id!, user.picture));
@@ -115,7 +116,7 @@ export class MemberProfileComponent implements OnInit {
     } else if ($event.actionName == 'CHANGE_MODE') {
       this.mode = $event.mode!;
     } else if ($event.actionName == 'ADMIN_UPDATE') {
-      this.memberService.updateProfiledetail($event?.id!, $event.profile as UserUpdateAdminDto).subscribe(data => {
+      this.memberService.updateProfiledetail($event?.id!, $event.profile as User).subscribe(data => {
         this.member = data!
         this.mode = 'view_admin';
         //this.memberService.getUserDetail($event.profile?.id!).subscribe(data=>this.member=data!)

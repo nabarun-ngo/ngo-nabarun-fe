@@ -1,8 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { DocumentDetailUpload } from 'src/app/core/api/models';
 import { sanitizeBase64 } from 'src/app/core/service/utilities.service';
 
-export type FileUpload={ file: File, detail: DocumentDetailUpload };
+export type FileUpload = { file: File, detail: { base64Content: string, contentType: string, originalFileName: string } };
 @Component({
   selector: 'app-file-upload',
   templateUrl: './file-upload.component.html',
@@ -35,7 +34,7 @@ export class FileUploadComponent {
         //console.log('hiii')
         return;
       } else {
-        
+
         this.fileError = '';
         let reader = new FileReader();
         reader.readAsDataURL(files[0]);
@@ -70,6 +69,6 @@ export class FileUploadComponent {
         : Math.round(size / 1024) + " KB"
       : size + " B";
   }
-  
+
 
 }

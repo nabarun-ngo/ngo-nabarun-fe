@@ -83,7 +83,7 @@ export const environment = {
 //   postLogoutRedirectUri: Capacitor.isNativePlatform() ? `${config.appId}://${authDomain}/capacitor/${config.appId}/logout` : window.location.origin,
 //   customQueryParams: { audience: 'https://nabarun.resourceserver.api' },
 //   async openUri(uri:string) {
-//     console.log(Capacitor.isNativePlatform())
+//     //console.log(Capacitor.isNativePlatform())
 //     if (Capacitor.isNativePlatform()) {
 //       await Browser.open({ url: uri });
 //     }else{

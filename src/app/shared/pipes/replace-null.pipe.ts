@@ -7,7 +7,7 @@ import { isEmpty } from 'src/app/core/service/utilities.service';
 export class ReplaceNullPipe implements PipeTransform {
 
   transform(value: any, repleceText: string = '-'): any {
-    //console.log(value)
+    ////console.log(value)
     if (typeof value === 'undefined' || value === null || isEmpty(value)) {
       return repleceText;
     }

@@ -2,22 +2,22 @@ import { Injectable } from '@angular/core';
 import { CommonControllerService, RequestControllerService, UserControllerService } from 'src/app/core/api/services';
 import { RequestDefaultValue, TaskDefaultValue } from './request.const';
 import { Observable, map } from 'rxjs';
-import { RefDataType, RequestDetail, RequestDetailFilter, WorkDetail, WorkDetailFilter } from 'src/app/core/api/models';
+import { RefDataType, RequestDetail, RequestDetailFilter, WorkDetail, WorkDetailFilter } from 'src/app/core/api-client/models';
 import { date } from 'src/app/core/service/utilities.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RequestService {
- 
+
   constructor(
     private requestController: RequestControllerService,
     private commonController: CommonControllerService,
-    private userController:UserControllerService,
+    private userController: UserControllerService,
   ) { }
 
   getUsers() {
-    return this.userController.getUsers({filter:{}}).pipe(map(d => d.responsePayload));
+    return this.userController.getUsers({ filter: {} }).pipe(map(d => d.responsePayload));
   }
 
 
@@ -28,43 +28,43 @@ export class RequestService {
     additionalFilter?: RequestDetailFilter
   ) {
     let filter = { isDelegated: delegated, ...additionalFilter };
-    return this.requestController.getMyRequests({ 
-      filter: filter, 
-      pageIndex: pageNumber, 
-      pageSize: pageSize 
+    return this.requestController.getMyRequests({
+      filter: filter,
+      pageIndex: pageNumber,
+      pageSize: pageSize
     }).pipe(map(d => d.responsePayload));
   }
 
   findRefField(type: string) {
-    return this.commonController.getReferenceField({source:'REQUEST-'+type}).pipe(map(d => d.responsePayload));
+    return this.commonController.getReferenceField({ source: 'REQUEST-' + type }).pipe(map(d => d.responsePayload));
   }
 
-  createRequest(detail:RequestDetail){
-    return this.requestController.createRequest({body:detail}).pipe(map(d => d.responsePayload));
+  createRequest(detail: RequestDetail) {
+    return this.requestController.createRequest({ body: detail }).pipe(map(d => d.responsePayload));
   }
 
-  
-  findMyWorkList( 
+
+  findMyWorkList(
     isCompleted: boolean,
     pageNumber?: number,
     pageSize?: number,
     filter?: WorkDetailFilter) {
-    let filter_:WorkDetailFilter ={};
-    filter_.completed=isCompleted;
+    let filter_: WorkDetailFilter = {};
+    filter_.completed = isCompleted;
 
-    if(filter?.requestId){
-      filter_.requestId=filter?.requestId;
+    if (filter?.requestId) {
+      filter_.requestId = filter?.requestId;
     }
-    if(filter?.workId){
-      filter_.workId=filter?.workId;
+    if (filter?.workId) {
+      filter_.workId = filter?.workId;
     }
-    if(filter?.fromDate){
-      filter_.fromDate=date(filter?.fromDate,'yyyy-MM-dd');
+    if (filter?.fromDate) {
+      filter_.fromDate = date(filter?.fromDate, 'yyyy-MM-dd');
     }
-    if(filter?.toDate){
-      filter_.toDate=date(filter?.toDate,'yyyy-MM-dd');
+    if (filter?.toDate) {
+      filter_.toDate = date(filter?.toDate, 'yyyy-MM-dd');
     }
-    console.log(filter_)
+    //console.log(filter_)
     return this.requestController.getMyWorkItems({
       filter: filter_,
       pageIndex: pageNumber, pageSize: pageSize
@@ -81,7 +81,7 @@ export class RequestService {
   }
 
   getDocuments(refId: string) {
-    return this.commonController.getDocuments({ docIndexId:refId, docIndexType:'REQUEST' }).pipe(map(d => d.responsePayload));
+    return this.commonController.getDocuments({ docIndexId: refId, docIndexType: 'REQUEST' }).pipe(map(d => d.responsePayload));
   }
 
   getWorkDetails(id: string) {
@@ -89,7 +89,7 @@ export class RequestService {
   }
 
   withdrawRequest(id: string) {
-    return this.requestController.updateRequest({ id:id , body:{status:'CANCELLED'} }).pipe(map(d => d.responsePayload));
+    return this.requestController.updateRequest({ id: id, body: { status: 'CANCELLED' } }).pipe(map(d => d.responsePayload));
   }
 
   /**
@@ -97,7 +97,7 @@ export class RequestService {
    * In a real scenario, this would call a backend API with advanced search capabilities
    */
   advancedSearchRequests(
-    delegated: boolean = false, 
+    delegated: boolean = false,
     searchParams: any,
     pageNumber: number = RequestDefaultValue.pageNumber,
     pageSize: number = RequestDefaultValue.pageSize

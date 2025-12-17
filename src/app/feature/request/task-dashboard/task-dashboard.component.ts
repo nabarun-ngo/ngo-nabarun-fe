@@ -8,7 +8,7 @@ import { StandardTabbedDashboard } from 'src/app/shared/utils/standard-tabbed-da
 import { TaskDefaultValue, workListTab } from '../request.const';
 import { PendingTasksTabComponent } from './pending-tasks-tab/pending-tasks-tab.component';
 import { CompletedTasksTabComponent } from './completed-tasks-tab/completed-tasks-tab.component';
-import { PaginateWorkDetail } from 'src/app/core/api/models';
+import { PaginateWorkDetail } from 'src/app/core/api-client/models';
 import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
 import { taskSearchInput } from '../request.field';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';

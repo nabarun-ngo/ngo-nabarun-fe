@@ -1,7 +1,7 @@
 import { Component, ElementRef } from '@angular/core';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { AccordionButton, AccordionCell } from 'src/app/shared/model/accordion-list.model';
-import { WorkDetail } from 'src/app/core/api/models';
+import { WorkDetail } from 'src/app/core/api-client/models';
 import { date } from 'src/app/core/service/utilities.service';
 import { RequestConstant, TaskField } from '../../request.const';
 import { RequestService } from '../../request.service';
@@ -21,11 +21,10 @@ export class CompletedTasksTabComponent extends PendingTasksTabComponent {
     protected override taskService: RequestService,
     protected override el: ElementRef,
   ) {
-    super(taskService, el);  
+    super(taskService, el);
   }
 
-  override ngOnInit(): void {
-    super.ngOnInit();
+  override onInitHook(): void {
     this.setHeaderRow([
       {
         value: TaskField.workId,
@@ -82,5 +81,5 @@ export class CompletedTasksTabComponent extends PendingTasksTabComponent {
 
   protected override onClick($event: { buttonId: string; rowIndex: number; }) {
   }
-  
+
 }

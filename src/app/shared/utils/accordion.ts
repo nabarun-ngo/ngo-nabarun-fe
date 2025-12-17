@@ -1,7 +1,7 @@
 import { Paginator } from "src/app/shared/utils/paginator";
 import { AccordionButton, AccordionCell, AccordionData, AccordionList, AccordionRow } from "../model/accordion-list.model";
 import { DetailedView, DetailedViewField } from "../model/detailed-view.model";
-import { KeyValue } from "src/app/core/api/models";
+import { KeyValue } from "src/app/core/api-client/models";
 import { FormControl } from "@angular/forms";
 import { BehaviorSubject } from "rxjs";
 import { FileUpload } from "../components/generic/file-upload/file-upload.component";
@@ -29,7 +29,16 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
     }
   }
 
-  abstract ngOnInit(): void;
+  /**
+   * Do not override this method
+   */
+  ngOnInit() {
+    //super.ngOnInit();
+    this.onInitHook();
+  }
+
+
+  abstract onInitHook(): void;
 
   ngAfterContentInit(): void {
     this.setContent(this.page.content!, this.page.totalSize);
@@ -98,8 +107,9 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
         this.addContentRow(e);
       })
     }
-
-    this.itemLengthSubs.next(totalSize!);
+    if (totalSize) {
+      this.totalItemLength = totalSize;
+    }
   }
 
   /**
@@ -112,7 +122,7 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
       detailed: this.prepareDetailedView(data),
       buttons: this.prepareDefaultButtons(data)
     } as AccordionRow;
-    //console.log(row);
+    ////console.log(row);
     if (insert_top) {
       this.accordionList.contents.unshift(row);
       this.itemList.unshift(data);
@@ -203,12 +213,12 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
       let section = this.accordionList.addContent?.detailed.find(f => f.section_html_id == sectionId);
       let indexAddDet = section?.content?.findIndex(f => f.field_html_id == field_detail.field_html_id)!;
       if (indexAddDet == -1) {
-        console.log(section, 1)
+        //console.log(section, 1)
         section?.section_form?.setControl(field_detail.form_control_name!, new FormControl(field_detail.field_value, field_detail.form_input_validation));
         section?.content?.push(field_detail)
-        console.log(section?.content)
+        //console.log(section?.content)
       } else {
-        console.log(section, 2)
+        //console.log(section, 2)
         section!.content![indexAddDet] = field_detail;
       }
     } else {
@@ -257,7 +267,7 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
     } as AccordionRow;
     this.accordionList.addContent = row;
     return this.accordionList.addContent.detailed.map(m => {
-      //console.log(m)
+      ////console.log(m)
       m.show_form = true;
       if (m.hide_section != true) {
         m.hide_section = false;
@@ -271,7 +281,7 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
       if (m.section_type == 'doc_list') {
         m.doc!.docList = new BehaviorSubject<FileUpload[]>([]);
         m.doc!.docChange.subscribe(m.doc!.docList)
-        console.log("Testt")
+        //console.log("Testt")
       }
       return m;
     });
@@ -279,7 +289,7 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
 
   showEditForm(rowIndex: number, section_ids: string[]) {
     this.accordionList.contents[rowIndex].detailed.filter(f => section_ids.includes(f.section_html_id!)).map(m => {
-      console.log(m)
+      //console.log(m)
       m.show_form = true;
       m.hide_section = false;
       m.content?.map(m => {
@@ -292,18 +302,18 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
       }
       return m;
     });
-    //console.log(this.accordionList.contents)
+    ////console.log(this.accordionList.contents)
     this.functionButtons = [];
     this.accordionList.contents[rowIndex].buttons?.forEach(b => {
       this.functionButtons.push(b)
     });
 
     this.accordionList.contents[rowIndex].buttons?.splice(0);
-    //console.log(this.accordionList.contents[rowIndex].buttons, this.functionButtons)
+    ////console.log(this.accordionList.contents[rowIndex].buttons, this.functionButtons)
     this.actionButtons.forEach(b => {
       this.accordionList.contents[rowIndex].buttons?.push(b);
     })
-    //console.log(this.accordionList.contents[rowIndex].buttons, this.actionButtons)
+    ////console.log(this.accordionList.contents[rowIndex].buttons, this.actionButtons)
   }
   hideForm(rowIndex: number, create?: boolean) {
     if (create) {

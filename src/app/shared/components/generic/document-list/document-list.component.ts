@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { DocumentDetail } from 'src/app/core/api/models';
-import { CommonControllerService } from 'src/app/core/api/services';
-import { openWindow, saveAs, saveFromURL } from 'src/app/core/service/utilities.service';
+import { DmsControllerService } from 'src/app/core/api-client/services';
+import { openWindow } from 'src/app/core/service/utilities.service';
+import { Doc } from 'src/app/shared/model/document.model';
 
 @Component({
   selector: 'app-document-list',
@@ -9,32 +9,32 @@ import { openWindow, saveAs, saveFromURL } from 'src/app/core/service/utilities.
   styleUrls: ['./document-list.component.scss']
 })
 export class DocumentListComponent {
-  
-  @Input('documents') documents: DocumentDetail[] | undefined;
+
+  @Input('documents') documents: Doc[] | undefined;
   @Input('heading') documentHeading: string = 'Documents';
   @Input('showHeading') showHeading: boolean = true;
 
-  canViewAttachment: boolean=true;
-  canDeleteAttachment: boolean=true;
+  canViewAttachment: boolean = true;
+  canDeleteAttachment: boolean = true;
 
-  constructor(private commonController:CommonControllerService){}
+  constructor(private commonController: DmsControllerService) { }
 
-  deleteAttachment(document: DocumentDetail) {
-    
+  deleteAttachment(document: Doc) {
+
   }
 
-  downloadAttachment(document: DocumentDetail) {
-    this.commonController.downloadDocument({id:document.docId!}).subscribe(data=>{
-     // console.log(data)
+  downloadAttachment(document: Doc) {
+    this.commonController.downloadDocument({ id: document.id! }).subscribe(data => {
+      // //console.log(data)
       //saveFromURL(data,document.originalFileName)
-      saveAs(data as Blob, document.originalFileName!);
+      //saveAs(data as Blob, document.originalFileName!);
     })
   }
 
-  viewAttachment(document: DocumentDetail) {
-    this.commonController.viewDocument({id:document.docId!}).subscribe((data)=>{
-      console.log(data)
-      openWindow(data.responsePayload?.downloadURL!);
+  viewAttachment(document: Doc) {
+    this.commonController.viewDocument({ id: document.id! }).subscribe((data) => {
+      //console.log(data)
+      openWindow(data.responsePayload!);
     })
   }
 

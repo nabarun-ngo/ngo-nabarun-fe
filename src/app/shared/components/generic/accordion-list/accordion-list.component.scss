@@ -7,20 +7,20 @@
     border: 1px solid #e5e7eb !important;
     background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    
+
     &:hover {
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
       transform: translateY(-2px) !important;
       border-color: #3b82f6 !important;
     }
-    
+
     &.mat-expanded {
       box-shadow: 0 8px 24px rgba(59, 130, 246, 0.15) !important;
       border-color: #3b82f6 !important;
       background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%) !important;
     }
   }
-  
+
   .mat-expansion-panel-header {
     height: fit-content !important;
     align-items: center !important;
@@ -28,47 +28,47 @@
     border-radius: 12px !important;
     background: transparent !important;
     transition: all 0.3s ease !important;
-    
+
     &:hover {
       background: rgba(59, 130, 246, 0.05) !important;
     }
-    
+
     .mat-expansion-panel-header-title {
       font-weight: 600 !important;
       color: #1f2937 !important;
       font-size: 0.95rem !important;
     }
-    
+
     .mat-expansion-indicator {
       color: #6b7280 !important;
       transition: all 0.3s ease !important;
-      
+
       &::after {
         border-color: #6b7280 !important;
         border-width: 2px !important;
       }
     }
   }
-  
+
   .mat-expansion-panel-body {
     padding: 1.25rem !important;
     background: rgba(248, 250, 252, 0.5) !important;
     border-radius: 0 0 12px 12px !important;
   }
-  
+
   .mat-action-row {
     padding: 1rem 1.25rem !important;
     background: rgba(248, 250, 252, 0.8) !important;
     border-top: 1px solid #e5e7eb !important;
     border-radius: 0 0 12px 12px !important;
-    
+
     .mat-button {
       border-radius: 8px !important;
       font-weight: 500 !important;
       text-transform: none !important;
       transition: all 0.2s ease !important;
       margin: 0.25rem !important;
-      
+
       &:hover {
         transform: translateY(-1px) !important;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
@@ -85,7 +85,7 @@
       font-weight: 500 !important;
       transition: all 0.2s ease !important;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
-      
+
       &:hover {
         transform: translateY(-1px) !important;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15) !important;
@@ -100,7 +100,7 @@
   border-radius: 12px !important;
   box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3) !important;
   margin-bottom: 1rem !important;
-  
+
   span {
     background: rgba(255, 255, 255, 0.2) !important;
     color: white !important;
@@ -115,34 +115,34 @@
   ::ng-deep .mat-expansion-panel {
     margin: 0.5rem 0 !important;
     border-radius: 8px !important;
-    
+
     .mat-expansion-panel-header {
       padding: 0.75rem 1rem !important;
       min-height: 3rem !important;
-      
+
       .mat-expansion-panel-header-title {
         font-size: 0.875rem !important;
         line-height: 1.25rem !important;
       }
-      
+
       .mat-expansion-indicator {
         margin-right: 0.5rem !important;
       }
     }
-    
+
     .mat-expansion-panel-body {
       padding: 0.75rem 1rem !important;
     }
   }
-  
+
   /* Stack accordion content on mobile */
   ::ng-deep .mat-accordion .grid {
     grid-template-columns: 1fr !important;
     gap: 0.5rem !important;
-    
+
     .col-span-1 {
       text-align: left !important;
-      
+
       span {
         font-size: 0.75rem !important;
         padding: 0.25rem 0.5rem !important;
@@ -152,11 +152,11 @@
       }
     }
   }
-  
+
   /* Mobile-friendly action buttons */
   ::ng-deep .mat-action-row {
     padding: 0.75rem 1rem !important;
-    
+
     .mat-button {
       min-width: auto !important;
       padding: 0.25rem 0.5rem !important;
@@ -165,4 +165,24 @@
     }
   }
 }
-  
+
+
+/* ================= ACCORDION GRID SYSTEM ================= */
+
+.accordion-grid {
+  display: grid;
+  gap: 0.75rem;
+  width: 100%;
+  align-items: center;
+
+  /* desktop: force columns in ONE row */
+  grid-template-columns: repeat(var(--cols, 4), minmax(0, 1fr));
+}
+
+/* Mobile: stack columns */
+@media (max-width: 640px) {
+  ::ng-deep .mat-accordion .accordion-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.5rem !important;
+  }
+}

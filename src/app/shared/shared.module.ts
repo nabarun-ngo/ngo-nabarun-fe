@@ -20,8 +20,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DocumentListComponent } from './components/generic/document-list/document-list.component';
 import { AccordionListComponent } from './components/generic/accordion-list/accordion-list.component';
 import { DetailedViewComponent } from './components/generic/detailed-view/detailed-view.component';
-import { DetailedProfileComponent } from './components/detailed-profile/detailed-profile.component';
-import { DetailedDonationComponent } from './components/detailed-donation/detailed-donation.component';
 import { FileUploadComponent } from './components/generic/file-upload/file-upload.component';
 import { MAT_RADIO_DEFAULT_OPTIONS, MatRadioModule } from '@angular/material/radio';
 import { UniversalInputComponent } from './components/generic/universal-input/universal-input.component';
@@ -49,13 +47,12 @@ import { PageNavigationButtonsComponent } from './components/generic/page-naviga
 import { PageLayoutComponent } from './layout/page-layout/page-layout.component';
 import { DocumentLinkComponent } from './components/document-link/document-link.component';
 import { AppPhoneNumberComponent } from './components/generic/phone-number/app-phone-number.component';
+import { StandardTabGroupComponent } from './components/standard-tab-group/standard-tab-group.component';
 
 @NgModule({
   declarations: [
     ItemTileListComponent,
     SearchAndAdvancedSearchFormComponent,
-    DetailedDonationComponent,
-    DetailedProfileComponent,
     DocumentListComponent,
     AccordionListComponent,
     DetailedViewComponent,
@@ -74,7 +71,8 @@ import { AppPhoneNumberComponent } from './components/generic/phone-number/app-p
     PageLayoutComponent,
     DocumentLinkComponent,
     FloatingActionButtonComponent,
-    AppPhoneNumberComponent
+    AppPhoneNumberComponent,
+    StandardTabGroupComponent
   ],
   imports: [
     CommonModule,
@@ -114,8 +112,6 @@ import { AppPhoneNumberComponent } from './components/generic/phone-number/app-p
     ReactiveFormsModule,
     MatPaginatorModule,
     AccordionListComponent,
-    DetailedDonationComponent,
-    DetailedProfileComponent,
     FileUploadComponent,
     MatInputModule,
     ProfileCardComponent,
@@ -136,7 +132,9 @@ import { AppPhoneNumberComponent } from './components/generic/phone-number/app-p
     MatCheckboxModule,
     DocumentLinkComponent,
     FloatingActionButtonComponent,
-    AppPhoneNumberComponent
+    AppPhoneNumberComponent,
+    StandardTabGroupComponent,
+    DetailedViewComponent
   ],
   providers: [{
     provide: MAT_RADIO_DEFAULT_OPTIONS,

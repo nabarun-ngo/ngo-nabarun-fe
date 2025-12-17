@@ -8,50 +8,50 @@ import { environment } from 'src/environments/environment';
 })
 export class GoogleCalendarService extends GoogleAuthService {
   createCalendarEvent(meeting: MeetingDetail | undefined, foreignId?: string | undefined) {
-   console.log(meeting)
-    let attendees:gapi.client.calendar.EventAttendee[]=[]
-    meeting?.meetingAttendees?.forEach(ma=>{
+    //console.log(meeting)
+    let attendees: gapi.client.calendar.EventAttendee[] = []
+    meeting?.meetingAttendees?.forEach(ma => {
       attendees.push({
-        displayName:ma.fullName,
-        email:ma.email
+        displayName: ma.fullName,
+        email: ma.email
       })
     })
     return gapi.client.calendar.events.insert({
       resource: {
-        summary:meeting?.meetingSummary,
-        location:meeting?.meetingLocation,
-        description:meeting?.meetingSummary,
+        summary: meeting?.meetingSummary,
+        location: meeting?.meetingLocation,
+        description: meeting?.meetingSummary,
         start: {
-          dateTime: this.getDateTime(new Date(meeting?.meetingDate!),meeting?.meetingStartTime!),
-          timeZone:'Asia/Kolkata'
+          dateTime: this.getDateTime(new Date(meeting?.meetingDate!), meeting?.meetingStartTime!),
+          timeZone: 'Asia/Kolkata'
         },
         end: {
-           dateTime:this.getDateTime(new Date(meeting?.meetingDate!),meeting?.meetingEndTime!),
-           timeZone:'Asia/Kolkata'
+          dateTime: this.getDateTime(new Date(meeting?.meetingDate!), meeting?.meetingEndTime!),
+          timeZone: 'Asia/Kolkata'
         },
-        attendees: environment.production ? attendees : [{displayName:'Souvik',email:'souviksarrkar362@gmail.com'}],
-        recurrence:['RRULE:FREQ=DAILY;COUNT=1'],
-        conferenceData: meeting?.meetingType == 'OFFLINE' ? undefined :{
-          createRequest:{
-            conferenceSolutionKey:{
+        attendees: environment.production ? attendees : [{ displayName: 'Souvik', email: 'souviksarrkar362@gmail.com' }],
+        recurrence: ['RRULE:FREQ=DAILY;COUNT=1'],
+        conferenceData: meeting?.meetingType == 'OFFLINE' ? undefined : {
+          createRequest: {
+            conferenceSolutionKey: {
               type: 'hangoutsMeet'
             },
-            requestId:foreignId
+            requestId: foreignId
           }
         }
       },
       calendarId: 'primary',
-      conferenceDataVersion:1
+      conferenceDataVersion: 1
     }).then();
   }
 
 
-  private getDateTime(date:Date,time:string){
-    console.log(date,time)//'2024-07-28T21:00:00+05:30'
-    let year =date.getFullYear();
-    let month = date.getMonth()+1;
-    let day=date.getDate();
-    return year+ '-'+month+'-'+day+'T'+time+':00+05:30';
+  private getDateTime(date: Date, time: string) {
+    //console.log(date,time)//'2024-07-28T21:00:00+05:30'
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+    return year + '-' + month + '-' + day + 'T' + time + ':00+05:30';
   }
 
   // listUpcomingEvents() {
