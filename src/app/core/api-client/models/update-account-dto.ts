@@ -5,10 +5,10 @@
 import { BankDetailDto } from '../models/bank-detail-dto';
 import { UpiDetailDto } from '../models/upi-detail-dto';
 export interface UpdateAccountDto {
-  accountStatus?: 'ACTIVE' | 'INACTIVE' | 'BLOCKED';
+  accountStatus?: 'ACTIVE' | 'INACTIVE' | 'BLOCKED' | 'CLOSED';
   bankDetail?: BankDetailDto;
   description?: string;
   name?: string;
-  type?: 'PRINCIPAL' | 'GENERAL' | 'DONATION' | 'PUBLIC_DONATION';
+  type?: 'PRINCIPAL' | 'GENERAL' | 'DONATION' | 'PUBLIC_DONATION' | 'EXPENSE';
   upiDetail?: UpiDetailDto;
 }

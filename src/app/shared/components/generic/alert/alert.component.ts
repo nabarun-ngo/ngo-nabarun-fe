@@ -11,6 +11,7 @@ export class AlertComponent implements OnInit {
   protected alertClass!: string;
   protected alertType!: string;
   protected display: boolean = true;
+  protected dissmiss!: number;
 
 
   @Input('alertData')

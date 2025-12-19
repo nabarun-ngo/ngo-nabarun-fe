@@ -8,6 +8,11 @@ import { BehaviorSubject } from "rxjs";
 import { AlertData } from "./alert.model";
 import { Doc } from "./document.model";
 
+export interface AlertList {
+    data: AlertData;
+    flag: boolean;
+}
+
 export interface DetailedView<NumType = any> {
 
 
@@ -28,8 +33,7 @@ export interface DetailedView<NumType = any> {
         accordionOpened: EventEmitter<{ rowIndex: number; }>;
         buttonClick: EventEmitter<{ buttonId: string; rowIndex: number; }>
     };
-    alertData?: AlertData;
-    alertFlag?: boolean;
+    alerts?: AlertList[];
     doc?: {
         docChange: EventEmitter<FileUpload[]>;
         docList: BehaviorSubject<FileUpload[]>;

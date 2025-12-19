@@ -379,11 +379,15 @@ export const transferAmountSection = () => {
     section_name: 'Record Amount Transfer',
     section_type: 'key_value',
     section_html_id: 'transfer_amt',
-    alertData: {
-      alertType: 'warning',
-      message: 'This action only records the already transferred amount.'
-    },
-    alertFlag: true,
+    alerts: [
+      {
+        data: {
+          alertType: 'warning',
+          message: 'This action only records the already transferred amount.'
+        },
+        flag: true,
+      }
+    ],
     hide_section: true,
     content: [
       {
@@ -452,11 +456,15 @@ export const moneyInSection = () => {
     section_name: 'Record Fund Addition',
     section_type: 'key_value',
     section_html_id: 'money_in_acc',
-    alertData: {
-      alertType: 'warning',
-      message: 'This action only records the already transferred amount.'
-    },
-    alertFlag: true,
+    alerts: [
+      {
+        data: {
+          alertType: 'warning',
+          message: 'This action only records the already transferred amount.'
+        },
+        flag: true,
+      }
+    ],
     hide_section: true,
     content: [
       {
@@ -513,11 +521,15 @@ export const accountDocumentSection = (
     section_type: 'doc_list',
     section_html_id: 'document_list',
     section_form: new FormGroup({}),
-    alertData: {
-      alertType: 'info',
-      message: 'Please upload the evidence of the transfer'
-    },
-    alertFlag: showAlert,
+    alerts: [
+      {
+        data: {
+          alertType: 'info',
+          message: 'Please upload the evidence of the transfer'
+        },
+        flag: showAlert,
+      }
+    ],
     documents: docs,
     doc: {
       docChange: new EventEmitter(),

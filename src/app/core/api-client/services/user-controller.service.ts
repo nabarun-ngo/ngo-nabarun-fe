@@ -46,7 +46,9 @@ export class UserControllerService extends BaseService {
   /**
    * Get list of users with pagination and filters.
    *
-   *
+   * **Required Permissions:**
+   * - `read:users`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `listUsers()` instead.
@@ -60,7 +62,9 @@ export class UserControllerService extends BaseService {
   /**
    * Get list of users with pagination and filters.
    *
-   *
+   * **Required Permissions:**
+   * - `read:users`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `listUsers$Response()` instead.
@@ -79,7 +83,9 @@ export class UserControllerService extends BaseService {
   /**
    * Create a new user.
    *
-   *
+   * **Required Permissions:**
+   * - `create:user`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `create()` instead.
@@ -93,7 +99,9 @@ export class UserControllerService extends BaseService {
   /**
    * Create a new user.
    *
-   *
+   * **Required Permissions:**
+   * - `create:user`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `create$Response()` instead.
@@ -112,7 +120,9 @@ export class UserControllerService extends BaseService {
   /**
    * Get user by ID.
    *
-   *
+   * **Required Permissions:**
+   * - `read:user`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getUser()` instead.
@@ -126,7 +136,9 @@ export class UserControllerService extends BaseService {
   /**
    * Get user by ID.
    *
-   *
+   * **Required Permissions:**
+   * - `read:user`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getUser$Response()` instead.
@@ -145,7 +157,9 @@ export class UserControllerService extends BaseService {
   /**
    * Update user (admin update).
    *
-   *
+   * **Required Permissions:**
+   * - `update:user`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updateUser()` instead.
@@ -159,7 +173,9 @@ export class UserControllerService extends BaseService {
   /**
    * Update user (admin update).
    *
-   *
+   * **Required Permissions:**
+   * - `update:user`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `updateUser$Response()` instead.
@@ -277,7 +293,9 @@ export class UserControllerService extends BaseService {
   /**
    * Assign Role to user.
    *
-   *
+   * **Required Permissions:**
+   * - `update:user_role`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `assignRole()` instead.
@@ -291,7 +309,9 @@ export class UserControllerService extends BaseService {
   /**
    * Assign Role to user.
    *
-   *
+   * **Required Permissions:**
+   * - `update:user_role`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `assignRole$Response()` instead.
@@ -310,7 +330,9 @@ export class UserControllerService extends BaseService {
   /**
    * Assign Role to user.
    *
-   *
+   * **Required Permissions:**
+   * - `update:user_role`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `assignRoleToUser()` instead.
@@ -324,7 +346,9 @@ export class UserControllerService extends BaseService {
   /**
    * Assign Role to user.
    *
-   *
+   * **Required Permissions:**
+   * - `update:user_role`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `assignRoleToUser$Response()` instead.

@@ -36,7 +36,9 @@ export class EarningControllerService extends BaseService {
   /**
    * Create new earning.
    *
-   * Authorities : 'create:earning'
+   * **Required Permissions:**
+   * - `create:earning`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createEarning()` instead.
@@ -50,7 +52,9 @@ export class EarningControllerService extends BaseService {
   /**
    * Create new earning.
    *
-   * Authorities : 'create:earning'
+   * **Required Permissions:**
+   * - `create:earning`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `createEarning$Response()` instead.
@@ -69,7 +73,9 @@ export class EarningControllerService extends BaseService {
   /**
    * Update earning details.
    *
-   * Authorities : 'update:earning'
+   * **Required Permissions:**
+   * - `update:earning`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updateEarning()` instead.
@@ -83,7 +89,9 @@ export class EarningControllerService extends BaseService {
   /**
    * Update earning details.
    *
-   * Authorities : 'update:earning'
+   * **Required Permissions:**
+   * - `update:earning`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `updateEarning$Response()` instead.
@@ -102,7 +110,9 @@ export class EarningControllerService extends BaseService {
   /**
    * List all earnings.
    *
-   * Authorities : 'read:earning'
+   * **Required Permissions:**
+   * - `read:earning`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `listEarnings()` instead.
@@ -116,7 +126,9 @@ export class EarningControllerService extends BaseService {
   /**
    * List all earnings.
    *
-   * Authorities : 'read:earning'
+   * **Required Permissions:**
+   * - `read:earning`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `listEarnings$Response()` instead.
@@ -168,7 +180,9 @@ export class EarningControllerService extends BaseService {
   /**
    * Get earning by ID.
    *
-   * Authorities : 'read:earning'
+   * **Required Permissions:**
+   * - `read:earning`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getEarningById()` instead.
@@ -182,7 +196,9 @@ export class EarningControllerService extends BaseService {
   /**
    * Get earning by ID.
    *
-   * Authorities : 'read:earning'
+   * **Required Permissions:**
+   * - `read:earning`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getEarningById$Response()` instead.

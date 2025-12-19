@@ -17,6 +17,8 @@ import { finalizeExpense } from '../fn/expense-controller/finalize-expense';
 import { FinalizeExpense$Params } from '../fn/expense-controller/finalize-expense';
 import { getExpenseById } from '../fn/expense-controller/get-expense-by-id';
 import { GetExpenseById$Params } from '../fn/expense-controller/get-expense-by-id';
+import { getSettlementSummary } from '../fn/expense-controller/get-settlement-summary';
+import { GetSettlementSummary$Params } from '../fn/expense-controller/get-settlement-summary';
 import { listExpenses } from '../fn/expense-controller/list-expenses';
 import { ListExpenses$Params } from '../fn/expense-controller/list-expenses';
 import { listSelfExpenses } from '../fn/expense-controller/list-self-expenses';
@@ -25,6 +27,7 @@ import { settleExpense } from '../fn/expense-controller/settle-expense';
 import { SettleExpense$Params } from '../fn/expense-controller/settle-expense';
 import { SuccessResponseExpenseDetailDto } from '../models/success-response-expense-detail-dto';
 import { SuccessResponsePagedResultExpenseDetailDto } from '../models/success-response-paged-result-expense-detail-dto';
+import { SuccessResponseSettlementSummaryDto } from '../models/success-response-settlement-summary-dto';
 import { updateExpense } from '../fn/expense-controller/update-expense';
 import { UpdateExpense$Params } from '../fn/expense-controller/update-expense';
 
@@ -40,7 +43,9 @@ export class ExpenseControllerService extends BaseService {
   /**
    * Create new expense.
    *
-   * Authorities : 'create:expense'
+   * **Required Permissions:**
+   * - `create:expense`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createExpense()` instead.
@@ -54,7 +59,9 @@ export class ExpenseControllerService extends BaseService {
   /**
    * Create new expense.
    *
-   * Authorities : 'create:expense'
+   * **Required Permissions:**
+   * - `create:expense`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `createExpense$Response()` instead.
@@ -73,7 +80,9 @@ export class ExpenseControllerService extends BaseService {
   /**
    * Update expense details.
    *
-   * Authorities : 'update:expense'
+   * **Required Permissions:**
+   * - `update:expense`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updateExpense()` instead.
@@ -87,7 +96,9 @@ export class ExpenseControllerService extends BaseService {
   /**
    * Update expense details.
    *
-   * Authorities : 'update:expense'
+   * **Required Permissions:**
+   * - `update:expense`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `updateExpense$Response()` instead.
@@ -106,7 +117,9 @@ export class ExpenseControllerService extends BaseService {
   /**
    * Finalize expense.
    *
-   * Authorities : 'create:expense_final'
+   * **Required Permissions:**
+   * - `create:expense_final`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `finalizeExpense()` instead.
@@ -120,7 +133,9 @@ export class ExpenseControllerService extends BaseService {
   /**
    * Finalize expense.
    *
-   * Authorities : 'create:expense_final'
+   * **Required Permissions:**
+   * - `create:expense_final`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `finalizeExpense$Response()` instead.
@@ -139,7 +154,9 @@ export class ExpenseControllerService extends BaseService {
   /**
    * Settle expense.
    *
-   * Authorities : 'create:expense_settle'
+   * **Required Permissions:**
+   * - `create:expense_settle`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `settleExpense()` instead.
@@ -153,7 +170,9 @@ export class ExpenseControllerService extends BaseService {
   /**
    * Settle expense.
    *
-   * Authorities : 'create:expense_settle'
+   * **Required Permissions:**
+   * - `create:expense_settle`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `settleExpense$Response()` instead.
@@ -172,7 +191,9 @@ export class ExpenseControllerService extends BaseService {
   /**
    * List all expenses.
    *
-   * Authorities : 'read:expense'
+   * **Required Permissions:**
+   * - `read:expenses`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `listExpenses()` instead.
@@ -186,7 +207,9 @@ export class ExpenseControllerService extends BaseService {
   /**
    * List all expenses.
    *
-   * Authorities : 'read:expense'
+   * **Required Permissions:**
+   * - `read:expenses`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `listExpenses$Response()` instead.
@@ -205,7 +228,7 @@ export class ExpenseControllerService extends BaseService {
   /**
    * List own expenses.
    *
-   * Authorities : 'read:expense'
+   *
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `listSelfExpenses()` instead.
@@ -219,7 +242,7 @@ export class ExpenseControllerService extends BaseService {
   /**
    * List own expenses.
    *
-   * Authorities : 'read:expense'
+   *
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `listSelfExpenses$Response()` instead.
@@ -238,7 +261,9 @@ export class ExpenseControllerService extends BaseService {
   /**
    * Get expense by ID.
    *
-   * Authorities : 'read:expense'
+   * **Required Permissions:**
+   * - `read:expenses`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getExpenseById()` instead.
@@ -252,7 +277,9 @@ export class ExpenseControllerService extends BaseService {
   /**
    * Get expense by ID.
    *
-   * Authorities : 'read:expense'
+   * **Required Permissions:**
+   * - `read:expenses`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getExpenseById$Response()` instead.
@@ -262,6 +289,43 @@ export class ExpenseControllerService extends BaseService {
   getExpenseById(params: GetExpenseById$Params, context?: HttpContext): Observable<SuccessResponseExpenseDetailDto> {
     return this.getExpenseById$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseExpenseDetailDto>): SuccessResponseExpenseDetailDto => r.body)
+    );
+  }
+
+  /** Path part for operation `getSettlementSummary()` */
+  static readonly GetSettlementSummaryPath = '/api/expense/{id}/settlement-summary';
+
+  /**
+   * Get settlement summary for user.
+   *
+   * **Required Permissions:**
+   * - `read:expenses`
+   * _(Any of these permissions)_
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getSettlementSummary()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getSettlementSummary$Response(params: GetSettlementSummary$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseSettlementSummaryDto>> {
+    return getSettlementSummary(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get settlement summary for user.
+   *
+   * **Required Permissions:**
+   * - `read:expenses`
+   * _(Any of these permissions)_
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getSettlementSummary$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getSettlementSummary(params: GetSettlementSummary$Params, context?: HttpContext): Observable<SuccessResponseSettlementSummaryDto> {
+    return this.getSettlementSummary$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseSettlementSummaryDto>): SuccessResponseSettlementSummaryDto => r.body)
     );
   }
 

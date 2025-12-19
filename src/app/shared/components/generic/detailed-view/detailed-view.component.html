@@ -13,8 +13,10 @@
                     </span>
                     <span class="tracking-wide">{{view.section_name}}</span>
                 </div>
-                <div class="my-2 py-2 text-gray-700" *ngIf="view.alertData && view.alertFlag">
-                    <app-alert [alertData]="view.alertData"></app-alert>
+                <div class="my-2 py-2 space-y-2 text-gray-700" *ngIf="view.alerts?.length">
+                    <ng-container *ngFor="let alert of view.alerts">
+                        <app-alert *ngIf="alert.flag" [alertData]="alert.data"></app-alert>
+                    </ng-container>
                 </div>
                 <div class="text-gray-700 my-2 mx-4" *ngIf="view.section_type == 'key_value'">
                     <div class="grid md:grid-cols-2 text-sm">

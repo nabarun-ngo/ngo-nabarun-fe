@@ -40,7 +40,9 @@ export class WorkflowControllerService extends BaseService {
   /**
    * Start a new workflow instance.
    *
-   *
+   * **Required Permissions:**
+   * - `create:request`
+   * _(All permissions required)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `startWorkflow()` instead.
@@ -54,7 +56,9 @@ export class WorkflowControllerService extends BaseService {
   /**
    * Start a new workflow instance.
    *
-   *
+   * **Required Permissions:**
+   * - `create:request`
+   * _(All permissions required)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `startWorkflow$Response()` instead.
@@ -73,7 +77,9 @@ export class WorkflowControllerService extends BaseService {
   /**
    * Update a workflow task.
    *
-   *
+   * **Required Permissions:**
+   * - `update:work`
+   * _(All permissions required)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updateTask()` instead.
@@ -87,7 +93,9 @@ export class WorkflowControllerService extends BaseService {
   /**
    * Update a workflow task.
    *
-   *
+   * **Required Permissions:**
+   * - `update:work`
+   * _(All permissions required)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `updateTask$Response()` instead.
@@ -106,7 +114,9 @@ export class WorkflowControllerService extends BaseService {
   /**
    * Get workflow instance by ID.
    *
-   *
+   * **Required Permissions:**
+   * - `read:request`
+   * _(All permissions required)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getInstance()` instead.
@@ -120,7 +130,9 @@ export class WorkflowControllerService extends BaseService {
   /**
    * Get workflow instance by ID.
    *
-   *
+   * **Required Permissions:**
+   * - `read:request`
+   * _(All permissions required)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getInstance$Response()` instead.
@@ -139,7 +151,9 @@ export class WorkflowControllerService extends BaseService {
   /**
    * List workflow instances.
    *
-   *
+   * **Required Permissions:**
+   * - `read:request`
+   * _(All permissions required)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `listInstancesForMe()` instead.
@@ -153,7 +167,9 @@ export class WorkflowControllerService extends BaseService {
   /**
    * List workflow instances.
    *
-   *
+   * **Required Permissions:**
+   * - `read:request`
+   * _(All permissions required)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `listInstancesForMe$Response()` instead.
@@ -172,7 +188,9 @@ export class WorkflowControllerService extends BaseService {
   /**
    * List workflow instances.
    *
-   *
+   * **Required Permissions:**
+   * - `read:request`
+   * _(All permissions required)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `listInstancesByMe()` instead.
@@ -186,7 +204,9 @@ export class WorkflowControllerService extends BaseService {
   /**
    * List workflow instances.
    *
-   *
+   * **Required Permissions:**
+   * - `read:request`
+   * _(All permissions required)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `listInstancesByMe$Response()` instead.
@@ -205,7 +225,9 @@ export class WorkflowControllerService extends BaseService {
   /**
    * List workflow tasks.
    *
-   *
+   * **Required Permissions:**
+   * - `read:work`
+   * _(All permissions required)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `listTasks()` instead.
@@ -219,7 +241,9 @@ export class WorkflowControllerService extends BaseService {
   /**
    * List workflow tasks.
    *
-   *
+   * **Required Permissions:**
+   * - `read:work`
+   * _(All permissions required)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `listTasks$Response()` instead.

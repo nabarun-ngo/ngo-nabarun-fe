@@ -8,7 +8,7 @@ import {
 import { Account, Expense, PagedExpenses } from '../../model';
 import { AccordionButton, AccordionCell } from 'src/app/shared/model/accordion-list.model';
 import { AppDialog } from 'src/app/core/constant/app-dialog.const';
-import { manageExpenseHighLevelView, manageExpenseTabHeader, rejectionModal } from '../../fields/expense.field';
+import { manageExpenseHighLevelView, manageExpenseTabHeader, rejectionModal, settlementSummary } from '../../fields/expense.field';
 import { SearchAndAdvancedSearchFormComponent } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search-form.component';
 import { MatDialogRef } from '@angular/material/dialog';
 import { SCOPE } from 'src/app/core/constant/auth-scope.const';
@@ -17,6 +17,7 @@ import { removeNullFields } from 'src/app/core/service/utilities.service';
 import { ExpenseDefaultValue } from '../../finance.const';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { User } from 'src/app/feature/member/models/member.model';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-manage-expense-tab',
@@ -124,6 +125,15 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
       });
     }
     return buttons;
+  }
+
+  protected override onAccordionOpen($event: { rowIndex: number; }): void {
+    const expense = this.itemList[$event.rowIndex];
+    if (expense.status == 'FINALIZED') {
+      this.accountService.getExpenseSummary(expense.id!).subscribe((data) => {
+        this.addSectionInAccordion(settlementSummary(data, expense), $event.rowIndex);
+      });
+    }
   }
 
   override handlePageEvent($event: PageEvent): void {

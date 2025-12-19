@@ -7,8 +7,8 @@ import { UpiDetailDto } from '../models/upi-detail-dto';
 export interface AccountDetailDto {
   accountHolder?: string;
   accountHolderName?: string;
-  accountStatus: 'ACTIVE' | 'INACTIVE' | 'BLOCKED';
-  accountType: 'PRINCIPAL' | 'GENERAL' | 'DONATION' | 'PUBLIC_DONATION';
+  accountStatus: 'ACTIVE' | 'INACTIVE' | 'BLOCKED' | 'CLOSED';
+  accountType: 'PRINCIPAL' | 'GENERAL' | 'DONATION' | 'PUBLIC_DONATION' | 'EXPENSE';
   activatedOn?: string;
   bankDetail?: BankDetailDto;
   currentBalance: number;

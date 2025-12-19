@@ -91,11 +91,18 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
     data: Expense,
     options?: { [key: string]: any }
   ): DetailedView[] {
+    console.log(this.userIdentity.loggedInUser)
     let isCreate = options && options['create'];
     var expenseList = expenseListSection(data, isCreate);
     this.handleExpenseItemEvents(expenseList, isCreate);
     return [
-      expenseDetailSection(data, isCreate, this.isAdmin),
+      expenseDetailSection({
+        ...data,
+        paidBy: {
+          id: this.userIdentity.loggedInUser.profile_id,
+          fullName: this.userIdentity.loggedInUser.name,
+        },
+      }, isCreate, this.isAdmin),
       expenseList,
       expenseDocumentSection([], isCreate),
     ];
@@ -119,6 +126,10 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
     }
     let buttons = [];
     if (data.status == 'DRAFT') {
+      buttons.push({
+        button_id: 'UPDATE_EXPENSE',
+        button_name: 'Update',
+      });
       buttons.push({
         button_id: 'SUBMIT_EXPENSE',
         button_name: 'Submit',
@@ -162,17 +173,6 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
           this.removeSectionField('expense_detail', 'expense_event', 0, true);
         }
       });
-    this.getSectionField(
-      'expense_detail',
-      'expense_borne_by',
-      0,
-      true
-    ).form_input!.selectList = [
-        {
-          displayValue: this.userIdentity.loggedInUser.name,
-          key: this.userIdentity.loggedInUser.profile_id,
-        },
-      ];
     this.users = [
       {
         id: this.userIdentity.loggedInUser.profile_id,
@@ -200,7 +200,6 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
           $event.rowIndex,
           $event.buttonId == 'CREATE_CONFIRM' ? true : false
         )?.itemList as ExpenseItem[];
-        //console.log(expenseItems);
         expenseForm?.markAllAsTouched();
         if (expenseItems.length == 0) {
           this.modalService.openNotificationModal(
@@ -232,7 +231,10 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
             let id = this.itemList[$event.rowIndex].id;
             let existingExpense = this.itemList[$event.rowIndex];
             this.accountService
-              .updateExpense(id!, existingExpense)
+              .updateExpense(id!, {
+                ...existingExpense,
+                status: $event.buttonId == 'SUBMIT_EXPENSE' ? 'SUBMITTED' : undefined
+              })
               .subscribe((d) => {
                 this.hideForm($event.rowIndex);
                 this.updateContentRow(d, $event.rowIndex);

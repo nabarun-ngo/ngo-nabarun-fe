@@ -46,7 +46,9 @@ export class DonationControllerService extends BaseService {
   /**
    * Create new donation.
    *
-   * Authorities : 'create:donation'
+   * **Required Permissions:**
+   * - `create:donation`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createDonation()` instead.
@@ -60,7 +62,9 @@ export class DonationControllerService extends BaseService {
   /**
    * Create new donation.
    *
-   * Authorities : 'create:donation'
+   * **Required Permissions:**
+   * - `create:donation`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `createDonation$Response()` instead.
@@ -79,7 +83,9 @@ export class DonationControllerService extends BaseService {
   /**
    * Update donation details.
    *
-   * Authorities : 'update:donation'
+   * **Required Permissions:**
+   * - `update:donation`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `update()` instead.
@@ -93,7 +99,9 @@ export class DonationControllerService extends BaseService {
   /**
    * Update donation details.
    *
-   * Authorities : 'update:donation'
+   * **Required Permissions:**
+   * - `update:donation`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `update$Response()` instead.
@@ -145,7 +153,9 @@ export class DonationControllerService extends BaseService {
   /**
    * Get donations by donor.
    *
-   * Authorities : 'read:user_donations'
+   * **Required Permissions:**
+   * - `read:user_donations`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getMemberDonations()` instead.
@@ -159,7 +169,9 @@ export class DonationControllerService extends BaseService {
   /**
    * Get donations by donor.
    *
-   * Authorities : 'read:user_donations'
+   * **Required Permissions:**
+   * - `read:user_donations`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getMemberDonations$Response()` instead.
@@ -178,7 +190,7 @@ export class DonationControllerService extends BaseService {
   /**
    * Get donations by donor.
    *
-   * Authorities : ''
+   *
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getDonationSummary()` instead.
@@ -192,7 +204,7 @@ export class DonationControllerService extends BaseService {
   /**
    * Get donations by donor.
    *
-   * Authorities : ''
+   *
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getDonationSummary$Response()` instead.
@@ -244,7 +256,9 @@ export class DonationControllerService extends BaseService {
   /**
    * List all donations.
    *
-   * Authorities : 'read:donation'
+   * **Required Permissions:**
+   * - `read:donations`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `list()` instead.
@@ -258,7 +272,9 @@ export class DonationControllerService extends BaseService {
   /**
    * List all donations.
    *
-   * Authorities : 'read:donation'
+   * **Required Permissions:**
+   * - `read:donations`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `list$Response()` instead.
@@ -277,7 +293,9 @@ export class DonationControllerService extends BaseService {
   /**
    * List guest donations.
    *
-   * Authorities : 'read:donation_guest'
+   * **Required Permissions:**
+   * - `read:donation_guest`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `listGuestDonations()` instead.
@@ -291,7 +309,9 @@ export class DonationControllerService extends BaseService {
   /**
    * List guest donations.
    *
-   * Authorities : 'read:donation_guest'
+   * **Required Permissions:**
+   * - `read:donation_guest`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `listGuestDonations$Response()` instead.

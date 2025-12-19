@@ -537,6 +537,7 @@ export class AccountService {
       expenseDate: expense.expenseDate,
       expenseItems: expense.expenseItems,
       remarks: expense.remarks,
+      status: expense.status
     };
     return this.expenseController
       .updateExpense({ id, body: expenseDetailDto })
@@ -597,6 +598,12 @@ export class AccountService {
       return this.dmsController.uploadFile({ body }).pipe(map(d => d.responsePayload));
     });
     return forkJoin(requests);
+  }
+
+  getExpenseSummary(id: string) {
+    return this.expenseController.getSettlementSummary({
+      id: id
+    }).pipe(map((d) => d.responsePayload));
   }
 
   getExpenseDocuments(id: string) {

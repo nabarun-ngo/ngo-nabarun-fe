@@ -8,6 +8,7 @@ import {
   AccordionCell,
 } from 'src/app/shared/model/accordion-list.model';
 import {
+  AlertList,
   DetailedView,
   DetailedViewField,
 } from 'src/app/shared/model/detailed-view.model';
@@ -17,6 +18,7 @@ import { ExpenseDefaultValue, expenseTab } from '../finance.const';
 import { Expense, ExpenseItem } from '../model';
 import { Doc } from 'src/app/shared/model/document.model';
 import { KeyValue } from 'src/app/shared/model/key-value.model';
+import { SettlementSummaryDto } from 'src/app/core/api-client/models';
 
 export const expenseTabHeader = [
   {
@@ -113,6 +115,8 @@ export const expenseDetailSection = (
   isCreate: boolean = false,
   isAdminView: boolean = false
 ) => {
+  console.log(m)
+
   return {
     section_name: 'Expense Detail',
     section_type: 'key_value',
@@ -172,7 +176,7 @@ export const expenseDetailSection = (
       {
         field_name: 'Paid By',
         field_value: m?.paidBy?.id,
-        editable: m?.status != 'FINALIZED' && (isCreate || isAdminView),
+        editable: m?.status != 'FINALIZED' && (isCreate && isAdminView),
         field_display_value: m?.paidBy?.fullName,
         field_html_id: 'expense_borne_by',
         form_control_name: 'expense_by',
@@ -551,5 +555,79 @@ export const expenseSearchInput = (
     })
   }
   return model;
+};
+
+export const settlementSummary = (
+  data: SettlementSummaryDto,
+  expense: Expense
+) => {
+  const alerts: AlertList[] = [];
+
+  // 1️⃣ No settlement required
+  if (!data.needsReimbursement) {
+    alerts.push({
+      data: {
+        alertType: 'success',
+        message: `
+No settlement is required for this expense.
+
+All expenses are already balanced and no further action is needed.
+        `.trim(),
+      },
+      flag: true,
+    });
+  }
+
+  // 2️⃣ Settlement required – action alert
+  if (data.needsReimbursement) {
+    alerts.push({
+      data: {
+        alertType: 'warning',
+        message: `
+Action Required: Record a settlement of ₹${data.amountToReimburse}.
+        `.trim(),
+      },
+      flag: true,
+    });
+  }
+
+  // 3️⃣ Settlement account missing
+  if (data.needsReimbursement && data.createAccount) {
+    alerts.push({
+      data: {
+        alertType: 'info',
+        message: `
+No settlement account is selected.
+
+Please create or select a settlement account to proceed.
+        `.trim(),
+      },
+      flag: true,
+    });
+  }
+
+  // 4️⃣ Important clarification (always shown when settlement is required)
+  if (data.needsReimbursement) {
+    alerts.push({
+      data: {
+        alertType: 'info',
+        message: `
+Important:
+This system will NOT transfer money to any account.
+It only records the settlement amount for bookkeeping purposes.
+        `.trim(),
+      },
+      flag: true,
+    });
+  }
+
+  return {
+    section_name: 'Settlement Summary',
+    section_type: 'custom',
+    section_html_id: 'settlement_summary',
+    section_form: new FormGroup({}),
+    alertFlag: alerts.length > 0,
+    alerts,
+  } as DetailedView;
 };
 
