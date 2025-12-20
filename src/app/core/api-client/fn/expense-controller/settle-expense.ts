@@ -12,12 +12,14 @@ import { SuccessResponseExpenseDetailDto } from '../../models/success-response-e
 
 export interface SettleExpense$Params {
   id: string;
+  accountId: string;
 }
 
 export function settleExpense(http: HttpClient, rootUrl: string, params: SettleExpense$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseExpenseDetailDto>> {
   const rb = new RequestBuilder(rootUrl, settleExpense.PATH, 'post');
   if (params) {
     rb.path('id', params.id, {});
+    rb.query('accountId', params.accountId, {});
   }
 
   return http.request(

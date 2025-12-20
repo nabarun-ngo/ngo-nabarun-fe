@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Expense, ExpenseItem, PagedExpenses } from '../../model';
 import { Accordion } from 'src/app/shared/utils/accordion';
@@ -10,6 +10,7 @@ import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import {
   expenseDetailSection,
   expenseDocumentSection,
+  expenseEditableTable,
   expenseEventField,
   expenseHighLevelView,
   expenseListSection,
@@ -24,7 +25,6 @@ import { UserIdentityService } from 'src/app/core/service/user-identity.service'
 import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
 import { removeNullFields } from 'src/app/core/service/utilities.service';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
-import { mapExpenseDtoToExpense } from '../../model';
 import { User } from 'src/app/feature/member/models/member.model';
 import { KeyValue } from 'src/app/shared/model/key-value.model';
 
@@ -91,7 +91,6 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
     data: Expense,
     options?: { [key: string]: any }
   ): DetailedView[] {
-    console.log(this.userIdentity.loggedInUser)
     let isCreate = options && options['create'];
     var expenseList = expenseListSection(data, isCreate);
     this.handleExpenseItemEvents(expenseList, isCreate);
@@ -104,6 +103,7 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
         },
       }, isCreate, this.isAdmin),
       expenseList,
+      //expenseEditableTable(data.expenseItems || []),
     ];
   }
 
@@ -193,6 +193,7 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
           $event.buttonId == 'CREATE_CONFIRM' ? true : false
         )?.itemList as ExpenseItem[];
         expenseForm?.markAllAsTouched();
+        const expenseDocuments = this.getSectionDocuments('expense_doc_list', $event.rowIndex, $event.buttonId == 'CREATE_CONFIRM' ? true : false);
         if (expenseItems.length == 0) {
           this.modalService.openNotificationModal(
             AppDialog.err_min_1_expense,
@@ -204,33 +205,56 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
             ? expenseForm?.value.expense_by
             : this.userIdentity.loggedInUser.profile_id;
 
-          let expenseDetail: Expense = {
-            description: expenseForm.value.description,
-            name: expenseForm.value.name,
-            expenseRefType: expenseForm.value.expense_source as any,
-            expenseRefId: expenseForm.value.expense_event,
-            expenseDate: expenseForm.value.expenseDate,
-            expenseItems: expenseItems,
-            payerId: payerId
-          };
           if ($event.buttonId == 'CREATE_CONFIRM') {
-            this.accountService.createExpenses(expenseDetail).subscribe((d) => {
+            this.accountService.createExpenses({
+              description: expenseForm.value.description,
+              name: expenseForm.value.name,
+              expenseRefType: expenseForm.value.expense_source,
+              expenseRefId: expenseForm.value.expense_event,
+              expenseDate: expenseForm.value.expenseDate,
+              expenseItems: expenseItems,
+              payerId: payerId
+            }).subscribe((d) => {
               this.hideForm(0, true);
               this.addContentRow(d!, true);
             });
           } else {
+            console.log($event.buttonId);
             // For updates, we need to get the existing expense and merge changes
             let id = this.itemList[$event.rowIndex].id;
             let existingExpense = this.itemList[$event.rowIndex];
-            this.accountService
-              .updateExpense(id!, {
-                ...existingExpense,
-                status: $event.buttonId == 'SUBMIT_EXPENSE' ? 'SUBMITTED' : undefined
-              })
-              .subscribe((d) => {
-                this.hideForm($event.rowIndex);
-                this.updateContentRow(d, $event.rowIndex);
+            if ($event.buttonId == 'SUBMIT_EXPENSE') {
+              this.modalService.openNotificationModal(
+                {
+                  title: 'Submit Expense',
+                  description: 'Are you sure you want to submit this expense?',
+                },
+                'confirmation',
+                'warning'
+              ).onAccept$.subscribe(() => {
+                this.accountService
+                  .updateExpense(id!, {
+                    ...existingExpense,
+                    status: 'SUBMITTED'
+                  })
+                  .subscribe((d) => {
+                    this.hideForm($event.rowIndex);
+                    this.updateContentRow(d, $event.rowIndex);
+                    this.accountService.uploadDocuments(expenseDocuments ?? [], id!, 'EXPENSE').subscribe();
+                  });
               });
+            } else {
+              this.accountService
+                .updateExpense(id!, {
+                  ...existingExpense, status: undefined
+                })
+                .subscribe((d) => {
+                  this.hideForm($event.rowIndex);
+                  this.updateContentRow(d, $event.rowIndex);
+                  this.accountService.uploadDocuments(expenseDocuments ?? [], id!, 'EXPENSE').subscribe();
+                });
+            }
+
           }
         }
         break;

@@ -1,11 +1,11 @@
 import { Paginator } from "src/app/shared/utils/paginator";
 import { AccordionButton, AccordionCell, AccordionData, AccordionList, AccordionRow } from "../model/accordion-list.model";
 import { DetailedView, DetailedViewField } from "../model/detailed-view.model";
-import { KeyValue } from "src/app/core/api-client/models";
 import { FormControl } from "@angular/forms";
 import { BehaviorSubject } from "rxjs";
 import { FileUpload } from "../components/generic/file-upload/file-upload.component";
 import { AfterContentInit, AfterViewInit, Component, Input, OnInit } from "@angular/core";
+import { KeyValue } from "../model/key-value.model";
 
 @Component({
   template: 'app-base-accordion',
@@ -88,8 +88,27 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
     this.accordionList.refData = data;
   }
 
-  getRefData() {
-    return this.accordionList.refData;
+  getRefData(options?: { isActive?: boolean }) {
+    const refData = this.accordionList.refData;
+    if (!refData || !options?.isActive) {
+      return refData;
+    }
+
+    const filtered: { [name: string]: KeyValue[] } = {};
+
+    Object.keys(refData).forEach(key => {
+      filtered[key] = refData[key].filter(e => e.active);
+    });
+
+    return filtered;
+  }
+
+  getRefValue(type: string, key: string) {
+    const refData = this.accordionList.refData;
+    if (!refData) {
+      return key;
+    }
+    return refData[type].find(e => e.key == key)?.displayValue;
   }
 
   /**
@@ -292,6 +311,7 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
       m.show_form = true;
       m.hide_section = false;
       m.content?.map(m => {
+        //m.hide_field = false;
         return m;
       })
       if (m.section_type == 'doc_list') {
@@ -300,6 +320,7 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
       }
       return m;
     });
+    ////console.log(this.accordionList.contents)
     this.functionButtons = [];
     this.accordionList.contents[rowIndex].buttons?.forEach(b => {
       this.functionButtons.push(b)

@@ -17,7 +17,7 @@ import {
   upiDetailSection,
 } from '../../fields/account.field';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AccountDefaultValue } from '../../finance.const';
+import { AccountConstant, AccountDefaultValue } from '../../finance.const';
 import { AccountService } from '../../service/account.service';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { ModalService } from 'src/app/core/service/modal.service';
@@ -102,7 +102,7 @@ export class MyAccountsTabComponent extends Accordion<Account> implements TabCom
   ): DetailedView[] {
     let isCreate = options && options['create'];
     return [
-      accountDetailSection(data, this.getRefData()!, isCreate),
+      accountDetailSection(data, this.getRefData({ isActive: true })!, isCreate),
       bankDetailSection(data),
       upiDetailSection(data),
     ];
@@ -207,7 +207,7 @@ export class MyAccountsTabComponent extends Accordion<Account> implements TabCom
       let account = this.itemList[rowIndex];
       let message = {
         title: 'Confirm',
-        description: `I confirm that I have received ${money_in_acc.value.amount} in my account ${account.id}`,
+        description: `I confirm that I have received Rs.${money_in_acc.value.amount} in my account ${account.id}`,
       };
       let modal = this.modalService.openNotificationModal(
         message,
@@ -266,7 +266,7 @@ export class MyAccountsTabComponent extends Accordion<Account> implements TabCom
       let account = this.itemList[rowIndex];
       let message = {
         title: 'Confirm',
-        description: `I confirm that I have transferred ${transfer_form.value.amount} to account ${transfer_form.value.transferTo} and uploaded related document.`,
+        description: `I confirm that I have transferred Rs.${transfer_form.value.amount} to account ${transfer_form.value.transferTo} and uploaded related document.`,
       };
       let modal = this.modalService.openNotificationModal(
         message,
@@ -296,9 +296,10 @@ export class MyAccountsTabComponent extends Accordion<Account> implements TabCom
       )?.form_input?.selectList;
       selectList?.splice(0);
       data?.content?.forEach((element) => {
+        let accountType = this.getRefValue(AccountConstant.refDataKey.accountType, element.accountType);
         let val = {
           key: element.id,
-          displayValue: element.id + '  (' + (element.accountHolderName || 'Unknown') + ')',
+          displayValue: `${accountType} - ${element.id} (${element.accountHolderName || 'Unknown'})`,
         } as KeyValue;
         selectList?.push(val);
       });

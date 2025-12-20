@@ -21,7 +21,7 @@ import { KeyValue } from 'src/app/shared/model/key-value.model';
 })
 export class ManageExpenseTabComponent extends MyExpensesTabComponent {
   protected override isAdmin: boolean = true;
-  protected accounts: Account[] = [];
+  private accounts: Record<string, Account | undefined> = {};
 
   protected permissions!: {
     canCreateExpense: boolean;
@@ -130,13 +130,17 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
         status: ['ACTIVE'],
         accountHolderId: expense.paidBy?.id,
       }).subscribe((data) => {
-        this.addSectionInAccordion(settlementSummary(expense, data?.content), $event.rowIndex);
+        this.accounts[expense.id!] = this.resolveAccount(data?.content);
+        this.addSectionInAccordion(settlementSummary(expense, this.accounts[expense.id!]), $event.rowIndex);
         super.onAccordionOpen($event);
       });
     }
     else {
       super.onAccordionOpen($event);
     }
+  }
+  private resolveAccount(content: Account[] | undefined): Account | undefined {
+    return content?.[0];
   }
 
   override handlePageEvent($event: PageEvent): void {
@@ -167,67 +171,6 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
     let service;
     let dialog: MatDialogRef<SearchAndAdvancedSearchFormComponent, any>;
     switch ($event.buttonId) {
-      case 'CONFIRM':
-        if (this.activeButtonId == 'SETTLE_EXPENSE') {
-          let documents = this.getSectionDocuments(
-            'expense_doc_list',
-            $event.rowIndex
-          );
-          let expense_form = this.getSectionForm(
-            'expense_detail',
-            $event.rowIndex
-          )!;
-          expense_form?.markAllAsTouched();
-          //console.log(documents);
-          if (documents?.length == 0) {
-            this.modalService.openNotificationModal(
-              AppDialog.err_min_1_doc,
-              'notification',
-              'error'
-            );
-          } else if (expense_form?.valid) {
-            let itemData = this.itemList[$event.rowIndex];
-            let mesage = {
-              title: 'Confirm Payment',
-              description: `I confirm that I have paid <b>INR ${itemData.finalAmount}</b> to <b>${itemData.paidBy?.fullName}</b> and have uploaded the relevant payment documents. I also confirm that the payee has acknowledged receipt of the payments.`,
-            };
-            this.modalService
-              .openNotificationModal(mesage, 'confirmation', 'warning')
-              .onAccept$.subscribe((d) => {
-                let sett_acc = this.accounts.find(
-                  (f) => f.id == expense_form?.value.settlement_acc
-                );
-
-                this.accountService
-                  .updateExpense(itemData.id!, { status: 'SETTLED' })
-                  .subscribe((s) => {
-                    this.accountService
-                      .uploadDocuments(documents?.map((m) => {
-                        const detail = m.detail as any;
-                        detail.documentMapping = [
-                          {
-                            docIndexId: itemData.id,
-                            docIndexType: 'EXPENSE',
-                          },
-                          {
-                            docIndexId: s?.txnNumber!,
-                            docIndexType: 'TRANSACTION',
-                          },
-                        ];
-                        return detail;
-                      })!)
-                      .subscribe(() => {
-                        this.updateContentRow(s, $event.rowIndex);
-                        this.hideForm($event.rowIndex);
-                        this.removeButton('SETTLE_EXPENSE', $event.rowIndex);
-                      });
-                  });
-              });
-          }
-        } else {
-          super.onClick($event);
-        }
-        break;
       case 'UPDATE_EXPENSE':
         this.accountService.fetchUsers().subscribe((data) => {
           this.users = data;
@@ -239,7 +182,7 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
             'expense_borne_by',
             $event.rowIndex
           ).form_input!.selectList = users;
-          this.showEditForm($event.rowIndex, ['expense_detail']);
+          this.showEditForm($event.rowIndex, ['expense_detail', 'expense_doc_list']);
         });
         break;
       case 'FINALIZE_EXPENSE':
@@ -257,25 +200,20 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
         break;
       case 'SETTLE_EXPENSE':
         this.activeButtonId = $event.buttonId;
-        this.accountService
-          .fetchAccounts({ type: ['PRINCIPAL'] })
-          .subscribe((data) => {
-            this.accounts = data?.content!;
-            let acc: KeyValue[] = data?.content?.map((m: any) => {
-              return {
-                key: m.id,
-                displayValue: `${m?.id} (${m?.accountHolderName})`,
-              } as KeyValue;
-            })!;
-            this.getSectionField(
-              'expense_detail',
-              'settlement_account',
-              $event.rowIndex
-            ).form_input!.selectList = acc;
-            this.showEditForm($event.rowIndex, [
-              'expense_detail',
-              'expense_doc_list',
-            ]);
+        let itemData = this.itemList[$event.rowIndex];
+        let mesage = {
+          title: 'Confirm Settlement',
+          description: `I confirm that all financial settlement has been made for this expense`,
+        };
+        this.modalService
+          .openNotificationModal(mesage, 'confirmation', 'warning')
+          .onAccept$.subscribe((d) => {
+            let sett_acc = this.accounts[itemData.id!]?.id;
+            this.accountService
+              .updateExpense(itemData.id!, { status: 'SETTLED', settlementAccountId: sett_acc })
+              .subscribe((s) => {
+                this.updateContentRow(s, $event.rowIndex);
+              });
           });
         break;
       case 'REJECT':

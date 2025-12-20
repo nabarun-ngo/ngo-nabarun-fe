@@ -28,6 +28,7 @@ export interface Expense {
   txnNumber?: string;
   remarks?: string;
   isDeligated?: boolean;
+  settlementAccountId?: string;
 
   // User references
   createdBy?: {

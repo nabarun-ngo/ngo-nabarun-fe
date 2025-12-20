@@ -1,6 +1,6 @@
 
 import { Injectable } from '@angular/core';
-import { forkJoin, map, of, Observable, switchMap } from 'rxjs';
+import { forkJoin, map, of, Observable, switchMap, catchError } from 'rxjs';
 import {
   AccountControllerService,
   UserControllerService,
@@ -206,7 +206,7 @@ export class AccountService {
 
     if (accountType === 'DONATION') {
       filter.roleCodes = ['ASSISTANT_CASHIER', 'CASHIER'];
-    } else if (accountType && accountType !== 'PUBLIC_DONATION') {
+    } else if (accountType == 'PRINCIPAL') {
       filter.roleCodes = ['TREASURER'];
     }
 
@@ -388,7 +388,12 @@ export class AccountService {
                 entityType: 'TRANSACTION'
               }]
             }
-          });
+          }).pipe(
+            catchError(err => {
+              console.error('File upload failed', err);
+              return of(null); // swallow error
+            })
+          )
         });
 
         return forkJoin(uploadRequests).pipe(map(() => transaction));
@@ -525,7 +530,7 @@ export class AccountService {
     }
     if (expense.status === 'SETTLED') {
       return this.expenseController
-        .settleExpense({ id })
+        .settleExpense({ id, accountId: expense.settlementAccountId! })
         .pipe(
           map((d) => d.responsePayload),
           map(mapExpenseDtoToExpense)
@@ -584,15 +589,15 @@ export class AccountService {
       .pipe(map((d) => d.responsePayload));
   }
 
-  uploadDocuments(documents: any[]) {
+  uploadDocuments(documents: FileUpload[], docIndexId: string, docIndexType: string) {
     const requests = documents.map(doc => {
       const body: DmsUploadDto = {
-        filename: doc.fileName,
-        fileBase64: doc.fileBase64,
-        contentType: doc.fileType,
+        filename: doc.detail.originalFileName,
+        fileBase64: doc.detail.base64Content,
+        contentType: doc.detail.contentType,
         documentMapping: [{
-          entityId: doc.docIndexId,
-          entityType: doc.docIndexType
+          entityId: docIndexId,
+          entityType: docIndexType as any
         }]
       };
       return this.dmsController.uploadFile({ body }).pipe(map(d => d.responsePayload));

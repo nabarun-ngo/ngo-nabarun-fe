@@ -1,0 +1,79 @@
+<div [formGroup]="view.section_form">
+
+    <!-- Global error -->
+    <!-- <div *ngIf="view.show_form && view.tableArray.invalid" class="text-red-600 text-sm mb-2">
+        Please fix errors in highlighted rows.
+    </div> -->
+
+    <table mat-table [dataSource]="tableArray.controls" [formArrayName]="view.editableTable!.formArrayName"
+        class="w-full">
+
+        <!-- Dynamic columns -->
+        <ng-container *ngFor="let col of view.editableTable!.columns" [matColumnDef]="col.columnDef">
+
+            <th mat-header-cell *matHeaderCellDef>
+                {{ col.header }}
+            </th>
+
+            <td mat-cell *matCellDef="let row; let i = index" [formGroupName]="i">
+
+                <!-- Read mode -->
+                <span *ngIf="!(col.editable && view.show_form)">
+                    {{ row.value[col.columnDef] || '-' }}
+                </span>
+
+                <!-- Edit mode -->
+                <app-universal-input *ngIf="col.editable && view.show_form" [formControlName]="col.columnDef"
+                    [inputModel]="col.inputModel">
+                </app-universal-input>
+
+                <!-- Field-level errors -->
+                <div class="text-red-500 text-xs mt-1" *ngIf="row.get(col.columnDef)?.invalid
+                 && (row.get(col.columnDef)?.touched || row.get(col.columnDef)?.dirty)">
+
+                    <div *ngFor="let err of row.get(col.columnDef)?.errors | keyvalue">
+                        {{ err.key }}
+                    </div>
+
+                </div>
+            </td>
+        </ng-container>
+
+        <!-- Actions -->
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let row; let i = index">
+                <button mat-icon-button color="warn" *ngIf="view.show_form && view.editableTable?.allowDeleteRow"
+                    (click)="removeRow(i)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </td>
+        </ng-container>
+
+        <!-- Header & rows -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+        <tr mat-row *matRowDef="let row; columns: displayedColumns" [class.bg-red-50]="row.invalid && view.show_form">
+        </tr>
+
+        <!-- Row-level errors -->
+        <tr *ngFor="let row of tableArray.controls" [hidden]="!row.errors || !(row.touched || row.dirty)">
+            <td [attr.colspan]="displayedColumns.length" class="bg-red-50 text-red-600 text-xs px-4 py-2">
+
+                <div *ngFor="let err of row.errors | keyvalue">
+                    {{ err.value }}
+                </div>
+
+            </td>
+        </tr>
+
+    </table>
+
+    <!-- Add row -->
+    <div class="flex justify-end mt-3" *ngIf="view.show_form">
+        <button mat-raised-button color="primary" *ngIf="view.editableTable?.allowAddRow" (click)="addRow()">
+            Add Row
+        </button>
+    </div>
+
+</div>

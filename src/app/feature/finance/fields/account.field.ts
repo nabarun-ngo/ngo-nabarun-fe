@@ -523,7 +523,7 @@ export const accountDocumentSection = (
       {
         data: {
           alertType: 'info',
-          message: 'Please upload the evidence of the transfer'
+          message: 'Please upload the screenshot of the actual fund transfer.'
         },
         hide_alert: !showAlert,
       }

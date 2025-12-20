@@ -63,6 +63,9 @@
                     <app-document-list *ngIf="!view.show_form" [documents]="view.documents"
                         [showHeading]="false"></app-document-list>
                 </div>
+                <div *ngIf="view.section_type == 'editable_table'">
+                    <app-editable-table-section [view]="view"></app-editable-table-section>
+                </div>
             </div>
         </div>
     </form>
