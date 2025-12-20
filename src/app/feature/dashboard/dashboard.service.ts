@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { deleteToken, getToken, Messaging, onMessage } from '@angular/fire/messaging';
-import { SpinnerVisibilityService } from 'ng-http-loader';
-import { filter, map, Observable, shareReplay, Subject, tap } from 'rxjs';
-import { KeyValue } from 'src/app/core/api-client/models';
+import { map, Observable, Subject } from 'rxjs';
+import { KeyValue } from 'src/app/shared/model/key-value.model';
 import { StaticDocsControllerService } from 'src/app/core/api-client/services';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 import { environment } from 'src/environments/environment';

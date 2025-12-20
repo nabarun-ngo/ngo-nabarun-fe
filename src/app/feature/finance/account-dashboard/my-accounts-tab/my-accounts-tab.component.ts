@@ -27,7 +27,7 @@ import { removeNullFields } from 'src/app/core/service/utilities.service';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 import { Account, PagedAccounts } from '../../model';
-import { KeyValue } from 'src/app/core/api-client/models';
+import { KeyValue } from 'src/app/shared/model/key-value.model';
 
 @Component({
   selector: 'app-my-accounts-tab',

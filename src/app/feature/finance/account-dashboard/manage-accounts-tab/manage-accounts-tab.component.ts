@@ -10,7 +10,7 @@ import { AccountDefaultValue } from '../../finance.const';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { SCOPE } from 'src/app/core/constant/auth-scope.const';
 import { Account } from '../../model';
-import { KeyValue } from 'src/app/core/api-client/models';
+import { KeyValue } from 'src/app/shared/model/key-value.model';
 import { User } from 'src/app/feature/member/models/member.model';
 
 @Component({

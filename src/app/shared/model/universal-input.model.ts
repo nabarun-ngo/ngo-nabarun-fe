@@ -1,4 +1,5 @@
-import { KeyValue } from "src/app/core/api-client/models";
+import { KeyValue } from "./key-value.model";
+
 export type inputType = 'text' | 'email' | 'phone' | 'password' | 'number' | 'date' | 'time' | 'editor' | 'multiselect' | 'radio' | 'check' | '';
 
 export interface UniversalInputModel {

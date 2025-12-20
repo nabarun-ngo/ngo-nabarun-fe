@@ -1,5 +1,4 @@
 import { Component, ViewChild } from '@angular/core';
-import { KeyValue } from 'src/app/core/api-client/models';
 import { PagedExpenses } from '../model';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
@@ -17,6 +16,7 @@ import { MyExpensesTabComponent } from './my-expenses-tab/my-expenses-tab.compon
 import { ManageExpenseTabComponent } from './manage-expense-tab/manage-expense-tab.component';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { User } from '../../member/models/member.model';
+import { KeyValue } from 'src/app/shared/model/key-value.model';
 
 @Component({
   selector: 'app-expense-dashboard',

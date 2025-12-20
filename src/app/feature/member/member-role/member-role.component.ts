@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MemberService } from '../service/member.service';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { KeyValue } from 'src/app/core/api-client/models';
+import { KeyValue } from 'src/app/shared/model/key-value.model';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { lastValueFrom } from 'rxjs';
 import { ModalService } from 'src/app/core/service/modal.service';

@@ -1,11 +1,6 @@
 import { Component } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import {
-  KeyValue,
-  AccountDetailDto,
-  ExpenseDetailDto,
-} from 'src/app/core/api-client/models';
-import { Account, Expense, PagedExpenses } from '../../model';
+import { Account, Expense } from '../../model';
 import { AccordionButton, AccordionCell } from 'src/app/shared/model/accordion-list.model';
 import { AppDialog } from 'src/app/core/constant/app-dialog.const';
 import { manageExpenseHighLevelView, manageExpenseTabHeader, rejectionModal, settlementSummary } from '../../fields/expense.field';
@@ -17,7 +12,7 @@ import { removeNullFields } from 'src/app/core/service/utilities.service';
 import { ExpenseDefaultValue } from '../../finance.const';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { User } from 'src/app/feature/member/models/member.model';
-import { FormGroup } from '@angular/forms';
+import { KeyValue } from 'src/app/shared/model/key-value.model';
 
 @Component({
   selector: 'app-manage-expense-tab',

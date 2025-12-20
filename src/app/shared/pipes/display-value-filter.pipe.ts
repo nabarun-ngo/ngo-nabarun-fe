@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { KeyValue } from 'src/app/core/api-client/models';
+import { KeyValue } from '../model/key-value.model';
 
 @Pipe({
   name: 'displayValueFilter'
