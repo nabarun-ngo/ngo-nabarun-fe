@@ -72,7 +72,7 @@ export class AccountService {
    * @returns Observable of paged account results (domain model)
    */
   fetchAccounts(options?: {
-    type?: Array<'PRINCIPAL' | 'GENERAL' | 'DONATION' | 'PUBLIC_DONATION'>;
+    type?: Array<'PRINCIPAL' | 'GENERAL' | 'DONATION' | 'PUBLIC_DONATION' | 'WALLET'>;
     status?: Array<'ACTIVE' | 'INACTIVE' | 'BLOCKED'>;
     accountId?: string;
     accountHolderId?: string;
@@ -600,11 +600,6 @@ export class AccountService {
     return forkJoin(requests);
   }
 
-  getExpenseSummary(id: string) {
-    return this.expenseController.getSettlementSummary({
-      id: id
-    }).pipe(map((d) => d.responsePayload));
-  }
 
   getExpenseDocuments(id: string) {
     return this.dmsController

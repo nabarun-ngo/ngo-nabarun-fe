@@ -104,7 +104,6 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
         },
       }, isCreate, this.isAdmin),
       expenseList,
-      expenseDocumentSection([], isCreate),
     ];
   }
 
@@ -169,23 +168,16 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
               true
             );
           });
-        } else if (val['expense_source'] == 'OTHER') {
+        } else if (val['expense_source'] !== 'EVENT') {
           this.removeSectionField('expense_detail', 'expense_event', 0, true);
         }
       });
-    this.users = [
-      {
-        id: this.userIdentity.loggedInUser.profile_id,
-        userId: this.userIdentity.loggedInUser.user_id,
-        fullName: this.userIdentity.loggedInUser.name,
-      },
-    ];
   }
 
   onClick($event: { buttonId: string; rowIndex: number }) {
     switch ($event.buttonId) {
       case 'UPDATE_EXPENSE':
-        this.showEditForm($event.rowIndex, ['expense_detail']);
+        this.showEditForm($event.rowIndex, ['expense_detail', 'expense_doc_list']);
         break;
       case 'CREATE_CONFIRM':
       case 'CONFIRM':
@@ -252,9 +244,7 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
   protected override onAccordionOpen($event: { rowIndex: number }) {
     let item = this.itemList![$event.rowIndex];
     this.accountService.getExpenseDocuments(item.id!).subscribe((data) => {
-      let accordion = this.getSectionInAccordion('expense_doc_list', $event.rowIndex)!;
-      accordion.documents = data;
-      accordion.hide_section = false;
+      this.addSectionInAccordion(expenseDocumentSection(data), $event.rowIndex);
     });
   }
 

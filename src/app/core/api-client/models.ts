@@ -46,7 +46,6 @@ export { ProcessDonationPaymentDto } from './models/process-donation-payment-dto
 export { ProjectDetailDto } from './models/project-detail-dto';
 export { ReverseTransactionDto } from './models/reverse-transaction-dto';
 export { RoleDto } from './models/role-dto';
-export { SettlementSummaryDto } from './models/settlement-summary-dto';
 export { SignUpDto } from './models/sign-up-dto';
 export { StartWorkflowDto } from './models/start-workflow-dto';
 export { StaticDocumentDto } from './models/static-document-dto';
@@ -78,7 +77,6 @@ export { SuccessResponsePagedResultTransactionDetailDto } from './models/success
 export { SuccessResponsePagedResultUserDto } from './models/success-response-paged-result-user-dto';
 export { SuccessResponsePagedResultWorkflowInstanceDto } from './models/success-response-paged-result-workflow-instance-dto';
 export { SuccessResponsePagedResultWorkflowTaskDto } from './models/success-response-paged-result-workflow-task-dto';
-export { SuccessResponseSettlementSummaryDto } from './models/success-response-settlement-summary-dto';
 export { SuccessResponseString } from './models/success-response-string';
 export { SuccessResponseTransactionDetailDto } from './models/success-response-transaction-detail-dto';
 export { SuccessResponseUserDto } from './models/success-response-user-dto';

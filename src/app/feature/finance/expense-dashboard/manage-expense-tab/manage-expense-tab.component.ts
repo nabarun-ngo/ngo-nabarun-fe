@@ -130,9 +130,17 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
   protected override onAccordionOpen($event: { rowIndex: number; }): void {
     const expense = this.itemList[$event.rowIndex];
     if (expense.status == 'FINALIZED') {
-      this.accountService.getExpenseSummary(expense.id!).subscribe((data) => {
-        this.addSectionInAccordion(settlementSummary(data, expense), $event.rowIndex);
+      this.accountService.fetchAccounts({
+        type: ['WALLET'],
+        status: ['ACTIVE'],
+        accountHolderId: expense.paidBy?.id,
+      }).subscribe((data) => {
+        this.addSectionInAccordion(settlementSummary(expense, data?.content), $event.rowIndex);
+        super.onAccordionOpen($event);
       });
+    }
+    else {
+      super.onAccordionOpen($event);
     }
   }
 

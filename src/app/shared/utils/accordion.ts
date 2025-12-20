@@ -289,11 +289,9 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
 
   showEditForm(rowIndex: number, section_ids: string[]) {
     this.accordionList.contents[rowIndex].detailed.filter(f => section_ids.includes(f.section_html_id!)).map(m => {
-      //console.log(m)
       m.show_form = true;
       m.hide_section = false;
       m.content?.map(m => {
-        //m.hide_field = false;
         return m;
       })
       if (m.section_type == 'doc_list') {
@@ -302,7 +300,6 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
       }
       return m;
     });
-    ////console.log(this.accordionList.contents)
     this.functionButtons = [];
     this.accordionList.contents[rowIndex].buttons?.forEach(b => {
       this.functionButtons.push(b)
@@ -341,9 +338,9 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
 
   getSectionDocuments(sectionId: string, rowIndex: number, create?: boolean) {
     if (create) {
-      return this.accordionList.addContent?.detailed.find(f => f.section_html_id == sectionId)?.doc?.docList.value;
+      return this.accordionList.addContent?.detailed.find(f => f.section_html_id == sectionId)?.doc?.docList?.value;
     } else {
-      return this.accordionList.contents[rowIndex]?.detailed.find(f => f.section_html_id == sectionId)?.doc?.docList.value;
+      return this.accordionList.contents[rowIndex]?.detailed.find(f => f.section_html_id == sectionId)?.doc?.docList?.value;
     }
   }
 

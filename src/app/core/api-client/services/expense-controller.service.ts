@@ -17,8 +17,6 @@ import { finalizeExpense } from '../fn/expense-controller/finalize-expense';
 import { FinalizeExpense$Params } from '../fn/expense-controller/finalize-expense';
 import { getExpenseById } from '../fn/expense-controller/get-expense-by-id';
 import { GetExpenseById$Params } from '../fn/expense-controller/get-expense-by-id';
-import { getSettlementSummary } from '../fn/expense-controller/get-settlement-summary';
-import { GetSettlementSummary$Params } from '../fn/expense-controller/get-settlement-summary';
 import { listExpenses } from '../fn/expense-controller/list-expenses';
 import { ListExpenses$Params } from '../fn/expense-controller/list-expenses';
 import { listSelfExpenses } from '../fn/expense-controller/list-self-expenses';
@@ -27,7 +25,6 @@ import { settleExpense } from '../fn/expense-controller/settle-expense';
 import { SettleExpense$Params } from '../fn/expense-controller/settle-expense';
 import { SuccessResponseExpenseDetailDto } from '../models/success-response-expense-detail-dto';
 import { SuccessResponsePagedResultExpenseDetailDto } from '../models/success-response-paged-result-expense-detail-dto';
-import { SuccessResponseSettlementSummaryDto } from '../models/success-response-settlement-summary-dto';
 import { updateExpense } from '../fn/expense-controller/update-expense';
 import { UpdateExpense$Params } from '../fn/expense-controller/update-expense';
 
@@ -289,43 +286,6 @@ export class ExpenseControllerService extends BaseService {
   getExpenseById(params: GetExpenseById$Params, context?: HttpContext): Observable<SuccessResponseExpenseDetailDto> {
     return this.getExpenseById$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseExpenseDetailDto>): SuccessResponseExpenseDetailDto => r.body)
-    );
-  }
-
-  /** Path part for operation `getSettlementSummary()` */
-  static readonly GetSettlementSummaryPath = '/api/expense/{id}/settlement-summary';
-
-  /**
-   * Get settlement summary for user.
-   *
-   * **Required Permissions:**
-   * - `read:expenses`
-   * _(Any of these permissions)_
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getSettlementSummary()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getSettlementSummary$Response(params: GetSettlementSummary$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseSettlementSummaryDto>> {
-    return getSettlementSummary(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * Get settlement summary for user.
-   *
-   * **Required Permissions:**
-   * - `read:expenses`
-   * _(Any of these permissions)_
-   *
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getSettlementSummary$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getSettlementSummary(params: GetSettlementSummary$Params, context?: HttpContext): Observable<SuccessResponseSettlementSummaryDto> {
-    return this.getSettlementSummary$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseSettlementSummaryDto>): SuccessResponseSettlementSummaryDto => r.body)
     );
   }
 

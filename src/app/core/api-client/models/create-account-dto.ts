@@ -8,5 +8,5 @@ export interface CreateAccountDto {
   description?: string;
   initialBalance?: number;
   name: string;
-  type: 'PRINCIPAL' | 'GENERAL' | 'DONATION' | 'PUBLIC_DONATION' | 'EXPENSE';
+  type: 'PRINCIPAL' | 'GENERAL' | 'DONATION' | 'PUBLIC_DONATION' | 'WALLET';
 }

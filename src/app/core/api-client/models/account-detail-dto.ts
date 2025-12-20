@@ -8,7 +8,7 @@ export interface AccountDetailDto {
   accountHolder?: string;
   accountHolderName?: string;
   accountStatus: 'ACTIVE' | 'INACTIVE' | 'BLOCKED' | 'CLOSED';
-  accountType: 'PRINCIPAL' | 'GENERAL' | 'DONATION' | 'PUBLIC_DONATION' | 'EXPENSE';
+  accountType: 'PRINCIPAL' | 'GENERAL' | 'DONATION' | 'PUBLIC_DONATION' | 'WALLET';
   activatedOn?: string;
   bankDetail?: BankDetailDto;
   currentBalance: number;

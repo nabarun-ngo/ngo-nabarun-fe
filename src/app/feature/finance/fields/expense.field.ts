@@ -15,10 +15,9 @@ import {
 import { date } from 'src/app/core/service/utilities.service';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
 import { ExpenseDefaultValue, expenseTab } from '../finance.const';
-import { Expense, ExpenseItem } from '../model';
+import { Account, Expense, ExpenseItem } from '../model';
 import { Doc } from 'src/app/shared/model/document.model';
 import { KeyValue } from 'src/app/shared/model/key-value.model';
-import { SettlementSummaryDto } from 'src/app/core/api-client/models';
 
 export const expenseTabHeader = [
   {
@@ -271,11 +270,19 @@ export const expenseDocumentSection = (
     section_type: 'doc_list',
     section_html_id: 'expense_doc_list',
     section_form: new FormGroup({}),
-    hide_section: true,
+    hide_section: false,
     documents: docs,
     doc: {
       docChange: new EventEmitter(),
     },
+    form_alerts: [
+      {
+        data: {
+          alertType: 'warning',
+          message: 'Please upload the expense receipts for each expense item.'
+        }
+      }
+    ],
   } as DetailedView;
 };
 
@@ -557,77 +564,77 @@ export const expenseSearchInput = (
   return model;
 };
 
+
 export const settlementSummary = (
-  data: SettlementSummaryDto,
-  expense: Expense
+  expense: Expense,
+  payerAccounts?: Account[]
 ) => {
-  const alerts: AlertList[] = [];
+  const walletCount = (payerAccounts?.length ?? 0);
+  const payerAccount = walletCount > 0 ? payerAccounts![0] : null;
 
-  // 1️⃣ No settlement required
-  if (!data.needsReimbursement) {
-    alerts.push({
-      data: {
-        alertType: 'success',
-        message: `
-No settlement is required for this expense.
+  const finalAmount = Number(expense?.finalAmount ?? 0);
+  const walletBalance = Number(payerAccount?.balance ?? 0);
 
-All expenses are already balanced and no further action is needed.
-        `.trim(),
-      },
-      flag: true,
-    });
-  }
-
-  // 2️⃣ Settlement required – action alert
-  if (data.needsReimbursement) {
-    alerts.push({
-      data: {
-        alertType: 'warning',
-        message: `
-Action Required: Record a settlement of ₹${data.amountToReimburse}.
-        `.trim(),
-      },
-      flag: true,
-    });
-  }
-
-  // 3️⃣ Settlement account missing
-  if (data.needsReimbursement && data.createAccount) {
-    alerts.push({
-      data: {
-        alertType: 'info',
-        message: `
-No settlement account is selected.
-
-Please create or select a settlement account to proceed.
-        `.trim(),
-      },
-      flag: true,
-    });
-  }
-
-  // 4️⃣ Important clarification (always shown when settlement is required)
-  if (data.needsReimbursement) {
-    alerts.push({
-      data: {
-        alertType: 'info',
-        message: `
-Important:
-This system will NOT transfer money to any account.
-It only records the settlement amount for bookkeeping purposes.
-        `.trim(),
-      },
-      flag: true,
-    });
-  }
+  const walletUsed = Math.min(walletBalance, finalAmount);
+  const transferAmount = Math.max(finalAmount - walletBalance, 0);
+  const walletBalanceAfterSettlement = walletBalance - walletUsed;
 
   return {
     section_name: 'Settlement Summary',
-    section_type: 'custom',
+    section_type: 'key_value',
     section_html_id: 'settlement_summary',
     section_form: new FormGroup({}),
-    alertFlag: alerts.length > 0,
-    alerts,
+    hide_section: false,
+    section_alerts: [
+      {
+        hide_alert: walletCount <= 1,
+        data: {
+          alertType: 'info',
+          message: `${walletCount} wallets found for the payer. Only the first wallet '${payerAccount?.id}' will be used for settlement.`,
+        }
+      },
+      {
+        hide_alert: !(walletCount > 0 && walletBalance < finalAmount),
+        data: {
+          alertType: 'warning',
+          message: `Please transfer Rs. ${finalAmount - walletBalance} to the wallet ${payerAccount?.id} to complete the settlement.`,
+        }
+      },
+      {
+        hide_alert: walletCount != 0,
+        data: {
+          alertType: 'warning',
+          message: `No wallets found for the payer. Please add a wallet to the payer and transfer Rs. ${finalAmount} to complete the settlement.`,
+        }
+      }
+    ],
+    content: [
+      {
+        field_name: 'Total Expense Amount',
+        field_value: finalAmount.toFixed(2),
+      },
+      {
+        field_name: 'Expense Paid By',
+        field_value: expense.paidBy?.fullName ?? '-',
+        editable: true,
+        field_html_id: 'expense_event',
+      },
+      {
+        field_name: 'Payer Wallet ID',
+        field_value: payerAccount?.id ?? '-',
+      },
+      {
+        field_name: 'Current Wallet Balance',
+        field_value: walletBalance.toFixed(2),
+      },
+      {
+        field_name: 'Amount to Transfer to Wallet',
+        field_value: transferAmount.toFixed(2),
+      },
+      {
+        field_name: 'Wallet Balance After Settlement',
+        field_value: walletBalanceAfterSettlement.toFixed(2),
+      },
+    ],
   } as DetailedView;
 };
-

@@ -9,6 +9,6 @@ export interface UpdateAccountDto {
   bankDetail?: BankDetailDto;
   description?: string;
   name?: string;
-  type?: 'PRINCIPAL' | 'GENERAL' | 'DONATION' | 'PUBLIC_DONATION' | 'EXPENSE';
+  type?: 'PRINCIPAL' | 'GENERAL' | 'DONATION' | 'PUBLIC_DONATION' | 'WALLET';
   upiDetail?: UpiDetailDto;
 }

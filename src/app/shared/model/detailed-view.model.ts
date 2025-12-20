@@ -9,22 +9,20 @@ import { AlertData } from "./alert.model";
 import { Doc } from "./document.model";
 
 export interface AlertList {
-    data: AlertData;
-    flag: boolean;
+    readonly data: AlertData;
+    readonly hide_alert?: boolean;
 }
 
 export interface DetailedView<NumType = any> {
-
-
-    section_html_id?: string;
-    section_name: string;
-    section_type: 'key_value' | 'doc_list' | 'custom' | 'accordion_list';
+    readonly section_html_id?: string;
+    readonly section_name: string;
+    readonly section_type: 'key_value' | 'doc_list' | 'custom' | 'accordion_list';
     hide_section?: boolean;
-    content?: DetailedViewField[];
-    section_form: FormGroup;
+    readonly content?: DetailedViewField[];
+    readonly section_form: FormGroup;
     show_form?: boolean;
-    documentHeader?: string;
-    documents?: Doc[];
+    readonly documentHeader?: string;
+    readonly documents?: Doc[];
     accordionList?: AccordionList;
     accordion?: {
         parentId?: string;
@@ -33,10 +31,11 @@ export interface DetailedView<NumType = any> {
         accordionOpened: EventEmitter<{ rowIndex: number; }>;
         buttonClick: EventEmitter<{ buttonId: string; rowIndex: number; }>
     };
-    alerts?: AlertList[];
+    readonly section_alerts?: AlertList[];
+    readonly form_alerts?: AlertList[];
     doc?: {
         docChange: EventEmitter<FileUpload[]>;
-        docList: BehaviorSubject<FileUpload[]>;
+        docList?: BehaviorSubject<FileUpload[]>;
     }
 }
 
