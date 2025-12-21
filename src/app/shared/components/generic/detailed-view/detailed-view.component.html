@@ -13,8 +13,15 @@
                     </span>
                     <span class="tracking-wide">{{view.section_name}}</span>
                 </div>
-                <div class="my-2 py-2 text-gray-700" *ngIf="view.alertData && view.alertFlag">
-                    <app-alert [alertData]="view.alertData"></app-alert>
+                <div class="my-2 py-2 space-y-2 text-gray-700" *ngIf="view.section_alerts?.length">
+                    <ng-container *ngFor="let alert of view.section_alerts">
+                        <app-alert *ngIf="!alert.hide_alert" [alertData]="alert.data"></app-alert>
+                    </ng-container>
+                </div>
+                <div class="my-2 py-2 space-y-2 text-gray-700" *ngIf="view.form_alerts?.length && view.show_form">
+                    <ng-container *ngFor="let alert of view.form_alerts">
+                        <app-alert *ngIf="!alert.hide_alert" [alertData]="alert.data"></app-alert>
+                    </ng-container>
                 </div>
                 <div class="text-gray-700 my-2 mx-4" *ngIf="view.section_type == 'key_value'">
                     <div class="grid md:grid-cols-2 text-sm">
@@ -55,6 +62,9 @@
                         (files)="view.doc?.docChange?.emit($event)"></app-file-upload>
                     <app-document-list *ngIf="!view.show_form" [documents]="view.documents"
                         [showHeading]="false"></app-document-list>
+                </div>
+                <div *ngIf="view.section_type == 'editable_table'">
+                    <app-editable-table-section [view]="view"></app-editable-table-section>
                 </div>
             </div>
         </div>

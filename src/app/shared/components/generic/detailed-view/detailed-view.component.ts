@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-import { KeyValue } from 'src/app/core/api-client/models';
+import { Component, Input } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
+import { KeyValue } from 'src/app/shared/model/key-value.model';
 
 @Component({
   selector: 'app-detailed-view',

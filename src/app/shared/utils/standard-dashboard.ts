@@ -1,9 +1,9 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { KeyValue } from 'src/app/core/api-client/models';
 import { Paginator } from './paginator';
 import { PageEvent } from '@angular/material/paginator';
 import { PagedResult } from '../model/paged-result.model';
+import { KeyValue } from '../model/key-value.model';
 
 
 /**

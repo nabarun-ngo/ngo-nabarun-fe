@@ -1,5 +1,5 @@
 import { EventEmitter } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 
 import { Accordion } from 'src/app/shared/utils/accordion';
@@ -8,13 +8,14 @@ import {
   AccordionCell,
 } from 'src/app/shared/model/accordion-list.model';
 import {
+  AlertList,
   DetailedView,
   DetailedViewField,
 } from 'src/app/shared/model/detailed-view.model';
 import { date } from 'src/app/core/service/utilities.service';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
 import { ExpenseDefaultValue, expenseTab } from '../finance.const';
-import { Expense, ExpenseItem } from '../model';
+import { Account, Expense, ExpenseItem } from '../model';
 import { Doc } from 'src/app/shared/model/document.model';
 import { KeyValue } from 'src/app/shared/model/key-value.model';
 
@@ -113,6 +114,8 @@ export const expenseDetailSection = (
   isCreate: boolean = false,
   isAdminView: boolean = false
 ) => {
+  //console.log(m)
+
   return {
     section_name: 'Expense Detail',
     section_type: 'key_value',
@@ -172,7 +175,7 @@ export const expenseDetailSection = (
       {
         field_name: 'Paid By',
         field_value: m?.paidBy?.id,
-        editable: m?.status != 'FINALIZED' && (isCreate || isAdminView),
+        editable: m?.status != 'FINALIZED' && (isCreate && isAdminView),
         field_display_value: m?.paidBy?.fullName,
         field_html_id: 'expense_borne_by',
         form_control_name: 'expense_by',
@@ -229,20 +232,9 @@ export const expenseDetailSection = (
       },
       {
         field_name: 'Settlement Account',
-        field_value: m?.settlementAccount?.id,
-        editable: m?.status == 'FINALIZED',
-        hide_field: m == undefined || !(m?.status == 'FINALIZED' || m?.status == 'SETTLED'),
-        field_display_value: `${m?.settlementAccount?.id} (${m?.settlementAccount?.accountHolderName})`,
+        field_value: m?.settlementAccountId,
+        hide_field: !(m?.status == 'FINALIZED' || m?.status == 'SETTLED'),
         field_html_id: 'settlement_account',
-        form_control_name: 'settlement_acc',
-        form_input: {
-          html_id: 'settlement_acc_inp',
-          tagName: 'select',
-          inputType: '',
-          placeholder: 'Select settlement account',
-          selectList: [],
-        },
-        form_input_validation: [Validators.required],
       },
       {
         field_name: 'Rejected By',
@@ -260,18 +252,25 @@ export const expenseDetailSection = (
 
 export const expenseDocumentSection = (
   docs: Doc[],
-  isCreate: boolean = false
 ) => {
   return {
     section_name: 'Documents',
     section_type: 'doc_list',
     section_html_id: 'expense_doc_list',
     section_form: new FormGroup({}),
-    hide_section: true,
+    hide_section: false,
     documents: docs,
     doc: {
       docChange: new EventEmitter(),
     },
+    form_alerts: [
+      {
+        data: {
+          alertType: 'info',
+          message: 'Please upload the expense receipts for each expense item.'
+        }
+      }
+    ],
   } as DetailedView;
 };
 
@@ -553,3 +552,129 @@ export const expenseSearchInput = (
   return model;
 };
 
+
+export const settlementSummary = (
+  expense: Expense,
+  payerAccount?: Account
+) => {
+  //const walletCount = (payerAccounts?.length ?? 0);
+  //const payerAccount = walletCount > 0 ? payerAccounts![0] : null;
+
+  const finalAmount = Number(expense?.finalAmount ?? 0);
+  const walletBalance = Number(payerAccount?.balance ?? 0);
+
+  const walletUsed = Math.min(walletBalance, finalAmount);
+  const transferAmount = Math.max(finalAmount - walletBalance, 0);
+  const walletBalanceAfterSettlement = walletBalance - walletUsed;
+
+  return {
+    section_name: 'Settlement Summary',
+    section_type: 'key_value',
+    section_html_id: 'settlement_summary',
+    section_form: new FormGroup({}),
+    hide_section: false,
+    section_alerts: [
+      {
+        hide_alert: !(payerAccount && walletBalance < finalAmount),
+        data: {
+          alertType: 'warning',
+          message: `Please transfer Rs. ${finalAmount - walletBalance} to the wallet ${payerAccount?.id} to complete the settlement.`,
+        }
+      },
+      {
+        hide_alert: payerAccount,
+        data: {
+          alertType: 'warning',
+          message: `No wallets found for the payer. Please add a wallet to the payer and transfer Rs. ${finalAmount} to complete the settlement.`,
+        }
+      },
+      {
+        hide_alert: !(walletBalanceAfterSettlement > 0),
+        data: {
+          alertType: 'warning',
+          message: `${expense.paidBy?.fullName} may need to transfer excess amount of Rs.${walletBalanceAfterSettlement} but still the expense can be settled.`,
+        }
+      },
+    ],
+    content: [
+      {
+        field_name: 'Total Expense Amount',
+        field_value: finalAmount.toFixed(2),
+      },
+      {
+        field_name: 'Expense Paid By',
+        field_value: expense.paidBy?.fullName ?? '-',
+        editable: true,
+        field_html_id: 'expense_event',
+      },
+      {
+        field_name: 'Payer Wallet ID',
+        field_value: payerAccount?.id ?? '-',
+      },
+      {
+        field_name: 'Current Wallet Balance',
+        field_value: walletBalance.toFixed(2),
+      },
+      {
+        field_name: 'Amount to Transfer to Wallet',
+        field_value: transferAmount.toFixed(2),
+      },
+      {
+        field_name: 'Wallet Balance After Settlement',
+        field_value: walletBalanceAfterSettlement.toFixed(2),
+      },
+    ],
+  } as DetailedView;
+};
+
+export const expenseEditableTable = (items: ExpenseItem[]) => {
+  return {
+    section_name: 'Expense Details',
+    section_type: 'editable_table',
+    section_html_id: 'expense_details',
+    section_form: new FormGroup({
+      items: new FormArray([
+        ...items.map(item => new FormGroup({
+          itemName: new FormControl(item.itemName),
+          amount: new FormControl(item.amount),
+        }))
+      ])
+    }),
+    show_form: true,
+    hide_section: false,
+    editableTable: {
+      allowAddRow: true,
+      allowDeleteRow: true,
+      formArrayName: 'items',
+      columns: [
+        {
+          columnDef: 'itemName',
+          header: 'Item Name',
+          editable: true,
+          validators: [Validators.required],
+          inputModel: {
+            html_id: 'item_name',
+            labelName: 'Item Name',
+            tagName: 'input',
+            inputType: 'text',
+            placeholder: 'Enter item name',
+          }
+        },
+        {
+          columnDef: 'amount',
+          header: 'Item Amount',
+          editable: true,
+          validators: [Validators.required],
+          inputModel: {
+            html_id: 'item_amount',
+            labelName: 'Item Amount',
+            tagName: 'input',
+            inputType: 'number',
+            placeholder: 'Enter item amount',
+          }
+        },
+
+      ],
+    },
+  } as DetailedView;
+};

@@ -54,7 +54,9 @@ export class AccountControllerService extends BaseService {
   /**
    * Create new account.
    *
-   * Authorities : 'create:account'
+   * **Required Permissions:**
+   * - `create:account`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createAccount()` instead.
@@ -68,7 +70,9 @@ export class AccountControllerService extends BaseService {
   /**
    * Create new account.
    *
-   * Authorities : 'create:account'
+   * **Required Permissions:**
+   * - `create:account`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `createAccount$Response()` instead.
@@ -87,7 +91,9 @@ export class AccountControllerService extends BaseService {
   /**
    * Update account details.
    *
-   * Authorities : 'update:account'
+   * **Required Permissions:**
+   * - `update:account`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updateAccount()` instead.
@@ -101,7 +107,9 @@ export class AccountControllerService extends BaseService {
   /**
    * Update account details.
    *
-   * Authorities : 'update:account'
+   * **Required Permissions:**
+   * - `update:account`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `updateAccount$Response()` instead.
@@ -153,7 +161,9 @@ export class AccountControllerService extends BaseService {
   /**
    * List all accounts.
    *
-   *
+   * **Required Permissions:**
+   * - `read:accounts`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `listAccounts()` instead.
@@ -167,7 +177,9 @@ export class AccountControllerService extends BaseService {
   /**
    * List all accounts.
    *
-   *
+   * **Required Permissions:**
+   * - `read:accounts`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `listAccounts$Response()` instead.
@@ -219,7 +231,9 @@ export class AccountControllerService extends BaseService {
   /**
    * List transactions for account.
    *
-   * Authorities : 'read:transactions'
+   * **Required Permissions:**
+   * - `read:transactions`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `listAccountTransactions()` instead.
@@ -233,7 +247,9 @@ export class AccountControllerService extends BaseService {
   /**
    * List transactions for account.
    *
-   * Authorities : 'read:transactions'
+   * **Required Permissions:**
+   * - `read:transactions`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `listAccountTransactions$Response()` instead.

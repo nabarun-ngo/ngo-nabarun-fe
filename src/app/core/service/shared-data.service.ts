@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { KeyValue } from '../api-client/models';
+import { KeyValue } from 'src/app/shared/model/key-value.model';
 
 @Injectable({
   providedIn: 'root'

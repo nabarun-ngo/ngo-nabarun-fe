@@ -9,4 +9,5 @@ export interface UpdateExpenseDto {
   expenseItems?: Array<ExpenseItemDetailDto>;
   name?: string;
   remarks?: string;
+  status?: 'DRAFT' | 'SUBMITTED' | 'FINALIZED' | 'SETTLED' | 'REJECTED';
 }

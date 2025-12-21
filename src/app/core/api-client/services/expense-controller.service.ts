@@ -40,7 +40,9 @@ export class ExpenseControllerService extends BaseService {
   /**
    * Create new expense.
    *
-   * Authorities : 'create:expense'
+   * **Required Permissions:**
+   * - `create:expense`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createExpense()` instead.
@@ -54,7 +56,9 @@ export class ExpenseControllerService extends BaseService {
   /**
    * Create new expense.
    *
-   * Authorities : 'create:expense'
+   * **Required Permissions:**
+   * - `create:expense`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `createExpense$Response()` instead.
@@ -73,7 +77,9 @@ export class ExpenseControllerService extends BaseService {
   /**
    * Update expense details.
    *
-   * Authorities : 'update:expense'
+   * **Required Permissions:**
+   * - `update:expense`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updateExpense()` instead.
@@ -87,7 +93,9 @@ export class ExpenseControllerService extends BaseService {
   /**
    * Update expense details.
    *
-   * Authorities : 'update:expense'
+   * **Required Permissions:**
+   * - `update:expense`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `updateExpense$Response()` instead.
@@ -106,7 +114,9 @@ export class ExpenseControllerService extends BaseService {
   /**
    * Finalize expense.
    *
-   * Authorities : 'create:expense_final'
+   * **Required Permissions:**
+   * - `create:expense_final`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `finalizeExpense()` instead.
@@ -120,7 +130,9 @@ export class ExpenseControllerService extends BaseService {
   /**
    * Finalize expense.
    *
-   * Authorities : 'create:expense_final'
+   * **Required Permissions:**
+   * - `create:expense_final`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `finalizeExpense$Response()` instead.
@@ -139,7 +151,9 @@ export class ExpenseControllerService extends BaseService {
   /**
    * Settle expense.
    *
-   * Authorities : 'create:expense_settle'
+   * **Required Permissions:**
+   * - `create:expense_settle`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `settleExpense()` instead.
@@ -153,7 +167,9 @@ export class ExpenseControllerService extends BaseService {
   /**
    * Settle expense.
    *
-   * Authorities : 'create:expense_settle'
+   * **Required Permissions:**
+   * - `create:expense_settle`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `settleExpense$Response()` instead.
@@ -172,7 +188,9 @@ export class ExpenseControllerService extends BaseService {
   /**
    * List all expenses.
    *
-   * Authorities : 'read:expense'
+   * **Required Permissions:**
+   * - `read:expenses`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `listExpenses()` instead.
@@ -186,7 +204,9 @@ export class ExpenseControllerService extends BaseService {
   /**
    * List all expenses.
    *
-   * Authorities : 'read:expense'
+   * **Required Permissions:**
+   * - `read:expenses`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `listExpenses$Response()` instead.
@@ -205,7 +225,7 @@ export class ExpenseControllerService extends BaseService {
   /**
    * List own expenses.
    *
-   * Authorities : 'read:expense'
+   *
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `listSelfExpenses()` instead.
@@ -219,7 +239,7 @@ export class ExpenseControllerService extends BaseService {
   /**
    * List own expenses.
    *
-   * Authorities : 'read:expense'
+   *
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `listSelfExpenses$Response()` instead.
@@ -238,7 +258,9 @@ export class ExpenseControllerService extends BaseService {
   /**
    * Get expense by ID.
    *
-   * Authorities : 'read:expense'
+   * **Required Permissions:**
+   * - `read:expenses`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getExpenseById()` instead.
@@ -252,7 +274,9 @@ export class ExpenseControllerService extends BaseService {
   /**
    * Get expense by ID.
    *
-   * Authorities : 'read:expense'
+   * **Required Permissions:**
+   * - `read:expenses`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getExpenseById$Response()` instead.

@@ -56,10 +56,10 @@ export function mapExpenseDtoToExpense(dto: ExpenseDetailDto): Expense {
     finalAmount: dto.finalAmount,
     status: dto.status,
     expenseItems: dto.expenseItems?.map(mapExpenseItem),
-    settlementAccount: dto.settlementAccount ? mapAccountDtoToAccount(dto.settlementAccount) : undefined,
     txnNumber: dto.txnNumber,
     remarks: dto.remarks,
     isDeligated: dto.isDeligated,
+    settlementAccountId: dto.settlementAccountId,
 
     // User references
     createdBy: dto.createdBy ? {

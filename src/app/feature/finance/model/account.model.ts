@@ -10,8 +10,8 @@ export interface Account {
   accountId?: string;
   accountHolderName?: string;
   accountHolder?: string;
-  accountType: 'PRINCIPAL' | 'GENERAL' | 'DONATION' | 'PUBLIC_DONATION';
-  status: 'ACTIVE' | 'INACTIVE' | 'BLOCKED';
+  accountType: 'PRINCIPAL' | 'GENERAL' | 'DONATION' | 'PUBLIC_DONATION' | 'WALLET';
+  status: 'ACTIVE' | 'INACTIVE' | 'BLOCKED' | 'CLOSED';
   balance: number;
   activatedOn?: string;
   bankDetail?: BankDetail;

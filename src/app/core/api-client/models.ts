@@ -30,7 +30,7 @@ export { ErrorResponse } from './models/error-response';
 export { ExpenseDetailDto } from './models/expense-detail-dto';
 export { ExpenseItemDetailDto } from './models/expense-item-detail-dto';
 export { JobDetail } from './models/job-detail';
-export { KeyValue } from './models/key-value';
+export { KeyValueDto } from './models/key-value-dto';
 export { LinkDto } from './models/link-dto';
 export { PagedResultAccountDetailDto } from './models/paged-result-account-detail-dto';
 export { PagedResultActivityDetailDto } from './models/paged-result-activity-detail-dto';

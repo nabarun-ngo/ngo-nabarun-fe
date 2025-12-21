@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { RoleDto, UserDto } from 'src/app/core/api-client/models';
-import { KeyValue } from 'src/app/core/api-client/models';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
+import { KeyValue } from '../../model/key-value.model';
 
 @Component({
   selector: 'app-profile-card',
