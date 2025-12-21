@@ -12,6 +12,7 @@ export interface Donation {
   donorId: string;
   donorName: string;
   donorEmail?: string;
+  donorPhone?: string;
   amount: number;
   currency: string;
   type: 'REGULAR' | 'ONETIME';

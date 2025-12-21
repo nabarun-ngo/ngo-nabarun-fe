@@ -24,11 +24,14 @@ import {
     mapDonationSummaryDtoToDonationSummary,
     mapAccountDtoToAccount
 } from '../model';
+import { mapDocDtoToDoc } from 'src/app/shared/model/document.model';
+import { from } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
 })
 export class DonationService {
+
 
 
     constructor(
@@ -70,37 +73,50 @@ export class DonationService {
     }
 
     /**
-     * Fetch current user's donations with summary and payable accounts
-     * @param options Pagination options
-     * @returns Promise of donations, summary, and accounts (domain models)
-     */
-    async fetchMyDonations(options: {
-        pageIndex?: number,
-        pageSize?: number
-    }): Promise<{ donations: PagedDonations; summary: DonationSummary; accounts: Account[] }> {
-        const id = (await this.identityService.getUser()).profile_id;
-        return firstValueFrom(combineLatest({
-            donations: this.donationController.getSelfDonations({
-                pageIndex: options.pageIndex || DonationDefaultValue.pageNumber,
-                pageSize: options.pageSize || DonationDefaultValue.pageSize
-            }).pipe(
-                map(d => d.responsePayload),
-                map(mapPagedDonationDtoToPagedDonations)
+  * Fetch current user's donations with summary and payable accounts
+  * @param options Pagination options
+  * @returns Observable of donations, summary, and accounts (domain models)
+  */
+    fetchMyDonations(options: {
+        pageIndex?: number;
+        pageSize?: number;
+    }): Observable<{
+        donations: PagedDonations;
+        summary: DonationSummary;
+        accounts: Account[];
+    }> {
+        return from(this.identityService.getUser()).pipe(
+            map(user => user.profile_id),
+
+            switchMap(donorId =>
+                combineLatest({
+                    donations: this.donationController.getSelfDonations({
+                        pageIndex: options.pageIndex ?? DonationDefaultValue.pageNumber,
+                        pageSize: options.pageSize ?? DonationDefaultValue.pageSize
+                    }).pipe(
+                        map(res => res.responsePayload),
+                        map(mapPagedDonationDtoToPagedDonations)
+                    ),
+
+                    summary: this.donationController.getDonationSummary({ donorId }).pipe(
+                        map(res => res.responsePayload),
+                        map(mapDonationSummaryDtoToDonationSummary)
+                    )
+                })
             ),
-            summary: this.donationController.getDonationSummary({ donorId: id }).pipe(
-                map(d => d.responsePayload),
-                map(mapDonationSummaryDtoToDonationSummary)
-            ),
-        }).pipe(switchMap(data => {
-            if (data.summary.hasOutstanding) {
+
+            switchMap(data => {
+                if (!data.summary.hasOutstanding) {
+                    return of({ ...data, accounts: [] });
+                }
+
                 return this.accountController.payableAccount({ isTransfer: false }).pipe(
-                    map(d => d.responsePayload),
-                    map(m => m.map(mapAccountDtoToAccount)),
-                    map(accounts => ({ ...data, accounts: accounts }))
+                    map(res => res.responsePayload),
+                    map(accounts => accounts.map(mapAccountDtoToAccount)),
+                    map(accounts => ({ ...data, accounts }))
                 );
-            }
-            return of({ ...data, accounts: [] });
-        })));
+            })
+        );
     }
 
     /**
@@ -180,7 +196,7 @@ export class DonationService {
     }
 
     fetchDocuments(id: string) {
-        return this.dmsService.getDocuments({ type: 'DONATION', id: id }).pipe(map(m => m.responsePayload));
+        return this.dmsService.getDocuments({ type: 'DONATION', id: id }).pipe(map(m => m.responsePayload), map(m => m.map(mapDocDtoToDoc)));
     }
 
     /**
@@ -210,11 +226,21 @@ export class DonationService {
      * @param donation Donation update details (API DTO format)
      * @returns Observable of updated donation (domain model) or undefined if action is NOTIFY
      */
-    updatePaymentInfo(id: string, action: string, donation: UpdateDonationDto): Observable<Donation> | undefined {
+    updatePaymentInfo(id: string, action: string, donation: Donation): Observable<Donation> | undefined {
         if (action === 'NOTIFY') {
             return undefined;
         }
-        return this.donationController.update({ id: id, body: donation }).pipe(
+        const donationDto: DonationDto = {
+            id: donation.id,
+            donorId: donation.donorId,
+            donorName: donation.donorName,
+            amount: donation.amount,
+            currency: donation.currency,
+            type: donation.type,
+            status: donation.status,
+            raisedOn: donation.raisedOn
+        };
+        return this.donationController.update({ id: id, body: donationDto }).pipe(
             map(d => d.responsePayload),
             map(mapDonationDtoToDonation)
         );

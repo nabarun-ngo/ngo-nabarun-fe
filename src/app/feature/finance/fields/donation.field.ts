@@ -1,4 +1,4 @@
-import { FormGroup } from "@angular/forms";
+import { FormGroup, Validators } from "@angular/forms";
 import { date } from "src/app/core/service/utilities.service";
 import { DetailedView } from "src/app/shared/model/detailed-view.model";
 import { SearchAndAdvancedSearchModel } from "src/app/shared/model/search-and-advanced-search.model";
@@ -6,6 +6,8 @@ import { DonationRefData, donationTab } from "../finance.const";
 import { Doc } from "src/app/shared/model/document.model";
 import { KeyValue } from "src/app/shared/model/key-value.model";
 import { Donation } from "../model";
+import { EventEmitter } from "@angular/core";
+import { User } from "../../member/models/member.model";
 
 
 export const donationSearchInput = (
@@ -319,6 +321,65 @@ export const getDonationSection = (
     };
 };
 
+export const getDonorSection = (
+    donation: Donation,
+    options: {
+        isCreate?: boolean,
+        refData?: { [name: string]: KeyValue[] }
+    }
+): DetailedView => {
+    const { isCreate, refData } = options;
+
+    return {
+        section_name: 'Donor Details',
+        section_type: 'key_value',
+        section_html_id: 'donor_detail',
+        section_form: new FormGroup({}),
+        content: [
+            {
+                field_name: 'Donor name',
+                field_value: donation?.donorName!,
+                form_control_name: 'donorName',
+                editable: isCreate,
+                form_input: {
+                    html_id: 'donorName',
+                    tagName: 'input',
+                    inputType: 'text',
+                    placeholder: 'Ex. John Doe',
+                },
+                field_html_id: 'donorName',
+                form_input_validation: [Validators.required]
+            },
+            {
+                field_name: 'Donor email',
+                field_value: donation?.donorEmail!,
+                form_control_name: 'donorEmail',
+                form_input: {
+                    html_id: 'donorEmail',
+                    tagName: 'input',
+                    inputType: 'email',
+                    placeholder: 'Ex. john.doe@gmail.com',
+                },
+                field_html_id: 'email',
+                form_input_validation: []
+            },
+            {
+                field_name: 'Phone Number',
+                field_value: donation.donorPhone!,
+                form_control_name: 'donorPhone',
+                form_input: {
+                    html_id: 'donorPhone',
+                    tagName: 'input',
+                    inputType: 'phone',
+                    placeholder: 'Ex. +91 1234567890'
+                },
+                field_html_id: 'primaryNumber',
+                form_input_validation: []
+            },
+        ]
+    };
+};
+
 export const donationDocumentSection = (
     docs: Doc[]
 ) => {
@@ -328,8 +389,16 @@ export const donationDocumentSection = (
         section_html_id: 'document_list',
         section_form: new FormGroup({}),
         documents: docs,
+        form_alerts: [
+            {
+                data: {
+                    alertType: 'info',
+                    message: 'Please upload the screenshot of the donation transfer'
+                }
+            }
+        ],
         doc: {
-            // docChange: new EventEmitter(),
+            docChange: new EventEmitter(),
         },
     } as DetailedView;
 };

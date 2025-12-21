@@ -5,8 +5,10 @@ import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.i
 import { AccordionButton, AccordionCell } from 'src/app/shared/model/accordion-list.model';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { Accordion } from 'src/app/shared/utils/accordion';
-import { DonationDefaultValue } from '../../finance.const';
+import { DonationDefaultValue, DonationRefData } from '../../finance.const';
 import { Donation, PagedDonations } from '../../model';
+import { date } from 'src/app/core/service/utilities.service';
+import { getDonorSection } from '../../fields/donation.field';
 
 @Component({
   selector: 'app-guest-donation-tab',
@@ -34,6 +36,8 @@ export class GuestDonationTabComponent extends Accordion<Donation> implements Ta
       }
     ]);
   }
+
+
   protected get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
     return {
       pageNumber: DonationDefaultValue.pageNumber,
@@ -48,10 +52,36 @@ export class GuestDonationTabComponent extends Accordion<Donation> implements Ta
 
 
   protected override prepareHighLevelView(data: Donation, options?: { [key: string]: any; }): AccordionCell[] {
-    return [];
+    return [
+      {
+        type: 'text',
+        value: data?.type,
+        showDisplayValue: true,
+        refDataSection: DonationRefData.refDataKey.type
+      },
+      {
+        type: 'text',
+        value: data.formattedAmount,
+      },
+      {
+        type: 'text',
+        value: `${date(data.startDate)} - ${date(data.endDate)}`
+      },
+      {
+        type: 'text',
+        value: data?.status,
+        showDisplayValue: true,
+        refDataSection: DonationRefData.refDataKey.status
+      }
+    ];
   }
   protected override prepareDetailedView(data: Donation, options?: { [key: string]: any; }): DetailedView[] {
-    return [];
+    return [
+      getDonorSection(data, {
+        isCreate: options && options['create'],
+        refData: this.getRefData({ isActive: true })
+      })
+    ];
   }
   protected override prepareDefaultButtons(data: Donation, options?: { [key: string]: any; }): AccordionButton[] {
     return [];

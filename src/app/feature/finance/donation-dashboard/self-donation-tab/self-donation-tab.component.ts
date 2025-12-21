@@ -10,7 +10,7 @@ import { DonationService } from '../../service/donation.service';
 import { date, removeNullFields } from 'src/app/core/service/utilities.service';
 import { DonationDefaultValue, DonationRefData } from '../../finance.const';
 import { Donation, DonationSummary, PagedDonations, Account } from '../../model';
-import { getDonationSection } from '../../fields/donation.field';
+import { donationDocumentSection, getDonationSection } from '../../fields/donation.field';
 
 @Component({
   selector: 'app-self-donation-tab',
@@ -87,11 +87,10 @@ export class SelfDonationTabComponent extends Accordion<Donation> implements Tab
     ];
   }
   protected override prepareDetailedView(data: Donation, options?: { [key: string]: any; }): DetailedView[] {
-    // Convert domain model back to DTO for donation.field.ts functions
     return [
       getDonationSection(data, {
         isCreate: options && options['create'],
-        refData: this.getRefData()
+        refData: this.getRefData({ isActive: true })
       })
     ];
   }
@@ -107,18 +106,7 @@ export class SelfDonationTabComponent extends Accordion<Donation> implements Tab
   protected override onClick(event: { buttonId: string; rowIndex: number; }): void {
     if (event.buttonId === 'NOTIFY') {
       const donation = this.itemList[event.rowIndex];
-      // Convert domain model to DTO for API call
-      const donationDto: DonationDto = {
-        id: donation.id,
-        donorId: donation.donorId,
-        donorName: donation.donorName,
-        amount: donation.amount,
-        currency: donation.currency,
-        type: donation.type,
-        status: donation.status,
-        raisedOn: donation.raisedOn
-      };
-      this.donationService.updatePaymentInfo(donation.id, 'NOTIFY', donationDto as any)?.subscribe(data => {
+      this.donationService.updatePaymentInfo(donation.id, 'NOTIFY', donation)?.subscribe(data => {
         if (data) {
           this.itemList[event.rowIndex] = data;
         }
@@ -126,7 +114,10 @@ export class SelfDonationTabComponent extends Accordion<Donation> implements Tab
     }
   }
   protected override onAccordionOpen(event: { rowIndex: number; }): void {
-
+    const donationId = this.itemList[event.rowIndex].id;
+    this.donationService.fetchDocuments(donationId).subscribe(data => {
+      this.addSectionInAccordion(donationDocumentSection(data), event.rowIndex);
+    });
   }
   override handlePageEvent($event: PageEvent): void {
     this.pageEvent = $event;
@@ -152,11 +143,12 @@ export class SelfDonationTabComponent extends Accordion<Donation> implements Tab
       });
     }
   }
-  async loadData(): Promise<void> {
-    const data = await this.donationService.fetchMyDonations({});
-    this.summary = data.summary;
-    this.payableAccounts = data.accounts;
-    this.setContent(data.donations.content!, data.donations.totalSize);
+  loadData(): void {
+    this.donationService.fetchMyDonations({}).subscribe(data => {
+      this.summary = data.summary;
+      this.payableAccounts = data.accounts;
+      this.setContent(data.donations.content!, data.donations.totalSize);
+    });
   }
 
 }

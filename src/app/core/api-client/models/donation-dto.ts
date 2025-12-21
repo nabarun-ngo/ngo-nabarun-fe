@@ -25,6 +25,7 @@ export interface DonationDto {
   donorEmail?: string;
   donorId: string;
   donorName: string;
+  donorNumber?: string;
 
   /**
    * End date for regular donations

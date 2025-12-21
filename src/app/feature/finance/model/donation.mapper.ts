@@ -76,6 +76,7 @@ export function mapDonationDtoToDonation(dto: DonationDto): Donation {
     donorId: dto.donorId,
     donorName: donorName,
     donorEmail: dto.donorEmail,
+    donorPhone: dto.donorNumber,
     amount: amount,
     currency: currency,
     type: dto.type,

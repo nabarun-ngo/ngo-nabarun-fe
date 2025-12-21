@@ -155,24 +155,7 @@ export class DonationDashboardComponent extends StandardTabbedDashboard<donation
   //     ]);
   //   }
   //   else if (this.tabMapping[this.tabIndex] == 'guest_donation') {
-  //     this.setHeaderRow([
-  //       {
-  //         value: 'Donor Name',
-  //         rounded: true
-  //       },
-  //       {
-  //         value: 'Donation Type',
-  //         rounded: true
-  //       },
-  //       {
-  //         value: 'Donation Amount',
-  //         rounded: true
-  //       },
-  //       {
-  //         value: 'Donation Status',
-  //         rounded: true
-  //       }
-  //     ])
+
   //   }
   //   else if (this.tabMapping[this.tabIndex] == 'member_donation') {
   //     this.setHeaderRow([

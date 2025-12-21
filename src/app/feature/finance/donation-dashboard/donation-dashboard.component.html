@@ -13,11 +13,11 @@
                             [payableAccounts]="initialData!.accounts" [refData]="refData"></app-self-donation-tab>
                     </mat-tab>
                     <mat-tab id="guestDonationTab" label="Guest Donations">
-                        <app-guest-donation-tab [accordionData]="initialData!.donations"
+                        <app-guest-donation-tab [accordionData]="initialData"
                             [refData]="refData"></app-guest-donation-tab>
                     </mat-tab>
                     <mat-tab id="memberDonationTab" label="Member Donations">
-                        <app-member-donation-tab [accordionData]="initialData!.donations"
+                        <app-member-donation-tab [accordionData]="initialData!"
                             [refData]="refData"></app-member-donation-tab>
                     </mat-tab>
                 </mat-tab-group>
