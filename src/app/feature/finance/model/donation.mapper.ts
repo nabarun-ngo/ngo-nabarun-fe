@@ -105,7 +105,8 @@ export function mapDonationDtoToDonation(dto: DonationDto): Donation {
     isPaid: dto.status === 'PAID',
     isPending: dto.status === 'PENDING' || dto.status === 'RAISED',
     isCancelled: dto.status === 'CANCELLED',
-    periodDisplay: formatDonationPeriod(dto.startDate, dto.endDate, dto.type)
+    periodDisplay: formatDonationPeriod(dto.startDate, dto.endDate, dto.type),
+    nextStatuses: dto.nextStatuses
   };
 }
 

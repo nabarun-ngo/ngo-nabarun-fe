@@ -57,6 +57,7 @@ export class DonationDashboardComponent extends StandardTabbedDashboard<donation
   }
 
   protected override onInitHook(): void {
+    console.log(this.initialData);
     this.sharedDataService.setPageName(DonationDefaultValue.pageTitle);
     this.searchInput = donationSearchInput(this.getCurrentTab(), this.refData!);
   }

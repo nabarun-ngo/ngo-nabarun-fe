@@ -21,7 +21,6 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
   }
 
   @Input({ required: true }) set accordionData(page: AccordionData<NumType>) {
-    console.log(page)
     if (page) {
       this.page = page;
       if (this.viewInitialized) {
@@ -42,7 +41,7 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
   abstract onInitHook(): void;
 
   ngAfterContentInit(): void {
-    this.setContent(this.page.content!, this.page.totalSize);
+    this.setContent(this.page?.content!, this.page?.totalSize);
     this.viewInitialized = true;
   }
 

@@ -48,6 +48,7 @@ export interface Donation {
   isPending: boolean;
   isCancelled: boolean;
   periodDisplay?: string;
+  nextStatuses?: string[];
 }
 
 export interface DonationSummary {

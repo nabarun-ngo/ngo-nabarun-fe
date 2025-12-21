@@ -16,6 +16,7 @@ export { CreateApiKeyDto } from './models/create-api-key-dto';
 export { CreateDonationDto } from './models/create-donation-dto';
 export { CreateEarningDto } from './models/create-earning-dto';
 export { CreateExpenseDto } from './models/create-expense-dto';
+export { CreateGuestDonationDto } from './models/create-guest-donation-dto';
 export { CreateProjectDto } from './models/create-project-dto';
 export { CreateUserDto } from './models/create-user-dto';
 export { DmsUploadDto } from './models/dms-upload-dto';

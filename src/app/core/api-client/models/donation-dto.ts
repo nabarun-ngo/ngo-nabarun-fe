@@ -54,6 +54,11 @@ export interface DonationDto {
   laterPaymentReason?: string;
 
   /**
+   * Next possible statuses for this donation
+   */
+  nextStatuses: Array<'RAISED' | 'PAID' | 'PENDING' | 'PAYMENT_FAILED' | 'PAY_LATER' | 'CANCELLED' | 'UPDATE_MISTAKE'>;
+
+  /**
    * Date when donation was paid
    */
   paidOn?: string;

@@ -230,15 +230,10 @@ export class DonationService {
         if (action === 'NOTIFY') {
             return undefined;
         }
-        const donationDto: DonationDto = {
-            id: donation.id,
-            donorId: donation.donorId,
-            donorName: donation.donorName,
+        const donationDto: UpdateDonationDto = {
             amount: donation.amount,
-            currency: donation.currency,
-            type: donation.type,
             status: donation.status,
-            raisedOn: donation.raisedOn
+
         };
         return this.donationController.update({ id: id, body: donationDto }).pipe(
             map(d => d.responsePayload),

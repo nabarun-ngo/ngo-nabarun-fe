@@ -89,8 +89,9 @@ export class SelfDonationTabComponent extends Accordion<Donation> implements Tab
   protected override prepareDetailedView(data: Donation, options?: { [key: string]: any; }): DetailedView[] {
     return [
       getDonationSection(data, {
-        isCreate: options && options['create'],
-        refData: this.getRefData({ isActive: true })
+        mode: 'view',
+        refData: this.getRefData({ isActive: true }),
+        payableAccounts: this.payableAccounts.map(acc => ({ key: acc.id, displayValue: acc.accountHolderName || '' }))
       })
     ];
   }
