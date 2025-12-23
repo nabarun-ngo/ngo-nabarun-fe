@@ -40,7 +40,7 @@ const routes: Routes = [
     component: DonationDashboardComponent,
     resolve: {
       data: donationDashboardResolverNew,
-      ref_data: donationRefDataResolverNew
+      ref_data: donationRefDataResolverNew,
     }
   }
 ];

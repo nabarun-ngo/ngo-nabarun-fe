@@ -8,6 +8,7 @@ import { KeyValue } from "src/app/shared/model/key-value.model";
 import { Donation } from "../model";
 import { EventEmitter } from "@angular/core";
 import { User } from "../../member/models/member.model";
+import { FieldVisibilityRule } from "src/app/shared/utils/accordion";
 
 
 export const donationSearchInput = (
@@ -118,7 +119,7 @@ export const getDonationSection = (
                 field_value: donation?.type || '',
                 show_display_value: true,
                 ref_data_section: DonationRefData.refDataKey.type,
-                editable: mode === 'create' || mode === 'edit',
+                editable: mode === 'create',
                 form_control_name: 'type',
                 form_input: {
                     html_id: 'type',
@@ -132,7 +133,7 @@ export const getDonationSection = (
                 field_name: 'Donation amount',
                 field_value: `${donation.amount}`,
                 field_display_value: `₹ ${donation.amount}`,
-                editable: mode === 'create' || mode === 'edit',
+                editable: mode === 'create' || (mode === 'edit' && donation?.status !== 'PAID'),
                 form_control_name: 'amount',
                 form_input: {
                     html_id: 'amount',
@@ -209,32 +210,31 @@ export const getDonationSection = (
                     (mode === 'view' && donation?.status === 'PAID') ||
                     (mode === 'edit' && donation?.status === 'PAID')
                 ),
-                editable: mode === 'edit',
+                editable: mode === 'edit' && donation?.status !== 'PAID',
                 form_control_name: 'paidOn',
                 form_input: {
                     html_id: 'paidOn',
                     tagName: 'input',
                     inputType: 'date',
                     placeholder: 'Ex. 01/15/2024',
-                    style: 'width: 212px;'
+                    style: 'width: 212px;',
                 }
             },
             {
                 field_name: 'Donation paid to',
-                field_value: donation?.paidToAccount?.accountHolderName
-                    ? `${donation.paidToAccount.accountHolderName}${donation.paidToAccount.id ? ` (${donation.paidToAccount.id})` : ''}`
-                    : '',
+                field_value: donation?.paidToAccount?.id || '',
                 hide_field: !(
                     (mode === 'view' && donation?.status === 'PAID') ||
                     (mode === 'edit' && donation?.status === 'PAID')
                 ),
-                editable: mode === 'edit',
-                form_control_name: 'paidToAccount',
+                editable: mode === 'edit' && donation?.status !== 'PAID',
+                form_control_name: 'paidToAccountId',
                 form_input: {
-                    html_id: 'paidToAccount',
+                    html_id: 'paidToAccountId',
                     tagName: 'select',
                     inputType: '',
-                    selectList: payableAccounts
+                    selectList: payableAccounts,
+                    disabled: donation?.status === 'PAID'
                 }
             },
             {
@@ -244,14 +244,15 @@ export const getDonationSection = (
                     (mode === 'view' && donation?.status === 'PAID') ||
                     (mode === 'edit' && donation?.status === 'PAID')
                 ),
-                editable: mode === 'edit',
+                editable: mode === 'edit' && donation?.status !== 'PAID',
                 form_control_name: 'paymentMethod',
                 form_input: {
                     html_id: 'paymentMethod',
                     tagName: 'select',
                     inputType: '',
                     placeholder: 'Ex. UPI',
-                    selectList: refData?.[DonationRefData.refDataKey.paymentMethod] || []
+                    selectList: refData?.[DonationRefData.refDataKey.paymentMethod] || [],
+                    disabled: donation?.status === 'PAID'
                 }
             },
             {
@@ -261,14 +262,15 @@ export const getDonationSection = (
                     (mode === 'view' && donation?.status === 'PAID' && donation?.paymentMethod === 'UPI') ||
                     (mode === 'edit' && donation?.status === 'PAID' && donation?.paymentMethod === 'UPI')
                 ),
-                editable: mode === 'edit',
+                editable: mode === 'edit' && donation?.status !== 'PAID',
                 form_control_name: 'paidUsingUPI',
                 form_input: {
                     html_id: 'paidUsingUPI',
                     tagName: 'select',
                     inputType: '',
                     placeholder: 'Ex. UPI',
-                    selectList: refData?.[DonationRefData.refDataKey.upiOps] || []
+                    selectList: refData?.[DonationRefData.refDataKey.upiOps] || [],
+                    disabled: donation?.status === 'PAID'
                 }
             },
             {
@@ -306,9 +308,9 @@ export const getDonationSection = (
                     (mode === 'edit' && donation?.status === 'CANCELLED')
                 ),
                 editable: mode === 'edit',
-                form_control_name: 'cancellationReason',
+                form_control_name: 'remarks',
                 form_input: {
-                    html_id: 'cancellationReason',
+                    html_id: 'remarks',
                     tagName: 'textarea',
                     inputType: '',
                     placeholder: 'Ex. Cancellation reason'
@@ -322,9 +324,9 @@ export const getDonationSection = (
                     (mode === 'edit' && donation?.status === 'PAY_LATER')
                 ),
                 editable: mode === 'edit',
-                form_control_name: 'laterPaymentReason',
+                form_control_name: 'remarks',
                 form_input: {
-                    html_id: 'laterPaymentReason',
+                    html_id: 'remarks',
                     tagName: 'textarea',
                     inputType: '',
                     placeholder: 'Ex. Reason'
@@ -338,9 +340,9 @@ export const getDonationSection = (
                     (mode === 'edit' && donation?.status === 'PAYMENT_FAILED')
                 ),
                 editable: mode === 'edit',
-                form_control_name: 'paymentFailureDetail',
+                form_control_name: 'remarks',
                 form_input: {
-                    html_id: 'paymentFailureDetail',
+                    html_id: 'remarks',
                     tagName: 'textarea',
                     inputType: '',
                     placeholder: 'Ex. Failure details'
@@ -466,3 +468,50 @@ export const donationDocumentSection = (
         },
     } as DetailedView;
 };
+
+export const DonationFieldVisibilityRules: FieldVisibilityRule<Donation>[] = [
+    // Payment-related fields (show when status is PAID)
+    {
+        fieldName: 'paidOn',
+        condition: (formValue) => formValue.status === 'PAID'
+    },
+    {
+        fieldName: 'paidToAccountId',
+        condition: (formValue) => formValue.status === 'PAID'
+    },
+    {
+        fieldName: 'paymentMethod',
+        condition: (formValue) => formValue.status === 'PAID'
+    },
+    {
+        fieldName: 'remarks',
+        condition: (formValue) => formValue.status === 'PAID'
+    },
+    // UPI field (show when status is PAID and payment method is UPI)
+    {
+        fieldName: 'paidUsingUPI',
+        condition: (formValue) => formValue.status === 'PAID' && formValue.paymentMethod === 'UPI'
+    },
+    // Status-specific reason fields
+    {
+        fieldName: 'cancellationReason',
+        condition: (formValue) => formValue.status === 'CANCELLED'
+    },
+    {
+        fieldName: 'laterPaymentReason',
+        condition: (formValue) => formValue.status === 'PAY_LATER'
+    },
+    {
+        fieldName: 'paymentFailureDetail',
+        condition: (formValue) => formValue.status === 'PAYMENT_FAILED'
+    },
+    // Type-dependent fields
+    {
+        fieldName: 'startDate',
+        condition: (formValue) => formValue.type === 'REGULAR'
+    },
+    {
+        fieldName: 'endDate',
+        condition: (formValue) => formValue.type === 'REGULAR'
+    }
+]

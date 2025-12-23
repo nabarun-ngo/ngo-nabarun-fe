@@ -30,6 +30,7 @@ export interface Donation {
   paidUsingUPI?: 'GPAY' | 'PAYTM' | 'PHONEPE' | 'BHARATPAY' | 'UPI_OTH';
   transactionRef?: string;
   paidToAccount?: Account;
+  paidToAccountId?: string;
 
   // Additional fields
   forEvent?: string;

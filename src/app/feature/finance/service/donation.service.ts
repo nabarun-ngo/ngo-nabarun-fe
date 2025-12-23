@@ -12,7 +12,7 @@ import {
     DmsControllerService
 } from 'src/app/core/api-client/services';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
-import { date } from 'src/app/core/service/utilities.service';
+import { date, removeNullFields } from 'src/app/core/service/utilities.service';
 import { DonationDefaultValue } from '../finance.const';
 import {
     Donation,
@@ -110,12 +110,17 @@ export class DonationService {
                     return of({ ...data, accounts: [] });
                 }
 
-                return this.accountController.payableAccount({ isTransfer: false }).pipe(
-                    map(res => res.responsePayload),
-                    map(accounts => accounts.map(mapAccountDtoToAccount)),
+                return this.fetchPayableAccounts().pipe(
                     map(accounts => ({ ...data, accounts }))
                 );
             })
+        );
+    }
+
+    fetchPayableAccounts(): Observable<Account[]> {
+        return this.accountController.payableAccount({ isTransfer: false }).pipe(
+            map(res => res.responsePayload),
+            map(accounts => accounts.map(mapAccountDtoToAccount))
         );
     }
 
@@ -205,8 +210,19 @@ export class DonationService {
      * @param details Donation details (API DTO format)
      * @returns Observable of updated donation (domain model)
      */
-    updateDonation(id: string, details: DonationDto): Observable<Donation> {
-        return this.donationController.update({ id: id, body: details as any }).pipe(
+    updateDonation(id: string, details: Donation): Observable<Donation> {
+        const updateDonation: UpdateDonationDto = {
+            amount: details.amount,
+            status: details.status,
+            forEvent: details.forEvent,
+            paidOn: details.paidOn,
+            paidToAccountId: details.paidToAccountId,
+            paymentMethod: details.paymentMethod,
+            paidUsingUPI: details.paidUsingUPI,
+            remarks: details.remarks
+        }
+
+        return this.donationController.update({ id: id, body: removeNullFields(updateDonation) }).pipe(
             map(d => d.responsePayload),
             map(mapDonationDtoToDonation)
         );

@@ -147,9 +147,81 @@ When user changes status to "PAID" in the form, the field doesn't appear because
 
 ### Solution Approach
 
-There are **two ways** to handle this:
+There are **three ways** to handle this:
 
-#### Option 1: Use Form ValueChanges (Recommended)
+#### Option 1: Use setupFieldVisibilityRules (Recommended - NEW!)
+
+The Accordion base class now provides a generic `setupFieldVisibilityRules()` method that makes this super easy:
+
+```typescript
+protected override onClick(event: { buttonId: string; rowIndex: number }): void {
+  if (event.buttonId === 'UPDATE') {
+    this.showEditForm(event.rowIndex, ['donation_detail']);
+    
+    // Setup dynamic field visibility using the generic method
+    // Defer to avoid ExpressionChangedAfterItHasBeenCheckedError
+    setTimeout(() => {
+      this.formSubscription = this.setupFieldVisibilityRules('donation_detail', event.rowIndex, [
+        {
+          fieldName: 'paidOn',
+          condition: (formValue) => formValue.status === 'PAID'
+        },
+        {
+          fieldName: 'paidUsingUPI',
+          condition: (formValue) => formValue.status === 'PAID' && formValue.paymentMethod === 'UPI'
+        },
+        {
+          fieldName: 'startDate',
+          condition: (formValue) => formValue.type === 'REGULAR'
+        }
+      ]);
+    }, 0);
+  }
+}
+```
+
+**Benefits:**
+- Clean, declarative syntax
+- Reusable across all components
+- Automatically handles subscription and initial update
+- Type-safe with `FieldVisibilityRule` type
+- **Prevents `ExpressionChangedAfterItHasBeenCheckedError`** by deferring initial update
+
+> **Important**: When calling `setupFieldVisibilityRules()` after `showEditForm()`, wrap it in `setTimeout(0)` to avoid `ExpressionChangedAfterItHasBeenCheckedError`. This is because `showEditForm()` modifies the view, and calling `setupFieldVisibilityRules()` immediately would cause additional view modifications in the same change detection cycle.
+
+> **Note**: The method internally uses `setTimeout(0)` for the initial visibility update, but you still need to wrap the method call itself when used after `showEditForm()`.
+
+#### Option 2: Use Helper Methods
+
+For simpler cases, use the batch update method:
+
+```typescript
+protected override onClick(event: { buttonId: string; rowIndex: number }): void {
+  if (event.buttonId === 'UPDATE') {
+    this.showEditForm(event.rowIndex, ['donation_detail']);
+    
+    const form = this.getSectionForm('donation_detail', event.rowIndex);
+    
+    form?.valueChanges.subscribe(formValue => {
+      // Batch update multiple fields at once
+      this.updateFieldsVisibility('donation_detail', event.rowIndex, {
+        'paidOn': formValue.status === 'PAID',
+        'paidToAccount': formValue.status === 'PAID',
+        'paymentMethod': formValue.status === 'PAID',
+        'paidUsingUPI': formValue.status === 'PAID' && formValue.paymentMethod === 'UPI'
+      });
+    });
+  }
+}
+```
+
+Or update a single field:
+
+```typescript
+this.updateFieldVisibility('donation_detail', 'paidOn', rowIndex, status === 'PAID');
+```
+
+#### Option 3: Manual Implementation (Legacy)
 
 Subscribe to form changes and manually toggle field visibility:
 
@@ -172,60 +244,21 @@ protected override onClick(event: { buttonId: string; rowIndex: number }): void 
         paymentMethodField.hide_field = status !== 'PAID';
       }
     });
-    
-    // Subscribe to payment method changes (for UPI field)
-    form?.get('paymentMethod')?.valueChanges.subscribe(method => {
-      const section = this.getSectionInAccordion('donation_detail', event.rowIndex);
-      const upiField = section?.content?.find(f => f.form_control_name === 'paidUsingUPI');
-      
-      if (upiField) {
-        const status = form.get('status')?.value;
-        upiField.hide_field = !(status === 'PAID' && method === 'UPI');
-      }
-    });
   }
 }
 ```
 
-#### Option 2: Regenerate Section on Form Change
+### Available Generic Methods
 
-Recreate the entire section when form values change:
+The `Accordion` base class provides these methods:
 
-```typescript
-protected override onClick(event: { buttonId: string; rowIndex: number }): void {
-  if (event.buttonId === 'UPDATE') {
-    this.showEditForm(event.rowIndex, ['donation_detail']);
-    
-    const form = this.getSectionForm('donation_detail', event.rowIndex);
-    
-    form?.valueChanges.subscribe(formValue => {
-      // Create updated donation object with form values
-      const updatedDonation = {
-        ...this.itemList[event.rowIndex],
-        ...formValue
-      };
-      
-      // Regenerate section with updated data
-      const updatedSection = getDonationSection(updatedDonation, {
-        mode: 'edit',
-        refData: this.getRefData({ isActive: true }),
-        payableAccounts: this.payableAccounts.map(acc => ({
-          key: acc.id,
-          displayValue: acc.accountHolderName || ''
-        }))
-      });
-      
-      // Replace section
-      const sectionIndex = this.accordionList.contents[event.rowIndex].detailed
-        .findIndex(s => s.section_html_id === 'donation_detail');
-      this.accordionList.contents[event.rowIndex].detailed[sectionIndex] = updatedSection;
-      
-      // Re-show form
-      this.showEditForm(event.rowIndex, ['donation_detail']);
-    });
-  }
-}
-```
+| Method | Purpose | Returns |
+|--------|---------|---------|
+| `setupFieldVisibilityRules()` | Setup rules for multiple fields | `Subscription \| undefined` |
+| `updateFieldVisibility()` | Update a single field's visibility | `void` |
+| `updateFieldsVisibility()` | Batch update multiple fields | `void` |
+| `regenerateDetailedView()` | Regenerate sections with new options (e.g., mode change) | `void` |
+| `replaceSectionWithMode()` | Replace a specific section with different mode | `void` |
 
 ---
 
