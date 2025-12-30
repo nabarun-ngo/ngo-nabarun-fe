@@ -156,6 +156,7 @@ export class GuestDonationTabComponent extends Accordion<Donation> implements Ta
       const donorForm = this.getSectionForm('donor_detail', event.rowIndex);
       const donationForm = this.getSectionForm('donation_detail', event.rowIndex);
       if (donorForm?.valid && donationForm?.valid) {
+        console.log(donationForm.value, donation);
         this.donationService.updateDonation(donation.id, compareObjects(donationForm.value, donation)).subscribe(data => {
           this.hideForm(event.rowIndex);
           this.updateContentRow(data, event.rowIndex);
