@@ -70,16 +70,12 @@ export class GuestDonationTabComponent extends BaseDonationTabComponent {
 
   protected override prepareDetailedView(data: Donation, options?: { [key: string]: any; }): DetailedView[] {
     const mode = (options?.['mode'] as 'create' | 'edit' | 'view') || 'view';
-
     return [
       getDonorSection(data, {
         mode: mode,
         refData: this.getRefData({ isActive: true })
       }),
-      getDonationSection(data, {
-        mode: mode,
-        refData: this.getRefData({ isActive: true }),
-      })
+      ...super.prepareDetailedView(data, options)
     ];
   }
 

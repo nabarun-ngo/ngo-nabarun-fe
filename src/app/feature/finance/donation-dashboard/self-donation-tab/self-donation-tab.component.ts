@@ -17,8 +17,7 @@ import { BaseDonationTabComponent } from '../base-donation-tab.component';
 export class SelfDonationTabComponent extends BaseDonationTabComponent {
   @Input()
   summary: DonationSummary | undefined;
-  @Input()
-  payableAccounts: Account[] = [];
+
 
 
   override onInitHook(): void {
@@ -65,15 +64,7 @@ export class SelfDonationTabComponent extends BaseDonationTabComponent {
       }
     ];
   }
-  protected override prepareDetailedView(data: Donation, options?: { [key: string]: any; }): DetailedView[] {
-    return [
-      getDonationSection(data, {
-        mode: 'view',
-        refData: this.getRefData({ isActive: true }),
-        payableAccounts: this.payableAccounts.map(acc => ({ key: acc.id, displayValue: acc.accountHolderName || '' }))
-      })
-    ];
-  }
+
   protected override prepareDefaultButtons(data: Donation, options?: { [key: string]: any; }): AccordionButton[] {
     return data.status === 'RAISED' || data.status === 'PENDING' ?
       [

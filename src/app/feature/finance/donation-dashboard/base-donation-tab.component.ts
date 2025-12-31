@@ -1,21 +1,25 @@
-import { Component, OnDestroy } from '@angular/core';
-import { Validators } from '@angular/forms';
+import { Component, Input, OnDestroy } from '@angular/core';
+import { FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { compareObjects } from 'src/app/core/service/utilities.service';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
 import { Accordion } from 'src/app/shared/utils/accordion';
-import { donationDocumentSection, DonationFieldVisibilityRules } from '../fields/donation.field';
+import { donationDocumentSection, DonationFieldVisibilityRules, getDonationSection } from '../fields/donation.field';
 import { DonationDefaultValue } from '../finance.const';
 import { Account, Donation, PagedDonations } from '../model';
 import { DonationService } from '../service/donation.service';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
+import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 
 @Component({
     template: ''
 })
 export abstract class BaseDonationTabComponent extends Accordion<Donation> implements TabComponentInterface<PagedDonations>, OnDestroy {
     protected formSubscription?: Subscription;
+
+    @Input()
+    payableAccounts: Account[] = [];
 
     constructor(
         protected donationService: DonationService,
@@ -35,6 +39,18 @@ export abstract class BaseDonationTabComponent extends Accordion<Donation> imple
             pageSize: DonationDefaultValue.pageSize,
             pageSizeOptions: DonationDefaultValue.pageSizeOptions
         };
+    }
+
+    protected override prepareDetailedView(data: Donation, options?: { [key: string]: any; }): DetailedView[] {
+        const mode = (options?.['mode'] as 'create' | 'edit' | 'view') || 'view';
+        return [
+            getDonationSection(data, {
+                mode: mode,
+                refData: this.getRefData({ isActive: true }),
+                payableAccounts: this.payableAccounts.map(acc => ({ key: acc.id, displayValue: acc.accountHolderName || '' }))
+            }),
+            donationDocumentSection([])
+        ];
     }
 
     protected override onClick(event: { buttonId: string; rowIndex: number; }): void {
@@ -97,6 +113,7 @@ export abstract class BaseDonationTabComponent extends Accordion<Donation> imple
 
         if (allValid) {
             const donationForm = this.getSectionForm('donation_detail', rowIndex);
+            const documents = this.getSectionDocuments('document_list', rowIndex);
             this.donationService.updateDonation(donation.id, compareObjects(donationForm?.value, donation)).subscribe((data: Donation) => {
                 this.hideForm(rowIndex);
                 this.updateContentRow(data, rowIndex);
@@ -118,14 +135,14 @@ export abstract class BaseDonationTabComponent extends Accordion<Donation> imple
      * Returns the list of forms to validate on confirm.
      * Can be overridden by child components.
      */
-    protected getFormsToValidate(rowIndex: number): any[] {
-        return [this.getSectionForm('donation_detail', rowIndex)];
+    protected getFormsToValidate(rowIndex: number): FormGroup[] {
+        return [this.getSectionForm('donation_detail', rowIndex)!];
     }
 
-    protected override onAccordionOpen(event: { rowIndex: number; }): void {
+    override onAccordionOpen(event: { rowIndex: number; }): void {
         const donationId = this.itemList[event.rowIndex].id;
         this.donationService.fetchDocuments(donationId).subscribe(data => {
-            this.addSectionInAccordion(donationDocumentSection(data), event.rowIndex);
+            this.getSectionInAccordion('document_list', event.rowIndex)!.documents = data;
         });
     }
 

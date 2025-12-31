@@ -74,7 +74,7 @@ export interface DetailedView<NumType = any> {
     /* ───────────── Documents ───────────── */
 
     readonly documentHeader?: string;
-    readonly documents?: Doc[];
+    documents?: Doc[];
 
     /**
      * Document upload state.

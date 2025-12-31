@@ -627,54 +627,54 @@ export const settlementSummary = (
   } as DetailedView;
 };
 
-export const expenseEditableTable = (items: ExpenseItem[]) => {
-  return {
-    section_name: 'Expense Details',
-    section_type: 'editable_table',
-    section_html_id: 'expense_details',
-    section_form: new FormGroup({
-      items: new FormArray([
-        ...items.map(item => new FormGroup({
-          itemName: new FormControl(item.itemName),
-          amount: new FormControl(item.amount),
-        }))
-      ])
-    }),
-    show_form: true,
-    hide_section: false,
-    editableTable: {
-      allowAddRow: true,
-      allowDeleteRow: true,
-      formArrayName: 'items',
-      columns: [
-        {
-          columnDef: 'itemName',
-          header: 'Item Name',
-          editable: true,
-          validators: [Validators.required],
-          inputModel: {
-            html_id: 'item_name',
-            labelName: 'Item Name',
-            tagName: 'input',
-            inputType: 'text',
-            placeholder: 'Enter item name',
-          }
-        },
-        {
-          columnDef: 'amount',
-          header: 'Item Amount',
-          editable: true,
-          validators: [Validators.required],
-          inputModel: {
-            html_id: 'item_amount',
-            labelName: 'Item Amount',
-            tagName: 'input',
-            inputType: 'number',
-            placeholder: 'Enter item amount',
-          }
-        },
+// export const expenseEditableTable = (items: ExpenseItem[]) => {
+//   return {
+//     section_name: 'Expense Details',
+//     section_type: 'editable_table',
+//     section_html_id: 'expense_details',
+//     section_form: new FormGroup({
+//       items: new FormArray([
+//         ...items.map(item => new FormGroup({
+//           itemName: new FormControl(item.itemName),
+//           amount: new FormControl(item.amount),
+//         }))
+//       ])
+//     }),
+//     show_form: true,
+//     hide_section: false,
+//     editableTable: {
+//       allowAddRow: true,
+//       allowDeleteRow: true,
+//       formArrayName: 'items',
+//       columns: [
+//         {
+//           columnDef: 'itemName',
+//           header: 'Item Name',
+//           editable: true,
+//           validators: [Validators.required],
+//           inputModel: {
+//             html_id: 'item_name',
+//             labelName: 'Item Name',
+//             tagName: 'input',
+//             inputType: 'text',
+//             placeholder: 'Enter item name',
+//           }
+//         },
+//         {
+//           columnDef: 'amount',
+//           header: 'Item Amount',
+//           editable: true,
+//           validators: [Validators.required],
+//           inputModel: {
+//             html_id: 'item_amount',
+//             labelName: 'Item Amount',
+//             tagName: 'input',
+//             inputType: 'number',
+//             placeholder: 'Enter item amount',
+//           }
+//         },
 
-      ],
-    },
-  } as DetailedView;
-};
+//       ],
+//     },
+//   } as DetailedView;
+// };
