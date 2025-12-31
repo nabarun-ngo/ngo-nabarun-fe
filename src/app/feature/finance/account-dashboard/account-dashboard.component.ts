@@ -36,18 +36,18 @@ export class AccountDashboardComponent extends StandardTabbedDashboard<accountTa
   };
   protected navigations: NavigationButtonModel[] = [
 
-    {
-      displayName: 'Visit Expenses',
-      routerLink: AppRoute.secured_manage_account_page.url,
-    },
+    // {
+    //   displayName: 'Visit Expenses',
+    //   routerLink: AppRoute.secured_manage_account_page.url,
+    // },
     {
       displayName: 'Back to Dashboard',
       routerLink: AppRoute.secured_dashboard_page.url,
     },
-    {
-      displayName: 'Visit Donations',
-      routerLink: AppRoute.secured_donation_dashboard_page.url,
-    }
+    // {
+    //   displayName: 'Visit Donations',
+    //   routerLink: AppRoute.secured_donation_dashboard_page.url,
+    // }
   ];
 
   /**

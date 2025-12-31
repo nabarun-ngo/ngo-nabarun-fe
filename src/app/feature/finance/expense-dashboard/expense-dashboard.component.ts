@@ -34,18 +34,18 @@ export class ExpenseDashboardComponent extends StandardTabbedDashboard<expenseTa
     canManageExpense: boolean;
   };
   protected navigations: NavigationButtonModel[] = [
-    {
-      displayName: 'Visit Accounts',
-      routerLink: AppRoute.secured_account_list_page.url,
-    },
+    // {
+    //   displayName: 'Visit Accounts',
+    //   routerLink: AppRoute.secured_account_list_page.url,
+    // },
     {
       displayName: 'Back to Dashboard',
       routerLink: AppRoute.secured_dashboard_page.url,
     },
-    {
-      displayName: 'Visit Donations',
-      routerLink: AppRoute.secured_donation_dashboard_page.url,
-    }
+    // {
+    //   displayName: 'Visit Donations',
+    //   routerLink: AppRoute.secured_donation_dashboard_page.url,
+    // }
   ];
   protected searchInput!: SearchAndAdvancedSearchModel;
   protected AppRoute = AppRoute;
