@@ -1,33 +1,28 @@
-import { Component, OnDestroy } from '@angular/core';
-import { Validators } from '@angular/forms';
+import { Component } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
-import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
 import { AccordionButton, AccordionCell } from 'src/app/shared/model/accordion-list.model';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
-import { Accordion } from 'src/app/shared/utils/accordion';
-import { DonationDefaultValue, DonationRefData } from '../../finance.const';
-import { Donation, PagedDonations } from '../../model';
-import { compareObjects, date } from 'src/app/core/service/utilities.service';
-import { DonationFieldVisibilityRules, getDonationSection, getDonorSection } from '../../fields/donation.field';
-import { DonationService } from '../../service/donation.service';
-import { Subscription } from 'rxjs';
+import { DonationRefData } from '../../finance.const';
+import { Donation } from '../../model';
+import { getDonationSection, getDonorSection } from '../../fields/donation.field';
+import { BaseDonationTabComponent } from '../base-donation-tab.component';
+import { SCOPE } from 'src/app/core/constant/auth-scope.const';
+import { removeNullFields } from 'src/app/core/service/utilities.service';
 
 @Component({
   selector: 'app-guest-donation-tab',
   templateUrl: './guest-donation-tab.component.html',
   styleUrls: ['./guest-donation-tab.component.scss']
 })
-export class GuestDonationTabComponent extends Accordion<Donation> implements TabComponentInterface<PagedDonations>, OnDestroy {
-  private formSubscription?: Subscription;
-
-  constructor(
-    protected donationService: DonationService,
-  ) {
-    super();
-  }
+export class GuestDonationTabComponent extends BaseDonationTabComponent {
+  permissions: { canCreateDonation: boolean; canUpdateDonation: boolean; } | undefined;
 
   override onInitHook(): void {
+    this.permissions = {
+      canCreateDonation: this.identityService.isAccrediatedTo(SCOPE.create.donation),
+      canUpdateDonation: this.identityService.isAccrediatedTo(SCOPE.update.donation),
+    }
     this.setHeaderRow([
       {
         value: 'Donor Name',
@@ -47,20 +42,6 @@ export class GuestDonationTabComponent extends Accordion<Donation> implements Ta
       }
     ]);
   }
-
-
-  protected get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
-    return {
-      pageNumber: DonationDefaultValue.pageNumber,
-      pageSize: DonationDefaultValue.pageSize,
-      pageSizeOptions: DonationDefaultValue.pageSizeOptions
-    };
-  }
-
-  protected get tabComponents() {
-    return {};
-  }
-
 
   protected override prepareHighLevelView(data: Donation, options?: { [key: string]: any; }): AccordionCell[] {
     return [
@@ -111,73 +92,30 @@ export class GuestDonationTabComponent extends Accordion<Donation> implements Ta
     ];
   }
 
-  protected override onClick(event: { buttonId: string; rowIndex: number; }): void {
-    if (event.buttonId === 'UPDATE_DONATION') {
-      this.activeButtonId = event.buttonId;
-      this.regenerateDetailedView(event.rowIndex, { mode: 'edit' });
-      this.showEditForm(event.rowIndex, ['donation_detail', 'document_list']);
-
-      setTimeout(() => {
-        this.formSubscription = this.setupFieldVisibilityRules('donation_detail', event.rowIndex, DonationFieldVisibilityRules);
-        const form = this.getSectionForm('donation_detail', event.rowIndex);
-        this.formSubscription?.add(
-          form?.get('status')?.valueChanges.subscribe(status => {
-            const isPaid = status === 'PAID';
-            this.updateFieldValidators('donation_detail', event.rowIndex, {
-              'paidOn': isPaid ? [Validators.required] : [],
-              'paidToAccountId': isPaid ? [Validators.required] : [],
-              'paymentMethod': isPaid ? [Validators.required] : [],
-              'paidUsingUPI': isPaid && form?.get('paymentMethod')?.value === 'UPI' ? [Validators.required] : [],
-              'cancellationReason': status === 'CANCELLED' ? [Validators.required] : [],
-              'laterPaymentReason': status === 'PAY_LATER' ? [Validators.required] : [],
-              'paymentFailureDetail': status === 'PAYMENT_FAILED' ? [Validators.required] : []
-            });
-          })
-        );
-
-        // Trigger initial validation update
-        form?.get('status')?.updateValueAndValidity({ emitEvent: true });
-      }, 0);
-
-      this.donationService.fetchPayableAccounts().subscribe(accounts => {
-        const accountOptions = accounts.map(a => ({
-          key: a.id,
-          displayValue: a.displayName
-        }));
-        this.updateFieldOptions('donation_detail', event.rowIndex, 'paidToAccountId', accountOptions);
-      });
-    }
-    else if (event.buttonId === 'CANCEL' && this.activeButtonId === 'UPDATE_DONATION') {
-      this.formSubscription?.unsubscribe();
-      this.hideForm(event.rowIndex);
-    }
-    else if (event.buttonId === 'CONFIRM' && this.activeButtonId === 'UPDATE_DONATION') {
-      const donation = this.itemList[event.rowIndex];
-      const donorForm = this.getSectionForm('donor_detail', event.rowIndex);
-      const donationForm = this.getSectionForm('donation_detail', event.rowIndex);
-      if (donorForm?.valid && donationForm?.valid) {
-        console.log(donationForm.value, donation);
-        this.donationService.updateDonation(donation.id, compareObjects(donationForm.value, donation)).subscribe(data => {
-          this.hideForm(event.rowIndex);
-          this.updateContentRow(data, event.rowIndex);
-        });
-      } else {
-        donationForm?.markAllAsTouched();
-        donorForm?.markAllAsTouched();
-      }
-    }
-  }
-
-  protected override onAccordionOpen(event: { rowIndex: number; }): void {
-    // Load documents or other data when accordion opens
-  }
 
   override handlePageEvent($event: PageEvent): void {
-    // Handle pagination
+    this.pageEvent = $event;
+    this.donationService.fetchGuestDonations({
+      pageIndex: $event.pageIndex,
+      pageSize: $event.pageSize
+    }).subscribe(data => {
+      this.setContent(data.content!, data.totalSize);
+    });
   }
 
   onSearch($event: SearchEvent): void {
-    // Handle search
+    if ($event.advancedSearch) {
+      this.donationService.fetchGuestDonations({
+        filter: removeNullFields($event.value)
+      }).subscribe(data => {
+        this.setContent(data.content!, data.totalSize);
+      });
+    }
+    else if ($event.reset) {
+      this.donationService.fetchGuestDonations({}).subscribe(data => {
+        this.setContent(data.content!, data.totalSize);
+      });
+    }
   }
 
   loadData(): void {
@@ -189,8 +127,11 @@ export class GuestDonationTabComponent extends Accordion<Donation> implements Ta
     })
   }
 
-  ngOnDestroy(): void {
-    this.formSubscription?.unsubscribe();
+  protected override getFormsToValidate(rowIndex: number): any[] {
+    return [
+      this.getSectionForm('donor_detail', rowIndex),
+      this.getSectionForm('donation_detail', rowIndex)
+    ];
   }
 
 }

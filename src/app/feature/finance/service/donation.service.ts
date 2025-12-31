@@ -132,10 +132,12 @@ export class DonationService {
     fetchGuestDonations(options: {
         pageIndex?: number,
         pageSize?: number
+        filter?: { donationId?: string, donationStatus?: string[], startDate?: string, endDate?: string, donationType?: string[] }
     }): Observable<PagedDonations> {
         return this.donationController.listGuestDonations({
             pageIndex: options.pageIndex || DonationDefaultValue.pageNumber,
-            pageSize: options.pageSize || DonationDefaultValue.pageSize
+            pageSize: options.pageSize || DonationDefaultValue.pageSize,
+            ...options.filter
         }).pipe(
             map(d => d.responsePayload),
             map(mapPagedDonationDtoToPagedDonations)

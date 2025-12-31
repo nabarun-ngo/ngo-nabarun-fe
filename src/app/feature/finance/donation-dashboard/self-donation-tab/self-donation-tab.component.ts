@@ -1,46 +1,25 @@
-import { Component, ElementRef, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { DonationDto } from 'src/app/core/api-client/models';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
-import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
 import { AccordionCell, AccordionButton } from 'src/app/shared/model/accordion-list.model';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
-import { Accordion } from 'src/app/shared/utils/accordion';
-import { DonationService } from '../../service/donation.service';
 import { date, removeNullFields } from 'src/app/core/service/utilities.service';
-import { DonationDefaultValue, DonationRefData } from '../../finance.const';
-import { Donation, DonationSummary, PagedDonations, Account } from '../../model';
-import { donationDocumentSection, getDonationSection } from '../../fields/donation.field';
+import { DonationRefData } from '../../finance.const';
+import { Donation, DonationSummary, Account } from '../../model';
+import { getDonationSection } from '../../fields/donation.field';
+import { BaseDonationTabComponent } from '../base-donation-tab.component';
 
 @Component({
   selector: 'app-self-donation-tab',
   templateUrl: './self-donation-tab.component.html',
   styleUrls: ['./self-donation-tab.component.scss']
 })
-export class SelfDonationTabComponent extends Accordion<Donation> implements TabComponentInterface<PagedDonations> {
+export class SelfDonationTabComponent extends BaseDonationTabComponent {
   @Input()
   summary: DonationSummary | undefined;
   @Input()
   payableAccounts: Account[] = [];
 
-  constructor(
-    protected donationService: DonationService,
-    protected el: ElementRef,
-  ) {
-    super();
-  }
-
-  protected get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
-    return {
-      pageNumber: DonationDefaultValue.pageNumber,
-      pageSize: DonationDefaultValue.pageSize,
-      pageSizeOptions: DonationDefaultValue.pageSizeOptions
-    };
-  }
-
-  protected get tabComponents() {
-    return {};
-  }
 
   override onInitHook(): void {
     this.setHeaderRow([
@@ -104,6 +83,7 @@ export class SelfDonationTabComponent extends Accordion<Donation> implements Tab
         }
       ] : [];
   }
+
   protected override onClick(event: { buttonId: string; rowIndex: number; }): void {
     if (event.buttonId === 'NOTIFY') {
       const donation = this.itemList[event.rowIndex];
@@ -114,12 +94,9 @@ export class SelfDonationTabComponent extends Accordion<Donation> implements Tab
       });
     }
   }
-  protected override onAccordionOpen(event: { rowIndex: number; }): void {
-    const donationId = this.itemList[event.rowIndex].id;
-    this.donationService.fetchDocuments(donationId).subscribe(data => {
-      this.addSectionInAccordion(donationDocumentSection(data), event.rowIndex);
-    });
-  }
+
+
+
   override handlePageEvent($event: PageEvent): void {
     this.pageEvent = $event;
     this.donationService.getSelfDonations({
@@ -129,8 +106,9 @@ export class SelfDonationTabComponent extends Accordion<Donation> implements Tab
       this.setContent(data.content!, data.totalSize);
     });
   }
+
+
   onSearch($event: SearchEvent): void {
-    console.log($event);
     if ($event.advancedSearch) {
       this.donationService.getSelfDonations({
         filter: removeNullFields($event.value)
@@ -144,6 +122,8 @@ export class SelfDonationTabComponent extends Accordion<Donation> implements Tab
       });
     }
   }
+
+
   loadData(): void {
     this.donationService.fetchMyDonations({}).subscribe(data => {
       this.summary = data.summary;
