@@ -102,7 +102,7 @@ export const getDonationSection = (
     const donationForm = new FormGroup({
     })
     const STATUS = refData?.[DonationRefData.refDataKey.status] || [];
-    const NEXT_STATUS = STATUS.filter((status) => donation.nextStatuses?.includes(status.key)) || [];
+    const NEXT_STATUS = STATUS.filter((status) => donation?.nextStatuses?.includes(status.key)) || [];
     return {
         section_name: 'Donation Details',
         section_type: 'key_value',
@@ -131,8 +131,8 @@ export const getDonationSection = (
             },
             {
                 field_name: 'Donation amount',
-                field_value: `${donation.amount}`,
-                field_display_value: `₹ ${donation.amount}`,
+                field_value: `${donation?.amount}`,
+                field_display_value: `₹ ${donation?.amount}`,
                 editable: mode === 'create' || (mode === 'edit' && donation?.status !== 'PAID'),
                 form_control_name: 'amount',
                 form_input: {
@@ -430,7 +430,7 @@ export const getDonorSection = (
             },
             {
                 field_name: 'Phone Number',
-                field_value: donation.donorPhone!,
+                field_value: donation?.donorPhone!,
                 form_control_name: 'donorPhone',
                 editable: true,
                 form_input: {

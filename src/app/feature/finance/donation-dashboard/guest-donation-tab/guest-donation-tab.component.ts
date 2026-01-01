@@ -57,7 +57,7 @@ export class GuestDonationTabComponent extends BaseDonationTabComponent {
       },
       {
         type: 'text',
-        value: data.formattedAmount,
+        value: data?.amount ? `₹ ${data.amount}` : '',
       },
       {
         type: 'text',
@@ -128,6 +128,10 @@ export class GuestDonationTabComponent extends BaseDonationTabComponent {
       this.getSectionForm('donor_detail', rowIndex),
       this.getSectionForm('donation_detail', rowIndex)
     ];
+  }
+
+  initCreateDonationForm() {
+    this.showCreateForm()
   }
 
 }
