@@ -26,6 +26,7 @@ import {
 } from '../model';
 import { mapDocDtoToDoc } from 'src/app/shared/model/document.model';
 import { from } from 'rxjs';
+import { FileUpload } from 'src/app/shared/components/generic/file-upload/file-upload.component';
 
 @Injectable({
     providedIn: 'root'
@@ -212,7 +213,7 @@ export class DonationService {
      * @param details Donation details (API DTO format)
      * @returns Observable of updated donation (domain model)
      */
-    updateDonation(id: string, details: Donation): Observable<Donation> {
+    updateDonation(id: string, details: Donation, documents?: FileUpload[]): Observable<Donation> {
         const updateDonation: UpdateDonationDto = {
             amount: details.amount,
             status: details.status,
@@ -223,15 +224,36 @@ export class DonationService {
             paidUsingUPI: details.paidUsingUPI,
             remarks: details.remarks
         }
-
         return this.donationController.update({ id: id, body: removeNullFields(updateDonation) }).pipe(
             map(d => d.responsePayload),
+            switchMap((donation) => {
+                if (documents && documents.length > 0) {
+                    const uploadDtos: DmsUploadDto[] = documents.map(doc => ({
+                        contentType: doc.detail.contentType,
+                        fileBase64: doc.detail.base64Content,
+                        filename: doc.detail.originalFileName,
+                        documentMapping: [
+                            {
+                                entityId: id,
+                                entityType: 'DONATION'
+                            },
+                        ]
+                    }));
+                    if (donation.transactionRef) {
+                        uploadDtos.map(doc => doc.documentMapping.push({
+                            entityId: donation.transactionRef!,
+                            entityType: 'TRANSACTION'
+                        }));
+                    }
+                    return this.uploadDocuments(uploadDtos).pipe(map(() => donation));
+                }
+                return of(donation);
+            }),
             map(mapDonationDtoToDonation)
         );
     }
 
     uploadDocuments(documents: DmsUploadDto[]) {
-        // Assuming uploadDocuments expects an array of upload DTOs
         return forkJoin(documents.map(doc =>
             this.dmsService.uploadFile({ body: doc }).pipe(map(d => d.responsePayload))
         ));

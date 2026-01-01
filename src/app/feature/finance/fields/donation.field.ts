@@ -91,14 +91,11 @@ export const donationSearchInput = (
 };
 export const getDonationSection = (
     donation: Donation,
-    options: {
-        mode: 'create' | 'edit' | 'view',
-        refData?: { [name: string]: KeyValue[] },
-        payableAccounts?: KeyValue[],
-        events?: KeyValue[]
-    }
+    refData: { [name: string]: KeyValue[] },
+    payableAccounts: KeyValue[] = [],
+    events: KeyValue[] = [],
+    isCreate: boolean = false
 ): DetailedView => {
-    const { mode, refData, payableAccounts = [], events = [] } = options;
     const donationForm = new FormGroup({
     })
     const STATUS = refData?.[DonationRefData.refDataKey.status] || [];
@@ -112,14 +109,14 @@ export const getDonationSection = (
             {
                 field_name: 'Donation number',
                 field_value: donation?.id || '',
-                hide_field: mode === 'create'
+                hide_field: isCreate
             },
             {
                 field_name: 'Donation type',
                 field_value: donation?.type || '',
                 show_display_value: true,
                 ref_data_section: DonationRefData.refDataKey.type,
-                editable: mode === 'create',
+                editable: isCreate,
                 form_control_name: 'type',
                 form_input: {
                     html_id: 'type',
@@ -133,7 +130,7 @@ export const getDonationSection = (
                 field_name: 'Donation amount',
                 field_value: `${donation?.amount}`,
                 field_display_value: `₹ ${donation?.amount}`,
-                editable: mode === 'create' || (mode === 'edit' && donation?.status !== 'PAID'),
+                editable: isCreate || (!isCreate && donation?.status !== 'PAID'),
                 form_control_name: 'amount',
                 form_input: {
                     html_id: 'amount',
@@ -147,8 +144,8 @@ export const getDonationSection = (
                 field_value: donation?.status || '',
                 show_display_value: true,
                 ref_data_section: DonationRefData.refDataKey.status,
-                hide_field: mode === 'create',
-                editable: mode === 'edit',
+                hide_field: isCreate,
+                editable: !isCreate,
                 form_control_name: 'status',
                 form_input: {
                     html_id: 'status',
@@ -162,12 +159,8 @@ export const getDonationSection = (
                 field_name: 'Donation start date',
                 field_value: donation?.startDate || '',
                 field_display_value: date(donation?.startDate),
-                hide_field: !(
-                    (mode === 'create' && donation?.type === 'REGULAR') ||
-                    (mode === 'edit' && donation?.type === 'REGULAR') ||
-                    (mode === 'view' && donation?.type === 'REGULAR')
-                ),
-                editable: mode === 'create' || mode === 'edit',
+                hide_field: !(donation?.type === 'REGULAR'),
+                editable: true,
                 form_control_name: 'startDate',
                 form_input: {
                     html_id: 'startDate',
@@ -181,12 +174,8 @@ export const getDonationSection = (
                 field_name: 'Donation end date',
                 field_value: donation?.endDate || '',
                 field_display_value: date(donation?.endDate),
-                hide_field: !(
-                    (mode === 'create' && donation?.type === 'REGULAR') ||
-                    (mode === 'edit' && donation?.type === 'REGULAR') ||
-                    (mode === 'view' && donation?.type === 'REGULAR')
-                ),
-                editable: mode === 'create' || mode === 'edit',
+                hide_field: !(donation?.type === 'REGULAR'),
+                editable: true,
                 form_control_name: 'endDate',
                 form_input: {
                     html_id: 'endDate',
@@ -200,17 +189,16 @@ export const getDonationSection = (
                 field_name: 'Donation raised on',
                 field_value: donation?.raisedOn || '',
                 field_display_value: date(donation?.raisedOn),
-                hide_field: mode === 'create'
+                hide_field: isCreate
             },
             {
                 field_name: 'Donation paid on',
-                field_value: donation?.paidOn || '',
+                field_value: donation?.paidOn,
                 field_display_value: date(donation?.paidOn),
                 hide_field: !(
-                    (mode === 'view' && donation?.status === 'PAID') ||
-                    (mode === 'edit' && donation?.status === 'PAID')
+                    !isCreate && donation?.status === 'PAID'
                 ),
-                editable: mode === 'edit' && donation?.status !== 'PAID',
+                editable: !isCreate && donation?.status !== 'PAID',
                 form_control_name: 'paidOn',
                 form_input: {
                     html_id: 'paidOn',
@@ -224,10 +212,9 @@ export const getDonationSection = (
                 field_name: 'Donation paid to',
                 field_value: donation?.paidToAccount?.id || '',
                 hide_field: !(
-                    (mode === 'view' && donation?.status === 'PAID') ||
-                    (mode === 'edit' && donation?.status === 'PAID')
+                    !isCreate && donation?.status === 'PAID'
                 ),
-                editable: mode === 'edit' && donation?.status !== 'PAID',
+                editable: !isCreate && donation?.status !== 'PAID',
                 form_control_name: 'paidToAccountId',
                 form_input: {
                     html_id: 'paidToAccountId',
@@ -241,10 +228,9 @@ export const getDonationSection = (
                 field_name: 'Payment method',
                 field_value: donation?.paymentMethod || '',
                 hide_field: !(
-                    (mode === 'view' && donation?.status === 'PAID') ||
-                    (mode === 'edit' && donation?.status === 'PAID')
+                    !isCreate && donation?.status === 'PAID'
                 ),
-                editable: mode === 'edit' && donation?.status !== 'PAID',
+                editable: !isCreate && donation?.status !== 'PAID',
                 form_control_name: 'paymentMethod',
                 form_input: {
                     html_id: 'paymentMethod',
@@ -259,10 +245,9 @@ export const getDonationSection = (
                 field_name: 'UPI name',
                 field_value: donation?.paidUsingUPI || '',
                 hide_field: !(
-                    (mode === 'view' && donation?.status === 'PAID' && donation?.paymentMethod === 'UPI') ||
-                    (mode === 'edit' && donation?.status === 'PAID' && donation?.paymentMethod === 'UPI')
+                    !isCreate && donation?.status === 'PAID' && donation?.paymentMethod === 'UPI'
                 ),
-                editable: mode === 'edit' && donation?.status !== 'PAID',
+                editable: !isCreate && donation?.status !== 'PAID',
                 form_control_name: 'paidUsingUPI',
                 form_input: {
                     html_id: 'paidUsingUPI',
@@ -276,22 +261,21 @@ export const getDonationSection = (
             {
                 field_name: 'Donation confirmed by',
                 field_value: donation?.confirmedBy?.fullName || '',
-                hide_field: !(mode === 'view' && donation?.status === 'PAID')
+                hide_field: !(!isCreate && donation?.status === 'PAID')
             },
             {
                 field_name: 'Donation confirmed on',
                 field_value: donation?.confirmedOn || '',
                 field_display_value: date(donation?.confirmedOn),
-                hide_field: !(mode === 'view' && donation?.status === 'PAID')
+                hide_field: !(!isCreate && donation?.status === 'PAID')
             },
             {
                 field_name: 'Remarks',
                 field_value: donation?.remarks || '',
                 hide_field: !(
-                    (mode === 'view' && donation?.status === 'PAID') ||
-                    (mode === 'edit' && donation?.status === 'PAID')
+                    !isCreate && donation?.status === 'PAID'
                 ),
-                editable: mode === 'edit',
+                editable: !isCreate,
                 form_control_name: 'remarks',
                 form_input: {
                     html_id: 'remarks',
@@ -304,10 +288,9 @@ export const getDonationSection = (
                 field_name: 'Reason for cancel',
                 field_value: donation?.cancelletionReason || '',
                 hide_field: !(
-                    (mode === 'view' && donation?.status === 'CANCELLED') ||
-                    (mode === 'edit' && donation?.status === 'CANCELLED')
+                    !isCreate && donation?.status === 'CANCELLED'
                 ),
-                editable: mode === 'edit',
+                editable: !isCreate,
                 form_control_name: 'remarks',
                 form_input: {
                     html_id: 'remarks',
@@ -320,10 +303,9 @@ export const getDonationSection = (
                 field_name: 'Reason for paying later',
                 field_value: donation?.laterPaymentReason || '',
                 hide_field: !(
-                    (mode === 'view' && donation?.status === 'PAY_LATER') ||
-                    (mode === 'edit' && donation?.status === 'PAY_LATER')
+                    !isCreate && donation?.status === 'PAY_LATER'
                 ),
-                editable: mode === 'edit',
+                editable: !isCreate,
                 form_control_name: 'remarks',
                 form_input: {
                     html_id: 'remarks',
@@ -336,10 +318,9 @@ export const getDonationSection = (
                 field_name: 'Payment failure details',
                 field_value: donation?.paymentFailureDetail || '',
                 hide_field: !(
-                    (mode === 'view' && donation?.status === 'PAYMENT_FAILED') ||
-                    (mode === 'edit' && donation?.status === 'PAYMENT_FAILED')
+                    !isCreate && donation?.status === 'PAYMENT_FAILED'
                 ),
-                editable: mode === 'edit',
+                editable: !isCreate,
                 form_control_name: 'remarks',
                 form_input: {
                     html_id: 'remarks',
@@ -351,8 +332,8 @@ export const getDonationSection = (
             {
                 field_name: 'Is this donation made for any events?',
                 field_value: donation?.forEvent ? 'Yes' : 'No',
-                hide_field: !(mode === 'create' && donation?.type === 'ONETIME'),
-                editable: mode === 'create',
+                hide_field: !(isCreate && donation?.type === 'ONETIME'),
+                editable: isCreate,
                 form_control_name: 'isForEvent',
                 form_input: {
                     html_id: 'isForEvent',
@@ -368,11 +349,11 @@ export const getDonationSection = (
                 field_name: 'Select event',
                 field_value: donation?.forEvent || '',
                 hide_field: !(
-                    mode === 'create' &&
+                    isCreate &&
                     donation?.type === 'ONETIME'
                     //  && donation?.forEvent === true
                 ),
-                editable: mode === 'create',
+                editable: isCreate,
                 form_control_name: 'eventId',
                 form_input: {
                     html_id: 'eventId',

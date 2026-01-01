@@ -151,7 +151,7 @@ export interface DetailedViewField {
     readonly field_name?: string;
 
     /** Raw value */
-    field_value: string;
+    field_value: string | undefined;
 
     /** Display value (formatted) */
     field_display_value?: string;

@@ -11,6 +11,7 @@ import { Account, Donation, PagedDonations } from '../model';
 import { DonationService } from '../service/donation.service';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
+import { ModalService } from 'src/app/core/service/modal.service';
 
 @Component({
     template: ''
@@ -23,7 +24,8 @@ export abstract class BaseDonationTabComponent extends Accordion<Donation> imple
 
     constructor(
         protected donationService: DonationService,
-        protected identityService: UserIdentityService
+        protected identityService: UserIdentityService,
+        protected modalService: ModalService
     ) {
         super();
     }
@@ -44,11 +46,13 @@ export abstract class BaseDonationTabComponent extends Accordion<Donation> imple
     protected override prepareDetailedView(data: Donation, options?: { [key: string]: any; }): DetailedView[] {
         const mode = (options?.['mode'] as 'create' | 'edit' | 'view') || 'view';
         return [
-            getDonationSection(data, {
-                mode: mode,
-                refData: this.getRefData({ isActive: true }),
-                payableAccounts: this.payableAccounts.map(acc => ({ key: acc.id, displayValue: acc.accountHolderName || '' }))
-            }),
+            getDonationSection(
+                data,
+                this.getRefData({ isActive: true }) || {},
+                this.payableAccounts.map(acc => ({ key: acc.id, displayValue: acc.accountHolderName || '' })),
+                [],
+                mode === 'create'
+            ),
             donationDocumentSection([])
         ];
     }
@@ -67,7 +71,6 @@ export abstract class BaseDonationTabComponent extends Accordion<Donation> imple
 
     protected handleUpdateDonation(rowIndex: number): void {
         this.activeButtonId = 'UPDATE_DONATION';
-        this.regenerateDetailedView(rowIndex, { mode: 'edit' });
         this.showEditForm(rowIndex, this.getEditFormSections());
 
         setTimeout(() => {
@@ -114,7 +117,15 @@ export abstract class BaseDonationTabComponent extends Accordion<Donation> imple
         if (allValid) {
             const donationForm = this.getSectionForm('donation_detail', rowIndex);
             const documents = this.getSectionDocuments('document_list', rowIndex);
-            this.donationService.updateDonation(donation.id, compareObjects(donationForm?.value, donation)).subscribe((data: Donation) => {
+            const donationFormValue = { ...donationForm?.value } as Donation;
+            if (donationFormValue.status === 'PAID' && documents?.length == 0) {
+                this.modalService.openNotificationModal({
+                    description: 'Please upload a document for the donation payment',
+                    title: 'Error',
+                }, 'notification', 'error')
+                return;
+            }
+            this.donationService.updateDonation(donation.id, compareObjects(donationFormValue, donation), documents).subscribe((data: Donation) => {
                 this.hideForm(rowIndex);
                 this.updateContentRow(data, rowIndex);
             });
