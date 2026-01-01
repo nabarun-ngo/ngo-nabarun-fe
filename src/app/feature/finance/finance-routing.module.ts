@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { AccountDashboardComponent } from './account-dashboard/account-dashboard.component';
-import { accountDashboardResolver, accountInfoResolver, accountRefDataResolver, accountTransactionResolver, donationDashboardResolver, donationRefDataResolverNew, expenseDashboardResolver } from './finance.resolver';
+import { accountDashboardResolver, accountInfoResolver, accountRefDataResolver, accountTransactionResolver, donationDashboardResolver, donationDashboardResolverNew, donationRefDataResolverNew, expenseDashboardResolver } from './finance.resolver';
 import { AccountTransactionComponent } from './account-transaction/account-transaction.component';
 import { ExpenseDashboardComponent } from './expense-dashboard/expense-dashboard.component';
 import { DonationDashboardComponent } from './donation-dashboard/donation-dashboard.component';
@@ -39,8 +39,8 @@ const routes: Routes = [
     path: route_data.secured_donation_dashboard_page.path,
     component: DonationDashboardComponent,
     resolve: {
-      data: donationDashboardResolver,
-      ref_data: donationRefDataResolverNew
+      data: donationDashboardResolverNew,
+      ref_data: donationRefDataResolverNew,
     }
   }
 ];

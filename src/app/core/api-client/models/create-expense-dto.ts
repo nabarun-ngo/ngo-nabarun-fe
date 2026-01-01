@@ -5,7 +5,7 @@
 import { ExpenseItemDetailDto } from '../models/expense-item-detail-dto';
 export interface CreateExpenseDto {
   currency?: string;
-  description: string;
+  description?: string;
   expenseDate?: string;
   expenseItems?: Array<ExpenseItemDetailDto>;
   expenseRefId?: string;

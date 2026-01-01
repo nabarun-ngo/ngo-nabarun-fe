@@ -25,6 +25,7 @@ export interface DonationDto {
   donorEmail?: string;
   donorId: string;
   donorName: string;
+  donorNumber?: string;
 
   /**
    * End date for regular donations
@@ -51,6 +52,11 @@ export interface DonationDto {
    * Reason for later payment
    */
   laterPaymentReason?: string;
+
+  /**
+   * Next possible statuses for this donation
+   */
+  nextStatuses: Array<'RAISED' | 'PAID' | 'PENDING' | 'PAYMENT_FAILED' | 'PAY_LATER' | 'CANCELLED' | 'UPDATE_MISTAKE'>;
 
   /**
    * Date when donation was paid

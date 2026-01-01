@@ -27,6 +27,7 @@ export const date = (dateString: string | undefined, format: string = 'dd/MM/yyy
 // }
 
 export function compareObjects(latest: any, old: any): any {
+  console.log('compare objects --> latest to old', latest, old);
   const keys1: string[] = [];
   const values1: any[] = [];
   Object.keys(latest).forEach((element) => {

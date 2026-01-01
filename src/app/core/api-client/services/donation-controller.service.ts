@@ -13,6 +13,8 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { createDonation } from '../fn/donation-controller/create-donation';
 import { CreateDonation$Params } from '../fn/donation-controller/create-donation';
+import { createGuestDonation } from '../fn/donation-controller/create-guest-donation';
+import { CreateGuestDonation$Params } from '../fn/donation-controller/create-guest-donation';
 import { getDonationSummary } from '../fn/donation-controller/get-donation-summary';
 import { GetDonationSummary$Params } from '../fn/donation-controller/get-donation-summary';
 import { getMemberDonations } from '../fn/donation-controller/get-member-donations';
@@ -73,6 +75,43 @@ export class DonationControllerService extends BaseService {
    */
   createDonation(params: CreateDonation$Params, context?: HttpContext): Observable<SuccessResponseDonationDto> {
     return this.createDonation$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseDonationDto>): SuccessResponseDonationDto => r.body)
+    );
+  }
+
+  /** Path part for operation `createGuestDonation()` */
+  static readonly CreateGuestDonationPath = '/api/donation/create/guest';
+
+  /**
+   * Create new guest donation.
+   *
+   * **Required Permissions:**
+   * - `create:donation`
+   * _(Any of these permissions)_
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `createGuestDonation()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createGuestDonation$Response(params: CreateGuestDonation$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseDonationDto>> {
+    return createGuestDonation(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Create new guest donation.
+   *
+   * **Required Permissions:**
+   * - `create:donation`
+   * _(Any of these permissions)_
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `createGuestDonation$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createGuestDonation(params: CreateGuestDonation$Params, context?: HttpContext): Observable<SuccessResponseDonationDto> {
+    return this.createGuestDonation$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseDonationDto>): SuccessResponseDonationDto => r.body)
     );
   }

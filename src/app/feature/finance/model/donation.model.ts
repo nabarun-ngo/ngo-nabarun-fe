@@ -12,6 +12,7 @@ export interface Donation {
   donorId: string;
   donorName: string;
   donorEmail?: string;
+  donorPhone?: string;
   amount: number;
   currency: string;
   type: 'REGULAR' | 'ONETIME';
@@ -29,6 +30,7 @@ export interface Donation {
   paidUsingUPI?: 'GPAY' | 'PAYTM' | 'PHONEPE' | 'BHARATPAY' | 'UPI_OTH';
   transactionRef?: string;
   paidToAccount?: Account;
+  paidToAccountId: string | undefined;
 
   // Additional fields
   forEvent?: string;
@@ -47,6 +49,7 @@ export interface Donation {
   isPending: boolean;
   isCancelled: boolean;
   periodDisplay?: string;
+  nextStatuses?: string[];
 }
 
 export interface DonationSummary {
@@ -65,7 +68,7 @@ export type PagedDonations = PagedResult<Donation>;
 
 export interface DonationDashboardData {
   donations: PagedDonations;
-  summary: DonationSummary;
+  summary: DonationSummary | undefined;
   accounts: Account[];
 }
 

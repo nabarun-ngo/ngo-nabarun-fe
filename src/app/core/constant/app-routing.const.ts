@@ -36,10 +36,10 @@ export const AppRoute = {
   },
   secured_donation_dashboard_page: {
     id: 'secured_donation_dashboard_page',
-    url: '/secured/donation/dashboard',
+    url: '/secured/finance/donations',
     parent: 'secured',
-    feature: 'donation',
-    path: 'dashboard',
+    feature: 'finance',
+    path: 'donations',
   },
   secured_member_members_page: {
     id: 'secured_member_members_page',

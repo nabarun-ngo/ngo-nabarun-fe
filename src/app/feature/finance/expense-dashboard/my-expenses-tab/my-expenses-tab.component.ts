@@ -10,7 +10,6 @@ import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import {
   expenseDetailSection,
   expenseDocumentSection,
-  expenseEditableTable,
   expenseEventField,
   expenseHighLevelView,
   expenseListSection,

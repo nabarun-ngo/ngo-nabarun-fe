@@ -1,4 +1,4 @@
-import { FormGroup } from "@angular/forms";
+import { FormGroup, Validators } from "@angular/forms";
 import { date } from "src/app/core/service/utilities.service";
 import { DetailedView } from "src/app/shared/model/detailed-view.model";
 import { SearchAndAdvancedSearchModel } from "src/app/shared/model/search-and-advanced-search.model";
@@ -6,6 +6,9 @@ import { DonationRefData, donationTab } from "../finance.const";
 import { Doc } from "src/app/shared/model/document.model";
 import { KeyValue } from "src/app/shared/model/key-value.model";
 import { Donation } from "../model";
+import { EventEmitter } from "@angular/core";
+import { User } from "../../member/models/member.model";
+import { FieldVisibilityRule } from "src/app/shared/utils/accordion";
 
 
 export const donationSearchInput = (
@@ -86,16 +89,16 @@ export const donationSearchInput = (
         }
     };
 };
-
 export const getDonationSection = (
     donation: Donation,
-    options: {
-        isCreate?: boolean,
-        refData?: { [name: string]: KeyValue[] }
-    }
+    refData: { [name: string]: KeyValue[] },
+    payableAccounts: KeyValue[] = [],
+    events: KeyValue[] = [],
+    isCreate: boolean = false,
+    isGuest: boolean = false,
 ): DetailedView => {
-    const { isCreate, refData } = options;
-
+    const STATUS = refData?.[DonationRefData.refDataKey.status] || [];
+    const NEXT_STATUS = STATUS.filter((status) => donation?.nextStatuses?.includes(status.key)) || [];
     return {
         section_name: 'Donation Details',
         section_type: 'key_value',
@@ -104,14 +107,15 @@ export const getDonationSection = (
         content: [
             {
                 field_name: 'Donation number',
-                field_value: donation?.id!,
+                field_value: donation?.id || '',
                 hide_field: isCreate
             },
             {
                 field_name: 'Donation type',
-                field_value: donation?.type!,
+                field_value: isGuest ? 'ONETIME' : donation?.type,
                 show_display_value: true,
                 ref_data_section: DonationRefData.refDataKey.type,
+                editable: isCreate && !isGuest,
                 form_control_name: 'type',
                 form_input: {
                     html_id: 'type',
@@ -119,39 +123,47 @@ export const getDonationSection = (
                     inputType: '',
                     placeholder: 'Ex. Regular',
                     selectList: refData?.[DonationRefData.refDataKey.type] || []
-                }
+                },
+                field_html_id: 'type',
+                form_input_validation: []
             },
             {
                 field_name: 'Donation amount',
-                field_value: (donation.currency || '₹') + ' ' + (donation.amount || ''),
+                field_value: donation?.amount ? `${donation?.amount}` : undefined,
+                field_display_value: `₹ ${donation?.amount}`,
+                editable: isCreate || (!isCreate && donation?.status !== 'PAID'),
                 form_control_name: 'amount',
                 form_input: {
                     html_id: 'amount',
                     tagName: 'input',
                     inputType: 'number',
                     placeholder: 'Ex. 100'
-                }
+                },
+                field_html_id: 'amount',
+                form_input_validation: []
             },
             {
                 field_name: 'Donation status',
-                field_value: donation?.status!,
+                field_value: donation?.status || '',
                 show_display_value: true,
                 ref_data_section: DonationRefData.refDataKey.status,
                 hide_field: isCreate,
+                editable: !isCreate,
                 form_control_name: 'status',
                 form_input: {
                     html_id: 'status',
                     tagName: 'select',
                     inputType: '',
                     placeholder: 'Ex. Paid',
-                    selectList: refData?.[DonationRefData.refDataKey.nextStatus] || []
+                    selectList: NEXT_STATUS
                 }
             },
             {
                 field_name: 'Donation start date',
-                field_value: date(donation?.startDate!),
-                hide_field: !(donation?.type === 'REGULAR' || (isCreate)),
-                editable: (isCreate) && (donation?.type === 'REGULAR' || isCreate),
+                field_value: donation?.startDate || '',
+                field_display_value: date(donation?.startDate),
+                hide_field: !(donation?.type === 'REGULAR'),
+                editable: true,
                 form_control_name: 'startDate',
                 form_input: {
                     html_id: 'startDate',
@@ -163,9 +175,10 @@ export const getDonationSection = (
             },
             {
                 field_name: 'Donation end date',
-                field_value: date(donation?.endDate!),
-                hide_field: !(donation?.type === 'REGULAR' || (isCreate)),
-                editable: (isCreate) && (donation?.type === 'REGULAR' || isCreate),
+                field_value: donation?.endDate || '',
+                field_display_value: date(donation?.endDate),
+                hide_field: !(donation?.type === 'REGULAR'),
+                editable: true,
                 form_control_name: 'endDate',
                 form_input: {
                     html_id: 'endDate',
@@ -177,101 +190,132 @@ export const getDonationSection = (
             },
             {
                 field_name: 'Donation raised on',
-                field_value: date(donation?.raisedOn!),
+                field_value: donation?.raisedOn || '',
+                field_display_value: date(donation?.raisedOn),
                 hide_field: isCreate
             },
             {
                 field_name: 'Donation paid on',
-                field_value: date(donation.paidOn!),
-                hide_field: !(donation.status === 'PAID'),
+                field_value: donation?.paidOn,
+                field_display_value: date(donation?.paidOn),
+                hide_field: !(
+                    !isCreate && donation?.status === 'PAID'
+                ),
+                editable: !isCreate && donation?.status !== 'PAID',
                 form_control_name: 'paidOn',
                 form_input: {
                     html_id: 'paidOn',
                     tagName: 'input',
                     inputType: 'date',
                     placeholder: 'Ex. 01/15/2024',
-                    style: 'width: 212px;'
+                    style: 'width: 212px;',
                 }
             },
             {
                 field_name: 'Donation paid to',
-                field_value: donation.paidToAccount?.accountHolderName + (donation.paidToAccount?.id ? ` (${donation.paidToAccount?.id})` : ''),
-                hide_field: !(donation.status === 'PAID'),
-                form_control_name: 'paidToAccount',
+                field_value: donation?.paidToAccount?.id || '',
+                hide_field: !(
+                    !isCreate && donation?.status === 'PAID'
+                ),
+                editable: !isCreate && donation?.status !== 'PAID',
+                form_control_name: 'paidToAccountId',
                 form_input: {
-                    html_id: 'paidToAccount',
+                    html_id: 'paidToAccountId',
                     tagName: 'select',
                     inputType: '',
-                    selectList: []
+                    selectList: payableAccounts,
+                    disabled: donation?.status === 'PAID'
                 }
             },
             {
                 field_name: 'Payment method',
-                field_value: donation.paymentMethod!,
-                hide_field: !(donation.status === 'PAID'),
+                field_value: donation?.paymentMethod || '',
+                hide_field: !(
+                    !isCreate && donation?.status === 'PAID'
+                ),
+                editable: !isCreate && donation?.status !== 'PAID',
+                show_display_value: true,
+                ref_data_section: DonationRefData.refDataKey.paymentMethod,
                 form_control_name: 'paymentMethod',
                 form_input: {
                     html_id: 'paymentMethod',
                     tagName: 'select',
                     inputType: '',
                     placeholder: 'Ex. UPI',
-                    selectList: refData?.[DonationRefData.refDataKey.paymentMethod] || []
+                    selectList: refData?.[DonationRefData.refDataKey.paymentMethod] || [],
+                    disabled: donation?.status === 'PAID'
                 }
             },
             {
                 field_name: 'UPI name',
-                field_value: donation.paidUsingUPI!,
-                hide_field: !(donation.paidUsingUPI),
+                field_value: donation?.paidUsingUPI || '',
+                hide_field: !(
+                    !isCreate && donation?.status === 'PAID' && donation?.paymentMethod === 'UPI'
+                ),
+                editable: !isCreate && donation?.status !== 'PAID',
+                show_display_value: true,
+                ref_data_section: DonationRefData.refDataKey.upiOps,
                 form_control_name: 'paidUsingUPI',
                 form_input: {
                     html_id: 'paidUsingUPI',
                     tagName: 'select',
                     inputType: '',
                     placeholder: 'Ex. UPI',
-                    selectList: refData?.[DonationRefData.refDataKey.upiOps] || []
+                    selectList: refData?.[DonationRefData.refDataKey.upiOps] || [],
+                    disabled: donation?.status === 'PAID'
                 }
             },
             {
                 field_name: 'Donation confirmed by',
-                field_value: donation.confirmedBy?.fullName!,
-                hide_field: !(donation.status === 'PAID')
+                field_value: donation?.confirmedBy?.fullName || '',
+                hide_field: !(!isCreate && donation?.status === 'PAID')
             },
             {
                 field_name: 'Donation confirmed on',
-                field_value: date(donation.confirmedOn!),
-                hide_field: !(donation.status === 'PAID')
+                field_value: donation?.confirmedOn || '',
+                field_display_value: date(donation?.confirmedOn),
+                hide_field: !(!isCreate && donation?.status === 'PAID')
             },
             {
                 field_name: 'Remarks',
-                field_value: donation.remarks!,
-                hide_field: !(donation.status === 'PAID'),
+                field_value: donation?.remarks || '',
+                hide_field: !(
+                    !isCreate && donation?.status === 'PAID'
+                ),
+                editable: !isCreate,
                 form_control_name: 'remarks',
                 form_input: {
                     html_id: 'remarks',
                     tagName: 'textarea',
                     inputType: '',
-                    placeholder: 'Ex. Remarks',
+                    placeholder: 'Ex. Remarks'
                 }
             },
             {
                 field_name: 'Reason for cancel',
-                field_value: donation.cancelletionReason!,
-                hide_field: !(donation.status === 'CANCELLED'),
-                form_control_name: 'cancelletionReason',
+                field_value: donation?.cancelletionReason || '',
+                hide_field: !(
+                    !isCreate && donation?.status === 'CANCELLED'
+                ),
+                editable: !isCreate,
+                form_control_name: 'remarks',
                 form_input: {
-                    html_id: 'cancelletionReason',
+                    html_id: 'remarks',
                     tagName: 'textarea',
                     inputType: '',
-                    placeholder: 'Ex. Cancelletion reason'
+                    placeholder: 'Ex. Cancellation reason'
                 }
             },
             {
                 field_name: 'Reason for paying later',
-                field_value: donation.laterPaymentReason!,
-                hide_field: !(donation.status === 'PAY_LATER'),
-                form_control_name: 'laterPaymentReason',
+                field_value: donation?.laterPaymentReason || '',
+                hide_field: !(
+                    !isCreate && donation?.status === 'PAY_LATER'
+                ),
+                editable: !isCreate,
+                form_control_name: 'remarks',
                 form_input: {
-                    html_id: 'laterPaymentReason',
+                    html_id: 'remarks',
                     tagName: 'textarea',
                     inputType: '',
                     placeholder: 'Ex. Reason'
@@ -279,11 +323,14 @@ export const getDonationSection = (
             },
             {
                 field_name: 'Payment failure details',
-                field_value: donation.paymentFailureDetail!,
-                hide_field: !(donation.status === 'PAYMENT_FAILED'),
-                form_control_name: 'paymentFailureDetail',
+                field_value: donation?.paymentFailureDetail || '',
+                hide_field: !(
+                    !isCreate && donation?.status === 'PAYMENT_FAILED'
+                ),
+                editable: !isCreate,
+                form_control_name: 'remarks',
                 form_input: {
-                    html_id: 'paymentFailureDetail',
+                    html_id: 'remarks',
                     tagName: 'textarea',
                     inputType: '',
                     placeholder: 'Ex. Failure details'
@@ -291,30 +338,97 @@ export const getDonationSection = (
             },
             {
                 field_name: 'Is this donation made for any events?',
-                field_value: donation.forEvent ? 'Yes' : 'No',
-                hide_field: !(isCreate || donation.type === 'ONETIME'),
+                field_value: donation?.forEvent ? 'Yes' : 'No',
+                hide_field: !(isCreate && donation?.type === 'ONETIME'),
                 editable: isCreate,
                 form_control_name: 'isForEvent',
                 form_input: {
                     html_id: 'isForEvent',
                     tagName: 'input',
                     inputType: 'radio',
-                    selectList: [{ key: 'true', displayValue: 'Yes' }, { key: 'false', displayValue: 'No' }]
+                    selectList: [
+                        { key: 'true', displayValue: 'Yes' },
+                        { key: 'false', displayValue: 'No' }
+                    ]
                 }
             },
             {
                 field_name: 'Select event',
-                field_value: donation.forEvent!,
-                hide_field: !donation.forEvent && !isCreate,
+                field_value: donation?.forEvent || '',
+                hide_field: !(
+                    isCreate &&
+                    donation?.type === 'ONETIME'
+                    //  && donation?.forEvent === true
+                ),
                 editable: isCreate,
                 form_control_name: 'eventId',
                 form_input: {
                     html_id: 'eventId',
                     tagName: 'select',
                     inputType: '',
-                    selectList: []
+                    selectList: events
                 }
             }
+        ]
+    };
+};
+
+export const getDonorSection = (
+    donation: Partial<Donation>,
+    options: {
+        refData?: { [name: string]: KeyValue[] }
+    }
+): DetailedView => {
+    const { refData } = options;
+
+    return {
+        section_name: 'Donor Details',
+        section_type: 'key_value',
+        section_html_id: 'donor_detail',
+        section_form: new FormGroup({}),
+        content: [
+            {
+                field_name: 'Donor name',
+                field_value: donation?.donorName!,
+                form_control_name: 'donorName',
+                editable: true,
+                form_input: {
+                    html_id: 'donorName',
+                    tagName: 'input',
+                    inputType: 'text',
+                    placeholder: 'Ex. John Doe',
+                },
+                field_html_id: 'donorName',
+                form_input_validation: [Validators.required]
+            },
+            {
+                field_name: 'Donor email',
+                field_value: donation?.donorEmail!,
+                form_control_name: 'donorEmail',
+                editable: true,
+                form_input: {
+                    html_id: 'donorEmail',
+                    tagName: 'input',
+                    inputType: 'email',
+                    placeholder: 'Ex. john.doe@gmail.com',
+                },
+                field_html_id: 'email',
+                form_input_validation: [Validators.email]
+            },
+            {
+                field_name: 'Phone Number',
+                field_value: donation?.donorPhone!,
+                form_control_name: 'donorPhone',
+                editable: true,
+                form_input: {
+                    html_id: 'donorPhone',
+                    tagName: 'input',
+                    inputType: 'phone',
+                    placeholder: 'Ex. +91 1234567890'
+                },
+                field_html_id: 'primaryNumber',
+                form_input_validation: []
+            },
         ]
     };
 };
@@ -328,8 +442,65 @@ export const donationDocumentSection = (
         section_html_id: 'document_list',
         section_form: new FormGroup({}),
         documents: docs,
+        form_alerts: [
+            {
+                data: {
+                    alertType: 'info',
+                    message: 'Please upload the screenshot of the donation transfer'
+                }
+            }
+        ],
         doc: {
-            // docChange: new EventEmitter(),
+            docChange: new EventEmitter(),
         },
     } as DetailedView;
 };
+
+export const DonationFieldVisibilityRules: FieldVisibilityRule<Donation>[] = [
+    // Payment-related fields (show when status is PAID)
+    {
+        fieldName: 'paidOn',
+        condition: (formValue) => formValue.status === 'PAID'
+    },
+    {
+        fieldName: 'paidToAccountId',
+        condition: (formValue) => formValue.status === 'PAID'
+    },
+    {
+        fieldName: 'paymentMethod',
+        condition: (formValue) => formValue.status === 'PAID'
+    },
+    {
+        fieldName: 'remarks',
+        condition: (formValue) => formValue.status === 'PAID'
+    },
+    // UPI field (show when status is PAID and payment method is UPI)
+    {
+        fieldName: 'paidUsingUPI',
+        condition: (formValue) => formValue.status === 'PAID' && formValue.paymentMethod === 'UPI'
+    },
+    // Status-specific reason fields
+    {
+        fieldName: 'cancellationReason',
+        condition: (formValue) => formValue.status === 'CANCELLED'
+    },
+    {
+        fieldName: 'laterPaymentReason',
+        condition: (formValue) => formValue.status === 'PAY_LATER'
+    },
+    {
+        fieldName: 'paymentFailureDetail',
+        condition: (formValue) => formValue.status === 'PAYMENT_FAILED'
+    },
+    // Type-dependent fields
+    {
+        fieldName: 'startDate',
+        condition: (formValue) => formValue.type === 'REGULAR'
+    },
+    {
+        fieldName: 'endDate',
+        condition: (formValue) => formValue.type === 'REGULAR'
+    }
+]
+
+

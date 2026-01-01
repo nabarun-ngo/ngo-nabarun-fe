@@ -23,8 +23,8 @@
                 </span>
 
                 <!-- Edit mode -->
-                <app-universal-input *ngIf="col.editable && view.show_form" [formControlName]="col.columnDef"
-                    [inputModel]="col.inputModel">
+                <app-universal-input *ngIf="col.editable && view.show_form && col.inputModel"
+                    [formControlName]="col.columnDef" [inputModel]="col.inputModel">
                 </app-universal-input>
 
                 <!-- Field-level errors -->

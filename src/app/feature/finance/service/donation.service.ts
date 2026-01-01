@@ -12,7 +12,7 @@ import {
     DmsControllerService
 } from 'src/app/core/api-client/services';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
-import { date } from 'src/app/core/service/utilities.service';
+import { date, removeNullFields } from 'src/app/core/service/utilities.service';
 import { DonationDefaultValue } from '../finance.const';
 import {
     Donation,
@@ -22,13 +22,19 @@ import {
     mapDonationDtoToDonation,
     mapPagedDonationDtoToPagedDonations,
     mapDonationSummaryDtoToDonationSummary,
-    mapAccountDtoToAccount
+    mapAccountDtoToAccount,
+    DonationDashboardData
 } from '../model';
+import { mapDocDtoToDoc } from 'src/app/shared/model/document.model';
+import { from } from 'rxjs';
+import { FileUpload } from 'src/app/shared/components/generic/file-upload/file-upload.component';
+import { mapPagedUserDtoToPagedUser } from '../../member/models/member.mapper';
 
 @Injectable({
     providedIn: 'root'
 })
 export class DonationService {
+
 
 
     constructor(
@@ -70,37 +76,51 @@ export class DonationService {
     }
 
     /**
-     * Fetch current user's donations with summary and payable accounts
-     * @param options Pagination options
-     * @returns Promise of donations, summary, and accounts (domain models)
-     */
-    async fetchMyDonations(options: {
-        pageIndex?: number,
-        pageSize?: number
-    }): Promise<{ donations: PagedDonations; summary: DonationSummary; accounts: Account[] }> {
-        const id = (await this.identityService.getUser()).profile_id;
-        return firstValueFrom(combineLatest({
-            donations: this.donationController.getSelfDonations({
-                pageIndex: options.pageIndex || DonationDefaultValue.pageNumber,
-                pageSize: options.pageSize || DonationDefaultValue.pageSize
-            }).pipe(
-                map(d => d.responsePayload),
-                map(mapPagedDonationDtoToPagedDonations)
+  * Fetch current user's donations with summary and payable accounts
+  * @param options Pagination options
+  * @returns Observable of donations, summary, and accounts (domain models)
+  */
+    fetchMyDonations(options: {
+        pageIndex?: number;
+        pageSize?: number;
+    }): Observable<DonationDashboardData> {
+        return from(this.identityService.getUser()).pipe(
+            map(user => user.profile_id),
+
+            switchMap(donorId =>
+                combineLatest({
+                    donations: this.donationController.getSelfDonations({
+                        pageIndex: options.pageIndex ?? DonationDefaultValue.pageNumber,
+                        pageSize: options.pageSize ?? DonationDefaultValue.pageSize
+                    }).pipe(
+                        map(res => res.responsePayload),
+                        map(mapPagedDonationDtoToPagedDonations)
+                    ),
+
+                    summary: this.donationController.getDonationSummary({ donorId }).pipe(
+                        map(res => res.responsePayload),
+                        map(mapDonationSummaryDtoToDonationSummary)
+                    )
+                })
             ),
-            summary: this.donationController.getDonationSummary({ donorId: id }).pipe(
-                map(d => d.responsePayload),
-                map(mapDonationSummaryDtoToDonationSummary)
-            ),
-        }).pipe(switchMap(data => {
-            if (data.summary.hasOutstanding) {
-                return this.accountController.payableAccount({ isTransfer: false }).pipe(
-                    map(d => d.responsePayload),
-                    map(m => m.map(mapAccountDtoToAccount)),
-                    map(accounts => ({ ...data, accounts: accounts }))
+
+            switchMap(data => {
+                if (!data.summary.hasOutstanding) {
+                    return of({ ...data, accounts: [] });
+                }
+
+                return this.fetchPayableAccounts().pipe(
+                    map(accounts => ({ ...data, accounts }))
                 );
-            }
-            return of({ ...data, accounts: [] });
-        })));
+            })
+        );
+    }
+
+    fetchPayableAccounts(): Observable<Account[]> {
+        return this.accountController.payableAccount({ isTransfer: false }).pipe(
+            map(res => res.responsePayload),
+            map(accounts => accounts.map(mapAccountDtoToAccount))
+        );
     }
 
     /**
@@ -111,14 +131,19 @@ export class DonationService {
     fetchGuestDonations(options: {
         pageIndex?: number,
         pageSize?: number
-    }): Observable<PagedDonations> {
-        return this.donationController.listGuestDonations({
-            pageIndex: options.pageIndex || DonationDefaultValue.pageNumber,
-            pageSize: options.pageSize || DonationDefaultValue.pageSize
-        }).pipe(
-            map(d => d.responsePayload),
-            map(mapPagedDonationDtoToPagedDonations)
-        );
+        filter?: { donationId?: string, donationStatus?: string[], startDate?: string, endDate?: string, donationType?: string[] }
+    }): Observable<DonationDashboardData> {
+        return combineLatest({
+            donations: this.donationController.listGuestDonations({
+                pageIndex: options.pageIndex ?? DonationDefaultValue.pageNumber,
+                pageSize: options.pageSize ?? DonationDefaultValue.pageSize
+            }).pipe(
+                map(res => res.responsePayload),
+                map(mapPagedDonationDtoToPagedDonations)
+            ),
+            accounts: of([]),
+            summary: of(undefined)
+        });
     }
 
     /**
@@ -150,7 +175,7 @@ export class DonationService {
             firstName: options.filter?.firstName,
             lastName: options.filter?.lastName,
             // status: filter?.status ? filter.status : ['ACTIVE'] 
-        }).pipe(map(m => m.responsePayload));
+        }).pipe(map(m => m.responsePayload), map(mapPagedUserDtoToPagedUser));
     }
 
     /**
@@ -180,7 +205,7 @@ export class DonationService {
     }
 
     fetchDocuments(id: string) {
-        return this.dmsService.getDocuments({ type: 'DONATION', id: id }).pipe(map(m => m.responsePayload));
+        return this.dmsService.getDocuments({ type: 'DONATION', id: id }).pipe(map(m => m.responsePayload), map(m => m.map(mapDocDtoToDoc)));
     }
 
     /**
@@ -189,15 +214,47 @@ export class DonationService {
      * @param details Donation details (API DTO format)
      * @returns Observable of updated donation (domain model)
      */
-    updateDonation(id: string, details: DonationDto): Observable<Donation> {
-        return this.donationController.update({ id: id, body: details as any }).pipe(
+    updateDonation(id: string, details: Donation, documents?: FileUpload[]): Observable<Donation> {
+        const updateDonation: UpdateDonationDto = {
+            amount: details.amount,
+            status: details.status,
+            forEvent: details.forEvent,
+            paidOn: details.paidOn,
+            paidToAccountId: details.paidToAccountId,
+            paymentMethod: details.paymentMethod,
+            paidUsingUPI: details.paidUsingUPI,
+            remarks: details.remarks
+        }
+        return this.donationController.update({ id: id, body: removeNullFields(updateDonation) }).pipe(
             map(d => d.responsePayload),
+            switchMap((donation) => {
+                if (documents && documents.length > 0) {
+                    const uploadDtos: DmsUploadDto[] = documents.map(doc => ({
+                        contentType: doc.detail.contentType,
+                        fileBase64: doc.detail.base64Content,
+                        filename: doc.detail.originalFileName,
+                        documentMapping: [
+                            {
+                                entityId: id,
+                                entityType: 'DONATION'
+                            },
+                        ]
+                    }));
+                    if (donation.transactionRef) {
+                        uploadDtos.map(doc => doc.documentMapping.push({
+                            entityId: donation.transactionRef!,
+                            entityType: 'TRANSACTION'
+                        }));
+                    }
+                    return this.uploadDocuments(uploadDtos).pipe(map(() => donation));
+                }
+                return of(donation);
+            }),
             map(mapDonationDtoToDonation)
         );
     }
 
     uploadDocuments(documents: DmsUploadDto[]) {
-        // Assuming uploadDocuments expects an array of upload DTOs
         return forkJoin(documents.map(doc =>
             this.dmsService.uploadFile({ body: doc }).pipe(map(d => d.responsePayload))
         ));
@@ -210,11 +267,16 @@ export class DonationService {
      * @param donation Donation update details (API DTO format)
      * @returns Observable of updated donation (domain model) or undefined if action is NOTIFY
      */
-    updatePaymentInfo(id: string, action: string, donation: UpdateDonationDto): Observable<Donation> | undefined {
+    updatePaymentInfo(id: string, action: string, donation: Donation): Observable<Donation> | undefined {
         if (action === 'NOTIFY') {
             return undefined;
         }
-        return this.donationController.update({ id: id, body: donation }).pipe(
+        const donationDto: UpdateDonationDto = {
+            amount: donation.amount,
+            status: donation.status,
+
+        };
+        return this.donationController.update({ id: id, body: donationDto }).pipe(
             map(d => d.responsePayload),
             map(mapDonationDtoToDonation)
         );
@@ -225,8 +287,31 @@ export class DonationService {
      * @param donation Donation details (API DTO format)
      * @returns Observable of created donation (domain model)
      */
-    createDonation(donation: any): Observable<Donation> {
-        return this.donationController.createDonation({ body: donation }).pipe(
+    createDonation(donation: Donation, isGuest: boolean): Observable<Donation> {
+        if (isGuest) {
+            return this.donationController.createGuestDonation({
+                body: {
+                    amount: donation.amount,
+                    forEventId: donation.forEvent,
+                    donorEmail: donation.donorEmail,
+                    donorName: donation.donorName,
+                    donorNumber: donation.donorPhone,
+                }
+            }).pipe(
+                map(d => d.responsePayload),
+                map(mapDonationDtoToDonation)
+            );
+        }
+        return this.donationController.createDonation({
+            body: {
+                amount: donation.amount,
+                forEventId: donation.forEvent,
+                donorId: donation.donorId,
+                type: donation.type,
+                endDate: donation.endDate,
+                startDate: donation.startDate,
+            }
+        }).pipe(
             map(d => d.responsePayload),
             map(mapDonationDtoToDonation)
         );

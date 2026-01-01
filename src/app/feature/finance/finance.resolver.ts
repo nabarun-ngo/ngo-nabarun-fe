@@ -1,9 +1,8 @@
-import { ActivatedRoute, ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot } from '@angular/router';
 import { AccountService } from './service/account.service';
-import { Inject, inject } from '@angular/core';
+import { inject } from '@angular/core';
 import { AccountDefaultValue, accountTab, DonationDefaultValue, donationTab, expenseTab, TransactionDefaultValue } from './finance.const';
-import { map, of } from 'rxjs';
-import { Account, PagedAccounts, PagedExpenses, PagedTransactions } from './model';
+import { Account, PagedAccounts, PagedDonations, PagedExpenses, PagedTransactions } from './model';
 import { DonationService } from './service/donation.service';
 import { AccountRefDataDto, DonationRefDataDto } from 'src/app/core/api-client/models';
 
@@ -83,19 +82,41 @@ export const accountRefDataResolver: ResolveFn<AccountRefDataDto> = (route, stat
 };
 
 
+
+export const donationDashboardResolverNew: ResolveFn<any> = (route, state) => {
+  const tab = (route.queryParams['tab'] || DonationDefaultValue.tabName) as donationTab;
+  const id = route.queryParams['id'] as string;
+
+  if (tab === 'member_donation') {
+    return;
+  }
+  else if (tab === 'guest_donation') {
+    return inject(DonationService).fetchGuestDonations({
+      pageIndex: DonationDefaultValue.pageNumber,
+      pageSize: DonationDefaultValue.pageSize
+    });
+  }
+  else {
+    return inject(DonationService).fetchMyDonations({
+      pageIndex: DonationDefaultValue.pageNumber,
+      pageSize: DonationDefaultValue.pageSize
+    });
+  }
+};
+
 export const donationDashboardResolver: ResolveFn<any> =
-  async (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
-    //return of(true);
-    let tab = (route.data['tab'] || DonationDefaultValue.tabName) as donationTab;
-    ////console.log(route)
+  async (route, state) => {
+    let tab = (route.queryParams['tab'] || DonationDefaultValue.tabName) as donationTab;
+    console.log(route.queryParams, tab)
     if (tab == 'member_donation') {
-      return inject(DonationService).fetchMembers({
+      return await inject(DonationService).fetchMembers({
         pageIndex: DonationDefaultValue.pageNumber,
         pageSize: DonationDefaultValue.pageSize
       });
     }
     else if (tab == 'guest_donation') {
-      return inject(DonationService).fetchGuestDonations({
+      console.log("fetching guest donations");
+      return await inject(DonationService).fetchMembers({
         pageIndex: DonationDefaultValue.pageNumber,
         pageSize: DonationDefaultValue.pageSize
       });
