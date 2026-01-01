@@ -374,7 +374,7 @@ export const getDonationSection = (
 };
 
 export const getDonorSection = (
-    donation: Donation,
+    donation: Partial<Donation>,
     options: {
         refData?: { [name: string]: KeyValue[] }
     }

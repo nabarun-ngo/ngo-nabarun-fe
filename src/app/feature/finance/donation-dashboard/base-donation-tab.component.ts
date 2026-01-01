@@ -166,7 +166,7 @@ export abstract class BaseDonationTabComponent extends Accordion<Donation> imple
         return [this.getSectionForm('donation_detail', rowIndex)!];
     }
 
-    override onAccordionOpen(event: { rowIndex: number; }): void {
+    protected override onAccordionOpen(event: { rowIndex: number; }): void {
         const donationId = this.itemList[event.rowIndex].id;
         this.donationService.fetchDocuments(donationId).subscribe(data => {
             this.addSectionInAccordion(donationDocumentSection(data), event.rowIndex);

@@ -89,10 +89,6 @@ export const donationDashboardResolverNew: ResolveFn<any> = (route, state) => {
 
   if (tab === 'member_donation') {
     return;
-    // return inject(DonationService).fetchMembers({
-    //   pageIndex: DonationDefaultValue.pageNumber,
-    //   pageSize: DonationDefaultValue.pageSize
-    // });
   }
   else if (tab === 'guest_donation') {
     return inject(DonationService).fetchGuestDonations({

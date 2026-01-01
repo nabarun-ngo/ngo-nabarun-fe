@@ -27,6 +27,7 @@ import {
 import { mapDocDtoToDoc } from 'src/app/shared/model/document.model';
 import { from } from 'rxjs';
 import { FileUpload } from 'src/app/shared/components/generic/file-upload/file-upload.component';
+import { mapPagedUserDtoToPagedUser } from '../../member/models/member.mapper';
 
 @Injectable({
     providedIn: 'root'
@@ -174,7 +175,7 @@ export class DonationService {
             firstName: options.filter?.firstName,
             lastName: options.filter?.lastName,
             // status: filter?.status ? filter.status : ['ACTIVE'] 
-        }).pipe(map(m => m.responsePayload));
+        }).pipe(map(m => m.responsePayload), map(mapPagedUserDtoToPagedUser));
     }
 
     /**
