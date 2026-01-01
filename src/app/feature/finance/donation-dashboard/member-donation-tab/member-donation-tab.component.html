@@ -1,24 +1,24 @@
-<app-floating-action-button [icon]="'add'" (buttonClick)="initCreateDonationForm()"></app-floating-action-button>
+<app-floating-action-button [icon]="'add'" (buttonClick)="initCreateDonationForm(false)"></app-floating-action-button>
 <div class="mb-4 flex justify-end relative z-10">
     <button mat-button color="primary" (click)="loadData()">
         <mat-icon>settings_backup_restore</mat-icon>
         Change Member
     </button>
 </div>
-<app-detailed-view [detailedViews]="detailedViews" [refData]="refData!"></app-detailed-view>
-<mat-card class="mb-4" *ngIf="summary && summary?.hasOutstanding">
+<app-detailed-view [detailedViews]="detailedViews" [refData]="getRefData()!"></app-detailed-view>
+<mat-card class="mb-4" *ngIf="summary &&summary.hasOutstanding">
     <div class="text-gray-700 m-4">
         <div class="grid md:grid-cols-2 text-sm">
             <div class="grid grid-cols-2">
                 <div class="py-2 font-semibold">Outstanding amount</div>
-                <div class="py-2"> ₹ {{summary?.outstandingAmount}}</div>
+                <div class="py-2"> ₹ {{summary.outstandingAmount}}</div>
             </div>
             <div class="grid grid-cols-2">
                 <div class="py-2 font-semibold">Outstanding month(s)</div>
                 <div class="py-2">
                     <span>
-                        {{ summary?.outstandingMonths?.length ==0 ? '-' :
-                        summary?.outstandingMonths?.join(', ') | replaceNull }}
+                        {{ summary.outstandingMonths.length ==0 ? '-' :
+                        summary.outstandingMonths.join(', ') | replaceNull }}
                     </span>
                 </div>
             </div>

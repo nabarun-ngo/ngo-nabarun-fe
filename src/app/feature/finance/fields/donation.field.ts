@@ -129,7 +129,7 @@ export const getDonationSection = (
             },
             {
                 field_name: 'Donation amount',
-                field_value: donation?.amount,
+                field_value: donation?.amount ? `${donation?.amount}` : undefined,
                 field_display_value: `₹ ${donation?.amount}`,
                 editable: isCreate || (!isCreate && donation?.status !== 'PAID'),
                 form_control_name: 'amount',

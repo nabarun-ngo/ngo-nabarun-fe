@@ -85,7 +85,7 @@ export class GuestDonationTabComponent extends BaseDonationTabComponent {
       pageIndex: $event.pageIndex,
       pageSize: $event.pageSize
     }).subscribe(data => {
-      this.setContent(data.content!, data.totalSize);
+      this.setContent(data.donations.content!, data.donations.totalSize);
     });
   }
 
@@ -94,12 +94,12 @@ export class GuestDonationTabComponent extends BaseDonationTabComponent {
       this.donationService.fetchGuestDonations({
         filter: removeNullFields($event.value)
       }).subscribe(data => {
-        this.setContent(data.content!, data.totalSize);
+        this.setContent(data.donations.content!, data.donations.totalSize);
       });
     }
     else if ($event.reset) {
       this.donationService.fetchGuestDonations({}).subscribe(data => {
-        this.setContent(data.content!, data.totalSize);
+        this.setContent(data.donations.content!, data.donations.totalSize);
       });
     }
   }
@@ -109,7 +109,7 @@ export class GuestDonationTabComponent extends BaseDonationTabComponent {
       pageIndex: this.paginationConfig.pageNumber,
       pageSize: this.paginationConfig.pageSize,
     }).subscribe(data => {
-      this.setContent(data.content!, data.totalSize);
+      this.setContent(data.donations.content!, data.donations.totalSize);
     })
   }
 

@@ -22,7 +22,8 @@ import {
     mapDonationDtoToDonation,
     mapPagedDonationDtoToPagedDonations,
     mapDonationSummaryDtoToDonationSummary,
-    mapAccountDtoToAccount
+    mapAccountDtoToAccount,
+    DonationDashboardData
 } from '../model';
 import { mapDocDtoToDoc } from 'src/app/shared/model/document.model';
 import { from } from 'rxjs';
@@ -82,11 +83,7 @@ export class DonationService {
     fetchMyDonations(options: {
         pageIndex?: number;
         pageSize?: number;
-    }): Observable<{
-        donations: PagedDonations;
-        summary: DonationSummary;
-        accounts: Account[];
-    }> {
+    }): Observable<DonationDashboardData> {
         return from(this.identityService.getUser()).pipe(
             map(user => user.profile_id),
 
@@ -135,15 +132,18 @@ export class DonationService {
         pageIndex?: number,
         pageSize?: number
         filter?: { donationId?: string, donationStatus?: string[], startDate?: string, endDate?: string, donationType?: string[] }
-    }): Observable<PagedDonations> {
-        return this.donationController.listGuestDonations({
-            pageIndex: options.pageIndex || DonationDefaultValue.pageNumber,
-            pageSize: options.pageSize || DonationDefaultValue.pageSize,
-            ...options.filter
-        }).pipe(
-            map(d => d.responsePayload),
-            map(mapPagedDonationDtoToPagedDonations)
-        );
+    }): Observable<DonationDashboardData> {
+        return combineLatest({
+            donations: this.donationController.listGuestDonations({
+                pageIndex: options.pageIndex ?? DonationDefaultValue.pageNumber,
+                pageSize: options.pageSize ?? DonationDefaultValue.pageSize
+            }).pipe(
+                map(res => res.responsePayload),
+                map(mapPagedDonationDtoToPagedDonations)
+            ),
+            accounts: of([]),
+            summary: of(undefined)
+        });
     }
 
     /**

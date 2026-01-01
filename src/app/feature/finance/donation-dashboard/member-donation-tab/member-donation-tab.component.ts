@@ -61,26 +61,6 @@ export class MemberDonationTabComponent extends BaseDonationTabComponent {
         rounded: true
       }
     ]);
-
-    // this.memberControl.valueChanges.subscribe(userId => {
-    //   if (userId) {
-    //     const member = this.users.find(u => u.id === userId);
-    //     if (member) {
-    //       this.detailedViews = [getDonorSection({
-    //         donorName: member.fullName,
-    //         donorEmail: member.email,
-    //         donorPhone: member.primaryNumber?.fullNumber!
-    //       }, {})];
-
-    //       this.donationService.fetchUserDonations(userId, {}).subscribe(data => {
-    //         this.setContent(data.donations?.content!, data.donations?.totalSize);
-    //       });
-    //     }
-    //   } else {
-    //     this.detailedViews = [];
-    //     this.setContent([], 0);
-    //   }
-    // });
   }
 
 

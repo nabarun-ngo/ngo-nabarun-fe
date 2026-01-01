@@ -68,7 +68,7 @@ export type PagedDonations = PagedResult<Donation>;
 
 export interface DonationDashboardData {
   donations: PagedDonations;
-  summary: DonationSummary;
+  summary: DonationSummary | undefined;
   accounts: Account[];
 }
 
