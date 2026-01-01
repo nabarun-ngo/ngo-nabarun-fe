@@ -15,6 +15,7 @@ import { BaseDonationTabComponent } from '../base-donation-tab.component';
   styleUrls: ['./self-donation-tab.component.scss']
 })
 export class SelfDonationTabComponent extends BaseDonationTabComponent {
+
   @Input()
   summary: DonationSummary | undefined;
 
@@ -122,5 +123,7 @@ export class SelfDonationTabComponent extends BaseDonationTabComponent {
       this.setContent(data.donations.content!, data.donations.totalSize);
     });
   }
+
+  protected override handleConfirmCreate(): void { }
 
 }

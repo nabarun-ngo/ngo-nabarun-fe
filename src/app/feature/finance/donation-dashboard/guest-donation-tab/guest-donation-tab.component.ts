@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
-import { AccordionButton, AccordionCell } from 'src/app/shared/model/accordion-list.model';
+import { AccordionCell } from 'src/app/shared/model/accordion-list.model';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { DonationRefData } from '../../finance.const';
 import { Donation } from '../../model';
-import { getDonationSection, getDonorSection } from '../../fields/donation.field';
+import { getDonorSection } from '../../fields/donation.field';
 import { BaseDonationTabComponent } from '../base-donation-tab.component';
 import { SCOPE } from 'src/app/core/constant/auth-scope.const';
 import { removeNullFields } from 'src/app/core/service/utilities.service';
@@ -16,6 +16,7 @@ import { removeNullFields } from 'src/app/core/service/utilities.service';
   styleUrls: ['./guest-donation-tab.component.scss']
 })
 export class GuestDonationTabComponent extends BaseDonationTabComponent {
+
   permissions: { canCreateDonation: boolean; canUpdateDonation: boolean; } | undefined;
 
   override onInitHook(): void {
@@ -69,22 +70,11 @@ export class GuestDonationTabComponent extends BaseDonationTabComponent {
   }
 
   protected override prepareDetailedView(data: Donation, options?: { [key: string]: any; }): DetailedView[] {
-    const mode = (options?.['mode'] as 'create' | 'edit' | 'view') || 'view';
     return [
       getDonorSection(data, {
-        mode: mode,
         refData: this.getRefData({ isActive: true })
       }),
-      ...super.prepareDetailedView(data, options)
-    ];
-  }
-
-  protected override prepareDefaultButtons(data: Donation, options?: { [key: string]: any; }): AccordionButton[] {
-    return [
-      {
-        button_id: 'UPDATE_DONATION',
-        button_name: 'Update'
-      }
+      ...super.prepareDetailedView(data, { guest: true, ...options })
     ];
   }
 
@@ -130,8 +120,26 @@ export class GuestDonationTabComponent extends BaseDonationTabComponent {
     ];
   }
 
-  initCreateDonationForm() {
-    this.showCreateForm()
+  protected override handleConfirmCreate(): void {
+    const donor_form = this.getSectionForm('donor_detail', 0, true);
+    const donation_form = this.getSectionForm('donation_detail', 0, true);
+    console.log(donor_form?.value, donation_form?.value);
+    if (donor_form?.valid && donation_form?.valid) {
+      const donor = donor_form?.value;
+      const donation = {
+        ...donor,
+        amount: donation_form?.value.amount,
+      } as Donation;
+
+      this.donationService.createDonation(donation, true).subscribe((data) => {
+        this.hideForm(0, true);
+        this.addContentRow(data, true);
+      });
+    } else {
+      donation_form?.markAllAsTouched();
+      donor_form?.markAllAsTouched();
+    }
   }
+
 
 }

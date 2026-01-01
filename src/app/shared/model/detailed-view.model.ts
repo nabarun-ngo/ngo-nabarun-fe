@@ -74,7 +74,7 @@ export interface DetailedView<NumType = any> {
     /* ───────────── Documents ───────────── */
 
     readonly documentHeader?: string;
-    documents?: Doc[];
+    readonly documents?: Doc[];
 
     /**
      * Document upload state.
@@ -151,7 +151,7 @@ export interface DetailedViewField {
     readonly field_name?: string;
 
     /** Raw value */
-    field_value: string | undefined;
+    field_value: string | number | undefined;
 
     /** Display value (formatted) */
     field_display_value?: string;

@@ -12,6 +12,7 @@ import { DonationService } from '../service/donation.service';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { ModalService } from 'src/app/core/service/modal.service';
+import { AccordionButton } from 'src/app/shared/model/accordion-list.model';
 
 @Component({
     template: ''
@@ -44,33 +45,53 @@ export abstract class BaseDonationTabComponent extends Accordion<Donation> imple
     }
 
     protected override prepareDetailedView(data: Donation, options?: { [key: string]: any; }): DetailedView[] {
-        const mode = (options?.['mode'] as 'create' | 'edit' | 'view') || 'view';
         return [
             getDonationSection(
                 data,
                 this.getRefData({ isActive: true }) || {},
                 this.payableAccounts.map(acc => ({ key: acc.id, displayValue: acc.accountHolderName || '' })),
                 [],
-                mode === 'create'
+                options && options['create'],
+                options && options['guest']
             ),
-            donationDocumentSection([])
         ];
     }
 
     protected override onClick(event: { buttonId: string; rowIndex: number; }): void {
+        console.log(event, this.activeButtonId);
         if (event.buttonId === 'UPDATE_DONATION') {
+            this.activeButtonId = event.buttonId;
             this.handleUpdateDonation(event.rowIndex);
         }
         else if (event.buttonId === 'CANCEL' && this.activeButtonId === 'UPDATE_DONATION') {
-            this.handleCancelUpdate(event.rowIndex);
+            this.formSubscription?.unsubscribe();
+            this.hideForm(event.rowIndex);
         }
         else if (event.buttonId === 'CONFIRM' && this.activeButtonId === 'UPDATE_DONATION') {
             this.handleConfirmUpdate(event.rowIndex);
         }
+        else if (event.buttonId === 'CANCEL_CREATE') {
+            this.formSubscription?.unsubscribe();
+            this.hideForm(0, true);
+        }
+        else if (event.buttonId === 'CONFIRM_CREATE') {
+            this.handleConfirmCreate();
+        }
+    }
+    protected abstract handleConfirmCreate(): void;
+
+    protected initCreateDonationForm(isGuest: boolean) {
+        this.showCreateForm();
+        setTimeout(() => {
+            this.formSubscription = this.setupFieldVisibilityRules('donation_detail', 0, DonationFieldVisibilityRules, true);
+            this.updateFieldValidators('donation_detail', 0, {
+                'amount': [Validators.required],
+                'type': isGuest ? [] : [Validators.required],
+            }, true);
+        }, 0);
     }
 
     protected handleUpdateDonation(rowIndex: number): void {
-        this.activeButtonId = 'UPDATE_DONATION';
         this.showEditForm(rowIndex, this.getEditFormSections());
 
         setTimeout(() => {
@@ -104,21 +125,16 @@ export abstract class BaseDonationTabComponent extends Accordion<Donation> imple
         });
     }
 
-    protected handleCancelUpdate(rowIndex: number): void {
-        this.formSubscription?.unsubscribe();
-        this.hideForm(rowIndex);
-    }
-
     protected handleConfirmUpdate(rowIndex: number): void {
         const donation = this.itemList[rowIndex];
         const forms = this.getFormsToValidate(rowIndex);
         const allValid = forms.every(f => f?.valid);
-
         if (allValid) {
             const donationForm = this.getSectionForm('donation_detail', rowIndex);
             const documents = this.getSectionDocuments('document_list', rowIndex);
             const donationFormValue = { ...donationForm?.value } as Donation;
-            if (donationFormValue.status === 'PAID' && documents?.length == 0) {
+            console.log(donationFormValue);
+            if (donationFormValue.status === 'PAID' && donationFormValue.paymentMethod !== 'CASH' && documents?.length == 0) {
                 this.modalService.openNotificationModal({
                     description: 'Please upload a document for the donation payment',
                     title: 'Error',
@@ -153,8 +169,29 @@ export abstract class BaseDonationTabComponent extends Accordion<Donation> imple
     override onAccordionOpen(event: { rowIndex: number; }): void {
         const donationId = this.itemList[event.rowIndex].id;
         this.donationService.fetchDocuments(donationId).subscribe(data => {
-            this.getSectionInAccordion('document_list', event.rowIndex)!.documents = data;
+            this.addSectionInAccordion(donationDocumentSection(data), event.rowIndex);
         });
+    }
+
+    protected override prepareDefaultButtons(data: Donation, options?: { [key: string]: any; }): AccordionButton[] {
+        if (options && options['create']) {
+            return [
+                {
+                    button_id: 'CANCEL_CREATE',
+                    button_name: 'Cancel',
+                },
+                {
+                    button_id: 'CONFIRM_CREATE',
+                    button_name: 'Confirm',
+                },
+            ];
+        }
+        return [
+            {
+                button_id: 'UPDATE_DONATION',
+                button_name: 'Update'
+            }
+        ];
     }
 
     abstract loadData(): void;

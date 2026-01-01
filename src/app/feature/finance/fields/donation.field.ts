@@ -94,17 +94,16 @@ export const getDonationSection = (
     refData: { [name: string]: KeyValue[] },
     payableAccounts: KeyValue[] = [],
     events: KeyValue[] = [],
-    isCreate: boolean = false
+    isCreate: boolean = false,
+    isGuest: boolean = false,
 ): DetailedView => {
-    const donationForm = new FormGroup({
-    })
     const STATUS = refData?.[DonationRefData.refDataKey.status] || [];
     const NEXT_STATUS = STATUS.filter((status) => donation?.nextStatuses?.includes(status.key)) || [];
     return {
         section_name: 'Donation Details',
         section_type: 'key_value',
         section_html_id: 'donation_detail',
-        section_form: donationForm,
+        section_form: new FormGroup({}),
         content: [
             {
                 field_name: 'Donation number',
@@ -113,10 +112,10 @@ export const getDonationSection = (
             },
             {
                 field_name: 'Donation type',
-                field_value: donation?.type || '',
+                field_value: isGuest ? 'ONETIME' : donation?.type,
                 show_display_value: true,
                 ref_data_section: DonationRefData.refDataKey.type,
-                editable: isCreate,
+                editable: isCreate && !isGuest,
                 form_control_name: 'type',
                 form_input: {
                     html_id: 'type',
@@ -124,11 +123,13 @@ export const getDonationSection = (
                     inputType: '',
                     placeholder: 'Ex. Regular',
                     selectList: refData?.[DonationRefData.refDataKey.type] || []
-                }
+                },
+                field_html_id: 'type',
+                form_input_validation: []
             },
             {
                 field_name: 'Donation amount',
-                field_value: `${donation?.amount}`,
+                field_value: donation?.amount,
                 field_display_value: `₹ ${donation?.amount}`,
                 editable: isCreate || (!isCreate && donation?.status !== 'PAID'),
                 form_control_name: 'amount',
@@ -137,7 +138,9 @@ export const getDonationSection = (
                     tagName: 'input',
                     inputType: 'number',
                     placeholder: 'Ex. 100'
-                }
+                },
+                field_html_id: 'amount',
+                form_input_validation: []
             },
             {
                 field_name: 'Donation status',
@@ -231,6 +234,8 @@ export const getDonationSection = (
                     !isCreate && donation?.status === 'PAID'
                 ),
                 editable: !isCreate && donation?.status !== 'PAID',
+                show_display_value: true,
+                ref_data_section: DonationRefData.refDataKey.paymentMethod,
                 form_control_name: 'paymentMethod',
                 form_input: {
                     html_id: 'paymentMethod',
@@ -248,6 +253,8 @@ export const getDonationSection = (
                     !isCreate && donation?.status === 'PAID' && donation?.paymentMethod === 'UPI'
                 ),
                 editable: !isCreate && donation?.status !== 'PAID',
+                show_display_value: true,
+                ref_data_section: DonationRefData.refDataKey.upiOps,
                 form_control_name: 'paidUsingUPI',
                 form_input: {
                     html_id: 'paidUsingUPI',
@@ -369,11 +376,10 @@ export const getDonationSection = (
 export const getDonorSection = (
     donation: Donation,
     options: {
-        mode: 'create' | 'edit' | 'view',
         refData?: { [name: string]: KeyValue[] }
     }
 ): DetailedView => {
-    const { mode, refData } = options;
+    const { refData } = options;
 
     return {
         section_name: 'Donor Details',
@@ -407,7 +413,7 @@ export const getDonorSection = (
                     placeholder: 'Ex. john.doe@gmail.com',
                 },
                 field_html_id: 'email',
-                form_input_validation: []
+                form_input_validation: [Validators.email]
             },
             {
                 field_name: 'Phone Number',
@@ -496,3 +502,5 @@ export const DonationFieldVisibilityRules: FieldVisibilityRule<Donation>[] = [
         condition: (formValue) => formValue.type === 'REGULAR'
     }
 ]
+
+

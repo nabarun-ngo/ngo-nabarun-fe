@@ -286,8 +286,31 @@ export class DonationService {
      * @param donation Donation details (API DTO format)
      * @returns Observable of created donation (domain model)
      */
-    createDonation(donation: any): Observable<Donation> {
-        return this.donationController.createDonation({ body: donation }).pipe(
+    createDonation(donation: Donation, isGuest: boolean): Observable<Donation> {
+        if (isGuest) {
+            return this.donationController.createGuestDonation({
+                body: {
+                    amount: donation.amount,
+                    forEventId: donation.forEvent,
+                    donorEmail: donation.donorEmail,
+                    donorName: donation.donorName,
+                    donorNumber: donation.donorPhone,
+                }
+            }).pipe(
+                map(d => d.responsePayload),
+                map(mapDonationDtoToDonation)
+            );
+        }
+        return this.donationController.createDonation({
+            body: {
+                amount: donation.amount,
+                forEventId: donation.forEvent,
+                donorId: donation.donorId,
+                type: donation.type,
+                endDate: donation.endDate,
+                startDate: donation.startDate,
+            }
+        }).pipe(
             map(d => d.responsePayload),
             map(mapDonationDtoToDonation)
         );
