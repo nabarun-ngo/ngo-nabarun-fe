@@ -5,7 +5,8 @@ import { buildRowValidator } from 'src/app/shared/utils/row-validator.factory';
 
 @Component({
     selector: 'app-editable-table-section',
-    templateUrl: './editable-table-section.component.html'
+    templateUrl: './editable-table-section.component.html',
+    styleUrls: ['./editable-table-section.component.scss']
 })
 export class EditableTableSectionComponent {
 
