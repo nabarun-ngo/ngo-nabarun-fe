@@ -10,6 +10,7 @@ import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import {
   expenseDetailSection,
   expenseDocumentSection,
+  expenseEditableTable,
   expenseEventField,
   expenseHighLevelView,
   expenseListSection,
@@ -102,7 +103,6 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
         },
       }, isCreate, this.isAdmin),
       expenseList,
-      //expenseEditableTable(data.expenseItems || []),
     ];
   }
 
@@ -126,11 +126,11 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
     if (data.status == 'DRAFT') {
       buttons.push({
         button_id: 'UPDATE_EXPENSE',
-        button_name: 'Update',
+        button_name: 'Update Expense',
       });
       buttons.push({
         button_id: 'SUBMIT_EXPENSE',
-        button_name: 'Submit',
+        button_name: 'Submit Expense',
       });
     } else if (data.status == 'SUBMITTED') {
       buttons.push({
@@ -283,14 +283,14 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
           break;
         case 'CREATE_CONFIRM':
         case 'CONFIRM':
-          let expenseForm = expenseList.accordion?.object.getSectionForm(
+          let expenseItemForm = expenseList.accordion?.object.getSectionForm(
             'expense_item_detail',
             data.rowIndex,
             data.buttonId == 'CREATE_CONFIRM'
           );
-          expenseForm?.markAllAsTouched();
-          if (expenseForm?.valid) {
-            let content = expenseForm.value as ExpenseItem;
+          expenseItemForm?.markAllAsTouched();
+          if (expenseItemForm?.valid) {
+            let content = expenseItemForm.value as ExpenseItem;
             if (data.buttonId == 'CREATE_CONFIRM') {
               expenseList.accordion?.object.addContentRow(content);
             } else {
@@ -303,19 +303,19 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
               data.rowIndex,
               data.buttonId == 'CREATE_CONFIRM'
             );
-            if (!isCreate) {
-              let index = this.itemList.findIndex(
-                (f) => f.id == expenseList.accordion?.parentId
-              );
-              let id = expenseList.accordion?.parentId!;
-              let expenseItems = this.getSectionAccordion(
-                'expense_list_detail',
-                index
-              )?.itemList as ExpenseItem[];
-              this.accountService
-                .updateExpenseItem(id, expenseItems)
-                .subscribe((d) => this.updateContentRow(d!, index));
-            }
+            // if (!isCreate) {
+            //   let index = this.itemList.findIndex(
+            //     (f) => f.id == expenseList.accordion?.parentId
+            //   );
+            //   let id = expenseList.accordion?.parentId!;
+            //   let expenseItems = this.getSectionAccordion(
+            //     'expense_list_detail',
+            //     index
+            //   )?.itemList as ExpenseItem[];
+            //   this.accountService
+            //     .updateExpenseItem(id, expenseItems)
+            //     .subscribe((d) => this.updateContentRow(d!, index));
+            // }
           }
           break;
         case 'CREATE_CANCEL':
@@ -344,11 +344,10 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
                 'error'
               );
             } else {
-              let id = expenseList.accordion?.parentId!;
               expenseList.accordion?.object.removeContentRow(data.rowIndex);
-              this.accountService
-                .updateExpenseItem(id, expenseItems)
-                .subscribe((d) => this.updateContentRow(d!, index));
+              //this.accountService
+              //  .updateExpenseItem(id, expenseItems)
+              //  .subscribe((d) => this.updateContentRow(d!, index));
             }
           }
           break;
