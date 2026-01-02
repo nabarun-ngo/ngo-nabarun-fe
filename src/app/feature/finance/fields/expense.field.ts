@@ -14,7 +14,7 @@ import {
 } from 'src/app/shared/model/detailed-view.model';
 import { date } from 'src/app/core/service/utilities.service';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
-import { ExpenseDefaultValue, expenseTab } from '../finance.const';
+import { AccountConstant, AccountDefaultValue, ExpenseDefaultValue, expenseTab } from '../finance.const';
 import { Account, Expense, ExpenseItem } from '../model';
 import { Doc } from 'src/app/shared/model/document.model';
 import { KeyValue } from 'src/app/shared/model/key-value.model';
@@ -79,6 +79,8 @@ export const expenseHighLevelView = (item: Expense): AccordionCell[] => {
       type: 'text',
       value: item?.status + '',
       bgColor: item?.settledOn ? 'bg-green-300' : 'bg-purple-200',
+      showDisplayValue: true,
+      refDataSection: AccountConstant.refDataKey.expenseStatus,
       rounded: true,
     },
   ];
@@ -104,6 +106,8 @@ export const manageExpenseHighLevelView = (item: Expense): AccordionCell[] => {
       type: 'text',
       value: item?.status + '',
       bgColor: item?.settledOn ? 'bg-green-300' : 'bg-purple-200',
+      showDisplayValue: true,
+      refDataSection: AccountConstant.refDataKey.expenseStatus,
       rounded: true,
     },
   ];

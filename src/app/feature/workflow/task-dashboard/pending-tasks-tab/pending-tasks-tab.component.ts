@@ -6,9 +6,9 @@ import { AccordionButton, AccordionCell } from 'src/app/shared/model/accordion-l
 import { PaginateWorkDetail, WorkDetail } from 'src/app/core/api-client/models';
 import { date, removeNullFields } from 'src/app/core/service/utilities.service';
 import { Accordion } from 'src/app/shared/utils/accordion';
-import { RequestConstant, TaskDefaultValue, TaskField } from '../../request.const';
-import { RequestService } from '../../request.service';
-import { getDocumentDetailSection, getRequestAdditionalDetailSection, getRequestDetailSection, getWorkActionDetailSection, getWorkDetailSection } from '../../request.field';
+import { RequestConstant, TaskDefaultValue, TaskField } from '../../workflow.const';
+import { RequestService } from '../../service/request.service';
+import { getDocumentDetailSection, getRequestAdditionalDetailSection, getRequestDetailSection, getWorkActionDetailSection, getWorkDetailSection } from '../../fields/request.field';
 import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 

@@ -14,7 +14,8 @@ export const AccountConstant = {
     refDataName: 'ACCOUNT',
     refDataKey: {
         accountType: 'accountTypes',
-        accountStatus: 'accountStatuses'
+        accountStatus: 'accountStatuses',
+        expenseStatus: 'expenseStatuses',
     },
     enum: {
 

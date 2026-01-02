@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CommonControllerService, RequestControllerService, UserControllerService } from 'src/app/core/api/services';
-import { RequestDefaultValue, TaskDefaultValue } from './request.const';
+import { RequestDefaultValue } from '../workflow.const';
 import { Observable, map } from 'rxjs';
-import { RefDataType, RequestDetail, RequestDetailFilter, WorkDetail, WorkDetailFilter } from 'src/app/core/api-client/models';
 import { date } from 'src/app/core/service/utilities.service';
 
 @Injectable({

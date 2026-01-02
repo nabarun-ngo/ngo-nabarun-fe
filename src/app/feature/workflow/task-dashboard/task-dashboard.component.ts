@@ -5,12 +5,12 @@ import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
 import { StandardTabbedDashboard } from 'src/app/shared/utils/standard-tabbed-dashboard';
-import { TaskDefaultValue, workListTab } from '../request.const';
+import { TaskDefaultValue, workListTab } from '../workflow.const';
 import { PendingTasksTabComponent } from './pending-tasks-tab/pending-tasks-tab.component';
 import { CompletedTasksTabComponent } from './completed-tasks-tab/completed-tasks-tab.component';
 import { PaginateWorkDetail } from 'src/app/core/api-client/models';
 import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
-import { taskSearchInput } from '../request.field';
+import { taskSearchInput } from '../fields/request.field';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 
 @Component({

@@ -3,9 +3,9 @@ import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { AccordionButton, AccordionCell } from 'src/app/shared/model/accordion-list.model';
 import { WorkDetail } from 'src/app/core/api-client/models';
 import { date } from 'src/app/core/service/utilities.service';
-import { RequestConstant, TaskField } from '../../request.const';
-import { RequestService } from '../../request.service';
-import { getWorkDetailSection } from '../../request.field';
+import { RequestConstant, TaskField } from '../../workflow.const';
+import { RequestService } from '../../service/request.service';
+import { getWorkDetailSection } from '../../fields/request.field';
 import { PendingTasksTabComponent } from '../pending-tasks-tab/pending-tasks-tab.component';
 
 @Component({

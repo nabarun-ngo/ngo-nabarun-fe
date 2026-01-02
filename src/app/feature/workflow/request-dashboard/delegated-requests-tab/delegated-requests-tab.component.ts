@@ -4,7 +4,7 @@ import { FormGroup, Validators } from '@angular/forms';
 import { RequestDetail } from 'src/app/core/api-client/models';
 import { AccordionCell, AccordionButton } from 'src/app/shared/model/accordion-list.model';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
-import { RequestConstant, RequestField } from '../../request.const';
+import { RequestConstant, RequestField } from '../../workflow.const';
 import { MyRequestsTabComponent } from '../my-requests-tab/my-requests-tab.component';
 
 @Component({

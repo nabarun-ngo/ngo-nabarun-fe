@@ -9,11 +9,11 @@ import {
 } from 'src/app/shared/model/accordion-list.model';
 import { DetailedView, DetailedViewField } from 'src/app/shared/model/detailed-view.model';
 import { Accordion } from 'src/app/shared/utils/accordion';
-import { RequestConstant, RequestDefaultValue, RequestField, TaskDefaultValue } from '../../request.const';
-import { RequestService } from '../../request.service';
+import { RequestConstant, RequestDefaultValue, RequestField, TaskDefaultValue } from '../../workflow.const';
+import { RequestService } from '../../service/request.service';
 import { ModalService } from 'src/app/core/service/modal.service';
 import { AppDialog } from 'src/app/core/constant/app-dialog.const';
-import { getRequestAdditionalDetailSection, getRequestDetailSection, getWorkActionDetailSection, getWorkDetailSection } from '../../request.field';
+import { getRequestAdditionalDetailSection, getRequestDetailSection, getWorkActionDetailSection, getWorkDetailSection } from '../../fields/request.field';
 import { date } from 'src/app/core/service/utilities.service';
 import { filterFormChange } from 'src/app/core/service/form.service';
 import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';

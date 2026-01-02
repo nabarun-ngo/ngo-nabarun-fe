@@ -1,6 +1,6 @@
 import { FormGroup, Validators } from "@angular/forms";
 import { date } from "src/app/core/service/utilities.service";
-import { RequestConstant, requestTab, workListTab } from "./request.const";
+import { RequestConstant, requestTab, workListTab } from "../workflow.const";
 import { DetailedView, DetailedViewField } from "src/app/shared/model/detailed-view.model";
 import { SearchAndAdvancedSearchModel } from "src/app/shared/model/search-and-advanced-search.model";
 

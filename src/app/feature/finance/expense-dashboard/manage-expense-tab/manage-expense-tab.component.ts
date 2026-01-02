@@ -69,7 +69,7 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
     options?: { [key: string]: any }
   ): AccordionCell[] {
     // Convert domain model to format expected by manageExpenseHighLevelView
-    return manageExpenseHighLevelView(data as any);
+    return manageExpenseHighLevelView(data);
   }
 
   protected override prepareDefaultButtons(
