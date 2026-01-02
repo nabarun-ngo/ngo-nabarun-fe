@@ -55,7 +55,7 @@ export class SelfDonationTabComponent extends BaseDonationTabComponent {
       },
       {
         type: 'text',
-        value: data.periodDisplay || `${date(data.startDate)} - ${date(data.endDate)}`
+        value: data?.startDate && data?.endDate ? `${date(data?.startDate)} - ${date(data?.endDate)}` : '-'
       },
       {
         type: 'text',

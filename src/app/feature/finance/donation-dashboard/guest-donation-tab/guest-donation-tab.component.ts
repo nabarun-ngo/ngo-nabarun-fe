@@ -17,13 +17,9 @@ import { removeNullFields } from 'src/app/core/service/utilities.service';
 })
 export class GuestDonationTabComponent extends BaseDonationTabComponent {
 
-  permissions: { canCreateDonation: boolean; canUpdateDonation: boolean; } | undefined;
 
   override onInitHook(): void {
-    this.permissions = {
-      canCreateDonation: this.identityService.isAccrediatedTo(SCOPE.create.donation),
-      canUpdateDonation: this.identityService.isAccrediatedTo(SCOPE.update.donation),
-    }
+
     this.setHeaderRow([
       {
         value: 'Donor Name',
@@ -123,7 +119,6 @@ export class GuestDonationTabComponent extends BaseDonationTabComponent {
   protected override handleConfirmCreate(): void {
     const donor_form = this.getSectionForm('donor_detail', 0, true);
     const donation_form = this.getSectionForm('donation_detail', 0, true);
-    console.log(donor_form?.value, donation_form?.value);
     if (donor_form?.valid && donation_form?.valid) {
       const donor = donor_form?.value;
       const donation = {

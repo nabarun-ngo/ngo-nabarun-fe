@@ -266,6 +266,11 @@ export const getDonationSection = (
                 }
             },
             {
+                field_name: 'Transaction ID',
+                field_value: donation?.transactionRef || '',
+                hide_field: !(!isCreate && donation?.status === 'PAID')
+            },
+            {
                 field_name: 'Donation confirmed by',
                 field_value: donation?.confirmedBy?.fullName || '',
                 hide_field: !(!isCreate && donation?.status === 'PAID')

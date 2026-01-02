@@ -10,8 +10,9 @@ import { Validators } from '@angular/forms';
 import { KeyValue } from 'src/app/shared/model/key-value.model';
 import { getDonorSection } from '../../fields/donation.field';
 import { DonationRefData } from '../../finance.const';
-import { date } from 'src/app/core/service/utilities.service';
+import { date, getNonNullValues, removeNullFields } from 'src/app/core/service/utilities.service';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
+import { User } from 'src/app/feature/member/models/member.model';
 
 @Component({
   selector: 'app-member-donation-tab',
@@ -41,6 +42,7 @@ export class MemberDonationTabComponent extends BaseDonationTabComponent {
       }]
     }
   };
+  protected profile: User | undefined;
 
   override onInitHook(): void {
     this.setHeaderRow([
@@ -74,11 +76,11 @@ export class MemberDonationTabComponent extends BaseDonationTabComponent {
       },
       {
         type: 'text',
-        value: data.formattedAmount,
+        value: data?.formattedAmount,
       },
       {
         type: 'text',
-        value: data.periodDisplay || `${date(data.startDate)} - ${date(data.endDate)}`
+        value: data?.startDate && data?.endDate ? `${date(data?.startDate)} - ${date(data?.endDate)}` : '-'
       },
       {
         type: 'text',
@@ -90,11 +92,28 @@ export class MemberDonationTabComponent extends BaseDonationTabComponent {
   }
 
   override handlePageEvent($event: PageEvent): void {
-
+    this.pageEvent = $event;
+    this.donationService.getUserDonations(this.profile?.id!, {
+      pageIndex: $event.pageIndex,
+      pageSize: $event.pageSize
+    }).subscribe(data => {
+      this.setContent(data.content!, data.totalSize);
+    });
   }
 
   onSearch($event: SearchEvent): void {
-
+    if ($event.advancedSearch) {
+      this.donationService.getUserDonations(this.profile?.id!, {
+        filter: removeNullFields($event.value)
+      }).subscribe(data => {
+        this.setContent(data.content!, data.totalSize);
+      });
+    }
+    else if ($event.reset) {
+      this.donationService.getUserDonations(this.profile?.id!, {}).subscribe(data => {
+        this.setContent(data.content!, data.totalSize);
+      });
+    }
   }
 
   loadData(): void {
@@ -116,15 +135,15 @@ export class MemberDonationTabComponent extends BaseDonationTabComponent {
           modal.close();
         }
         else {
-          let profile = users.content?.find(f => f.id == data.value.userId);
-          if (profile) {
+          this.profile = users.content?.find(f => f.id == data.value.userId);
+          if (this.profile) {
             this.detailedViews = [
               getDonorSection({
-                donorName: profile.fullName,
-                donorEmail: profile.email,
-                donorPhone: profile.primaryNumber?.fullNumber!
+                donorName: this.profile.fullName,
+                donorEmail: this.profile.email,
+                donorPhone: this.profile.primaryNumber?.fullNumber!
               }, {})];
-            this.donationService.fetchUserDonations(profile.id, {}).subscribe(data => {
+            this.donationService.fetchUserDonations(this.profile.id, {}).subscribe(data => {
               this.setContent(data.donations?.content!, data.donations?.totalSize);
               this.summary = data.summary;
               modal.close();
@@ -136,5 +155,19 @@ export class MemberDonationTabComponent extends BaseDonationTabComponent {
   }
 
   protected override handleConfirmCreate(): void {
+    const donation_form = this.getSectionForm('donation_detail', 0, true);
+    if (donation_form?.valid) {
+      const donation = {
+        ...donation_form?.value,
+        donorId: this.profile?.id!,
+      } as Donation;
+
+      this.donationService.createDonation(donation, false).subscribe((data) => {
+        this.hideForm(0, true);
+        this.addContentRow(data, true);
+      });
+    } else {
+      donation_form?.markAllAsTouched();
+    }
   }
 }

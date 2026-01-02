@@ -13,12 +13,15 @@ import { UserIdentityService } from 'src/app/core/service/user-identity.service'
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { ModalService } from 'src/app/core/service/modal.service';
 import { AccordionButton } from 'src/app/shared/model/accordion-list.model';
+import { SCOPE } from 'src/app/core/constant/auth-scope.const';
 
 @Component({
     template: ''
 })
 export abstract class BaseDonationTabComponent extends Accordion<Donation> implements TabComponentInterface<PagedDonations>, OnDestroy {
     protected formSubscription?: Subscription;
+    protected permissions: { canCreateDonation: boolean; canUpdateDonation: boolean; } | undefined;
+
 
     @Input()
     payableAccounts: Account[] = [];
@@ -29,6 +32,10 @@ export abstract class BaseDonationTabComponent extends Accordion<Donation> imple
         protected modalService: ModalService
     ) {
         super();
+        this.permissions = {
+            canCreateDonation: this.identityService.isAccrediatedTo(SCOPE.create.donation),
+            canUpdateDonation: this.identityService.isAccrediatedTo(SCOPE.update.donation),
+        }
     }
 
     ngOnDestroy(): void {
@@ -58,7 +65,7 @@ export abstract class BaseDonationTabComponent extends Accordion<Donation> imple
     }
 
     protected override onClick(event: { buttonId: string; rowIndex: number; }): void {
-        console.log(event, this.activeButtonId);
+        //console.log(event, this.activeButtonId);
         if (event.buttonId === 'UPDATE_DONATION') {
             this.activeButtonId = event.buttonId;
             this.handleUpdateDonation(event.rowIndex);
@@ -81,6 +88,7 @@ export abstract class BaseDonationTabComponent extends Accordion<Donation> imple
     protected abstract handleConfirmCreate(): void;
 
     protected initCreateDonationForm(isGuest: boolean) {
+        console.log(this.permissions);
         this.showCreateForm();
         setTimeout(() => {
             this.formSubscription = this.setupFieldVisibilityRules('donation_detail', 0, DonationFieldVisibilityRules, true);
