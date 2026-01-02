@@ -136,7 +136,8 @@ export class DonationService {
         return combineLatest({
             donations: this.donationController.listGuestDonations({
                 pageIndex: options.pageIndex ?? DonationDefaultValue.pageNumber,
-                pageSize: options.pageSize ?? DonationDefaultValue.pageSize
+                pageSize: options.pageSize ?? DonationDefaultValue.pageSize,
+                ...options.filter
             }).pipe(
                 map(res => res.responsePayload),
                 map(mapPagedDonationDtoToPagedDonations)
@@ -192,7 +193,7 @@ export class DonationService {
             donations: this.donationController.getMemberDonations({
                 memberId: id,
                 pageIndex: options.pageIndex || DonationDefaultValue.pageNumber,
-                pageSize: options.pageSize || DonationDefaultValue.pageSize
+                pageSize: options.pageSize || DonationDefaultValue.pageSize,
             }).pipe(
                 map(d => d.responsePayload),
                 map(mapPagedDonationDtoToPagedDonations)
@@ -202,6 +203,22 @@ export class DonationService {
                 map(mapDonationSummaryDtoToDonationSummary)
             )
         });
+    }
+
+    getUserDonations(id: string, options: {
+        pageIndex?: number,
+        pageSize?: number,
+        filter?: { donationId?: string, donationStatus?: string[], startDate?: string, endDate?: string, donationType?: string[] }
+    }): Observable<PagedDonations> {
+        return this.donationController.getMemberDonations({
+            memberId: id,
+            pageIndex: options.pageIndex || DonationDefaultValue.pageNumber,
+            pageSize: options.pageSize || DonationDefaultValue.pageSize,
+            ...options.filter
+        }).pipe(
+            map(d => d.responsePayload),
+            map(mapPagedDonationDtoToPagedDonations)
+        );
     }
 
     fetchDocuments(id: string) {
@@ -305,11 +322,11 @@ export class DonationService {
         return this.donationController.createDonation({
             body: {
                 amount: donation.amount,
-                forEventId: donation.forEvent,
+                ...donation.forEvent ? { forEventId: donation.forEvent } : {},
                 donorId: donation.donorId,
                 type: donation.type,
-                endDate: donation.endDate,
-                startDate: donation.startDate,
+                ...donation.endDate ? { endDate: donation.endDate } : {},
+                ...donation.startDate ? { startDate: donation.startDate } : {},
             }
         }).pipe(
             map(d => d.responsePayload),
