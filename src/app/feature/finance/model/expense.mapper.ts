@@ -18,7 +18,7 @@ import { date } from 'src/app/core/service/utilities.service';
 function mapExpenseItem(dto: ExpenseItemDetailDto): ExpenseItem {
   return {
     itemName: dto.itemName,
-    description: dto.description,
+    // description: dto.description,
     amount: dto.amount,
     formattedAmount: `₹${dto.amount.toLocaleString('en-IN')}`
   };

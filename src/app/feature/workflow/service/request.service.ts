@@ -1,109 +1,82 @@
 import { Injectable } from '@angular/core';
-import { CommonControllerService, RequestControllerService, UserControllerService } from 'src/app/core/api/services';
-import { RequestDefaultValue } from '../workflow.const';
 import { Observable, map } from 'rxjs';
-import { date } from 'src/app/core/service/utilities.service';
+import { WorkflowControllerService, UserControllerService, DmsControllerService } from 'src/app/core/api-client/services';
+import { mapPagedWorkflowInstanceDtoToPagedRequest, mapToWorkflowInstanceDtoToWorkflowRequest } from '../model/workflow.mapper';
+import { PagedRequest, WorkflowRequest } from '../model/request.model';
+import { mapPagedUserDtoToPagedUser } from '../../member/models/member.mapper';
+import { KeyValue } from 'src/app/shared/model/key-value.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RequestService {
 
+
   constructor(
-    private requestController: RequestControllerService,
-    private commonController: CommonControllerService,
+    private workflowController: WorkflowControllerService,
     private userController: UserControllerService,
+    private dmsController: DmsControllerService,
   ) { }
 
   getUsers() {
-    return this.userController.getUsers({ filter: {} }).pipe(map(d => d.responsePayload));
+    return this.userController.listUsers({}).pipe(
+      map(d => d.responsePayload),
+      map(mapPagedUserDtoToPagedUser));
   }
-
 
   findRequests(
-    delegated: boolean,
-    pageNumber?: number,
-    pageSize?: number,
-    additionalFilter?: RequestDetailFilter
-  ) {
-    let filter = { isDelegated: delegated, ...additionalFilter };
-    return this.requestController.getMyRequests({
-      filter: filter,
-      pageIndex: pageNumber,
-      pageSize: pageSize
-    }).pipe(map(d => d.responsePayload));
-  }
-
-  findRefField(type: string) {
-    return this.commonController.getReferenceField({ source: 'REQUEST-' + type }).pipe(map(d => d.responsePayload));
-  }
-
-  createRequest(detail: RequestDetail) {
-    return this.requestController.createRequest({ body: detail }).pipe(map(d => d.responsePayload));
-  }
-
-
-  findMyWorkList(
-    isCompleted: boolean,
-    pageNumber?: number,
-    pageSize?: number,
-    filter?: WorkDetailFilter) {
-    let filter_: WorkDetailFilter = {};
-    filter_.completed = isCompleted;
-
-    if (filter?.requestId) {
-      filter_.requestId = filter?.requestId;
+    requestFor: 'me' | 'others',
+    page?: number,
+    size?: number,
+  ): Observable<PagedRequest> {
+    if (requestFor === 'me') {
+      return this.workflowController.listInstancesForMe({
+        page: page,
+        size: size
+      }).pipe(
+        map(d => d.responsePayload),
+        map(mapPagedWorkflowInstanceDtoToPagedRequest)
+      );
     }
-    if (filter?.workId) {
-      filter_.workId = filter?.workId;
-    }
-    if (filter?.fromDate) {
-      filter_.fromDate = date(filter?.fromDate, 'yyyy-MM-dd');
-    }
-    if (filter?.toDate) {
-      filter_.toDate = date(filter?.toDate, 'yyyy-MM-dd');
-    }
-    //console.log(filter_)
-    return this.requestController.getMyWorkItems({
-      filter: filter_,
-      pageIndex: pageNumber, pageSize: pageSize
-    }).pipe(map(d => d.responsePayload));
-  }
-
-  updateWorkItem(id: string, detail: WorkDetail) {
-    return this.requestController.updateWorkItem({ id: id, body: detail }).pipe(map(d => d.responsePayload));
+    return this.workflowController.listInstancesByMe({
+      page: page,
+      size: size,
+      delegated: true // interested to get request by me for others 
+    }).pipe(
+      map(d => d.responsePayload),
+      map(mapPagedWorkflowInstanceDtoToPagedRequest)
+    );
   }
 
 
-  getRequestDetail(id: string) {
-    return this.requestController.getRequestDetail({ id: id }).pipe(map(d => d.responsePayload));
+
+  createRequest(type: string, data: Record<string, string>, requestedFor?: string) {
+    return this.workflowController.startWorkflow({
+      body: {
+        type: type as any,
+        data: data,
+        requestedFor: requestedFor
+      }
+    }).pipe(
+      map(d => d.responsePayload),
+      map(mapToWorkflowInstanceDtoToWorkflowRequest)
+    );
   }
 
-  getDocuments(refId: string) {
-    return this.commonController.getDocuments({ docIndexId: refId, docIndexType: 'REQUEST' }).pipe(map(d => d.responsePayload));
+  withdrawRequest(id: string): Observable<any> {
+    // Currently no direct "cancel" in WorkflowControllerService, 
+    // but might be implemented as a task update or a different endpoint
+    // Returning an error observable for now
+    return new Observable(observer => {
+      observer.error('Withdrawal not implemented in new workflow API yet');
+    });
   }
 
-  getWorkDetails(id: string) {
-    return this.requestController.getWorkItems({ id: id }).pipe(map(d => d.responsePayload));
-  }
-
-  withdrawRequest(id: string) {
-    return this.requestController.updateRequest({ id: id, body: { status: 'CANCELLED' } }).pipe(map(d => d.responsePayload));
-  }
-
-  /**
-   * Advanced search for requests - placeholder implementation
-   * In a real scenario, this would call a backend API with advanced search capabilities
-   */
-  advancedSearchRequests(
-    delegated: boolean = false,
-    searchParams: any,
-    pageNumber: number = RequestDefaultValue.pageNumber,
-    pageSize: number = RequestDefaultValue.pageSize
-  ) {
-    // For now, delegate to regular findRequests with additional filter
-    // This would be replaced with a proper advanced search API call
-    return this.findRequests(delegated, pageNumber, pageSize, searchParams);
+  getRefData() {
+    return this.workflowController.workflowReferenceData().pipe(
+      map(d => d.responsePayload),
+    );
   }
 
 }
+

@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { SharedModule } from 'src/app/shared/shared.module';
-import { TaskSearchPipe } from './service/task.pipe';
 // New dashboard components
 import { RequestDashboardComponent } from './request-dashboard/request-dashboard.component';
 import { MyRequestsTabComponent } from './request-dashboard/my-requests-tab/my-requests-tab.component';
@@ -16,7 +15,6 @@ import { WorkflowRoutingModule } from './workflow-routing.module';
 
 @NgModule({
   declarations: [
-    TaskSearchPipe,
     // New dashboard components
     RequestDashboardComponent,
     MyRequestsTabComponent,
@@ -32,7 +30,6 @@ import { WorkflowRoutingModule } from './workflow-routing.module';
     SharedModule,
   ],
   providers: [
-    TaskSearchPipe
   ]
 })
 export class WorkflowModule { }

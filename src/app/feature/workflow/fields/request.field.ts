@@ -1,329 +1,243 @@
 import { FormGroup, Validators } from "@angular/forms";
 import { date } from "src/app/core/service/utilities.service";
-import { RequestConstant, requestTab, workListTab } from "../workflow.const";
+import { requestTab, WorkflowConstant, workListTab } from "../workflow.const";
 import { DetailedView, DetailedViewField } from "src/app/shared/model/detailed-view.model";
 import { SearchAndAdvancedSearchModel } from "src/app/shared/model/search-and-advanced-search.model";
-
-const refDataKey = RequestConstant.refDataKey
-
-// const getAdditionalField = (fields: AdditionalField[]) => {
-//     return fields?.map(m1 => {
-//         return {
-//             field_name: m1.name!,
-//             field_html_id: m1.id!,
-//             field_value: m1.value!,
-//             hide_field: false,
-//             form_control_name: m1.key,
-//             editable: true,
-//             form_input: {
-//                 tagName: m1.type as any,
-//                 inputType: m1.valueType as any,
-//                 placeholder: m1.name!,
-//                 selectList: m1.options?.map(o => {
-//                     return { key: o, displayValue: o };
-//                 })
-//             },
-//             form_input_validation: m1.mandatory ? [Validators.required] : []
-//         } as DetailedViewField;
-//     })
-// }
-
-// export const getWorkDetailSection = (m: WorkDetail, tab: workListTab): DetailedView => {
-//     return {
-//         section_name: 'Task Details',
-//         section_type: 'key_value',
-//         section_html_id: 'work_detail',
-//         section_form: new FormGroup({}),
-//         content: [
-//             {
-//                 field_name: 'Task Id',
-//                 field_html_id: 'work_id',
-//                 field_value: m.id!
-//             },
-//             {
-//                 field_name: 'Task Type',
-//                 field_html_id: 'work_type',
-//                 field_value: m.workType!,
-//             },
-//             {
-//                 field_name: 'Task Description',
-//                 field_html_id: 'work_description',
-//                 field_value: m.description!,
-//             },
-//             {
-//                 field_name: 'Creation Date',
-//                 field_html_id: 'creation_date',
-//                 field_value: date(m.createdOn)
-//             },
-//             {
-//                 field_name: 'Assigned to',
-//                 field_html_id: 'pending_with',
-//                 field_value: m.pendingWith?.map(m => m.fullName).join(', ')!,
-//                 hide_field: tab == 'completed_worklist'
-//             },
-//             {
-//                 field_name: 'Decision Owner',
-//                 field_html_id: 'decision_owner',
-//                 field_value: m.decisionOwner?.fullName!,
-//                 hide_field: tab == 'pending_worklist'
-//             },
-//             {
-//                 field_name: 'Decision Date',
-//                 field_html_id: 'decision_date',
-//                 field_value: date(m.decisionDate),
-//                 hide_field: tab == 'pending_worklist',
-//             },
-//         ]
-//     };
-// }
-
-// export const getWorkActionDetailSection = (m: WorkDetail): DetailedView => {
-//     return {
-//         section_name: 'Task Action Detail',
-//         section_type: 'key_value',
-//         section_html_id: 'action_details',
-//         hide_section: m.additionalFields?.length == 0,
-//         section_form: new FormGroup({}),
-//         content: getAdditionalField(m.additionalFields!)
-//     };
-// }
+import { WorkflowRequest } from "../model/request.model";
+import { Task } from "../model/task.model";
+import { DocumentDto } from "src/app/core/api-client/models";
+import { Doc, mapDocDtoToDoc } from "src/app/shared/model/document.model";
+import { KeyValue } from "src/app/shared/model/key-value.model";
 
 
+export const getWorkDetailSection = (m: Task, tab: workListTab): DetailedView => {
+    return {
+        section_name: 'Task Details',
+        section_type: 'key_value',
+        section_html_id: 'work_detail',
+        section_form: new FormGroup({}),
+        content: [
+            {
+                field_name: 'Task Id',
+                field_html_id: 'work_id',
+                field_value: m.id!
+            },
+            {
+                field_name: 'Task Name',
+                field_html_id: 'work_name',
+                field_value: m.name!,
+            },
+            {
+                field_name: 'Task Type',
+                field_html_id: 'work_type',
+                field_value: m.type!,
+            },
+            {
+                field_name: 'Task Description',
+                field_html_id: 'work_description',
+                field_value: m.description!,
+            },
+            {
+                field_name: 'Creation Date',
+                field_html_id: 'creation_date',
+                field_value: date(m.createdAt)
+            },
+            {
+                field_name: 'Status',
+                field_html_id: 'status',
+                field_value: m.status,
+            },
+            {
+                field_name: 'Assigned to',
+                field_html_id: 'assigned_to',
+                field_value: m.assignedToName || 'Unassigned',
+                hide_field: tab == 'completed_worklist'
+            },
+            {
+                field_name: 'Completed By',
+                field_html_id: 'completed_by',
+                field_value: m.completedByName!,
+                hide_field: tab == 'pending_worklist'
+            },
+            {
+                field_name: 'Completion Date',
+                field_html_id: 'completion_date',
+                field_value: date(m.completedAt),
+                hide_field: tab == 'pending_worklist',
+            },
+        ]
+    };
+}
 
-// export const getRequestDetailSection = (request: RequestDetail): DetailedView => {
-//     return {
-//         section_name: 'Request Details',
-//         section_type: 'key_value',
-//         section_html_id: 'request_detail',
-//         section_form: new FormGroup({}),//Here you have to pass form group
-//         content: [
-//             {
-//                 field_name: 'Request Id',
-//                 field_value: request?.id!,
-//             },
-//             {
-//                 field_name: 'Request Type',
-//                 field_value: request?.type!,
-//                 show_display_value: true,
-//                 ref_data_section: refDataKey.workflowTypes
-//             },
-//             {
-//                 field_name: 'Request Status',
-//                 field_value: request?.status!,
-//                 show_display_value: true,
-//                 ref_data_section: refDataKey.workflowSteps
-//             },
-//             {
-//                 field_name: 'Requester Name',
-//                 field_value: request?.requester?.fullName!,
-//             },
-//             {
-//                 field_name: 'Request Created By',
-//                 field_value: request?.delegatedRequester?.fullName!,
-//                 hide_field: !(request.delegated!)
-//             },
-//             {
-//                 field_name: 'Request Description',
-//                 field_value: request?.description!,
-//             },
-//             {
-//                 field_name: 'Request Date',
-//                 field_value: date(request?.createdOn!),
-//             },
-//             {
-//                 field_name: 'Resolved On',
-//                 field_value: date(request?.resolvedOn!),
-//                 hide_field: !request?.resolvedOn
-//             },
-//             {
-//                 field_name: 'Resolve Remarks',
-//                 field_value: request?.remarks!,
-//                 hide_field: !request?.remarks
-//             },
-//         ]
-//     };
-// }
+export const getWorkActionDetailSection = (m: Task): DetailedView => {
+    // Basic action section for task completion
+    return {
+        section_name: 'Task Action Detail',
+        section_type: 'key_value',
+        section_html_id: 'action_details',
+        section_form: new FormGroup({}),
+        content: [
+            {
+                field_name: 'Remarks',
+                field_html_id: 'remarks',
+                form_control_name: 'remarks',
+                field_value: '',
+                editable: true,
+                form_input: {
+                    tagName: 'textarea',
+                    inputType: 'text',
+                    html_id: 'remarks',
+                    placeholder: 'Enter remarks',
+                },
+                form_input_validation: [Validators.required]
+            }
+        ]
+
+    };
+}
+
+export const getRequestDetailSection = (
+    request: WorkflowRequest, refData: { [name: string]: KeyValue[]; }, isCreate: boolean = false, isDelegated: boolean = false): DetailedView => {
+    console.log(refData)
+    return {
+        section_name: 'Request Detail',
+        section_type: 'key_value',
+        section_html_id: 'request_detail',
+        section_form: new FormGroup({}),
+        content: [
+            {
+                field_name: 'Request Id',
+                field_value: request?.id!,
+            },
+            {
+                field_name: 'Request Type',
+                field_value: request?.type!,
+                editable: isCreate,
+                field_html_id: 'request_type',
+                form_control_name: 'requestType',
+                show_display_value: true,
+                ref_data_section: WorkflowConstant.refDataKey.workflowTypes,
+                form_input: {
+                    html_id: 'requestType',
+                    tagName: 'select',
+                    inputType: '',
+                    placeholder: 'Select Request type',
+                    selectList: []
+                },
+                form_input_validation: [Validators.required],
+            },
+            {
+                field_name: 'Request Status',
+                field_value: request?.status!,
+                show_display_value: true,
+                ref_data_section: WorkflowConstant.refDataKey.workflowStatuses,
+            },
+            {
+                field_name: 'Request Description',
+                field_value: request?.description!,
+            },
+            {
+                field_name: 'Requested For',
+                field_value: request?.initiatedForName!,
+            },
+            {
+                field_name: 'Requested By',
+                field_value: request?.initiatedByName!,
+            },
+            {
+                field_name: 'Request Date',
+                field_value: date(request?.createdAt!),
+            },
+            {
+                field_name: 'Current Step',
+                field_value: request?.steps.find((step) => step.stepId == request?.currentStepId)?.name!,
+            },
+            {
+                field_name: 'Resolved On',
+                field_value: date(request?.completedAt!),
+                hide_field: !request?.completedAt
+            },
+            {
+                field_name: 'Failure Reason',
+                field_value: request?.failureReason!,
+                hide_field: !request?.failureReason
+            },
+        ]
+    };
+}
+
+export const getRequestAdditionalDetailSection = (m: WorkflowRequest): DetailedView => {
+    return {
+        section_name: 'Request Data',
+        section_type: 'key_value',
+        section_html_id: 'request_data',
+        hide_section: !m.requestData || Object.keys(m.requestData).length === 0,
+        section_form: new FormGroup({}),
+        content: Object.keys(m.requestData || {}).map(key => ({
+            field_name: key,
+            field_value: typeof m.requestData[key] === 'object' ? JSON.stringify(m.requestData[key]) : m.requestData[key]
+        }))
+    };
+}
+
+export const getDocumentDetailSection = (m: DocumentDto[]): DetailedView => {
+    return {
+        section_name: 'Documents',
+        section_type: 'doc_list',
+        section_html_id: 'request_docs',
+        hide_section: m.length == 0,
+        section_form: new FormGroup({}),
+        documents: m.map(d => mapDocDtoToDoc(d))
+    };
+}
 
 
-// export const getRequestAdditionalDetailSection = (m: RequestDetail): DetailedView => {
-//     return {
-//         section_name: 'Request Additional Details',
-//         section_type: 'key_value',
-//         section_html_id: 'request_add_detail',
-//         hide_section: m.additionalFields?.length == 0,
-//         section_form: new FormGroup({}),
-//         content: getAdditionalField(m.additionalFields!)
-//     };
-// }
+export const requestSearchInput = (
+    tab: requestTab,
+    refData: {
+        [name: string]: any[];
+    }
+): SearchAndAdvancedSearchModel => {
+    return {
+        normalSearchPlaceHolder: 'Search by Request ID, Type, or Description',
+        advancedSearch: {
+            title: 'Advanced Request Search',
+            buttonText: {
+                search: 'Search Requests',
+                close: 'Clear & Close'
+            },
+            searchFormFields: [
+                {
+                    formControlName: 'type',
+                    inputModel: {
+                        tagName: 'select',
+                        inputType: '',
+                        html_id: 'type',
+                        labelName: 'Request Type',
+                        placeholder: 'Select Request Type',
+                        selectList: [
+                            { key: 'JOIN_REQUEST', displayValue: 'Join Request' },
+                            { key: 'CONTACT_REQUEST', displayValue: 'Contact Request' },
+                            { key: 'DONATION_REQUEST', displayValue: 'Donation Request' }
+                        ],
+                        cssInputClass: 'bg-white'
+                    }
+                }
+            ]
+        }
+    };
+};
 
-// export const getDocumentDetailSection = (m: DocumentDetail[]): DetailedView => {
-//     return {
-//         section_name: 'Documents',
-//         section_type: 'doc_list',
-//         section_html_id: 'request_docs',
-//         hide_section: m.length == 0,
-//         section_form: new FormGroup({}),
-//         documents: m
-//     };
-// }
-
-
-// export const requestSearchInput = (
-//     tab: requestTab,
-//     refData: {
-//         [name: string]: KeyValue[];
-//     }
-// ): SearchAndAdvancedSearchModel => {
-
-//     return {
-//         normalSearchPlaceHolder: 'Search by Request ID, Type, or Description',
-//         advancedSearch: {
-//             title: 'Advanced Request Search',
-//             buttonText: {
-//                 search: 'Search Requests',
-//                 close: 'Clear & Close'
-//             },
-//             searchFormFields: [
-//                 {
-//                     formControlName: 'requestId',
-//                     inputModel: {
-//                         tagName: 'input',
-//                         inputType: 'text',
-//                         html_id: 'requestId',
-//                         labelName: 'Request ID',
-//                         placeholder: 'Enter Request ID',
-//                         cssInputClass: 'bg-white'
-//                     }
-//                 },
-//                 {
-//                     formControlName: 'requestType',
-//                     inputModel: {
-//                         tagName: 'select',
-//                         inputType: '',
-//                         html_id: 'requestType',
-//                         labelName: 'Request Type',
-//                         placeholder: 'Select Request Type',
-//                         selectList: refData?.[RequestConstant.refDataKey.workflowTypes] || [],
-//                         cssInputClass: 'bg-white'
-//                     }
-//                 },
-//                 {
-//                     formControlName: 'status',
-//                     inputModel: {
-//                         tagName: 'select',
-//                         inputType: '',
-//                         html_id: 'status',
-//                         labelName: 'Request Status',
-//                         placeholder: 'Select Status',
-//                         selectList: refData?.[RequestConstant.refDataKey.workflowSteps] || [],
-//                         cssInputClass: 'bg-white'
-//                     }
-//                 },
-//                 {
-//                     formControlName: 'fromDate',
-//                     inputModel: {
-//                         tagName: 'input',
-//                         inputType: 'date',
-//                         html_id: 'fromDate',
-//                         labelName: 'From Date',
-//                         placeholder: 'Select from date',
-//                         cssInputClass: 'bg-white'
-//                     }
-//                 },
-//                 {
-//                     formControlName: 'toDate',
-//                     inputModel: {
-//                         tagName: 'input',
-//                         inputType: 'date',
-//                         html_id: 'toDate',
-//                         labelName: 'To Date',
-//                         placeholder: 'Select to date',
-//                         cssInputClass: 'bg-white'
-//                     }
-//                 },
-//                 // Only show for delegated requests tab
-//                 {
-//                     formControlName: 'requesterName',
-//                     inputModel: {
-//                         tagName: 'input',
-//                         inputType: 'text',
-//                         html_id: 'requesterName',
-//                         labelName: 'Requester Name',
-//                         placeholder: 'Enter requester name',
-//                         cssInputClass: 'bg-white'
-//                     },
-//                     hidden: tab !== 'delegated_request'
-//                 },
-//                 {
-//                     formControlName: 'description',
-//                     inputModel: {
-//                         tagName: 'textarea',
-//                         inputType: '',
-//                         html_id: 'description',
-//                         labelName: 'Description Contains',
-//                         placeholder: 'Enter keywords from description',
-//                         cssInputClass: 'bg-white',
-//                         props: { rows: 3 }
-//                     }
-//                 }
-//             ]
-//         }
-//     };
-// };
-
-// export const taskSearchInput = (
-//     tab: workListTab,
-//     refData: {
-//         [name: string]: KeyValue[];
-//     }
-// ): SearchAndAdvancedSearchModel => {
-
-//     return {
-//         normalSearchPlaceHolder: 'Search by Work Id, Request Id, Work Type',
-//         advancedSearch: {
-//             searchFormFields: [
-//                 {
-//                     formControlName: 'workId',
-//                     inputModel: {
-//                         tagName: 'input' as const,
-//                         inputType: 'text' as const,
-//                         html_id: 'workId',
-//                         labelName: 'Work Id',
-//                         placeholder: 'Enter Work Id',
-//                         cssInputClass: 'bg-white'
-//                     },
-//                 },
-//                 {
-//                     formControlName: 'requestId',
-//                     inputModel: {
-//                         tagName: 'input' as const,
-//                         inputType: 'text' as const,
-//                         html_id: 'requestId',
-//                         labelName: 'Request Id',
-//                         placeholder: 'Enter Request Id',
-//                     },
-//                 },
-//                 {
-//                     formControlName: 'fromDate',
-//                     inputModel: {
-//                         tagName: 'input' as const,
-//                         inputType: 'date' as const,
-//                         html_id: 'startDate',
-//                         labelName: 'From Date',
-//                         placeholder: 'Enter From Date',
-//                     },
-//                 },
-//                 {
-//                     formControlName: 'toDate',
-//                     inputModel: {
-//                         tagName: 'input' as const,
-//                         inputType: 'date' as const,
-//                         html_id: 'endDate',
-//                         labelName: 'To Date',
-//                         placeholder: 'Enter To Date',
-//                     },
-//                 },
-//             ]
-//         }
-//     };
-// };
+export const taskSearchInput = (
+    tab: workListTab,
+    refData: {
+        [name: string]: any[];
+    }
+): SearchAndAdvancedSearchModel => {
+    return {
+        normalSearchPlaceHolder: 'Search tasks...',
+        advancedSearch: {
+            searchFormFields: []
+        }
+    };
+};

@@ -1,4 +1,4 @@
-<app-floating-action-button [icon]="'add'" (buttonClick)="initCreateRequestForm()"></app-floating-action-button>
+<app-floating-action-button [icon]="'add'" (buttonClick)="initCreateRequestForm(true)"></app-floating-action-button>
 <!-- <h2 class="text-purple-700 font-bold text-center mt-4">Requests for Others</h2> -->
 <app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)"
     (onAccordionOpen)="onAccordionOpen($event)"></app-accordion-list>

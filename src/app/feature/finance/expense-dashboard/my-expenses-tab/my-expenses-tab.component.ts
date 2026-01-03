@@ -183,12 +183,14 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
           $event.rowIndex,
           $event.buttonId == 'CREATE_CONFIRM' ? true : false
         );
-        let expenseItems = this.getSectionForm(
+        let expenseFormItems = this.getSectionForm(
           'expense_list_detail',
           $event.rowIndex,
           $event.buttonId == 'CREATE_CONFIRM' ? true : false
-        )?.get('items')?.value as ExpenseItem[];
+        );
+        let expenseItems = expenseFormItems?.get('items')?.value as ExpenseItem[];
         expenseForm?.markAllAsTouched();
+        expenseFormItems?.markAllAsTouched();
         const expenseDocuments = this.getSectionDocuments('expense_doc_list', $event.rowIndex, $event.buttonId == 'CREATE_CONFIRM' ? true : false);
         if (expenseItems.length == 0) {
           this.modalService.openNotificationModal(
@@ -196,7 +198,7 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
             'notification',
             'error'
           );
-        } else if (expenseForm?.valid) {
+        } else if (expenseForm?.valid && expenseFormItems?.valid) {
           const payerId = this.isAdmin
             ? expenseForm?.value.expense_by
             : this.userIdentity.loggedInUser.profile_id;

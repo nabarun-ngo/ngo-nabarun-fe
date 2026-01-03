@@ -1,12 +1,14 @@
 import { Component, ElementRef } from '@angular/core';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { AccordionButton, AccordionCell } from 'src/app/shared/model/accordion-list.model';
-import { WorkDetail } from 'src/app/core/api-client/models';
+import { Task } from '../../model/task.model';
+
 import { date } from 'src/app/core/service/utilities.service';
-import { RequestConstant, TaskField } from '../../workflow.const';
+import { TaskField, WorkflowConstant } from '../../workflow.const';
 import { RequestService } from '../../service/request.service';
 import { getWorkDetailSection } from '../../fields/request.field';
 import { PendingTasksTabComponent } from '../pending-tasks-tab/pending-tasks-tab.component';
+import { TaskService } from '../../service/task.service';
 
 @Component({
   selector: 'app-completed-tasks-tab',
@@ -15,10 +17,10 @@ import { PendingTasksTabComponent } from '../pending-tasks-tab/pending-tasks-tab
 })
 export class CompletedTasksTabComponent extends PendingTasksTabComponent {
 
-  protected override isCompleted: boolean = true;
+
 
   constructor(
-    protected override taskService: RequestService,
+    protected override taskService: TaskService,
     protected override el: ElementRef,
   ) {
     super(taskService, el);
@@ -45,7 +47,7 @@ export class CompletedTasksTabComponent extends PendingTasksTabComponent {
     ]);
   }
 
-  protected override prepareHighLevelView(item: WorkDetail, options?: { [key: string]: any }): AccordionCell[] {
+  protected override prepareHighLevelView(item: Task, options?: { [key: string]: any }): AccordionCell[] {
     return [
       {
         type: 'text',
@@ -54,30 +56,31 @@ export class CompletedTasksTabComponent extends PendingTasksTabComponent {
       },
       {
         type: 'text',
-        value: item?.workflowStatus!,
+        value: item?.status!,
         showDisplayValue: true,
-        refDataSection: RequestConstant.refDataKey.workflowSteps
+        refDataSection: WorkflowConstant.refDataKey.workflowSteps
       },
       {
         type: 'text',
-        value: item?.workflowId!,
+        value: 'N/A',
       },
       {
         type: 'text',
-        value: date(item.decisionDate)
+        value: date(item.completedAt)
       }
     ];
   }
 
-  protected override prepareDetailedView(m: WorkDetail, options?: { [key: string]: any }): DetailedView[] {
+  protected override prepareDetailedView(m: Task, options?: { [key: string]: any }): DetailedView[] {
     return [
       getWorkDetailSection(m, 'completed_worklist')
     ];
   }
 
-  protected override prepareDefaultButtons(data: WorkDetail, options?: { [key: string]: any }): AccordionButton[] {
+  protected override prepareDefaultButtons(data: Task, options?: { [key: string]: any }): AccordionButton[] {
     return [];
   }
+
 
   protected override onClick($event: { buttonId: string; rowIndex: number; }) {
   }

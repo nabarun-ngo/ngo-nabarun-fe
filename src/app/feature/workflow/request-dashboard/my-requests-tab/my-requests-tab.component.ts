@@ -1,30 +1,34 @@
-import { Component, EventEmitter } from '@angular/core';
+import { Component } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, Validators } from '@angular/forms';
-import { RequestDetail, KeyValue, UserDetail, AdditionalField, WorkDetail, PaginateRequestDetail, RequestType } from 'src/app/core/api-client/models';
+import { Validators } from '@angular/forms';
+import { KeyValue } from 'src/app/shared/model/key-value.model';
+import { UserDto as UserDetail } from 'src/app/core/api-client/models';
+import { PagedRequest, WorkflowRequest } from '../../model/request.model';
+import { RequestType } from '../../workflow.const';
 import {
   AccordionCell,
   AccordionButton,
 } from 'src/app/shared/model/accordion-list.model';
-import { DetailedView, DetailedViewField } from 'src/app/shared/model/detailed-view.model';
+import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { Accordion } from 'src/app/shared/utils/accordion';
-import { RequestConstant, RequestDefaultValue, RequestField, TaskDefaultValue } from '../../workflow.const';
-import { RequestService } from '../../service/request.service';
+import { WorkflowConstant, RequestDefaultValue, RequestField } from '../../workflow.const';
 import { ModalService } from 'src/app/core/service/modal.service';
 import { AppDialog } from 'src/app/core/constant/app-dialog.const';
-import { getRequestAdditionalDetailSection, getRequestDetailSection, getWorkActionDetailSection, getWorkDetailSection } from '../../fields/request.field';
+import { getRequestDetailSection } from '../../fields/request.field';
 import { date } from 'src/app/core/service/utilities.service';
 import { filterFormChange } from 'src/app/core/service/form.service';
 import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
+import { RequestService } from '../../service/request.service';
 
 @Component({
   selector: 'app-my-requests-tab',
   templateUrl: './my-requests-tab.component.html',
   styleUrls: ['./my-requests-tab.component.scss'],
 })
-export class MyRequestsTabComponent extends Accordion<RequestDetail> implements TabComponentInterface<PaginateRequestDetail> {
+export class MyRequestsTabComponent extends Accordion<WorkflowRequest> implements TabComponentInterface<PagedRequest> {
+
   protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
     return {
       pageNumber: RequestDefaultValue.pageNumber,
@@ -48,11 +52,12 @@ export class MyRequestsTabComponent extends Accordion<RequestDetail> implements 
   onSearch($event: SearchEvent): void {
     if ($event.advancedSearch && !$event.reset) {
       this.requestService
-        .findRequests(false, RequestDefaultValue.pageNumber, RequestDefaultValue.pageSize)
+        .findRequests('me', RequestDefaultValue.pageNumber, RequestDefaultValue.pageSize)
         .subscribe((s) => {
           this.setContent(s?.content!, s?.totalSize);
         });
     } else if ($event.advancedSearch && $event.reset) {
+
       //console.log('Resetting search');
       this.loadData();
     }
@@ -60,11 +65,12 @@ export class MyRequestsTabComponent extends Accordion<RequestDetail> implements 
 
   loadData(): void {
     this.requestService
-      .findRequests(false, RequestDefaultValue.pageNumber, RequestDefaultValue.pageSize)
+      .findRequests('me', RequestDefaultValue.pageNumber, RequestDefaultValue.pageSize)
       .subscribe((s) => {
         this.setContent(s?.content!, s?.totalSize);
       });
   }
+
 
   override onInitHook(): void {
     this.setHeaderRow([
@@ -89,9 +95,10 @@ export class MyRequestsTabComponent extends Accordion<RequestDetail> implements 
   }
 
   protected override prepareHighLevelView(
-    data: RequestDetail,
+    data: WorkflowRequest,
     options?: { [key: string]: any }
   ): AccordionCell[] {
+
     return [
       {
         type: 'text',
@@ -102,76 +109,38 @@ export class MyRequestsTabComponent extends Accordion<RequestDetail> implements 
         type: 'text',
         value: data.type!,
         showDisplayValue: true,
-        refDataSection: RequestConstant.refDataKey.workflowTypes
+        refDataSection: WorkflowConstant.refDataKey.workflowTypes
       },
       {
         type: 'text',
         value: data.status!,
         showDisplayValue: true,
-        refDataSection: RequestConstant.refDataKey.workflowSteps
+        refDataSection: WorkflowConstant.refDataKey.workflowStatuses
       },
       {
         type: 'text',
-        value: date(data.createdOn!)
+        value: date(data.createdAt!)
       }
     ];
   }
 
+
   protected override prepareDetailedView(
-    data: RequestDetail,
+    data: WorkflowRequest,
     options?: { [key: string]: any }
   ): DetailedView[] {
-    if (options?.['create']) {
-      return [
-        {
-          section_name: 'Request Detail',
-          section_type: 'key_value',
-          section_html_id: 'request_detail_create',
-          section_form: new FormGroup({}),
-          content: [
-            {
-              field_name: 'Request Type',
-              field_value: data.type!,
-              editable: true,
-              field_html_id: 'request_type',
-              form_control_name: 'requestType',
-              form_input: {
-                html_id: 'requestType',
-                tagName: 'select',
-                inputType: '',
-                placeholder: 'Select Request type',
-                selectList: this.getFilteredWorkflowTypes()
-              },
-              form_input_validation: [Validators.required]
-            },
-            {
-              field_name: 'Request Description',
-              field_value: data.description!,
-              editable: true,
-              field_html_id: 'request_desc',
-              form_control_name: 'description',
-              form_input: {
-                html_id: 'description',
-                tagName: 'textarea',
-                inputType: '',
-                placeholder: 'Enter Description',
-              },
-              form_input_validation: [Validators.required]
-            },
-          ]
-        }
-      ];
-    }
+    const isCreate = options && options['create'];
+    const isDelegated = options && options['forOthers'];
     return [
-      getRequestDetailSection(data!),
-      getRequestAdditionalDetailSection(data!)
+      getRequestDetailSection(data!, this.getRefData()!, isCreate, isDelegated),
     ];
   }
 
   protected override prepareDefaultButtons(
-    data: RequestDetail,
+    data: WorkflowRequest,
     options?: { [key: string]: any }
   ): AccordionButton[] {
+
     if (options && options['create']) {
       return [
         {
@@ -209,34 +178,123 @@ export class MyRequestsTabComponent extends Accordion<RequestDetail> implements 
     }
   }
 
-  private performCreateRequest() {
-    let request_form = this.getSectionForm('request_detail_create', 0, true);
-    let request_addnl_form = this.getSectionForm('request_detail_addnl', 0, true);
-    if (request_form?.valid && request_addnl_form?.valid) {
-      let additionalFields: AdditionalField[] = [];
-      Object.keys(request_addnl_form.value).forEach(key => {
-        additionalFields?.push({
-          key: key as any,
-          value: request_addnl_form!.value[key]
-        });
+  protected override onAccordionOpen(event: { rowIndex: number }): void {
+    let item = this.itemList[event.rowIndex];
+    // this.requestService.getRequestDetail(item.id!).subscribe(s => {
+    //   // Flatten tasks from all steps to show in the nested accordion
+    //   const allTasks: Task[] = [];
+    //   s.steps?.forEach(step => {
+    //     step.tasks?.forEach(task => {
+    //       allTasks.push(task);
+    //     });
+    //   });
+
+    //   let workAccordion = new class extends Accordion<Task> {
+    //     protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
+    //       return {
+    //         pageNumber: TaskDefaultValue.pageNumber,
+    //         pageSize: TaskDefaultValue.pageSize,
+    //         pageSizeOptions: TaskDefaultValue.pageSizeOptions,
+    //       };
+    //     }
+    //     override onInitHook(): void { }
+    //     protected override onClick(event: { buttonId: string; rowIndex: number; }): void { }
+    //     protected override onAccordionOpen(event: { rowIndex: number; }): void { }
+
+    //     prepareHighLevelView(item: Task, options?: { [key: string]: any }): AccordionCell[] {
+    //       return [
+    //         {
+    //           type: 'text',
+    //           value: item?.id!,
+    //           bgColor: 'bg-purple-200'
+    //         },
+    //         {
+    //           type: 'text',
+    //           value: item?.name!
+    //         },
+    //         {
+    //           type: 'text',
+    //           value: item?.status!
+    //         }
+    //       ];
+    //     }
+
+    //     prepareDetailedView(data: Task, options?: { [key: string]: any }): DetailedView[] {
+    //       return [
+    //         getWorkDetailSection(data, data.status === 'COMPLETED' ? 'completed_worklist' : 'pending_worklist')
+    //       ];
+    //     }
+
+    //     prepareDefaultButtons(data: Task, options?: { [key: string]: any }): AccordionButton[] {
+    //       return [];
+    //     }
+
+    //     handlePageEvent($event: PageEvent): void { }
+    //   }();
+
+
+    //   // Set up the nested accordion
+    //   workAccordion.setRefData(this.getRefData()!);
+    //   workAccordion.setHeaderRow([
+    //     {
+    //       value: 'Work Id',
+    //       rounded: true
+    //     },
+    //     {
+    //       value: 'Work Type',
+    //       rounded: true
+    //     },
+    //     {
+    //       value: 'Status',
+    //       rounded: true
+    //     }
+    //   ]);
+
+    //   // Set the content
+    //   workAccordion.setContent(allTasks, allTasks.length);
+
+    //   // Add the section with properly initialized accordion
+    //   this.addSectionInAccordion({
+    //     section_name: 'Work Detail',
+    //     section_type: 'accordion_list',
+    //     section_html_id: 'task_list',
+    //     section_form: new FormGroup({}),
+    //     accordionList: workAccordion.getAccordionList(),
+    //     accordion: {
+    //       object: workAccordion,
+    //       accordionOpened: new EventEmitter<{ rowIndex: number }>(),
+    //       buttonClick: new EventEmitter<{ buttonId: string; rowIndex: number }>()
+    //     }
+    //   }, event.rowIndex);
+    // });
+  }
+
+  override handlePageEvent($event: PageEvent): void {
+    this.requestService
+      .findRequests('me', $event.pageIndex, $event.pageSize)
+      .subscribe((data) => {
+        this.setContent(data?.content!, data?.totalSize);
       });
-      let request: RequestDetail = {
-        type: request_form?.value.requestType,
-        description: request_form?.value.description,
-        delegated: this.isDelegatedRequest,
-        requester: (this.isDelegatedRequest && request_form?.value.requestType !== 'JOIN_REQUEST_USER') ?
-          this.userList?.find(f => f.id == request_form?.value.delegation_user) : undefined,
-        additionalFields: additionalFields,
-      };
-      this.requestService.createRequest(request).subscribe(s => {
+  }
+
+
+  private performCreateRequest() {
+    let request_form = this.getSectionForm('request_detail', 0, true);
+    if (request_form?.valid) {
+      const type = request_form?.value.requestType;
+      const data = { description: request_form?.value.description };
+      const requestedFor = (this.isDelegatedRequest && request_form?.value.requestType !== 'JOIN_REQUEST_USER') ?
+        request_form?.value.delegation_user : undefined;
+
+      this.requestService.createRequest(type, data, requestedFor).subscribe(s => {
         this.hideForm(0, true);
         this.addContentRow(s!, true);
       });
     } else {
       request_form?.markAllAsTouched();
-      request_addnl_form?.markAllAsTouched();
     }
   }
+
 
   private performWithdrawRequest(rowIndex: number) {
     let decision = this.modalService.openNotificationModal(
@@ -244,118 +302,19 @@ export class MyRequestsTabComponent extends Accordion<RequestDetail> implements 
       'confirmation',
       'warning'
     );
-    decision.onAccept$.subscribe(d => {
-      this.requestService.withdrawRequest(this.itemList[rowIndex].id!).subscribe(d => {
+    decision.onAccept$.subscribe(() => {
+      this.requestService.withdrawRequest(this.itemList[rowIndex].id!).subscribe(() => {
         this.removeContentRow(rowIndex);
       });
     });
+
   }
 
-  protected override onAccordionOpen(event: { rowIndex: number }): void {
-    let item = this.itemList[event.rowIndex];
-    this.requestService.getWorkDetails(item.id!).subscribe(s => {
-      // Create a nested accordion for work details
-      let workAccordion = new class extends Accordion<WorkDetail> {
-        protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
-          return {
-            pageNumber: TaskDefaultValue.pageNumber,
-            pageSize: TaskDefaultValue.pageSize,
-            pageSizeOptions: TaskDefaultValue.pageSizeOptions,
-          };
-        }
-        override onInitHook(): void { }
-        protected override onClick(event: { buttonId: string; rowIndex: number; }): void { }
-        protected override onAccordionOpen(event: { rowIndex: number; }): void { }
-
-        prepareHighLevelView(item: WorkDetail, options?: { [key: string]: any }): AccordionCell[] {
-          return [
-            {
-              type: 'text',
-              value: item?.id!,
-              bgColor: 'bg-purple-200'
-            },
-            {
-              type: 'text',
-              value: item?.workType!
-            },
-            {
-              type: 'text',
-              value: item?.stepCompleted ? 'Completed' : 'Pending'
-            }
-          ];
-        }
-
-        prepareDetailedView(data: WorkDetail, options?: { [key: string]: any }): DetailedView[] {
-          return data.stepCompleted ? [
-            getWorkDetailSection(data, 'completed_worklist'),
-            getWorkActionDetailSection(data)
-          ] : [
-            getWorkDetailSection(data, 'pending_worklist')
-          ];
-        }
-
-        prepareDefaultButtons(data: WorkDetail, options?: { [key: string]: any }): AccordionButton[] {
-          return [];
-        }
-
-        handlePageEvent($event: PageEvent): void { }
-      }();
-
-      // Set up the nested accordion
-      workAccordion.setRefData(this.getRefData()!);
-      workAccordion.setHeaderRow([
-        {
-          value: 'Work Id',
-          rounded: true
-        },
-        {
-          value: 'Work Type',
-          rounded: true
-        },
-        {
-          value: 'Status',
-          rounded: true
-        }
-      ]);
-
-      // Set the content
-      workAccordion.setContent(s!, s?.length);
-
-      // Add the section with properly initialized accordion
-      this.addSectionInAccordion({
-        section_name: 'Work Detail',
-        section_type: 'accordion_list',
-        section_html_id: 'task_list',
-        section_form: new FormGroup({}),
-        accordionList: workAccordion.getAccordionList(),
-        accordion: {
-          object: workAccordion,
-          accordionOpened: new EventEmitter<{ rowIndex: number }>(),
-          buttonClick: new EventEmitter<{ buttonId: string; rowIndex: number }>()
-        }
-      }, event.rowIndex);
-    });
-  }
-
-  override handlePageEvent($event: PageEvent): void {
-    this.requestService
-      .findRequests(false, $event.pageIndex, $event.pageSize)
-      .subscribe((data) => {
-        this.setContent(data?.content!, data?.totalSize);
-      });
-  }
-
-  /**
- * Get filtered workflow types excluding JOIN_REQUEST_USER for My Requests tab
- */
-  protected getFilteredWorkflowTypes(): KeyValue[] {
-    const allTypes = this.getRefData()?.['visibleWorkflowTypes'] || [];
-    return allTypes.filter((type: KeyValue) => type.key !== RequestType.JoinRequestUser);
-  }
 
   initCreateRequestForm(isDelegated: boolean = false) {
     this.isDelegatedRequest = isDelegated;
-    this.showCreateForm({});
+    this.showCreateForm({} as any);
+
     let request_create_form = this.getSectionForm('request_detail_create', 0, true);
     request_create_form?.valueChanges.pipe(filterFormChange(request_create_form.value))
       .subscribe((val) => {
@@ -367,36 +326,10 @@ export class MyRequestsTabComponent extends Accordion<RequestDetail> implements 
 
   private handleRequestTypeChange(val: any) {
     this.removeSectionInAccordion('request_detail_addnl', 0, true);
-    this.requestService.findRefField(val['requestType']).subscribe(data => {
-      let addnl_fields = data?.map(m1 => {
-        return {
-          field_name: m1.name!,
-          field_html_id: m1.key + '_' + m1.name! + '_' + m1.id!,
-          field_value: m1.value!,
-          hide_field: false,
-          form_control_name: m1.key,
-          editable: true,
-          form_input: {
-            html_id: m1.key!,
-            tagName: m1.type as any,
-            inputType: m1.valueType as any,
-            placeholder: m1.name!,
-            selectList: m1.options?.map(o => {
-              return { key: o, displayValue: o };
-            })
-          },
-          form_input_validation: m1.mandatory ? [Validators.required] : []
-        } as DetailedViewField;
-      });
-      this.addSectionInAccordion({
-        section_name: 'Additional Request Detail',
-        section_type: 'key_value',
-        section_html_id: 'request_detail_addnl',
-        section_form: new FormGroup({}),
-        show_form: true,
-        content: addnl_fields
-      }, 0, true);
-    });
+    // findRefField currently not available in RequestService, 
+    // skipping or using a placeholder until reference data API is confirmed.
+    // this.requestService.findRefField(val['requestType']).subscribe(data => { ... });
+
     // Handle delegation field - automatically setup based on context
     if (this.isDelegatedRequest) {
       if (val['requestType'] !== 'JOIN_REQUEST_USER') {
@@ -408,7 +341,6 @@ export class MyRequestsTabComponent extends Accordion<RequestDetail> implements 
       }
     }
   }
-
 
   private handleDelegationChange(val: any) {
     let requestForm = this.getSectionForm('request_detail_create', 0, true);
@@ -438,3 +370,4 @@ export class MyRequestsTabComponent extends Accordion<RequestDetail> implements 
     });
   }
 }
+

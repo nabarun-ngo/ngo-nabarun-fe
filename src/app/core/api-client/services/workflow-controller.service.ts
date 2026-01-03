@@ -11,6 +11,8 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { additionalFields } from '../fn/workflow-controller/additional-fields';
+import { AdditionalFields$Params } from '../fn/workflow-controller/additional-fields';
 import { getInstance } from '../fn/workflow-controller/get-instance';
 import { GetInstance$Params } from '../fn/workflow-controller/get-instance';
 import { listInstancesByMe } from '../fn/workflow-controller/list-instances-by-me';
@@ -21,12 +23,16 @@ import { listTasks } from '../fn/workflow-controller/list-tasks';
 import { ListTasks$Params } from '../fn/workflow-controller/list-tasks';
 import { startWorkflow } from '../fn/workflow-controller/start-workflow';
 import { StartWorkflow$Params } from '../fn/workflow-controller/start-workflow';
+import { SuccessResponseArrayFieldAttributeDto } from '../models/success-response-array-field-attribute-dto';
 import { SuccessResponsePagedResultWorkflowInstanceDto } from '../models/success-response-paged-result-workflow-instance-dto';
 import { SuccessResponsePagedResultWorkflowTaskDto } from '../models/success-response-paged-result-workflow-task-dto';
 import { SuccessResponseWorkflowInstanceDto } from '../models/success-response-workflow-instance-dto';
+import { SuccessResponseWorkflowRefDataDto } from '../models/success-response-workflow-ref-data-dto';
 import { SuccessResponseWorkflowTaskDto } from '../models/success-response-workflow-task-dto';
 import { updateTask } from '../fn/workflow-controller/update-task';
 import { UpdateTask$Params } from '../fn/workflow-controller/update-task';
+import { workflowReferenceData } from '../fn/workflow-controller/workflow-reference-data';
+import { WorkflowReferenceData$Params } from '../fn/workflow-controller/workflow-reference-data';
 
 @Injectable({ providedIn: 'root' })
 export class WorkflowControllerService extends BaseService {
@@ -197,7 +203,7 @@ export class WorkflowControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listInstancesByMe$Response(params: ListInstancesByMe$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultWorkflowInstanceDto>> {
+  listInstancesByMe$Response(params?: ListInstancesByMe$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultWorkflowInstanceDto>> {
     return listInstancesByMe(this.http, this.rootUrl, params, context);
   }
 
@@ -213,7 +219,7 @@ export class WorkflowControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listInstancesByMe(params: ListInstancesByMe$Params, context?: HttpContext): Observable<SuccessResponsePagedResultWorkflowInstanceDto> {
+  listInstancesByMe(params?: ListInstancesByMe$Params, context?: HttpContext): Observable<SuccessResponsePagedResultWorkflowInstanceDto> {
     return this.listInstancesByMe$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponsePagedResultWorkflowInstanceDto>): SuccessResponsePagedResultWorkflowInstanceDto => r.body)
     );
@@ -253,6 +259,72 @@ export class WorkflowControllerService extends BaseService {
   listTasks(params?: ListTasks$Params, context?: HttpContext): Observable<SuccessResponsePagedResultWorkflowTaskDto> {
     return this.listTasks$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponsePagedResultWorkflowTaskDto>): SuccessResponsePagedResultWorkflowTaskDto => r.body)
+    );
+  }
+
+  /** Path part for operation `workflowReferenceData()` */
+  static readonly WorkflowReferenceDataPath = '/api/workflows/static/referenceData';
+
+  /**
+   * Get static reference data.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `workflowReferenceData()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  workflowReferenceData$Response(params?: WorkflowReferenceData$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseWorkflowRefDataDto>> {
+    return workflowReferenceData(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get static reference data.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `workflowReferenceData$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  workflowReferenceData(params?: WorkflowReferenceData$Params, context?: HttpContext): Observable<SuccessResponseWorkflowRefDataDto> {
+    return this.workflowReferenceData$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseWorkflowRefDataDto>): SuccessResponseWorkflowRefDataDto => r.body)
+    );
+  }
+
+  /** Path part for operation `additionalFields()` */
+  static readonly AdditionalFieldsPath = '/api/workflows/static/additionalFields';
+
+  /**
+   * Get additional fields for a workflow type.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `additionalFields()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  additionalFields$Response(params: AdditionalFields$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayFieldAttributeDto>> {
+    return additionalFields(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get additional fields for a workflow type.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `additionalFields$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  additionalFields(params: AdditionalFields$Params, context?: HttpContext): Observable<SuccessResponseArrayFieldAttributeDto> {
+    return this.additionalFields$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseArrayFieldAttributeDto>): SuccessResponseArrayFieldAttributeDto => r.body)
     );
   }
 

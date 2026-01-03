@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
-import { requestListResolver, requestRefDataResolver, taskListResolver } from './workflow.resolver';
+import { requestListResolver, taskListResolver, workflowRefDataResolver } from './workflow.resolver';
 import { RequestDashboardComponent } from './request-dashboard/request-dashboard.component';
 import { TaskDashboardComponent } from './task-dashboard/task-dashboard.component';
 
@@ -13,7 +13,7 @@ const routes: Routes = [
     component: RequestDashboardComponent,
     resolve: {
       data: requestListResolver,
-      ref_data: requestRefDataResolver
+      ref_data: workflowRefDataResolver
     }
   },
   {
@@ -21,7 +21,7 @@ const routes: Routes = [
     component: TaskDashboardComponent,
     resolve: {
       data: taskListResolver,
-      ref_data: requestRefDataResolver
+      ref_data: workflowRefDataResolver
     }
   },
 ];
