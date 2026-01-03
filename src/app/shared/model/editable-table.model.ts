@@ -11,6 +11,10 @@ export interface EditableTableColumn {
     /** Angular field-level validators */
     validators?: ValidatorFn[];
     asyncValidators?: AsyncValidatorFn[];
+
+    /** show display value */
+    show_display_value?: boolean;
+    ref_data_section?: string;
 }
 
 /* ---------- Row-level validation rule ---------- */

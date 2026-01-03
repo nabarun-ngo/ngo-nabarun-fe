@@ -23,7 +23,8 @@
                 <div class="w-full">
                     <!-- Read mode -->
                     <span *ngIf="!(col.editable && view.show_form)" class="read-mode-value">
-                        {{ row.value[col.columnDef] || '-' }}
+                        {{ (col.show_display_value ? displayValue(col.ref_data_section,row.value[col.columnDef]) :
+                        row.value[col.columnDef]) || '-' }}
                     </span>
 
                     <!-- Edit mode -->

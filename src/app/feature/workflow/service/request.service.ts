@@ -50,12 +50,13 @@ export class RequestService {
 
 
 
-  createRequest(type: string, data: Record<string, string>, requestedFor?: string) {
+  createRequest(type: string, data: Record<string, string>, requestedFor?: string, isExtUser?: boolean) {
     return this.workflowController.startWorkflow({
       body: {
         type: type as any,
         data: data,
-        requestedFor: requestedFor
+        requestedFor: requestedFor,
+        forExternalUser: isExtUser
       }
     }).pipe(
       map(d => d.responsePayload),
@@ -78,5 +79,19 @@ export class RequestService {
     );
   }
 
+  getAdditionalFields(requestType: string) {
+    return this.workflowController.additionalFields({
+      workflowType: requestType as any
+    }).pipe(
+      map(d => d.responsePayload),
+    );
+  }
+
+  getRequestDetail(id: string): Observable<WorkflowRequest> {
+    return this.workflowController.getInstance({ id }).pipe(
+      map(d => d.responsePayload),
+      map(mapToWorkflowInstanceDtoToWorkflowRequest)
+    );
+  }
 }
 

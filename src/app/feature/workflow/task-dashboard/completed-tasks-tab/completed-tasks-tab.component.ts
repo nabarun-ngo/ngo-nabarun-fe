@@ -21,9 +21,10 @@ export class CompletedTasksTabComponent extends PendingTasksTabComponent {
 
   constructor(
     protected override taskService: TaskService,
+    protected override requestService: RequestService,
     protected override el: ElementRef,
   ) {
-    super(taskService, el);
+    super(taskService, requestService, el);
   }
 
   override onInitHook(): void {

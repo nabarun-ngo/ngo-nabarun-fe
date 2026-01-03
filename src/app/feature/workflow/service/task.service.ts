@@ -38,10 +38,5 @@ export class TaskService {
         }).pipe(map(d => mapToWorkflowTaskDtoToTask(d.responsePayload!)));
     }
 
-    getRequestDetail(id: string): Observable<WorkflowRequest> {
-        return this.workflowController.getInstance({ id }).pipe(
-            map(d => d.responsePayload),
-            map(mapToWorkflowInstanceDtoToWorkflowRequest)
-        );
-    }
+
 }

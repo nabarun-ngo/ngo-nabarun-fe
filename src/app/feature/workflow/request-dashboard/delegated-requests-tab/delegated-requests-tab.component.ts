@@ -45,22 +45,22 @@ export class DelegatedRequestsTabComponent extends MyRequestsTabComponent {
     return [
       {
         type: 'text',
-        value: data.id!,
+        value: data?.id!,
         bgColor: 'bg-purple-200'
       },
       {
         type: 'text',
-        value: data.type!,
+        value: data?.type!,
         showDisplayValue: true,
         refDataSection: WorkflowConstant.refDataKey.workflowTypes
       },
       {
         type: 'text',
-        value: data.initiatedForName!
+        value: data?.initiatedForName!
       },
       {
         type: 'text',
-        value: data.status!,
+        value: data?.status!,
         showDisplayValue: true,
         refDataSection: WorkflowConstant.refDataKey.workflowStatuses
       }

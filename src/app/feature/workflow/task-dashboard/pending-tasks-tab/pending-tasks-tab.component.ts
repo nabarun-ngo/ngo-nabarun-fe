@@ -11,6 +11,7 @@ import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.i
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { Task } from '../../model/task.model';
 import { TaskService } from '../../service/task.service';
+import { RequestService } from '../../service/request.service';
 
 
 @Component({
@@ -33,6 +34,7 @@ export class PendingTasksTabComponent extends Accordion<Task> implements TabComp
   constructor(
 
     protected taskService: TaskService,
+    protected requestService: RequestService,
     protected el: ElementRef,
   ) {
     super();
@@ -156,9 +158,11 @@ export class PendingTasksTabComponent extends Accordion<Task> implements TabComp
     let item = this.itemList![event.rowIndex];
     // We need workflowId to fetch details. If not in Task, this will fail.
     const workflowId = item.id!;
-    this.taskService.getRequestDetail(workflowId).subscribe(request => {
+    this.requestService.getRequestDetail(workflowId).subscribe(request => {
       this.addSectionInAccordion(getRequestDetailSection(request!, this.getRefData()!), event.rowIndex)
-      this.addSectionInAccordion(getRequestAdditionalDetailSection(request!), event.rowIndex)
+      this.requestService.getAdditionalFields(request.type!).subscribe(s => {
+        this.addSectionInAccordion(getRequestAdditionalDetailSection(request!, s), event.rowIndex)
+      })
     })
   }
 
