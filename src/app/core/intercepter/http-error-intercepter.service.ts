@@ -21,7 +21,7 @@ export class HttpErrorIntercepterService implements HttpInterceptor {
 
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpSentEvent | HttpHeaderResponse | HttpProgressEvent | HttpResponse<any> | HttpUserEvent<any>> {
-    ////console.log(request.url,environment.api_base_url)
+    //////console.log(request.url,environment.api_base_url)
     if (request.url.includes(environment.api_base_url)) {
       request = request.clone({
         setHeaders: {
@@ -38,7 +38,7 @@ export class HttpErrorIntercepterService implements HttpInterceptor {
       })
     }
 
-    ////console.log(request.headers.get('Correlation-Id'))
+    //////console.log(request.headers.get('Correlation-Id'))
 
     var showError = request.headers.get('hideError') == null ? true : false;
     var corrId = request.headers.get('Correlation-Id')!;
@@ -48,9 +48,9 @@ export class HttpErrorIntercepterService implements HttpInterceptor {
         retry(0),
         tap(event => {
           if (event instanceof HttpResponse) {
-            ////console.log(event);
+            //////console.log(event);
             if (event.body && !isEmpty(event.body.messages) && isEmpty(event.body.error)) {
-              ////console.log(event);
+              //////console.log(event);
               this.showInformationMessage(event);
             }
           }
@@ -69,7 +69,7 @@ export class HttpErrorIntercepterService implements HttpInterceptor {
   }
 
   private showErrorResponse(errorResponse: any, corrId = 'NA') {
-    //console.log(errorResponse);
+    ////console.log(errorResponse);
     let message: string;
     let heading: string = 'Error';
     if (errorResponse.status === HttpStatusCode.Forbidden /*&& !errorResponse.url.includes(environment.tokenEndpoint)*/) {

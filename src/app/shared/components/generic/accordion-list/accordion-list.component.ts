@@ -33,9 +33,9 @@ export class AccordionListComponent {
 
 
   accordionOpened(row: AccordionRow) {
-    ////console.log(this.accordionList,row)
+    //////console.log(this.accordionList,row)
     let rowIndex = this.accordionList.contents.findIndex(f => f.detailed == row.detailed);
-    ////console.log(rowIndex)
+    //////console.log(rowIndex)
     this.onAccordionOpen.emit({ rowIndex: rowIndex })
   }
 

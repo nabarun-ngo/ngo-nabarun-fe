@@ -45,7 +45,7 @@ export class HeaderComponent implements OnInit {
         if (data && data['notificationCount']) {
           this.notificationCount = data['notificationCount'];
         }
-        //console.log(data)
+        ////console.log(data)
 
         if (data && data['needActionAccount']) {
           SecuredDashboardComponent.tileList.filter(f => f.tile_html_id == 'accountTile').map(m => {
@@ -158,12 +158,12 @@ export class HeaderComponent implements OnInit {
     // sound.play();
   }
 
-  async copy(){
+  async copy() {
     const token = await this.identityService.getAccessToken();
     await navigator.clipboard.writeText(token);
     alert('Token successfully copied.')
   }
 
-  
+
 
 }

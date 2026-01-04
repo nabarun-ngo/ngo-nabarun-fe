@@ -25,7 +25,7 @@ export class DocumentListComponent {
 
   downloadAttachment(document: Doc) {
     this.commonController.downloadDocument({ id: document.id! }).subscribe(data => {
-      // //console.log(data)
+      // ////console.log(data)
       //saveFromURL(data,document.originalFileName)
       //saveAs(data as Blob, document.originalFileName!);
     })
@@ -33,7 +33,7 @@ export class DocumentListComponent {
 
   viewAttachment(document: Doc) {
     this.commonController.viewDocument({ id: document.id! }).subscribe((data) => {
-      //console.log(data)
+      ////console.log(data)
       openWindow(data.responsePayload!);
     })
   }

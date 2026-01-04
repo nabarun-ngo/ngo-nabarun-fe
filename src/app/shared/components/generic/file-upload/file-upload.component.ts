@@ -19,11 +19,11 @@ export class FileUploadComponent {
 
   protected onSelectFile(event: any) {
     let files = event.target.files as FileList;
-    //console.log(files[0])
+    ////console.log(files[0])
 
     if (files.length > 0) {
       let fileExt = files[0].name.split('.').pop()!;
-      console.log(fileExt, this.fileTypwRegex.test(fileExt))
+      //console.log(fileExt, this.fileTypwRegex.test(fileExt))
 
       if (this.allowedFileTypes.length > 0 && !this.fileTypwRegex.test(fileExt)) {
         this.fileError = 'File type ' + fileExt + ' not allowed.';
@@ -31,7 +31,7 @@ export class FileUploadComponent {
         this.fileError = 'File size must be greter than ' + this.getSizeText(this.minFileSize) + '.';
       } else if (files[0].size > this.maxFileSize) {
         this.fileError = 'File size must be less than ' + this.getSizeText(this.maxFileSize) + '.';
-        //console.log('hiii')
+        ////console.log('hiii')
         return;
       } else {
 
@@ -48,7 +48,7 @@ export class FileUploadComponent {
             }
           });
           this.files.emit(this.selectedFiles);
-          console.log(this.selectedFiles)
+          //console.log(this.selectedFiles)
         }
       }
     }

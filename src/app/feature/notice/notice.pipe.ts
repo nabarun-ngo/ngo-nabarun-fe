@@ -7,14 +7,14 @@ import { NoticeDetail } from 'src/app/core/api-client/models';
 export class NoticeSearchPipe implements PipeTransform {
 
   transform(notices: NoticeDetail[] | undefined, searchValue: string): NoticeDetail[] {
-    //console.log(notices,searchValue)
+    ////console.log(notices,searchValue)
     if (!notices) {
       return [];
     }
     if (!searchValue) {
       return notices;
     }
-    ////console.log(searchValue)
+    //////console.log(searchValue)
     searchValue = searchValue.toLowerCase();
     return notices.filter((notice: NoticeDetail) =>
 

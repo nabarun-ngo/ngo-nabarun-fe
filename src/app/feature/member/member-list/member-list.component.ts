@@ -130,7 +130,7 @@ export class MemberListComponent extends StandardDashboard<PagedUser> {
 
   onSearch($event: { advancedSearch: boolean; reset: boolean; value: any; }) {
     if ($event.advancedSearch && !$event.reset) {
-      //console.log($event.value)
+      ////console.log($event.value)
       this.memberService.advancedSearch({
         email: $event.value.email,
         firstName: $event.value.firstName,
@@ -139,14 +139,14 @@ export class MemberListComponent extends StandardDashboard<PagedUser> {
         role: $event.value.role as string[]
       }).subscribe(data => {
         this.memberList = data!
-        //console.log(this.memberList)
+        ////console.log(this.memberList)
         if (data?.totalSize) {
           this.totalItemLength = data.totalSize;
         }
       })
     }
     else if ($event.advancedSearch && $event.reset) {
-      //console.log($event.value)
+      ////console.log($event.value)
       this.memberService.fetchMembers(this.pageNumber, this.pageSize).subscribe(data => {
         this.memberList = data!;
         if (data?.totalSize) {

@@ -50,8 +50,8 @@ export class SearchAndAdvancedSearchFormComponent implements OnInit {
   ngOnInit(): void {
     this.searchformGroup.valueChanges.subscribe(d => {
       this.isSearchDisabled = !this.searchformGroup.valid || isEmptyObject(removeNullFields(d));
-      //console.log(isEmptyObject(removeNullFields(d)))
-      //console.log('Disabled',this.isSearchDisabled)
+      ////console.log(isEmptyObject(removeNullFields(d)))
+      ////console.log('Disabled',this.isSearchDisabled)
 
     })
   }

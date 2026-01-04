@@ -31,10 +31,6 @@ const routes: Routes = [
         path: route_data.secured_dashboard_page.feature,
         loadChildren: () => import('./feature/dashboard/dashboard.module').then(m => m.DashboardModule),
       },
-      // {
-      //   path: route_data.secured_donation_dashboard_page.feature,
-      //   loadChildren: () => import('./feature/donation/donation.module').then(m => m.DonationModule),
-      // },
       {
         path: route_data.secured_member_members_page.feature,
         loadChildren: () => import('./feature/member/member.module').then(m => m.MemberModule),
@@ -52,10 +48,10 @@ const routes: Routes = [
       //   path: route_data.secured_notice_notices_page.feature,
       //   loadChildren: () => import('./feature/notice/notice.module').then(m => m.NoticeModule),
       // },
-      // {
-      //   path: route_data.secured_admin_dashboard_page.feature,
-      //   loadChildren: () => import('./feature/admin/admin.module').then(m => m.AdminModule),
-      // },
+      {
+        path: route_data.secured_admin_dashboard_page.feature,
+        loadChildren: () => import('./feature/admin/admin.module').then(m => m.AdminModule),
+      },
       // {
       //   path: route_data.secured_event_list_page.feature,
       //   loadChildren: () => import('./feature/social-event/social-event.module').then(m => m.SocialEventModule),

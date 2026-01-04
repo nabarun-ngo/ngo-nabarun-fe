@@ -20,7 +20,7 @@ export function injectNgControl() {
     ngControl instanceof NgModel
   ) {
     ngControl.valueAccessor = new NoopValueAccessor();
-    ////console.log(ngControl)
+    //////console.log(ngControl)
     return ngControl;
   }
 
@@ -69,7 +69,7 @@ export function getErrorMessage(arg0: ValidationErrors | null, fieldName?: strin
   if (!arg0) {
     return;
   }
-  ////console.log(arg0)
+  //////console.log(arg0)
   if (arg0 && arg0['required']) {
     return (fieldName ? fieldName : 'This field') + ' is required.';
   }
@@ -122,7 +122,7 @@ export function conditionalValidator(predicate: BooleanFn,
     if (predicate()) {
       error = validator(formControl);
       //Changeing this 28/09/2021
-      ////console.log('formControl',validator,predicate())
+      //////console.log('formControl',validator,predicate())
     }
     if (errorNamespace && error) {
       const customError: any = {};

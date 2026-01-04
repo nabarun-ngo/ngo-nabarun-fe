@@ -26,10 +26,10 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
   ngAfterViewInit(): void {
     let el = document.getElementById('resetpassword');
-    //console.log(el)
+    ////console.log(el)
     el?.addEventListener('click', (e: Event) => {
       let stateData = this.location.getState() as { state: string };
-      //console.log(stateData)
+      ////console.log(stateData)
       //window.location.href = environment.auth_config.issuer+'u/reset-password/request/Username-Password-Authentication?state='+stateData.state
     })
   }
@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
     //this.sharedDataService.setAuthenticated(await this.identityService.isUserLoggedIn());
     let stateData = this.location.getState() as { isError: boolean; description: string }
-    //console.log('state data',stateData)
+    ////console.log('state data',stateData)
     if (stateData && stateData.isError) {
       this.isCodeError = true;
       this.codeErrorDescription = stateData.description;

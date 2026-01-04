@@ -118,7 +118,7 @@ export const expenseDetailSection = (
   isCreate: boolean = false,
   isAdminView: boolean = false
 ) => {
-  //console.log(m)
+  ////console.log(m)
 
   return {
     section_name: 'Expense Detail',

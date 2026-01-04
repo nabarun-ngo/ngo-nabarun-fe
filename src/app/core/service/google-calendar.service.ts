@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
 })
 export class GoogleCalendarService extends GoogleAuthService {
   createCalendarEvent(meeting: MeetingDetail | undefined, foreignId?: string | undefined) {
-    //console.log(meeting)
+    ////console.log(meeting)
     let attendees: gapi.client.calendar.EventAttendee[] = []
     meeting?.meetingAttendees?.forEach(ma => {
       attendees.push({
@@ -47,7 +47,7 @@ export class GoogleCalendarService extends GoogleAuthService {
 
 
   private getDateTime(date: Date, time: string) {
-    //console.log(date,time)//'2024-07-28T21:00:00+05:30'
+    ////console.log(date,time)//'2024-07-28T21:00:00+05:30'
     let year = date.getFullYear();
     let month = date.getMonth() + 1;
     let day = date.getDate();

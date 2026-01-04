@@ -13,8 +13,11 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { getPolicies } from '../fn/static-docs-controller/get-policies';
 import { GetPolicies$Params } from '../fn/static-docs-controller/get-policies';
+import { getStaticLinks } from '../fn/static-docs-controller/get-static-links';
+import { GetStaticLinks$Params } from '../fn/static-docs-controller/get-static-links';
 import { getUserGuides } from '../fn/static-docs-controller/get-user-guides';
 import { GetUserGuides$Params } from '../fn/static-docs-controller/get-user-guides';
+import { SuccessResponseArrayKeyValueDto } from '../models/success-response-array-key-value-dto';
 import { SuccessResponseArrayStaticDocumentDto } from '../models/success-response-array-static-document-dto';
 
 @Injectable({ providedIn: 'root' })
@@ -86,6 +89,39 @@ export class StaticDocsControllerService extends BaseService {
   getPolicies(params?: GetPolicies$Params, context?: HttpContext): Observable<SuccessResponseArrayStaticDocumentDto> {
     return this.getPolicies$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseArrayStaticDocumentDto>): SuccessResponseArrayStaticDocumentDto => r.body)
+    );
+  }
+
+  /** Path part for operation `getStaticLinks()` */
+  static readonly GetStaticLinksPath = '/api/static-docs/app-links';
+
+  /**
+   * Get app links.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getStaticLinks()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getStaticLinks$Response(params: GetStaticLinks$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayKeyValueDto>> {
+    return getStaticLinks(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get app links.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getStaticLinks$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getStaticLinks(params: GetStaticLinks$Params, context?: HttpContext): Observable<SuccessResponseArrayKeyValueDto> {
+    return this.getStaticLinks$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseArrayKeyValueDto>): SuccessResponseArrayKeyValueDto => r.body)
     );
   }
 

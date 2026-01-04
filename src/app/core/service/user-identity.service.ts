@@ -25,18 +25,18 @@ export class UserIdentityService {
     private router: Router,
   ) {
     this.oAuthService.isAuthenticated$.subscribe(data => {
-      //console.log(data)
+      ////console.log(data)
       return this.isLoggedIn = data;
     });
     this.oAuthService.user$.pipe(map(m => m as AuthUser)).subscribe(data => {
       this.loggedInUser = data;
-      //console.log(data)
+      ////console.log(data)
     });
     this.oAuthService.getAccessTokenSilently().subscribe((claims: string) => {
       if (claims && claims) {
         const decodedToken = jwtDecode(claims) as any;
         this.grantedScopes = decodedToken['permissions'] as string[];
-        //console.log(this.grantedScopes)
+        ////console.log(this.grantedScopes)
       }
     });
   }
@@ -62,7 +62,7 @@ export class UserIdentityService {
     if (prompt) {
       params.prompt = prompt;
     }
-    //console.log(loginType)
+    ////console.log(loginType)
     let return_url = redirectUrl ? redirectUrl : AppRoute.secured_dashboard_page.url;
     if (loginType == 'email') {
       params.connection = 'email';
@@ -130,14 +130,14 @@ export class UserIdentityService {
     return await firstValueFrom(this.oAuthService.isAuthenticated$);
   }
 
-  async getAccessToken(){
+  async getAccessToken() {
     return await firstValueFrom(this.oAuthService.getAccessTokenSilently());
   }
 
   isAccrediatedTo(access: string): boolean {
     let scopes = this.grantedScopes;
     var result = scopes.includes(access);
-    //console.log('Has ' + access + ' access = ', result);
+    ////console.log('Has ' + access + ' access = ', result);
     return result;
   }
 
@@ -154,7 +154,7 @@ export class UserIdentityService {
   }
 
   async isProfileUpdated() {
-    return this.profileUpdated || (await this.getUser()).profile_updated;
+    return this.profileUpdated || (await this.getUser())?.profile_updated || false;
   }
   // getUser(): AuthUser {
   //   return this.loggedInUser || {};
@@ -162,7 +162,7 @@ export class UserIdentityService {
 
 
   // async onCallback() {
-  //   //console.log("I am callback")
+  //   ////console.log("I am callback")
   //   // if (Capacitor.isNativePlatform()) {
   //   //   await Browser.close();
   //   // }
@@ -209,7 +209,7 @@ export class UserIdentityService {
  // this.oAuthService.configure(environment.auth_config);
     // this.oAuthService.setupAutomaticSilentRefresh({}, 'access_token');
     // this.oAuthService.setupAutomaticSilentRefresh({}, 'id_token');
-    // //console.log("Before Login " + this.oAuthService.state)
+    // ////console.log("Before Login " + this.oAuthService.state)
     // this.oAuthService.loadDiscoveryDocumentAndTryLogin().then(data => {
     //   if (this.oAuthService.state) {
     //     this.router.navigateByUrl(decodeURIComponent(this.oAuthService.state));

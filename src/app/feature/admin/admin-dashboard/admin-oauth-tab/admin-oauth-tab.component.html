@@ -1,0 +1,3 @@
+<app-floating-action-button [icon]="'add'" (buttonClick)="showCreateForm()"></app-floating-action-button>
+<app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)"
+    (onAccordionOpen)="onAccordionOpen($event)"></app-accordion-list>

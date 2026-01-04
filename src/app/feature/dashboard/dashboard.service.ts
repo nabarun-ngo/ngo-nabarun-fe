@@ -34,21 +34,21 @@ export class DashboardService {
     Notification.requestPermission().then(
       (notificationPermissions: NotificationPermission) => {
         if (notificationPermissions === "granted") {
-          //console.log("Granted");
+          ////console.log("Granted");
           this.sendToken();
           onMessage(this.messageing, (message) => {
             this.notificationSub.next(message.data!);
-            ////console.log("1",message.data);
+            //////console.log("1",message.data);
             //this.sound.play();
           });
           new BroadcastChannel('notification_data').onmessage = (item) => {
             this.notificationSub.next(item.data);
-            ////console.log("2",item.data);
+            //////console.log("2",item.data);
             //this.sound.play();
           };
         }
         else if (notificationPermissions === "denied") {
-          //console.log("Denied");
+          ////console.log("Denied");
         }
       });
   }
@@ -65,7 +65,7 @@ export class DashboardService {
           vapidKey: environment.firebase_vapidKey,
           serviceWorkerRegistration: serviceWorkerRegistration,
         }).then(async (token) => {
-          //console.log('fcm token', token);
+          ////console.log('fcm token', token);
           // this.commonController.manageNotification({ action: 'SAVE_TOKEN_AND_GET_COUNTS', body: { 'token': token, 'profile_id': (await this.userDetail.getUser()).profile_id } }).subscribe(s => {
 
           // })

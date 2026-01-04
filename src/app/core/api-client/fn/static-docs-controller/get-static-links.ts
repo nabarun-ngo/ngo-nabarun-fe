@@ -8,14 +8,20 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseArrayString } from '../../models/success-response-array-string';
+import { SuccessResponseArrayKeyValueDto } from '../../models/success-response-array-key-value-dto';
 
-export interface ListApiScopes$Params {
+export interface GetStaticLinks$Params {
+
+/**
+ * Type of app links
+ */
+  linkType: string;
 }
 
-export function listApiScopes(http: HttpClient, rootUrl: string, params?: ListApiScopes$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayString>> {
-  const rb = new RequestBuilder(rootUrl, listApiScopes.PATH, 'get');
+export function getStaticLinks(http: HttpClient, rootUrl: string, params: GetStaticLinks$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayKeyValueDto>> {
+  const rb = new RequestBuilder(rootUrl, getStaticLinks.PATH, 'get');
   if (params) {
+    rb.query('linkType', params.linkType, {});
   }
 
   return http.request(
@@ -23,9 +29,9 @@ export function listApiScopes(http: HttpClient, rootUrl: string, params?: ListAp
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseArrayString>;
+      return r as StrictHttpResponse<SuccessResponseArrayKeyValueDto>;
     })
   );
 }
 
-listApiScopes.PATH = '/api/auth/apikey/scopes';
+getStaticLinks.PATH = '/api/static-docs/app-links';

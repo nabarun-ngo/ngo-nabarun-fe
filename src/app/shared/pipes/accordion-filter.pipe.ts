@@ -21,7 +21,7 @@ export class AccordionFilterPipe implements PipeTransform {
       })
       f.detailed.forEach(f1 => {
         f1.content?.forEach(f2 => {
-          ////console.log(f2.field_name+' '+f2.field_value,searchValue)
+          //////console.log(f2.field_name+' '+f2.field_value,searchValue)
           if (f2.field_value) {
             all_values_in_row.push(f2.field_value.toString());
           }

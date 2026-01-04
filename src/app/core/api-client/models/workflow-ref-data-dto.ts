@@ -5,6 +5,7 @@
 import { KeyValueDto } from '../models/key-value-dto';
 export interface WorkflowRefDataDto {
   additionalFields?: Array<KeyValueDto>;
+  visibleTaskStatuses?: Array<KeyValueDto>;
   visibleWorkflowTypes?: Array<KeyValueDto>;
   workflowStatuses?: Array<KeyValueDto>;
   workflowStepStatuses?: Array<KeyValueDto>;

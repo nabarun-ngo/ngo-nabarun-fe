@@ -8,12 +8,12 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseArrayArray } from '../../models/success-response-array-array';
+import { SuccessResponseArrayString } from '../../models/success-response-array-string';
 
 export interface GetGoogleScopes$Params {
 }
 
-export function getGoogleScopes(http: HttpClient, rootUrl: string, params?: GetGoogleScopes$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayArray>> {
+export function getGoogleScopes(http: HttpClient, rootUrl: string, params?: GetGoogleScopes$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayString>> {
   const rb = new RequestBuilder(rootUrl, getGoogleScopes.PATH, 'get');
   if (params) {
   }
@@ -23,7 +23,7 @@ export function getGoogleScopes(http: HttpClient, rootUrl: string, params?: GetG
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseArrayArray>;
+      return r as StrictHttpResponse<SuccessResponseArrayString>;
     })
   );
 }

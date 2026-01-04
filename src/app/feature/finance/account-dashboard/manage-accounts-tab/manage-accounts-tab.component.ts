@@ -158,7 +158,7 @@ export class ManageAccountsTabComponent extends MyAccountsTabComponent {
     let accountForm = this.getSectionForm('account_detail', 0, true);
     accountForm?.markAllAsTouched();
     if (accountForm?.valid) {
-      console.log(accountForm.value);
+      //console.log(accountForm.value);
       this.accountService.createAccount(accountForm.value).subscribe((d) => {
         this.hideForm(0, true);
         this.addContentRow(d!, true);
@@ -198,7 +198,7 @@ export class ManageAccountsTabComponent extends MyAccountsTabComponent {
     account_form?.valueChanges
       .pipe(filterFormChange(account_form.value))
       .subscribe((val) => {
-        //console.log(val);
+        ////console.log(val);
         if (val['accountType']) {
           account_form?.get('account_holder')?.reset();
           this.accountService
@@ -217,7 +217,7 @@ export class ManageAccountsTabComponent extends MyAccountsTabComponent {
       true
     )?.form_input?.selectList;
     selectList?.splice(0);
-    console.log(selectList, items);
+    //console.log(selectList, items);
     items?.forEach((element: any) => {
       let val = {
         key: element.id,

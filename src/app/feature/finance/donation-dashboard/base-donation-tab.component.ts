@@ -65,7 +65,7 @@ export abstract class BaseDonationTabComponent extends Accordion<Donation> imple
     }
 
     protected override onClick(event: { buttonId: string; rowIndex: number; }): void {
-        //console.log(event, this.activeButtonId);
+        ////console.log(event, this.activeButtonId);
         if (event.buttonId === 'UPDATE_DONATION') {
             this.activeButtonId = event.buttonId;
             this.handleUpdateDonation(event.rowIndex);
@@ -88,7 +88,7 @@ export abstract class BaseDonationTabComponent extends Accordion<Donation> imple
     protected abstract handleConfirmCreate(): void;
 
     protected initCreateDonationForm(isGuest: boolean) {
-        console.log(this.permissions);
+        //console.log(this.permissions);
         this.showCreateForm();
         setTimeout(() => {
             this.formSubscription = this.setupFieldVisibilityRules('donation_detail', 0, DonationFieldVisibilityRules, true);
@@ -141,7 +141,7 @@ export abstract class BaseDonationTabComponent extends Accordion<Donation> imple
             const donationForm = this.getSectionForm('donation_detail', rowIndex);
             const documents = this.getSectionDocuments('document_list', rowIndex);
             const donationFormValue = { ...donationForm?.value } as Donation;
-            console.log(donationFormValue);
+            //console.log(donationFormValue);
             if (donationFormValue.status === 'PAID' && donationFormValue.paymentMethod !== 'CASH' && documents?.length == 0) {
                 this.modalService.openNotificationModal({
                     description: 'Please upload a document for the donation payment',

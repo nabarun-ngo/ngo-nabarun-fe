@@ -54,7 +54,7 @@ export class DetailedDonationComponent implements OnInit {
   @Input('mode') set setMode(mode: OperationMode) {
     this.mode = mode;
     if (mode == 'create' || mode == 'edit') {
-      //console.log(this.donation)
+      ////console.log(this.donation)
       this.donationForm.setControl('type', new FormControl(this.donation?.type, []))
       this.donationForm.setControl('amount', new FormControl(this.donation?.amount, [Validators.required, Validators.min(1)]))
       this.donationForm.setControl('status', new FormControl(this.donation?.status, []))
@@ -164,7 +164,7 @@ export class DetailedDonationComponent implements OnInit {
           donationStatus: this.donation.status,
           donationType: this.donation.type
         }).subscribe(data => this.refData = data);
-        ////console.log(this.dfControl['endDate'].value, this.dfControl['startDate'].value)
+        //////console.log(this.dfControl['endDate'].value, this.dfControl['startDate'].value)
         this.dfControl['type'].disable();
         this.dfControl['startDate'].disable();
         this.dfControl['endDate'].disable();
@@ -175,7 +175,7 @@ export class DetailedDonationComponent implements OnInit {
       }
       this.donationForm.removeControl('isPaymentNotified');
     } else if (mode == 'view' && this.donationTab == 'self_donation') {
-      ////console.log("hiiiiiiii", this.mode, this.donationTab)
+      //////console.log("hiiiiiiii", this.mode, this.donationTab)
       this.donationForm.setControl('isPaymentNotified', new FormControl(null, [Validators.required]))
     }
   };
@@ -186,7 +186,7 @@ export class DetailedDonationComponent implements OnInit {
 
     this.triggerEvent?.subscribe(data => {
       if (data == 'validate_form') {
-        //console.log(this.dfControl)
+        ////console.log(this.dfControl)
         this.donationForm.markAllAsTouched();
       } else if (data == 'reset_form') {
         this.donationForm.reset();
@@ -257,7 +257,7 @@ export class DetailedDonationComponent implements OnInit {
       return [];
     }
     let item = this.refData[name];
-    // //console.log(item);
+    // ////console.log(item);
 
     if (item && name == this.donationRefData.refDataKey.type) {
       return item.filter(f => this.donationTab != 'guest_donation' || f.key == this.donationType.Onetime);

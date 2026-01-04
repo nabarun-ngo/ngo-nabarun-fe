@@ -21,7 +21,7 @@ export class AuthGuardService {
       const request_uri = window.location.pathname + window.location.search;
       const redirect_to = (request_uri !== '/' ? request_uri : undefined);
       if (redirect_to) {
-        //console.log('saving requested url: ', redirect_to);
+        ////console.log('saving requested url: ', redirect_to);
         this.router.navigate([''], {
           state: { redirect_to: redirect_to }
         });
