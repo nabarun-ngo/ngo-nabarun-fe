@@ -8,14 +8,14 @@ import { isEmptyObject } from 'src/app/core/service/utilities.service';
 export class MemberSearchPipe implements PipeTransform {
 
   transform(profiles: UserDto[] | undefined, searchValue: string): UserDto[] {
-    ////console.log(profiles,searchValue)
+    //////console.log(profiles,searchValue)
     if (!profiles) {
       return [];
     }
     if (!searchValue || isEmptyObject(searchValue)) {
       return profiles;
     }
-    //console.log(searchValue)
+    ////console.log(searchValue)
     searchValue = searchValue.toLowerCase();
     return profiles.filter((profile: UserDto) =>
 

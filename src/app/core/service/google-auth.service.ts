@@ -26,7 +26,7 @@ export class GoogleAuthService {
   }
 
   updateSigninStatus(isSignedIn: boolean) {
-    //console.log('updateSigninStatus', isSignedIn);
+    ////console.log('updateSigninStatus', isSignedIn);
     this.isSignedIn = isSignedIn;
   }
 
@@ -51,7 +51,7 @@ export class GoogleAuthService {
   }
 
   async initialize() {
-    //console.log('Hellociation')
+    ////console.log('Hellociation')
     await this.loadGapi();
     //gapi.load('client:auth2', this.initClient.bind(this));
   }

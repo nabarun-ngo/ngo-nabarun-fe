@@ -17,8 +17,8 @@ import { getGoogleScopes } from '../fn/o-auth-controller/get-google-scopes';
 import { GetGoogleScopes$Params } from '../fn/o-auth-controller/get-google-scopes';
 import { getGoogleTokens } from '../fn/o-auth-controller/get-google-tokens';
 import { GetGoogleTokens$Params } from '../fn/o-auth-controller/get-google-tokens';
-import { SuccessResponseArrayArray } from '../models/success-response-array-array';
 import { SuccessResponseArrayAuthTokenDto } from '../models/success-response-array-auth-token-dto';
+import { SuccessResponseArrayString } from '../models/success-response-array-string';
 import { SuccessResponseString } from '../models/success-response-string';
 
 @Injectable({ providedIn: 'root' })
@@ -73,7 +73,7 @@ export class OAuthControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getGoogleScopes$Response(params?: GetGoogleScopes$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayArray>> {
+  getGoogleScopes$Response(params?: GetGoogleScopes$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayString>> {
     return getGoogleScopes(this.http, this.rootUrl, params, context);
   }
 
@@ -87,9 +87,9 @@ export class OAuthControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getGoogleScopes(params?: GetGoogleScopes$Params, context?: HttpContext): Observable<SuccessResponseArrayArray> {
+  getGoogleScopes(params?: GetGoogleScopes$Params, context?: HttpContext): Observable<SuccessResponseArrayString> {
     return this.getGoogleScopes$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseArrayArray>): SuccessResponseArrayArray => r.body)
+      map((r: StrictHttpResponse<SuccessResponseArrayString>): SuccessResponseArrayString => r.body)
     );
   }
 

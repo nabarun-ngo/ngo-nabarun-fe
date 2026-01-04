@@ -21,7 +21,7 @@ export class ShowAuthedDirective implements OnInit {
   authRef: ViewRef | undefined;
 
   ngOnInit() {
-    //console.log('Directive called')
+    ////console.log('Directive called')
     // this.identityService.onEvent()
     //   .pipe(filter(data => data.event == 'token_received' || data.event == 'token_refreshed'))
     //   .pipe(map(data => data.status == 'success'))

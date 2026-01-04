@@ -27,7 +27,7 @@ export const date = (dateString: string | undefined, format: string = 'dd/MM/yyy
 // }
 
 export function compareObjects(latest: any, old: any): any {
-  console.log('compare objects --> latest to old', latest, old);
+  //console.log('compare objects --> latest to old', latest, old);
   const keys1: string[] = [];
   const values1: any[] = [];
   Object.keys(latest).forEach((element) => {
@@ -110,7 +110,7 @@ export function isDuplicateArray(a1: any, a2: any) {
     a1.sort();
     a2.sort();
   }
-  //console.log(a1, a2)
+  ////console.log(a1, a2)
 
   return a1.length === a2.length && a1.every((o: any, idx: string | number) => isEmptyObject(compareObjects(o, a2[idx])))
 }

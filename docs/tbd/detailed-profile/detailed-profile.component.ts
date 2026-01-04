@@ -25,7 +25,7 @@ export class DetailedProfileComponent implements OnInit {
       primaryNumber: new FormControl(this.profile?.primaryNumber, []),
     });
     this.triggerEvent?.subscribe(data => {
-      //console.log(data)
+      ////console.log(data)
       this.memberForm.markAllAsTouched();
     });
     this.memberForm.valueChanges.subscribe(() => {

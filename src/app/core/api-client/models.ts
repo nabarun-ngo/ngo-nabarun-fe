@@ -57,12 +57,13 @@ export { SuccessResponseAccountRefDataDto } from './models/success-response-acco
 export { SuccessResponseApiKeyDto } from './models/success-response-api-key-dto';
 export { SuccessResponseArrayAccountDetailDto } from './models/success-response-array-account-detail-dto';
 export { SuccessResponseArrayApiKeyDto } from './models/success-response-array-api-key-dto';
-export { SuccessResponseArrayArray } from './models/success-response-array-array';
 export { SuccessResponseArrayAuthTokenDto } from './models/success-response-array-auth-token-dto';
 export { SuccessResponseArrayDocumentDto } from './models/success-response-array-document-dto';
 export { SuccessResponseArrayFieldAttributeDto } from './models/success-response-array-field-attribute-dto';
 export { SuccessResponseArrayJobDetail } from './models/success-response-array-job-detail';
+export { SuccessResponseArrayKeyValueDto } from './models/success-response-array-key-value-dto';
 export { SuccessResponseArrayStaticDocumentDto } from './models/success-response-array-static-document-dto';
+export { SuccessResponseArrayString } from './models/success-response-array-string';
 export { SuccessResponseBoolean } from './models/success-response-boolean';
 export { SuccessResponseDocumentDto } from './models/success-response-document-dto';
 export { SuccessResponseDonationDto } from './models/success-response-donation-dto';

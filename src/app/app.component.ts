@@ -21,7 +21,7 @@ export class AppComponent {
 
   }
   async ngOnInit(): Promise<void> {
-    //console.log("Hiii")
+    ////console.log("Hiii")
     /**
      * Disableing logs in production
      */

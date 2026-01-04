@@ -63,7 +63,7 @@ export class NoticeCardComponent implements OnInit {
 
   submitForm(notice: NoticeDetail) {
     if (this.noticeForm.valid) {
-      //console.log(this.noticeForm.value)
+      ////console.log(this.noticeForm.value)
       this.onSubmit.emit({ id: notice?.id!, formValue: this.noticeForm.value, cancel: false })
     } else {
       this.noticeForm.markAllAsTouched()

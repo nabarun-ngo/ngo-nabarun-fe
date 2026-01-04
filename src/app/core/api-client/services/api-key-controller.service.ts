@@ -21,7 +21,7 @@ import { revokeApiKey } from '../fn/api-key-controller/revoke-api-key';
 import { RevokeApiKey$Params } from '../fn/api-key-controller/revoke-api-key';
 import { SuccessResponseApiKeyDto } from '../models/success-response-api-key-dto';
 import { SuccessResponseArrayApiKeyDto } from '../models/success-response-array-api-key-dto';
-import { SuccessResponseArrayArray } from '../models/success-response-array-array';
+import { SuccessResponseArrayString } from '../models/success-response-array-string';
 import { SuccessResponseBoolean } from '../models/success-response-boolean';
 import { updateApiKeyPermissions } from '../fn/api-key-controller/update-api-key-permissions';
 import { UpdateApiKeyPermissions$Params } from '../fn/api-key-controller/update-api-key-permissions';
@@ -111,7 +111,7 @@ export class ApiKeyControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listApiScopes$Response(params?: ListApiScopes$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayArray>> {
+  listApiScopes$Response(params?: ListApiScopes$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayString>> {
     return listApiScopes(this.http, this.rootUrl, params, context);
   }
 
@@ -125,9 +125,9 @@ export class ApiKeyControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listApiScopes(params?: ListApiScopes$Params, context?: HttpContext): Observable<SuccessResponseArrayArray> {
+  listApiScopes(params?: ListApiScopes$Params, context?: HttpContext): Observable<SuccessResponseArrayString> {
     return this.listApiScopes$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseArrayArray>): SuccessResponseArrayArray => r.body)
+      map((r: StrictHttpResponse<SuccessResponseArrayString>): SuccessResponseArrayString => r.body)
     );
   }
 

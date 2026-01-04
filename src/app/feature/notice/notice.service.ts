@@ -58,7 +58,7 @@ export class NoticeService {
           m.responsePayload?.content?.forEach(f => {
             notice.meeting?.meetingAttendees?.push(f)
           })
-          ////console.log(notice.meeting?.meetingAttendees)
+          //////console.log(notice.meeting?.meetingAttendees)
           return m.responsePayload?.content
         }))),
         concatMap(response0 => from(this.noticeController.createNotice({ body: notice })).pipe(map(m => {

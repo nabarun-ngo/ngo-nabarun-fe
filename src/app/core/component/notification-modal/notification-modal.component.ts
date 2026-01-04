@@ -27,7 +27,7 @@ export class NotificationModalComponent implements OnInit {
     this.details.buttons.accept = isEmpty(this.details.buttons.accept) ? 'Yes' : this.details.buttons.accept;
     this.details.buttons.decline = isEmpty(this.details.buttons.decline) ? 'No' : this.details.buttons.decline;
     this.details.buttons.okay = isEmpty(this.details.buttons.okay) ? 'Okay' : this.details.buttons.okay;
-    ////console.log(this.details)
+    //////console.log(this.details)
   }
   ngOnInit(): void {
 

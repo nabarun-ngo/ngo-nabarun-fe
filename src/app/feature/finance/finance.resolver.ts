@@ -107,7 +107,7 @@ export const donationDashboardResolverNew: ResolveFn<any> = (route, state) => {
 export const donationDashboardResolver: ResolveFn<any> =
   async (route, state) => {
     let tab = (route.queryParams['tab'] || DonationDefaultValue.tabName) as donationTab;
-    console.log(route.queryParams, tab)
+    //console.log(route.queryParams, tab)
     if (tab == 'member_donation') {
       return await inject(DonationService).fetchMembers({
         pageIndex: DonationDefaultValue.pageNumber,
@@ -115,14 +115,14 @@ export const donationDashboardResolver: ResolveFn<any> =
       });
     }
     else if (tab == 'guest_donation') {
-      console.log("fetching guest donations");
+      //console.log("fetching guest donations");
       return await inject(DonationService).fetchMembers({
         pageIndex: DonationDefaultValue.pageNumber,
         pageSize: DonationDefaultValue.pageSize
       });
 
     } else {
-      //console.log("fetching my donations");
+      ////console.log("fetching my donations");
       return await inject(DonationService).fetchMyDonations({
         pageIndex: DonationDefaultValue.pageNumber,
         pageSize: DonationDefaultValue.pageSize

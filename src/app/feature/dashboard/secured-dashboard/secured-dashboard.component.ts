@@ -35,7 +35,7 @@ export class SecuredDashboardComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     let user = await this.identityService.getUser();
     if (!user.profile_updated) {
-      // //console.log("Profile Not updated")
+      // ////console.log("Profile Not updated")
     }
     this.greetings = getGreetings(user.given_name || user.nickname || user.name);
     this.sharedDataService.setPageName("WELCOME TO NABARUN'S SECURED DASHBOARD");

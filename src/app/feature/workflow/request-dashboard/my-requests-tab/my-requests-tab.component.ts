@@ -198,7 +198,7 @@ export class MyRequestsTabComponent extends Accordion<WorkflowRequest> implement
     this.showCreateForm();
     const form = this.getSectionForm('request_detail', 0, true);
     form?.valueChanges.pipe(filterFormChange(form.value)).subscribe((val) => {
-      console.log(val);
+      //console.log(val);
       if (val.requestType) {
         this.updateFieldVisibility('request_detail', 'initiatedFor', 0, val.requestType !== 'JOIN_REQUEST', true);
         this.updateFieldValidators('request_detail', 0, {
@@ -225,11 +225,11 @@ export class MyRequestsTabComponent extends Accordion<WorkflowRequest> implement
   }
 
   private performCreateRequest() {
-    console.log(this.isDelegatedRequest);
+    //console.log(this.isDelegatedRequest);
     let request_form = this.getSectionForm('request_detail', 0, true);
     let request_data_form = this.getSectionForm('request_data', 0, true);
-    console.log(request_form);
-    console.log(request_data_form);
+    //console.log(request_form);
+    //console.log(request_data_form);
 
     if (request_form?.valid && request_data_form?.valid) {
       const type = request_form?.value.requestType;

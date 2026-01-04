@@ -234,7 +234,7 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
         );
         dialog.componentInstance.onSearch.subscribe((s) => {
           dialog?.close();
-          //console.log(s);
+          ////console.log(s);
           if (!s.reset) {
             var id = this.itemList[$event.rowIndex].id;
             const itemData = this.itemList[$event.rowIndex];

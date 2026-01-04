@@ -178,7 +178,7 @@ export class MemberRoleComponent implements OnInit {
       for (const f of this.rolesToEdit) {
         let currentUsers = this.roleUserMaping[f.key!].currentUsers.map(m => m.userId) as string[];
         let pastUsers = this.roleUserMaping[f.key!].previousUsersId;
-        //console.log(f.key!, currentUsers, pastUsers)
+        ////console.log(f.key!, currentUsers, pastUsers)
 
         if (!arraysEqual(currentUsers, pastUsers)) {
           isChanged = true;
@@ -197,7 +197,7 @@ export class MemberRoleComponent implements OnInit {
       this.modalService.openNotificationModal(AppDialog.err_incorrect_role, 'notification', 'error');
     }
 
-    //console.log(noError)
+    ////console.log(noError)
   }
 
 }
