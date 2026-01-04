@@ -130,7 +130,7 @@ export class UserIdentityService {
     return await firstValueFrom(this.oAuthService.isAuthenticated$);
   }
 
-  async getAccessToken(){
+  async getAccessToken() {
     return await firstValueFrom(this.oAuthService.getAccessTokenSilently());
   }
 
@@ -154,7 +154,7 @@ export class UserIdentityService {
   }
 
   async isProfileUpdated() {
-    return this.profileUpdated || (await this.getUser()).profile_updated;
+    return this.profileUpdated || (await this.getUser())?.profile_updated || false;
   }
   // getUser(): AuthUser {
   //   return this.loggedInUser || {};
