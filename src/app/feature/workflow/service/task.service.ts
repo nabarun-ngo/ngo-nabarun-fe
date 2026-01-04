@@ -14,12 +14,14 @@ export class TaskService {
     constructor(private workflowController: WorkflowControllerService) { }
 
     findMyTasks(
+        completed: boolean,
         page?: number,
-        size?: number
+        size?: number,
     ): Observable<PagedTask> {
         return this.workflowController.listTasks({
             page: page || RequestDefaultValue.pageNumber,
-            size: size || RequestDefaultValue.pageSize
+            size: size || RequestDefaultValue.pageSize,
+            completed
         }).pipe(
             map(d => d.responsePayload),
             map(mapPagedWorkflowTaskDtoToPagedTask)

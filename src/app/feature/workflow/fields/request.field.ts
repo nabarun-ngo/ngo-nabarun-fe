@@ -4,97 +4,12 @@ import { requestTab, WorkflowConstant, workListTab } from "../workflow.const";
 import { DetailedView, DetailedViewField } from "src/app/shared/model/detailed-view.model";
 import { SearchAndAdvancedSearchModel } from "src/app/shared/model/search-and-advanced-search.model";
 import { WorkflowRequest } from "../model/request.model";
-import { Task } from "../model/task.model";
 import { DocumentDto, FieldAttributeDto } from "src/app/core/api-client/models";
-import { Doc, mapDocDtoToDoc } from "src/app/shared/model/document.model";
+import { mapDocDtoToDoc } from "src/app/shared/model/document.model";
 import { KeyValue } from "src/app/shared/model/key-value.model";
 
 
-export const getWorkDetailSection = (m: Task, tab: workListTab): DetailedView => {
-    return {
-        section_name: 'Task Details',
-        section_type: 'key_value',
-        section_html_id: 'work_detail',
-        section_form: new FormGroup({}),
-        content: [
-            {
-                field_name: 'Task Id',
-                field_html_id: 'work_id',
-                field_value: m.id!
-            },
-            {
-                field_name: 'Task Name',
-                field_html_id: 'work_name',
-                field_value: m.name!,
-            },
-            {
-                field_name: 'Task Type',
-                field_html_id: 'work_type',
-                field_value: m.type!,
-            },
-            {
-                field_name: 'Task Description',
-                field_html_id: 'work_description',
-                field_value: m.description!,
-            },
-            {
-                field_name: 'Creation Date',
-                field_html_id: 'creation_date',
-                field_value: date(m.createdAt)
-            },
-            {
-                field_name: 'Status',
-                field_html_id: 'status',
-                field_value: m.status,
-            },
-            {
-                field_name: 'Assigned to',
-                field_html_id: 'assigned_to',
-                field_value: m.assignedToName || 'Unassigned',
-                hide_field: tab == 'completed_worklist'
-            },
-            {
-                field_name: 'Completed By',
-                field_html_id: 'completed_by',
-                field_value: m.completedByName!,
-                hide_field: tab == 'pending_worklist'
-            },
-            {
-                field_name: 'Completion Date',
-                field_html_id: 'completion_date',
-                field_value: date(m.completedAt),
-                hide_field: tab == 'pending_worklist',
-            },
-        ]
-    };
-}
 
-export const getWorkActionDetailSection = (m: Task): DetailedView => {
-    // Basic action section for task completion
-    return {
-        section_name: 'Task Action Detail',
-        section_type: 'key_value',
-        section_html_id: 'action_details',
-        section_form: new FormGroup({}),
-        content: [
-            {
-                field_name: 'Remarks',
-                field_html_id: 'remarks',
-                form_control_name: 'remarks',
-                field_value: '',
-                editable: true,
-                form_input: {
-                    tagName: 'textarea',
-                    inputType: 'text',
-                    html_id: 'remarks',
-                    placeholder: 'Enter remarks',
-                },
-                form_input_validation: [Validators.required]
-            }
-        ]
-
-    };
-}
 
 export const getRequestDetailSection = (
     request: WorkflowRequest, refData: { [name: string]: KeyValue[]; }, isCreate: boolean = false, isDelegated: boolean = false): DetailedView => {

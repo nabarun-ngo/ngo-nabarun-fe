@@ -4,11 +4,11 @@ import { AccordionButton, AccordionCell } from 'src/app/shared/model/accordion-l
 import { Task } from '../../model/task.model';
 
 import { date } from 'src/app/core/service/utilities.service';
-import { TaskField, WorkflowConstant } from '../../workflow.const';
+import { WorkflowConstant } from '../../workflow.const';
 import { RequestService } from '../../service/request.service';
-import { getWorkDetailSection } from '../../fields/request.field';
 import { PendingTasksTabComponent } from '../pending-tasks-tab/pending-tasks-tab.component';
 import { TaskService } from '../../service/task.service';
+import { getTaskDetailSection } from '../../fields/tasks.field';
 
 @Component({
   selector: 'app-completed-tasks-tab',
@@ -17,6 +17,7 @@ import { TaskService } from '../../service/task.service';
 })
 export class CompletedTasksTabComponent extends PendingTasksTabComponent {
 
+  protected override completed: boolean = true;
 
 
   constructor(
@@ -30,19 +31,19 @@ export class CompletedTasksTabComponent extends PendingTasksTabComponent {
   override onInitHook(): void {
     this.setHeaderRow([
       {
-        value: TaskField.workId,
+        value: 'Task Id',
         rounded: true
       },
       {
-        value: TaskField.requestStatus,
+        value: 'Task Status',
         rounded: true
       },
       {
-        value: TaskField.requestId,
+        value: 'Request Id',
         rounded: true
       },
       {
-        value: TaskField.completedOn,
+        value: 'Completed On',
         rounded: true
       }
     ]);
@@ -59,11 +60,11 @@ export class CompletedTasksTabComponent extends PendingTasksTabComponent {
         type: 'text',
         value: item?.status!,
         showDisplayValue: true,
-        refDataSection: WorkflowConstant.refDataKey.workflowSteps
+        refDataSection: WorkflowConstant.refDataKey.workflowTaskStatuses
       },
       {
         type: 'text',
-        value: 'N/A',
+        value: item?.workflowId!,
       },
       {
         type: 'text',
@@ -74,7 +75,7 @@ export class CompletedTasksTabComponent extends PendingTasksTabComponent {
 
   protected override prepareDetailedView(m: Task, options?: { [key: string]: any }): DetailedView[] {
     return [
-      getWorkDetailSection(m, 'completed_worklist')
+      getTaskDetailSection(m, 'completed_worklist')
     ];
   }
 

@@ -113,6 +113,7 @@ export function mapToWorkflowTaskDtoToTask(dto: WorkflowTaskDto): Task {
         failureReason: dto.failureReason,
         checklist: dto.checklist,
         resultData: dto.resultData,
+        workflowId: dto.workflowId,
         assignments: (dto.assignments || []).map(a => mapToTaskAssignmentDtoToTaskAssignment(a))
     };
 }

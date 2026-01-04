@@ -240,7 +240,7 @@ export class WorkflowControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listTasks$Response(params?: ListTasks$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultWorkflowTaskDto>> {
+  listTasks$Response(params: ListTasks$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultWorkflowTaskDto>> {
     return listTasks(this.http, this.rootUrl, params, context);
   }
 
@@ -256,7 +256,7 @@ export class WorkflowControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listTasks(params?: ListTasks$Params, context?: HttpContext): Observable<SuccessResponsePagedResultWorkflowTaskDto> {
+  listTasks(params: ListTasks$Params, context?: HttpContext): Observable<SuccessResponsePagedResultWorkflowTaskDto> {
     return this.listTasks$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponsePagedResultWorkflowTaskDto>): SuccessResponsePagedResultWorkflowTaskDto => r.body)
     );

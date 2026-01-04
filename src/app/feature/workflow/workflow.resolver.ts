@@ -21,5 +21,9 @@ export const workflowRefDataResolver: ResolveFn<WorkflowRefDataDto> = (route, st
 };
 
 export const taskListResolver: ResolveFn<PagedTask> = (route, state) => {
-  return inject(TaskService).findMyTasks(TaskDefaultValue.pageNumber, TaskDefaultValue.pageSize);
+  let tab = (route.queryParams['tab'] || TaskDefaultValue.tabName) as workListTab;
+  if (tab == 'completed_worklist') {
+    return inject(TaskService).findMyTasks(true, TaskDefaultValue.pageNumber, TaskDefaultValue.pageSize);
+  }
+  return inject(TaskService).findMyTasks(false, TaskDefaultValue.pageNumber, TaskDefaultValue.pageSize);
 };

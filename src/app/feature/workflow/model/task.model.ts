@@ -17,6 +17,7 @@ export interface TaskAssignment {
 }
 
 export interface Task {
+    workflowId: any;
     id: string;
     taskId: string;
     stepId: string;
