@@ -39,14 +39,11 @@ const routes: Routes = [
         path: route_data.secured_member_members_page.feature,
         loadChildren: () => import('./feature/member/member.module').then(m => m.MemberModule),
       },
-      // {
-      //   path: route_data.secured_request_list_page.feature,
-      //   loadChildren: () => import('./feature/request/request.module').then(m => m.RequestModule),
-      // },
-      // {
-      //   path: route_data.secured_account_list_page.feature,
-      //   loadChildren: () => import('./feature/account/account.module').then(m => m.AccountModule),
-      // },
+      {
+        path: route_data.secured_request_list_page.feature,
+        loadChildren: () => import('./feature/workflow/workflow.module').then(m => m.WorkflowModule),
+      },
+
       {
         path: route_data.secured_account_list_page.feature,
         loadChildren: () => import('./feature/finance/finance.module').then(m => m.FinanceModule),

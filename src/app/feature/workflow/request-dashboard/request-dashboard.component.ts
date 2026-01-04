@@ -1,8 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
-import { RequestDefaultValue, requestTab } from '../request.const';
-import { PaginateRequestDetail } from 'src/app/core/api-client/models';
+import { RequestDefaultValue, requestTab } from '../workflow.const';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
@@ -10,15 +9,16 @@ import { StandardTabbedDashboard } from 'src/app/shared/utils/standard-tabbed-da
 import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
 import { MyRequestsTabComponent } from './my-requests-tab/my-requests-tab.component';
 import { DelegatedRequestsTabComponent } from './delegated-requests-tab/delegated-requests-tab.component';
-import { requestSearchInput } from '../request.field';
+import { requestSearchInput } from '../fields/request.field';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
+import { PagedRequest } from '../model/request.model';
 
 @Component({
   selector: 'app-request-dashboard',
   templateUrl: './request-dashboard.component.html',
   styleUrls: ['./request-dashboard.component.scss'],
 })
-export class RequestDashboardComponent extends StandardTabbedDashboard<requestTab, PaginateRequestDetail> {
+export class RequestDashboardComponent extends StandardTabbedDashboard<requestTab, PagedRequest> {
 
   @ViewChild(MyRequestsTabComponent) selfRequestTab!: MyRequestsTabComponent;
   @ViewChild(DelegatedRequestsTabComponent) delegatedRequestTab!: DelegatedRequestsTabComponent;
@@ -45,7 +45,7 @@ export class RequestDashboardComponent extends StandardTabbedDashboard<requestTa
     this.searchInput = requestSearchInput(this.getCurrentTab(), this.refData!);
   }
 
-  protected override get tabComponents(): { [key in requestTab]?: TabComponentInterface<PaginateRequestDetail> } {
+  protected override get tabComponents(): { [key in requestTab]?: TabComponentInterface<PagedRequest> } {
     return {
       self_request: this.selfRequestTab,
       delegated_request: this.delegatedRequestTab

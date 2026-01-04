@@ -11,6 +11,11 @@ export interface StartWorkflowDto {
 };
 
   /**
+   * Is external user (use only when requestedFor id is not available)
+   */
+  forExternalUser?: boolean;
+
+  /**
    * User ID for whom the workflow is initiated
    */
   requestedFor?: string;

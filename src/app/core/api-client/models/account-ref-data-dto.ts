@@ -6,5 +6,6 @@ import { KeyValueDto } from '../models/key-value-dto';
 export interface AccountRefDataDto {
   accountStatuses?: Array<KeyValueDto>;
   accountTypes?: Array<KeyValueDto>;
+  expenseStatuses?: Array<KeyValueDto>;
   transactionRefTypes?: Array<KeyValueDto>;
 }

@@ -14,7 +14,7 @@ import {
 } from 'src/app/shared/model/detailed-view.model';
 import { date } from 'src/app/core/service/utilities.service';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
-import { ExpenseDefaultValue, expenseTab } from '../finance.const';
+import { AccountConstant, AccountDefaultValue, ExpenseDefaultValue, expenseTab } from '../finance.const';
 import { Account, Expense, ExpenseItem } from '../model';
 import { Doc } from 'src/app/shared/model/document.model';
 import { KeyValue } from 'src/app/shared/model/key-value.model';
@@ -79,6 +79,8 @@ export const expenseHighLevelView = (item: Expense): AccordionCell[] => {
       type: 'text',
       value: item?.status + '',
       bgColor: item?.settledOn ? 'bg-green-300' : 'bg-purple-200',
+      showDisplayValue: true,
+      refDataSection: AccountConstant.refDataKey.expenseStatus,
       rounded: true,
     },
   ];
@@ -104,6 +106,8 @@ export const manageExpenseHighLevelView = (item: Expense): AccordionCell[] => {
       type: 'text',
       value: item?.status + '',
       bgColor: item?.settledOn ? 'bg-green-300' : 'bg-purple-200',
+      showDisplayValue: true,
+      refDataSection: AccountConstant.refDataKey.expenseStatus,
       rounded: true,
     },
   ];
@@ -273,158 +277,56 @@ export const expenseDocumentSection = (
     ],
   } as DetailedView;
 };
-
-export const expenseListSection = (
+export const expenseEditableTable = (
   m: Expense,
   isCreate: boolean = false
 ) => {
-  let accordion = new (class extends Accordion<ExpenseItem> {
-    protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
-      return {
-        pageNumber: ExpenseDefaultValue.pageNumber,
-        pageSize: ExpenseDefaultValue.pageSize,
-        pageSizeOptions: ExpenseDefaultValue.pageSizeOptions
-      };
-    }
-
-    override onInitHook(): void { }
-    protected override onClick(event: {
-      buttonId: string;
-      rowIndex: number;
-    }): void { }
-    protected override onAccordionOpen(event: { rowIndex: number }): void { }
-    prepareHighLevelView(
-      item: ExpenseItem,
-      options?: { [key: string]: any }
-    ): AccordionCell[] {
-      return [
-        {
-          type: 'text',
-          value: item?.itemName!,
-        },
-        {
-          type: 'text',
-          value: `₹ ${item?.amount ? item?.amount : 0}`,
-        },
-      ];
-    }
-    prepareDetailedView(
-      data: ExpenseItem,
-      options?: { [key: string]: any }
-    ): DetailedView[] {
-      return [
-        {
-          section_name: 'Expense Item Detail',
-          section_type: 'key_value',
-          section_html_id: 'expense_item_detail',
-          section_form: new FormGroup({}),
-          hide_section: false,
-          content: [
-            {
-              field_name: 'Item Name',
-              field_html_id: 'e_item_name',
-              field_value: data?.itemName!,
-              editable: true,
-              form_control_name: 'itemName',
-              form_input: {
-                html_id: 'name_fld',
-                inputType: 'text',
-                tagName: 'input',
-                placeholder: 'Enter Item Name',
-              },
-              form_input_validation: [Validators.required],
-            },
-            {
-              field_name: 'Item Description',
-              field_html_id: 'e_item_desc',
-              field_value: data?.description!,
-              editable: true,
-              form_control_name: 'description',
-              form_input: {
-                html_id: 'desc_fld',
-                inputType: '',
-                tagName: 'textarea',
-                placeholder: 'Enter Item Description',
-              },
-              form_input_validation: [],
-            },
-            {
-              field_name: 'Item Amount',
-              field_html_id: 'e_item_amount',
-              field_value: data?.amount!,
-              editable: true,
-              form_control_name: 'amount',
-              form_input_validation: [Validators.required],
-              form_input: {
-                html_id: 'amount_fld',
-                inputType: 'number',
-                tagName: 'input',
-                placeholder: 'Enter Item Amount',
-              },
-            },
-          ],
-        } as DetailedView,
-      ];
-    }
-    prepareDefaultButtons(
-      data: ExpenseItem,
-      options?: { [key: string]: any }
-    ): AccordionButton[] {
-      if (options && options['create']) {
-        return [
-          {
-            button_id: 'CREATE_CANCEL',
-            button_name: 'Cancel',
-          },
-          {
-            button_id: 'CREATE_CONFIRM',
-            button_name: 'Add',
-          },
-        ];
-      }
-      if (m == undefined || m?.status == 'DRAFT' || m?.status == 'SUBMITTED') {
-        return [
-          {
-            button_id: 'DELETE_EXPENSE_ITEM',
-            button_name: 'Delete',
-          },
-          {
-            button_id: 'UPDATE_EXPENSE_ITEM',
-            button_name: 'Update',
-          },
-        ];
-      }
-      return [];
-    }
-    handlePageEvent($event: PageEvent): void { }
-  })();
-  accordion.setHeaderRow([
-    {
-      value: 'Item Name',
-      rounded: true,
-    },
-    {
-      value: 'Item Amount',
-      rounded: true,
-    },
-  ]);
-
-  ////console.log(m)
-  accordion.setContent(m?.expenseItems!, m?.expenseItems?.length);
-
+  const items = m?.expenseItems ?? [];
   return {
-    section_name: 'Expense List',
-    section_type: 'accordion_list',
+    section_name: 'Expense Items',
+    section_type: 'editable_table',
     section_html_id: 'expense_list_detail',
-    section_form: new FormGroup({}),
+    section_form: new FormGroup({
+      items: new FormArray([
+        ...items.map(item => new FormGroup({
+          itemName: new FormControl(item.itemName, [Validators.required]),
+          amount: new FormControl(item.amount, [Validators.required]),
+        }))
+      ])
+    }),
+    show_form: false,
     hide_section: false,
-    accordionList: accordion.getAccordionList(),
-    accordion: {
-      object: accordion,
-      parentId: m?.id!,
-      createBtn: isCreate || m?.status == 'DRAFT' || m?.status == 'SUBMITTED',
-      accordionOpened: new EventEmitter(),
-      buttonClick: new EventEmitter(),
+    editableTable: {
+      allowAddRow: isCreate || m?.status == 'DRAFT' || m?.status == 'SUBMITTED',
+      allowDeleteRow: isCreate || m?.status == 'DRAFT' || m?.status == 'SUBMITTED',
+      formArrayName: 'items',
+      columns: [
+        {
+          columnDef: 'itemName',
+          header: 'Item Name',
+          editable: true,
+          inputModel: {
+            html_id: 'item_name_inp',
+            tagName: 'input',
+            inputType: 'text',
+            placeholder: 'Ex. Tea/Coffee',
+          },
+          validators: [Validators.required],
+        },
+
+        {
+          columnDef: 'amount',
+          header: 'Amount',
+          editable: true,
+          inputModel: {
+            html_id: 'item_amount_inp',
+            tagName: 'input',
+            inputType: 'number',
+            placeholder: '0.00',
+          },
+          validators: [Validators.required],
+        },
+      ],
     },
   } as DetailedView;
 };
@@ -627,54 +529,3 @@ export const settlementSummary = (
   } as DetailedView;
 };
 
-// export const expenseEditableTable = (items: ExpenseItem[]) => {
-//   return {
-//     section_name: 'Expense Details',
-//     section_type: 'editable_table',
-//     section_html_id: 'expense_details',
-//     section_form: new FormGroup({
-//       items: new FormArray([
-//         ...items.map(item => new FormGroup({
-//           itemName: new FormControl(item.itemName),
-//           amount: new FormControl(item.amount),
-//         }))
-//       ])
-//     }),
-//     show_form: true,
-//     hide_section: false,
-//     editableTable: {
-//       allowAddRow: true,
-//       allowDeleteRow: true,
-//       formArrayName: 'items',
-//       columns: [
-//         {
-//           columnDef: 'itemName',
-//           header: 'Item Name',
-//           editable: true,
-//           validators: [Validators.required],
-//           inputModel: {
-//             html_id: 'item_name',
-//             labelName: 'Item Name',
-//             tagName: 'input',
-//             inputType: 'text',
-//             placeholder: 'Enter item name',
-//           }
-//         },
-//         {
-//           columnDef: 'amount',
-//           header: 'Item Amount',
-//           editable: true,
-//           validators: [Validators.required],
-//           inputModel: {
-//             html_id: 'item_amount',
-//             labelName: 'Item Amount',
-//             tagName: 'input',
-//             inputType: 'number',
-//             placeholder: 'Enter item amount',
-//           }
-//         },
-
-//       ],
-//     },
-//   } as DetailedView;
-// };

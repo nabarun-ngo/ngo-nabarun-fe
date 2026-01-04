@@ -1,15 +1,18 @@
 import { Component, Input } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
+import { KeyValue } from 'src/app/shared/model/key-value.model';
 import { buildRowValidator } from 'src/app/shared/utils/row-validator.factory';
 
 @Component({
     selector: 'app-editable-table-section',
-    templateUrl: './editable-table-section.component.html'
+    templateUrl: './editable-table-section.component.html',
+    styleUrls: ['./editable-table-section.component.scss']
 })
 export class EditableTableSectionComponent {
 
     @Input() view!: DetailedView;
+    @Input() refData!: { [name: string]: KeyValue[]; };
 
     get tableArray(): FormArray {
         return this.view.section_form.get(
@@ -50,5 +53,12 @@ export class EditableTableSectionComponent {
 
     markAllTouched(): void {
         this.tableArray.markAllAsTouched();
+    }
+
+    displayValue = (section: string | undefined, code: string | undefined) => {
+        if (this.refData && section && code) {
+            return this.refData[section]?.find(f => f.key == code)?.displayValue;
+        }
+        return code;
     }
 }

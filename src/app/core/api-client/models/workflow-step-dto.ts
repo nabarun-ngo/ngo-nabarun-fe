@@ -7,10 +7,10 @@ export interface WorkflowStepDto {
   completedAt?: string;
   createdAt: string;
   description?: string | null;
-  failureReason?: string;
   id: string;
   name: string;
   orderIndex: number;
+  remarks?: string;
   startedAt?: string;
   status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'FAILED';
   stepId: string;

@@ -1,7 +1,7 @@
 import { ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot } from '@angular/router';
 import { AccountService } from './service/account.service';
 import { inject } from '@angular/core';
-import { AccountDefaultValue, accountTab, DonationDefaultValue, donationTab, expenseTab, TransactionDefaultValue } from './finance.const';
+import { AccountDefaultValue, accountTab, DonationDefaultValue, donationTab, ExpenseDefaultValue, expenseTab, TransactionDefaultValue } from './finance.const';
 import { Account, PagedAccounts, PagedDonations, PagedExpenses, PagedTransactions } from './model';
 import { DonationService } from './service/donation.service';
 import { AccountRefDataDto, DonationRefDataDto } from 'src/app/core/api-client/models';
@@ -27,7 +27,7 @@ export const accountDashboardResolver: ResolveFn<PagedAccounts | undefined> = (r
 };
 
 export const expenseDashboardResolver: ResolveFn<PagedExpenses | undefined> = (route, state) => {
-  const tab = (route.queryParams['tab'] || 'my_expenses') as expenseTab;
+  const tab = (route.queryParams['tab'] || ExpenseDefaultValue.tabName) as expenseTab;
   const id = route.queryParams['id'] as string;
 
   if (tab === 'my_expenses') {

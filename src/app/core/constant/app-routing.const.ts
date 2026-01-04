@@ -78,17 +78,17 @@ export const AppRoute = {
   },
   secured_request_list_page: {
     id: 'secured_request_list_page',
-    url: '/secured/request/list',
+    url: '/secured/workflow/requests',
     parent: 'secured',
-    feature: 'request',
-    path: 'list',
+    feature: 'workflow',
+    path: 'requests',
   },
   secured_task_list_page: {
     id: 'secured_task_list_page',
-    url: '/secured/request/tasklist',
+    url: '/secured/workflow/tasks',
     parent: 'secured',
-    feature: 'request',
-    path: 'tasklist',
+    feature: 'workflow',
+    path: 'tasks',
   },
   secured_account_list_page: {
     id: 'secured_account_list_page',

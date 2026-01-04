@@ -21,10 +21,14 @@ export interface ListInstancesByMe$Params {
  * Count of content to load per page
  */
   size?: number;
-  delegated: boolean;
+
+/**
+ * Filter by delegated (set true to get workflow created by me for others, set false to get only workflow created by me for me)
+ */
+  delegated?: boolean;
 }
 
-export function listInstancesByMe(http: HttpClient, rootUrl: string, params: ListInstancesByMe$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultWorkflowInstanceDto>> {
+export function listInstancesByMe(http: HttpClient, rootUrl: string, params?: ListInstancesByMe$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultWorkflowInstanceDto>> {
   const rb = new RequestBuilder(rootUrl, listInstancesByMe.PATH, 'get');
   if (params) {
     rb.query('page', params.page, {});

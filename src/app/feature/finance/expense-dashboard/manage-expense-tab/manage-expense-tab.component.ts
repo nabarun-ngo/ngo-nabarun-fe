@@ -69,7 +69,7 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
     options?: { [key: string]: any }
   ): AccordionCell[] {
     // Convert domain model to format expected by manageExpenseHighLevelView
-    return manageExpenseHighLevelView(data as any);
+    return manageExpenseHighLevelView(data);
   }
 
   protected override prepareDefaultButtons(
@@ -182,7 +182,7 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
             'expense_borne_by',
             $event.rowIndex
           ).form_input!.selectList = users;
-          this.showEditForm($event.rowIndex, ['expense_detail', 'expense_doc_list']);
+          this.showEditForm($event.rowIndex, ['expense_detail', 'expense_list_detail', 'expense_doc_list']);
         });
         break;
       case 'FINALIZE_EXPENSE':
@@ -201,6 +201,18 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
       case 'SETTLE_EXPENSE':
         this.activeButtonId = $event.buttonId;
         let itemData = this.itemList[$event.rowIndex];
+        let sett_acc = this.accounts[itemData.id!]?.id;
+        if (!sett_acc) {
+          this.modalService.openNotificationModal(
+            {
+              title: 'Wallet Not Found',
+              description: 'No wallets found for the payer.',
+            },
+            'notification',
+            'error'
+          );
+          return;
+        }
         let mesage = {
           title: 'Confirm Settlement',
           description: `I confirm that all financial settlement has been made for this expense`,
@@ -208,7 +220,6 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
         this.modalService
           .openNotificationModal(mesage, 'confirmation', 'warning')
           .onAccept$.subscribe((d) => {
-            let sett_acc = this.accounts[itemData.id!]?.id;
             this.accountService
               .updateExpense(itemData.id!, { status: 'SETTLED', settlementAccountId: sett_acc })
               .subscribe((s) => {

@@ -49,6 +49,7 @@ import { DocumentLinkComponent } from './components/document-link/document-link.
 import { AppPhoneNumberComponent } from './components/generic/phone-number/app-phone-number.component';
 import { StandardTabGroupComponent } from './components/standard-tab-group/standard-tab-group.component';
 import { EditableTableSectionComponent } from './components/generic/detailed-view/editable-table/editable-table-section.component';
+import { EditableListSectionComponent } from './components/generic/detailed-view/editable-list/editable-list-section.component';
 
 @NgModule({
   declarations: [
@@ -74,7 +75,8 @@ import { EditableTableSectionComponent } from './components/generic/detailed-vie
     FloatingActionButtonComponent,
     AppPhoneNumberComponent,
     StandardTabGroupComponent,
-    EditableTableSectionComponent
+    EditableTableSectionComponent,
+    EditableListSectionComponent
   ],
   imports: [
     CommonModule,
