@@ -25,7 +25,7 @@ export function mapToWorkflowStepDtoToWorkflowStep(dto: WorkflowStepDto): Workfl
         completedAt: dto.completedAt,
         createdAt: dto.createdAt,
         updatedAt: dto.updatedAt,
-        failureReason: dto.failureReason,
+        remarks: dto.remarks
     };
 }
 
@@ -50,7 +50,7 @@ export function mapToWorkflowInstanceDtoToWorkflowRequest(dto: WorkflowInstanceD
         createdAt: dto.createdAt,
         updatedAt: dto.updatedAt,
         completedAt: dto.completedAt,
-        failureReason: dto.failureReason,
+        remarks: dto.remarks,
         steps: (dto.steps || []).map(s => mapToWorkflowStepDtoToWorkflowStep(s))
     };
 }
@@ -110,7 +110,7 @@ export function mapToWorkflowTaskDtoToTask(dto: WorkflowTaskDto): Task {
         completedAt: dto.completedAt,
         createdAt: dto.createdAt,
         updatedAt: dto.updatedAt,
-        failureReason: dto.failureReason,
+        remarks: dto.remarks,
         checklist: dto.checklist,
         resultData: dto.resultData,
         workflowId: dto.workflowId,

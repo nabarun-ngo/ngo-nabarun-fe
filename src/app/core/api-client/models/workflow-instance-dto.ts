@@ -8,12 +8,12 @@ export interface WorkflowInstanceDto {
   createdAt: string;
   currentStepId?: string | null;
   description: string;
-  failureReason?: string;
   id: string;
   initiatedById?: string;
   initiatedByName?: string;
   initiatedForId?: string;
   initiatedForName?: string;
+  remarks?: string;
   requestData: {
 };
   resultData?: {

@@ -15,7 +15,7 @@ export interface WorkflowStep {
     completedAt?: string;
     createdAt: string;
     updatedAt: string;
-    failureReason?: string;
+    remarks?: string;
     tasks?: Task[];
 }
 
@@ -34,7 +34,7 @@ export interface WorkflowRequest {
     createdAt: string;
     updatedAt: string;
     completedAt?: string;
-    failureReason?: string;
+    remarks?: string;
     steps: WorkflowStep[];
 }
 

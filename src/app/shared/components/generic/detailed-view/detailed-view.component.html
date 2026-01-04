@@ -66,6 +66,9 @@
                 <div *ngIf="view.section_type == 'editable_table'">
                     <app-editable-table-section [view]="view" [refData]="refData"></app-editable-table-section>
                 </div>
+                <div *ngIf="view.section_type == 'editable_list'">
+                    <app-editable-list-section [view]="view" [refData]="refData"></app-editable-list-section>
+                </div>
             </div>
         </div>
     </form>

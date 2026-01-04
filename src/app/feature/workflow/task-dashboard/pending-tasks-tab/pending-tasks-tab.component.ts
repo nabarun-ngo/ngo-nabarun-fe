@@ -1,4 +1,4 @@
-import { Component, ElementRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { scrollToFirstInvalidControl } from 'src/app/core/service/form.service';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
@@ -12,7 +12,7 @@ import { SearchEvent } from 'src/app/shared/components/search-and-advanced-searc
 import { Task } from '../../model/task.model';
 import { TaskService } from '../../service/task.service';
 import { RequestService } from '../../service/request.service';
-import { getTaskActionDetailSection, getTaskDetailSection } from '../../fields/tasks.field';
+import { getTaskCheckListSection, getTaskDetailSection } from '../../fields/tasks.field';
 
 
 @Component({
@@ -37,7 +37,6 @@ export class PendingTasksTabComponent extends Accordion<Task> implements TabComp
 
     protected taskService: TaskService,
     protected requestService: RequestService,
-    protected el: ElementRef,
   ) {
     super();
   }
@@ -91,7 +90,8 @@ export class PendingTasksTabComponent extends Accordion<Task> implements TabComp
 
   protected override prepareDetailedView(m: Task, options?: { [key: string]: any }): DetailedView[] {
     return [
-      getTaskDetailSection(m, 'pending_worklist')
+      getTaskDetailSection(m, 'pending_worklist', this.getRefData()!),
+      getTaskCheckListSection(m, 'pending_worklist')
     ];
   }
 
@@ -128,8 +128,7 @@ export class PendingTasksTabComponent extends Accordion<Task> implements TabComp
     let task = this.itemList![$event.rowIndex];
     switch ($event.buttonId) {
       case 'VIEW_REQUEST':
-        let item = this.itemList![$event.rowIndex];
-        const workflowId = item.workflowId!;
+        const workflowId = task.workflowId!;
         this.requestService.getRequestDetail(workflowId).subscribe(request => {
           this.addSectionInAccordion(getRequestDetailSection(request!, this.getRefData()!), $event.rowIndex)
           this.requestService.getAdditionalFields(request.type!).subscribe(s => {
@@ -146,25 +145,29 @@ export class PendingTasksTabComponent extends Accordion<Task> implements TabComp
         this.actionName = $event.buttonId;
         break;
       case 'UPDATE':
-        this.addSectionInAccordion(getTaskActionDetailSection(task!), $event.rowIndex)
-        this.showEditForm($event.rowIndex, ['action_details']);
+        this.showEditForm($event.rowIndex, ['work_detail']);
         this.actionName = $event.buttonId;
         break;
       case 'CONFIRM':
-        let form_action_detail = this.getSectionForm('action_details', $event.rowIndex);
-        if (form_action_detail?.valid) {
-          const remarks = form_action_detail.value['remarks'];
-          // this.taskService.updateTask(item.id!, 'COMPLETED', remarks).subscribe(data => {
-          //   this.hideForm($event.rowIndex)
-          //   this.loadData();
-          // })
+        let form_work_detail = this.getSectionForm('work_detail', $event.rowIndex);
+        if (form_work_detail?.valid) {
+          const remarks = form_work_detail.value['remarks'];
+          const status = form_work_detail.value['status'];
+          this.taskService.updateTask(task.workflowId!, task.id!,
+            status, remarks).subscribe(data => {
+              this.hideForm($event.rowIndex)
+              if (data.completedAt) {
+                this.removeContentRow($event.rowIndex)
+              } else {
+                this.updateContentRow(data, $event.rowIndex);
+              }
+            })
         } else {
-          form_action_detail?.markAllAsTouched();
-          scrollToFirstInvalidControl(this.el.nativeElement);
+          form_work_detail?.markAllAsTouched();
+          scrollToFirstInvalidControl();
         }
         break;
       case 'CANCEL':
-        this.removeSectionInAccordion('action_details', $event.rowIndex)
         this.hideForm($event.rowIndex)
         break;
 

@@ -91,9 +91,9 @@ export const getRequestDetailSection = (
                 hide_field: !request?.completedAt || isCreate
             },
             {
-                field_name: 'Failure Reason',
-                field_value: request?.failureReason!,
-                hide_field: !request?.failureReason || isCreate
+                field_name: 'Remarks',
+                field_value: request?.remarks!,
+                hide_field: !request?.remarks || isCreate
             },
         ]
     };

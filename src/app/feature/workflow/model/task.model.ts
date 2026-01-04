@@ -34,7 +34,7 @@ export interface Task {
     completedAt?: string;
     createdAt: string;
     updatedAt: string;
-    failureReason?: string;
+    remarks?: string;
     checklist?: string[];
     resultData?: any;
     assignments: TaskAssignment[];

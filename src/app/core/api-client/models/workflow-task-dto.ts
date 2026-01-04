@@ -13,11 +13,11 @@ export interface WorkflowTaskDto {
   completedByName?: string;
   createdAt: string;
   description?: string | null;
-  failureReason?: string;
   handler?: string;
   id: string;
   jobId?: string;
   name: string;
+  remarks?: string;
   resultData?: {
 };
   status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'FAILED' | 'SKIPPED';

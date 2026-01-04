@@ -134,10 +134,15 @@ export function conditionalValidator(predicate: BooleanFn,
 }
 
 
-export function scrollToFirstInvalidControl(el: HTMLElement) {
-  const firstInvalidControl: HTMLElement = el.querySelector(
+export function scrollToFirstInvalidControl(el?: HTMLElement) {
+  const searchRoot = el || (document.body as HTMLElement);
+  const firstInvalidControl: HTMLElement | null = searchRoot.querySelector(
     ".ng-invalid"
-  )!;
+  );
+
+  if (!firstInvalidControl) {
+    return;
+  }
 
   window.scroll({
     top: getTopOffset(firstInvalidControl),

@@ -23,9 +23,8 @@ export class CompletedTasksTabComponent extends PendingTasksTabComponent {
   constructor(
     protected override taskService: TaskService,
     protected override requestService: RequestService,
-    protected override el: ElementRef,
   ) {
-    super(taskService, requestService, el);
+    super(taskService, requestService);
   }
 
   override onInitHook(): void {
@@ -75,16 +74,20 @@ export class CompletedTasksTabComponent extends PendingTasksTabComponent {
 
   protected override prepareDetailedView(m: Task, options?: { [key: string]: any }): DetailedView[] {
     return [
-      getTaskDetailSection(m, 'completed_worklist')
+      getTaskDetailSection(m, 'completed_worklist', this.getRefData()!)
     ];
   }
 
   protected override prepareDefaultButtons(data: Task, options?: { [key: string]: any }): AccordionButton[] {
-    return [];
+    return [
+      {
+        button_id: 'VIEW_REQUEST',
+        button_name: 'View Request'
+      }
+    ];
   }
 
 
-  protected override onClick($event: { buttonId: string; rowIndex: number; }) {
-  }
+
 
 }

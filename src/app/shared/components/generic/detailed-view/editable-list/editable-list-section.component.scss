@@ -1,0 +1,98 @@
+.editable-list-container {
+    padding: var(--space-md);
+}
+
+.list-item {
+    position: relative;
+    background: white;
+    border: 1px solid var(--secondary-100);
+    border-radius: var(--radius-lg);
+    padding: var(--space-md) var(--space-lg);
+    margin-bottom: var(--space-md);
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-sm);
+
+    &:hover {
+        box-shadow: var(--shadow-md);
+        border-color: var(--secondary-200);
+        background: var(--secondary-50);
+    }
+
+    &.bg-red-50 {
+        border-color: var(--danger-200);
+    }
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.row-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-md);
+    align-items: start;
+}
+
+.field-cell {
+    display: flex;
+    flex-direction: column;
+}
+
+.cell-label {
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-xs);
+    color: var(--secondary-500);
+    padding: 2px 8px;
+    background: var(--secondary-100);
+    border-radius: var(--radius-sm);
+    display: inline-flex;
+    align-self: flex-start;
+}
+
+.read-mode-value {
+    display: inline-block;
+    padding: var(--space-xs) 0;
+    color: var(--secondary-800);
+    font-weight: 500;
+    font-size: 0.9375rem;
+}
+
+.action-overlay {
+    position: absolute;
+    top: var(--space-xs);
+    right: var(--space-xs);
+    opacity: 0.5;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+        opacity: 1;
+    }
+}
+
+.empty-state {
+    padding: var(--space-xl);
+    text-align: center;
+    color: var(--secondary-400);
+    border: 2px dashed var(--secondary-200);
+    border-radius: var(--radius-lg);
+    background: var(--secondary-50);
+
+    mat-icon {
+        font-size: 3rem;
+        height: 3rem;
+        width: 3rem;
+        margin-bottom: var(--space-sm);
+    }
+}
+
+.add-btn-container {
+    display: flex;
+    align-items: center;
+    margin-top: var(--space-lg);
+    padding: var(--space-md);
+    border-top: 1px solid var(--secondary-100);
+}

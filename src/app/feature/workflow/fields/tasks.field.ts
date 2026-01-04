@@ -1,10 +1,11 @@
 import { DetailedView } from "src/app/shared/model/detailed-view.model";
 import { Task } from "../model/task.model";
 import { WorkflowConstant, workListTab } from "../workflow.const";
-import { FormGroup, Validators } from "@angular/forms";
+import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import { date } from "src/app/core/service/utilities.service";
+import { KeyValue } from "src/app/shared/model/key-value.model";
 
-export const getTaskDetailSection = (m: Task, tab: workListTab): DetailedView => {
+export const getTaskDetailSection = (m: Task, tab: workListTab, refData: { [name: string]: KeyValue[]; }): DetailedView => {
     return {
         section_name: 'Task Details',
         section_type: 'key_value',
@@ -44,12 +45,28 @@ export const getTaskDetailSection = (m: Task, tab: workListTab): DetailedView =>
                 field_value: m.status,
                 show_display_value: true,
                 ref_data_section: WorkflowConstant.refDataKey.workflowTaskStatuses,
+                editable: true,
+                form_control_name: 'status',
+                form_input: {
+                    tagName: 'select',
+                    inputType: '',
+                    html_id: 'status',
+                    placeholder: 'Select status',
+                    selectList: refData[WorkflowConstant.refDataKey.visibleTaskStatuses]
+                },
+                form_input_validation: [Validators.required]
             },
             {
                 field_name: 'Assigned To',
                 field_html_id: 'assigned_to',
-                field_value: m.assignments?.map(x => x.assignedToName).join(', '),
-                hide_field: tab == 'completed_worklist'
+                field_value: m.assignments?.map(x => `${x.assignedToName} (${x.status})`).join(', '),
+                hide_field: !!m.assignedToId
+            },
+            {
+                field_name: 'Accepted By',
+                field_html_id: 'accepted_by',
+                field_value: m.assignedToName,
+                hide_field: !m.assignedToId
             },
             {
                 field_name: 'Completed By',
@@ -64,29 +81,11 @@ export const getTaskDetailSection = (m: Task, tab: workListTab): DetailedView =>
                 hide_field: tab == 'pending_worklist',
             },
             {
-                field_name: 'Failure Reason',
-                field_html_id: 'failure_reason',
-                field_value: m.failureReason!,
-                hide_field: !m.failureReason || tab == 'pending_worklist',
-            },
-        ]
-    };
-}
-
-export const getTaskActionDetailSection = (m: Task): DetailedView => {
-    // Basic action section for task completion
-    return {
-        section_name: 'Task Action Detail',
-        section_type: 'key_value',
-        section_html_id: 'action_details',
-        section_form: new FormGroup({}),
-        content: [
-            {
                 field_name: 'Remarks',
                 field_html_id: 'remarks',
-                form_control_name: 'remarks',
-                field_value: '',
+                field_value: m.remarks!,
                 editable: true,
+                form_control_name: 'remarks',
                 form_input: {
                     tagName: 'textarea',
                     inputType: 'text',
@@ -96,6 +95,36 @@ export const getTaskActionDetailSection = (m: Task): DetailedView => {
                 form_input_validation: [Validators.required]
             }
         ]
+    };
+}
+
+export const getTaskCheckListSection = (m: Task, tab: workListTab): DetailedView => {
+    return {
+        section_name: 'To Do List',
+        section_type: 'editable_list',
+        section_html_id: 'todos',
+        show_form: false,
+        section_form: new FormGroup({
+            todos: new FormArray(m.checklist?.map(x => new FormGroup({
+                task: new FormControl(x)
+            })) || [])
+        }),
+        editableList: {
+            formArrayName: 'todos',
+            itemFields: [
+                {
+                    field_html_id: 'task',
+                    field_value: '',
+                    form_control_name: 'task',
+                    editable: false,
+                },
+            ],
+            allowAddRow: false,
+            allowDeleteRow: false,
+
+        }
 
     };
 }
+
+

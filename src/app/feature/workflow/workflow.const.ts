@@ -33,7 +33,8 @@ export const WorkflowConstant = {
         additionalFields: 'additionalFields',
         workflowStepStatuses: 'workflowStepStatuses',
         workflowTaskStatuses: 'workflowTaskStatuses',
-        workflowTaskTypes: 'workflowTaskTypes'
+        workflowTaskTypes: 'workflowTaskTypes',
+        visibleTaskStatuses: 'visibleTaskStatuses'
     },
     enum: {
 

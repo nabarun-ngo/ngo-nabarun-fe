@@ -7,7 +7,7 @@ import { FileUpload } from "../components/generic/file-upload/file-upload.compon
 import { BehaviorSubject } from "rxjs";
 import { AlertData } from "./alert.model";
 import { Doc } from "./document.model";
-import { EditableTableConfig } from "./editable-table.model";
+import { EditableTableConfig, EditableTableRowRule } from "./editable-table.model";
 
 
 /* ──────────────────────────────────────────────────────────────
@@ -47,7 +47,8 @@ export interface DetailedView<NumType = any> {
     | 'doc_list'
     | 'custom'
     | 'accordion_list'
-    | 'editable_table';
+    | 'editable_table'
+    | 'editable_list';
 
     /* ───────────── Visibility & Mode ───────────── */
 
@@ -136,6 +137,12 @@ export interface DetailedView<NumType = any> {
      */
     editableTable?: EditableTableConfig;
 
+    /**
+     * Optional editable list.
+     * Exists only when section_type === 'editable_list'.
+     */
+    editableList?: EditableListConfig;
+
 }
 
 /* ──────────────────────────────────────────────────────────────
@@ -172,4 +179,29 @@ export interface DetailedViewField {
 
     show_display_value?: boolean;
     ref_data_section?: string;
+}
+
+
+/* ──────────────────────────────────────────────────────────────
+ * Editable List
+ * ────────────────────────────────────────────────────────────── */
+
+export interface EditableListConfig {
+    /** 
+     * Template fields for each item in the list.
+     * Use form_control_name to bind to FormGroupName controls.
+     */
+    itemFields: DetailedViewField[];
+
+    /** Name of the FormArray in the parent FormGroup */
+    formArrayName: string;
+
+    allowAddRow?: boolean;
+    allowDeleteRow?: boolean;
+
+    addBtnLabel?: string;
+    emptyMessage?: string;
+
+    /** Generic row validation */
+    rowValidationRules?: EditableTableRowRule[];
 }
