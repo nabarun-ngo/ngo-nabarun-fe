@@ -20,8 +20,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DocumentListComponent } from './components/generic/document-list/document-list.component';
 import { AccordionListComponent } from './components/generic/accordion-list/accordion-list.component';
 import { DetailedViewComponent } from './components/generic/detailed-view/detailed-view.component';
-import { DetailedProfileComponent } from './components/detailed-profile/detailed-profile.component';
-import { DetailedDonationComponent } from './components/detailed-donation/detailed-donation.component';
 import { FileUploadComponent } from './components/generic/file-upload/file-upload.component';
 import { MAT_RADIO_DEFAULT_OPTIONS, MatRadioModule } from '@angular/material/radio';
 import { UniversalInputComponent } from './components/generic/universal-input/universal-input.component';
@@ -48,13 +46,15 @@ import { DisplayValueFilterPipe } from './pipes/display-value-filter.pipe';
 import { PageNavigationButtonsComponent } from './components/generic/page-navigation-buttons/page-navigation-buttons.component';
 import { PageLayoutComponent } from './layout/page-layout/page-layout.component';
 import { DocumentLinkComponent } from './components/document-link/document-link.component';
+import { AppPhoneNumberComponent } from './components/generic/phone-number/app-phone-number.component';
+import { StandardTabGroupComponent } from './components/standard-tab-group/standard-tab-group.component';
+import { EditableTableSectionComponent } from './components/generic/detailed-view/editable-table/editable-table-section.component';
+import { EditableListSectionComponent } from './components/generic/detailed-view/editable-list/editable-list-section.component';
 
 @NgModule({
   declarations: [
     ItemTileListComponent,
     SearchAndAdvancedSearchFormComponent,
-    DetailedDonationComponent,
-    DetailedProfileComponent,
     DocumentListComponent,
     AccordionListComponent,
     DetailedViewComponent,
@@ -73,6 +73,10 @@ import { DocumentLinkComponent } from './components/document-link/document-link.
     PageLayoutComponent,
     DocumentLinkComponent,
     FloatingActionButtonComponent,
+    AppPhoneNumberComponent,
+    StandardTabGroupComponent,
+    EditableTableSectionComponent,
+    EditableListSectionComponent
   ],
   imports: [
     CommonModule,
@@ -112,8 +116,6 @@ import { DocumentLinkComponent } from './components/document-link/document-link.
     ReactiveFormsModule,
     MatPaginatorModule,
     AccordionListComponent,
-    DetailedDonationComponent,
-    DetailedProfileComponent,
     FileUploadComponent,
     MatInputModule,
     ProfileCardComponent,
@@ -132,32 +134,35 @@ import { DocumentLinkComponent } from './components/document-link/document-link.
     PageNavigationButtonsComponent,
     PageLayoutComponent,
     MatCheckboxModule,
-  DocumentLinkComponent,
-  FloatingActionButtonComponent
+    DocumentLinkComponent,
+    FloatingActionButtonComponent,
+    AppPhoneNumberComponent,
+    StandardTabGroupComponent,
+    DetailedViewComponent
   ],
   providers: [{
     provide: MAT_RADIO_DEFAULT_OPTIONS,
     useValue: { color: 'primary' },
-  }, 
+  },
   {
     provide: MAT_CHECKBOX_DEFAULT_OPTIONS,
     useValue: { color: 'primary' },
   },
   {
-    provide:MAT_DIALOG_DATA,
-    useValue:{}
+    provide: MAT_DIALOG_DATA,
+    useValue: {}
   },
-  // {
-  //   provide:MAT_SELECT_SCROLL_STRATEGY,
-  //   useValue:{}
-  // },
-  // {
-  //   provide:MatDatepicker,
-  //   useValue:{}
-  // }
-  //MemberSearchPipe,
-],
-  
+    // {
+    //   provide:MAT_SELECT_SCROLL_STRATEGY,
+    //   useValue:{}
+    // },
+    // {
+    //   provide:MatDatepicker,
+    //   useValue:{}
+    // }
+    //MemberSearchPipe,
+  ],
+
 
 })
 export class SharedModule { }

@@ -1,0 +1,311 @@
+import { Component } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
+import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
+import { AccordionCell, AccordionRow } from 'src/app/shared/model/accordion-list.model';
+import { DetailedView } from 'src/app/shared/model/detailed-view.model';
+import { Donation, DonationSummary } from '../../model';
+import { BaseDonationTabComponent } from '../base-donation-tab.component';
+import { SearchAndAdvancedSearchFormComponent } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search-form.component';
+import { Validators } from '@angular/forms';
+import { KeyValue } from 'src/app/shared/model/key-value.model';
+import { getDonorSection } from '../../fields/donation.field';
+import { DonationRefData } from '../../finance.const';
+import { date, getNonNullValues, removeNullFields } from 'src/app/core/service/utilities.service';
+import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
+import { User } from 'src/app/feature/member/models/member.model';
+
+@Component({
+  selector: 'app-member-donation-tab',
+  templateUrl: './member-donation-tab.component.html',
+  styleUrls: ['./member-donation-tab.component.scss']
+})
+export class MemberDonationTabComponent extends BaseDonationTabComponent {
+  protected detailedViews: DetailedView[] = [];
+  protected summary!: DonationSummary;
+  protected userSearch: SearchAndAdvancedSearchModel = {
+    normalSearchPlaceHolder: '',
+    showOnlyAdvancedSearch: true,
+    advancedSearch: {
+      buttonText: { search: 'Select', close: 'Close' },
+      title: 'Select Members',
+      searchFormFields: [{
+        formControlName: 'userId',
+        inputModel: {
+          html_id: 'user_search',
+          inputType: 'text',
+          tagName: 'input',
+          autocomplete: true,
+          placeholder: 'Select a member',
+          selectList: []
+        },
+        validations: [Validators.required]
+      }]
+    }
+  };
+  protected profile: User | undefined;
+
+  override onInitHook(): void {
+    this.setHeaderRow([
+      {
+        value: 'Donation Type',
+        rounded: true
+      },
+      {
+        value: 'Donation Amount',
+        rounded: true
+      },
+      {
+        value: 'Donation Period',
+        rounded: true
+      },
+      {
+        value: 'Donation Status',
+        rounded: true
+      }
+    ]);
+    this.setSelectable(true);
+  }
+
+
+  protected override prepareHighLevelView(data: Donation, options?: { [key: string]: any; }): AccordionCell[] {
+    return [
+      {
+        type: 'text',
+        value: data?.type,
+        showDisplayValue: true,
+        refDataSection: DonationRefData.refDataKey.type
+      },
+      {
+        type: 'text',
+        value: data?.formattedAmount,
+      },
+      {
+        type: 'text',
+        value: data?.startDate && data?.endDate ? `${date(data?.startDate)} - ${date(data?.endDate)}` : '-'
+      },
+      {
+        type: 'text',
+        value: data?.status,
+        showDisplayValue: true,
+        refDataSection: DonationRefData.refDataKey.status
+      }
+    ];
+  }
+
+  override handlePageEvent($event: PageEvent): void {
+    this.pageEvent = $event;
+    this.donationService.getUserDonations(this.profile?.id!, {
+      pageIndex: $event.pageIndex,
+      pageSize: $event.pageSize
+    }).subscribe(data => {
+      this.setContent(data.content!, data.totalSize);
+    });
+  }
+
+  onSelectionChange(selectedRows: AccordionRow[]) {
+    console.log(selectedRows);
+  }
+
+  onSearch($event: SearchEvent): void {
+    if ($event.advancedSearch) {
+      this.donationService.getUserDonations(this.profile?.id!, {
+        filter: removeNullFields($event.value)
+      }).subscribe(data => {
+        this.setContent(data.content!, data.totalSize);
+      });
+    }
+    else if ($event.reset) {
+      this.donationService.getUserDonations(this.profile?.id!, {}).subscribe(data => {
+        this.setContent(data.content!, data.totalSize);
+      });
+    }
+  }
+
+  loadData(): void {
+    this.donationService.fetchMembers({ pageIndex: 0, pageSize: 100000 }).subscribe(users => {
+      this.userSearch.advancedSearch?.searchFormFields.filter(f => f.inputModel.html_id == 'user_search').map(m => {
+        m.inputModel.selectList = users.content?.map(m2 => {
+          return { key: m2.id, displayValue: m2.fullName } as KeyValue
+        })
+      });
+      let modal = this.modalService.openComponentDialog(SearchAndAdvancedSearchFormComponent,
+        this.userSearch,
+        {
+          height: 290,
+          width: 700,
+          disableClose: true
+        });
+      modal.componentInstance.onSearch.subscribe(data => {
+        if (data.reset) {
+          modal.close();
+        }
+        else {
+          this.profile = users.content?.find(f => f.id == data.value.userId);
+          if (this.profile) {
+            this.detailedViews = [
+              getDonorSection({
+                donorName: this.profile.fullName,
+                donorEmail: this.profile.email,
+                donorPhone: this.profile.primaryNumber?.fullNumber!
+              }, {})];
+            this.donationService.fetchUserDonations(this.profile.id, {}).subscribe(data => {
+              this.setContent(data.donations?.content!, data.donations?.totalSize);
+              this.summary = data.summary;
+              modal.close();
+            });
+          }
+        }
+      })
+    });
+  }
+
+  protected override handleConfirmCreate(): void {
+    const donation_form = this.getSectionForm('donation_detail', 0, true);
+    if (donation_form?.valid) {
+      const donation = {
+        ...donation_form?.value,
+        donorId: this.profile?.id!,
+      } as Donation;
+
+      this.donationService.createDonation(donation, false).subscribe((data) => {
+        this.hideForm(0, true);
+        this.addContentRow(data, true);
+      });
+    } else {
+      donation_form?.markAllAsTouched();
+    }
+  }
+
+  bulkUpdate() {
+
+  }
+
+  //   performBulkEdit(memId: string, donations: DonationList[]): void {
+  //   let dons = donations?.filter((f) => f.selected);
+  //   if (dons.length > 0) {
+  //     let uniqueTypes = new Set(dons.map((don) => don.donation?.type));
+  //     if (uniqueTypes.size > 1) {
+  //       this.modalService.openNotificationModal(
+  //         AppDialog.err_sel_don_nt_sm_typ,
+  //         'notification',
+  //         'error'
+  //       );
+  //       return;
+  //     }
+  //     let uniqueStatus = new Set(dons.map((don) => don.donation?.status));
+  //     if (uniqueStatus.size > 1) {
+  //       this.modalService.openNotificationModal(
+  //         AppDialog.err_sel_don_nt_sm_sts,
+  //         'notification',
+  //         'error'
+  //       );
+  //       return;
+  //     }
+  //     let donIds = dons.map((m) => m.donation?.id);
+  //     let modal = this.modalService.openBaseModal(
+  //       DetailedDonationComponent,
+  //       {
+  //         donation: {
+  //           id: donIds.join(', '),
+  //           amount: dons.reduce(
+  //             (sum, current) => sum + current.donation?.amount!,
+  //             0
+  //           ),
+  //           status: dons[0].donation?.status,
+  //           type: dons[0].donation?.type,
+  //         },
+  //         setMode: 'edit',
+  //         donationTab: 'member_donation',
+  //       },
+  //       {
+  //         headerText: 'Bulk Edit ',
+  //         buttons: [
+  //           { button_id: 'CANCEL', button_name: 'Cancel' },
+  //           { button_id: 'SUBMIT', button_name: 'Submit', is_primary: true },
+  //         ],
+  //       }
+  //     );
+  //     let docList = new BehaviorSubject<FileUpload[]>([]);
+  //     modal.componentInstance.onConpomentInit.subscribe((s) => {
+  //       let compInstnc = modal.componentInstance.bodyComponentInstance;
+  //       compInstnc?.donationForm?.controls!['amount']?.disable();
+  //       compInstnc.docChange.subscribe(docList);
+  //     });
+
+  //     modal.componentInstance.onbuttonClick.subscribe(async (d) => {
+  //       if (d == 'SUBMIT') {
+  //         let compInstnc = modal.componentInstance.bodyComponentInstance;
+  //         compInstnc?.donationForm?.controls!['amount']?.disable();
+  //         compInstnc.donationForm.markAllAsTouched();
+  //         if (compInstnc.donationForm.valid) {
+  //           let formValue = compInstnc.donationForm.value;
+  //           let isFileNeeded =
+  //             formValue.status == DonationStatus.Paid &&
+  //             formValue.paymentMethod &&
+  //             formValue.paymentMethod != PaymentMethod.Cash;
+  //           if (isFileNeeded && docList.value.length == 0) {
+  //             this.modalService.openNotificationModal(
+  //               AppDialog.err_min_1_doc,
+  //               'notification',
+  //               'error'
+  //             );
+  //           } else {
+  //             let docMap: DocumentMapping[] = [];
+  //             for (let donId of donIds) {
+  //               let donation: DonationDetail = {
+  //                 status: formValue.status,
+  //                 cancelletionReason: formValue.cancelletionReason,
+  //                 laterPaymentReason: formValue.laterPaymentReason,
+  //                 paidOn: formValue.paidOn,
+  //                 paidToAccount: formValue.paidToAccount
+  //                   ? { id: formValue.paidToAccount }
+  //                   : undefined,
+  //                 paidUsingUPI: formValue.paidUsingUPI,
+  //                 paymentFailureDetail: formValue.paymentFailureDetail,
+  //                 paymentMethod: formValue.paymentMethod,
+  //                 remarks: formValue.remarks,
+  //               };
+  //               let updatedDonation = await firstValueFrom(
+  //                 this.donationService.updateDonation(
+  //                   donId!,
+  //                   removeNullFields(donation)
+  //                 )
+  //               );
+  //               let member = this.members.find((f) => f.member?.id == memId);
+  //               member
+  //                 ?.donations!.filter((f) => f.donation?.id == donId)
+  //                 .map((item) => {
+  //                   item.action = 'view';
+  //                   item.update = undefined;
+  //                   item.donation = updatedDonation;
+  //                   return item;
+  //                 });
+  //               docMap.push({
+  //                 docIndexId: donId,
+  //                 docIndexType: 'DONATION',
+  //               });
+  //               docMap.push({
+  //                 docIndexId: updatedDonation?.transactionRef,
+  //                 docIndexType: 'TRANSACTION',
+  //               });
+  //             }
+  //             if (docList.value.length > 0) {
+  //               this.donationService
+  //                 .uploadDocuments(
+  //                   docList.value.map((m) => {
+  //                     m.detail.documentMapping = docMap;
+  //                     return m.detail;
+  //                   })
+  //                 )
+  //                 .subscribe((d) => {});
+  //             }
+  //             modal.close();
+  //           }
+  //         }
+  //       } else {
+  //         modal.close();
+  //       }
+  //     });
+  //   }
+  // }
+}

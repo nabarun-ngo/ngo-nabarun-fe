@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { HistoryDetail } from 'src/app/core/api/models';
+//import { HistoryDetail } from 'src/app/core/api-client/models';
 
 @Component({
   selector: 'app-history',
@@ -8,5 +8,5 @@ import { HistoryDetail } from 'src/app/core/api/models';
 })
 export class HistoryComponent {
 
-  @Input() histories!:HistoryDetail[]
+  // @Input() histories!: HistoryDetail[]
 }

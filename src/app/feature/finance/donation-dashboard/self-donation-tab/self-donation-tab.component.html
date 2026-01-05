@@ -1,0 +1,130 @@
+<div class="container-fluid p-0">
+    <div class="row">
+        <div class="col">
+            <mat-card class="mb-4" *ngIf="summary?.hasOutstanding">
+                <div class="text-gray-700 m-4">
+                    <div class="grid md:grid-cols-2 text-sm">
+                        <div class="grid grid-cols-2">
+                            <div class="py-2 font-semibold">Outstanding amount</div>
+                            <div class="py-2"> ₹ {{summary?.outstandingAmount}}</div>
+                        </div>
+                        <div class="grid grid-cols-2">
+                            <div class="py-2 font-semibold">Outstanding month(s)</div>
+                            <div class="py-2">
+                                <span>
+                                    {{ summary?.outstandingMonths?.length ==0 ? '-' :
+                                    summary?.outstandingMonths?.join(', ') | replaceNull }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 mt-4" *ngIf="(payableAccounts?.length || 0) > 0">
+                        <div class="py-2 text-center justify-center font-bold text-purple-700">Please pay your
+                            outstanding donation amount to the below Bank account or UPI</div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 md:divide-x-4 mt-4"
+                            *ngFor="let account of payableAccounts">
+                            <div class="col-span-1 mb-6 md:mb-0">
+                                <div
+                                    class="flex items-center justify-center space-x-2 font-semibold text-gray-900 leading-8">
+                                    <span clas="text-green-500">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                                        </svg>
+                                    </span>
+                                    <span class="tracking-wide">Banking Details</span>
+                                </div>
+                                <div class="text-gray-700 mt-2">
+                                    <div class="grid md:grid-cols-2 text-sm mx-4">
+                                        <div class="grid grid-cols-2">
+                                            <div class="px-2 py-2 font-semibold">Bank name</div>
+                                            <div class="px-2 py-2">{{account.bankDetail?.bankName | replaceNull}}</div>
+                                        </div>
+                                        <div class="grid grid-cols-2">
+                                            <div class="px-2 py-2 font-semibold">Branch name</div>
+                                            <div class="px-2 py-2">{{account.bankDetail?.branch | replaceNull}}
+                                            </div>
+                                        </div>
+                                        <div class="grid grid-cols-2">
+                                            <div class="px-2 py-2 font-semibold">IFSC number</div>
+                                            <div class="px-2 py-2">{{account.bankDetail?.ifscNumber | replaceNull}}
+                                            </div>
+                                        </div>
+                                        <div class="grid grid-cols-2">
+                                            <div class="px-2 py-2 font-semibold">Account holder name</div>
+                                            <div class="px-2 py-2">{{account.bankDetail?.accountHolderName |
+                                                replaceNull}}</div>
+                                        </div>
+                                        <div class="grid grid-cols-2">
+                                            <div class="px-2 py-2 font-semibold">Account number</div>
+                                            <div class="px-2 py-2">{{account.bankDetail?.accountNumber |
+                                                replaceNull}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-span-1">
+                                <div
+                                    class="flex items-center justify-center space-x-2 font-semibold text-gray-900 leading-8">
+                                    <span clas="text-green-500">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                                        </svg>
+                                    </span>
+                                    <span class="tracking-wide">UPI Details</span>
+                                </div>
+                                <div class="text-gray-700 mt-2">
+                                    <div class="grid md:grid-cols-2 text-sm mx-4">
+                                        <div class="grid grid-cols-1">
+                                            <div class="grid grid-cols-2">
+                                                <div class="px-2 py-2 font-semibold">UPI mobile number</div>
+                                                <div class="px-2 py-2">{{account.upiDetail?.mobileNumber | replaceNull}}
+                                                </div>
+                                            </div>
+                                            <div class="grid grid-cols-2">
+                                                <div class="px-2 py-2 font-semibold">Payee name</div>
+                                                <div class="px-2 py-2">{{account.upiDetail?.payeeName | replaceNull}}
+                                                </div>
+                                            </div>
+
+                                            <div class="grid grid-cols-2">
+                                                <div class="px-2 py-2 font-semibold">UPI id</div>
+                                                <div class="px-2 py-2">{{account.upiDetail?.upiId | replaceNull}}</div>
+                                            </div>
+                                        </div>
+                                        <!-- <div class="grid grid-cols-1">
+                                            <div class="grid grid-cols-2">
+                                                <div class="px-2 py-2 font-semibold">QR code</div>
+                                                <div class="qrcodeImage px-2 py-2">
+                                                    <qrcode [qrdata]="account.upiDetail?.qrData!" [cssClass]="'center'"
+                                                        [colorDark]="'#000000'" [colorLight]="'#ffffffff'"
+                                                        [elementType]="'canvas'" [errorCorrectionLevel]="'M'"
+                                                        [imageSrc]="'./assets/logo.png'" [imageHeight]="40"
+                                                        [imageWidth]="40" [margin]="4" [scale]="1" [width]="110">
+                                                    </qrcode>
+                                                </div>
+                                            </div>
+                                        </div> -->
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-card>
+
+            <app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)"
+                (onAccordionOpen)="onAccordionOpen($event)">
+            </app-accordion-list>
+            <mat-paginator class="mt-4" style="background-color: transparent;" (page)="handlePageEvent($event)"
+                [length]="itemLength$ | async" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
+                [pageIndex]="pageNumber" aria-label="Select page">
+            </mat-paginator>
+        </div>
+    </div>
+</div>

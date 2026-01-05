@@ -2,9 +2,6 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-import { Browser } from "@capacitor/browser";
-import { Capacitor } from "@capacitor/core";
-import config from "capacitor.config";
 import { getScopes } from "src/app/core/constant/auth-scope.const";
 import { version } from "./version";
 import { AuthConfig } from "@auth0/auth0-angular";
@@ -20,7 +17,7 @@ const firebaseConfig = {
   measurementId: "G-DY3169JJ99"
 };
 
-const gapiConfig ={
+const gapiConfig = {
   apiKey: 'AIzaSyBYP4sshue06ft65C2qyYoXV4PQ2cb_ThM',
   clientId:
     '496110742871-673vscum8up3kb0ivhmnooi9m9udpoqp.apps.googleusercontent.com',
@@ -28,29 +25,30 @@ const gapiConfig ={
     'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest',
   ],
   scope: 'https://www.googleapis.com/auth/calendar.readonly',
-  plugin_name:'nabarun_app_p'
-  
+  plugin_name: 'nabarun_app_p'
+
 };
 
 
 
 const authDomain = 'sso-nabarun.us.auth0.com';
-const authClientId = Capacitor.isNativePlatform() ? 'o1WzBSYjyhinq1U9CHBmBHZ5GWNDV70D':'8AzSWAAYeZdRC7taAICQkkxqpbtc3Bqm';
-const apiBaseUrl='https://ngonabarun.appspot.com';
+const authClientId = '8AzSWAAYeZdRC7taAICQkkxqpbtc3Bqm';
+const apiBaseUrl = 'https://ngonabarun.appspot.com';
+const apiBaseUrl2 = 'https://api-dot-ngonabarun-stage.appspot.com';
 
-const auth_config:AuthConfig={
+const auth_config: AuthConfig = {
   domain: authDomain,
   clientId: authClientId,
   authorizationParams: {
-    redirect_uri: Capacitor.isNativePlatform() ? `${config.appId}://${authDomain}/capacitor/${config.appId}/callback` : window.location.origin ,  
-    scope: 'openid profile email offline_access api auth_time family_name given_name email_verified exp phone_number picture sub iss iat aud ' + getScopes(), 
-    audience: 'https://nabarun.resourceserver.api' ,
+    redirect_uri: window.location.origin,
+    scope: 'openid profile email offline_access api auth_time family_name given_name email_verified exp phone_number picture sub iss iat aud ' + getScopes(),
+    audience: 'https://nabarun.resourceserver.api',
   },
-  httpInterceptor:{
-    allowedList:[
+  httpInterceptor: {
+    allowedList: [
       {
         uriMatcher(uri) {
-          return uri.includes(apiBaseUrl)
+          return uri.startsWith(apiBaseUrl) || uri.startsWith(apiBaseUrl2)
         },
       }
     ]
@@ -60,14 +58,14 @@ const auth_config:AuthConfig={
 
 export const environment = {
   production: true,
-  name:version,
+  name: version,
   max_idle_time_in_sec: 600,
   api_base_url: apiBaseUrl,
+  api_base_url2: apiBaseUrl2,
   auth_config: auth_config,
   firebase_config: firebaseConfig,
-  firebase_vapidKey:'BG5qo111TmZDK1avMtzLlbzw3w5lsN6-iAyrg-giZ7RSAmm9xh9CvapLAdTmz4JXLboiQ8_c9toYK7PDxHDWzSs',
-  inactivityTimeOut: 15*60,
-  gapi_config:gapiConfig
+  firebase_vapidKey: 'BG5qo111TmZDK1avMtzLlbzw3w5lsN6-iAyrg-giZ7RSAmm9xh9CvapLAdTmz4JXLboiQ8_c9toYK7PDxHDWzSs',
+  inactivityTimeOut: 15 * 60,
 
 };
 

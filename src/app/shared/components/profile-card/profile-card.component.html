@@ -1,23 +1,26 @@
-<div class="py-6 px-4 mx-4 sm:mx-0 sm:py-4 bg-white rounded-xl shadow-md space-y-2 sm:flex sm:items-center sm:space-y-0 sm:space-x-6">
+<div
+    class="py-6 px-4 mx-4 sm:mx-0 sm:py-4 bg-white rounded-xl shadow-md space-y-2 sm:flex sm:items-center sm:space-y-0 sm:space-x-6">
     <!-- <span class="absolute top-0 text-xl inline-flex items-center justify-center px-2 py-1  font-bold leading-none text-white transform mx-4 -translate-y-1/2 bg-red-600 rounded-full uppercase">ok</span> -->
     <img class="block mx-auto h-24 rounded-full sm:mx-0 sm:flex-shrink-0" src="{{profile.picture}}" alt="Face">
     <div class="text-center space-y-2 sm:text-left">
         <div class="space-y-0.5">
             <div class="text-lg text-black font-semibold">
                 {{profile.fullName ? profile.fullName : (profile.firstName + ' ' +profile.lastName)}}
-            
+
             </div>
             <p *ngIf="options?.showEmail" class="text-lg text-purple-600 font-normal">{{profile.email}}</p>
 
-            <p class="text-gray-500 font-medium break-words" *ngIf="!options?.hideRole && profile.roleString">
-                <span>{{ profile.roleString}}</span>
+            <p class="text-gray-500 font-medium break-words" *ngIf="!options?.hideRole && profile.roles.length > 0">
+                <span>{{ roleString(profile.roles)}}</span>
             </p>
 
         </div>
-        <a *ngIf="!options?.hideViewBtn" (click)="view()" class="px-4 py-1 text-sm text-purple-600 font-semibold rounded-full border border-purple-200 hover:text-white hover:bg-purple-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2">
+        <a *ngIf="!options?.hideViewBtn" (click)="view()"
+            class="px-4 py-1 text-sm text-purple-600 font-semibold rounded-full border border-purple-200 hover:text-white hover:bg-purple-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2">
             View
         </a>
-        <a *ngFor="let btn of options?.addnlBtns" (click)="onAddnlBtnClick.emit({buttonId:btn.key!,profile:profile})" class="px-4 py-1 text-sm text-purple-600 font-semibold rounded-full border border-purple-200 hover:text-white hover:bg-purple-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2">
+        <a *ngFor="let btn of options?.addnlBtns" (click)="onAddnlBtnClick.emit({buttonId:btn.key!,profile:profile})"
+            class="px-4 py-1 text-sm text-purple-600 font-semibold rounded-full border border-purple-200 hover:text-white hover:bg-purple-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2">
             {{btn.displayValue}}
         </a>
         <!-- <button (click)="deleteProfile(profile.id)" *ngIf="canDeleteProfile?false:false" class="px-4 py-1 text-sm text-red-600 font-semibold rounded-full border border-purple-200 hover:text-white hover:bg-red-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2">

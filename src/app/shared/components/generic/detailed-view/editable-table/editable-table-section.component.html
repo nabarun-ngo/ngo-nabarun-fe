@@ -1,0 +1,68 @@
+<div [formGroup]="view.section_form" class="editable-table-container">
+
+    <!-- Table Header (Desktop only) -->
+    <div class="table-header"
+        [style.grid-template-columns]="'repeat(' + view.editableTable!.columns.length + ', 1fr) ' + (view.show_form ? '60px' : '')">
+        <div *ngFor="let col of view.editableTable!.columns" class="header-cell">
+            {{ col.header }}
+        </div>
+        <div *ngIf="view.show_form" class="header-cell"></div>
+    </div>
+
+    <!-- Table Body -->
+    <div [formArrayName]="view.editableTable!.formArrayName">
+        <div *ngFor="let row of tableArray.controls; let i = index" [formGroupName]="i" class="table-row"
+            [style.grid-template-columns]="'repeat(' + view.editableTable!.columns.length + ', 1fr) ' + (view.show_form ? '60px' : '')"
+            [class.bg-red-50]="row.invalid && view.show_form">
+
+            <div *ngFor="let col of view.editableTable!.columns" class="cell-content">
+                <!-- Mobile Label -->
+                <div class="cell-label">{{ col.header }}</div>
+
+                <!-- Value Area -->
+                <div class="w-full">
+                    <!-- Read mode -->
+                    <span *ngIf="!(col.editable && view.show_form)" class="read-mode-value">
+                        {{ (col.show_display_value ? displayValue(col.ref_data_section,row.value[col.columnDef]) :
+                        row.value[col.columnDef]) || '-' }}
+                    </span>
+
+                    <!-- Edit mode -->
+                    <div *ngIf="col.editable && view.show_form && col.inputModel" class="dense-3 w-full">
+                        <app-universal-input [formControlName]="col.columnDef" [inputModel]="col.inputModel">
+                        </app-universal-input>
+                    </div>
+                </div>
+
+                <!-- Field-level errors -->
+                <!-- <div class="error-msg" *ngIf="row.get(col.columnDef)?.invalid
+                 && (row.get(col.columnDef)?.touched || row.get(col.columnDef)?.dirty)">
+                    <div *ngFor="let err of row.get(col.columnDef)?.errors | keyvalue">
+                        {{ err.key }}
+                    </div>
+                </div> -->
+            </div>
+
+            <!-- Actions -->
+            <div *ngIf="view.show_form" class="action-cell">
+                <button mat-icon-button color="warn" *ngIf="view.editableTable?.allowDeleteRow" (click)="removeRow(i)"
+                    matTooltip="Remove Item">
+                    <mat-icon>delete_outline</mat-icon>
+                </button>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="tableArray.length === 0" class="empty-state">
+            <mat-icon class="text-4xl opacity-20">inventory_2</mat-icon>
+            <p>No items added yet</p>
+        </div>
+    </div>
+
+    <!-- Footer Actions -->
+    <div class="add-btn-container" *ngIf="view.show_form && view.editableTable?.allowAddRow">
+        <button mat-mini-fab color="primary" (click)="addRow()" matTooltip="Add Item">
+            <mat-icon>add</mat-icon>
+        </button>
+    </div>
+</div>

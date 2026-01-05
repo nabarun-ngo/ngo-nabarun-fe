@@ -1,22 +1,22 @@
 import { DatePipe } from "@angular/common";
 
-export const getGreetings = (name:string) :string =>{
-    var hour = new Date().getHours();
-    if(hour>=5 && hour<12){
-     return 'good morning, '+name;
-    } else if(hour>=12 && hour<18){
-      return 'good afternoon, '+name;
-    }else{
-      return 'good evening, '+name;
-    }
+export const getGreetings = (name: string): string => {
+  var hour = new Date().getHours();
+  if (hour >= 5 && hour < 12) {
+    return 'good morning, ' + name;
+  } else if (hour >= 12 && hour < 18) {
+    return 'good afternoon, ' + name;
+  } else {
+    return 'good evening, ' + name;
+  }
 }
 
-export const isEmpty = (str: string): boolean =>{
+export const isEmpty = (str: string): boolean => {
   return (!str || str.length === 0);
 }
 
-export const date = (dateString: string | undefined,format:string='dd/MM/yyyy'): string =>{
-  return new DatePipe('en').transform(dateString,format)!;
+export const date = (dateString: string | undefined, format: string = 'dd/MM/yyyy'): string => {
+  return new DatePipe('en').transform(dateString, format)!;
 }
 
 // export const gerRouteURL = (key:string) =>{
@@ -27,6 +27,7 @@ export const date = (dateString: string | undefined,format:string='dd/MM/yyyy'):
 // }
 
 export function compareObjects(latest: any, old: any): any {
+  //console.log('compare objects --> latest to old', latest, old);
   const keys1: string[] = [];
   const values1: any[] = [];
   Object.keys(latest).forEach((element) => {
@@ -109,10 +110,10 @@ export function isDuplicateArray(a1: any, a2: any) {
     a1.sort();
     a2.sort();
   }
-  console.log(a1, a2)
+  ////console.log(a1, a2)
 
-    return a1.length === a2.length && a1.every((o: any, idx: string | number) => isEmptyObject(compareObjects(o, a2[idx])))
- }
+  return a1.length === a2.length && a1.every((o: any, idx: string | number) => isEmptyObject(compareObjects(o, a2[idx])))
+}
 
 export function saveAs(blob: Blob, fileName: string) {
   const url = window.URL.createObjectURL(blob);
@@ -141,7 +142,7 @@ export function objectsEqual(o1: any, o2: any): boolean {
   return isEmptyObject(compareObjects(o1, o2))
 }
 
-export function arraysEqual(a:any[], b:any[]) {
+export function arraysEqual(a: any[], b: any[]) {
   if (a === b) return true;
   if (a == null || b == null) return false;
   if (a.length !== b.length) return false;
@@ -157,14 +158,14 @@ export function arraysEqual(a:any[], b:any[]) {
   return true;
 }
 
-export function getNonNullValues(obj:any) {
-  return Object.assign({},Object.fromEntries(Object.entries(obj).filter(([key, value]) => value != null || value != undefined)))
+export function getNonNullValues(obj: any) {
+  return Object.assign({}, Object.fromEntries(Object.entries(obj).filter(([key, value]) => value !== null && value !== undefined)))
 }
 
-export function sanitizeBase64(base64:string){
-  let base64Splits=base64.split(",");
-  if(base64Splits && base64Splits.length > 0){
-    return base64Splits[base64Splits.length-1];
+export function sanitizeBase64(base64: string) {
+  let base64Splits = base64.split(",");
+  if (base64Splits && base64Splits.length > 0) {
+    return base64Splits[base64Splits.length - 1];
   }
   return base64;
 }
@@ -173,10 +174,10 @@ export function removeNullFields<T extends Record<string, any>>(obj: T): T {
   if (typeof obj !== 'object' || obj === null) {
     throw new Error('Input must be a non-null object');
   }
-  
+
   return Object.fromEntries(
     Object.entries(obj).filter(([_, value]) => {
-      if(value !== null && Array.isArray(value)){
+      if (value !== null && Array.isArray(value)) {
         return value.length > 0;
       }
       return value !== null && value !== undefined && value !== '';

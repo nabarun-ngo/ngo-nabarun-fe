@@ -11,7 +11,7 @@ import { BaseModalComponent, ModalButton, ModalData } from '../component/base-mo
 @Injectable({
   providedIn: 'any'
 })
-export class ModalService{
+export class ModalService {
   modalClosed = new EventEmitter();
 
   constructor(private dialog: MatDialog,
@@ -81,16 +81,16 @@ export class ModalService{
     return this.dialog.open<ModalComponent>(ModalComponent, config);
   }
 
-  openSnackBar(data:{message:string;actionName?:string}) {
-    return this.snack.openFromComponent(SnackComponent,{verticalPosition:'top'})
+  openSnackBar(data: { message: string; actionName?: string }) {
+    return this.snack.openFromComponent(SnackComponent, { verticalPosition: 'top' })
   }
 
 
-  openComponentDialog<T,D>(
-    component:ComponentType<T>, 
-    data:D,
-    dimention?: { width?: number, height?: number,fullScreen?: boolean }
-  ){
+  openComponentDialog<T, D>(
+    component: ComponentType<T>,
+    data: D,
+    dimention?: { width?: number, height?: number, fullScreen?: boolean, disableClose?: boolean }
+  ) {
     const config = new MatDialogConfig();
 
     if (dimention?.width != null || dimention?.width != undefined) {
@@ -107,41 +107,42 @@ export class ModalService{
       config.maxWidth = '100vw';
       config.maxHeight = '100vh';
     }
-    config.data=data;
-    return this.dialog.open(component,config);
+    config.data = data;
+    config.disableClose = dimention?.disableClose;
+    return this.dialog.open(component, config);
   }
 
-  openComponentDialog2<T extends object>(
-    component: ComponentType<T>,
-    inputs: Partial<T>,
-    dimention?: { width?: number; height?: number; fullScreen?: boolean }
-  ) {
-    const config = new MatDialogConfig();
-  
-    if (dimention?.width != null) {
-      config.width = dimention.width + 'px';
-    }
-    if (dimention?.height != null) {
-      config.height = dimention.height + 'px';
-    }
-  
-    if (dimention?.fullScreen) {
-      config.panelClass = 'fullscreen-dialog';
-      config.width = '100%';
-      config.height = '100%';
-      config.maxWidth = '100vw';
-      config.maxHeight = '100vh';
-    }
-  
-    // Open the dialog
-    const dialogRef = this.dialog.open(component, config);
-  
-    // Set the inputs dynamically
-    const instance = dialogRef.componentInstance;
-    Object.assign(instance, inputs);
-  
-    return dialogRef;
-  }
+  // openComponentDialog2<T extends object>(
+  //   component: ComponentType<T>,
+  //   inputs: Partial<T>,
+  //   dimention?: { width?: number; height?: number; fullScreen?: boolean }
+  // ) {
+  //   const config = new MatDialogConfig();
+
+  //   if (dimention?.width != null) {
+  //     config.width = dimention.width + 'px';
+  //   }
+  //   if (dimention?.height != null) {
+  //     config.height = dimention.height + 'px';
+  //   }
+
+  //   if (dimention?.fullScreen) {
+  //     config.panelClass = 'fullscreen-dialog';
+  //     config.width = '100%';
+  //     config.height = '100%';
+  //     config.maxWidth = '100vw';
+  //     config.maxHeight = '100vh';
+  //   }
+
+  //   // Open the dialog
+  //   const dialogRef = this.dialog.open(component, config);
+
+  //   // Set the inputs dynamically
+  //   const instance = dialogRef.componentInstance;
+  //   Object.assign(instance, inputs);
+
+  //   return dialogRef;
+  // }
 
   openBaseModal<T extends object>(
     bodyComponent: ComponentType<T>,
@@ -153,7 +154,7 @@ export class ModalService{
     }
   ) {
     const config = new MatDialogConfig<ModalData<T>>();
-  
+
     if (options.dimention?.width) {
       config.width = options.dimention.width + 'px';
     }
@@ -167,14 +168,14 @@ export class ModalService{
       config.maxWidth = '100vw';
       config.maxHeight = '100vh';
     }
-  
+
     config.data = {
       headerText: options.headerText,
       bodyComponent: bodyComponent,
       bodyInputs: bodyInputs,
       buttons: options.buttons
     };
-  
+
     return this.dialog.open(BaseModalComponent<T>, config);
   }
 

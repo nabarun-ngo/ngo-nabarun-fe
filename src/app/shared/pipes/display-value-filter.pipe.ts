@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { KeyValue } from 'src/app/core/api/models';
+import { KeyValue } from '../model/key-value.model';
 
 @Pipe({
   name: 'displayValueFilter'
@@ -7,10 +7,10 @@ import { KeyValue } from 'src/app/core/api/models';
 export class DisplayValueFilterPipe implements PipeTransform {
 
   transform(list: KeyValue[], searchValue: string): KeyValue[] {
-    if(!searchValue){
+    if (!searchValue) {
       return list;
     }
-    return list.filter(option => option.displayValue!.toLowerCase().includes(searchValue.toLowerCase()));
+    return list.filter(option => option?.displayValue?.toLowerCase().includes(searchValue?.toLowerCase()));
   }
 
 }

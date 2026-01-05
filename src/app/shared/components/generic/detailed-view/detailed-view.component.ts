@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-import { KeyValue } from 'src/app/core/api/models';
+import { Component, Input } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
+import { KeyValue } from 'src/app/shared/model/key-value.model';
 
 @Component({
   selector: 'app-detailed-view',
@@ -17,14 +17,17 @@ export class DetailedViewComponent {
 
 
   @Input({ required: true, alias: 'detailedViews' }) set detailedViews(view: DetailedView[]) {
-   // console.log(view)
     this.detailed_views = view;
     this.detailed_views.map(m => {
       m.content?.filter(f1 => f1.editable).map(m1 => {
-        let value = m1.field_value && m1.field_value_splitter? m1.field_value.split(m1.field_value_splitter): m1.field_value;
-        if(m1.form_input?.inputType == 'date'){
+        console.log(m1.field_name, m1.form_input_validation)
+        let value = m1.field_value && m1.field_value_splitter ? (m1.field_value as string).split(m1.field_value_splitter) : m1.field_value;
+        if (m1.form_input?.inputType == 'date') {
           m.section_form?.setControl(m1.form_control_name!, new FormControl(new Date(value as string), m1.form_input_validation));
-        }else{
+        }
+        else if (m1.form_input?.inputType == 'number') {
+          m.section_form?.setControl(m1.form_control_name!, new FormControl(value, m1.form_input_validation));
+        } else {
           m.section_form?.setControl(m1.form_control_name!, new FormControl(value, m1.form_input_validation));
         }
       })

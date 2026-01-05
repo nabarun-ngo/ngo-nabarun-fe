@@ -18,6 +18,14 @@ import { SearchEvent } from 'src/app/shared/components/search-and-advanced-searc
 })
 export class AdminServiceTabComponent extends Accordion<AdminServiceInfo> implements TabComponentInterface<AdminServiceInfo[]>, OnInit {
 
+  protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
+    return {
+      pageNumber: this.defaultValue.pageNumber,
+      pageSize: this.defaultValue.pageSize,
+      pageSizeOptions: this.defaultValue.pageSizeOptions
+    }
+  }
+
   defaultValue = AdminDefaultValue;
   constant = AdminConstant;
 
@@ -27,7 +35,7 @@ export class AdminServiceTabComponent extends Accordion<AdminServiceInfo> implem
     super();
   }
 
-  onSearch(event: SearchEvent): void {}
+  onSearch(event: SearchEvent): void { }
   loadData(): void {
     var serviceList = [
       {
@@ -90,8 +98,7 @@ export class AdminServiceTabComponent extends Accordion<AdminServiceInfo> implem
     this.setContent(serviceList, serviceList.length);
   }
 
-  override ngOnInit(): void {
-    this.init(this.defaultValue.pageNumber, this.defaultValue.pageSize, this.defaultValue.pageSizeOptions)
+  override onInitHook(): void {
     this.setHeaderRow([
       {
         type: 'text',
@@ -107,7 +114,7 @@ export class AdminServiceTabComponent extends Accordion<AdminServiceInfo> implem
   }
 
   protected override prepareHighLevelView(data: AdminServiceInfo, options?: { [key: string]: any; }): AccordionCell[] {
-    console.log(data)
+    ////console.log(data)
     let service = data as AdminServiceInfo
     return [
       {
@@ -164,38 +171,38 @@ export class AdminServiceTabComponent extends Accordion<AdminServiceInfo> implem
     switch ($event.buttonId) {
       case 'CLEAR_CACHE':
         let cacheName = formdata?.value.cacheNames as string;
-        this.adminService.clearCache(cacheName ? cacheName.split(',') : []).subscribe(data => {
-          this.addSectionInAccordion({
-            section_name: 'Service Output',
-            section_type: 'key_value',
-            section_html_id: 'service_output',
-            section_form: new FormGroup({}),
-            hide_section: false,
-            content: [{
-              field_name: 'Response',
-              field_value: new JsonPipe().transform(data)
-            }]
-          }, $event.rowIndex)
-        })
+        // this.adminService.clearCache(cacheName ? cacheName.split(',') : []).subscribe(data => {
+        //   this.addSectionInAccordion({
+        //     section_name: 'Service Output',
+        //     section_type: 'key_value',
+        //     section_html_id: 'service_output',
+        //     section_form: new FormGroup({}),
+        //     hide_section: false,
+        //     content: [{
+        //       field_name: 'Response',
+        //       field_value: new JsonPipe().transform(data)
+        //     }]
+        //   }, $event.rowIndex)
+        // })
         break;
       case 'SYNC_USER':
-        console.log(formdata)
+        ////console.log(formdata)
         let sync_role = formdata?.value.syncRole as string;
         let userId = formdata?.value.userId as string;
         let userEmail = formdata?.value.userEmail as string;
-        this.adminService.syncUser(sync_role, { userId: userId, userEmail: userEmail }).subscribe(data => {
-          this.addSectionInAccordion({
-            section_name: 'Service Output',
-            section_type: 'key_value',
-            section_html_id: 'service_output',
-            section_form: new FormGroup({}),
-            hide_section: false,
-            content: [{
-              field_name: 'Response',
-              field_value: new JsonPipe().transform(data)
-            }]
-          }, $event.rowIndex)
-        })
+        // this.adminService.syncUser(sync_role, { userId: userId, userEmail: userEmail }).subscribe(data => {
+        //   this.addSectionInAccordion({
+        //     section_name: 'Service Output',
+        //     section_type: 'key_value',
+        //     section_html_id: 'service_output',
+        //     section_form: new FormGroup({}),
+        //     hide_section: false,
+        //     content: [{
+        //       field_name: 'Response',
+        //       field_value: new JsonPipe().transform(data)
+        //     }]
+        //   }, $event.rowIndex)
+        // })
         break;
     }
   }

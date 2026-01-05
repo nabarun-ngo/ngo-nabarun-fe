@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { KeyValue, UserDetail } from 'src/app/core/api/models';
+import { RoleDto, UserDto } from 'src/app/core/api-client/models';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
+import { KeyValue } from '../../model/key-value.model';
 
 @Component({
   selector: 'app-profile-card',
@@ -11,25 +12,30 @@ import { AppRoute } from 'src/app/core/constant/app-routing.const';
 export class ProfileCardComponent {
 
   constructor(private router: Router) { }
-  route_data =AppRoute; 
+  route_data = AppRoute;
 
-  @Input({required:true})
-  profile!:UserDetail
+  @Input({ required: true })
+  profile!: UserDto
 
   @Input()
-  options!:{
-    showEmail:boolean,
-    hideRole:boolean,
-    hideViewBtn:boolean,
-    addnlBtns:KeyValue[]
+  options?: {
+    showEmail: boolean,
+    hideRole: boolean,
+    hideViewBtn: boolean,
+    addnlBtns: KeyValue[]
   }
 
   @Output()
-  onAddnlBtnClick:EventEmitter<{buttonId:string,profile?:UserDetail}> = new EventEmitter();
+  onAddnlBtnClick: EventEmitter<{ buttonId: string, profile?: UserDto }> = new EventEmitter();
 
 
   view() {
-    this.router.navigate([this.route_data.secured_member_profile_page.url,btoa(this.profile.id!)]);
-}
+    this.router.navigate([this.route_data.secured_member_profile_page.url, btoa(this.profile.id!)]);
+  }
+
+  roleString(roles: RoleDto[]) {
+    return roles.map(r => r.roleName).join(', ')
+  }
 
 }
+

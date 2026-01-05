@@ -1,5 +1,5 @@
 import { FormGroup, Validators } from "@angular/forms";
-import { EventDetail, KeyValue } from "src/app/core/api/models";
+import { EventDetail, KeyValue } from "src/app/core/api-client/models";
 import { date } from "src/app/core/service/utilities.service";
 import { DetailedView } from "src/app/shared/model/detailed-view.model";
 import { eventTabs } from "./events.conts";

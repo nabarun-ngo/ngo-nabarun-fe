@@ -3,7 +3,7 @@ import { NoticeControllerService, UserControllerService } from 'src/app/core/api
 import { NoticeDefaultValue } from './notice.const';
 import { concatMap, from, map } from 'rxjs';
 import { GoogleCalendarService } from 'src/app/core/service/google-calendar.service';
-import { MeetingDetail, NoticeDetail, NoticeDetailFilter } from 'src/app/core/api/models';
+import { MeetingDetail, NoticeDetail, NoticeDetailFilter } from 'src/app/core/api-client/models';
 
 @Injectable({
   providedIn: 'root'
@@ -27,8 +27,8 @@ export class NoticeService {
     return this.noticeController.getAllNotice({
       pageIndex: pageIndex,
       pageSize: pageSize,
-      filter:{
-        status:['ACTIVE'],
+      filter: {
+        status: ['ACTIVE'],
       }
     }).pipe(map(d => d.responsePayload))
   }
@@ -50,15 +50,15 @@ export class NoticeService {
       meeting.meetingStartTime = formValue.meetingStartTime;
       meeting.meetingEndTime = formValue.meetingEndTime;
       meeting.meetingStatus = 'CREATED_L';
-      meeting.meetingAttendees=[]
+      meeting.meetingAttendees = []
       notice.meeting = meeting;
 
       return from(this.googleCalService.signInToGoogle()).pipe(
-        concatMap(response => from(this.userController.getUsers({ filter:{status:['ACTIVE']} })).pipe(map(m => {
-          m.responsePayload?.content?.forEach(f=>{
+        concatMap(response => from(this.userController.getUsers({ filter: { status: ['ACTIVE'] } })).pipe(map(m => {
+          m.responsePayload?.content?.forEach(f => {
             notice.meeting?.meetingAttendees?.push(f)
           })
-          //console.log(notice.meeting?.meetingAttendees)
+          //////console.log(notice.meeting?.meetingAttendees)
           return m.responsePayload?.content
         }))),
         concatMap(response0 => from(this.noticeController.createNotice({ body: notice })).pipe(map(m => {
@@ -70,15 +70,15 @@ export class NoticeService {
           id: notice.id!,
           body: {
             hasMeeting: true,
-            noticeStatus:'ACTIVE',
+            noticeStatus: 'ACTIVE',
             meeting: {
               extMeetingId: response2.id,
               extHtmlLink: response2.htmlLink,
               extVideoConferenceLink: response2.hangoutLink,
               meetingRefId: notice.id!,
               meetingStatus: 'CREATED_G',
-              extConferenceStatus:response2.status,
-              creatorEmail:response2.creator?.email
+              extConferenceStatus: response2.status,
+              creatorEmail: response2.creator?.email
             }
           }
         })))
@@ -92,28 +92,28 @@ export class NoticeService {
   }
 
 
-  editNotice(id:string,formValue:any){
-    
+  editNotice(id: string, formValue: any) {
+
   }
 
 
-  advancedSearch(filter:{noticeNumber?:string,noticeTitle?:string,startDate?:string,endDate?:string,status?:string}){
-    let filterOps:NoticeDetailFilter={};
-    if(filter.noticeNumber){
-      filterOps.id=filter.noticeNumber
+  advancedSearch(filter: { noticeNumber?: string, noticeTitle?: string, startDate?: string, endDate?: string, status?: string }) {
+    let filterOps: NoticeDetailFilter = {};
+    if (filter.noticeNumber) {
+      filterOps.id = filter.noticeNumber
     }
-    if(filter.noticeTitle){
-      filterOps.title=filter.noticeTitle
+    if (filter.noticeTitle) {
+      filterOps.title = filter.noticeTitle
     }
-    if(filter.startDate){
-      filterOps.startDate=filter.startDate
+    if (filter.startDate) {
+      filterOps.startDate = filter.startDate
     }
-    if(filter.endDate){
-      filterOps.endDate=filter.endDate
+    if (filter.endDate) {
+      filterOps.endDate = filter.endDate
     }
-    if(filter.status){
-      filterOps.status=filter.status as any
+    if (filter.status) {
+      filterOps.status = filter.status as any
     }
-    return this.noticeController.getAllNotice({ filter:filterOps}).pipe(map(d => d.responsePayload));
+    return this.noticeController.getAllNotice({ filter: filterOps }).pipe(map(d => d.responsePayload));
   }
 }

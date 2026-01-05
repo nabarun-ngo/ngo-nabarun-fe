@@ -5,28 +5,28 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class GoogleAuthService {
-  isSignedIn: boolean=false;
+  isSignedIn: boolean = false;
 
 
-  constructor(protected zone: NgZone) {}
+  constructor(protected zone: NgZone) { }
 
   private initClient() {
-    const updateSigninStatus = this.updateSigninStatus.bind(this);
-    gapi.client
-      .init(environment.gapi_config)
-      .then(() => {
-        this.zone.run(() => {
-          // Listen for sign-in state changes.
-          gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+    //const updateSigninStatus = this.updateSigninStatus.bind(this);
+    // gapi.client
+    //   .init(environment.gapi_config)
+    //   .then(() => {
+    //     this.zone.run(() => {
+    //       // Listen for sign-in state changes.
+    //       gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
 
-          // Handle the initial sign-in state.
-          updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-        });
-      });
+    //       // Handle the initial sign-in state.
+    //       updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+    //     });
+    //   });
   }
 
   updateSigninStatus(isSignedIn: boolean) {
-    console.log('updateSigninStatus', isSignedIn);
+    ////console.log('updateSigninStatus', isSignedIn);
     this.isSignedIn = isSignedIn;
   }
 
@@ -38,7 +38,7 @@ export class GoogleAuthService {
     gapi.auth2.getAuthInstance().signOut();
   }
 
-  
+
 
   private loadGapi() {
     const script = document.createElement('script');
@@ -51,8 +51,8 @@ export class GoogleAuthService {
   }
 
   async initialize() {
-    console.log('Hellociation')
+    ////console.log('Hellociation')
     await this.loadGapi();
-    gapi.load('client:auth2', this.initClient.bind(this));
+    //gapi.load('client:auth2', this.initClient.bind(this));
   }
 }

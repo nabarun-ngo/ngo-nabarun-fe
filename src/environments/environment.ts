@@ -3,25 +3,28 @@
 // The list of file replacements can be found in `angular.json`.
 
 import { getScopes } from "src/app/core/constant/auth-scope.const";
-import { Capacitor } from '@capacitor/core';
-import config from '../../capacitor.config';
 import { version } from "./version";
 import { AuthConfig } from "@auth0/auth0-angular";
 
 const authDomain = 'dev-u2aco2py.us.auth0.com';
-const authClientId = Capacitor.isNativePlatform() ? 'eTrMFsU97X71Dve76lbYuZmUN6k3PN66': '8DLWlfdUodZhM8nW2HRKFYL7GjBxMbGH';
-const apiBaseUrl=Capacitor.isNativePlatform() ? `${config.appId}://${authDomain}/capacitor/${config.appId}/callback` : 'http://localhost:8082';
+const authClientId = '8DLWlfdUodZhM8nW2HRKFYL7GjBxMbGH';
+const apiBaseUrl = 'http://localhost:8082';
+const apiBaseUrl2 = 'http://localhost:8080';
 
-const auth_config:AuthConfig={
+const auth_config: AuthConfig = {
   domain: authDomain,
   clientId: authClientId,
   authorizationParams: {
-    redirect_uri: Capacitor.isNativePlatform() ? `${config.appId}://${authDomain}/capacitor/${config.appId}/callback` : window.location.origin ,  
-    scope: 'openid profile email offline_access api auth_time family_name given_name email_verified exp phone_number picture sub iss iat aud ' + getScopes(), 
-    audience: 'https://nabarun.resourceserver.api' ,
+    redirect_uri: window.location.origin,
+    scope: 'openid profile email offline_access api auth_time family_name given_name email_verified exp phone_number picture sub iss iat aud ' + getScopes(),
+    audience: 'https://nabarun.resourceserver.api',
   },
-  httpInterceptor:{
-    allowedList:['http://localhost:8082/api/*']
+  httpInterceptor: {
+    allowedList: [{
+      uriMatcher(uri) {
+        return uri.startsWith(apiBaseUrl) || uri.startsWith(apiBaseUrl2)
+      },
+    }]
   },
 }
 
@@ -39,7 +42,7 @@ const firebaseConfig = {
   measurementId: "G-PT9V4XMXWY"
 };
 
-const gapiConfig ={
+const gapiConfig = {
   apiKey: 'AIzaSyDEQ5433AfdAoTOOCqjlK9K-Ep0FD8sdwg',
   clientId:
     '595475200212-gibsoge21ed013o9obcreldfpfncgops.apps.googleusercontent.com',
@@ -47,19 +50,19 @@ const gapiConfig ={
     'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest',
   ],
   scope: 'https://www.googleapis.com/auth/calendar.events',//https://www.googleapis.com/auth/calendar 
-  plugin_name:'nabarun_app'
-  
+  plugin_name: 'nabarun_app'
+
 };
 
 
 export const environment = {
   production: false,
-  name:'DEV-WEB '+version,
+  name: 'DEV-WEB ' + version,
   max_idle_time_in_sec: 10,
   api_base_url: apiBaseUrl,
+  api_base_url2: apiBaseUrl2,
   firebase_config: firebaseConfig,
-  firebase_vapidKey:'BBDkLXhO325xFYbQ9v2yDhAlxRCBwB-MERVALRhUsiPjKWNAFiR1LVxgdxB8M8VVXD6ZBMQllGFdfjmIG0CGvig',
-  inactivityTimeOut: 120*60,
-  gapi_config:gapiConfig,
-  auth_config:auth_config,
+  firebase_vapidKey: 'BBDkLXhO325xFYbQ9v2yDhAlxRCBwB-MERVALRhUsiPjKWNAFiR1LVxgdxB8M8VVXD6ZBMQllGFdfjmIG0CGvig',
+  inactivityTimeOut: 120 * 60,
+  auth_config: auth_config,
 };

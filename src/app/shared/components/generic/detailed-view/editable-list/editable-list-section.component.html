@@ -1,0 +1,56 @@
+<div [formGroup]="view.section_form" class="editable-list-container">
+
+    <!-- List Body -->
+    <div [formArrayName]="view.editableList!.formArrayName" class="space-y-4">
+        <div *ngFor="let item of listArray.controls; let i = index" [formGroupName]="i" class="list-item"
+            [class.bg-red-50]="item.invalid && view.show_form">
+
+            <div class="row-grid">
+                <div *ngFor="let field of view.editableList!.itemFields" class="field-cell">
+                    <!-- Label -->
+                    <div class="cell-label" *ngIf="field.field_name">{{
+                        field.field_name }}</div>
+
+                    <!-- Value Area -->
+                    <div class="w-full">
+                        <!-- Read mode -->
+                        <span *ngIf="!(field.editable && view.show_form)" class="read-mode-value">
+                            {{ (field.show_display_value ? displayValue(field.ref_data_section,
+                            item.get(field.form_control_name!)?.value) :
+                            item.get(field.form_control_name!)?.value) || '-' }}
+                        </span>
+
+                        <!-- Edit mode -->
+                        <div *ngIf="field.editable && view.show_form && field.form_input" class="dense-3 w-full">
+                            <app-universal-input [formControlName]="field.form_control_name!"
+                                [inputModel]="field.form_input">
+                            </app-universal-input>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div *ngIf="view.show_form && view.editableList?.allowDeleteRow" class="action-overlay">
+                <button mat-icon-button color="warn" (click)="removeItem(i)" matTooltip="Remove Item">
+                    <mat-icon>delete_outline</mat-icon>
+                </button>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="listArray.length === 0" class="empty-state">
+            <mat-icon class="text-4xl opacity-20">list_alt</mat-icon>
+            <p>{{ view.editableList?.emptyMessage || 'No items added yet' }}</p>
+        </div>
+    </div>
+
+    <!-- Footer Actions -->
+    <div class="add-btn-container" *ngIf="view.show_form && view.editableList?.allowAddRow">
+        <button mat-mini-fab color="primary" (click)="addItem()" matTooltip="Add Item">
+            <mat-icon>add</mat-icon>
+        </button>
+        <span *ngIf="view.editableList?.addBtnLabel" class="ml-2 text-sm font-semibold text-primary-600">{{
+            view.editableList?.addBtnLabel }}</span>
+    </div>
+</div>

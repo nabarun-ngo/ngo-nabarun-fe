@@ -36,10 +36,10 @@ export const AppRoute = {
   },
   secured_donation_dashboard_page: {
     id: 'secured_donation_dashboard_page',
-    url: '/secured/donation/dashboard',
+    url: '/secured/finance/donations',
     parent: 'secured',
-    feature: 'donation',
-    path: 'dashboard',
+    feature: 'finance',
+    path: 'donations',
   },
   secured_member_members_page: {
     id: 'secured_member_members_page',
@@ -78,17 +78,17 @@ export const AppRoute = {
   },
   secured_request_list_page: {
     id: 'secured_request_list_page',
-    url: '/secured/request/list',
+    url: '/secured/workflow/requests',
     parent: 'secured',
-    feature: 'request',
-    path: 'list',
+    feature: 'workflow',
+    path: 'requests',
   },
   secured_task_list_page: {
     id: 'secured_task_list_page',
-    url: '/secured/request/tasklist',
+    url: '/secured/workflow/tasks',
     parent: 'secured',
-    feature: 'request',
-    path: 'tasklist',
+    feature: 'workflow',
+    path: 'tasks',
   },
   secured_account_list_page: {
     id: 'secured_account_list_page',

@@ -1,14 +1,9 @@
-import { EventEmitter, Inject, Injectable, NgZone, OnInit, Output } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { AuthUser } from '../model/auth-user.model';
-import { filter, firstValueFrom, map } from 'rxjs';
+import { firstValueFrom, map } from 'rxjs';
 import { Router } from '@angular/router';
 import { AppRoute } from '../constant/app-routing.const';
-import { App } from '@capacitor/app';
-import config from 'capacitor.config';
-import { Browser } from '@capacitor/browser';
-import { SharedDataService } from './shared-data.service';
-import { AuthService, IdToken, User } from '@auth0/auth0-angular';
-import { Capacitor } from '@capacitor/core';
+import { AuthService } from '@auth0/auth0-angular';
 import { environment } from 'src/environments/environment';
 import { jwtDecode } from 'jwt-decode';
 
@@ -21,65 +16,40 @@ export type AuthEventType = 'login_success' | 'login_error';
 export class UserIdentityService {
   isLoggedIn!: boolean;
   loggedInUser!: AuthUser;
-  grantedScopes: string[]=[];
+  grantedScopes: string[] = [];
   profileUpdated!: boolean;
 
 
   constructor(
     private oAuthService: AuthService,
     private router: Router,
-    private zone: NgZone,
-    private sharedDataService: SharedDataService,
   ) {
-    this.oAuthService.isAuthenticated$.subscribe(data=>{
-      console.log(data)
-      return this.isLoggedIn=data;
+    this.oAuthService.isAuthenticated$.subscribe(data => {
+      ////console.log(data)
+      return this.isLoggedIn = data;
     });
-    this.oAuthService.user$.pipe(map(m=> m as AuthUser)).subscribe(data=>{
-      this.loggedInUser=data;
-      console.log(data)
+    this.oAuthService.user$.pipe(map(m => m as AuthUser)).subscribe(data => {
+      this.loggedInUser = data;
+      ////console.log(data)
     });
     this.oAuthService.getAccessTokenSilently().subscribe((claims: string) => {
       if (claims && claims) {
         const decodedToken = jwtDecode(claims) as any;
-        this.grantedScopes=decodedToken['permissions'] as string[];
-        console.log(this.grantedScopes)
+        this.grantedScopes = decodedToken['permissions'] as string[];
+        ////console.log(this.grantedScopes)
       }
     });
   }
 
   configure() {
-    if(Capacitor.isNativePlatform()){
-      App.addListener('appUrlOpen',  ({ url }) => {
-        const app_url= new URL(url);
-        console.log(app_url)
-         this.zone.run(() => {
-          if (url.startsWith(`${config.appId}://`)) {
-            if (app_url.searchParams.has("state") && app_url.searchParams.has("code")) {
-              this.oAuthService.handleRedirectCallback(url).subscribe(data=>{
-                this.router.navigate([data.appState?.target]);
-              })
-            } else if(app_url.searchParams.has("state") && app_url.searchParams.has("error")){
-              Browser.close();
-              let description = app_url.searchParams.get("error") + ' : ' + app_url.searchParams.get("error_description");
-              this.router.navigate([AppRoute.login_page.url], { state: { isError: true, description:description, state: app_url.searchParams.get("state") } });
-            }else {
-              Browser.close();
-              let description = 'Some unknown error occured.';
-              this.router.navigate([AppRoute.login_page.url], { state: { isError: true, description:description, state: app_url.searchParams.get("state") } });
-            }
-          }
-        })
-      });
-    }
-    const app_url= new URL(window.location.href);
+    const app_url = new URL(window.location.href);
     if (app_url.searchParams.has("state") && app_url.searchParams.has("code")) {
-      this.oAuthService.handleRedirectCallback().subscribe(data=>{
+      this.oAuthService.handleRedirectCallback().subscribe(data => {
         this.router.navigate([data.appState?.target]);
       })
     }
-    this.oAuthService.error$.subscribe(d=>{
-      this.router.navigate([AppRoute.login_page.url], { state: { isError: true, description:d.name+' : '+d.message, state: app_url.searchParams.get("state") } });
+    this.oAuthService.error$.subscribe(d => {
+      this.router.navigate([AppRoute.login_page.url], { state: { isError: true, description: d.name + ' : ' + d.message, state: app_url.searchParams.get("state") } });
     })
 
   }
@@ -92,7 +62,7 @@ export class UserIdentityService {
     if (prompt) {
       params.prompt = prompt;
     }
-    console.log(loginType)
+    ////console.log(loginType)
     let return_url = redirectUrl ? redirectUrl : AppRoute.secured_dashboard_page.url;
     if (loginType == 'email') {
       params.connection = 'email';
@@ -102,15 +72,11 @@ export class UserIdentityService {
           target: return_url
         },
         authorizationParams: {
-           connection: 'email',
-           prompt:params.prompt as any
+          connection: 'email',
+          prompt: params.prompt as any
         },
         async openUrl(url) {
-          if(Capacitor.isNativePlatform()){
-            await Browser.open({url:url , windowName:'_self'})
-          }else{
-            window.location.href=url
-          }
+          window.location.href = url
         },
       });
     } else if (loginType == 'sms') {
@@ -121,14 +87,10 @@ export class UserIdentityService {
         },
         authorizationParams: {
           connection: 'sms',
-          prompt:params.prompt as any
+          prompt: params.prompt as any
         },
         async openUrl(url) {
-          if(Capacitor.isNativePlatform()){
-            await Browser.open({url:url , windowName:'_self'})
-          }else{
-            window.location.href=url
-          }
+          window.location.href = url
         },
       });
     } else {
@@ -137,15 +99,11 @@ export class UserIdentityService {
         appState: {
           target: return_url
         },
-        authorizationParams:{
-          prompt:params.prompt as any
+        authorizationParams: {
+          prompt: params.prompt as any
         },
         async openUrl(url) {
-          if(Capacitor.isNativePlatform()){
-            await Browser.open({url:url , windowName:'_self'})
-          }else{
-            window.location.href=url
-          }
+          window.location.href = url
         },
       });
     }
@@ -157,31 +115,29 @@ export class UserIdentityService {
     //   client_id: environment.auth_config.clientId
     // });
     this.oAuthService.logout({
-      clientId:environment.auth_config.clientId,
-      logoutParams:{
+      clientId: environment.auth_config.clientId,
+      logoutParams: {
         returnTo: window.location.origin,
       },
       async openUrl(url) {
-        if(Capacitor.isNativePlatform()){
-          await Browser.open({url:url , windowName:'_self'})
-        }else{
-          window.location.href=url
-        }
+        window.location.href = url
       },
     })
   }
 
-  // async isUserLoggedIn(): Promise<boolean> {
-  //   return await firstValueFrom(this.oAuthService.isAuthenticated$);
-  // }
+
   async isUserLoggedIn() {
     return await firstValueFrom(this.oAuthService.isAuthenticated$);
+  }
+
+  async getAccessToken() {
+    return await firstValueFrom(this.oAuthService.getAccessTokenSilently());
   }
 
   isAccrediatedTo(access: string): boolean {
     let scopes = this.grantedScopes;
     var result = scopes.includes(access);
-    console.log('Has ' + access + ' access = ', result);
+    ////console.log('Has ' + access + ' access = ', result);
     return result;
   }
 
@@ -194,11 +150,11 @@ export class UserIdentityService {
   }
 
   async getUser(): Promise<AuthUser> {
-    return await firstValueFrom(this.oAuthService.user$.pipe(map(m=> m as AuthUser)))
+    return await firstValueFrom(this.oAuthService.user$.pipe(map(m => m as AuthUser)))
   }
 
-  async isProfileUpdated(){
-    return this.profileUpdated || (await this.getUser()).profile_updated;
+  async isProfileUpdated() {
+    return this.profileUpdated || (await this.getUser())?.profile_updated || false;
   }
   // getUser(): AuthUser {
   //   return this.loggedInUser || {};
@@ -206,12 +162,12 @@ export class UserIdentityService {
 
 
   // async onCallback() {
-  //   console.log("I am callback")
+  //   ////console.log("I am callback")
   //   // if (Capacitor.isNativePlatform()) {
   //   //   await Browser.close();
   //   // }
   // }
-   
+
   /*
     onEvent(...event_codes: EventType[]) {
       return this.oAuthService.events
@@ -253,7 +209,7 @@ export class UserIdentityService {
  // this.oAuthService.configure(environment.auth_config);
     // this.oAuthService.setupAutomaticSilentRefresh({}, 'access_token');
     // this.oAuthService.setupAutomaticSilentRefresh({}, 'id_token');
-    // console.log("Before Login " + this.oAuthService.state)
+    // ////console.log("Before Login " + this.oAuthService.state)
     // this.oAuthService.loadDiscoveryDocumentAndTryLogin().then(data => {
     //   if (this.oAuthService.state) {
     //     this.router.navigateByUrl(decodeURIComponent(this.oAuthService.state));

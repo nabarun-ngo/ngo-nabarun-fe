@@ -3,6 +3,7 @@ import { AlertType } from "../../core/component/notification-modal/notification-
 export interface AlertData {
     alertType: AlertType;
     message: string;
-    destroyAfter?:number;
+    destroyAfter?: number;
+    showDismissButton?: boolean;
 }
 
