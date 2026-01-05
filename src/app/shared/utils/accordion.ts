@@ -90,6 +90,14 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
   }
 
   /**
+   * Enable or disable multi-selection for the accordion rows.
+   * @param selectable Whether rows can be selected
+   */
+  setSelectable(selectable: boolean) {
+    this.accordionList.selectable = selectable;
+  }
+
+  /**
    * 
    * @param data 
    */

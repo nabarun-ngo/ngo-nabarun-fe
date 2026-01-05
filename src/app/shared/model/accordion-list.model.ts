@@ -33,12 +33,21 @@ export interface AccordionList {
 
     /** Current search input value */
     searchValue: string;
+
+    /** 
+     * Whether rows can be selected for bulk actions.
+     * If true, checkboxes will be rendered.
+     */
+    selectable?: boolean;
 }
 
 /**
  * A single accordion row (collapsed + expanded view)
  */
 export interface AccordionRow {
+
+    /** Whether the row is selected */
+    selected?: boolean;
 
     /**
      * Optional index.

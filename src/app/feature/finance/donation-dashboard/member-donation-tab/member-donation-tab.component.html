@@ -29,7 +29,14 @@
 
 
 <app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)"
-    (onAccordionOpen)="onAccordionOpen($event)">
+    (onAccordionOpen)="onAccordionOpen($event)" (onSelectionChange)="onSelectionChange($event)">
+
+    <div bulkActions>
+        <button mat-raised-button color="primary" (click)="bulkUpdate()" style="border-radius: var(--radius-lg);">
+            <mat-icon class="mr-2">done_all</mat-icon>
+            Bulk Update
+        </button>
+    </div>
 </app-accordion-list>
 <mat-paginator class="mt-4" style="background-color: transparent;" (page)="handlePageEvent($event)"
     [length]="itemLength$ | async" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" [pageIndex]="pageNumber"
