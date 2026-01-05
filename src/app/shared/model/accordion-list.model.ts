@@ -104,10 +104,8 @@ export interface AccordionButton {
  */
 export interface AccordionData<NumType> {
 
-    currentSize?: number;
     pageIndex?: number;
     pageSize?: number;
-    totalPages?: number;
     totalSize?: number;
 
     /**
