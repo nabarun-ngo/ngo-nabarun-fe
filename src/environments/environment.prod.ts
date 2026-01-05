@@ -48,7 +48,7 @@ const auth_config: AuthConfig = {
     allowedList: [
       {
         uriMatcher(uri) {
-          return uri.includes(apiBaseUrl) || uri.includes(apiBaseUrl2)
+          return uri.startsWith(apiBaseUrl) || uri.startsWith(apiBaseUrl2)
         },
       }
     ]
