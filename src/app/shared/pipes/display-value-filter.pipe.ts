@@ -10,7 +10,7 @@ export class DisplayValueFilterPipe implements PipeTransform {
     if (!searchValue) {
       return list;
     }
-    return list.filter(option => option.displayValue!.toLowerCase().includes(searchValue.toLowerCase()));
+    return list.filter(option => option?.displayValue?.toLowerCase().includes(searchValue?.toLowerCase()));
   }
 
 }

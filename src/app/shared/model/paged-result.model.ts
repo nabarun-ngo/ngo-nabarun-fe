@@ -19,10 +19,6 @@ export interface ApiPagedResult<T> {
   totalSize?: number;
   pageIndex?: number;
   pageSize?: number;
-  currentSize?: number;
-  totalPages?: number;
-  nextPageIndex?: number;
-  prevPageIndex?: number;
 }
 
 /**
