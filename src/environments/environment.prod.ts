@@ -34,7 +34,7 @@ const gapiConfig = {
 const authDomain = 'sso-nabarun.us.auth0.com';
 const authClientId = '8AzSWAAYeZdRC7taAICQkkxqpbtc3Bqm';
 const apiBaseUrl = 'https://ngonabarun.appspot.com';
-const apiBaseUrl2 = 'https://api-dot-ngonabarun-stage.appspot.com';
+const apiBaseUrl2 = 'https://api-dot-ngonabarun.appspot.com';
 
 const auth_config: AuthConfig = {
   domain: authDomain,
