@@ -14,6 +14,7 @@ import { DonationDashboardComponent } from './donation-dashboard/donation-dashbo
 import { SelfDonationTabComponent } from './donation-dashboard/self-donation-tab/self-donation-tab.component';
 import { GuestDonationTabComponent } from './donation-dashboard/guest-donation-tab/guest-donation-tab.component';
 import { MemberDonationTabComponent } from './donation-dashboard/member-donation-tab/member-donation-tab.component';
+import { BulkEditDonationComponent } from './donation-dashboard/bulk-edit-donation/bulk-edit-donation.component';
 
 
 
@@ -31,6 +32,7 @@ import { MemberDonationTabComponent } from './donation-dashboard/member-donation
     SelfDonationTabComponent,
     GuestDonationTabComponent,
     MemberDonationTabComponent,
+    BulkEditDonationComponent,
   ],
   imports: [
     CommonModule,

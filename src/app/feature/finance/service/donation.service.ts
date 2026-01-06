@@ -179,6 +179,7 @@ export class DonationService {
         }).pipe(map(m => m.responsePayload), map(mapPagedUserDtoToPagedUser));
     }
 
+
     /**
      * Fetch donations for a specific user with summary
      * @param id User ID

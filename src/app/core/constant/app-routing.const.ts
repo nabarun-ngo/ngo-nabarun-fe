@@ -41,6 +41,13 @@ export const AppRoute = {
     feature: 'finance',
     path: 'donations',
   },
+  secured_donation_bulk_edit_page: {
+    id: 'secured_donation_bulk_edit_page',
+    url: '/secured/finance/donations/bulk-edit',
+    parent: 'secured',
+    feature: 'finance',
+    path: 'donations/bulk-edit',
+  },
   secured_member_members_page: {
     id: 'secured_member_members_page',
     url: '/secured/member/list',

@@ -104,6 +104,10 @@ export abstract class BaseDonationTabComponent extends Accordion<Donation> imple
 
         setTimeout(() => {
             this.formSubscription = this.setupFieldVisibilityRules('donation_detail', rowIndex, DonationFieldVisibilityRules);
+            this.updateFieldValidators('donation_detail', rowIndex, {
+                'amount': [Validators.required],
+                'status': [Validators.required],
+            });
             const form = this.getSectionForm('donation_detail', rowIndex);
             this.formSubscription?.add(
                 form?.get('status')?.valueChanges.subscribe((status: any) => {

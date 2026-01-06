@@ -156,7 +156,8 @@ export const getDonationSection = (
                     inputType: '',
                     placeholder: 'Ex. Paid',
                     selectList: NEXT_STATUS
-                }
+                },
+                form_input_validation: [Validators.required]
             },
             {
                 field_name: 'Donation start date',
@@ -507,5 +508,4 @@ export const DonationFieldVisibilityRules: FieldVisibilityRule<Donation>[] = [
         condition: (formValue) => formValue.type === 'REGULAR'
     }
 ]
-
 
