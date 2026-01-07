@@ -1,0 +1,50 @@
+<div class="bulk-edit-container">
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-overlay">
+        <p class="loading-text">Loading data...</p>
+    </div>
+
+    <!-- Main Content -->
+    <div *ngIf="!loading" class="content-wrapper">
+        <!-- Header -->
+        <div class="header-section">
+            <button mat-icon-button (click)="onCancel()" class="back-button">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            <div class="header-content">
+                <h1 class="title">{{ config.title || 'Bulk Edit Donations' }}</h1>
+                <p class="subtitle">Editing {{ donationIds.length }} item(s)</p>
+            </div>
+        </div>
+
+        <!-- Info Banner -->
+        <mat-card class="info-banner">
+            <mat-icon class="info-icon">info</mat-icon>
+            <div class="info-content">
+                <p class="info-title">Bulk Edit Mode</p>
+                <p class="info-description">
+                    Changes made here will be applied to all {{ donationIds.length }} selected items.
+                    Fields marked as locked cannot be changed during bulk edit.
+                </p>
+            </div>
+        </mat-card>
+
+        <!-- Form Section -->
+        <mat-card class="form-card">
+            <app-detailed-view [detailedViews]="currentDetailedViews" [refData]="getRefData()!">
+            </app-detailed-view>
+        </mat-card>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button mat-stroked-button (click)="onCancel()" class="cancel-button">
+                <mat-icon>close</mat-icon>
+                Cancel
+            </button>
+            <button mat-raised-button color="primary" (click)="onSubmit()" class="submit-button">
+                <mat-icon>save</mat-icon>
+                Update {{ donationIds.length }} item(s)
+            </button>
+        </div>
+    </div>
+</div>

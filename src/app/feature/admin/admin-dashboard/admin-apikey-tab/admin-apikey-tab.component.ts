@@ -171,7 +171,7 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDto> implements Tab
     switch ($event.buttonId) {
       case 'CREATE':
         const api_key_detail = this.getSectionForm('api_key_detail', 0, true);
-        console.log(api_key_detail)
+        //console.log(api_key_detail)
 
         if (api_key_detail?.valid) {
           this.adminService.createAPIKey(api_key_detail.value).subscribe(s => {

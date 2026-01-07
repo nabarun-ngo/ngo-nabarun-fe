@@ -134,6 +134,7 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
   clearContents() {
     this.accordionList.contents.splice(0);
     this.itemList.splice(0);
+    this.count = 0;
   }
 
   setContent(dataList: NumType[], totalSize?: number) {
@@ -148,6 +149,8 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
     }
   }
 
+  private count = 0;
+
   /**
    * 
    * @param data 
@@ -156,15 +159,19 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
     let row = {
       columns: this.prepareHighLevelView(data),
       detailed: this.prepareDetailedView(data),
-      buttons: this.prepareDefaultButtons(data)
+      buttons: this.prepareDefaultButtons(data),
+      index: 0 // Placeholder
     } as AccordionRow;
     //////console.log(row);
     if (insert_top) {
       this.accordionList.contents.unshift(row);
       this.itemList.unshift(data);
+      this.reindex();
     } else {
+      row.index = this.accordionList.contents.length;
       this.accordionList.contents.push(row);
       this.itemList.push(data);
+      this.count = this.accordionList.contents.length;
     }
   }
 
@@ -172,7 +179,8 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
     let row = {
       columns: this.prepareHighLevelView(data),
       detailed: this.prepareDetailedView(data),
-      buttons: this.prepareDefaultButtons(data)
+      buttons: this.prepareDefaultButtons(data),
+      index: rowIndex
     } as AccordionRow;
     this.accordionList.contents[rowIndex] = row;
     this.itemList[rowIndex] = data;
@@ -181,6 +189,14 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
   removeContentRow(rowIndex: number) {
     this.accordionList.contents.splice(rowIndex, 1);
     this.itemList.splice(rowIndex, 1);
+    this.reindex();
+  }
+
+  private reindex() {
+    this.accordionList.contents.forEach((row, idx) => {
+      row.index = idx;
+    });
+    this.count = this.accordionList.contents.length;
   }
 
   /**
@@ -447,7 +463,7 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
     let row = {
       columns: this.prepareHighLevelView(data!, options),
       detailed: this.prepareDetailedView(data!, options),
-      buttons: this.prepareDefaultButtons(data!, options)
+      buttons: this.prepareDefaultButtons(data!, options),
     } as AccordionRow;
     this.accordionList.addContent = row;
     return this.accordionList.addContent.detailed.map(m => {
