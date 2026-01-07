@@ -55,7 +55,7 @@ export interface AccordionRow {
      * - Managed externally by the accordion component
      * - Not required during creation
      */
-    index?: number;
+    index: number;
 
     /** High-level (collapsed) cells */
     columns: AccordionCell[];
