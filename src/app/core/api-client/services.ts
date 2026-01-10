@@ -17,3 +17,5 @@ export { PublicControllerService } from './services/public-controller.service';
 export { CallbackControllerService } from './services/callback-controller.service';
 export { HealthControllerService } from './services/health-controller.service';
 export { ProjectControllerService } from './services/project-controller.service';
+export { CorrespondenceControllerService } from './services/correspondence-controller.service';
+export { CronControllerService } from './services/cron-controller.service';

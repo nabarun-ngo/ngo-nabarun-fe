@@ -585,7 +585,7 @@ export class AccountService {
 
   fetchEvents() {
     return this.projectController
-      .listActivities({})
+      .listActivities({ id: '' })
       .pipe(map((d) => d.responsePayload));
   }
 

@@ -11,13 +11,15 @@ import { RequestBuilder } from '../../request-builder';
 import { SuccessResponsePagedResultActivityDetailDto } from '../../models/success-response-paged-result-activity-detail-dto';
 
 export interface ListActivities$Params {
+  id: string;
   pageIndex?: number;
   pageSize?: number;
 }
 
-export function listActivities(http: HttpClient, rootUrl: string, params?: ListActivities$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultActivityDetailDto>> {
+export function listActivities(http: HttpClient, rootUrl: string, params: ListActivities$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultActivityDetailDto>> {
   const rb = new RequestBuilder(rootUrl, listActivities.PATH, 'get');
   if (params) {
+    rb.path('id', params.id, {});
     rb.query('pageIndex', params.pageIndex, {});
     rb.query('pageSize', params.pageSize, {});
   }
@@ -32,4 +34,4 @@ export function listActivities(http: HttpClient, rootUrl: string, params?: ListA
   );
 }
 
-listActivities.PATH = '/api/api/project/activities';
+listActivities.PATH = '/api/projects/{id}/activities';

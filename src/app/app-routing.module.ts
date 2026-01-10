@@ -52,10 +52,10 @@ const routes: Routes = [
         path: route_data.secured_admin_dashboard_page.feature,
         loadChildren: () => import('./feature/admin/admin.module').then(m => m.AdminModule),
       },
-      // {
-      //   path: route_data.secured_event_list_page.feature,
-      //   loadChildren: () => import('./feature/social-event/social-event.module').then(m => m.SocialEventModule),
-      // },
+      {
+        path: route_data.secured_event_list_page.feature,
+        loadChildren: () => import('./feature/projects/projects.module').then(m => m.ProjectsModule),
+      },
     ],
     canActivate: [
       AuthGuardService,

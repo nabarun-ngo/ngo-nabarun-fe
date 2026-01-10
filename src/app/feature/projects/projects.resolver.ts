@@ -1,8 +1,7 @@
 import { inject } from '@angular/core';
 import { ResolveFn } from '@angular/router';
-import { EventsService } from './events.service';
-import { CommonService } from 'src/app/feature/dashboard/dashboard.service';
-import { DefaultValue, eventTabs } from './events.conts';
+import { DefaultValue, eventTabs } from './projects.conts';
+import { ProjectsService } from './services/projects.service';
 
 export const eventListResolver: ResolveFn<any> = (route, state) => {
   let tab = (route.data['tab'] || DefaultValue.tabName) as eventTabs;
@@ -12,4 +11,10 @@ export const eventListResolver: ResolveFn<any> = (route, state) => {
 
 export const eventRefDataResolver: ResolveFn<any> = (route, state) => {
   return inject(CommonService).getRefData();
-}; 
+};
+
+
+export const projectsResolver: ResolveFn<any> = (route, state) => {
+  return inject(ProjectsService).listProjects();
+};
+

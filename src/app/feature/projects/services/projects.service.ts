@@ -1,15 +1,26 @@
 import { Injectable } from '@angular/core';
-import { SocialEventControllerService } from 'src/app/core/api/services';
-import { DefaultValue } from './events.conts';
+import { DefaultValue } from '../projects.conts';
 import { map } from 'rxjs';
-import { EventDetail, EventDetailFilter } from 'src/app/core/api-client/models';
 import { date, removeNullFields } from 'src/app/core/service/utilities.service';
+import { ProjectControllerService } from 'src/app/core/api-client/services';
 
 @Injectable({
   providedIn: 'root'
 })
-export class EventsService {
-  advancedSearch(criteria: EventDetailFilter) {
+export class ProjectsService {
+
+  constructor(private projectsController: ProjectControllerService) { }
+
+  listProjects() {
+    return this.projectsController.listProjects({
+      pageIndex: DefaultValue.pageNumber,
+      pageSize: DefaultValue.pageSize,
+    }).pipe(
+      map(d => d.responsePayload),
+    );
+  }
+
+  advancedSearch(criteria: ProjectFilter) {
     let filter = removeNullFields(criteria);
     filter = filter ? filter : {};
     if (filter?.fromDate) {
@@ -23,7 +34,6 @@ export class EventsService {
 
   defaultValue = DefaultValue;
 
-  constructor(private eventController: SocialEventControllerService) { }
 
   getSocialEventList(isCompleted: boolean, pageIndex?: number, pageSize?: number, filter?: EventDetailFilter) {
     if (filter?.fromDate) {

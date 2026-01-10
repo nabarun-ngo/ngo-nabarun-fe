@@ -237,8 +237,8 @@ export class MyRequestsTabComponent extends Accordion<WorkflowRequest> implement
       const requestedFor = (this.isDelegatedRequest && request_form?.value.requestType !== 'JOIN_REQUEST') ?
         request_form?.value.initiatedFor : undefined;
       const isExtUser = request_form?.value.requestType === 'JOIN_REQUEST';
-
-      this.requestService.createRequest(type, data, requestedFor, isExtUser).subscribe(s => {
+      const extUserEmail = isExtUser ? data.email : undefined;
+      this.requestService.createRequest(type, data, requestedFor, isExtUser, extUserEmail).subscribe(s => {
         this.hideForm(0, true);
         this.addContentRow(s!, true);
       });

@@ -252,11 +252,11 @@ export class BulkEditDonationComponent extends MemberDonationTabComponent {
             this.goBack();
         } catch (error) {
             console.error('Error updating donations:', error);
-            this.modalService.openNotificationModal(
-                { title: 'Error', description: 'Failed to update donations' },
-                'notification',
-                'error'
-            );
+            // this.modalService.openNotificationModal(
+            //     { title: 'Error', description: 'Failed to update donations' },
+            //     'notification',
+            //     'error'
+            // );
             this.loading = false;
         }
     }

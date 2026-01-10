@@ -2,7 +2,7 @@ import { PagedResult } from "src/app/shared/model/paged-result.model";
 import { Task } from "./task.model";
 
 export type RequestStatus = 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'FAILED' | 'CANCELLED';
-export type StepStatus = 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'FAILED';
+export type StepStatus = 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'FAILED' | 'SKIPPED';
 
 export interface WorkflowStep {
     id: string;

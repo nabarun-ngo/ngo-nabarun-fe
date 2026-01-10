@@ -94,7 +94,7 @@ export class SecuredDashboardComponent implements OnInit {
         },
         {
           tile_html_id: 'requestTile',
-          tile_name: 'Support Requests',
+          tile_name: 'Requests',
           tile_icon: 'icon_group',
           tile_link: this.route.secured_request_list_page.url,
         },
@@ -106,7 +106,7 @@ export class SecuredDashboardComponent implements OnInit {
         },
         {
           tile_html_id: 'eventTile',
-          tile_name: 'Social Events',
+          tile_name: 'Projects',
           tile_icon: 'icon_group',
           tile_link: this.route.secured_event_list_page.url,
         },

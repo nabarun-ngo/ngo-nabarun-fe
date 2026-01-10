@@ -2,18 +2,14 @@ import { Component, ViewChild } from '@angular/core';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
 import { ActivatedRoute } from '@angular/router';
-import {
-  PaginateEventDetail,
-} from 'src/app/core/api-client/models';
-import { DefaultValue, eventTabs } from '../events.conts';
-import { EventsService } from '../events.service';
+import { DefaultValue, eventTabs } from '../projects.conts';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { StandardTabbedDashboard } from 'src/app/shared/utils/standard-tabbed-dashboard';
 import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
 import { UpcomingEventsTabComponent } from './upcoming-events-tab/upcoming-events-tab.component';
 import { CompletedEventsTabComponent } from './completed-events-tab/completed-events-tab.component';
-import { eventSearchInput } from '../social-event.field';
+import { eventSearchInput } from '../fields/projects.field';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 
 @Component({

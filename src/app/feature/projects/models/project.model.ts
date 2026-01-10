@@ -1,0 +1,26 @@
+
+export interface ProjectDetailDto {
+    actualBeneficiaryCount?: number;
+    actualEndDate?: string;
+    budget?: number;
+    category: 'EDUCATION' | 'HEALTH' | 'ENVIRONMENT' | 'RURAL_DEVELOPMENT' | 'WOMEN_EMPOWERMENT' | 'CHILD_WELFARE' | 'DISASTER_RELIEF' | 'OTHER';
+    code: string;
+    createdAt: string;
+    currency: string;
+    description: string;
+    endDate?: string;
+    id: string;
+    location?: string;
+    managerId: string;
+    metadata?: {
+    };
+    name: string;
+    phase: 'INITIATION' | 'PLANNING' | 'EXECUTION' | 'MONITORING' | 'CLOSURE';
+    spentAmount?: number;
+    sponsorId?: string;
+    startDate: string;
+    status: 'PLANNING' | 'ACTIVE' | 'ON_HOLD' | 'COMPLETED' | 'CANCELLED';
+    tags: Array<string>;
+    targetBeneficiaryCount?: number;
+    updatedAt: string;
+}

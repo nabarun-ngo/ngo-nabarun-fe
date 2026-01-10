@@ -4,10 +4,12 @@
 
 import { WorkflowStepDto } from '../models/workflow-step-dto';
 export interface WorkflowInstanceDto {
+  actualSteps: Array<WorkflowStepDto>;
   completedAt?: string;
   createdAt: string;
   currentStepId?: string | null;
   description: string;
+  expectedSteps: Array<WorkflowStepDto>;
   id: string;
   initiatedById?: string;
   initiatedByName?: string;

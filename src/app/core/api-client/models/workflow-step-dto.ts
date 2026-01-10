@@ -12,7 +12,7 @@ export interface WorkflowStepDto {
   orderIndex: number;
   remarks?: string;
   startedAt?: string;
-  status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'FAILED';
+  status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'FAILED' | 'SKIPPED';
   stepId: string;
   tasks: Array<WorkflowTaskDto>;
   updatedAt: string;

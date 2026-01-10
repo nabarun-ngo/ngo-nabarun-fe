@@ -10,7 +10,11 @@ import { RequestBuilder } from '../../request-builder';
 
 
 export interface PauseQueue$Params {
-  operation: string;
+
+/**
+ * Operation to trigger
+ */
+  operation: 'pause' | 'resume';
 }
 
 export function pauseQueue(http: HttpClient, rootUrl: string, params: PauseQueue$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {

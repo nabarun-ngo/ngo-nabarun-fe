@@ -8,9 +8,9 @@ import {
   AccordionButton,
 } from 'src/app/shared/model/accordion-list.model';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
-import { EventsService } from '../../events.service';
-import { eventDetailSection } from '../../social-event.field';
-import { DefaultValue } from '../../events.conts';
+import { EventsService } from '../../services/projects.service';
+import { eventDetailSection } from '../../fields/projects.field';
+import { DefaultValue } from '../../projects.conts';
 import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 

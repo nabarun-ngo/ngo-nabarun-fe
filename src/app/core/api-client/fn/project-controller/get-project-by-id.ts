@@ -8,7 +8,7 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { ProjectDetailDto } from '../../models/project-detail-dto';
+import { SuccessResponseProjectDetailDto } from '../../models/success-response-project-detail-dto';
 
 export interface GetProjectById$Params {
 
@@ -18,7 +18,7 @@ export interface GetProjectById$Params {
   id: string;
 }
 
-export function getProjectById(http: HttpClient, rootUrl: string, params: GetProjectById$Params, context?: HttpContext): Observable<StrictHttpResponse<ProjectDetailDto>> {
+export function getProjectById(http: HttpClient, rootUrl: string, params: GetProjectById$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseProjectDetailDto>> {
   const rb = new RequestBuilder(rootUrl, getProjectById.PATH, 'get');
   if (params) {
     rb.path('id', params.id, {});
@@ -29,9 +29,9 @@ export function getProjectById(http: HttpClient, rootUrl: string, params: GetPro
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<ProjectDetailDto>;
+      return r as StrictHttpResponse<SuccessResponseProjectDetailDto>;
     })
   );
 }
 
-getProjectById.PATH = '/api/api/project/{id}';
+getProjectById.PATH = '/api/projects/{id}';

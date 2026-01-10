@@ -2,7 +2,7 @@ import { FormGroup, Validators } from "@angular/forms";
 import { EventDetail, KeyValue } from "src/app/core/api-client/models";
 import { date } from "src/app/core/service/utilities.service";
 import { DetailedView } from "src/app/shared/model/detailed-view.model";
-import { eventTabs } from "./events.conts";
+import { eventTabs } from "../projects.conts";
 import { SearchAndAdvancedSearchModel } from "src/app/shared/model/search-and-advanced-search.model";
 
 export const eventDetailSection = (data: EventDetail): DetailedView => {
