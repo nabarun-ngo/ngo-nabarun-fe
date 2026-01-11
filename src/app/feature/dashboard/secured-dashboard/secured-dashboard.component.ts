@@ -67,7 +67,7 @@ export class SecuredDashboardComponent implements OnInit {
         {
           tile_html_id: 'expenseTile',
           tile_name: 'Expense',
-          tile_icon: 'icon_presentation',
+          tile_icon: 'icon_expense',
           tile_link: this.route.secured_manage_account_page.url,
           additional_info: {
             tile_label: 'My Unsettled Expenses',
@@ -78,7 +78,7 @@ export class SecuredDashboardComponent implements OnInit {
         {
           tile_html_id: 'worklistTile',
           tile_name: 'Tasks',
-          tile_icon: 'icon_group',
+          tile_icon: 'icon_tasks',
           tile_link: this.route.secured_task_list_page.url,
           additional_info: {
             tile_label: 'My Pending Tasks',
@@ -89,31 +89,31 @@ export class SecuredDashboardComponent implements OnInit {
         {
           tile_html_id: 'memberTile',
           tile_name: 'Members',
-          tile_icon: 'icon_group',
+          tile_icon: 'icon_members',
           tile_link: this.route.secured_member_members_page.url,
         },
         {
           tile_html_id: 'requestTile',
           tile_name: 'Requests',
-          tile_icon: 'icon_group',
+          tile_icon: 'icon_requests',
           tile_link: this.route.secured_request_list_page.url,
         },
         {
           tile_html_id: 'noticeTile',
-          tile_name: 'Notices',
-          tile_icon: 'icon_group',
+          tile_name: 'Meetings',
+          tile_icon: 'icon_notices',
           tile_link: this.route.secured_notice_notices_page.url,
         },
         {
           tile_html_id: 'eventTile',
           tile_name: 'Projects',
-          tile_icon: 'icon_group',
+          tile_icon: 'icon_projects',
           tile_link: this.route.secured_project_list_page.url,
         },
         {
           tile_html_id: 'adminTile',
           tile_name: 'Admin Console',
-          tile_icon: 'icon_group',
+          tile_icon: 'icon_admin',
           tile_link: this.route.secured_admin_dashboard_page.url,
           hide_tile: !this.identityService.isAccrediatedToAny(
             SCOPE.read.actuator,
