@@ -167,4 +167,11 @@ export const AppRoute = {
     feature: 'project',
     path: ':id/activities'
   },
+  secured_meetings_list_page: {
+    id: 'secured_meetings_list_page',
+    url: '/secured/communication/meetings',
+    parent: 'secured',
+    feature: 'communication',
+    path: 'meetings'
+  },
 };

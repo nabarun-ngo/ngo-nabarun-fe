@@ -1,6 +1,7 @@
 import { Notice, PagedNotice } from "./notice.model";
 import { Meeting, PagedMeeting } from "./meeting.model";
 import { mapPagedResult } from "src/app/shared/model/paged-result.model";
+import { MeetingDto } from "src/app/core/api-client/models";
 
 /**
  * Map domain Notice to API DTO format
@@ -14,7 +15,6 @@ export function mapNoticeToDto(notice: Partial<Notice>): any {
         noticeDate: notice.noticeDate,
         noticeStatus: notice.noticeStatus,
         hasMeeting: notice.hasMeeting,
-        meeting: notice.meeting ? mapMeetingToDto(notice.meeting) : undefined,
         createdAt: notice.createdAt,
         updatedAt: notice.updatedAt,
     };
@@ -39,54 +39,26 @@ export function mapDtoToNotice(dto: any): Notice {
 }
 
 /**
- * Map domain Meeting to API DTO format
+ * Map API DTO to domain Meeting
  */
-export function mapMeetingToDto(meeting: Partial<Meeting>): any {
+export function mapDtoToMeeting(dto: MeetingDto): Meeting {
     return {
-        id: meeting.id,
-        meetingSummary: meeting.meetingSummary,
-        meetingDescription: meeting.meetingDescription,
-        meetingType: meeting.meetingType,
-        meetingLocation: meeting.meetingLocation,
-        meetingDate: meeting.meetingDate,
-        meetingStartTime: meeting.meetingStartTime,
-        meetingEndTime: meeting.meetingEndTime,
-        meetingStatus: meeting.meetingStatus,
-        meetingAttendees: meeting.meetingAttendees,
-        extMeetingId: meeting.extMeetingId,
-        extHtmlLink: meeting.extHtmlLink,
-        extVideoConferenceLink: meeting.extVideoConferenceLink,
-        meetingRefId: meeting.meetingRefId,
-        extConferenceStatus: meeting.extConferenceStatus,
-        creatorEmail: meeting.creatorEmail,
-        noticeId: meeting.noticeId,
+        id: dto.id,
+        agenda: dto.agenda,
+        attendees: dto.attendees,
+        calendarLink: dto.calendarLink,
+        description: dto.description,
+        endTime: dto.endTime,
+        location: dto.location,
+        meetLink: dto.meetLink,
+        outcomes: dto.outcomes,
+        startTime: dto.startTime,
+        status: dto.status,
+        summary: dto.summary,
+        type: dto.type,
     };
 }
 
-/**
- * Map API DTO to domain Meeting
- */
-export function mapDtoToMeeting(dto: any): Meeting {
-    return {
-        id: dto.id,
-        meetingSummary: dto.meetingSummary,
-        meetingDescription: dto.meetingDescription,
-        meetingType: dto.meetingType,
-        meetingLocation: dto.meetingLocation,
-        meetingDate: dto.meetingDate,
-        meetingStartTime: dto.meetingStartTime,
-        meetingEndTime: dto.meetingEndTime,
-        meetingStatus: dto.meetingStatus,
-        meetingAttendees: dto.meetingAttendees,
-        extMeetingId: dto.extMeetingId,
-        extHtmlLink: dto.extHtmlLink,
-        extVideoConferenceLink: dto.extVideoConferenceLink,
-        meetingRefId: dto.meetingRefId,
-        extConferenceStatus: dto.extConferenceStatus,
-        creatorEmail: dto.creatorEmail,
-        noticeId: dto.noticeId,
-    };
-}
 
 /**
  * Map paged DTO to domain PagedNotice

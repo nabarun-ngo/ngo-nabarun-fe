@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { NoticeDefaultValue, MeetingDefaultValue } from '../communication.const';
+import { map, Observable, of } from 'rxjs';
 import { PagedNotice, Notice } from '../model/notice.model';
 import { PagedMeeting, Meeting } from '../model/meeting.model';
-import { mapNoticeToDto, mapDtoToNotice, mapPagedDtoToPagedNotice, mapMeetingToDto, mapDtoToMeeting, mapPagedDtoToPagedMeeting } from '../model/communication.mapper';
+import { mapNoticeToDto, mapDtoToMeeting, mapPagedDtoToPagedMeeting } from '../model/communication.mapper';
+import { MeetingControllerService } from 'src/app/core/api-client/services';
+import { MeetingDefaultValue } from '../communication.const';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CommunicationService {
 
-  constructor() { }
+  constructor(private readonly meetingController: MeetingControllerService) { }
 
   /**
    * Fetch notices with pagination
@@ -31,7 +31,7 @@ export class CommunicationService {
     //   map((d) => d.responsePayload),
     //   map(mapPagedDtoToPagedNotice)
     // );
-    
+
     return of({
       content: [],
       totalSize: 0,
@@ -59,7 +59,7 @@ export class CommunicationService {
   createNotice(noticeData: Partial<Notice>): Observable<Notice> {
     // Map domain model to DTO format
     const noticeDto = mapNoticeToDto(noticeData);
-    
+
     // Set default values for create
     if (!noticeDto.noticeStatus) {
       noticeDto.noticeStatus = 'ACTIVE';
@@ -67,14 +67,14 @@ export class CommunicationService {
     if (noticeDto.hasMeeting === undefined) {
       noticeDto.hasMeeting = false;
     }
-    
+
     // Placeholder - implement when API endpoint is available
     // Example implementation:
     // return this.noticeController.createNotice({ body: noticeDto }).pipe(
     //   map((d) => d.responsePayload),
     //   map(mapDtoToNotice)
     // );
-    
+
     // For now, return a mock response with generated ID
     const createdNotice: Notice = {
       id: 'notice-' + Date.now().toString(),
@@ -87,7 +87,7 @@ export class CommunicationService {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
-    
+
     return of(createdNotice);
   }
 
@@ -98,7 +98,7 @@ export class CommunicationService {
   updateNotice(id: string, noticeData: Partial<Notice>): Observable<Notice> {
     // Map domain model to DTO format
     const noticeDto = mapNoticeToDto(noticeData);
-    
+
     // Placeholder - implement when API endpoint is available
     // Example implementation:
     // return this.noticeController.updateNotice({
@@ -108,7 +108,7 @@ export class CommunicationService {
     //   map((d) => d.responsePayload),
     //   map(mapDtoToNotice)
     // );
-    
+
     // For now, return a mock response with updated data
     const updatedNotice: Notice = {
       id: id,
@@ -121,7 +121,7 @@ export class CommunicationService {
       createdAt: noticeData.createdAt || new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
-    
+
     return of(updatedNotice);
   }
 
@@ -133,13 +133,13 @@ export class CommunicationService {
     page?: number,
     size?: number,
   ): Observable<PagedMeeting> {
-    // Placeholder - implement when API endpoint is available
-    return of({
-      content: [],
-      totalSize: 0,
-      pageIndex: page || 0,
-      pageSize: size || 20,
-    } as PagedMeeting);
+    return this.meetingController.listMeetings({
+      pageIndex: page || MeetingDefaultValue.pageNumber,
+      pageSize: size || MeetingDefaultValue.pageSize,
+    }).pipe(
+      map((d) => d.responsePayload),
+      map(mapPagedDtoToPagedMeeting)
+    );
   }
 
   /**
@@ -159,37 +159,23 @@ export class CommunicationService {
    * TODO: Replace with actual API call when MeetingControllerService is available in api-client
    */
   createMeeting(meetingData: Partial<Meeting>): Observable<Meeting> {
-    // Map domain model to DTO format
-    const meetingDto = mapMeetingToDto(meetingData);
-    
-    // Set default values for create
-    if (!meetingDto.meetingStatus) {
-      meetingDto.meetingStatus = 'CREATED_L';
-    }
-    
-    // Placeholder - implement when API endpoint is available
-    // Example implementation:
-    // return this.meetingController.createMeeting({ body: meetingDto }).pipe(
-    //   map((d) => d.responsePayload),
-    //   map(mapDtoToMeeting)
-    // );
-    
-    // For now, return a mock response with generated ID
-    const createdMeeting: Meeting = {
-      id: 'meeting-' + Date.now().toString(),
-      meetingSummary: meetingDto.meetingSummary || '',
-      meetingDescription: meetingDto.meetingDescription || '',
-      meetingType: meetingDto.meetingType,
-      meetingLocation: meetingDto.meetingLocation,
-      meetingDate: meetingDto.meetingDate || new Date().toISOString().split('T')[0],
-      meetingStartTime: meetingDto.meetingStartTime || '',
-      meetingEndTime: meetingDto.meetingEndTime || '',
-      meetingStatus: meetingDto.meetingStatus as any,
-      meetingAttendees: meetingDto.meetingAttendees || [],
-      noticeId: meetingDto.noticeId,
-    };
-    
-    return of(createdMeeting);
+
+    return this.meetingController.createMeeting({
+      body: {
+        attendees: meetingData.attendees!,
+        description: meetingData.description!,
+        endTime: meetingData.endTime!,
+        location: meetingData.location!,
+        startTime: meetingData.startTime!,
+        summary: meetingData.summary!,
+        type: meetingData.type!,
+      }
+    }).pipe(
+      map((d) => d.responsePayload),
+      map(mapDtoToMeeting)
+    );
+
+
   }
 
   /**
@@ -197,41 +183,13 @@ export class CommunicationService {
    * TODO: Replace with actual API call when MeetingControllerService is available in api-client
    */
   updateMeeting(id: string, meetingData: Partial<Meeting>): Observable<Meeting> {
-    // Map domain model to DTO format
-    const meetingDto = mapMeetingToDto(meetingData);
-    
-    // Placeholder - implement when API endpoint is available
-    // Example implementation:
-    // return this.meetingController.updateMeeting({
-    //   id: id,
-    //   body: meetingDto
-    // }).pipe(
-    //   map((d) => d.responsePayload),
-    //   map(mapDtoToMeeting)
-    // );
-    
-    // For now, return a mock response with updated data
-    const updatedMeeting: Meeting = {
+    return this.meetingController.updateMeeting({
       id: id,
-      meetingSummary: meetingDto.meetingSummary || '',
-      meetingDescription: meetingDto.meetingDescription || '',
-      meetingType: meetingDto.meetingType,
-      meetingLocation: meetingDto.meetingLocation,
-      meetingDate: meetingDto.meetingDate || new Date().toISOString().split('T')[0],
-      meetingStartTime: meetingDto.meetingStartTime || '',
-      meetingEndTime: meetingDto.meetingEndTime || '',
-      meetingStatus: meetingDto.meetingStatus as any,
-      meetingAttendees: meetingDto.meetingAttendees || [],
-      extMeetingId: meetingDto.extMeetingId,
-      extHtmlLink: meetingDto.extHtmlLink,
-      extVideoConferenceLink: meetingDto.extVideoConferenceLink,
-      meetingRefId: meetingDto.meetingRefId,
-      extConferenceStatus: meetingDto.extConferenceStatus,
-      creatorEmail: meetingDto.creatorEmail,
-      noticeId: meetingDto.noticeId,
-    };
-    
-    return of(updatedMeeting);
+      body: meetingData
+    }).pipe(
+      map((d) => d.responsePayload),
+      map(mapDtoToMeeting)
+    );
   }
 
   /**

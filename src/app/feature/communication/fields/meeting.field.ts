@@ -35,11 +35,7 @@ export const meetingSearchInput = (
  */
 export const meetingHeader: any[] = [
     {
-        value: 'Meeting Summary',
-        rounded: true
-    },
-    {
-        value: 'Type',
+        value: 'Summary',
         rounded: true
     },
     {
@@ -48,10 +44,6 @@ export const meetingHeader: any[] = [
     },
     {
         value: 'Time',
-        rounded: true
-    },
-    {
-        value: 'Status',
         rounded: true
     }
 ];
@@ -71,15 +63,10 @@ export const getMeetingSection = (
         section_form: new FormGroup({}),
         content: [
             {
-                field_name: 'Meeting ID',
-                field_value: meeting?.id || '',
-                hide_field: isCreate
-            },
-            {
                 field_name: 'Meeting Summary',
-                field_value: meeting?.meetingSummary || '',
+                field_value: meeting?.summary || '',
                 editable: true,
-                form_control_name: 'meetingSummary',
+                form_control_name: 'summary',
                 field_html_id: 'meeting_summary',
                 form_input: {
                     html_id: 'meeting_summary',
@@ -90,10 +77,10 @@ export const getMeetingSection = (
                 form_input_validation: isCreate ? [Validators.required] : []
             },
             {
-                field_name: 'Description',
-                field_value: meeting?.meetingDescription || '',
+                field_name: 'Meeting Description',
+                field_value: meeting?.description || '',
                 editable: true,
-                form_control_name: 'meetingDescription',
+                form_control_name: 'description',
                 field_html_id: 'meeting_description',
                 form_input: {
                     html_id: 'meeting_description',
@@ -105,11 +92,9 @@ export const getMeetingSection = (
             },
             {
                 field_name: 'Meeting Type',
-                field_value: meeting?.meetingType,
-                show_display_value: true,
-                ref_data_section: MeetingConstant.refDataKey.types,
+                field_value: meeting?.type,
                 editable: true,
-                form_control_name: 'meetingType',
+                form_control_name: 'type',
                 field_html_id: 'meeting_type',
                 form_input: {
                     html_id: 'meeting_type',
@@ -122,10 +107,10 @@ export const getMeetingSection = (
             },
             {
                 field_name: 'Meeting Date',
-                field_value: meeting?.meetingDate || '',
-                field_display_value: date(meeting?.meetingDate),
+                field_value: meeting?.startTime || '',
+                field_display_value: date(meeting?.startTime),
                 editable: true,
-                form_control_name: 'meetingDate',
+                form_control_name: 'date',
                 field_html_id: 'meeting_date',
                 form_input: {
                     html_id: 'meeting_date',
@@ -137,9 +122,9 @@ export const getMeetingSection = (
             },
             {
                 field_name: 'Start Time',
-                field_value: meeting?.meetingStartTime || '',
+                field_value: meeting?.startTime || '',
                 editable: true,
-                form_control_name: 'meetingStartTime',
+                form_control_name: 'startTime',
                 field_html_id: 'meeting_start_time',
                 form_input: {
                     html_id: 'meeting_start_time',
@@ -151,9 +136,9 @@ export const getMeetingSection = (
             },
             {
                 field_name: 'End Time',
-                field_value: meeting?.meetingEndTime || '',
+                field_value: meeting?.endTime || '',
                 editable: true,
-                form_control_name: 'meetingEndTime',
+                form_control_name: 'endTime',
                 field_html_id: 'meeting_end_time',
                 form_input: {
                     html_id: 'meeting_end_time',
@@ -165,9 +150,9 @@ export const getMeetingSection = (
             },
             {
                 field_name: 'Location',
-                field_value: meeting?.meetingLocation || '',
+                field_value: meeting?.location || '',
                 editable: true,
-                form_control_name: 'meetingLocation',
+                form_control_name: 'location',
                 field_html_id: 'meeting_location',
                 form_input: {
                     html_id: 'meeting_location',
@@ -179,11 +164,9 @@ export const getMeetingSection = (
             },
             {
                 field_name: 'Status',
-                field_value: meeting?.meetingStatus,
-                show_display_value: true,
-                ref_data_section: MeetingConstant.refDataKey.statuses,
+                field_value: meeting?.status,
                 editable: true,
-                form_control_name: 'meetingStatus',
+                form_control_name: 'status',
                 field_html_id: 'meeting_status',
                 form_input: {
                     html_id: 'meeting_status',
@@ -195,14 +178,9 @@ export const getMeetingSection = (
                 form_input_validation: []
             },
             {
-                field_name: 'Video Conference Link',
-                field_value: meeting?.extVideoConferenceLink || '',
-                hide_field: !meeting?.extVideoConferenceLink || isCreate
-            },
-            {
                 field_name: 'Meeting Link',
-                field_value: meeting?.extHtmlLink || '',
-                hide_field: !meeting?.extHtmlLink || isCreate
+                field_value: meeting?.meetLink || '',
+                hide_field: !meeting?.meetLink || isCreate
             }
         ]
     };

@@ -7,7 +7,7 @@ import { Meeting, PagedMeeting } from '../../model/meeting.model';
 import { MeetingDefaultValue, MeetingConstant } from '../../communication.const';
 import { meetingHeader, getMeetingSection } from '../../fields/meeting.field';
 import { CommunicationService } from '../../service/communication.service';
-import { removeNullFields } from 'src/app/core/service/utilities.service';
+import { compareObjects, removeNullFields } from 'src/app/core/service/utilities.service';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 
 @Component({
@@ -25,12 +25,6 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
     };
   }
 
-  @Input()
-  accordionData?: PagedMeeting;
-
-  @Input()
-  refData?: { [name: string]: any[] };
-
   defaultValue = MeetingDefaultValue;
   protected override activeButtonId: string = '';
 
@@ -44,51 +38,27 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
     this.setHeaderRow(meetingHeader);
   }
 
-  override ngAfterContentInit(): void {
-    super.ngAfterContentInit();
-    // Set refData if provided
-    if (this.refData) {
-      this.setRefData(this.refData);
-    }
-    // Load meetings when component initializes if no initial data
-    if (!this.page?.content || this.page.content.length === 0) {
-      this.loadData();
-    }
-  }
-
   protected override prepareHighLevelView(
     data: Meeting,
     options?: { [key: string]: any }
   ): AccordionCell[] {
-    const timeRange = data?.meetingStartTime && data?.meetingEndTime
-      ? `${data.meetingStartTime} - ${data.meetingEndTime}`
-      : data?.meetingStartTime || '';
-    
+    const timeRange = data?.startTime && data?.endTime
+      ? `${data.startTime} - ${data.endTime}`
+      : data?.startTime || '';
+
     return [
       {
         type: 'text',
-        value: data?.meetingSummary,
-      },
-      {
-        type: 'text',
-        value: data?.meetingType,
-        showDisplayValue: true,
-        refDataSection: MeetingConstant.refDataKey.types
+        value: data?.summary!,
       },
       {
         type: 'date',
-        value: data?.meetingDate,
+        value: data?.startTime!,
       },
       {
         type: 'text',
         value: timeRange,
-      },
-      {
-        type: 'text',
-        value: data?.meetingStatus,
-        showDisplayValue: true,
-        refDataSection: MeetingConstant.refDataKey.statuses
-      },
+      }
     ];
   }
 
@@ -144,7 +114,6 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
   }
 
   protected override onAccordionOpen(event: { rowIndex: number; }): void {
-    // Load additional data when accordion opens if needed
   }
 
   override handlePageEvent($event: PageEvent): void {
@@ -183,16 +152,9 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
     const meetingForm = this.getSectionForm('meeting_detail', 0, true);
     meetingForm?.markAllAsTouched();
     if (meetingForm?.valid) {
-      this.communicationService.createMeeting(meetingForm.value).subscribe({
-        next: (data) => {
-          this.hideForm(0, true);
-          // Refresh the list to show the new meeting
-          this.fetchMeetings(this.pageNumber, this.pageSize);
-        },
-        error: (error) => {
-          console.error('Error creating meeting:', error);
-          // Handle error - could show a toast notification here
-        }
+      this.communicationService.createMeeting(removeNullFields(meetingForm.value)).subscribe(data => {
+        this.hideForm(0, true);
+        this.addContentRow(data);
       });
     }
   }
@@ -200,20 +162,14 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
   private performUpdateMeeting(rowIndex: number): void {
     const meeting = this.itemList[rowIndex];
     if (!meeting.id) return;
-    
+
     const meetingForm = this.getSectionForm('meeting_detail', rowIndex);
     meetingForm?.markAllAsTouched();
     if (meetingForm?.valid) {
-      this.communicationService.updateMeeting(meeting.id, meetingForm.value).subscribe({
-        next: (data) => {
-          this.hideForm(rowIndex);
-          // Update the row with the new data
-          this.updateContentRow(data, rowIndex);
-        },
-        error: (error) => {
-          console.error('Error updating meeting:', error);
-          // Handle error - could show a toast notification here
-        }
+      const updated = compareObjects(meetingForm.value, meeting);
+      this.communicationService.updateMeeting(meeting.id, updated).subscribe(data => {
+        this.hideForm(rowIndex);
+        this.updateContentRow(data, rowIndex);
       });
     }
   }
