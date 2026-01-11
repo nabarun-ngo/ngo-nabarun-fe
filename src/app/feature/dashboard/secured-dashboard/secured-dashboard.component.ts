@@ -102,7 +102,7 @@ export class SecuredDashboardComponent implements OnInit {
           tile_html_id: 'noticeTile',
           tile_name: 'Meetings',
           tile_icon: 'icon_notices',
-          tile_link: this.route.secured_notice_notices_page.url,
+          tile_link: this.route.secured_meetings_list_page.url,
         },
         {
           tile_html_id: 'eventTile',

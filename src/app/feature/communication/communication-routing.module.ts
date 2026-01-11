@@ -8,16 +8,16 @@ import { MeetingDashboardComponent } from './meeting-dashboard/meeting-dashboard
 const route_data = AppRoute;
 
 const routes: Routes = [
+  // {
+  //   path: route_data.secured_communication_notice_page.path,
+  //   component: NoticeDashboardComponent,
+  //   resolve: {
+  //     data: noticesResolver,
+  //     ref_data: noticeRefDataResolver
+  //   }
+  // },
   {
-    path: route_data.secured_communication_notice_page.path,
-    component: NoticeDashboardComponent,
-    resolve: {
-      data: noticesResolver,
-      ref_data: noticeRefDataResolver
-    }
-  },
-  {
-    path: route_data.secured_communication_meeting_page.path,
+    path: route_data.secured_meetings_list_page.path,
     component: MeetingDashboardComponent,
     resolve: {
       data: meetingsResolver,

@@ -50,5 +50,49 @@ export class UniversalInputComponent {
     }
   }
 
+  selectAll(event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+    }
+
+    if (!this.inputModel.selectList || this.inputModel.selectList.length === 0) {
+      return;
+    }
+
+    const isAllSelected = this.isAllSelected();
+    const allKeys = this.inputModel.selectList.map(opt => opt.key);
+
+    if (isAllSelected) {
+      // Deselect all
+      this.ngControl.control?.setValue([]);
+    } else {
+      // Select all
+      this.ngControl.control?.setValue(allKeys);
+    }
+
+    // Remove 'all' from the value if it somehow got added
+    setTimeout(() => {
+      const value = this.ngControl.control?.value;
+      if (Array.isArray(value) && value.includes('all')) {
+        const filtered = value.filter(v => v !== 'all');
+        this.ngControl.control?.setValue(filtered);
+      }
+    }, 0);
+  }
+
+  isAllSelected(): boolean {
+    if (!this.inputModel?.selectList || this.inputModel.selectList.length === 0) {
+      return false;
+    }
+
+    const currentValue = this.ngControl?.control?.value;
+    if (!Array.isArray(currentValue)) {
+      return false;
+    }
+
+    const selectedKeysCount = currentValue.filter(v => v !== 'all').length;
+    return selectedKeysCount === this.inputModel.selectList.length;
+  }
+
 
 }

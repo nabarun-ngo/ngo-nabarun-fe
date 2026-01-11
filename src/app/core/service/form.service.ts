@@ -99,6 +99,10 @@ export function getErrorMessage(arg0: ValidationErrors | null, fieldName?: strin
   else if (arg0 && arg0['confirmedValidator']) {
     return (fieldName ? fieldName : 'This field') + ' should match with Password.';
   }
+  else if (arg0 && arg0['timeRange']) {
+    return (fieldName ? fieldName : 'End Time') + ' should be after Start Time.';
+  }
+
 
 
   // Validators.max

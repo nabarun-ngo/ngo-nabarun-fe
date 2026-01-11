@@ -25,12 +25,6 @@ export class NoticeAccordionComponent extends Accordion<Notice> implements After
     };
   }
 
-  @Input()
-  accordionData?: PagedNotice;
-
-  @Input()
-  refData?: { [name: string]: any[] };
-
   defaultValue = NoticeDefaultValue;
   protected override activeButtonId: string = '';
 
@@ -44,17 +38,6 @@ export class NoticeAccordionComponent extends Accordion<Notice> implements After
     this.setHeaderRow(noticeHeader);
   }
 
-  override ngAfterContentInit(): void {
-    super.ngAfterContentInit();
-    // Set refData if provided
-    if (this.refData) {
-      this.setRefData(this.refData);
-    }
-    // Load notices when component initializes if no initial data
-    if (!this.page?.content || this.page.content.length === 0) {
-      this.loadData();
-    }
-  }
 
   protected override prepareHighLevelView(
     data: Notice,
@@ -71,7 +54,7 @@ export class NoticeAccordionComponent extends Accordion<Notice> implements After
       },
       {
         type: 'text',
-        value: data?.noticeStatus,
+        value: data?.noticeStatus!,
         showDisplayValue: true,
         refDataSection: NoticeConstant.refDataKey.statuses
       },
