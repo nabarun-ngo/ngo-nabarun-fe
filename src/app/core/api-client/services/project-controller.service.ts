@@ -17,6 +17,8 @@ import { createProject } from '../fn/project-controller/create-project';
 import { CreateProject$Params } from '../fn/project-controller/create-project';
 import { getProjectById } from '../fn/project-controller/get-project-by-id';
 import { GetProjectById$Params } from '../fn/project-controller/get-project-by-id';
+import { getReferenceData_1 } from '../fn/project-controller/get-reference-data-1';
+import { GetReferenceData_1$Params } from '../fn/project-controller/get-reference-data-1';
 import { listActivities } from '../fn/project-controller/list-activities';
 import { ListActivities$Params } from '../fn/project-controller/list-activities';
 import { listProjects } from '../fn/project-controller/list-projects';
@@ -25,6 +27,9 @@ import { SuccessResponseActivityDetailDto } from '../models/success-response-act
 import { SuccessResponsePagedResultActivityDetailDto } from '../models/success-response-paged-result-activity-detail-dto';
 import { SuccessResponsePagedResultProjectDetailDto } from '../models/success-response-paged-result-project-detail-dto';
 import { SuccessResponseProjectDetailDto } from '../models/success-response-project-detail-dto';
+import { SuccessResponseProjectRefDataDto } from '../models/success-response-project-ref-data-dto';
+import { updateActivity } from '../fn/project-controller/update-activity';
+import { UpdateActivity$Params } from '../fn/project-controller/update-activity';
 import { updateProject } from '../fn/project-controller/update-project';
 import { UpdateProject$Params } from '../fn/project-controller/update-project';
 
@@ -229,6 +234,72 @@ export class ProjectControllerService extends BaseService {
   createActivity(params: CreateActivity$Params, context?: HttpContext): Observable<SuccessResponseActivityDetailDto> {
     return this.createActivity$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseActivityDetailDto>): SuccessResponseActivityDetailDto => r.body)
+    );
+  }
+
+  /** Path part for operation `updateActivity()` */
+  static readonly UpdateActivityPath = '/api/projects/{id}/activity/{activityId}';
+
+  /**
+   * Update project activity.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateActivity()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateActivity$Response(params: UpdateActivity$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseActivityDetailDto>> {
+    return updateActivity(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Update project activity.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateActivity$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateActivity(params: UpdateActivity$Params, context?: HttpContext): Observable<SuccessResponseActivityDetailDto> {
+    return this.updateActivity$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseActivityDetailDto>): SuccessResponseActivityDetailDto => r.body)
+    );
+  }
+
+  /** Path part for operation `getReferenceData_1()` */
+  static readonly GetReferenceData_1Path = '/api/projects/static/referenceData';
+
+  /**
+   * Get project reference data.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getReferenceData_1()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getReferenceData_1$Response(params?: GetReferenceData_1$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseProjectRefDataDto>> {
+    return getReferenceData_1(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get project reference data.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getReferenceData_1$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getReferenceData_1(params?: GetReferenceData_1$Params, context?: HttpContext): Observable<SuccessResponseProjectRefDataDto> {
+    return this.getReferenceData_1$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseProjectRefDataDto>): SuccessResponseProjectRefDataDto => r.body)
     );
   }
 

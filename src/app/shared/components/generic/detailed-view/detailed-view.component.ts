@@ -20,10 +20,10 @@ export class DetailedViewComponent {
     this.detailed_views = view;
     this.detailed_views.map(m => {
       m.content?.filter(f1 => f1.editable).map(m1 => {
-        //console.log(m1.field_name, m1.form_input_validation)
-        let value = m1.field_value && m1.field_value_splitter ? (m1.field_value as string).split(m1.field_value_splitter) : m1.field_value;
+        let value = m1.field_value && m1.field_value_splitter ?
+          (m1.field_value as string).split(m1.field_value_splitter) : m1.field_value;
         if (m1.form_input?.inputType == 'date') {
-          m.section_form?.setControl(m1.form_control_name!, new FormControl(new Date(value as string), m1.form_input_validation));
+          m.section_form?.setControl(m1.form_control_name!, new FormControl(value ? new Date(value as string) : undefined, m1.form_input_validation));
         }
         else if (m1.form_input?.inputType == 'number') {
           m.section_form?.setControl(m1.form_control_name!, new FormControl(value, m1.form_input_validation));

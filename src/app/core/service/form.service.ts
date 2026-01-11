@@ -69,7 +69,6 @@ export function getErrorMessage(arg0: ValidationErrors | null, fieldName?: strin
   if (!arg0) {
     return;
   }
-  //////console.log(arg0)
   if (arg0 && arg0['required']) {
     return (fieldName ? fieldName : 'This field') + ' is required.';
   }
@@ -88,8 +87,11 @@ export function getErrorMessage(arg0: ValidationErrors | null, fieldName?: strin
   else if (arg0 && arg0['max']) {
     return (fieldName ? fieldName : 'This field') + ' should be maximum ' + arg0['max'].max + '.';
   }
-  else if (arg0 && arg0['maxLength']) {
-    return (fieldName ? fieldName : 'This field') + ' should be minimum ' + arg0['maxLength'].max + '.';
+  else if (arg0 && (arg0['maxLength'] || arg0['maxlength'])) {
+    return (fieldName ? fieldName : 'This field') + ' should be maximum ' + (arg0['maxLength'] ?? arg0['maxlength']).requiredLength + '.';
+  }
+  else if (arg0 && (arg0['minLength'] || arg0['minlength'])) {
+    return (fieldName ? fieldName : 'This field') + ' should be minimum ' + (arg0['minLength'] ?? arg0['minlength']).requiredLength + '.';
   }
   else if (arg0 && arg0['validatePhoneNumber']) {
     return (fieldName ? fieldName : 'This field') + ' contains invalid phone number.';
@@ -105,7 +107,7 @@ export function getErrorMessage(arg0: ValidationErrors | null, fieldName?: strin
   // Validators.minLength
   // Validators.nullValidator
   // Validators.requiredTrue
-  return;
+  return 'This field in not valid.';
 }
 
 export interface BooleanFn {

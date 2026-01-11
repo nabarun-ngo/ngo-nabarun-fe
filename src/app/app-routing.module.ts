@@ -53,8 +53,8 @@ const routes: Routes = [
         loadChildren: () => import('./feature/admin/admin.module').then(m => m.AdminModule),
       },
       {
-        path: route_data.secured_event_list_page.feature,
-        loadChildren: () => import('./feature/projects/projects.module').then(m => m.ProjectsModule),
+        path: route_data.secured_project_list_page.feature,
+        loadChildren: () => import('./feature/project/project.module').then(m => m.ProjectModule),
       },
     ],
     canActivate: [

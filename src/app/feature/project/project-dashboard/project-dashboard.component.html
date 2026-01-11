@@ -1,0 +1,9 @@
+<app-page-layout>
+  <div class="flex lg:flex-row p-2 lg:p-4 justify-center items-start lg:items-stretch w-full">
+    <app-search-and-advanced-search-form [searchInput]="searchInput" (searchEvent)="onSearch($event)">
+    </app-search-and-advanced-search-form>
+  </div>
+  <app-project-list-tab [accordionData]="initialData!.projects" [refData]="refData" [managers]="initialData!.managers">
+  </app-project-list-tab>
+  <app-page-navigation-buttons [navigations]="navigations"></app-page-navigation-buttons>
+</app-page-layout>

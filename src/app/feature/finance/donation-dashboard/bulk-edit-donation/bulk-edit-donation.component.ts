@@ -186,9 +186,6 @@ export class BulkEditDonationComponent extends MemberDonationTabComponent {
         const documents = this.getSectionDocuments('document_list', rowIndex);
         donation_form?.markAllAsTouched();
 
-        console.log(donation_form);
-        console.log(documents);
-
         if (!donation_form?.valid) {
             this.modalService.openNotificationModal(
                 { title: 'Validation Error', description: 'Please fill all required fields correctly' },

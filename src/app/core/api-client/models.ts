@@ -49,6 +49,7 @@ export { PagedResultWorkflowTaskDto } from './models/paged-result-workflow-task-
 export { PhoneNumberDto } from './models/phone-number-dto';
 export { ProcessDonationPaymentDto } from './models/process-donation-payment-dto';
 export { ProjectDetailDto } from './models/project-detail-dto';
+export { ProjectRefDataDto } from './models/project-ref-data-dto';
 export { ReverseTransactionDto } from './models/reverse-transaction-dto';
 export { RoleDto } from './models/role-dto';
 export { SendEmailDto } from './models/send-email-dto';
@@ -90,6 +91,7 @@ export { SuccessResponsePagedResultUserDto } from './models/success-response-pag
 export { SuccessResponsePagedResultWorkflowInstanceDto } from './models/success-response-paged-result-workflow-instance-dto';
 export { SuccessResponsePagedResultWorkflowTaskDto } from './models/success-response-paged-result-workflow-task-dto';
 export { SuccessResponseProjectDetailDto } from './models/success-response-project-detail-dto';
+export { SuccessResponseProjectRefDataDto } from './models/success-response-project-ref-data-dto';
 export { SuccessResponseSendEmailResult } from './models/success-response-send-email-result';
 export { SuccessResponseString } from './models/success-response-string';
 export { SuccessResponseSuccessResponse } from './models/success-response-success-response';
@@ -105,9 +107,11 @@ export { TransactionDetailDto } from './models/transaction-detail-dto';
 export { TransferDto } from './models/transfer-dto';
 export { UpdateAccountDto } from './models/update-account-dto';
 export { UpdateAccountSelfDto } from './models/update-account-self-dto';
+export { UpdateActivityDto } from './models/update-activity-dto';
 export { UpdateDonationDto } from './models/update-donation-dto';
 export { UpdateEarningDto } from './models/update-earning-dto';
 export { UpdateExpenseDto } from './models/update-expense-dto';
+export { UpdateProjectActivityDto } from './models/update-project-activity-dto';
 export { UpdateProjectDto } from './models/update-project-dto';
 export { UpdateTaskDto } from './models/update-task-dto';
 export { UpiDetailDto } from './models/upi-detail-dto';
