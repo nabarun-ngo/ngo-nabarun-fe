@@ -10,6 +10,7 @@ import { PagedProject } from '../model/project.model';
 import { projectSearchInput } from '../fields/project.field';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { ProjectListTabComponent } from './project-list-tab/project-list-tab.component';
+import { User } from 'src/app/feature/member/models/member.model';
 
 @Component({
   selector: 'app-project-dashboard',
