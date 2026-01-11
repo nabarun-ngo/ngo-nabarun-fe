@@ -1,17 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MemberService } from '../service/member.service';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { MemberDefaultValue } from '../member.const';
 import { PageEvent } from '@angular/material/paginator';
-import { Paginator } from 'src/app/shared/utils/paginator';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
 import { PagedUser } from '../models/member.model';
-import { KeyValue } from 'src/app/shared/model/key-value.model';
 import { StandardDashboard } from 'src/app/shared/utils/standard-dashboard';
-import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-member-list',
@@ -118,7 +115,7 @@ export class MemberListComponent extends StandardDashboard<PagedUser> {
 
   override handlePageEvent($event: PageEvent) {
     this.pageEvent = $event;
-    this.memberService.fetchMembers(this.pageNumber, this.pageSize).subscribe(data => {
+    this.memberService.fetchMembers($event.pageIndex, $event.pageSize).subscribe(data => {
       this.memberList = data!;
       if (data?.totalSize) {
         this.totalItemLength = data.totalSize;

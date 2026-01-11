@@ -7,8 +7,10 @@ import { Meeting, PagedMeeting } from '../../model/meeting.model';
 import { MeetingDefaultValue, MeetingConstant } from '../../communication.const';
 import { meetingHeader, getMeetingSection } from '../../fields/meeting.field';
 import { CommunicationService } from '../../service/communication.service';
-import { compareObjects, removeNullFields } from 'src/app/core/service/utilities.service';
+import { compareObjects, date, removeNullFields } from 'src/app/core/service/utilities.service';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
+import { KeyValue } from 'src/app/shared/model/key-value.model';
+import { User } from 'src/app/feature/member/models/member.model';
 
 @Component({
   selector: 'app-meeting-accordion',
@@ -16,6 +18,7 @@ import { SearchEvent } from 'src/app/shared/components/search-and-advanced-searc
   styleUrls: ['./meeting-accordion.component.scss']
 })
 export class MeetingAccordionComponent extends Accordion<Meeting> implements AfterContentInit {
+  members: User[] = [];
 
   protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
     return {
@@ -36,6 +39,7 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
 
   override onInitHook(): void {
     this.setHeaderRow(meetingHeader);
+    this.communicationService.fetchUserList().subscribe(data => this.members = data)
   }
 
   protected override prepareHighLevelView(
@@ -43,7 +47,7 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
     options?: { [key: string]: any }
   ): AccordionCell[] {
     const timeRange = data?.startTime && data?.endTime
-      ? `${data.startTime} - ${data.endTime}`
+      ? `${date(data.startTime, 'hh:mm a')} - ${date(data.endTime, 'hh:mm a')}`
       : data?.startTime || '';
 
     return [
@@ -99,6 +103,13 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
   protected override onClick(event: { buttonId: string; rowIndex: number; }): void {
     if (event.buttonId === 'UPDATE_MEETING') {
       this.showEditForm(event.rowIndex, ['meeting_detail']);
+      const options = this.members.map((d) => {
+        return {
+          key: d.email,
+          displayValue: `${d.fullName} (${d.email})`
+        } as KeyValue
+      })
+      this.updateFieldOptions('meeting_detail', event.rowIndex, 'attendees', options);
       this.activeButtonId = event.buttonId;
     } else if (event.buttonId === 'CANCEL') {
       this.hideForm(event.rowIndex);
@@ -146,15 +157,29 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
 
   initCreateMeetingForm(): void {
     this.showCreateForm();
+    const options = this.members.map((d) => {
+      return {
+        key: d.email,
+        displayValue: `${d.fullName} (${d.email})`
+      } as KeyValue
+    })
+    this.updateFieldOptions('meeting_detail', 0, 'attendees', options, true);
   }
 
   private performCreateMeeting(): void {
     const meetingForm = this.getSectionForm('meeting_detail', 0, true);
     meetingForm?.markAllAsTouched();
     if (meetingForm?.valid) {
-      this.communicationService.createMeeting(removeNullFields(meetingForm.value)).subscribe(data => {
+      const meeting = meetingForm.value;
+      meeting.attendees = meeting.attendees.map((d: string) => {
+        return {
+          name: this.members.find((m) => m.email === d)?.fullName,
+          email: d
+        }
+      })
+      this.communicationService.createMeeting(removeNullFields(meeting)).subscribe(data => {
         this.hideForm(0, true);
-        this.addContentRow(data);
+        this.addContentRow(data, true);
       });
     }
   }
@@ -167,6 +192,12 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
     meetingForm?.markAllAsTouched();
     if (meetingForm?.valid) {
       const updated = compareObjects(meetingForm.value, meeting);
+      updated.attendees = updated.attendees.map((d: string) => {
+        return {
+          name: this.members.find((m) => m.email === d)?.fullName,
+          email: d
+        }
+      })
       this.communicationService.updateMeeting(meeting.id, updated).subscribe(data => {
         this.hideForm(rowIndex);
         this.updateContentRow(data, rowIndex);

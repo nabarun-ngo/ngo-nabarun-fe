@@ -3,15 +3,19 @@ import { map, Observable, of } from 'rxjs';
 import { PagedNotice, Notice } from '../model/notice.model';
 import { PagedMeeting, Meeting } from '../model/meeting.model';
 import { mapNoticeToDto, mapDtoToMeeting, mapPagedDtoToPagedMeeting } from '../model/communication.mapper';
-import { MeetingControllerService } from 'src/app/core/api-client/services';
+import { MeetingControllerService, UserControllerService } from 'src/app/core/api-client/services';
 import { MeetingDefaultValue } from '../communication.const';
+import { mapPagedUserDtoToPagedUser } from '../../member/models/member.mapper';
+import { User } from '../../member/models/member.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CommunicationService {
 
-  constructor(private readonly meetingController: MeetingControllerService) { }
+  constructor(private readonly meetingController: MeetingControllerService,
+    private readonly userController: UserControllerService
+  ) { }
 
   /**
    * Fetch notices with pagination
@@ -206,5 +210,16 @@ export class CommunicationService {
    */
   getMeetingRefData(): Observable<any> {
     return of({});
+  }
+
+  fetchUserList(): Observable<User[]> {
+    return this.userController.listUsers({
+      pageIndex: 0,
+      pageSize: 100000,
+    }).pipe(
+      map((d) => d.responsePayload),
+      map(mapPagedUserDtoToPagedUser),
+      map((d) => d.content!)
+    );
   }
 }
