@@ -22,6 +22,7 @@ import { CallbackControllerService } from './services/callback-controller.servic
 import { HealthControllerService } from './services/health-controller.service';
 import { ProjectControllerService } from './services/project-controller.service';
 import { CorrespondenceControllerService } from './services/correspondence-controller.service';
+import { MeetingControllerService } from './services/meeting-controller.service';
 import { CronControllerService } from './services/cron-controller.service';
 
 /**
@@ -48,6 +49,7 @@ import { CronControllerService } from './services/cron-controller.service';
     HealthControllerService,
     ProjectControllerService,
     CorrespondenceControllerService,
+    MeetingControllerService,
     CronControllerService,
     ApiConfiguration
   ],

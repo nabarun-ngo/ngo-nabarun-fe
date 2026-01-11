@@ -18,4 +18,5 @@ export { CallbackControllerService } from './services/callback-controller.servic
 export { HealthControllerService } from './services/health-controller.service';
 export { ProjectControllerService } from './services/project-controller.service';
 export { CorrespondenceControllerService } from './services/correspondence-controller.service';
+export { MeetingControllerService } from './services/meeting-controller.service';
 export { CronControllerService } from './services/cron-controller.service';
