@@ -7,7 +7,7 @@ import { Meeting, PagedMeeting } from '../../model/meeting.model';
 import { MeetingDefaultValue, MeetingConstant } from '../../communication.const';
 import { meetingHeader, getMeetingSection } from '../../fields/meeting.field';
 import { CommunicationService } from '../../service/communication.service';
-import { compareObjects, date, removeNullFields } from 'src/app/core/service/utilities.service';
+import { compareObjects, date, removeNullFields, shareToWhatsApp } from 'src/app/core/service/utilities.service';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { KeyValue } from 'src/app/shared/model/key-value.model';
 import { User } from 'src/app/feature/member/models/member.model';
@@ -96,6 +96,10 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
       {
         button_id: 'UPDATE_MEETING',
         button_name: 'Update Meeting'
+      },
+      {
+        button_id: 'SHARE_WHATSAPP',
+        button_name: 'Share on WhatsApp'
       }
     ];
   }
@@ -121,6 +125,9 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
       this.hideForm(0, true);
     } else if (event.buttonId === 'CONFIRM_CREATE') {
       this.performCreateMeeting();
+    } else if (event.buttonId === 'SHARE_WHATSAPP') {
+      const message = this.createWhatsAppMessage(this.itemList[event.rowIndex]);
+      shareToWhatsApp(message);
     }
   }
 
@@ -203,5 +210,58 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
         this.updateContentRow(data, rowIndex);
       });
     }
+  }
+
+
+  private createWhatsAppMessage(meeting: Meeting): string {
+    const lines: string[] = [];
+
+    // Header with emojis
+    lines.push('📅 *MEETING INVITATION*');
+    lines.push('━━━━━━━━━━━━━━━━━━━');
+    lines.push('');
+
+    // Meeting title
+    lines.push(`📌 *${meeting.summary}*`);
+    lines.push('');
+
+    // Date and time
+    lines.push(`🗓️ *Date:* ${date(meeting.startTime)}`);
+    lines.push(`🕐 *Time:* ${date(meeting.startTime, 'hh:mm a')} - ${date(meeting.endTime, 'hh:mm a')}`);
+    lines.push('');
+
+    // Location or meeting link
+    if (meeting.location) {
+      lines.push(`📍 *Location:* ${meeting.location}`);
+      lines.push('');
+    }
+
+    if (meeting.meetLink) {
+      lines.push(`🔗 *Join Link:*`);
+      lines.push(meeting.meetLink);
+      lines.push('');
+    }
+
+    // Attendees
+    // if (meeting.attendees && meeting.attendees.length > 0) {
+    //   lines.push(`👥 *Attendees:*`);
+    //   meeting.attendees.forEach(attendee => {
+    //     lines.push(`   • ${attendee}`);
+    //   });
+    //   lines.push('');
+    // }
+
+    // Agenda
+    if (meeting.agenda && meeting.agenda.length > 0) {
+      lines.push(`📋 *Agenda:*`);
+      lines.push(`${meeting.agenda}`);
+      lines.push('');
+    }
+
+    // Footer
+    lines.push('━━━━━━━━━━━━━━━━━━━');
+    lines.push('✨ Looking forward to seeing you!');
+
+    return lines.join('\n');
   }
 }
