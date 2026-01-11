@@ -16,7 +16,7 @@ import { ProjectListTabComponent } from './project-list-tab/project-list-tab.com
   templateUrl: './project-dashboard.component.html',
   styleUrls: ['./project-dashboard.component.scss'],
 })
-export class ProjectDashboardComponent extends StandardDashboard<PagedProject> {
+export class ProjectDashboardComponent extends StandardDashboard<{projects : PagedProject, managers: User[] | undefined> {
 
   @ViewChild(ProjectListTabComponent) projectListTab!: ProjectListTabComponent;
 
