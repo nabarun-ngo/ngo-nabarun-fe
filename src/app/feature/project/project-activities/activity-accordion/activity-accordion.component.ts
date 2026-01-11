@@ -166,13 +166,9 @@ export class ActivityAccordionComponent extends Accordion<ProjectActivity> imple
       pageNumber,
       pageSize
     ).subscribe((data) => {
-      // Filter activities by projectId and exclude IN_PROGRESS status
-      const filteredContent = data.content?.filter(activity =>
-        activity.projectId === this.project.id && activity.status !== 'IN_PROGRESS'
-      ) || [];
       this.setContent(
-        filteredContent,
-        filteredContent.length
+        data.content!,
+        data.totalSize
       );
     });
   }
