@@ -44,18 +44,14 @@ const routes: Routes = [
         path: route_data.secured_account_list_page.feature,
         loadChildren: () => import('./feature/finance/finance.module').then(m => m.FinanceModule),
       },
-      // {
-      //   path: route_data.secured_notice_notices_page.feature,
-      //   loadChildren: () => import('./feature/notice/notice.module').then(m => m.NoticeModule),
-      // },
       {
         path: route_data.secured_admin_dashboard_page.feature,
         loadChildren: () => import('./feature/admin/admin.module').then(m => m.AdminModule),
       },
-      // {
-      //   path: route_data.secured_event_list_page.feature,
-      //   loadChildren: () => import('./feature/social-event/social-event.module').then(m => m.SocialEventModule),
-      // },
+      {
+        path: route_data.secured_project_list_page.feature,
+        loadChildren: () => import('./feature/project/project.module').then(m => m.ProjectModule),
+      },
     ],
     canActivate: [
       AuthGuardService,

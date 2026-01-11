@@ -5,7 +5,7 @@
 export interface ProjectDetailDto {
   actualBeneficiaryCount?: number;
   actualEndDate?: string;
-  budget: number;
+  budget?: number;
   category: 'EDUCATION' | 'HEALTH' | 'ENVIRONMENT' | 'RURAL_DEVELOPMENT' | 'WOMEN_EMPOWERMENT' | 'CHILD_WELFARE' | 'DISASTER_RELIEF' | 'OTHER';
   code: string;
   createdAt: string;
@@ -19,7 +19,7 @@ export interface ProjectDetailDto {
 };
   name: string;
   phase: 'INITIATION' | 'PLANNING' | 'EXECUTION' | 'MONITORING' | 'CLOSURE';
-  spentAmount: number;
+  spentAmount?: number;
   sponsorId?: string;
   startDate: string;
   status: 'PLANNING' | 'ACTIVE' | 'ON_HOLD' | 'COMPLETED' | 'CANCELLED';

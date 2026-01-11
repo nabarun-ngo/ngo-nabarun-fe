@@ -8,7 +8,7 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { ProjectDetailDto } from '../../models/project-detail-dto';
+import { SuccessResponseProjectDetailDto } from '../../models/success-response-project-detail-dto';
 import { UpdateProjectDto } from '../../models/update-project-dto';
 
 export interface UpdateProject$Params {
@@ -20,7 +20,7 @@ export interface UpdateProject$Params {
       body: UpdateProjectDto
 }
 
-export function updateProject(http: HttpClient, rootUrl: string, params: UpdateProject$Params, context?: HttpContext): Observable<StrictHttpResponse<ProjectDetailDto>> {
+export function updateProject(http: HttpClient, rootUrl: string, params: UpdateProject$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseProjectDetailDto>> {
   const rb = new RequestBuilder(rootUrl, updateProject.PATH, 'patch');
   if (params) {
     rb.path('id', params.id, {});
@@ -32,9 +32,9 @@ export function updateProject(http: HttpClient, rootUrl: string, params: UpdateP
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<ProjectDetailDto>;
+      return r as StrictHttpResponse<SuccessResponseProjectDetailDto>;
     })
   );
 }
 
-updateProject.PATH = '/api/api/project/{id}/update';
+updateProject.PATH = '/api/projects/{id}/update';

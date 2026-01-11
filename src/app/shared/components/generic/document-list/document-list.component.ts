@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { DmsControllerService } from 'src/app/core/api-client/services';
-import { openWindow } from 'src/app/core/service/utilities.service';
+import { openWindow, saveAs } from 'src/app/core/service/utilities.service';
 import { Doc } from 'src/app/shared/model/document.model';
 
 @Component({
@@ -17,23 +17,38 @@ export class DocumentListComponent {
   canViewAttachment: boolean = true;
   canDeleteAttachment: boolean = true;
 
-  constructor(private commonController: DmsControllerService) { }
+  constructor(private dmsService: DmsControllerService) { }
 
   deleteAttachment(document: Doc) {
 
   }
 
+
   downloadAttachment(document: Doc) {
-    this.commonController.downloadDocument({ id: document.id! }).subscribe(data => {
-      // ////console.log(data)
-      //saveFromURL(data,document.originalFileName)
-      //saveAs(data as Blob, document.originalFileName!);
-    })
+    this.dmsService.downloadDocument({ id: document.id! }).subscribe((response) => {
+      const blob = response;
+
+      // 2. Create a temporary URL for the blob
+      const url = window.URL.createObjectURL(blob!);
+
+      // 3. Create a hidden <a> tag and click it
+      const link = window.document.createElement('a');
+      link.href = url;
+      link.download = document.fileName!;
+      window.document.body.appendChild(link);
+      link.click();
+
+      // 4. Cleanup
+      window.document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    }, error => {
+      console.error('Download failed', error);
+    });
   }
 
+
   viewAttachment(document: Doc) {
-    this.commonController.viewDocument({ id: document.id! }).subscribe((data) => {
-      ////console.log(data)
+    this.dmsService.viewDocument({ id: document.id! }).subscribe((data) => {
       openWindow(data.responsePayload!);
     })
   }

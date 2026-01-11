@@ -49,7 +49,7 @@ export class JobControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getJobs$Response(params: GetJobs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayJobDetail>> {
+  getJobs$Response(params?: GetJobs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayJobDetail>> {
     return getJobs(this.http, this.rootUrl, params, context);
   }
 
@@ -63,7 +63,7 @@ export class JobControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getJobs(params: GetJobs$Params, context?: HttpContext): Observable<SuccessResponseArrayJobDetail> {
+  getJobs(params?: GetJobs$Params, context?: HttpContext): Observable<SuccessResponseArrayJobDetail> {
     return this.getJobs$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseArrayJobDetail>): SuccessResponseArrayJobDetail => r.body)
     );
