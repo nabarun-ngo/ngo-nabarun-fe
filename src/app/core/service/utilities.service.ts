@@ -15,7 +15,7 @@ export const isEmpty = (str: string): boolean => {
   return (!str || str.length === 0);
 }
 
-export const date = (dateString: string | undefined, format: string = 'dd/MM/yyyy'): string => {
+export const date = (dateString: string | Date | undefined, format: string = 'dd/MM/yyyy'): string => {
   return new DatePipe('en').transform(dateString, format)!;
 }
 
