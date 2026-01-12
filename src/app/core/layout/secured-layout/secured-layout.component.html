@@ -2,8 +2,9 @@
 <app-page-title></app-page-title>
 <router-outlet></router-outlet>
 <app-footer></app-footer>
-<ng-http-loader [backgroundColor]="httpLoaderConfig.backgroundColor" [debounceDelay]="httpLoaderConfig.debounceDelay" [extraDuration]="httpLoaderConfig.extraDuration" [minDuration]="httpLoaderConfig.minDuration" [backdropBackgroundColor]="httpLoaderConfig.backdropBackgroundColor"
-    [entryComponent]="httpLoaderConfig.entryComponent" [opacity]="httpLoaderConfig.opacity" 
+<ng-http-loader [backgroundColor]="httpLoaderConfig.backgroundColor" [debounceDelay]="httpLoaderConfig.debounceDelay"
+    [extraDuration]="httpLoaderConfig.extraDuration" [minDuration]="httpLoaderConfig.minDuration"
+    [backdropBackgroundColor]="httpLoaderConfig.backdropBackgroundColor"
+    [entryComponent]="httpLoaderConfig.entryComponent" [opacity]="httpLoaderConfig.opacity"
     [filteredHeaders]="['Show-No-Spinner']"
-    [filteredUrlPatterns]="['openid-configuration','jwks.json']"
-    ></ng-http-loader>
+    [filteredUrlPatterns]="httpLoaderConfig.filteredUrlPatterns"></ng-http-loader>

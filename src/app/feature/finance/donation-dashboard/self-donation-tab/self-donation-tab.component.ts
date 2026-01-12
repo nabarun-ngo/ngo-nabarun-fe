@@ -69,10 +69,10 @@ export class SelfDonationTabComponent extends BaseDonationTabComponent {
   protected override prepareDefaultButtons(data: Donation, options?: { [key: string]: any; }): AccordionButton[] {
     return data.status === 'RAISED' || data.status === 'PENDING' ?
       [
-        {
-          button_id: 'NOTIFY',
-          button_name: 'Notify Payment',
-        }
+        // {
+        //   button_id: 'NOTIFY',
+        //   button_name: 'Notify Payment',
+        // }
       ] : [];
   }
 

@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { UserIdentityService } from '../../service/user-identity.service';
-import { SharedDataService } from '../../service/shared-data.service';
 
 @Component({
   selector: 'app-loader',
@@ -16,8 +14,8 @@ import { SharedDataService } from '../../service/shared-data.service';
 })
 export class PageLoaderComponent implements OnInit {
 
-  constructor() {}
+  constructor() { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
 }

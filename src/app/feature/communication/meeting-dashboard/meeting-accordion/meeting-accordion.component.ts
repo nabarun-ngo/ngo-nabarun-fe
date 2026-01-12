@@ -48,7 +48,7 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
   ): AccordionCell[] {
     const timeRange = data?.startTime && data?.endTime
       ? `${date(data.startTime, 'hh:mm a')} - ${date(data.endTime, 'hh:mm a')}`
-      : data?.startTime || '';
+      : data?.startTime ? date(data.startTime, 'hh:mm a') : '';
 
     return [
       {
@@ -57,7 +57,7 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
       },
       {
         type: 'date',
-        value: data?.startTime!,
+        value: data?.startTime ? data.startTime.toISOString() : '',
       },
       {
         type: 'text',
@@ -199,7 +199,10 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
     meetingForm?.markAllAsTouched();
     if (meetingForm?.valid) {
       const updated = compareObjects(meetingForm.value, meeting);
-      updated.attendees = updated.attendees.map((d: string) => {
+      if (updated.startTime || updated.endTime) {
+        updated.meetingDate = meetingForm.value.meetingDate;
+      }
+      updated.attendees = updated.attendees?.map((d: string) => {
         return {
           name: this.members.find((m) => m.email === d)?.fullName,
           email: d

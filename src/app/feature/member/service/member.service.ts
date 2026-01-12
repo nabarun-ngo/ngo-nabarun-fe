@@ -9,6 +9,7 @@ import { mapPagedUserDtoToPagedUser, mapUserDtoToUser } from '../models/member.m
 })
 export class MemberService {
 
+
   constructor(
     private userController: UserControllerService,
     private dmsService: DmsControllerService,
@@ -90,6 +91,10 @@ export class MemberService {
 
   updateProfiledetail(id: string, updatedDetail: UserUpdateAdminDto) {
     return this.userController.updateUser({ id: id, body: updatedDetail }).pipe(map(d => d.responsePayload), map(d => mapUserDtoToUser(d)));
+  }
+
+  initPasswordChange() {
+    return this.userController.initPasswordChange()
   }
 
 }

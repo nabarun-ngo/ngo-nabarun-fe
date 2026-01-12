@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { map, Observable, of } from 'rxjs';
 import { PagedNotice, Notice } from '../model/notice.model';
-import { PagedMeeting, Meeting } from '../model/meeting.model';
+import { PagedMeeting, Meeting, formatMeetingDate } from '../model/meeting.model';
 import { mapNoticeToDto, mapDtoToMeeting, mapPagedDtoToPagedMeeting } from '../model/communication.mapper';
 import { MeetingControllerService, UserControllerService } from 'src/app/core/api-client/services';
 import { MeetingDefaultValue } from '../communication.const';
@@ -162,15 +162,15 @@ export class CommunicationService {
    * Create a new meeting
    * TODO: Replace with actual API call when MeetingControllerService is available in api-client
    */
-  createMeeting(meetingData: Partial<Meeting>): Observable<Meeting> {
-
+  createMeeting(meetingData: Partial<Meeting>): Observable<any> {
     return this.meetingController.createMeeting({
       body: {
+        agenda: meetingData.agenda!,
         attendees: meetingData.attendees!,
         description: meetingData.description!,
-        endTime: meetingData.endTime!,
+        endTime: formatMeetingDate(meetingData.meetingDate!, meetingData.endTime!),
         location: meetingData.location!,
-        startTime: meetingData.startTime!,
+        startTime: formatMeetingDate(meetingData.meetingDate!, meetingData.startTime!),
         summary: meetingData.summary!,
         type: meetingData.type!,
       }
@@ -178,8 +178,6 @@ export class CommunicationService {
       map((d) => d.responsePayload),
       map(mapDtoToMeeting)
     );
-
-
   }
 
   /**
@@ -187,9 +185,23 @@ export class CommunicationService {
    * TODO: Replace with actual API call when MeetingControllerService is available in api-client
    */
   updateMeeting(id: string, meetingData: Partial<Meeting>): Observable<Meeting> {
+    const body: any = { ...meetingData };
+
+    if (meetingData.startTime) {
+      body.startTime = meetingData.startTime instanceof Date
+        ? meetingData.startTime.toISOString()
+        : formatMeetingDate(meetingData.meetingDate!, meetingData.startTime as unknown as string);
+    }
+
+    if (meetingData.endTime) {
+      body.endTime = meetingData.endTime instanceof Date
+        ? meetingData.endTime.toISOString()
+        : formatMeetingDate(meetingData.meetingDate!, meetingData.endTime as unknown as string);
+    }
+
     return this.meetingController.updateMeeting({
       id: id,
-      body: meetingData
+      body: body
     }).pipe(
       map((d) => d.responsePayload),
       map(mapDtoToMeeting)

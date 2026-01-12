@@ -21,6 +21,7 @@ export class HeaderComponent implements OnInit {
   //userId!:string;
   //notifications:  AppNotification[]=[];
   notificationCount: string = '0';
+  showNotification: boolean = false;
   constructor(
     private identityService: UserIdentityService,
     private modalService: ModalService,
