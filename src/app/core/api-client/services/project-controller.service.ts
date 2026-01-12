@@ -11,16 +11,25 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { createActivity } from '../fn/project-controller/create-activity';
+import { CreateActivity$Params } from '../fn/project-controller/create-activity';
 import { createProject } from '../fn/project-controller/create-project';
 import { CreateProject$Params } from '../fn/project-controller/create-project';
 import { getProjectById } from '../fn/project-controller/get-project-by-id';
 import { GetProjectById$Params } from '../fn/project-controller/get-project-by-id';
+import { getReferenceData_1 } from '../fn/project-controller/get-reference-data-1';
+import { GetReferenceData_1$Params } from '../fn/project-controller/get-reference-data-1';
 import { listActivities } from '../fn/project-controller/list-activities';
 import { ListActivities$Params } from '../fn/project-controller/list-activities';
 import { listProjects } from '../fn/project-controller/list-projects';
 import { ListProjects$Params } from '../fn/project-controller/list-projects';
-import { ProjectDetailDto } from '../models/project-detail-dto';
+import { SuccessResponseActivityDetailDto } from '../models/success-response-activity-detail-dto';
 import { SuccessResponsePagedResultActivityDetailDto } from '../models/success-response-paged-result-activity-detail-dto';
+import { SuccessResponsePagedResultProjectDetailDto } from '../models/success-response-paged-result-project-detail-dto';
+import { SuccessResponseProjectDetailDto } from '../models/success-response-project-detail-dto';
+import { SuccessResponseProjectRefDataDto } from '../models/success-response-project-ref-data-dto';
+import { updateActivity } from '../fn/project-controller/update-activity';
+import { UpdateActivity$Params } from '../fn/project-controller/update-activity';
 import { updateProject } from '../fn/project-controller/update-project';
 import { UpdateProject$Params } from '../fn/project-controller/update-project';
 
@@ -30,107 +39,8 @@ export class ProjectControllerService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `createProject()` */
-  static readonly CreateProjectPath = '/api/api/project/create';
-
-  /**
-   * Create a new project.
-   *
-   *
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `createProject()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  createProject$Response(params: CreateProject$Params, context?: HttpContext): Observable<StrictHttpResponse<ProjectDetailDto>> {
-    return createProject(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * Create a new project.
-   *
-   *
-   *
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `createProject$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  createProject(params: CreateProject$Params, context?: HttpContext): Observable<ProjectDetailDto> {
-    return this.createProject$Response(params, context).pipe(
-      map((r: StrictHttpResponse<ProjectDetailDto>): ProjectDetailDto => r.body)
-    );
-  }
-
-  /** Path part for operation `updateProject()` */
-  static readonly UpdateProjectPath = '/api/api/project/{id}/update';
-
-  /**
-   * Update a project.
-   *
-   *
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `updateProject()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  updateProject$Response(params: UpdateProject$Params, context?: HttpContext): Observable<StrictHttpResponse<ProjectDetailDto>> {
-    return updateProject(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * Update a project.
-   *
-   *
-   *
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `updateProject$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  updateProject(params: UpdateProject$Params, context?: HttpContext): Observable<ProjectDetailDto> {
-    return this.updateProject$Response(params, context).pipe(
-      map((r: StrictHttpResponse<ProjectDetailDto>): ProjectDetailDto => r.body)
-    );
-  }
-
-  /** Path part for operation `getProjectById()` */
-  static readonly GetProjectByIdPath = '/api/api/project/{id}';
-
-  /**
-   * Get project by ID.
-   *
-   *
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getProjectById()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getProjectById$Response(params: GetProjectById$Params, context?: HttpContext): Observable<StrictHttpResponse<ProjectDetailDto>> {
-    return getProjectById(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * Get project by ID.
-   *
-   *
-   *
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getProjectById$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getProjectById(params: GetProjectById$Params, context?: HttpContext): Observable<ProjectDetailDto> {
-    return this.getProjectById$Response(params, context).pipe(
-      map((r: StrictHttpResponse<ProjectDetailDto>): ProjectDetailDto => r.body)
-    );
-  }
-
   /** Path part for operation `listProjects()` */
-  static readonly ListProjectsPath = '/api/api/project/list';
+  static readonly ListProjectsPath = '/api/projects';
 
   /**
    * List projects with filters and pagination.
@@ -142,7 +52,7 @@ export class ProjectControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listProjects$Response(params?: ListProjects$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ProjectDetailDto>>> {
+  listProjects$Response(params?: ListProjects$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultProjectDetailDto>> {
     return listProjects(this.http, this.rootUrl, params, context);
   }
 
@@ -156,14 +66,113 @@ export class ProjectControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listProjects(params?: ListProjects$Params, context?: HttpContext): Observable<Array<ProjectDetailDto>> {
+  listProjects(params?: ListProjects$Params, context?: HttpContext): Observable<SuccessResponsePagedResultProjectDetailDto> {
     return this.listProjects$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<ProjectDetailDto>>): Array<ProjectDetailDto> => r.body)
+      map((r: StrictHttpResponse<SuccessResponsePagedResultProjectDetailDto>): SuccessResponsePagedResultProjectDetailDto => r.body)
+    );
+  }
+
+  /** Path part for operation `createProject()` */
+  static readonly CreateProjectPath = '/api/projects/create';
+
+  /**
+   * Create a new project.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `createProject()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createProject$Response(params: CreateProject$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseProjectDetailDto>> {
+    return createProject(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Create a new project.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `createProject$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createProject(params: CreateProject$Params, context?: HttpContext): Observable<SuccessResponseProjectDetailDto> {
+    return this.createProject$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseProjectDetailDto>): SuccessResponseProjectDetailDto => r.body)
+    );
+  }
+
+  /** Path part for operation `updateProject()` */
+  static readonly UpdateProjectPath = '/api/projects/{id}/update';
+
+  /**
+   * Update a project.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateProject()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateProject$Response(params: UpdateProject$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseProjectDetailDto>> {
+    return updateProject(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Update a project.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateProject$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateProject(params: UpdateProject$Params, context?: HttpContext): Observable<SuccessResponseProjectDetailDto> {
+    return this.updateProject$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseProjectDetailDto>): SuccessResponseProjectDetailDto => r.body)
+    );
+  }
+
+  /** Path part for operation `getProjectById()` */
+  static readonly GetProjectByIdPath = '/api/projects/{id}';
+
+  /**
+   * Get project by ID.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getProjectById()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getProjectById$Response(params: GetProjectById$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseProjectDetailDto>> {
+    return getProjectById(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get project by ID.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getProjectById$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getProjectById(params: GetProjectById$Params, context?: HttpContext): Observable<SuccessResponseProjectDetailDto> {
+    return this.getProjectById$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseProjectDetailDto>): SuccessResponseProjectDetailDto => r.body)
     );
   }
 
   /** Path part for operation `listActivities()` */
-  static readonly ListActivitiesPath = '/api/api/project/activities';
+  static readonly ListActivitiesPath = '/api/projects/{id}/activities';
 
   /**
    * List project activities with filters and pagination.
@@ -175,7 +184,7 @@ export class ProjectControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listActivities$Response(params?: ListActivities$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultActivityDetailDto>> {
+  listActivities$Response(params: ListActivities$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultActivityDetailDto>> {
     return listActivities(this.http, this.rootUrl, params, context);
   }
 
@@ -189,9 +198,108 @@ export class ProjectControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listActivities(params?: ListActivities$Params, context?: HttpContext): Observable<SuccessResponsePagedResultActivityDetailDto> {
+  listActivities(params: ListActivities$Params, context?: HttpContext): Observable<SuccessResponsePagedResultActivityDetailDto> {
     return this.listActivities$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponsePagedResultActivityDetailDto>): SuccessResponsePagedResultActivityDetailDto => r.body)
+    );
+  }
+
+  /** Path part for operation `createActivity()` */
+  static readonly CreateActivityPath = '/api/projects/{id}/activity';
+
+  /**
+   * create new activity.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `createActivity()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createActivity$Response(params: CreateActivity$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseActivityDetailDto>> {
+    return createActivity(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * create new activity.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `createActivity$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  createActivity(params: CreateActivity$Params, context?: HttpContext): Observable<SuccessResponseActivityDetailDto> {
+    return this.createActivity$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseActivityDetailDto>): SuccessResponseActivityDetailDto => r.body)
+    );
+  }
+
+  /** Path part for operation `updateActivity()` */
+  static readonly UpdateActivityPath = '/api/projects/{id}/activity/{activityId}';
+
+  /**
+   * Update project activity.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateActivity()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateActivity$Response(params: UpdateActivity$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseActivityDetailDto>> {
+    return updateActivity(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Update project activity.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateActivity$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateActivity(params: UpdateActivity$Params, context?: HttpContext): Observable<SuccessResponseActivityDetailDto> {
+    return this.updateActivity$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseActivityDetailDto>): SuccessResponseActivityDetailDto => r.body)
+    );
+  }
+
+  /** Path part for operation `getReferenceData_1()` */
+  static readonly GetReferenceData_1Path = '/api/projects/static/referenceData';
+
+  /**
+   * Get project reference data.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getReferenceData_1()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getReferenceData_1$Response(params?: GetReferenceData_1$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseProjectRefDataDto>> {
+    return getReferenceData_1(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get project reference data.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getReferenceData_1$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getReferenceData_1(params?: GetReferenceData_1$Params, context?: HttpContext): Observable<SuccessResponseProjectRefDataDto> {
+    return this.getReferenceData_1$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseProjectRefDataDto>): SuccessResponseProjectRefDataDto => r.body)
     );
   }
 

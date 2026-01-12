@@ -15,7 +15,7 @@ export interface GetJobs$Params {
 /**
  * Status of the failed jobs to return
  */
-  status: string;
+  status?: 'completed' | 'failed' | 'paused' | 'delayed' | 'paused' | 'active';
 
 /**
  * Number of failed jobs to return
@@ -23,7 +23,7 @@ export interface GetJobs$Params {
   limit?: number;
 }
 
-export function getJobs(http: HttpClient, rootUrl: string, params: GetJobs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayJobDetail>> {
+export function getJobs(http: HttpClient, rootUrl: string, params?: GetJobs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayJobDetail>> {
   const rb = new RequestBuilder(rootUrl, getJobs.PATH, 'get');
   if (params) {
     rb.query('status', params.status, {});

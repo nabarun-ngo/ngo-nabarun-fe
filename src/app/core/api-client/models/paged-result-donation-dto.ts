@@ -11,16 +11,6 @@ export interface PagedResultDonationDto {
   content: Array<DonationDto>;
 
   /**
-   * Size of the current content
-   */
-  currentSize: number;
-
-  /**
-   * Next page index
-   */
-  nextPageIndex: number;
-
-  /**
    * Current page index (1-based or 0-based depending on API)
    */
   pageIndex: number;
@@ -29,16 +19,6 @@ export interface PagedResultDonationDto {
    * Page size (number of items per page)
    */
   pageSize: number;
-
-  /**
-   * Previous page index
-   */
-  prevPageIndex: number;
-
-  /**
-   * Total number of pages
-   */
-  totalPages: number;
 
   /**
    * Total number of items across all pages

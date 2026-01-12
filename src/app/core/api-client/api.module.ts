@@ -21,6 +21,9 @@ import { PublicControllerService } from './services/public-controller.service';
 import { CallbackControllerService } from './services/callback-controller.service';
 import { HealthControllerService } from './services/health-controller.service';
 import { ProjectControllerService } from './services/project-controller.service';
+import { CorrespondenceControllerService } from './services/correspondence-controller.service';
+import { MeetingControllerService } from './services/meeting-controller.service';
+import { CronControllerService } from './services/cron-controller.service';
 
 /**
  * Module that provides all services and configuration.
@@ -45,6 +48,9 @@ import { ProjectControllerService } from './services/project-controller.service'
     CallbackControllerService,
     HealthControllerService,
     ProjectControllerService,
+    CorrespondenceControllerService,
+    MeetingControllerService,
+    CronControllerService,
     ApiConfiguration
   ],
 })

@@ -50,13 +50,14 @@ export class RequestService {
 
 
 
-  createRequest(type: string, data: Record<string, string>, requestedFor?: string, isExtUser?: boolean) {
+  createRequest(type: string, data: Record<string, string>, requestedFor?: string, isExtUser?: boolean, extUserEmail?: string) {
     return this.workflowController.startWorkflow({
       body: {
         type: type as any,
         data: data,
         requestedFor: requestedFor,
-        forExternalUser: isExtUser
+        forExternalUser: isExtUser,
+        externalUserEmail: extUserEmail
       }
     }).pipe(
       map(d => d.responsePayload),

@@ -8,7 +8,7 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { ProjectDetailDto } from '../../models/project-detail-dto';
+import { SuccessResponsePagedResultProjectDetailDto } from '../../models/success-response-paged-result-project-detail-dto';
 
 export interface ListProjects$Params {
   pageIndex?: number;
@@ -22,7 +22,7 @@ export interface ListProjects$Params {
   tags?: Array<string>;
 }
 
-export function listProjects(http: HttpClient, rootUrl: string, params?: ListProjects$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ProjectDetailDto>>> {
+export function listProjects(http: HttpClient, rootUrl: string, params?: ListProjects$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultProjectDetailDto>> {
   const rb = new RequestBuilder(rootUrl, listProjects.PATH, 'get');
   if (params) {
     rb.query('pageIndex', params.pageIndex, {});
@@ -41,9 +41,9 @@ export function listProjects(http: HttpClient, rootUrl: string, params?: ListPro
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<ProjectDetailDto>>;
+      return r as StrictHttpResponse<SuccessResponsePagedResultProjectDetailDto>;
     })
   );
 }
 
-listProjects.PATH = '/api/api/project/list';
+listProjects.PATH = '/api/projects';

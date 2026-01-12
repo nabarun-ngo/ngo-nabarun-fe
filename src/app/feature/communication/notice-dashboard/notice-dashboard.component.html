@@ -1,0 +1,9 @@
+<app-page-layout [navigations]="navigations">
+  <div class="flex flex-col gap-4">
+    <app-search-and-advanced-search-form [searchInput]="searchInput" (onSearch)="onSearch($event)">
+    </app-search-and-advanced-search-form>
+
+    <app-notice-accordion [accordionData]="initialData!" [refData]="refData">
+    </app-notice-accordion>
+  </div>
+</app-page-layout>

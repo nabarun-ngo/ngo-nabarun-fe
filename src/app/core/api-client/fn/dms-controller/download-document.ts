@@ -10,21 +10,25 @@ import { RequestBuilder } from '../../request-builder';
 
 
 export interface DownloadDocument$Params {
+
+/**
+ * Document ID
+ */
   id: string;
 }
 
-export function downloadDocument(http: HttpClient, rootUrl: string, params: DownloadDocument$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+export function downloadDocument(http: HttpClient, rootUrl: string, params: DownloadDocument$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
   const rb = new RequestBuilder(rootUrl, downloadDocument.PATH, 'get');
   if (params) {
     rb.path('id', params.id, {});
   }
 
   return http.request(
-    rb.build({ responseType: 'text', accept: '*/*', context })
+    rb.build({ responseType: 'blob', accept: 'application/octet-stream', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      return r as StrictHttpResponse<Blob>;
     })
   );
 }

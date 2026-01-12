@@ -9,13 +9,13 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 import { CreateProjectDto } from '../../models/create-project-dto';
-import { ProjectDetailDto } from '../../models/project-detail-dto';
+import { SuccessResponseProjectDetailDto } from '../../models/success-response-project-detail-dto';
 
 export interface CreateProject$Params {
       body: CreateProjectDto
 }
 
-export function createProject(http: HttpClient, rootUrl: string, params: CreateProject$Params, context?: HttpContext): Observable<StrictHttpResponse<ProjectDetailDto>> {
+export function createProject(http: HttpClient, rootUrl: string, params: CreateProject$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseProjectDetailDto>> {
   const rb = new RequestBuilder(rootUrl, createProject.PATH, 'post');
   if (params) {
     rb.body(params.body, 'application/json');
@@ -26,9 +26,9 @@ export function createProject(http: HttpClient, rootUrl: string, params: CreateP
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<ProjectDetailDto>;
+      return r as StrictHttpResponse<SuccessResponseProjectDetailDto>;
     })
   );
 }
 
-createProject.PATH = '/api/api/project/create';
+createProject.PATH = '/api/projects/create';

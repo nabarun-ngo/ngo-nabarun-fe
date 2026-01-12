@@ -1,8 +1,8 @@
 export interface TileInfo {
-    tile_html_id?:string;
+    tile_html_id?: string;
     tile_name: string;
     tile_link: string;
-    tile_icon: 'icon_rupee' | 'icon_book' | 'icon_group' | 'icon_credit_card' | 'icon_presentation' | 'icon_home' | 'icon_comment' | 'icon_globe' | 'icon_code';
+    tile_icon: 'icon_rupee' | 'icon_book' | 'icon_group' | 'icon_credit_card' | 'icon_presentation' | 'icon_home' | 'icon_comment' | 'icon_globe' | 'icon_code' | 'icon_expense' | 'icon_tasks' | 'icon_members' | 'icon_requests' | 'icon_notices' | 'icon_projects' | 'icon_admin';
     hide_tile?: boolean;
     additional_info?: {
         tile_value?: string;

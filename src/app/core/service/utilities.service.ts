@@ -185,6 +185,23 @@ export function removeNullFields<T extends Record<string, any>>(obj: T): T {
   ) as T;
 }
 
+export function shareToWhatsApp(message: string, phoneNumber?: string): void {
+  const encodedMessage = encodeURIComponent(message);
+
+  // Create WhatsApp URL
+  let whatsappUrl: string;
+  if (phoneNumber) {
+    // Send to specific number
+    whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+  } else {
+    // Open WhatsApp with message (user selects recipient)
+    whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
+  }
+
+  // Open WhatsApp
+  window.open(whatsappUrl, '_blank');
+}
+
 
 
 

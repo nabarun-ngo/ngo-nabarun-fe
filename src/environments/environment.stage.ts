@@ -43,18 +43,6 @@ const firebaseConfig = {
   measurementId: "G-PT9V4XMXWY"
 };
 
-const gapiConfig = {
-  apiKey: 'AIzaSyDEQ5433AfdAoTOOCqjlK9K-Ep0FD8sdwg',
-  clientId:
-    '595475200212-gibsoge21ed013o9obcreldfpfncgops.apps.googleusercontent.com',
-  discoveryDocs: [
-    'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest',
-  ],
-  scope: 'https://www.googleapis.com/auth/calendar.readonly',
-  plugin_name: 'nabarun_app'
-
-};
-
 export const environment = {
   production: false,
   name: 'STAGE-WEB ' + version,

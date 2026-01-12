@@ -11,6 +11,11 @@ export interface StartWorkflowDto {
 };
 
   /**
+   * External user email (use only when forExternalUser is true)
+   */
+  externalUserEmail?: string;
+
+  /**
    * Is external user (use only when requestedFor id is not available)
    */
   forExternalUser?: boolean;

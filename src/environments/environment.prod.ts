@@ -17,18 +17,6 @@ const firebaseConfig = {
   measurementId: "G-DY3169JJ99"
 };
 
-const gapiConfig = {
-  apiKey: 'AIzaSyBYP4sshue06ft65C2qyYoXV4PQ2cb_ThM',
-  clientId:
-    '496110742871-673vscum8up3kb0ivhmnooi9m9udpoqp.apps.googleusercontent.com',
-  discoveryDocs: [
-    'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest',
-  ],
-  scope: 'https://www.googleapis.com/auth/calendar.readonly',
-  plugin_name: 'nabarun_app_p'
-
-};
-
 
 
 const authDomain = 'sso-nabarun.us.auth0.com';

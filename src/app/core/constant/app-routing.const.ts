@@ -153,4 +153,25 @@ export const AppRoute = {
     feature: 'socialevents',
     path: 'list'
   },
+  secured_project_list_page: {
+    id: 'secured_project_list_page',
+    url: '/secured/project/list',
+    parent: 'secured',
+    feature: 'project',
+    path: 'list'
+  },
+  secured_project_activities_page: {
+    id: 'secured_project_activities_page',
+    url: '/secured/project/:id/activities',
+    parent: 'secured',
+    feature: 'project',
+    path: ':id/activities'
+  },
+  secured_meetings_list_page: {
+    id: 'secured_meetings_list_page',
+    url: '/secured/communication/meetings',
+    parent: 'secured',
+    feature: 'communication',
+    path: 'meetings'
+  },
 };
