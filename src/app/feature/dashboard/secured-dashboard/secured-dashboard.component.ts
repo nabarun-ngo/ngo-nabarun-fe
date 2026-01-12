@@ -6,6 +6,8 @@ import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 import { getGreetings } from 'src/app/core/service/utilities.service';
 import { TileInfo } from 'src/app/shared/model/tile-info.model';
+import { DashboardService } from '../dashboard.service';
+import { UserMetricsDto } from 'src/app/core/api-client/models';
 
 @Component({
   selector: 'app-secured-dashboard',
@@ -13,10 +15,6 @@ import { TileInfo } from 'src/app/shared/model/tile-info.model';
   styleUrls: ['./secured-dashboard.component.scss'],
 })
 export class SecuredDashboardComponent implements OnInit {
-  reload() {
-    // Temporary stub to prevent runtime error. Implement real reload logic as needed.
-    console.warn('Dashboard reload is not yet implemented.');
-  }
   protected route = AppRoute;
   protected scope = SCOPE;
   greetings!: string;
@@ -25,6 +23,7 @@ export class SecuredDashboardComponent implements OnInit {
   constructor(
     private identityService: UserIdentityService,
     private sharedDataService: SharedDataService,
+    private dashboardService: DashboardService
   ) { }
 
   get tiles() { return SecuredDashboardComponent.tileList; }
@@ -39,6 +38,11 @@ export class SecuredDashboardComponent implements OnInit {
     }
     this.greetings = getGreetings(user.given_name || user.nickname || user.name);
     this.sharedDataService.setPageName("WELCOME TO NABARUN'S SECURED DASHBOARD");
+    this.initTiles();
+    this.fetchMetrics();
+  }
+
+  initTiles() {
     if (SecuredDashboardComponent.tileList.length == 0) {
       SecuredDashboardComponent.tileList = [
         {
@@ -59,7 +63,7 @@ export class SecuredDashboardComponent implements OnInit {
           tile_icon: 'icon_book',
           tile_link: this.route.secured_account_list_page.url,
           additional_info: {
-            tile_label: 'My Account Balance',
+            tile_label: 'My Wallet Balance',
             tile_show_badge: false,
             tile_is_loading: true
           }
@@ -93,6 +97,12 @@ export class SecuredDashboardComponent implements OnInit {
           tile_link: this.route.secured_member_members_page.url,
         },
         {
+          tile_html_id: 'eventTile',
+          tile_name: 'Projects',
+          tile_icon: 'icon_projects',
+          tile_link: this.route.secured_project_list_page.url,
+        },
+        {
           tile_html_id: 'requestTile',
           tile_name: 'Requests',
           tile_icon: 'icon_requests',
@@ -104,12 +114,7 @@ export class SecuredDashboardComponent implements OnInit {
           tile_icon: 'icon_notices',
           tile_link: this.route.secured_meetings_list_page.url,
         },
-        {
-          tile_html_id: 'eventTile',
-          tile_name: 'Projects',
-          tile_icon: 'icon_projects',
-          tile_link: this.route.secured_project_list_page.url,
-        },
+
         {
           tile_html_id: 'adminTile',
           tile_name: 'Admin Console',
@@ -125,24 +130,43 @@ export class SecuredDashboardComponent implements OnInit {
         }
       ];
     }
-
-    // Fetch counts from Firebase and update tiles
-    // Donations count
-    // this.dashboardDataService.getCount('/counts/donations').subscribe(count => {
-    //   const donationTile = SecuredDashboardComponent.tileList.find(tile => tile.tile_html_id === 'donationTile');
-    //   if (donationTile && donationTile.additional_info) {
-    //     donationTile.additional_info.tile_value = count !== null ? count.toString() : '-';
-    //     donationTile.additional_info.tile_is_loading = false;
-    //   }
-    // });
-    // // Members count
-    // this.dashboardDataService.getCount('/counts/members').subscribe(count => {
-    //   const memberTile = SecuredDashboardComponent.tileList.find(tile => tile.tile_html_id === 'memberTile');
-    //   if (memberTile && memberTile.additional_info) {
-    //     memberTile.additional_info.tile_value = count !== null ? count.toString() : '-';
-    //     memberTile.additional_info.tile_is_loading = false;
-    //   }
-    // });
   }
+
+  reload() {
+    this.fetchMetrics();
+  }
+
+  fetchMetrics() {
+    this.dashboardService.getUserMetrics().subscribe((metrics: UserMetricsDto) => {
+      const donationTile = SecuredDashboardComponent.tileList.find(tile => tile.tile_html_id === 'donationTile');
+      if (donationTile && donationTile.additional_info) {
+        donationTile.additional_info.tile_value = metrics.pendingDonations != null ? `₹ ${metrics.pendingDonations}` : '-';
+        donationTile.additional_info.tile_is_loading = false;
+        donationTile.additional_info.tile_show_badge = metrics.pendingDonations > 0;
+      }
+
+      const accountTile = SecuredDashboardComponent.tileList.find(tile => tile.tile_html_id === 'accountTile');
+      if (accountTile && accountTile.additional_info) {
+        accountTile.additional_info.tile_value = metrics.walletBalance != null ? `₹ ${metrics.walletBalance}` : '-';
+        accountTile.additional_info.tile_is_loading = false;
+        accountTile.additional_info.tile_show_badge = metrics.walletBalance > 0;
+      }
+
+      const expenseTile = SecuredDashboardComponent.tileList.find(tile => tile.tile_html_id === 'expenseTile');
+      if (expenseTile && expenseTile.additional_info) {
+        expenseTile.additional_info.tile_value = metrics.unsettledExpense != null ? `₹ ${metrics.unsettledExpense}` : '-';
+        expenseTile.additional_info.tile_is_loading = false;
+        expenseTile.additional_info.tile_show_badge = metrics.unsettledExpense > 0;
+      }
+
+      const taskTile = SecuredDashboardComponent.tileList.find(tile => tile.tile_html_id === 'worklistTile');
+      if (taskTile && taskTile.additional_info) {
+        taskTile.additional_info.tile_value = metrics.pendingTask != null ? metrics.pendingTask.toString() : '-';
+        taskTile.additional_info.tile_is_loading = false;
+        taskTile.additional_info.tile_show_badge = metrics.pendingTask > 0;
+      }
+    });
+  }
+
 
 }

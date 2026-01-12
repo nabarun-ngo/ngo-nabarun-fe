@@ -9,6 +9,7 @@ import { MemberService } from 'src/app/feature/member/service/member.service';
 import { UserDto } from 'src/app/core/api-client/models/user-dto';
 import { LinkDto, UserUpdateAdminDto, UserUpdateDto } from 'src/app/core/api-client/models';
 import { KeyValue } from '../../model/key-value.model';
+import { ModalService } from 'src/app/core/service/modal.service';
 
 @Component({
   selector: 'app-profile-view',
@@ -61,7 +62,7 @@ export class ProfileViewComponent implements OnInit {
   constructor(
     private sharedDataService: SharedDataService,
     private memberService: MemberService,
-    //private commonService: CommonService,
+    private modalService: ModalService,
 
   ) { }
 
@@ -137,7 +138,7 @@ export class ProfileViewComponent implements OnInit {
       linkedInLink: new FormControl(this.socialMedia.linkedInSM?.linkValue, []),
       twitterLink: new FormControl(this.socialMedia.twitterSM?.linkValue, []),
       //whatsappLink: new FormControl(this.socialMedia.whatsappSM?.mediaLink, []),
-      about: new FormControl(this.profile.about, [Validators.required]),
+      about: new FormControl(this.profile.about, []),
       picture: new FormControl('', []),
 
     });
@@ -351,20 +352,30 @@ export class ProfileViewComponent implements OnInit {
       this.onUpdate.emit({ actionName: 'SELF_UPDATE', profile: userDetail, id: this.profile.id! })
     } else {
       this.editSelfForm.markAllAsTouched();
+      this.modalService.openNotificationModal({
+        title: 'Error',
+        description: 'Please fill all the required fields',
+      }, 'notification', 'error')
     }
   }
 
   changePassword() {
+    this.memberService.initPasswordChange().subscribe(d => {
+      this.modalService.openNotificationModal({
+        title: 'Success',
+        description: 'We have sent a password change link to your email. Please check your email.',
+      }, 'notification', 'success');
+    })
     //////console.log(this.editLoginInfoForm)
-    if (this.editLoginInfoForm.valid) {
-      // let userDetail = {} as UserDetail;
-      // userDetail.attributes = {};
-      // userDetail.attributes['old_password'] = btoa(this.editLoginInfoForm.value.oldPassword);
-      // userDetail.attributes['new_password'] = btoa(this.editLoginInfoForm.value.newPassword);
-      // this.onUpdate.emit({ actionName: 'CHANGE_PASSWORD', profile: userDetail })
-    } else {
-      this.editLoginInfoForm.markAllAsTouched();
-    }
+    //if (this.editLoginInfoForm.valid) {
+    // let userDetail = {} as UserDetail;
+    // userDetail.attributes = {};
+    // userDetail.attributes['old_password'] = btoa(this.editLoginInfoForm.value.oldPassword);
+    // userDetail.attributes['new_password'] = btoa(this.editLoginInfoForm.value.newPassword);
+    // this.onUpdate.emit({ actionName: 'CHANGE_PASSWORD', profile: userDetail })
+    // } else {
+    //   this.editLoginInfoForm.markAllAsTouched();
+    // }
 
   }
 
