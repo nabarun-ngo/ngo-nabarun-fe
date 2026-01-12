@@ -28,7 +28,7 @@ export class UniversalInputComponent {
     }
   }
 
-  specialInputTypes: inputType[] = ['date', 'editor', 'radio', 'time', 'phone', 'check']
+  specialInputTypes: inputType[] = ['date', 'editor', 'html', 'radio', 'time', 'phone', 'check']
 
 
 
