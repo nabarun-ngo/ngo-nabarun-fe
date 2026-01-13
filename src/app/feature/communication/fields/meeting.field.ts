@@ -307,7 +307,7 @@ export const getMeetingSection = (
                     inputType: 'text',
                     placeholder: 'Enter meeting agenda'
                 },
-                form_input_validation: []
+                form_input_validation: isCreate ? [Validators.required] : []
             },
             {
                 field_name: 'Meeting Date',
@@ -385,7 +385,7 @@ export const getMeetingSection = (
                     placeholder: 'Select attendees',
                     selectList: []
                 },
-                form_input_validation: []
+                form_input_validation: isCreate ? [Validators.required] : []
             },
             {
                 field_name: 'Status',
