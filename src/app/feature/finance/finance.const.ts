@@ -46,7 +46,7 @@ export const DonationDefaultValue = {
     pageNumber: 0,
     pageSize: 10,
     pageSizeOptions: [10, 20, 50, 100],
-    pageTitle: 'DONATION DASHBOARD',
+    pageTitle: 'DONATIONS',
 }
 
 
