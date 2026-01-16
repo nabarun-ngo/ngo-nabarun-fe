@@ -132,7 +132,7 @@ export class ActivityAccordionComponent extends Accordion<ProjectActivity> imple
     } else if (event.buttonId === 'VIEW_EXPENSES') {
       const activity = this.itemList[event.rowIndex];
       this.router.navigate([AppRoute.secured_manage_account_page.url], {
-        queryParams: { tab: 'project_expense', activityId: activity.id }
+        queryParams: { tab: 'my_expenses', activityId: activity.id }
       });
     } else if (event.buttonId === 'CANCEL') {
       this.hideForm(event.rowIndex);

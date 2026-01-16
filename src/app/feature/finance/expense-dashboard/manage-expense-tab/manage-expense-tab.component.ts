@@ -32,7 +32,10 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
   override onSearch($event: SearchEvent): void {
     if ($event.advancedSearch && !$event.reset) {
       this.accountService
-        .fetchExpenses(undefined, undefined, removeNullFields($event.value))
+        .fetchExpenses(undefined, undefined, {
+          expenseRefId: this.activityId,
+          ...removeNullFields($event.value)
+        })
         .subscribe((s) => {
           this.setContent(s!.content!, s?.totalSize!);
         });
@@ -43,7 +46,9 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
 
   override loadData(): void {
     this.accountService
-      .fetchExpenses(ExpenseDefaultValue.pageNumber, ExpenseDefaultValue.pageSize, {})
+      .fetchExpenses(ExpenseDefaultValue.pageNumber, ExpenseDefaultValue.pageSize, {
+        expenseRefId: this.activityId,
+      })
       .subscribe((data) => {
         this.setContent(data?.content!, data?.totalSize);
       });
@@ -145,7 +150,9 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
 
   override handlePageEvent($event: PageEvent): void {
     this.accountService
-      .fetchExpenses($event.pageIndex, $event.pageSize, {})
+      .fetchExpenses($event.pageIndex, $event.pageSize, {
+        expenseRefId: this.activityId,
+      })
       .subscribe((s) => {
         this.setContent(s!.content!, s?.totalSize!);
       });

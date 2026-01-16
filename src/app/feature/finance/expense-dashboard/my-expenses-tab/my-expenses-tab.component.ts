@@ -65,7 +65,10 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
   onSearch($event: SearchEvent): void {
     if ($event.advancedSearch && !$event.reset) {
       this.accountService
-        .fetchMyExpenses(undefined, undefined, removeNullFields($event.value))
+        .fetchMyExpenses(undefined, undefined, {
+          expenseRefId: this.activityId,
+          ...removeNullFields($event.value)
+        })
         .subscribe((s) => {
           this.setContent(s!.content!, s?.totalSize!);
         });
