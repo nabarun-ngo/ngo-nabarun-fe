@@ -4,9 +4,9 @@
     <h3 class="category-title">{{ category.name }}</h3>
     <ul class="documents-list">
       <li *ngFor="let doc of category.documents" class="document-item">
-        <a [href]="$any(doc).displayValue" target="_blank" rel="noopener" class="document-link"
-          title="Open {{ $any(doc).description }}">
-          {{ $any(doc).description }}
+        <a href="javascript:void(0)" (click)="openDocument(doc)" class="document-link"
+          title="Open {{ doc.description }}">
+          {{ doc.description }}
         </a>
       </li>
     </ul>

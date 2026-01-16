@@ -50,6 +50,8 @@ import { AppPhoneNumberComponent } from './components/generic/phone-number/app-p
 import { StandardTabGroupComponent } from './components/standard-tab-group/standard-tab-group.component';
 import { EditableTableSectionComponent } from './components/generic/detailed-view/editable-table/editable-table-section.component';
 import { EditableListSectionComponent } from './components/generic/detailed-view/editable-list/editable-list-section.component';
+import { SafeResourceUrlPipe } from './pipes/safe-resource-url.pipe';
+
 
 @NgModule({
   declarations: [
@@ -76,8 +78,10 @@ import { EditableListSectionComponent } from './components/generic/detailed-view
     AppPhoneNumberComponent,
     StandardTabGroupComponent,
     EditableTableSectionComponent,
-    EditableListSectionComponent
+    EditableListSectionComponent,
+    SafeResourceUrlPipe,
   ],
+
   imports: [
     CommonModule,
     RouterModule,
@@ -138,8 +142,10 @@ import { EditableListSectionComponent } from './components/generic/detailed-view
     FloatingActionButtonComponent,
     AppPhoneNumberComponent,
     StandardTabGroupComponent,
-    DetailedViewComponent
+    DetailedViewComponent,
+    SafeResourceUrlPipe,
   ],
+
   providers: [{
     provide: MAT_RADIO_DEFAULT_OPTIONS,
     useValue: { color: 'primary' },

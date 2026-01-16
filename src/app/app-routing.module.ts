@@ -6,7 +6,6 @@ import { NoAuthGuardService } from './core/guards/no-auth-guard.service';
 import { SecuredLayoutComponent } from './core/layout/secured-layout/secured-layout.component';
 import { AuthGuardService } from './core/guards/auth-guard.service';
 import { UserGuardService } from './core/guards/user-guard.service';
-
 const route_data = AppRoute;
 
 const routes: Routes = [
