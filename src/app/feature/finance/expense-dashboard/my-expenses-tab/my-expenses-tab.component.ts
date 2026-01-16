@@ -169,11 +169,13 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
     return [
       expenseDetailSection({
         ...data,
-        paidBy: {
-          id: this.userIdentity.loggedInUser.profile_id,
-          fullName: this.userIdentity.loggedInUser.name,
+        ...this.isAdmin ? {} : {
+          paidBy: {
+            id: this.userIdentity.loggedInUser.profile_id,
+            fullName: this.userIdentity.loggedInUser.name,
+          }
         },
-      }, isCreate, this.isAdmin, this.activityId),
+      }, isCreate, this.isAdmin, this.activityId !== undefined),
       expenseEditableTable(data, isCreate),
     ];
   }
@@ -248,6 +250,7 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
           $event.rowIndex,
           $event.buttonId == 'CREATE_CONFIRM' ? true : false
         );
+        console.log(expenseForm)
         let expenseFormItems = this.getSectionForm(
           'expense_list_detail',
           $event.rowIndex,
@@ -264,28 +267,17 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
             'error'
           );
         } else if (expenseForm?.valid && expenseFormItems?.valid) {
+
           const payerId = this.isAdmin
             ? expenseForm?.value.expense_by
             : this.userIdentity.loggedInUser.profile_id;
 
           if ($event.buttonId == 'CREATE_CONFIRM') {
-            if (expenseForm.value.expense_source == 'EVENT' && !this.activityId) {
-              this.modalService.openNotificationModal(
-                {
-                  title: 'Error',
-                  description: 'Please select a Project and Activity',
-                },
-                'notification',
-                'error'
-              );
-              return;
-            }
-
             this.accountService.createExpenses({
               description: expenseForm.value.description,
               name: expenseForm.value.name,
-              expenseRefId: expenseForm.value.expense_source == 'EVENT' ? this.activityId : undefined,
-              expenseRefType: expenseForm.value.expense_source == 'EVENT' ? 'EVENT' : 'ADHOC',
+              expenseRefId: this.activityId,
+              expenseRefType: this.activityId ? 'EVENT' : 'ADHOC',
               expenseDate: expenseForm.value.expenseDate,
               expenseItems: expenseItems,
               payerId: payerId
@@ -310,7 +302,8 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
                   .updateExpense(id!, {
                     ...existingExpense,
                     expenseItems: expenseItems,
-                    status: 'SUBMITTED'
+                    status: 'SUBMITTED',
+                    payerId: expenseForm?.value.expense_by
                   })
                   .subscribe((d) => {
                     this.hideForm($event.rowIndex);
@@ -323,7 +316,8 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
                 .updateExpense(id!, {
                   ...existingExpense,
                   expenseItems: expenseItems,
-                  status: undefined
+                  status: undefined,
+                  payerId: expenseForm?.value.expense_by
                 })
                 .subscribe((d) => {
                   this.hideForm($event.rowIndex);

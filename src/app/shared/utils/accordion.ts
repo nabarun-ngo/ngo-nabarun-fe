@@ -339,7 +339,6 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
     }
 
     const field = section.content.find(f => f.form_control_name === fieldName);
-
     if (field && field.form_input) {
       field.form_input.selectList = options;
     } else {

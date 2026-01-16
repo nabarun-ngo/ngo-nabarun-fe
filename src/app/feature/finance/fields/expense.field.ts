@@ -21,7 +21,7 @@ import { KeyValue } from 'src/app/shared/model/key-value.model';
 
 export const expenseTabHeader = [
   {
-    value: 'Expense Id',
+    value: 'Expense Id (Type)',
     rounded: true,
   },
   {
@@ -40,7 +40,7 @@ export const expenseTabHeader = [
 
 export const manageExpenseTabHeader = [
   {
-    value: 'Expense Id',
+    value: 'Expense Id (Type)',
     rounded: true,
   },
   {
@@ -63,7 +63,7 @@ export const expenseHighLevelView = (item: Expense): AccordionCell[] => {
   return [
     {
       type: 'text',
-      value: item?.id!,
+      value: item?.id! + ' (' + item?.expenseRefType + ')',
       bgColor: 'bg-purple-200',
       rounded: true,
     },
@@ -90,13 +90,14 @@ export const manageExpenseHighLevelView = (item: Expense): AccordionCell[] => {
   return [
     {
       type: 'text',
-      value: item?.id!,
+      value: item?.id! + ' (' + item?.expenseRefType + ')',
       bgColor: 'bg-purple-200',
       rounded: true,
     },
     {
       type: 'text',
       value: '₹ ' + item?.finalAmount,
+
     },
     {
       type: 'text',
@@ -114,7 +115,7 @@ export const manageExpenseHighLevelView = (item: Expense): AccordionCell[] => {
 };
 
 export const expenseDetailSection = (
-  m: Expense, isCreate: boolean = false, isAdminView: boolean = false, activityId: string | undefined) => {
+  m: Expense, isCreate: boolean = false, isAdminView: boolean = false, forProject: boolean = false) => {
   ////console.log(m)
 
   return {
@@ -176,7 +177,7 @@ export const expenseDetailSection = (
       {
         field_name: 'Paid By',
         field_value: m?.paidBy?.id,
-        editable: m?.status != 'FINALIZED' && (isCreate && isAdminView),
+        editable: m?.status != 'FINALIZED' && (isAdminView),
         field_display_value: m?.paidBy?.fullName,
         field_html_id: 'expense_borne_by',
         form_control_name: 'expense_by',
@@ -206,7 +207,7 @@ export const expenseDetailSection = (
         field_name: 'Is this Project related expense?',
         field_html_id: 'exp_is_event',
         field_value: '',
-        hide_field: !isCreate || activityId,
+        hide_field: !isCreate || forProject,
         editable: isCreate && m?.status != 'FINALIZED',
         form_control_name: 'expense_source',
         form_input: {
@@ -219,7 +220,7 @@ export const expenseDetailSection = (
             { key: 'ADHOC', displayValue: 'No' },
           ],
         },
-        form_input_validation: activityId ? [] : [Validators.required],
+        form_input_validation: forProject ? [] : [Validators.required],
       },
       {
         field_name: 'Finalized By',

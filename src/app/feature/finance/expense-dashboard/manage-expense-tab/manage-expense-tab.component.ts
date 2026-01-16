@@ -167,12 +167,13 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
       let users: KeyValue[] = data?.map((m: any) => {
         return { key: m.id, displayValue: m.fullName } as KeyValue;
       })!;
-      this.getSectionField(
+      this.updateFieldOptions(
         'expense_detail',
-        'expense_borne_by',
         0,
+        'expense_by',
+        users,
         true
-      ).form_input!.selectList = users;
+      );
     });
   }
 
@@ -186,11 +187,12 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
           let users: KeyValue[] = data?.map((m: User) => {
             return { key: m.id, displayValue: m.fullName } as KeyValue;
           })!;
-          this.getSectionField(
+          this.updateFieldOptions(
             'expense_detail',
-            'expense_borne_by',
-            $event.rowIndex
-          ).form_input!.selectList = users;
+            $event.rowIndex,
+            'expense_by',
+            users
+          );
           this.showEditForm($event.rowIndex, ['expense_detail', 'expense_list_detail', 'expense_doc_list']);
         });
         break;

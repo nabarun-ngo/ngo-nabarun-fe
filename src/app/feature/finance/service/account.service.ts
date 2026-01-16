@@ -542,7 +542,8 @@ export class AccountService {
       expenseDate: expense.expenseDate,
       expenseItems: expense.expenseItems,
       remarks: expense.remarks,
-      status: expense.status
+      status: expense.status,
+      payerId: expense.payerId
     };
     return this.expenseController
       .updateExpense({ id, body: expenseDetailDto })

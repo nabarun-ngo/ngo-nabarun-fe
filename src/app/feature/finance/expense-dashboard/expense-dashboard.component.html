@@ -8,7 +8,7 @@
         <mat-tab id="myExpense" label="My Expense">
             <app-my-expenses-tab [accordionData]="initialData!" [refData]="refData!"></app-my-expenses-tab>
         </mat-tab>
-        <mat-tab id="expenses" label="Manage Expenses" [disabled]="!permissions.canManageExpense">
+        <mat-tab id="expenses" label="All Expenses" [disabled]="!permissions.canManageExpense">
             <app-manage-expense-tab [accordionData]="initialData!" [refData]="refData!"></app-manage-expense-tab>
         </mat-tab>
     </mat-tab-group>
