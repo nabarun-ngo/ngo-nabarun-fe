@@ -26,6 +26,7 @@ import { removeNullFields } from 'src/app/core/service/utilities.service';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { User } from 'src/app/feature/member/models/member.model';
 import { KeyValue } from 'src/app/shared/model/key-value.model';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-my-expenses-tab',
@@ -46,16 +47,19 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
    */
   protected users!: Partial<User>[];
   protected isAdmin: boolean = false;
+  protected activityId?: string;
   constructor(
     protected accountService: AccountService,
     protected modalService: ModalService,
-    protected userIdentity: UserIdentityService
+    protected userIdentity: UserIdentityService,
+    protected route: ActivatedRoute
   ) {
     super();
   }
 
   override onInitHook(): void {
     this.setHeaderRow(expenseTabHeader);
+    this.activityId = this.route.snapshot.queryParamMap.get('activityId') ?? undefined;
   }
 
   onSearch($event: SearchEvent): void {
@@ -72,7 +76,9 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
 
   loadData(): void {
     this.accountService
-      .fetchMyExpenses(AccountDefaultValue.pageNumber, AccountDefaultValue.pageSize, {})
+      .fetchMyExpenses(AccountDefaultValue.pageNumber, AccountDefaultValue.pageSize, {
+        expenseRefId: this.activityId
+      })
       .subscribe((data) => {
         this.setContent(data?.content!, data?.totalSize);
       });
@@ -140,7 +146,9 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
 
   override handlePageEvent($event: PageEvent): void {
     this.accountService
-      .fetchExpenses($event.pageIndex, $event.pageSize, {})
+      .fetchExpenses($event.pageIndex, $event.pageSize, {
+        expenseRefId: this.activityId
+      })
       .subscribe((s) => {
         this.setContent(s!.content!, s?.totalSize!);
       });
@@ -208,7 +216,7 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
               description: expenseForm.value.description,
               name: expenseForm.value.name,
               expenseRefType: expenseForm.value.expense_source,
-              expenseRefId: expenseForm.value.expense_event,
+              expenseRefId: this.activityId,
               expenseDate: expenseForm.value.expenseDate,
               expenseItems: expenseItems,
               payerId: payerId
