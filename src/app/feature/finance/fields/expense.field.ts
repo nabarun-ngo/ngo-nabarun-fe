@@ -114,10 +114,7 @@ export const manageExpenseHighLevelView = (item: Expense): AccordionCell[] => {
 };
 
 export const expenseDetailSection = (
-  m: Expense,
-  isCreate: boolean = false,
-  isAdminView: boolean = false
-) => {
+  m: Expense, isCreate: boolean = false, isAdminView: boolean = false, activityId: string | undefined) => {
   ////console.log(m)
 
   return {
@@ -206,10 +203,10 @@ export const expenseDetailSection = (
         hide_field: !m?.finalAmount
       },
       {
-        field_name: 'Is this any event releted expense?',
+        field_name: 'Is this Project related expense?',
         field_html_id: 'exp_is_event',
         field_value: '',
-        hide_field: !isCreate,
+        hide_field: !isCreate || activityId,
         editable: isCreate && m?.status != 'FINALIZED',
         form_control_name: 'expense_source',
         form_input: {
@@ -219,10 +216,10 @@ export const expenseDetailSection = (
           placeholder: 'Ex. Lorem Ipsum',
           selectList: [
             { key: 'EVENT', displayValue: 'Yes' },
-            { key: 'OTHER', displayValue: 'No' },
+            { key: 'ADHOC', displayValue: 'No' },
           ],
         },
-        form_input_validation: [Validators.required],
+        form_input_validation: activityId ? [] : [Validators.required],
       },
       {
         field_name: 'Finalized By',

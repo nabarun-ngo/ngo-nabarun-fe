@@ -26,7 +26,15 @@ import { removeNullFields } from 'src/app/core/service/utilities.service';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { User } from 'src/app/feature/member/models/member.model';
 import { KeyValue } from 'src/app/shared/model/key-value.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ProjectService } from 'src/app/feature/project/service/project.service';
+import { Validators } from '@angular/forms';
+import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
+import { SearchAndAdvancedSearchFormComponent } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search-form.component';
+import { Project } from 'src/app/feature/project/model/project.model';
+import { getProjectSection } from 'src/app/feature/project/fields/project.field';
+import { getActivitySection } from 'src/app/feature/project/fields/activity.field';
+import { PagedActivity, ProjectActivity } from 'src/app/feature/project/model/activity.model';
 
 @Component({
   selector: 'app-my-expenses-tab',
@@ -34,6 +42,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./my-expenses-tab.component.scss'],
 })
 export class MyExpensesTabComponent extends Accordion<Expense> implements TabComponentInterface<PagedExpenses> {
+  projectId: string | undefined;
   protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
     return {
       pageNumber: AccountDefaultValue.pageNumber,
@@ -48,11 +57,56 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
   protected users!: Partial<User>[];
   protected isAdmin: boolean = false;
   protected activityId?: string;
+  protected detailedViews: DetailedView[] = [];
+  protected projects: Project[] = [];
+  protected activities: ProjectActivity[] = [];
+  protected projectSearch: SearchAndAdvancedSearchModel = {
+    normalSearchPlaceHolder: '',
+    showOnlyAdvancedSearch: true,
+    advancedSearch: {
+      buttonText: { search: 'Select', close: 'Close' },
+      title: 'Select Project & Activity',
+      searchFormFields: [
+        {
+          formControlName: 'projectId',
+          inputModel: {
+            html_id: 'project_search',
+            inputType: 'text',
+            tagName: 'input',
+            autocomplete: true,
+            placeholder: 'Select a project',
+            labelName: 'Project',
+            selectList: []
+          }
+        },
+        {
+          formControlName: 'activityId',
+          inputModel: {
+            html_id: 'activity_search',
+            inputType: 'text',
+            tagName: 'input',
+            autocomplete: true,
+            placeholder: 'Select an activity',
+            labelName: 'Activity',
+            selectList: []
+          },
+          validations: [
+            Validators.required
+          ]
+        }
+      ]
+    }
+  };
+
+
   constructor(
     protected accountService: AccountService,
     protected modalService: ModalService,
     protected userIdentity: UserIdentityService,
-    protected route: ActivatedRoute
+    protected route: ActivatedRoute,
+    private projectService: ProjectService,
+    protected router: Router,
+
   ) {
     super();
   }
@@ -60,6 +114,17 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
   override onInitHook(): void {
     this.setHeaderRow(expenseTabHeader);
     this.activityId = this.route.snapshot.queryParamMap.get('activityId') ?? undefined;
+    this.projectId = this.route.snapshot.queryParamMap.get('projectId') ?? undefined;
+
+    const state = history.state;
+    if (state && state.project && state.activity) {
+      this.activityId = state.activity.id;
+      this.projectId = state.project.id;
+      this.detailedViews = [
+        getProjectSection(state.project, this.getRefData()!, []),
+        getActivitySection(state.activity, this.getRefData()!)
+      ];
+    }
   }
 
   onSearch($event: SearchEvent): void {
@@ -78,6 +143,7 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
   }
 
   loadData(): void {
+    console.log(this.activityId)
     this.accountService
       .fetchMyExpenses(AccountDefaultValue.pageNumber, AccountDefaultValue.pageSize, {
         expenseRefId: this.activityId
@@ -107,7 +173,7 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
           id: this.userIdentity.loggedInUser.profile_id,
           fullName: this.userIdentity.loggedInUser.name,
         },
-      }, isCreate, this.isAdmin),
+      }, isCreate, this.isAdmin, this.activityId),
       expenseEditableTable(data, isCreate),
     ];
   }
@@ -164,19 +230,7 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
       .pipe(filterFormChange(expense_form.value))
       .subscribe((val) => {
         if (val['expense_source'] == 'EVENT') {
-          this.accountService.fetchEvents().subscribe((data) => {
-            let events: KeyValue[] = data?.content?.map((m: any) => {
-              return { key: m.id, displayValue: m.name } as KeyValue;
-            })!;
-            this.addSectionField(
-              'expense_detail',
-              expenseEventField(events),
-              0,
-              true
-            );
-          });
-        } else if (val['expense_source'] !== 'EVENT') {
-          this.removeSectionField('expense_detail', 'expense_event', 0, true);
+          this.selectProject()
         }
       });
   }
@@ -215,11 +269,23 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
             : this.userIdentity.loggedInUser.profile_id;
 
           if ($event.buttonId == 'CREATE_CONFIRM') {
+            if (expenseForm.value.expense_source == 'EVENT' && !this.activityId) {
+              this.modalService.openNotificationModal(
+                {
+                  title: 'Error',
+                  description: 'Please select a Project and Activity',
+                },
+                'notification',
+                'error'
+              );
+              return;
+            }
+
             this.accountService.createExpenses({
               description: expenseForm.value.description,
               name: expenseForm.value.name,
-              expenseRefType: expenseForm.value.expense_source,
-              expenseRefId: this.activityId,
+              expenseRefId: expenseForm.value.expense_source == 'EVENT' ? this.activityId : undefined,
+              expenseRefType: expenseForm.value.expense_source == 'EVENT' ? 'EVENT' : 'ADHOC',
               expenseDate: expenseForm.value.expenseDate,
               expenseItems: expenseItems,
               payerId: payerId
@@ -280,6 +346,65 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
     let item = this.itemList![$event.rowIndex];
     this.accountService.getExpenseDocuments(item.id!).subscribe((data) => {
       this.addSectionInAccordion(expenseDocumentSection(data), $event.rowIndex);
+    });
+  }
+
+  selectProject(): void {
+    this.projectService.fetchProjects().subscribe(data => {
+      this.projects = data.content!;
+      this.projectSearch.advancedSearch?.searchFormFields.filter(f => f.inputModel.html_id == 'project_search').map(m => {
+        m.inputModel.selectList = this.projects.map(m2 => {
+          return { key: m2.id, displayValue: m2.name } as KeyValue
+        })
+      });
+      let modal = this.modalService.openComponentDialog(SearchAndAdvancedSearchFormComponent,
+        this.projectSearch,
+        {
+          height: 300,
+          width: 700,
+          disableClose: true
+        });
+
+      modal.componentInstance.searchformGroup.get('projectId')?.valueChanges.subscribe(data => {
+        if (data) {
+          this.projectId = data;
+          this.projectService.fetchProjectActivities(data).subscribe(data2 => {
+            this.activities = data2.content!;
+            this.projectSearch.advancedSearch?.searchFormFields.filter(f => f.inputModel.html_id == 'activity_search').map(m => {
+              m.inputModel.selectList = this.activities.map(m2 => {
+                return { key: m2.id, displayValue: m2.name } as KeyValue
+              })
+            });
+          })
+        } else {
+          this.projectSearch.advancedSearch?.searchFormFields.filter(f => f.inputModel.html_id == 'activity_search').map(m => {
+            m.inputModel.selectList = []
+          });
+        }
+      })
+      modal.componentInstance.onSearch.subscribe(searchEvent => {
+        if (searchEvent.reset) {
+          modal.close();
+        }
+        else {
+          const formValues = modal.componentInstance.searchformGroup.value;
+          modal.close();
+
+          this.activityId = formValues.activityId;
+          this.projectId = formValues.projectId;
+
+          const selectedProject = this.projects.find(p => p.id == this.projectId);
+          const selectedActivity = this.activities.find(a => a.id == this.activityId);
+
+          if (selectedProject && selectedActivity) {
+            this.detailedViews = [
+              getProjectSection(selectedProject, this.getRefData()!, []),
+              getActivitySection(selectedActivity, this.getRefData()!)
+            ];
+          }
+          this.loadData();
+        }
+      })
     });
   }
 

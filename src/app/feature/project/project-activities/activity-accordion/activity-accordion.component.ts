@@ -46,7 +46,6 @@ export class ActivityAccordionComponent extends Accordion<ProjectActivity> imple
 
   override onInitHook(): void {
     this.setHeaderRow(activityHeader);
-    this.loadData();
     this.allowActivityCreate = this.project?.status === 'ACTIVE' || false;
   }
 
@@ -127,12 +126,14 @@ export class ActivityAccordionComponent extends Accordion<ProjectActivity> imple
     } else if (event.buttonId === 'VIEW_DONATIONS') {
       const activity = this.itemList[event.rowIndex];
       this.router.navigate([AppRoute.secured_donation_dashboard_page.url], {
-        queryParams: { tab: 'guest_donation', forEventId: activity.id }
+        queryParams: { tab: 'guest_donation', forEventId: activity.id, projectId: this.project.id },
+        state: { project: this.project, activity: activity }
       });
     } else if (event.buttonId === 'VIEW_EXPENSES') {
       const activity = this.itemList[event.rowIndex];
       this.router.navigate([AppRoute.secured_manage_account_page.url], {
-        queryParams: { tab: 'my_expenses', activityId: activity.id }
+        queryParams: { tab: 'my_expenses', activityId: activity.id, projectId: this.project.id },
+        state: { project: this.project, activity: activity }
       });
     } else if (event.buttonId === 'CANCEL') {
       this.hideForm(event.rowIndex);

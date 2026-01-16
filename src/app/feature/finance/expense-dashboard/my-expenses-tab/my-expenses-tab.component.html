@@ -1,5 +1,12 @@
-
 <app-floating-action-button [icon]="'add'" (buttonClick)="createExpense()"></app-floating-action-button>
+<div class="mb-4 flex justify-end relative z-10">
+    <button mat-button color="primary" (click)="selectProject()">
+        <mat-icon>filter_alt</mat-icon>
+        Filter by Project & Activity
+    </button>
+</div>
+<app-detailed-view [detailedViews]="detailedViews" [refData]="getRefData()!"></app-detailed-view>
+
 <app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)"
     (onAccordionOpen)="onAccordionOpen($event)"></app-accordion-list>
 <mat-paginator class="mt-4" style="background-color: transparent;" (page)="handlePageEvent($event)"

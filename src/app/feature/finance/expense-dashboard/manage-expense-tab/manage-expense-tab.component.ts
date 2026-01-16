@@ -45,6 +45,7 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
   }
 
   override loadData(): void {
+    console.log(this.activityId)
     this.accountService
       .fetchExpenses(ExpenseDefaultValue.pageNumber, ExpenseDefaultValue.pageSize, {
         expenseRefId: this.activityId,
@@ -55,6 +56,7 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
   }
 
   override onInitHook(): void {
+    super.onInitHook();
     this.setHeaderRow(manageExpenseTabHeader);
     this.permissions = {
       canCreateExpense: this.userIdentity.isAccrediatedTo(

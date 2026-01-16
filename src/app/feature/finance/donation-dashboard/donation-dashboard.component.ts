@@ -58,7 +58,21 @@ export class DonationDashboardComponent extends StandardTabbedDashboard<donation
 
   protected override onInitHook(): void {
     //console.log(this.initialData);
-    this.sharedDataService.setPageName(DonationDefaultValue.pageTitle);
+    const forEventId = this.route.snapshot.queryParamMap.get('forEventId');
+    const projectId = this.route.snapshot.queryParamMap.get('projectId');
+
+    if (projectId && forEventId) {
+      this.navigations = [
+        {
+          displayName: 'Back to Project Activities',
+          routerLink: AppRoute.secured_project_activities_page.url.replace(':id', btoa(projectId))
+        }
+      ];
+      this.sharedDataService.setPageName('Project Donations');
+    } else {
+      this.sharedDataService.setPageName(DonationDefaultValue.pageTitle);
+    }
+
     this.searchInput = donationSearchInput(this.getCurrentTab(), this.refData!);
   }
 

@@ -13,30 +13,29 @@
         <!-- Advanced Search Button -->
         <button (click)="clickAdvSearchBtn()"
             class="bg-indigo-500 py-3 px-5 w-full sm:w-auto text-white font-semibold rounded-lg hover:shadow-lg transition duration-300 cursor-pointer">
-            {{search.normalSearchButtonText ? search.normalSearchButtonText : 'Advanced Search'}} 
+            {{search.normalSearchButtonText ? search.normalSearchButtonText : 'Advanced Search'}}
         </button>
     </div>
 
-    <div *ngIf="search.showOnlyAdvancedSearch || adv_search"
-        class="flex flex-col bg-gray-100 p-4 w-full rounded-lg">
-        <div class="text-lg font-medium leading-6 mb-4 text-center text-gray-900">{{search.advancedSearch?.title ? search.advancedSearch?.title :'Advanced Search'}}</div>
+    <div *ngIf="search.showOnlyAdvancedSearch || adv_search" class="flex flex-col bg-gray-100 p-4 w-full rounded-lg">
+        <div class="text-lg font-medium leading-6 mb-4 text-center text-gray-900">{{search.advancedSearch?.title ?
+            search.advancedSearch?.title :'Advanced Search'}}</div>
         <form [formGroup]="searchformGroup">
             <div class="shadow overflow-hidden sm:rounded-md">
-            <div class="px-4 py-4 bg-white">
-                <div class="grid gap-6"
-                [ngClass]="{
+                <div class="px-4 py-4 bg-white">
+                    <div class="grid gap-6" [ngClass]="{
                     'grid-cols-1': true,
                     'sm:grid-cols-2': search.advancedSearch?.searchFormFields?.length! > 1,
                     'lg:grid-cols-3': search.advancedSearch?.searchFormFields?.length! > 2
                 }">
-                <div class="col-span-6"
-                    [ngClass]="search.advancedSearch?.searchFormFields?.length! > 2 ? 'sm:col-span-2 lg:col-span-1' : 'sm:col-span-3 lg:col-span-1'"
-                    *ngFor="let input of search.advancedSearch?.searchFormFields">
-                    <app-universal-input *ngIf="!input.hidden" [formControlName]="input.formControlName"
-                    [inputModel]="input.inputModel"></app-universal-input>
+                        <div class="col-span-6"
+                            [ngClass]="search.advancedSearch?.searchFormFields?.length! > 2 ? 'sm:col-span-2 lg:col-span-1' : 'sm:col-span-3 lg:col-span-1'"
+                            *ngFor="let input of search.advancedSearch?.searchFormFields">
+                            <app-universal-input *ngIf="!input.hidden" [formControlName]="input.formControlName"
+                                [inputModel]="input.inputModel"></app-universal-input>
+                        </div>
+                    </div>
                 </div>
-                </div>
-            </div>
             </div>
         </form>
 
@@ -44,9 +43,9 @@
         <div class="pt-4 mt-2 bg-gray-100 text-center sm:px-6 rounded-lg">
             <button (click)="advSearch()" [disabled]="isSearchDisabled"
                 class="bg-indigo-500 py-3 px-5 mx-2 text-white font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">
-                 {{search.advancedSearch?.buttonText?.search?search.advancedSearch?.buttonText?.search:'Search'}}
+                {{search.advancedSearch?.buttonText?.search?search.advancedSearch?.buttonText?.search:'Search'}}
             </button>
-            <button (click)="advSearchReset()"
+            <button *ngIf="!search.advancedSearch?.hideCloseButton" (click)="advSearchReset()"
                 class="bg-white py-3 px-5 mx-1 text-gray-700 border border-gray-300 font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">
                 {{search.advancedSearch?.buttonText?.search?search.advancedSearch?.buttonText?.close:'Close'}}
             </button>
