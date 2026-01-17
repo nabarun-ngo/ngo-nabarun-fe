@@ -187,25 +187,25 @@ export const getDonationSection = (
                     style: 'width: 212px;'
                 }
             },
-            {
-                field_name: 'Is this donation for a project?',
-                field_html_id: 'exp_is_event',
-                field_value: 'GENERAL',
-                hide_field: !isCreate,
-                editable: isCreate,
-                form_control_name: 'donation_for',
-                form_input: {
-                    html_id: 'donation_for_inp',
-                    inputType: 'radio',
-                    tagName: 'input',
-                    placeholder: 'Ex. Lorem Ipsum',
-                    selectList: [
-                        { key: 'PROJECT', displayValue: 'Yes' },
-                        { key: 'GENERAL', displayValue: 'No' },
-                    ],
-                },
-                form_input_validation: [],
-            },
+            // {
+            //     field_name: 'Is this donation for a project?',
+            //     field_html_id: 'exp_is_event',
+            //     field_value: 'GENERAL',
+            //     hide_field: !isCreate,
+            //     editable: isCreate,
+            //     form_control_name: 'donation_for',
+            //     form_input: {
+            //         html_id: 'donation_for_inp',
+            //         inputType: 'radio',
+            //         tagName: 'input',
+            //         placeholder: 'Ex. Lorem Ipsum',
+            //         selectList: [
+            //             { key: 'PROJECT', displayValue: 'Yes' },
+            //             { key: 'GENERAL', displayValue: 'No' },
+            //         ],
+            //     },
+            //     form_input_validation: [],
+            // },
             {
                 field_name: 'Donation raised on',
                 field_value: donation?.raisedOn || '',

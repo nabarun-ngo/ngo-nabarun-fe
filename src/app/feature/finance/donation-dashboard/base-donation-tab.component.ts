@@ -94,8 +94,17 @@ export abstract class BaseDonationTabComponent extends Accordion<Donation> imple
             this.updateFieldValidators('donation_detail', 0, {
                 'amount': [Validators.required],
                 'type': isGuest ? [] : [Validators.required],
-
             }, true);
+
+            const form = this.getSectionForm('donation_detail', 0, true);
+            this.formSubscription?.add(
+                form?.get('type')?.valueChanges.subscribe((type: any) => {
+                    this.updateFieldValidators('donation_detail', 0, {
+                        'endDate': type === 'REGULAR' ? [Validators.required] : [],
+                        'startDate': type === 'REGULAR' ? [Validators.required] : [],
+                    }, true);
+                })
+            );
         }, 0);
     }
 
