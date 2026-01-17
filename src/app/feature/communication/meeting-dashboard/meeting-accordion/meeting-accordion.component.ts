@@ -11,6 +11,8 @@ import { compareObjects, date, removeNullFields, shareToWhatsApp } from 'src/app
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { KeyValue } from 'src/app/shared/model/key-value.model';
 import { User } from 'src/app/feature/member/models/member.model';
+import { Validators } from '@angular/forms';
+import { filterFormChange } from 'src/app/core/service/form.service';
 
 @Component({
   selector: 'app-meeting-accordion',
@@ -171,6 +173,14 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
       } as KeyValue
     })
     this.updateFieldOptions('meeting_detail', 0, 'attendees', options, true);
+    const form = this.getSectionForm('meeting_detail', 0, true);
+    form?.valueChanges.pipe(filterFormChange(form.value)).subscribe((value) => {
+      if (value.type) {
+        this.updateFieldValidators('meeting_detail', 0, {
+          'location': value.type === 'OFFLINE' ? [Validators.required] : []
+        }, true);
+      }
+    })
   }
 
   private performCreateMeeting(): void {

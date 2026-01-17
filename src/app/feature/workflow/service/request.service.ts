@@ -32,7 +32,7 @@ export class RequestService {
     if (requestFor === 'me') {
       return this.workflowController.listInstancesForMe({
         page: page,
-        size: size
+        size: size,
       }).pipe(
         map(d => d.responsePayload),
         map(mapPagedWorkflowInstanceDtoToPagedRequest)

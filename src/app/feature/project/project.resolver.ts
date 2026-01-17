@@ -28,6 +28,7 @@ export const projectResolver: ResolveFn<Project> = (route, state) => {
 
 export const projectActivitiesResolver: ResolveFn<PagedActivity> = (route, state) => {
   const projectId = atob(route.params['id']);
+  console.log(projectId)
   return inject(ProjectService).fetchProjectActivities(
     projectId,
     activityDefaultValue.pageNumber,

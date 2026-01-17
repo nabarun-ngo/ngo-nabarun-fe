@@ -105,7 +105,7 @@ export class ProjectListTabComponent extends Accordion<Project> implements TabCo
     return [
       {
         button_id: 'VIEW_ACTIVITIES',
-        button_name: 'View Activities'
+        button_name: 'Add/View Activities'
       },
       {
         button_id: 'UPDATE_PROJECT',

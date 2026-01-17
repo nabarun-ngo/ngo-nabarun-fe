@@ -7,8 +7,9 @@ import { DonationRefData } from '../../finance.const';
 import { Donation } from '../../model';
 import { getDonorSection } from '../../fields/donation.field';
 import { BaseDonationTabComponent } from '../base-donation-tab.component';
-import { SCOPE } from 'src/app/core/constant/auth-scope.const';
 import { removeNullFields } from 'src/app/core/service/utilities.service';
+import { getProjectSection } from 'src/app/feature/project/fields/project.field';
+import { getActivitySection } from 'src/app/feature/project/fields/activity.field';
 
 @Component({
   selector: 'app-guest-donation-tab',
@@ -16,10 +17,17 @@ import { removeNullFields } from 'src/app/core/service/utilities.service';
   styleUrls: ['./guest-donation-tab.component.scss']
 })
 export class GuestDonationTabComponent extends BaseDonationTabComponent {
+  protected detailedViews: DetailedView[] = [];
 
 
   override onInitHook(): void {
-
+    const state = history.state;
+    if (state && state.project && state.activity) {
+      this.detailedViews = [
+        getProjectSection(state.project, this.getRefData()!, []),
+        getActivitySection(state.activity, this.getRefData()!)
+      ];
+    }
     this.setHeaderRow([
       {
         value: 'Donor Name',
@@ -87,6 +95,7 @@ export class GuestDonationTabComponent extends BaseDonationTabComponent {
 
   onSearch($event: SearchEvent): void {
     if ($event.advancedSearch) {
+      console.log(removeNullFields($event.value))
       this.donationService.fetchGuestDonations({
         filter: removeNullFields($event.value)
       }).subscribe(data => {

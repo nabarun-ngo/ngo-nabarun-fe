@@ -18,6 +18,7 @@ export const projectSearchInput = (
 ): SearchAndAdvancedSearchModel => {
     return {
         normalSearchPlaceHolder: 'Search projects...',
+        disableAdvancedSearchBtn: true,
         advancedSearch: {
             title: 'Advanced Project Search',
             buttonText: {

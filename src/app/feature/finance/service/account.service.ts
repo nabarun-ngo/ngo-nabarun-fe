@@ -44,8 +44,7 @@ export class AccountService {
     private userController: UserControllerService,
     private expenseController: ExpenseControllerService,
     private dmsController: DmsControllerService,
-    private projectController: ProjectControllerService,
-    private earnController: EarningControllerService
+    // private projectController: ProjectControllerService,
   ) { }
 
   /**
@@ -542,7 +541,8 @@ export class AccountService {
       expenseDate: expense.expenseDate,
       expenseItems: expense.expenseItems,
       remarks: expense.remarks,
-      status: expense.status
+      status: expense.status,
+      payerId: expense.payerId
     };
     return this.expenseController
       .updateExpense({ id, body: expenseDetailDto })
@@ -581,12 +581,6 @@ export class AccountService {
         map((d) => d.responsePayload),
         map(mapExpenseDtoToExpense)
       );
-  }
-
-  fetchEvents() {
-    return this.projectController
-      .listActivities({ id: '' })
-      .pipe(map((d) => d.responsePayload));
   }
 
   uploadDocuments(documents: FileUpload[], docIndexId: string, docIndexType: string) {

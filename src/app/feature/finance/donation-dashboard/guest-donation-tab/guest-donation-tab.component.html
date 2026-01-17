@@ -1,5 +1,6 @@
 <app-floating-action-button *ngIf="permissions?.canCreateDonation" [icon]="'add'"
     (buttonClick)="initCreateDonationForm(true)"></app-floating-action-button>
+<app-detailed-view [detailedViews]="detailedViews" [refData]="getRefData()!"></app-detailed-view>
 <app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)"
     (onAccordionOpen)="onAccordionOpen($event)">
 </app-accordion-list>

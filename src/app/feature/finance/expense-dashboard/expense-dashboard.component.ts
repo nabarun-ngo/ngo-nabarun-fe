@@ -17,6 +17,7 @@ import { ManageExpenseTabComponent } from './manage-expense-tab/manage-expense-t
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { User } from '../../member/models/member.model';
 import { KeyValue } from 'src/app/shared/model/key-value.model';
+import { ProjectService } from '../../project/service/project.service';
 
 @Component({
   selector: 'app-expense-dashboard',
@@ -34,18 +35,7 @@ export class ExpenseDashboardComponent extends StandardTabbedDashboard<expenseTa
     canManageExpense: boolean;
   };
   protected navigations: NavigationButtonModel[] = [
-    // {
-    //   displayName: 'Visit Accounts',
-    //   routerLink: AppRoute.secured_account_list_page.url,
-    // },
-    {
-      displayName: 'Back to Dashboard',
-      routerLink: AppRoute.secured_dashboard_page.url,
-    },
-    // {
-    //   displayName: 'Visit Donations',
-    //   routerLink: AppRoute.secured_donation_dashboard_page.url,
-    // }
+
   ];
   protected searchInput!: SearchAndAdvancedSearchModel;
   protected AppRoute = AppRoute;
@@ -68,7 +58,7 @@ export class ExpenseDashboardComponent extends StandardTabbedDashboard<expenseTa
     private sharedDataService: SharedDataService,
     protected override route: ActivatedRoute,
     private identityService: UserIdentityService,
-    private accountService: AccountService
+    private accountService: AccountService,
   ) {
     super(route);
   }
@@ -76,7 +66,18 @@ export class ExpenseDashboardComponent extends StandardTabbedDashboard<expenseTa
 
   protected override onInitHook(): void {
     this.searchInput = expenseSearchInput(this.getCurrentTab(), this.refData!);
-    this.sharedDataService.setPageName(ExpenseDefaultValue.pageTitle);
+    const activityId = this.route.snapshot.queryParamMap.get('activityId') ?? undefined;
+    const projectId = this.route.snapshot.queryParamMap.get('projectId') ?? undefined;
+    this.navigations = [
+      {
+        displayName: history.state.project ? 'Back to Project Activities' : 'Back to Dashboard',
+        routerLink: history.state.project ?
+          AppRoute.secured_project_activities_page.url.replace(':id', btoa(projectId!)) :
+          AppRoute.secured_dashboard_page.url,
+      },
+    ];
+
+    this.sharedDataService.setPageName(activityId ? 'Project Expenses' : ExpenseDefaultValue.pageTitle);
 
     // Setup permissions
     this.permissions = {
@@ -96,14 +97,7 @@ export class ExpenseDashboardComponent extends StandardTabbedDashboard<expenseTa
     this.forwardSearchToActiveTab($event);
 
     if ($event.advancedSearch) {
-      this.accountService.fetchEvents().subscribe((s) => {
-        let events = s?.content?.map((m: any) => {
-          return { key: m.id, displayValue: m.name || m.eventTitle || m.id } as KeyValue;
-        });
-        this.searchInput.advancedSearch!.searchFormFields.find(
-          (f) => f.inputModel.html_id == 'event_Id'
-        )!.inputModel.selectList = events;
-      });
+
       if (this.tabMapping[this.tabIndex] == 'expense_list') {
         this.accountService.fetchUsers().subscribe((s) => {
           let users = s?.map((m: User) => {

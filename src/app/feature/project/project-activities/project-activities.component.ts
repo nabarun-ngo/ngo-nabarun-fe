@@ -15,6 +15,7 @@ import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { StandardDashboard } from 'src/app/shared/utils/standard-dashboard';
 import { ActivityAccordionComponent } from './activity-accordion/activity-accordion.component';
 import { User } from '../../member/models/member.model';
+import { ProjectService } from '../service/project.service';
 
 @Component({
   selector: 'app-project-activities',
@@ -39,6 +40,7 @@ export class ProjectActivitiesComponent extends StandardDashboard<PagedActivity>
 
   constructor(
     private sharedDataService: SharedDataService,
+    private projectService: ProjectService,
     protected override route: ActivatedRoute
   ) {
     super(route);
@@ -58,9 +60,10 @@ export class ProjectActivitiesComponent extends StandardDashboard<PagedActivity>
       this.project = projectState;
       this.detailedViews = [getProjectSection(this.project, this.refData! || {}, [])];
     } else {
-      // If not in state, fetch project details
-      // This could be done via a resolver in the future
-      this.detailedViews = [];
+      this.projectService.getProjectDetail(this.projectId).subscribe(p => {
+        this.project = p;
+        this.detailedViews = [getProjectSection(this.project, this.refData! || {}, [])];
+      });
     }
 
   }

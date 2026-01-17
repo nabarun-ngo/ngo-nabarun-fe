@@ -8,6 +8,7 @@ export interface UpdateExpenseDto {
   expenseDate?: string;
   expenseItems?: Array<ExpenseItemDetailDto>;
   name?: string;
+  payerId?: string;
   remarks?: string;
   status?: 'DRAFT' | 'SUBMITTED' | 'FINALIZED' | 'SETTLED' | 'REJECTED';
 }

@@ -5,7 +5,6 @@ import { Validators } from '@angular/forms';
 import { KeyValue } from 'src/app/shared/model/key-value.model';
 import { UserDto as UserDetail } from 'src/app/core/api-client/models';
 import { PagedRequest, WorkflowRequest } from '../../model/request.model';
-import { RequestType } from '../../workflow.const';
 import {
   AccordionCell,
   AccordionButton,
@@ -21,7 +20,6 @@ import { filterFormChange } from 'src/app/core/service/form.service';
 import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { RequestService } from '../../service/request.service';
-import { DonationFieldVisibilityRules } from 'src/app/feature/finance/fields/donation.field';
 
 @Component({
   selector: 'app-my-requests-tab',

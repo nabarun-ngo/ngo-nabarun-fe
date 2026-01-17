@@ -32,7 +32,10 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
   override onSearch($event: SearchEvent): void {
     if ($event.advancedSearch && !$event.reset) {
       this.accountService
-        .fetchExpenses(undefined, undefined, removeNullFields($event.value))
+        .fetchExpenses(undefined, undefined, {
+          expenseRefId: this.activityId,
+          ...removeNullFields($event.value)
+        })
         .subscribe((s) => {
           this.setContent(s!.content!, s?.totalSize!);
         });
@@ -42,14 +45,18 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
   }
 
   override loadData(): void {
+    console.log(this.activityId)
     this.accountService
-      .fetchExpenses(ExpenseDefaultValue.pageNumber, ExpenseDefaultValue.pageSize, {})
+      .fetchExpenses(ExpenseDefaultValue.pageNumber, ExpenseDefaultValue.pageSize, {
+        expenseRefId: this.activityId,
+      })
       .subscribe((data) => {
         this.setContent(data?.content!, data?.totalSize);
       });
   }
 
   override onInitHook(): void {
+    super.onInitHook();
     this.setHeaderRow(manageExpenseTabHeader);
     this.permissions = {
       canCreateExpense: this.userIdentity.isAccrediatedTo(
@@ -145,7 +152,9 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
 
   override handlePageEvent($event: PageEvent): void {
     this.accountService
-      .fetchExpenses($event.pageIndex, $event.pageSize, {})
+      .fetchExpenses($event.pageIndex, $event.pageSize, {
+        expenseRefId: this.activityId,
+      })
       .subscribe((s) => {
         this.setContent(s!.content!, s?.totalSize!);
       });
@@ -158,12 +167,13 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
       let users: KeyValue[] = data?.map((m: any) => {
         return { key: m.id, displayValue: m.fullName } as KeyValue;
       })!;
-      this.getSectionField(
+      this.updateFieldOptions(
         'expense_detail',
-        'expense_borne_by',
         0,
+        'expense_by',
+        users,
         true
-      ).form_input!.selectList = users;
+      );
     });
   }
 
@@ -177,11 +187,12 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
           let users: KeyValue[] = data?.map((m: User) => {
             return { key: m.id, displayValue: m.fullName } as KeyValue;
           })!;
-          this.getSectionField(
+          this.updateFieldOptions(
             'expense_detail',
-            'expense_borne_by',
-            $event.rowIndex
-          ).form_input!.selectList = users;
+            $event.rowIndex,
+            'expense_by',
+            users
+          );
           this.showEditForm($event.rowIndex, ['expense_detail', 'expense_list_detail', 'expense_doc_list']);
         });
         break;

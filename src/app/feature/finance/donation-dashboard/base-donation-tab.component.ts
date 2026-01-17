@@ -57,7 +57,6 @@ export abstract class BaseDonationTabComponent extends Accordion<Donation> imple
                 data,
                 this.getRefData({ isActive: true }) || {},
                 this.payableAccounts.map(acc => ({ key: acc.id, displayValue: acc.accountHolderName || '' })),
-                [],
                 options && options['create'],
                 options && options['guest']
             ),
@@ -96,6 +95,16 @@ export abstract class BaseDonationTabComponent extends Accordion<Donation> imple
                 'amount': [Validators.required],
                 'type': isGuest ? [] : [Validators.required],
             }, true);
+
+            const form = this.getSectionForm('donation_detail', 0, true);
+            this.formSubscription?.add(
+                form?.get('type')?.valueChanges.subscribe((type: any) => {
+                    this.updateFieldValidators('donation_detail', 0, {
+                        'endDate': type === 'REGULAR' ? [Validators.required] : [],
+                        'startDate': type === 'REGULAR' ? [Validators.required] : [],
+                    }, true);
+                })
+            );
         }, 0);
     }
 

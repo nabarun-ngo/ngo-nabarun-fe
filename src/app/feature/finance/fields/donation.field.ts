@@ -7,7 +7,6 @@ import { Doc } from "src/app/shared/model/document.model";
 import { KeyValue } from "src/app/shared/model/key-value.model";
 import { Donation } from "../model";
 import { EventEmitter } from "@angular/core";
-import { User } from "../../member/models/member.model";
 import { FieldVisibilityRule } from "src/app/shared/utils/accordion";
 
 
@@ -93,7 +92,6 @@ export const getDonationSection = (
     donation: Donation,
     refData: { [name: string]: KeyValue[] },
     payableAccounts: KeyValue[] = [],
-    events: KeyValue[] = [],
     isCreate: boolean = false,
     isGuest: boolean = false,
 ): DetailedView => {
@@ -189,6 +187,25 @@ export const getDonationSection = (
                     style: 'width: 212px;'
                 }
             },
+            // {
+            //     field_name: 'Is this donation for a project?',
+            //     field_html_id: 'exp_is_event',
+            //     field_value: 'GENERAL',
+            //     hide_field: !isCreate,
+            //     editable: isCreate,
+            //     form_control_name: 'donation_for',
+            //     form_input: {
+            //         html_id: 'donation_for_inp',
+            //         inputType: 'radio',
+            //         tagName: 'input',
+            //         placeholder: 'Ex. Lorem Ipsum',
+            //         selectList: [
+            //             { key: 'PROJECT', displayValue: 'Yes' },
+            //             { key: 'GENERAL', displayValue: 'No' },
+            //         ],
+            //     },
+            //     form_input_validation: [],
+            // },
             {
                 field_name: 'Donation raised on',
                 field_value: donation?.raisedOn || '',
@@ -342,39 +359,7 @@ export const getDonationSection = (
                     placeholder: 'Ex. Failure details'
                 }
             },
-            {
-                field_name: 'Is this donation made for any events?',
-                field_value: donation?.forEvent ? 'Yes' : 'No',
-                hide_field: !(isCreate && donation?.type === 'ONETIME'),
-                editable: isCreate,
-                form_control_name: 'isForEvent',
-                form_input: {
-                    html_id: 'isForEvent',
-                    tagName: 'input',
-                    inputType: 'radio',
-                    selectList: [
-                        { key: 'true', displayValue: 'Yes' },
-                        { key: 'false', displayValue: 'No' }
-                    ]
-                }
-            },
-            {
-                field_name: 'Select event',
-                field_value: donation?.forEvent || '',
-                hide_field: !(
-                    isCreate &&
-                    donation?.type === 'ONETIME'
-                    //  && donation?.forEvent === true
-                ),
-                editable: isCreate,
-                form_control_name: 'eventId',
-                form_input: {
-                    html_id: 'eventId',
-                    tagName: 'select',
-                    inputType: '',
-                    selectList: events
-                }
-            }
+
         ]
     };
 };
