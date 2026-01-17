@@ -16,10 +16,12 @@ export class DocumentLinkComponent {
 
   constructor(private router: Router) { }
 
-  openDocument(doc: KeyValueDto) {
+  openDocument(doc: KeyValueDto, secName: string) {
     const url = this.getEmbedUrl(doc.displayValue);
-    const viewerUrl = `${AppRoute.secured_dashboard_help_viewer_page.url}?title=${doc.description}&url=${encodeURIComponent(url)}`;
-    //window.open(viewerUrl, '_blank');
+    if (secName.toLowerCase().includes('video')) {
+      window.open(url, '_blank');
+      return;
+    }
     this.router.navigate([AppRoute.secured_dashboard_help_viewer_page.url], {
       queryParams: {
         title: doc.description,
@@ -32,9 +34,9 @@ export class DocumentLinkComponent {
     if (!url) return '';
 
     // Handle OneDrive view links
-    // if (url.includes('onedrive.live.com') && url.includes('view.aspx')) {
-    //   return url.replace('view.aspx', 'embed.aspx');
-    // }
+    if (url.includes('onedrive.live.com') && url.includes('view.aspx')) {
+      return url.replace('view.aspx', 'embed.aspx');
+    }
 
     return url;
   }
