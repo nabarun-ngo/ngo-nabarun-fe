@@ -7,7 +7,6 @@ import { DonationRefData } from '../../finance.const';
 import { Donation } from '../../model';
 import { getDonorSection } from '../../fields/donation.field';
 import { BaseDonationTabComponent } from '../base-donation-tab.component';
-import { SCOPE } from 'src/app/core/constant/auth-scope.const';
 import { removeNullFields } from 'src/app/core/service/utilities.service';
 import { getProjectSection } from 'src/app/feature/project/fields/project.field';
 import { getActivitySection } from 'src/app/feature/project/fields/activity.field';

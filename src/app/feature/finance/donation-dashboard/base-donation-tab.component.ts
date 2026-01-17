@@ -57,7 +57,6 @@ export abstract class BaseDonationTabComponent extends Accordion<Donation> imple
                 data,
                 this.getRefData({ isActive: true }) || {},
                 this.payableAccounts.map(acc => ({ key: acc.id, displayValue: acc.accountHolderName || '' })),
-                [],
                 options && options['create'],
                 options && options['guest']
             ),
@@ -95,6 +94,7 @@ export abstract class BaseDonationTabComponent extends Accordion<Donation> imple
             this.updateFieldValidators('donation_detail', 0, {
                 'amount': [Validators.required],
                 'type': isGuest ? [] : [Validators.required],
+
             }, true);
         }, 0);
     }
