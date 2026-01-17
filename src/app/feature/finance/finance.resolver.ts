@@ -29,18 +29,19 @@ export const accountDashboardResolver: ResolveFn<PagedAccounts | undefined> = (r
 export const expenseDashboardResolver: ResolveFn<PagedExpenses | undefined> = (route, state) => {
   const tab = (route.queryParams['tab'] || ExpenseDefaultValue.tabName) as expenseTab;
   const id = route.queryParams['id'] as string;
+  const activityId = route.queryParams['activityId'] as string;
 
   if (tab === 'my_expenses') {
     return inject(AccountService).fetchMyExpenses(
       AccountDefaultValue.pageNumber,
       AccountDefaultValue.pageSize,
-      { expenseId: id ? atob(id) : undefined }
+      { expenseId: id ? atob(id) : undefined, expenseRefId: activityId }
     );
   } else if (tab === 'expense_list') {
     return inject(AccountService).fetchExpenses(
       AccountDefaultValue.pageNumber,
       AccountDefaultValue.pageSize,
-      { expenseId: id ? atob(id) : undefined }
+      { expenseId: id ? atob(id) : undefined, expenseRefId: activityId }
     );
   }
   return;

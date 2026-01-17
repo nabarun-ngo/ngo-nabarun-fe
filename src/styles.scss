@@ -936,3 +936,31 @@ h6 {
     }
   }
 }
+
+.fullscreen-dialog {
+  .mat-mdc-dialog-container {
+    padding: 0 !important;
+  }
+
+  .mdc-dialog__surface {
+    border-radius: 0 !important;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mat-mdc-dialog-content {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-height: unset !important;
+    flex-grow: 1;
+    overflow: hidden;
+  }
+
+  .mat-mdc-dialog-title {
+    margin: 0 !important;
+    padding: 16px 24px !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}

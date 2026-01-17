@@ -11,6 +11,8 @@ import { compareObjects, date, removeNullFields } from 'src/app/core/service/uti
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
 import { Project } from '../../model/project.model';
+import { Router } from '@angular/router';
+import { AppRoute } from 'src/app/core/constant/app-routing.const';
 
 @Component({
   selector: 'app-activity-accordion',
@@ -36,14 +38,14 @@ export class ActivityAccordionComponent extends Accordion<ProjectActivity> imple
   protected allowActivityCreate: boolean = false;
 
   constructor(
-    protected projectService: ProjectService
+    protected projectService: ProjectService,
+    private router: Router
   ) {
     super();
   }
 
   override onInitHook(): void {
     this.setHeaderRow(activityHeader);
-    this.loadData();
     this.allowActivityCreate = this.project?.status === 'ACTIVE' || false;
   }
 
@@ -102,13 +104,13 @@ export class ActivityAccordionComponent extends Accordion<ProjectActivity> imple
       ];
     }
     return [
-      {
-        button_id: 'VIEW_DONATIONS',
-        button_name: 'View Donations'
-      },
+      // {
+      //   button_id: 'VIEW_DONATIONS',
+      //   button_name: 'View Donations'
+      // },
       {
         button_id: 'VIEW_EXPENSES',
-        button_name: 'View Expenses'
+        button_name: 'Add/View Expenses'
       },
       {
         button_id: 'UPDATE_ACTIVITY',
@@ -121,6 +123,18 @@ export class ActivityAccordionComponent extends Accordion<ProjectActivity> imple
     if (event.buttonId === 'UPDATE_ACTIVITY') {
       this.showEditForm(event.rowIndex, ['activity_detail']);
       this.activeButtonId = event.buttonId;
+    } else if (event.buttonId === 'VIEW_DONATIONS') {
+      const activity = this.itemList[event.rowIndex];
+      this.router.navigate([AppRoute.secured_donation_dashboard_page.url], {
+        queryParams: { tab: 'guest_donation', forEventId: activity.id, projectId: this.project.id },
+        state: { project: this.project, activity: activity }
+      });
+    } else if (event.buttonId === 'VIEW_EXPENSES') {
+      const activity = this.itemList[event.rowIndex];
+      this.router.navigate([AppRoute.secured_manage_account_page.url], {
+        queryParams: { tab: 'my_expenses', activityId: activity.id, projectId: this.project.id },
+        state: { project: this.project, activity: activity }
+      });
     } else if (event.buttonId === 'CANCEL') {
       this.hideForm(event.rowIndex);
     } else if (event.buttonId === 'CONFIRM') {

@@ -6,6 +6,7 @@ import { SecuredDashboardComponent } from './secured-dashboard/secured-dashboard
 import { NeedHelpComponent } from './need-help/need-help.component';
 import { NoticeBoardComponent } from './notice-board.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { DocumentViewerComponent } from './document-viewer/document-viewer.component';
 
 
 @NgModule({
@@ -13,14 +14,15 @@ import { SharedModule } from 'src/app/shared/shared.module';
     SecuredDashboardComponent,
     NeedHelpComponent,
     NoticeBoardComponent,
+    DocumentViewerComponent
   ],
   imports: [
     CommonModule,
     DashboardRoutingModule,
     SharedModule,
   ],
-  providers:[
-   
+  providers: [
+
   ]
 })
 export class DashboardModule { }

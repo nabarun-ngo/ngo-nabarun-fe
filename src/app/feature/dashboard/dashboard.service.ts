@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { deleteToken, getToken, Messaging, onMessage } from '@angular/fire/messaging';
 import { map, Observable, Subject } from 'rxjs';
 import { KeyValue } from 'src/app/shared/model/key-value.model';
-import { StaticDocsControllerService } from 'src/app/core/api-client/services';
+import { StaticDocsControllerService, UserControllerService } from 'src/app/core/api-client/services';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 import { environment } from 'src/environments/environment';
 
@@ -18,8 +18,13 @@ export class DashboardService {
   constructor(
     private docsController: StaticDocsControllerService,
     private messageing: Messaging,
-    private userDetail: UserIdentityService
+    private userDetail: UserIdentityService,
+    private userController: UserControllerService
   ) { }
+
+  getUserMetrics() {
+    return this.userController.getUserMetrics().pipe(map(m => m.responsePayload));
+  }
 
 
   private notificationSub = new Subject<{ [key: string]: string; }>();

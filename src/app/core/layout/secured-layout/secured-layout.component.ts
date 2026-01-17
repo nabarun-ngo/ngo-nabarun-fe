@@ -16,11 +16,12 @@ export class SecuredLayoutComponent {
     entryComponent: PageLoaderComponent,
     opacity: '0.9',
     filteredUrlPatterns: [
-      // 'token',
-      // 'openid-configuration',
-       //'jwks.json',
-       'manageNotification',
-       'getNotifications',
-     ]
+      'token',
+      'openid-configuration',
+      'jwks.json',
+      'api/users/profile/metrics',
+      'api/users/profile/notifications',
+
+    ]
   }
 }

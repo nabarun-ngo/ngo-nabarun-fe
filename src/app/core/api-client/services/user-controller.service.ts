@@ -21,12 +21,17 @@ import { getLoggedInUser } from '../fn/user-controller/get-logged-in-user';
 import { GetLoggedInUser$Params } from '../fn/user-controller/get-logged-in-user';
 import { getUser } from '../fn/user-controller/get-user';
 import { GetUser$Params } from '../fn/user-controller/get-user';
+import { getUserMetrics } from '../fn/user-controller/get-user-metrics';
+import { GetUserMetrics$Params } from '../fn/user-controller/get-user-metrics';
+import { initPasswordChange } from '../fn/user-controller/init-password-change';
+import { InitPasswordChange$Params } from '../fn/user-controller/init-password-change';
 import { listUsers } from '../fn/user-controller/list-users';
 import { ListUsers$Params } from '../fn/user-controller/list-users';
 import { referenceData } from '../fn/user-controller/reference-data';
 import { ReferenceData$Params } from '../fn/user-controller/reference-data';
 import { SuccessResponsePagedResultUserDto } from '../models/success-response-paged-result-user-dto';
 import { SuccessResponseUserDto } from '../models/success-response-user-dto';
+import { SuccessResponseUserMetricsDto } from '../models/success-response-user-metrics-dto';
 import { SuccessResponseUserRefDataDto } from '../models/success-response-user-ref-data-dto';
 import { SuccessResponseVoid } from '../models/success-response-void';
 import { updateMyDetails } from '../fn/user-controller/update-my-details';
@@ -287,6 +292,39 @@ export class UserControllerService extends BaseService {
     );
   }
 
+  /** Path part for operation `getUserMetrics()` */
+  static readonly GetUserMetricsPath = '/api/users/profile/metrics';
+
+  /**
+   * Get user metrics.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getUserMetrics()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUserMetrics$Response(params?: GetUserMetrics$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseUserMetricsDto>> {
+    return getUserMetrics(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get user metrics.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getUserMetrics$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUserMetrics(params?: GetUserMetrics$Params, context?: HttpContext): Observable<SuccessResponseUserMetricsDto> {
+    return this.getUserMetrics$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseUserMetricsDto>): SuccessResponseUserMetricsDto => r.body)
+    );
+  }
+
   /** Path part for operation `assignRole()` */
   static readonly AssignRolePath = '/api/users/{id}/assign-role';
 
@@ -357,6 +395,39 @@ export class UserControllerService extends BaseService {
    */
   assignRoleToUser(params: AssignRoleToUser$Params, context?: HttpContext): Observable<SuccessResponseVoid> {
     return this.assignRoleToUser$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseVoid>): SuccessResponseVoid => r.body)
+    );
+  }
+
+  /** Path part for operation `initPasswordChange()` */
+  static readonly InitPasswordChangePath = '/api/users/profile/init-password-change';
+
+  /**
+   * Initiate password change for user.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `initPasswordChange()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  initPasswordChange$Response(params?: InitPasswordChange$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
+    return initPasswordChange(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Initiate password change for user.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `initPasswordChange$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  initPasswordChange(params?: InitPasswordChange$Params, context?: HttpContext): Observable<SuccessResponseVoid> {
+    return this.initPasswordChange$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseVoid>): SuccessResponseVoid => r.body)
     );
   }

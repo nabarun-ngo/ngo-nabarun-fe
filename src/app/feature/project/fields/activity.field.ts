@@ -17,6 +17,7 @@ export const activitySearchInput = (
 ): SearchAndAdvancedSearchModel => {
     return {
         normalSearchPlaceHolder: 'Search activities...',
+        disableAdvancedSearchBtn: true,
         advancedSearch: {
             title: 'Advanced Activity Search',
             buttonText: {

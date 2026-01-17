@@ -182,7 +182,7 @@
                         <span>Member since</span>
                         <span class="ml-auto">{{profile.createdOn | date: 'd MMMM y' | replaceNull}}</span>
                     </li>
-                    <li class="flex items-center py-3" *ngIf="profile.loginMethod || mode == 'edit_admin'" >
+                    <li class="flex items-center py-3" *ngIf="profile.loginMethod || mode == 'edit_admin'">
                         <span>Login Method(s)</span>
                         <span class="ml-auto">
                             <div *ngIf="profile.loginMethod && mode != 'edit_admin'">
@@ -192,7 +192,8 @@
                                 </span>
                             </div>
 
-                            <app-universal-input formControlName="loginMethod" *ngIf="mode == 'edit_admin'" [inputModel]="{
+                            <app-universal-input formControlName="loginMethod" *ngIf="mode == 'edit_admin'"
+                                [inputModel]="{
                                 html_id:'login_method',
                                 tagName : 'select' ,
                                 inputType : 'multiselect',
@@ -437,7 +438,7 @@
                             placeholder:'Enter Hometown',
                          }"></app-universal-input>
                         </div>
-                         <div class="grid grid-cols-2">
+                        <div class="grid grid-cols-2">
                             <div class="px-4 py-2 font-semibold">Pin code</div>
                             <div *ngIf="mode != 'edit_self'" class="px-4 py-2">{{profile.presentAddress?.zipCode |
                                 replaceNull}}
@@ -448,7 +449,7 @@
                             inputType : 'number',
                             placeholder:'Enter pincode',
                          }"></app-universal-input>
-                         
+
                         </div>
                         <div class="grid grid-cols-2"
                             *ngIf="editSelfForm && editSelfForm.value?.country_p == 'IN' && editSelfForm.value?.state_p">
@@ -569,7 +570,7 @@
                             inputType : 'number',
                             placeholder:'Enter pincode',
                          }"></app-universal-input>
-                         
+
                         </div>
                         <div class="grid grid-cols-2"
                             *ngIf="editSelfForm && editSelfForm.value?.country_s == 'IN' && editSelfForm.value?.state_s">
@@ -670,7 +671,8 @@
                         <button (click)="editSelf()"
                             class="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">
                             Update Profile</button>
-                        <button (click)="onUpdate.emit({ actionName: 'CHANGE_MODE',mode:'password_form'})"
+                        <!-- onUpdate.emit({ actionName: 'CHANGE_MODE',mode:'password_form'}) -->
+                        <button (click)="changePassword()"
                             class="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">
                             Change Password</button>
                     </div>
@@ -695,7 +697,7 @@
         <div class="my-4"></div>
 
         <!-- Roles and activity -->
-        <div class="bg-white p-3 shadow-sm rounded-sm">
+        <!-- <div class="bg-white p-3 shadow-sm rounded-sm">
 
             <div class="grid grid-cols-2">
                 <div>
@@ -709,7 +711,7 @@
                         </span>
                         <span class="tracking-wide">Past Roles, Transactions, Documents, social media</span>
                     </div>
-                    <!-- <ul class="list-inside space-y-2" *ngIf="profile.pastRoles">
+                    <ul class="list-inside space-y-2" *ngIf="profile.pastRoles">
                         <li *ngIf="profile.pastRoles.length === 0">
                             <div class="text-teal-600">No roles yet.</div>
                         </li>
@@ -719,9 +721,9 @@
                         </li>
                       
 
-                    </ul> -->
+                    </ul>
                 </div>
-                <!-- <div>
+                <div>
                     <div class="flex items-center space-x-2 font-semibold text-gray-900 leading-8 mb-3">
                         <span clas="text-green-500">
                             <svg class="h-5" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -749,10 +751,9 @@
                             <div class="text-gray-500 text-xs">March 2020 - Now</div>
                         </li>
                     </ul>
-                </div> -->
+                </div>
             </div>
-            <!-- End of Experience and education grid -->
-        </div>
+        </div> -->
         <!-- End of profile tab -->
 
     </div>

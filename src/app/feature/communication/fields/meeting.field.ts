@@ -296,25 +296,25 @@ export const getMeetingSection = (
                 form_input_validation: isCreate ? [Validators.required] : []
             },
             {
-                field_name: 'Description',
-                field_value: meeting?.description || '',
+                field_name: 'Agenda',
+                field_value: meeting?.agenda || '',
                 editable: true,
-                form_control_name: 'description',
-                field_html_id: 'meeting_description',
+                form_control_name: 'agenda',
+                field_html_id: 'meeting_agenda',
                 form_input: {
-                    html_id: 'meeting_description',
+                    html_id: 'meeting_agenda',
                     tagName: 'textarea',
                     inputType: 'text',
-                    placeholder: 'Enter meeting description'
+                    placeholder: 'Enter meeting agenda'
                 },
-                form_input_validation: []
+                form_input_validation: isCreate ? [Validators.required] : []
             },
             {
                 field_name: 'Meeting Date',
-                field_value: meeting?.startTime || '',
+                field_value: meeting?.startTime ? date(meeting.startTime, 'yyyy-MM-dd') : '',
                 field_display_value: date(meeting?.startTime),
                 editable: true,
-                form_control_name: 'date',
+                form_control_name: 'meetingDate',
                 field_html_id: 'meeting_date',
                 form_input: {
                     html_id: 'meeting_date',
@@ -326,7 +326,7 @@ export const getMeetingSection = (
             },
             {
                 field_name: 'Start Time',
-                field_value: date(meeting?.startTime, 'HH:mm'),
+                field_value: meeting?.startTime ? date(meeting.startTime, 'HH:mm') : '',
                 field_display_value: date(meeting?.startTime, 'hh:mm a'),
                 editable: true,
                 form_control_name: 'startTime',
@@ -342,7 +342,7 @@ export const getMeetingSection = (
             },
             {
                 field_name: 'End Time',
-                field_value: date(meeting?.endTime, 'HH:mm'),
+                field_value: meeting?.endTime ? date(meeting.endTime, 'HH:mm') : '',
                 field_display_value: date(meeting?.endTime, 'hh:mm a'),
                 editable: true,
                 form_control_name: 'endTime',
@@ -385,7 +385,7 @@ export const getMeetingSection = (
                     placeholder: 'Select attendees',
                     selectList: []
                 },
-                form_input_validation: []
+                form_input_validation: isCreate ? [Validators.required] : []
             },
             {
                 field_name: 'Status',
@@ -396,6 +396,20 @@ export const getMeetingSection = (
                 field_name: 'Meeting Link',
                 field_value: meeting?.meetLink || '',
                 hide_field: !meeting?.meetLink || isCreate
+            },
+            {
+                field_name: 'Outcomes',
+                field_value: meeting?.outcomes || '',
+                editable: !isCreate,
+                form_control_name: 'outcomes',
+                field_html_id: 'meeting_outcomes',
+                form_input: {
+                    html_id: 'meeting_outcomes',
+                    tagName: 'textarea',
+                    inputType: 'text',
+                    placeholder: 'Enter meeting outcomes'
+                },
+                form_input_validation: []
             }
         ]
     };

@@ -53,22 +53,20 @@ export class DonationService {
     getSelfDonations(options: {
         pageIndex?: number,
         pageSize?: number,
-        filter?: { donationId?: string, donationStatus?: string[], startDate?: string, endDate?: string, donationType?: string[] }
+        filter?: { donationId?: string, donationStatus?: string[], startDate?: string, endDate?: string, donationType?: string[], forEventId?: string }
     }): Observable<PagedDonations> {
         const param: any = {};
 
-        if (options.filter) {
-            if (options.filter.donationId) param.donationId = options.filter.donationId;
-            if (options.filter.donationStatus?.length) param.status = [options.filter.donationStatus, 'default'];
-            if (options.filter.donationType?.length) param.type = [options.filter.donationType, 'default'];
-            if (options.filter.startDate) param.startDate = new Date(options.filter.startDate).toISOString();
-            if (options.filter.endDate) param.endDate = new Date(options.filter.endDate).toISOString();
-        }
 
         return this.donationController.getSelfDonations({
             pageIndex: options.pageIndex || DonationDefaultValue.pageNumber,
             pageSize: options.pageSize || DonationDefaultValue.pageSize,
-            ...param
+            donationId: options.filter?.donationId,
+            status: options.filter?.donationStatus as any,
+            type: options.filter?.donationType as any,
+            startDate: options.filter?.startDate,
+            endDate: options.filter?.endDate,
+            //forEventId: options.filter?.forEventId
         }).pipe(
             map(d => d.responsePayload),
             map(mapPagedDonationDtoToPagedDonations)
@@ -83,6 +81,7 @@ export class DonationService {
     fetchMyDonations(options: {
         pageIndex?: number;
         pageSize?: number;
+        filter?: { forEventId?: string };
     }): Observable<DonationDashboardData> {
         return from(this.identityService.getUser()).pipe(
             map(user => user.profile_id),
@@ -91,7 +90,7 @@ export class DonationService {
                 combineLatest({
                     donations: this.donationController.getSelfDonations({
                         pageIndex: options.pageIndex ?? DonationDefaultValue.pageNumber,
-                        pageSize: options.pageSize ?? DonationDefaultValue.pageSize
+                        pageSize: options.pageSize ?? DonationDefaultValue.pageSize,
                     }).pipe(
                         map(res => res.responsePayload),
                         map(mapPagedDonationDtoToPagedDonations)
@@ -131,13 +130,17 @@ export class DonationService {
     fetchGuestDonations(options: {
         pageIndex?: number,
         pageSize?: number
-        filter?: { donationId?: string, donationStatus?: string[], startDate?: string, endDate?: string, donationType?: string[] }
+        filter?: { donationId?: string, donationStatus?: string[], startDate?: string, endDate?: string, donationType?: string[], forEventId?: string }
     }): Observable<DonationDashboardData> {
         return combineLatest({
             donations: this.donationController.listGuestDonations({
                 pageIndex: options.pageIndex ?? DonationDefaultValue.pageNumber,
                 pageSize: options.pageSize ?? DonationDefaultValue.pageSize,
-                ...options.filter
+                donationId: options.filter?.donationId,
+                status: options.filter?.donationStatus as any,
+                type: options.filter?.donationType as any,
+                startDate: options.filter?.startDate,
+                endDate: options.filter?.endDate,
             }).pipe(
                 map(res => res.responsePayload),
                 map(mapPagedDonationDtoToPagedDonations)
@@ -188,14 +191,16 @@ export class DonationService {
      */
     fetchUserDonations(id: string, options: {
         pageIndex?: number,
-        pageSize?: number
+        pageSize?: number,
+        filter?: { forEventId?: string }
     }): Observable<{ donations: PagedDonations; summary: DonationSummary }> {
         return combineLatest({
             donations: this.donationController.getMemberDonations({
                 memberId: id,
                 pageIndex: options.pageIndex || DonationDefaultValue.pageNumber,
                 pageSize: options.pageSize || DonationDefaultValue.pageSize,
-            }).pipe(
+                ...options.filter
+            } as any).pipe(
                 map(d => d.responsePayload),
                 map(mapPagedDonationDtoToPagedDonations)
             ),
@@ -209,13 +214,17 @@ export class DonationService {
     getUserDonations(id: string, options: {
         pageIndex?: number,
         pageSize?: number,
-        filter?: { donationId?: string, donationStatus?: string[], startDate?: string, endDate?: string, donationType?: string[] }
+        filter?: { donationId?: string, donationStatus?: string[], startDate?: string, endDate?: string, donationType?: string[], forEventId?: string }
     }): Observable<PagedDonations> {
         return this.donationController.getMemberDonations({
             memberId: id,
             pageIndex: options.pageIndex || DonationDefaultValue.pageNumber,
             pageSize: options.pageSize || DonationDefaultValue.pageSize,
-            ...options.filter
+            donationId: options.filter?.donationId,
+            status: options.filter?.donationStatus as any,
+            type: options.filter?.donationType as any,
+            startDate: options.filter?.startDate,
+            endDate: options.filter?.endDate,
         }).pipe(
             map(d => d.responsePayload),
             map(mapPagedDonationDtoToPagedDonations)

@@ -2,11 +2,9 @@ import { Component, Input } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { AccordionCell, AccordionButton } from 'src/app/shared/model/accordion-list.model';
-import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { date, removeNullFields } from 'src/app/core/service/utilities.service';
 import { DonationRefData } from '../../finance.const';
-import { Donation, DonationSummary, Account } from '../../model';
-import { getDonationSection } from '../../fields/donation.field';
+import { Donation, DonationSummary } from '../../model';
 import { BaseDonationTabComponent } from '../base-donation-tab.component';
 
 @Component({
@@ -69,10 +67,10 @@ export class SelfDonationTabComponent extends BaseDonationTabComponent {
   protected override prepareDefaultButtons(data: Donation, options?: { [key: string]: any; }): AccordionButton[] {
     return data.status === 'RAISED' || data.status === 'PENDING' ?
       [
-        {
-          button_id: 'NOTIFY',
-          button_name: 'Notify Payment',
-        }
+        // {
+        //   button_id: 'NOTIFY',
+        //   button_name: 'Notify Payment',
+        // }
       ] : [];
   }
 

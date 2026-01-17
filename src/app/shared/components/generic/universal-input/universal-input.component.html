@@ -69,7 +69,8 @@
 
 
 <!-- textarea -->
-<ng-container *ngIf="inputModel.tagName == 'textarea'">
+<ng-container
+    *ngIf="inputModel.tagName == 'textarea' && inputModel.inputType != 'editor' && inputModel.inputType != 'html'">
     <label *ngIf="inputModel.labelName"
         [for]="inputModel.html_id ?inputModel.html_id : inputModel.tagName+'_'+inputModel.inputType+'_'+inputModel.labelName"
         class="block text-sm font-medium text-gray-700 mb-2">{{inputModel.labelName}}</label>
@@ -98,22 +99,32 @@
 </ng-container>
 
 
-<!-- input with date-->
-<ng-container *ngIf="inputModel.tagName == 'input' && inputModel.inputType == 'editor'">
+<!-- input with editor or html-->
+<ng-container *ngIf="inputModel.inputType == 'editor' || inputModel.inputType == 'html'">
     <label *ngIf="inputModel.labelName"
         [for]="inputModel.html_id ?inputModel.html_id : inputModel.tagName+'_'+inputModel.inputType+'_'+inputModel.labelName"
         class="block text-sm font-medium text-gray-700 mb-2">{{inputModel.labelName}}</label>
-    <angular-editor [formControl]="ngControl.control" [style]="inputModel.style? inputModel.style : ''"
-        [ngClass]="inputModel.cssClass ? inputModel.cssClass : ''" [config]="{
-        editable: true,
-        spellcheck: true,
-        height: '200px', 
-        showToolbar: false,
-        placeholder: inputModel.placeholder!,
-        outline:true,
-        sanitize: true
-      }"></angular-editor>
-    <mat-error>{{ errorMessage(ngControl.control.errors,inputModel.labelName)}}</mat-error>
+
+    <div class="angular-editor-wrapper">
+        <angular-editor [formControl]="ngControl.control" [style]="inputModel.style? inputModel.style : ''"
+            [ngClass]="inputModel.cssClass ? inputModel.cssClass : ''" [config]="{
+            editable: true,
+            spellcheck: true,
+            height: inputModel.props?.['height'] || 'auto', 
+            minHeight: inputModel.props?.['minHeight'] || '120px',
+            showToolbar: inputModel.props?.['showToolbar'] !== undefined ? inputModel.props?.['showToolbar'] : true,
+            placeholder: inputModel.placeholder!,
+            outline: false,
+            sanitize: true,
+            toolbarHiddenButtons: [
+                ['fontName'],
+                ['fontSize'],
+                ['textColor', 'backgroundColor', 'customClasses', 'insertImage', 'insertVideo', 'insertHorizontalRule', 'clearFormatting']
+            ]
+          }"></angular-editor>
+    </div>
+    <mat-error *ngIf="ngControl.control.errors">{{
+        errorMessage(ngControl.control.errors,inputModel.labelName)}}</mat-error>
 
 </ng-container>
 
