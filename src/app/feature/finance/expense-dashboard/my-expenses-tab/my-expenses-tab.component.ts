@@ -158,7 +158,7 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
     options?: { [key: string]: any }
   ): AccordionCell[] {
     // Convert domain model to format expected by expenseHighLevelView
-    return expenseHighLevelView(data as any);
+    return expenseHighLevelView(data);
   }
 
   protected override prepareDetailedView(
@@ -250,7 +250,6 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
           $event.rowIndex,
           $event.buttonId == 'CREATE_CONFIRM' ? true : false
         );
-        console.log(expenseForm)
         let expenseFormItems = this.getSectionForm(
           'expense_list_detail',
           $event.rowIndex,

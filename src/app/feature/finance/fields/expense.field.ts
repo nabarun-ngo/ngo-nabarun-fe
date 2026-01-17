@@ -421,17 +421,6 @@ export const expenseSearchInput = (
             placeholder: 'Select End Date',
           },
         },
-        {
-          formControlName: 'expenseRefId',
-          inputModel: {
-            html_id: 'event_Id',
-            tagName: 'select',
-            inputType: '',
-            labelName: 'Select Event',
-            selectList: [],
-            placeholder: 'Ex. NEV1224',
-          }
-        }
       ],
     },
   };

@@ -136,7 +136,11 @@ export class DonationService {
             donations: this.donationController.listGuestDonations({
                 pageIndex: options.pageIndex ?? DonationDefaultValue.pageNumber,
                 pageSize: options.pageSize ?? DonationDefaultValue.pageSize,
-                ...options.filter
+                donationId: options.filter?.donationId,
+                status: options.filter?.donationStatus as any,
+                type: options.filter?.donationType as any,
+                startDate: options.filter?.startDate,
+                endDate: options.filter?.endDate,
             }).pipe(
                 map(res => res.responsePayload),
                 map(mapPagedDonationDtoToPagedDonations)
@@ -216,7 +220,11 @@ export class DonationService {
             memberId: id,
             pageIndex: options.pageIndex || DonationDefaultValue.pageNumber,
             pageSize: options.pageSize || DonationDefaultValue.pageSize,
-            ...options.filter
+            donationId: options.filter?.donationId,
+            status: options.filter?.donationStatus as any,
+            type: options.filter?.donationType as any,
+            startDate: options.filter?.startDate,
+            endDate: options.filter?.endDate,
         }).pipe(
             map(d => d.responsePayload),
             map(mapPagedDonationDtoToPagedDonations)

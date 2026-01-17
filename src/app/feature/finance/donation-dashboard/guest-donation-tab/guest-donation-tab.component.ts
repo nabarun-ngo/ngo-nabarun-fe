@@ -95,6 +95,7 @@ export class GuestDonationTabComponent extends BaseDonationTabComponent {
 
   onSearch($event: SearchEvent): void {
     if ($event.advancedSearch) {
+      console.log(removeNullFields($event.value))
       this.donationService.fetchGuestDonations({
         filter: removeNullFields($event.value)
       }).subscribe(data => {

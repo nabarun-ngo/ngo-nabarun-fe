@@ -44,8 +44,7 @@ export class AccountService {
     private userController: UserControllerService,
     private expenseController: ExpenseControllerService,
     private dmsController: DmsControllerService,
-    private projectController: ProjectControllerService,
-    private earnController: EarningControllerService
+    // private projectController: ProjectControllerService,
   ) { }
 
   /**
@@ -582,12 +581,6 @@ export class AccountService {
         map((d) => d.responsePayload),
         map(mapExpenseDtoToExpense)
       );
-  }
-
-  fetchEvents() {
-    return this.projectController
-      .listActivities({ id: '' })
-      .pipe(map((d) => d.responsePayload));
   }
 
   uploadDocuments(documents: FileUpload[], docIndexId: string, docIndexType: string) {

@@ -110,7 +110,7 @@ export class ActivityAccordionComponent extends Accordion<ProjectActivity> imple
       // },
       {
         button_id: 'VIEW_EXPENSES',
-        button_name: 'View Expenses'
+        button_name: 'Add/View Expenses'
       },
       {
         button_id: 'UPDATE_ACTIVITY',

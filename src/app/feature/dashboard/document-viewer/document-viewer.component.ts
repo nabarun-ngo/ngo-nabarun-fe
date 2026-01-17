@@ -11,7 +11,7 @@ import { AlertData } from 'src/app/shared/model/alert.model';
     styleUrls: ['./document-viewer.component.scss']
 })
 export class DocumentViewerComponent implements OnInit {
-    protected url: string | null = null;
+    protected url!: string;
     protected title: string | null = null;
 
     protected navigations: NavigationButtonModel[] = [
@@ -37,7 +37,7 @@ export class DocumentViewerComponent implements OnInit {
         this.route.queryParamMap.subscribe(params => {
             this.title = params.get('title');
             this.sharedData.setPageName(this.title ?? 'View Document');
-            this.url = params.get('url');
+            this.url = params.get('url')!;
             if (!this.url) {
                 this.router.navigate([AppRoute.secured_dashboard_help_page.url]);
             }

@@ -5,6 +5,7 @@ export interface SearchAndAdvancedSearchModel {
   normalSearchPlaceHolder: string;
   normalSearchButtonText?: string;
   showOnlyAdvancedSearch?: boolean;
+  disableAdvancedSearchBtn?: boolean;
   advancedSearch?: {
     searchFormFields: {
       formControlName: string;

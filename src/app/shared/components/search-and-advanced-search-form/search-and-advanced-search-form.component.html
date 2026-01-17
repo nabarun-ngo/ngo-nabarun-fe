@@ -11,7 +11,7 @@
         </div>
 
         <!-- Advanced Search Button -->
-        <button (click)="clickAdvSearchBtn()"
+        <button [disabled]="search.disableAdvancedSearchBtn" (click)="clickAdvSearchBtn()"
             class="bg-indigo-500 py-3 px-5 w-full sm:w-auto text-white font-semibold rounded-lg hover:shadow-lg transition duration-300 cursor-pointer">
             {{search.normalSearchButtonText ? search.normalSearchButtonText : 'Advanced Search'}}
         </button>

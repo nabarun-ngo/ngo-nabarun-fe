@@ -97,14 +97,7 @@ export class ExpenseDashboardComponent extends StandardTabbedDashboard<expenseTa
     this.forwardSearchToActiveTab($event);
 
     if ($event.advancedSearch) {
-      this.accountService.fetchEvents().subscribe((s) => {
-        let events = s?.content?.map((m: any) => {
-          return { key: m.id, displayValue: m.name || m.eventTitle || m.id } as KeyValue;
-        });
-        this.searchInput.advancedSearch!.searchFormFields.find(
-          (f) => f.inputModel.html_id == 'event_Id'
-        )!.inputModel.selectList = events;
-      });
+
       if (this.tabMapping[this.tabIndex] == 'expense_list') {
         this.accountService.fetchUsers().subscribe((s) => {
           let users = s?.map((m: User) => {
