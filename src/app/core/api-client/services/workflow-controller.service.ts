@@ -15,14 +15,19 @@ import { additionalFields } from '../fn/workflow-controller/additional-fields';
 import { AdditionalFields$Params } from '../fn/workflow-controller/additional-fields';
 import { getInstance } from '../fn/workflow-controller/get-instance';
 import { GetInstance$Params } from '../fn/workflow-controller/get-instance';
+import { listAutomaticTasks } from '../fn/workflow-controller/list-automatic-tasks';
+import { ListAutomaticTasks$Params } from '../fn/workflow-controller/list-automatic-tasks';
 import { listInstancesByMe } from '../fn/workflow-controller/list-instances-by-me';
 import { ListInstancesByMe$Params } from '../fn/workflow-controller/list-instances-by-me';
 import { listInstancesForMe } from '../fn/workflow-controller/list-instances-for-me';
 import { ListInstancesForMe$Params } from '../fn/workflow-controller/list-instances-for-me';
 import { listTasks } from '../fn/workflow-controller/list-tasks';
 import { ListTasks$Params } from '../fn/workflow-controller/list-tasks';
+import { processTask } from '../fn/workflow-controller/process-task';
+import { ProcessTask$Params } from '../fn/workflow-controller/process-task';
 import { startWorkflow } from '../fn/workflow-controller/start-workflow';
 import { StartWorkflow$Params } from '../fn/workflow-controller/start-workflow';
+import { SuccessResponse } from '../models/success-response';
 import { SuccessResponseArrayFieldAttributeDto } from '../models/success-response-array-field-attribute-dto';
 import { SuccessResponsePagedResultWorkflowInstanceDto } from '../models/success-response-paged-result-workflow-instance-dto';
 import { SuccessResponsePagedResultWorkflowTaskDto } from '../models/success-response-paged-result-workflow-task-dto';
@@ -259,6 +264,84 @@ export class WorkflowControllerService extends BaseService {
   listTasks(params: ListTasks$Params, context?: HttpContext): Observable<SuccessResponsePagedResultWorkflowTaskDto> {
     return this.listTasks$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponsePagedResultWorkflowTaskDto>): SuccessResponsePagedResultWorkflowTaskDto => r.body)
+    );
+  }
+
+  /** Path part for operation `listAutomaticTasks()` */
+  static readonly ListAutomaticTasksPath = '/api/workflows/tasks/automatic';
+
+  /**
+   * List automatic workflow tasks.
+   *
+   * **Required Permissions:**
+   * - `read:work`
+   * _(All permissions required)_
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `listAutomaticTasks()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  listAutomaticTasks$Response(params?: ListAutomaticTasks$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultWorkflowTaskDto>> {
+    return listAutomaticTasks(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * List automatic workflow tasks.
+   *
+   * **Required Permissions:**
+   * - `read:work`
+   * _(All permissions required)_
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `listAutomaticTasks$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  listAutomaticTasks(params?: ListAutomaticTasks$Params, context?: HttpContext): Observable<SuccessResponsePagedResultWorkflowTaskDto> {
+    return this.listAutomaticTasks$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponsePagedResultWorkflowTaskDto>): SuccessResponsePagedResultWorkflowTaskDto => r.body)
+    );
+  }
+
+  /** Path part for operation `processTask()` */
+  static readonly ProcessTaskPath = '/api/workflows/{id}/tasks/{taskId}/processTask';
+
+  /**
+   * Process a workflow task.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `processTask()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  processTask$Response(params: ProcessTask$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponse & {
+'responsePayload'?: string;
+}>> {
+    return processTask(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Process a workflow task.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `processTask$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  processTask(params: ProcessTask$Params, context?: HttpContext): Observable<SuccessResponse & {
+'responsePayload'?: string;
+}> {
+    return this.processTask$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponse & {
+'responsePayload'?: string;
+}>): SuccessResponse & {
+'responsePayload'?: string;
+} => r.body)
     );
   }
 

@@ -9,6 +9,7 @@ import { AdminApikeyTabComponent } from './admin-dashboard/admin-apikey-tab/admi
 import { AdminGlobalConfigTabComponent } from './admin-dashboard/admin-global-config-tab/admin-global-config-tab.component';
 import { AdminOauthTabComponent } from './admin-dashboard/admin-oauth-tab/admin-oauth-tab.component';
 import { AdminBgJobsTabComponent } from './admin-dashboard/admin-bg-jobs-tab/admin-bg-jobs-tab.component';
+import { AdminTasksTabComponent } from './admin-dashboard/admin-tasks-tab/admin-tasks-tab.component';
 
 
 @NgModule({
@@ -20,6 +21,7 @@ import { AdminBgJobsTabComponent } from './admin-dashboard/admin-bg-jobs-tab/adm
     AdminGlobalConfigTabComponent,
     AdminOauthTabComponent,
     AdminBgJobsTabComponent,
+    AdminTasksTabComponent,
   ],
   imports: [
     CommonModule,

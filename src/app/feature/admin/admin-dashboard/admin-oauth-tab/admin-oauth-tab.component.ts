@@ -26,7 +26,6 @@ export class AdminOauthTabComponent extends Accordion<AuthTokenDto> implements T
 
   override onInitHook(): void {
     this.setHeaderRow([{ value: 'Client ID' }, { value: 'Provider' }])
-    this.loadData()
   }
   protected override prepareHighLevelView(data: AuthTokenDto, options?: { [key: string]: any; }): AccordionCell[] {
     return [

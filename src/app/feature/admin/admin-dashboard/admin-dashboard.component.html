@@ -26,6 +26,9 @@
                     <mat-tab id="oauthToken" label="Manage OAuth Tokens">
                         <app-admin-oauth-tab [accordionData]="initialData" [refData]="refData"></app-admin-oauth-tab>
                     </mat-tab>
+                    <mat-tab id="tasks" label="Automatic Tasks">
+                        <app-admin-tasks-tab [accordionData]="initialData" [refData]="refData"></app-admin-tasks-tab>
+                    </mat-tab>
                     <!-- <mat-tab id="config" label="Manage Global Config">
                         <app-admin-global-config-tab [initialData]="initialData"
                             [refData]="refData"></app-admin-global-config-tab>
