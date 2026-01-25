@@ -15,7 +15,7 @@ import { WorkflowConstant, RequestDefaultValue, RequestField } from '../../workf
 import { ModalService } from 'src/app/core/service/modal.service';
 import { AppDialog } from 'src/app/core/constant/app-dialog.const';
 import { getRequestAdditionalDetailSection, getRequestDetailSection, getRequestStepsSection } from '../../fields/request.field';
-import { date } from 'src/app/core/service/utilities.service';
+import { date, removeNullFields } from 'src/app/core/service/utilities.service';
 import { filterFormChange } from 'src/app/core/service/form.service';
 import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
@@ -174,7 +174,9 @@ export class MyRequestsTabComponent extends Accordion<WorkflowRequest> implement
   onSearch($event: SearchEvent): void {
     if ($event.advancedSearch && !$event.reset) {
       this.requestService
-        .findRequests('me', RequestDefaultValue.pageNumber, RequestDefaultValue.pageSize)
+        .findRequests('me', undefined, undefined, {
+          ...removeNullFields($event.value),
+        })
         .subscribe((s) => {
           this.setContent(s?.content!, s?.totalSize);
         });

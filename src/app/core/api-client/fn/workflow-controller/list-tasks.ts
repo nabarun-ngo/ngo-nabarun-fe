@@ -14,7 +14,11 @@ export interface ListTasks$Params {
   taskId?: string;
   workflowId?: string;
   type?: Array<'VERIFICATION' | 'APPROVAL' | 'AUTOMATIC'>;
-  completed?: boolean;
+
+/**
+ * Options Y/N
+ */
+  completed?: string;
 
 /**
  * Index of the page to retrieve

@@ -229,7 +229,7 @@ export class BulkEditDonationComponent extends MemberDonationTabComponent {
                 }
             }
 
-            if (documents) {
+            if (documents && documents.length > 0) {
                 const dmsDtos: DmsUploadDto[] = documents.map(doc => ({
                     contentType: doc.detail.contentType,
                     fileBase64: doc.detail.base64Content,
@@ -238,15 +238,6 @@ export class BulkEditDonationComponent extends MemberDonationTabComponent {
                 }))
                 await firstValueFrom(this.donationService.uploadDocuments(dmsDtos))
             }
-
-            this.modalService.openNotificationModal(
-                {
-                    title: 'Success',
-                    description: `Successfully updated ${this.donationIds.length} donation(s)`
-                },
-                'notification',
-                'success'
-            );
 
             this.goBack();
         } catch (error) {

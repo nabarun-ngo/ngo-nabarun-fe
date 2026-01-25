@@ -3,7 +3,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { scrollToFirstInvalidControl } from 'src/app/core/service/form.service';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { AccordionButton, AccordionCell } from 'src/app/shared/model/accordion-list.model';
-import { date } from 'src/app/core/service/utilities.service';
+import { date, removeNullFields } from 'src/app/core/service/utilities.service';
 import { Accordion } from 'src/app/shared/utils/accordion';
 import { TaskDefaultValue, WorkflowConstant } from '../../workflow.const';
 import { getRequestAdditionalDetailSection, getRequestDetailSection } from '../../fields/request.field';
@@ -189,7 +189,11 @@ export class PendingTasksTabComponent extends Accordion<Task> implements TabComp
 
   onSearch(event: SearchEvent): void {
     if (event.advancedSearch && !event.reset) {
-      this.taskService.findMyTasks(this.completed)
+      this.taskService.findMyTasks(this.completed,
+        undefined,
+        undefined,
+        { ...removeNullFields(event.value) }
+      )
         .subscribe(s => {
           this.setContent(s?.content!, s?.totalSize!);
         })
