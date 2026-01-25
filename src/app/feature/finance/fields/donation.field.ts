@@ -321,9 +321,9 @@ export const getDonationSection = (
                     !isCreate && donation?.status === 'CANCELLED'
                 ),
                 editable: !isCreate,
-                form_control_name: 'remarks',
+                form_control_name: 'cancellationReason',
                 form_input: {
-                    html_id: 'remarks',
+                    html_id: 'cancellationReason',
                     tagName: 'textarea',
                     inputType: '',
                     placeholder: 'Ex. Cancellation reason'
@@ -336,9 +336,9 @@ export const getDonationSection = (
                     !isCreate && donation?.status === 'PAY_LATER'
                 ),
                 editable: !isCreate,
-                form_control_name: 'remarks',
+                form_control_name: 'laterPaymentReason',
                 form_input: {
-                    html_id: 'remarks',
+                    html_id: 'laterPaymentReason',
                     tagName: 'textarea',
                     inputType: '',
                     placeholder: 'Ex. Reason'
@@ -351,9 +351,9 @@ export const getDonationSection = (
                     !isCreate && donation?.status === 'PAYMENT_FAILED'
                 ),
                 editable: !isCreate,
-                form_control_name: 'remarks',
+                form_control_name: 'paymentFailureDetail',
                 form_input: {
-                    html_id: 'remarks',
+                    html_id: 'paymentFailureDetail',
                     tagName: 'textarea',
                     inputType: '',
                     placeholder: 'Ex. Failure details'
