@@ -236,6 +236,8 @@ export class WorkflowControllerService extends BaseService {
   /**
    * List workflow tasks.
    *
+   * Filter by completed (set true to get completed tasks, set false to get pending tasks)
+   *
    * **Required Permissions:**
    * - `read:work`
    * _(All permissions required)_
@@ -245,12 +247,14 @@ export class WorkflowControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listTasks$Response(params: ListTasks$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultWorkflowTaskDto>> {
+  listTasks$Response(params?: ListTasks$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultWorkflowTaskDto>> {
     return listTasks(this.http, this.rootUrl, params, context);
   }
 
   /**
    * List workflow tasks.
+   *
+   * Filter by completed (set true to get completed tasks, set false to get pending tasks)
    *
    * **Required Permissions:**
    * - `read:work`
@@ -261,7 +265,7 @@ export class WorkflowControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listTasks(params: ListTasks$Params, context?: HttpContext): Observable<SuccessResponsePagedResultWorkflowTaskDto> {
+  listTasks(params?: ListTasks$Params, context?: HttpContext): Observable<SuccessResponsePagedResultWorkflowTaskDto> {
     return this.listTasks$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponsePagedResultWorkflowTaskDto>): SuccessResponsePagedResultWorkflowTaskDto => r.body)
     );

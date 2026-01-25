@@ -192,7 +192,7 @@ export class ProjectService {
    * TODO: Implement when API endpoint is available
    */
   getRefData(): Observable<ProjectRefDataDto> {
-    return this.projectController.getReferenceData_1().pipe(
+    return this.projectController.getProjectReferenceData().pipe(
       map((d) => d.responsePayload)
     );
   }

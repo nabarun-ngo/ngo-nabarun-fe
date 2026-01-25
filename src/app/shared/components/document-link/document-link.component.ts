@@ -18,16 +18,17 @@ export class DocumentLinkComponent {
 
   openDocument(doc: KeyValueDto, secName: string) {
     const url = this.getEmbedUrl(doc.displayValue);
-    if (secName.toLowerCase().includes('video')) {
-      window.open(url, '_blank');
-      return;
-    }
-    this.router.navigate([AppRoute.secured_dashboard_help_viewer_page.url], {
-      queryParams: {
-        title: doc.description,
-        url: url
-      }
-    });
+    //if (secName.toLowerCase().includes('video')) 
+    // {
+    window.open(url, '_blank');
+    //return;
+    //}
+    // this.router.navigate([AppRoute.secured_dashboard_help_viewer_page.url], {
+    //   queryParams: {
+    //     title: doc.description,
+    //     url: url
+    //   }
+    // });
   }
 
   private getEmbedUrl(url: string): string {

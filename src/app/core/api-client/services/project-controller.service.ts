@@ -17,8 +17,8 @@ import { createProject } from '../fn/project-controller/create-project';
 import { CreateProject$Params } from '../fn/project-controller/create-project';
 import { getProjectById } from '../fn/project-controller/get-project-by-id';
 import { GetProjectById$Params } from '../fn/project-controller/get-project-by-id';
-import { getReferenceData_1 } from '../fn/project-controller/get-reference-data-1';
-import { GetReferenceData_1$Params } from '../fn/project-controller/get-reference-data-1';
+import { getProjectReferenceData } from '../fn/project-controller/get-project-reference-data';
+import { GetProjectReferenceData$Params } from '../fn/project-controller/get-project-reference-data';
 import { listActivities } from '../fn/project-controller/list-activities';
 import { ListActivities$Params } from '../fn/project-controller/list-activities';
 import { listProjects } from '../fn/project-controller/list-projects';
@@ -270,8 +270,8 @@ export class ProjectControllerService extends BaseService {
     );
   }
 
-  /** Path part for operation `getReferenceData_1()` */
-  static readonly GetReferenceData_1Path = '/api/projects/static/referenceData';
+  /** Path part for operation `getProjectReferenceData()` */
+  static readonly GetProjectReferenceDataPath = '/api/projects/static/referenceData';
 
   /**
    * Get project reference data.
@@ -279,12 +279,12 @@ export class ProjectControllerService extends BaseService {
    *
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getReferenceData_1()` instead.
+   * To access only the response body, use `getProjectReferenceData()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getReferenceData_1$Response(params?: GetReferenceData_1$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseProjectRefDataDto>> {
-    return getReferenceData_1(this.http, this.rootUrl, params, context);
+  getProjectReferenceData$Response(params?: GetProjectReferenceData$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseProjectRefDataDto>> {
+    return getProjectReferenceData(this.http, this.rootUrl, params, context);
   }
 
   /**
@@ -293,12 +293,12 @@ export class ProjectControllerService extends BaseService {
    *
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getReferenceData_1$Response()` instead.
+   * To access the full response (for headers, for example), `getProjectReferenceData$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getReferenceData_1(params?: GetReferenceData_1$Params, context?: HttpContext): Observable<SuccessResponseProjectRefDataDto> {
-    return this.getReferenceData_1$Response(params, context).pipe(
+  getProjectReferenceData(params?: GetProjectReferenceData$Params, context?: HttpContext): Observable<SuccessResponseProjectRefDataDto> {
+    return this.getProjectReferenceData$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseProjectRefDataDto>): SuccessResponseProjectRefDataDto => r.body)
     );
   }

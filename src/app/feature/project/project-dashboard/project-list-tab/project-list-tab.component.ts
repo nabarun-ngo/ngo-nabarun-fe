@@ -45,15 +45,15 @@ export class ProjectListTabComponent extends Accordion<Project> implements TabCo
         rounded: true
       },
       {
-        value: 'Category',
+        value: 'Project Category',
         rounded: true
       },
       {
-        value: 'Status',
+        value: 'Project Status',
         rounded: true
       },
       {
-        value: 'Phase',
+        value: 'Project Phase',
         rounded: true
       }
     ]);

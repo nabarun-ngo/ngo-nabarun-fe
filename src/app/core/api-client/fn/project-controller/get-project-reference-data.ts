@@ -10,11 +10,11 @@ import { RequestBuilder } from '../../request-builder';
 
 import { SuccessResponseProjectRefDataDto } from '../../models/success-response-project-ref-data-dto';
 
-export interface GetReferenceData_1$Params {
+export interface GetProjectReferenceData$Params {
 }
 
-export function getReferenceData_1(http: HttpClient, rootUrl: string, params?: GetReferenceData_1$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseProjectRefDataDto>> {
-  const rb = new RequestBuilder(rootUrl, getReferenceData_1.PATH, 'get');
+export function getProjectReferenceData(http: HttpClient, rootUrl: string, params?: GetProjectReferenceData$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseProjectRefDataDto>> {
+  const rb = new RequestBuilder(rootUrl, getProjectReferenceData.PATH, 'get');
   if (params) {
   }
 
@@ -28,4 +28,4 @@ export function getReferenceData_1(http: HttpClient, rootUrl: string, params?: G
   );
 }
 
-getReferenceData_1.PATH = '/api/projects/static/referenceData';
+getProjectReferenceData.PATH = '/api/projects/static/referenceData';

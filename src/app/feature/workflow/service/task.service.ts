@@ -21,7 +21,7 @@ export class TaskService {
         return this.workflowController.listTasks({
             page: page || RequestDefaultValue.pageNumber,
             size: size || RequestDefaultValue.pageSize,
-            completed
+            completed: completed
         }).pipe(
             map(d => d.responsePayload),
             map(mapPagedWorkflowTaskDtoToPagedTask)
