@@ -38,6 +38,8 @@ import { FloatingActionButtonComponent } from './components/floating-action-butt
 import { MAT_CHECKBOX_DEFAULT_OPTIONS, MatCheckboxModule } from '@angular/material/checkbox';
 import { DynamicInjectPipe } from './pipes/dynamic-inject.pipe';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { OverlayModule } from '@angular/cdk/overlay';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { AccordionFilterPipe } from './pipes/accordion-filter.pipe';
 import { AlertComponent } from './components/generic/alert/alert.component';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -106,6 +108,8 @@ import { SafeResourceUrlPipe } from './pipes/safe-resource-url.pipe';
     NgxMatInputTelComponent,
     MatCheckboxModule,
     MatAutocompleteModule,
+    OverlayModule,
+    ScrollingModule,
   ],
   exports: [
     ItemTileListComponent,
@@ -142,8 +146,13 @@ import { SafeResourceUrlPipe } from './pipes/safe-resource-url.pipe';
     FloatingActionButtonComponent,
     AppPhoneNumberComponent,
     StandardTabGroupComponent,
+    EditableTableSectionComponent,
+    EditableListSectionComponent,
     DetailedViewComponent,
     SafeResourceUrlPipe,
+    MatAutocompleteModule,
+    ScrollingModule,
+    OverlayModule,
   ],
 
   providers: [{

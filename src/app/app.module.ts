@@ -13,6 +13,7 @@ import { provideDatabase, getDatabase } from '@angular/fire/database';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { environment } from 'src/environments/environment';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
       enabled: environment.production,
       registrationStrategy: 'registerWhenStable:30000'
     }),
+    MatAutocompleteModule,
   ],
   providers: [BnNgIdleService],
   bootstrap: [AppComponent]

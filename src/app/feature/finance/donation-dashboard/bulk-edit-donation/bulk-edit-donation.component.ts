@@ -16,6 +16,7 @@ import { MemberDonationTabComponent } from '../member-donation-tab/member-donati
 import { DmsUploadDto, DocMapDto } from 'src/app/core/api-client/models';
 import { getDocumentDetailSection } from 'src/app/feature/workflow/fields/request.field';
 import { donationDocumentSection } from '../../fields/donation.field';
+import { ProjectSelectionService } from 'src/app/feature/project/service/project-selection.service';
 
 export interface BulkEditConfig {
     /** Title to display in the header */
@@ -49,9 +50,10 @@ export class BulkEditDonationComponent extends MemberDonationTabComponent {
         protected location: Location,
         protected override donationService: DonationService,
         protected override identityService: UserIdentityService,
-        protected override modalService: ModalService
+        protected override modalService: ModalService,
+        protected override projectSelectionService: ProjectSelectionService,
     ) {
-        super(donationService, identityService, modalService, router, route);
+        super(donationService, identityService, modalService, projectSelectionService, router, route);
         this.canUpdate = this.identityService.isAccrediatedTo(SCOPE.update.donation);
     }
 
