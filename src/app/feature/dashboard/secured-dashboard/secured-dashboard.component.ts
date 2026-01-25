@@ -137,33 +137,48 @@ export class SecuredDashboardComponent implements OnInit {
   }
 
   fetchMetrics() {
+    const donationTile = SecuredDashboardComponent.tileList.find(tile => tile.tile_html_id === 'donationTile');
+    const accountTile = SecuredDashboardComponent.tileList.find(tile => tile.tile_html_id === 'accountTile');
+    const expenseTile = SecuredDashboardComponent.tileList.find(tile => tile.tile_html_id === 'expenseTile');
+    const worklistTile = SecuredDashboardComponent.tileList.find(tile => tile.tile_html_id === 'worklistTile');
+
+    if (donationTile && donationTile.additional_info) {
+      donationTile.additional_info.tile_is_loading = true;
+    }
+    if (accountTile && accountTile.additional_info) {
+      accountTile.additional_info.tile_is_loading = true;
+    }
+    if (expenseTile && expenseTile.additional_info) {
+      expenseTile.additional_info.tile_is_loading = true;
+    }
+    if (worklistTile && worklistTile.additional_info) {
+      worklistTile.additional_info.tile_is_loading = true;
+    }
+
+
     this.dashboardService.getUserMetrics().subscribe((metrics: UserMetricsDto) => {
-      const donationTile = SecuredDashboardComponent.tileList.find(tile => tile.tile_html_id === 'donationTile');
       if (donationTile && donationTile.additional_info) {
         donationTile.additional_info.tile_value = metrics.pendingDonations != null ? `₹ ${metrics.pendingDonations}` : '-';
         donationTile.additional_info.tile_is_loading = false;
         donationTile.additional_info.tile_show_badge = metrics.pendingDonations > 0;
       }
 
-      const accountTile = SecuredDashboardComponent.tileList.find(tile => tile.tile_html_id === 'accountTile');
       if (accountTile && accountTile.additional_info) {
         accountTile.additional_info.tile_value = metrics.walletBalance != null ? `₹ ${metrics.walletBalance}` : '-';
         accountTile.additional_info.tile_is_loading = false;
         accountTile.additional_info.tile_show_badge = metrics.walletBalance > 0;
       }
 
-      const expenseTile = SecuredDashboardComponent.tileList.find(tile => tile.tile_html_id === 'expenseTile');
       if (expenseTile && expenseTile.additional_info) {
         expenseTile.additional_info.tile_value = metrics.unsettledExpense != null ? `₹ ${metrics.unsettledExpense}` : '-';
         expenseTile.additional_info.tile_is_loading = false;
         expenseTile.additional_info.tile_show_badge = metrics.unsettledExpense > 0;
       }
 
-      const taskTile = SecuredDashboardComponent.tileList.find(tile => tile.tile_html_id === 'worklistTile');
-      if (taskTile && taskTile.additional_info) {
-        taskTile.additional_info.tile_value = metrics.pendingTask != null ? metrics.pendingTask.toString() : '-';
-        taskTile.additional_info.tile_is_loading = false;
-        taskTile.additional_info.tile_show_badge = metrics.pendingTask > 0;
+      if (worklistTile && worklistTile.additional_info) {
+        worklistTile.additional_info.tile_value = metrics.pendingTask != null ? metrics.pendingTask.toString() : '-';
+        worklistTile.additional_info.tile_is_loading = false;
+        worklistTile.additional_info.tile_show_badge = metrics.pendingTask > 0;
       }
     });
   }
