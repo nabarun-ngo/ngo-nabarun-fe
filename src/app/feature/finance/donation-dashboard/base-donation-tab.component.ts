@@ -101,7 +101,7 @@ export abstract class BaseDonationTabComponent extends Accordion<Donation> imple
             }, true);
             const donationForm = this.getSectionForm('donation_detail', 0, true);
             this.formSubscription?.add(
-                donationForm?.get('donation_for')?.valueChanges.subscribe(val => {
+                donationForm?.get('donationFor')?.valueChanges.subscribe(val => {
                     if (val === 'PROJECT') {
                         this.selectProject();
                     }
@@ -110,7 +110,7 @@ export abstract class BaseDonationTabComponent extends Accordion<Donation> imple
             this.formSubscription?.add(
                 donationForm?.get('type')?.valueChanges.subscribe(val => {
                     this.updateFieldValidators('donation_detail', 0, {
-                        'donation_for': val === 'REGULAR' ? [] : [Validators.required],
+                        'donationFor': val === 'REGULAR' ? [] : [Validators.required],
                         'endDate': val === 'REGULAR' ? [Validators.required] : [],
                         'startDate': val === 'REGULAR' ? [Validators.required] : [],
                     }, true);
@@ -232,9 +232,15 @@ export abstract class BaseDonationTabComponent extends Accordion<Donation> imple
     protected selectProject(): void {
         this.projectSelectionService.selectProject().subscribe(result => {
             if (result) {
+                console.log(result);
                 this.forEventId = result.activityId;
+                this.addAlertToSection('donation_detail', 0, {
+                    alertType: 'info',
+                    message: `This is donation will be recorded for '${result.activity.name}' activity under '${result.project.name}' project`
+                }, true);
             } else {
                 this.forEventId = undefined;
+                this.removeAlertFromSection('donation_detail', 0, true);
             }
         });
     }
