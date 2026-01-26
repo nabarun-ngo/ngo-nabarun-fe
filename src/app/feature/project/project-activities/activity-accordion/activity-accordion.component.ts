@@ -170,7 +170,7 @@ export class ActivityAccordionComponent extends Accordion<ProjectActivity> imple
   loadData(): void {
     this.fetchActivities(
       ActivityDefaultValue.pageNumber,
-      ActivityDefaultValue.pageSize
+      ActivityDefaultValue.pageSize,
     );
   }
 
@@ -178,7 +178,8 @@ export class ActivityAccordionComponent extends Accordion<ProjectActivity> imple
     this.projectService.fetchProjectActivities(
       this.project.id,
       pageNumber,
-      pageSize
+      pageSize,
+      filter
     ).subscribe((data) => {
       this.setContent(
         data.content!,

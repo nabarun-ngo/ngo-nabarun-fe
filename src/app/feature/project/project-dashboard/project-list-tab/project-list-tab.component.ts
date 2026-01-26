@@ -197,14 +197,19 @@ export class ProjectListTabComponent extends Accordion<Project> implements TabCo
   }
 
   onSearch($event: SearchEvent): void {
-    if ($event.advancedSearch) {
-      // TODO: Implement advanced search
-      this.projectService.fetchProjects().subscribe(data => {
+    if ($event.advancedSearch && !$event.reset) {
+      this.projectService.fetchProjects(
+        undefined,
+        undefined,
+        removeNullFields($event.value)
+      ).subscribe(data => {
         this.setContent(data.content!, data.totalSize);
       });
-    }
-    else if ($event.reset) {
-      this.projectService.fetchProjects().subscribe(data => {
+    } else if ($event.reset) {
+      this.projectService.fetchProjects(
+        ProjectDefaultValue.pageNumber,
+        ProjectDefaultValue.pageSize,
+      ).subscribe(data => {
         this.setContent(data.content!, data.totalSize);
       });
     }
@@ -213,7 +218,7 @@ export class ProjectListTabComponent extends Accordion<Project> implements TabCo
   loadData(): void {
     this.projectService.fetchProjects(
       ProjectDefaultValue.pageNumber,
-      ProjectDefaultValue.pageSize
+      ProjectDefaultValue.pageSize,
     ).subscribe(data => {
       this.setContent(data.content!, data.totalSize);
     });

@@ -14,19 +14,54 @@ import { User } from "../../member/models/member.model";
 export const projectSearchInput = (
     refData: {
         [name: string]: any[];
-    }
+    },
 ): SearchAndAdvancedSearchModel => {
     return {
-        normalSearchPlaceHolder: 'Search projects...',
-        disableAdvancedSearchBtn: true,
+        normalSearchPlaceHolder: 'Search projects by name or code...',
+        disableAdvancedSearchBtn: false,
         advancedSearch: {
             title: 'Advanced Project Search',
             buttonText: {
-                search: 'Search Projects',
-                close: 'Clear & Close'
+                search: 'Search',
+                close: 'Close'
             },
             searchFormFields: [
-                // Add search form fields here later
+                {
+                    formControlName: 'category',
+                    inputModel: {
+                        tagName: 'select',
+                        inputType: '',
+                        html_id: 'category',
+                        labelName: 'Category',
+                        placeholder: 'Select Category',
+                        selectList: refData[ProjectConstant.refDataKey.categories],
+                        cssInputClass: 'bg-white'
+                    }
+                },
+                {
+                    formControlName: 'status',
+                    inputModel: {
+                        tagName: 'select',
+                        inputType: '',
+                        html_id: 'status',
+                        labelName: 'Status',
+                        placeholder: 'Select Status',
+                        selectList: refData[ProjectConstant.refDataKey.statuses],
+                        cssInputClass: 'bg-white'
+                    }
+                },
+                {
+                    formControlName: 'phase',
+                    inputModel: {
+                        tagName: 'select',
+                        inputType: '',
+                        html_id: 'phase',
+                        labelName: 'Phase',
+                        placeholder: 'Select Phase',
+                        selectList: refData[ProjectConstant.refDataKey.phases],
+                        cssInputClass: 'bg-white'
+                    }
+                },
             ]
         }
     };
