@@ -11,7 +11,6 @@ import {
   expenseDetailSection,
   expenseDocumentSection,
   expenseEditableTable,
-  expenseEventField,
   expenseHighLevelView,
   expenseTabHeader,
 } from '../../fields/expense.field';
@@ -25,16 +24,12 @@ import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.i
 import { removeNullFields } from 'src/app/core/service/utilities.service';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { User } from 'src/app/feature/member/models/member.model';
-import { KeyValue } from 'src/app/shared/model/key-value.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ProjectService } from 'src/app/feature/project/service/project.service';
 import { Validators } from '@angular/forms';
-import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
-import { SearchAndAdvancedSearchFormComponent } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search-form.component';
-import { Project } from 'src/app/feature/project/model/project.model';
 import { getProjectSection } from 'src/app/feature/project/fields/project.field';
 import { getActivitySection } from 'src/app/feature/project/fields/activity.field';
-import { PagedActivity, ProjectActivity } from 'src/app/feature/project/model/activity.model';
+import { ProjectSelectionService, ProjectSelectionResult } from 'src/app/feature/project/service/project-selection.service';
+
 
 @Component({
   selector: 'app-my-expenses-tab',
@@ -58,45 +53,6 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
   protected isAdmin: boolean = false;
   protected activityId?: string;
   protected detailedViews: DetailedView[] = [];
-  protected projects: Project[] = [];
-  protected activities: ProjectActivity[] = [];
-  protected projectSearch: SearchAndAdvancedSearchModel = {
-    normalSearchPlaceHolder: '',
-    showOnlyAdvancedSearch: true,
-    advancedSearch: {
-      buttonText: { search: 'Select', close: 'Close' },
-      title: 'Select Project & Activity',
-      searchFormFields: [
-        {
-          formControlName: 'projectId',
-          inputModel: {
-            html_id: 'project_search',
-            inputType: 'text',
-            tagName: 'input',
-            autocomplete: true,
-            placeholder: 'Select a project',
-            labelName: 'Project',
-            selectList: []
-          }
-        },
-        {
-          formControlName: 'activityId',
-          inputModel: {
-            html_id: 'activity_search',
-            inputType: 'text',
-            tagName: 'input',
-            autocomplete: true,
-            placeholder: 'Select an activity',
-            labelName: 'Activity',
-            selectList: []
-          },
-          validations: [
-            Validators.required
-          ]
-        }
-      ]
-    }
-  };
 
 
   constructor(
@@ -104,9 +60,8 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
     protected modalService: ModalService,
     protected userIdentity: UserIdentityService,
     protected route: ActivatedRoute,
-    private projectService: ProjectService,
     protected router: Router,
-
+    private projectSelectionService: ProjectSelectionService,
   ) {
     super();
   }
@@ -343,61 +298,16 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
   }
 
   selectProject(): void {
-    this.projectService.fetchProjects().subscribe(data => {
-      this.projects = data.content!;
-      this.projectSearch.advancedSearch?.searchFormFields.filter(f => f.inputModel.html_id == 'project_search').map(m => {
-        m.inputModel.selectList = this.projects.map(m2 => {
-          return { key: m2.id, displayValue: m2.name } as KeyValue
-        })
-      });
-      let modal = this.modalService.openComponentDialog(SearchAndAdvancedSearchFormComponent,
-        this.projectSearch,
-        {
-          height: 300,
-          width: 700,
-          disableClose: true
-        });
-
-      modal.componentInstance.searchformGroup.get('projectId')?.valueChanges.subscribe(data => {
-        if (data) {
-          this.projectId = data;
-          this.projectService.fetchProjectActivities(data).subscribe(data2 => {
-            this.activities = data2.content!;
-            this.projectSearch.advancedSearch?.searchFormFields.filter(f => f.inputModel.html_id == 'activity_search').map(m => {
-              m.inputModel.selectList = this.activities.map(m2 => {
-                return { key: m2.id, displayValue: m2.name } as KeyValue
-              })
-            });
-          })
-        } else {
-          this.projectSearch.advancedSearch?.searchFormFields.filter(f => f.inputModel.html_id == 'activity_search').map(m => {
-            m.inputModel.selectList = []
-          });
-        }
-      })
-      modal.componentInstance.onSearch.subscribe(searchEvent => {
-        if (searchEvent.reset) {
-          modal.close();
-        }
-        else {
-          const formValues = modal.componentInstance.searchformGroup.value;
-          modal.close();
-
-          this.activityId = formValues.activityId;
-          this.projectId = formValues.projectId;
-
-          const selectedProject = this.projects.find(p => p.id == this.projectId);
-          const selectedActivity = this.activities.find(a => a.id == this.activityId);
-
-          if (selectedProject && selectedActivity) {
-            this.detailedViews = [
-              getProjectSection(selectedProject, this.getRefData()!, []),
-              getActivitySection(selectedActivity, this.getRefData()!)
-            ];
-          }
-          this.loadData();
-        }
-      })
+    this.projectSelectionService.selectProject().subscribe((result: ProjectSelectionResult | null) => {
+      if (result) {
+        this.projectId = result.projectId;
+        this.activityId = result.activityId;
+        this.detailedViews = [
+          getProjectSection(result.project, this.getRefData()!, []),
+          getActivitySection(result.activity, this.getRefData()!)
+        ];
+        this.loadData();
+      }
     });
   }
 

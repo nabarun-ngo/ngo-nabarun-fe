@@ -14,19 +14,54 @@ import { User } from "../../member/models/member.model";
 export const projectSearchInput = (
     refData: {
         [name: string]: any[];
-    }
+    },
 ): SearchAndAdvancedSearchModel => {
     return {
-        normalSearchPlaceHolder: 'Search projects...',
-        disableAdvancedSearchBtn: true,
+        normalSearchPlaceHolder: 'Search projects by name or code...',
+        disableAdvancedSearchBtn: false,
         advancedSearch: {
             title: 'Advanced Project Search',
             buttonText: {
-                search: 'Search Projects',
-                close: 'Clear & Close'
+                search: 'Search',
+                close: 'Close'
             },
             searchFormFields: [
-                // Add search form fields here later
+                {
+                    formControlName: 'category',
+                    inputModel: {
+                        tagName: 'select',
+                        inputType: '',
+                        html_id: 'category',
+                        labelName: 'Category',
+                        placeholder: 'Select Category',
+                        selectList: refData[ProjectConstant.refDataKey.categories],
+                        cssInputClass: 'bg-white'
+                    }
+                },
+                {
+                    formControlName: 'status',
+                    inputModel: {
+                        tagName: 'select',
+                        inputType: '',
+                        html_id: 'status',
+                        labelName: 'Status',
+                        placeholder: 'Select Status',
+                        selectList: refData[ProjectConstant.refDataKey.statuses],
+                        cssInputClass: 'bg-white'
+                    }
+                },
+                {
+                    formControlName: 'phase',
+                    inputModel: {
+                        tagName: 'select',
+                        inputType: '',
+                        html_id: 'phase',
+                        labelName: 'Phase',
+                        placeholder: 'Select Phase',
+                        selectList: refData[ProjectConstant.refDataKey.phases],
+                        cssInputClass: 'bg-white'
+                    }
+                },
             ]
         }
     };
@@ -82,7 +117,7 @@ export const getProjectSection = (
                 form_input_validation: isCreate ? [Validators.required, Validators.maxLength(50), Validators.minLength(2)] : []
             },
             {
-                field_name: 'Description',
+                field_name: 'Project Goal(s)',
                 field_value: project?.description,
                 editable: true,
                 form_control_name: 'description',
@@ -96,7 +131,7 @@ export const getProjectSection = (
                 form_input_validation: isCreate ? [Validators.required, Validators.maxLength(500), Validators.minLength(2)] : []
             },
             {
-                field_name: 'Category',
+                field_name: 'Project Category',
                 field_value: project?.category,
                 show_display_value: true,
                 ref_data_section: ProjectConstant.refDataKey.categories,
@@ -113,7 +148,7 @@ export const getProjectSection = (
                 form_input_validation: isCreate ? [Validators.required] : []
             },
             {
-                field_name: 'Status',
+                field_name: 'Project Status',
                 field_value: project?.status,
                 show_display_value: true,
                 ref_data_section: ProjectConstant.refDataKey.statuses,
@@ -130,7 +165,7 @@ export const getProjectSection = (
                 form_input_validation: []
             },
             {
-                field_name: 'Phase',
+                field_name: 'Project Phase',
                 field_value: project?.phase,
                 show_display_value: true,
                 ref_data_section: ProjectConstant.refDataKey.phases,

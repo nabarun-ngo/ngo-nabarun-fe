@@ -21,10 +21,9 @@ export interface ListInstancesByMe$Params {
  * Count of content to load per page
  */
   size?: number;
-
-/**
- * Filter by delegated (set true to get workflow created by me for others, set false to get only workflow created by me for me)
- */
+  workflowId?: string;
+  status?: Array<'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'FAILED' | 'CANCELLED'>;
+  type?: Array<'JOIN_REQUEST' | 'CONTACT_REQUEST' | 'DONATION_REQUEST'>;
   delegated?: boolean;
 }
 
@@ -33,6 +32,9 @@ export function listInstancesByMe(http: HttpClient, rootUrl: string, params?: Li
   if (params) {
     rb.query('page', params.page, {});
     rb.query('size', params.size, {});
+    rb.query('workflowId', params.workflowId, {});
+    rb.query('status', params.status, {});
+    rb.query('type', params.type, {});
     rb.query('delegated', params.delegated, {});
   }
 

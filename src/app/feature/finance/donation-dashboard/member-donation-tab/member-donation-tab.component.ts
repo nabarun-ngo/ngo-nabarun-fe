@@ -18,7 +18,9 @@ import { AppDialog } from 'src/app/core/constant/app-dialog.const';
 import { DonationService } from '../../service/donation.service';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 import { ModalService } from 'src/app/core/service/modal.service';
+import { getActivitySection } from 'src/app/feature/project/fields/activity.field';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
+import { ProjectSelectionService } from 'src/app/feature/project/service/project-selection.service';
 
 @Component({
   selector: 'app-member-donation-tab',
@@ -26,7 +28,7 @@ import { AppRoute } from 'src/app/core/constant/app-routing.const';
   styleUrls: ['./member-donation-tab.component.scss']
 })
 export class MemberDonationTabComponent extends BaseDonationTabComponent {
-  protected detailedViews: DetailedView[] = [];
+  protected override detailedViews: DetailedView[] = [];
   protected summary!: DonationSummary;
   protected userSearch: SearchAndAdvancedSearchModel = {
     normalSearchPlaceHolder: '',
@@ -55,10 +57,11 @@ export class MemberDonationTabComponent extends BaseDonationTabComponent {
     protected override donationService: DonationService,
     protected override identityService: UserIdentityService,
     protected override modalService: ModalService,
+    protected override projectSelectionService: ProjectSelectionService,
     protected router: Router,
     protected route: ActivatedRoute
   ) {
-    super(donationService, identityService, modalService);
+    super(donationService, identityService, modalService, projectSelectionService);
   }
 
   override onInitHook(): void {
@@ -199,7 +202,19 @@ export class MemberDonationTabComponent extends BaseDonationTabComponent {
       const donation = {
         ...donation_form?.value,
         donorId: this.profile?.id!,
+        forEvent: donation_form?.value.donationFor === 'PROJECT' ? this.forEventId : null
       } as Donation;
+
+      if (donation_form?.value.type === 'ONETIME'
+        && donation_form?.value.donationFor === 'PROJECT'
+        && !this.forEventId
+      ) {
+        this.modalService.openNotificationModal({
+          title: 'Project Donation',
+          description: 'Please select a project for this one-time donation.'
+        }, 'notification', 'error')
+        return;
+      }
 
       this.donationService.createDonation(donation, false).subscribe((data) => {
         this.hideForm(0, true);

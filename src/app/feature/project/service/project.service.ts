@@ -20,16 +20,24 @@ export class ProjectService {
   ) { }
 
   /**
-   * Fetch projects with pagination
+   * Fetch projects with pagination and filters
    * Note: API returns Array<ProjectDetailDto>, so we convert it to PagedProject
    */
   fetchProjects(
     page?: number,
     size?: number,
+    filter?: {
+      category?: string;
+      status?: string;
+      phase?: string;
+    }
   ): Observable<PagedProject> {
     return this.projectController.listProjects({
       pageIndex: page,
-      pageSize: size
+      pageSize: size,
+      category: filter?.category as any,
+      status: filter?.status as any,
+      phase: filter?.phase as any,
     }).pipe(
       map((d) => d.responsePayload),
       map(mapPagedProjectDtoToPagedProjects)
@@ -54,11 +62,14 @@ export class ProjectService {
     projectId: string,
     page?: number,
     size?: number,
+    filter?: any
   ): Observable<PagedActivity> {
     return this.projectController.listActivities({
       pageIndex: page,
       pageSize: size,
-      id: projectId
+      id: projectId,
+
+
     }).pipe(
       map((d) => d.responsePayload),
       map(mapPagedActivityDetailDtoToPagedActivity)
@@ -192,7 +203,7 @@ export class ProjectService {
    * TODO: Implement when API endpoint is available
    */
   getRefData(): Observable<ProjectRefDataDto> {
-    return this.projectController.getReferenceData_1().pipe(
+    return this.projectController.getProjectReferenceData().pipe(
       map((d) => d.responsePayload)
     );
   }

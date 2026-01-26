@@ -6,6 +6,7 @@ import { BehaviorSubject, Subscription } from "rxjs";
 import { FileUpload } from "../components/generic/file-upload/file-upload.component";
 import { AfterContentInit, AfterViewInit, Component, Input, OnInit } from "@angular/core";
 import { KeyValue } from "../model/key-value.model";
+import { AlertData } from "../model/alert.model";
 
 /**
  * Type definition for field visibility rules
@@ -736,4 +737,25 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
       }
     }
   }
+
+  protected addAlertToSection(sectionId: string, rowIndex: number, alert: AlertData, create?: boolean): void {
+    const section = this.getSectionInAccordion(sectionId, rowIndex, create);
+    if (section) {
+      if (!section.form_alerts) {
+        section.form_alerts = [];
+      }
+      section.form_alerts.push({
+        data: alert,
+        hide_alert: false
+      });
+    }
+  }
+
+  protected removeAlertFromSection(sectionId: string, rowIndex: number, create?: boolean): void {
+    const section = this.getSectionInAccordion(sectionId, rowIndex, create);
+    if (section) {
+      section.form_alerts = [];
+    }
+  }
+
 } 

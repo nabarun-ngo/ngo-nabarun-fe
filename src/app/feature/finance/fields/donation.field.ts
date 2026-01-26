@@ -102,6 +102,7 @@ export const getDonationSection = (
         section_type: 'key_value',
         section_html_id: 'donation_detail',
         section_form: new FormGroup({}),
+        form_alerts: [],
         content: [
             {
                 field_name: 'Donation number',
@@ -113,17 +114,37 @@ export const getDonationSection = (
                 field_value: isGuest ? 'ONETIME' : donation?.type,
                 show_display_value: true,
                 ref_data_section: DonationRefData.refDataKey.type,
-                editable: isCreate && !isGuest,
+                editable: isCreate,
+                hide_field: isCreate && isGuest,
                 form_control_name: 'type',
                 form_input: {
                     html_id: 'type',
                     tagName: 'select',
                     inputType: '',
                     placeholder: 'Ex. Regular',
-                    selectList: refData?.[DonationRefData.refDataKey.type] || []
+                    selectList: refData?.[DonationRefData.refDataKey.type] || [],
                 },
                 field_html_id: 'type',
                 form_input_validation: []
+            },
+            {
+                field_name: 'Is this any project related Donation?',
+                field_html_id: 'exp_is_event',
+                field_value: undefined,
+                hide_field: !isCreate,
+                editable: isCreate,
+                form_control_name: 'donationFor',
+                form_input: {
+                    html_id: 'donation_for_inp',
+                    inputType: 'radio',
+                    tagName: 'input',
+                    placeholder: 'Ex. Lorem Ipsum',
+                    selectList: [
+                        { key: 'PROJECT', displayValue: 'Yes' },
+                        { key: 'GENERAL', displayValue: 'No' },
+                    ],
+                },
+                form_input_validation: [Validators.required],
             },
             {
                 field_name: 'Donation amount',
@@ -187,25 +208,6 @@ export const getDonationSection = (
                     style: 'width: 212px;'
                 }
             },
-            // {
-            //     field_name: 'Is this donation for a project?',
-            //     field_html_id: 'exp_is_event',
-            //     field_value: 'GENERAL',
-            //     hide_field: !isCreate,
-            //     editable: isCreate,
-            //     form_control_name: 'donation_for',
-            //     form_input: {
-            //         html_id: 'donation_for_inp',
-            //         inputType: 'radio',
-            //         tagName: 'input',
-            //         placeholder: 'Ex. Lorem Ipsum',
-            //         selectList: [
-            //             { key: 'PROJECT', displayValue: 'Yes' },
-            //             { key: 'GENERAL', displayValue: 'No' },
-            //         ],
-            //     },
-            //     form_input_validation: [],
-            // },
             {
                 field_name: 'Donation raised on',
                 field_value: donation?.raisedOn || '',
@@ -321,9 +323,9 @@ export const getDonationSection = (
                     !isCreate && donation?.status === 'CANCELLED'
                 ),
                 editable: !isCreate,
-                form_control_name: 'remarks',
+                form_control_name: 'cancellationReason',
                 form_input: {
-                    html_id: 'remarks',
+                    html_id: 'cancellationReason',
                     tagName: 'textarea',
                     inputType: '',
                     placeholder: 'Ex. Cancellation reason'
@@ -336,9 +338,9 @@ export const getDonationSection = (
                     !isCreate && donation?.status === 'PAY_LATER'
                 ),
                 editable: !isCreate,
-                form_control_name: 'remarks',
+                form_control_name: 'laterPaymentReason',
                 form_input: {
-                    html_id: 'remarks',
+                    html_id: 'laterPaymentReason',
                     tagName: 'textarea',
                     inputType: '',
                     placeholder: 'Ex. Reason'
@@ -351,9 +353,9 @@ export const getDonationSection = (
                     !isCreate && donation?.status === 'PAYMENT_FAILED'
                 ),
                 editable: !isCreate,
-                form_control_name: 'remarks',
+                form_control_name: 'paymentFailureDetail',
                 form_input: {
-                    html_id: 'remarks',
+                    html_id: 'paymentFailureDetail',
                     tagName: 'textarea',
                     inputType: '',
                     placeholder: 'Ex. Failure details'
@@ -491,6 +493,10 @@ export const DonationFieldVisibilityRules: FieldVisibilityRule<Donation>[] = [
     {
         fieldName: 'endDate',
         condition: (formValue) => formValue.type === 'REGULAR'
+    },
+    {
+        fieldName: 'donationFor',
+        condition: (formValue) => formValue.type == 'ONETIME'
     }
 ]
 

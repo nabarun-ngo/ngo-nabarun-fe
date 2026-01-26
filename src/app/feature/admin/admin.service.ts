@@ -2,19 +2,24 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
 import { CreateApiKeyDto } from 'src/app/core/api-client/models';
-import { ApiKeyControllerService, JobControllerService, OAuthControllerService, StaticDocsControllerService } from 'src/app/core/api-client/services';
+import { ApiKeyControllerService, JobControllerService, OAuthControllerService, StaticDocsControllerService, WorkflowControllerService } from 'src/app/core/api-client/services';
 import { environment } from 'src/environments/environment';
+import { AdminDefaultValue } from './admin.const';
+import { mapPagedWorkflowTaskDtoToPagedTask } from '../workflow/model/workflow.mapper';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminService {
 
+
   constructor(
     private oauthController: OAuthControllerService,
     private staticDocs: StaticDocsControllerService,
     private jobController: JobControllerService,
     private apiKeyController: ApiKeyControllerService,
+    private workflowController: WorkflowControllerService,
+
     private httpClient: HttpClient) { }
 
   getAPIKeyList() {
@@ -54,5 +59,19 @@ export class AdminService {
     return this.staticDocs.getStaticLinks({
       linkType: 'ADMIN_LINKS'
     }).pipe(map(m => m.responsePayload));
+  }
+
+  getFailedTasks(pageIndex: number = AdminDefaultValue.pageNumber, pageSize: number = AdminDefaultValue.pageSize) {
+    return this.workflowController.listAutomaticTasks({
+      page: pageIndex,
+      size: pageSize
+    }).pipe(
+      map(d => d.responsePayload),
+      map(mapPagedWorkflowTaskDtoToPagedTask)
+    )
+  }
+
+  retryTask(id: string, workflowId: string) {
+    return this.workflowController.processTask({ id: workflowId!, taskId: id }).pipe(map(m => m.responsePayload));
   }
 }

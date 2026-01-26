@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, map } from 'rxjs';
+import { Observable, filter, map } from 'rxjs';
 import { WorkflowControllerService, UserControllerService, DmsControllerService } from 'src/app/core/api-client/services';
 import { mapPagedWorkflowInstanceDtoToPagedRequest, mapToWorkflowInstanceDtoToWorkflowRequest } from '../model/workflow.mapper';
 import { PagedRequest, WorkflowRequest } from '../model/request.model';
@@ -28,11 +28,20 @@ export class RequestService {
     requestFor: 'me' | 'others',
     page?: number,
     size?: number,
+    filter?: {
+      workflowId?: string;
+      status?: string[];
+      type?: string[];
+    }
   ): Observable<PagedRequest> {
+    console.log(filter);
     if (requestFor === 'me') {
       return this.workflowController.listInstancesForMe({
         page: page,
         size: size,
+        workflowId: filter?.workflowId,
+        status: filter?.status as any,
+        type: filter?.type as any
       }).pipe(
         map(d => d.responsePayload),
         map(mapPagedWorkflowInstanceDtoToPagedRequest)
@@ -41,7 +50,10 @@ export class RequestService {
     return this.workflowController.listInstancesByMe({
       page: page,
       size: size,
-      delegated: true // interested to get request by me for others 
+      delegated: true, // interested to get request by me for others 
+      workflowId: filter?.workflowId,
+      status: filter?.status as any,
+      type: filter?.type as any
     }).pipe(
       map(d => d.responsePayload),
       map(mapPagedWorkflowInstanceDtoToPagedRequest)

@@ -190,41 +190,46 @@ export const requestSearchInput = (
         advancedSearch: {
             title: 'Advanced Request Search',
             buttonText: {
-                search: 'Search Requests',
-                close: 'Clear & Close'
+                search: 'Search',
+                close: 'Close'
             },
             searchFormFields: [
+                {
+                    formControlName: 'workflowId',
+                    inputModel: {
+                        tagName: 'input',
+                        inputType: 'text',
+                        html_id: 'requestId',
+                        labelName: 'Request ID',
+                        placeholder: 'Enter Request ID',
+                        cssInputClass: 'bg-white'
+                    }
+                },
                 {
                     formControlName: 'type',
                     inputModel: {
                         tagName: 'select',
-                        inputType: '',
+                        inputType: 'multiselect',
                         html_id: 'type',
                         labelName: 'Request Type',
                         placeholder: 'Select Request Type',
-                        selectList: [
-                            { key: 'JOIN_REQUEST', displayValue: 'Join Request' },
-                            { key: 'CONTACT_REQUEST', displayValue: 'Contact Request' },
-                            { key: 'DONATION_REQUEST', displayValue: 'Donation Request' }
-                        ],
+                        selectList: refData[WorkflowConstant.refDataKey.visibleWorkflowTypes],
+                        cssInputClass: 'bg-white'
+                    }
+                },
+                {
+                    formControlName: 'status',
+                    inputModel: {
+                        tagName: 'select',
+                        inputType: 'multiselect',
+                        html_id: 'status',
+                        labelName: 'Status',
+                        placeholder: 'Select Status',
+                        selectList: refData[WorkflowConstant.refDataKey.visibleTaskStatuses],
                         cssInputClass: 'bg-white'
                     }
                 }
             ]
-        }
-    };
-};
-
-export const taskSearchInput = (
-    tab: workListTab,
-    refData: {
-        [name: string]: any[];
-    }
-): SearchAndAdvancedSearchModel => {
-    return {
-        normalSearchPlaceHolder: 'Search tasks...',
-        advancedSearch: {
-            searchFormFields: []
         }
     };
 };

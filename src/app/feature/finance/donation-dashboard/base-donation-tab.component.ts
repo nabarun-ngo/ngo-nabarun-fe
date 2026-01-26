@@ -14,6 +14,7 @@ import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { ModalService } from 'src/app/core/service/modal.service';
 import { AccordionButton } from 'src/app/shared/model/accordion-list.model';
 import { SCOPE } from 'src/app/core/constant/auth-scope.const';
+import { ProjectSelectionService } from 'src/app/feature/project/service/project-selection.service';
 
 @Component({
     template: ''
@@ -21,15 +22,18 @@ import { SCOPE } from 'src/app/core/constant/auth-scope.const';
 export abstract class BaseDonationTabComponent extends Accordion<Donation> implements TabComponentInterface<PagedDonations>, OnDestroy {
     protected formSubscription?: Subscription;
     protected permissions: { canCreateDonation: boolean; canUpdateDonation: boolean; } | undefined;
+    protected detailedViews: DetailedView[] = [];
 
 
     @Input()
     payableAccounts: Account[] = [];
+    forEventId?: string;
 
     constructor(
         protected donationService: DonationService,
         protected identityService: UserIdentityService,
-        protected modalService: ModalService
+        protected modalService: ModalService,
+        protected projectSelectionService: ProjectSelectionService,
     ) {
         super();
         this.permissions = {
@@ -95,13 +99,20 @@ export abstract class BaseDonationTabComponent extends Accordion<Donation> imple
                 'amount': [Validators.required],
                 'type': isGuest ? [] : [Validators.required],
             }, true);
-
-            const form = this.getSectionForm('donation_detail', 0, true);
+            const donationForm = this.getSectionForm('donation_detail', 0, true);
             this.formSubscription?.add(
-                form?.get('type')?.valueChanges.subscribe((type: any) => {
+                donationForm?.get('donationFor')?.valueChanges.subscribe(val => {
+                    if (val === 'PROJECT') {
+                        this.selectProject();
+                    }
+                })
+            );
+            this.formSubscription?.add(
+                donationForm?.get('type')?.valueChanges.subscribe(val => {
                     this.updateFieldValidators('donation_detail', 0, {
-                        'endDate': type === 'REGULAR' ? [Validators.required] : [],
-                        'startDate': type === 'REGULAR' ? [Validators.required] : [],
+                        'donationFor': val === 'REGULAR' ? [] : [Validators.required],
+                        'endDate': val === 'REGULAR' ? [Validators.required] : [],
+                        'startDate': val === 'REGULAR' ? [Validators.required] : [],
                     }, true);
                 })
             );
@@ -217,4 +228,20 @@ export abstract class BaseDonationTabComponent extends Accordion<Donation> imple
 
     abstract loadData(): void;
     abstract onSearch($event: SearchEvent): void;
+
+    protected selectProject(): void {
+        this.projectSelectionService.selectProject().subscribe(result => {
+            if (result) {
+                console.log(result);
+                this.forEventId = result.activityId;
+                this.addAlertToSection('donation_detail', 0, {
+                    alertType: 'info',
+                    message: `This is donation will be recorded for '${result.activity.name}' activity under '${result.project.name}' project`
+                }, true);
+            } else {
+                this.forEventId = undefined;
+                this.removeAlertFromSection('donation_detail', 0, true);
+            }
+        });
+    }
 }
