@@ -12,10 +12,12 @@
   </div>
   <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center">
     <mat-tab id="userGuide" label="User Guide">
-      <app-document-link [categories]="userGuides || []"></app-document-link>
+      <app-document-link [categories]="userGuides || []"
+        (documentClicked)="onDocumentClicked($event)"></app-document-link>
     </mat-tab>
     <mat-tab id="policy" label="Policy Hub">
-      <app-document-link [categories]="policies || []"></app-document-link>
+      <app-document-link [categories]="policies || []"
+        (documentClicked)="onDocumentClicked($event)"></app-document-link>
     </mat-tab>
   </mat-tab-group>
 </app-page-layout>

@@ -15,6 +15,7 @@ import { generateReport } from '../fn/finance-report-controller/generate-report'
 import { GenerateReport$Params } from '../fn/finance-report-controller/generate-report';
 import { getReportList } from '../fn/finance-report-controller/get-report-list';
 import { GetReportList$Params } from '../fn/finance-report-controller/get-report-list';
+import { SuccessResponseArrayKeyValueDto } from '../models/success-response-array-key-value-dto';
 
 @Injectable({ providedIn: 'root' })
 export class FinanceReportControllerService extends BaseService {
@@ -26,24 +27,32 @@ export class FinanceReportControllerService extends BaseService {
   static readonly GetReportListPath = '/api/finance-report/list';
 
   /**
+   * Get list of reports.
+   *
+   *
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getReportList()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getReportList$Response(params?: GetReportList$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  getReportList$Response(params?: GetReportList$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayKeyValueDto>> {
     return getReportList(this.http, this.rootUrl, params, context);
   }
 
   /**
+   * Get list of reports.
+   *
+   *
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getReportList$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getReportList(params?: GetReportList$Params, context?: HttpContext): Observable<void> {
+  getReportList(params?: GetReportList$Params, context?: HttpContext): Observable<SuccessResponseArrayKeyValueDto> {
     return this.getReportList$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+      map((r: StrictHttpResponse<SuccessResponseArrayKeyValueDto>): SuccessResponseArrayKeyValueDto => r.body)
     );
   }
 

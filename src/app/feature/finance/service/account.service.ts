@@ -5,9 +5,7 @@ import {
   AccountControllerService,
   UserControllerService,
   ExpenseControllerService,
-  DmsControllerService,
-  ProjectControllerService,
-  EarningControllerService
+  DmsControllerService
 } from 'src/app/core/api-client/services';
 import { date } from 'src/app/core/service/utilities.service';
 import { AccountDefaultValue } from '../finance.const';
@@ -28,9 +26,9 @@ import {
   UpiDetail,
   ExpenseItem
 } from '../model';
-import { CreateExpenseDto, DmsUploadDto, EarningDetailDto, TransactionDetailDto, UpdateExpenseDto } from 'src/app/core/api-client/models';
+import { CreateExpenseDto, DmsUploadDto, TransactionDetailDto, UpdateExpenseDto } from 'src/app/core/api-client/models';
 import { User } from '../../member/models/member.model';
-import { mapPagedUserDtoToPagedUser, mapUserDtoToUser } from '../../member/models/member.mapper';
+import { mapUserDtoToUser } from '../../member/models/member.mapper';
 import { FileUpload } from 'src/app/shared/components/generic/file-upload/file-upload.component';
 import { mapDocDtoToDoc } from 'src/app/shared/model/document.model';
 
@@ -42,9 +40,7 @@ export class AccountService {
   constructor(
     private accountController: AccountControllerService,
     private userController: UserControllerService,
-    private expenseController: ExpenseControllerService,
     private dmsController: DmsControllerService,
-    // private projectController: ProjectControllerService,
   ) { }
 
   /**
@@ -400,188 +396,6 @@ export class AccountService {
     );
   }
 
-  /**
-   * Fetch expenses (admin operation)
-   * @param pageIndex Page index (0-based)
-   * @param pageSize Page size
-   * @param filter Additional filter options
-   * @returns Observable of paged expense results
-   */
-  fetchExpenses(
-    pageIndex?: number,
-    pageSize?: number,
-    filter?: {
-      startDate?: Date | string;
-      endDate?: Date | string;
-      expenseId?: string;
-      expenseRefId?: string;
-      expenseStatus?: Array<'DRAFT' | 'SUBMITTED' | 'FINALIZED' | 'SETTLED' | 'REJECTED'>;
-      payerId?: string;
-    }
-  ): Observable<PagedExpenses> {
-    return this.expenseController
-      .listExpenses({
-        pageIndex: pageIndex ?? AccountDefaultValue.pageNumber,
-        pageSize: pageSize ?? AccountDefaultValue.pageSize,
-        ...(filter?.startDate && {
-          startDate: typeof filter.startDate === 'string'
-            ? filter.startDate
-            : date(filter.startDate.toISOString().split('T')[0], 'yyyy-MM-dd')
-        }),
-        ...(filter?.endDate && {
-          endDate: typeof filter.endDate === 'string'
-            ? filter.endDate
-            : date(filter.endDate.toISOString().split('T')[0], 'yyyy-MM-dd')
-        }),
-        ...(filter?.expenseId && { expenseId: filter.expenseId }),
-        ...(filter?.expenseRefId && { expenseRefId: filter.expenseRefId }),
-        ...(filter?.expenseStatus && { expenseStatus: filter.expenseStatus }),
-        ...(filter?.payerId && { payerId: filter.payerId })
-      })
-      .pipe(
-        map((d) => d.responsePayload),
-        map(mapPagedExpenseDtoToPagedExpenses)
-      );
-  }
-
-  /**
-   * Fetch current user's expenses
-   * @param pageIndex Page index (0-based)
-   * @param pageSize Page size
-   * @param filter Additional filter options
-   * @returns Observable of paged expense results
-   */
-  fetchMyExpenses(
-    pageIndex?: number,
-    pageSize?: number,
-    filter?: {
-      startDate?: Date | string;
-      endDate?: Date | string;
-      expenseId?: string;
-      expenseRefId?: string;
-      expenseStatus?: Array<'DRAFT' | 'SUBMITTED' | 'FINALIZED' | 'SETTLED' | 'REJECTED'>;
-      payerId?: string;
-    }
-  ): Observable<PagedExpenses> {
-    return this.expenseController
-      .listSelfExpenses({
-        pageIndex: pageIndex ?? AccountDefaultValue.pageNumber,
-        pageSize: pageSize ?? AccountDefaultValue.pageSize,
-        ...(filter?.startDate && {
-          startDate: typeof filter.startDate === 'string'
-            ? filter.startDate
-            : date(filter.startDate.toISOString().split('T')[0], 'yyyy-MM-dd')
-        }),
-        ...(filter?.endDate && {
-          endDate: typeof filter.endDate === 'string'
-            ? filter.endDate
-            : date(filter.endDate.toISOString().split('T')[0], 'yyyy-MM-dd')
-        }),
-        ...(filter?.expenseId && { expenseId: filter.expenseId }),
-        ...(filter?.expenseRefId && { expenseRefId: filter.expenseRefId }),
-        ...(filter?.expenseStatus && { expenseStatus: filter.expenseStatus }),
-        ...(filter?.payerId && { payerId: filter.payerId })
-      })
-      .pipe(
-        map((d) => d.responsePayload),
-        map(mapPagedExpenseDtoToPagedExpenses)
-      );
-  }
-
-  /**
-   * Create a new expense
-   * @param detail Expense creation data
-   * @returns Observable of created expense (domain model)
-   */
-  createExpenses(detail: Expense): Observable<Expense> {
-    let expenseDetail: CreateExpenseDto = {
-      description: detail.description || '',
-      name: detail.name || '',
-      expenseRefType: detail.expenseRefType as any,
-      expenseRefId: detail.expenseRefId,
-      expenseDate: detail.expenseDate,
-      expenseItems: detail.expenseItems,
-      payerId: detail.payerId || ''
-    };
-    return this.expenseController
-      .createExpense({ body: expenseDetail })
-      .pipe(
-        map((d) => d.responsePayload),
-        map(mapExpenseDtoToExpense)
-      );
-  }
-
-  /**
-   * Update expense details or change status
-   * @param id Expense ID
-   * @param expense Expense data (API model - components should use ExpenseDetailDto)
-   * @returns Observable of updated expense (domain model)
-   */
-  updateExpense(id: string, expense: Expense): Observable<Expense> {
-
-    if (expense.status === 'FINALIZED') {
-      return this.expenseController
-        .finalizeExpense({ id })
-        .pipe(
-          map((d) => d.responsePayload),
-          map(mapExpenseDtoToExpense)
-        );
-    }
-    if (expense.status === 'SETTLED') {
-      return this.expenseController
-        .settleExpense({ id, accountId: expense.settlementAccountId! })
-        .pipe(
-          map((d) => d.responsePayload),
-          map(mapExpenseDtoToExpense)
-        );
-    }
-    let expenseDetailDto: UpdateExpenseDto = {
-      name: expense.name,
-      description: expense.description,
-      expenseDate: expense.expenseDate,
-      expenseItems: expense.expenseItems,
-      remarks: expense.remarks,
-      status: expense.status,
-      payerId: expense.payerId
-    };
-    return this.expenseController
-      .updateExpense({ id, body: expenseDetailDto })
-      .pipe(
-        map((d) => d.responsePayload),
-        map(mapExpenseDtoToExpense)
-      );
-  }
-
-  createExpenseItem(id: string, data: any) {
-    return this.expenseController
-      .updateExpense({
-        id: id,
-        body: {
-          expenseItems: [
-            {
-              itemName: data.itemName,
-              description: data.description,
-              amount: data.amount,
-            },
-          ],
-        } as any,
-      })
-      .pipe(map((d) => d.responsePayload));
-  }
-
-  updateExpenseItem(id: string, data: ExpenseItem[]): Observable<Expense> {
-    return this.expenseController
-      .updateExpense({
-        id: id,
-        body: {
-          expenseItems: data,
-        } as any,
-      })
-      .pipe(
-        map((d) => d.responsePayload),
-        map(mapExpenseDtoToExpense)
-      );
-  }
 
   uploadDocuments(documents: FileUpload[], docIndexId: string, docIndexType: string) {
     const requests = documents.map(doc => {
@@ -600,11 +414,7 @@ export class AccountService {
   }
 
 
-  getExpenseDocuments(id: string) {
-    return this.dmsController
-      .getDocuments({ id: id, type: 'EXPENSE' })
-      .pipe(map((d) => d.responsePayload), map(d => d.map(mapDocDtoToDoc)));
-  }
+
 
   getTransactionDocuments(id: string) {
     return this.dmsController

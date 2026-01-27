@@ -29,6 +29,7 @@ import { Validators } from '@angular/forms';
 import { getProjectSection } from 'src/app/feature/project/fields/project.field';
 import { getActivitySection } from 'src/app/feature/project/fields/activity.field';
 import { ProjectSelectionService, ProjectSelectionResult } from 'src/app/feature/project/service/project-selection.service';
+import { ExpenseService } from '../../service/expense.service';
 
 
 @Component({
@@ -56,7 +57,7 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
 
 
   constructor(
-    protected accountService: AccountService,
+    protected expenseService: ExpenseService,
     protected modalService: ModalService,
     protected userIdentity: UserIdentityService,
     protected route: ActivatedRoute,
@@ -84,7 +85,7 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
 
   onSearch($event: SearchEvent): void {
     if ($event.advancedSearch && !$event.reset) {
-      this.accountService
+      this.expenseService
         .fetchMyExpenses(undefined, undefined, {
           expenseRefId: this.activityId,
           ...removeNullFields($event.value)
@@ -99,7 +100,7 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
 
   loadData(): void {
     console.log(this.activityId)
-    this.accountService
+    this.expenseService
       .fetchMyExpenses(AccountDefaultValue.pageNumber, AccountDefaultValue.pageSize, {
         expenseRefId: this.activityId
       })
@@ -171,7 +172,7 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
   }
 
   override handlePageEvent($event: PageEvent): void {
-    this.accountService
+    this.expenseService
       .fetchExpenses($event.pageIndex, $event.pageSize, {
         expenseRefId: this.activityId
       })
@@ -227,7 +228,7 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
             : this.userIdentity.loggedInUser.profile_id;
 
           if ($event.buttonId == 'CREATE_CONFIRM') {
-            this.accountService.createExpenses({
+            this.expenseService.createExpenses({
               description: expenseForm.value.description,
               name: expenseForm.value.name,
               expenseRefId: this.activityId,
@@ -252,7 +253,7 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
                 'confirmation',
                 'warning'
               ).onAccept$.subscribe(() => {
-                this.accountService
+                this.expenseService
                   .updateExpense(id!, {
                     ...existingExpense,
                     expenseItems: expenseItems,
@@ -262,11 +263,11 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
                   .subscribe((d) => {
                     this.hideForm($event.rowIndex);
                     this.updateContentRow(d, $event.rowIndex);
-                    this.accountService.uploadDocuments(expenseDocuments ?? [], id!, 'EXPENSE').subscribe();
+                    this.expenseService.uploadDocuments(expenseDocuments ?? [], id!, 'EXPENSE').subscribe();
                   });
               });
             } else {
-              this.accountService
+              this.expenseService
                 .updateExpense(id!, {
                   ...existingExpense,
                   expenseItems: expenseItems,
@@ -276,7 +277,7 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
                 .subscribe((d) => {
                   this.hideForm($event.rowIndex);
                   this.updateContentRow(d, $event.rowIndex);
-                  this.accountService.uploadDocuments(expenseDocuments ?? [], id!, 'EXPENSE').subscribe();
+                  this.expenseService.uploadDocuments(expenseDocuments ?? [], id!, 'EXPENSE').subscribe();
                 });
             }
 
@@ -292,7 +293,7 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
 
   protected override onAccordionOpen($event: { rowIndex: number }) {
     let item = this.itemList![$event.rowIndex];
-    this.accountService.getExpenseDocuments(item.id!).subscribe((data) => {
+    this.expenseService.getExpenseDocuments(item.id!).subscribe((data) => {
       this.addSectionInAccordion(expenseDocumentSection(data), $event.rowIndex);
     });
   }

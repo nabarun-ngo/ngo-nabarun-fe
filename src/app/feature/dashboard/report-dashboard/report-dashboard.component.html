@@ -1,0 +1,8 @@
+<app-page-layout [navigations]="navigations">
+    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center">
+        <mat-tab id="finReports" label="Financial Reports">
+            <app-document-link [categories]="financeReports"
+                (documentClicked)="onDocumentClicked($event)"></app-document-link>
+        </mat-tab>
+    </mat-tab-group>
+</app-page-layout>

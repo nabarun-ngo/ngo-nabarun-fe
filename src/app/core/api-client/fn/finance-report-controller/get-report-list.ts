@@ -8,21 +8,22 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { SuccessResponseArrayKeyValueDto } from '../../models/success-response-array-key-value-dto';
 
 export interface GetReportList$Params {
 }
 
-export function getReportList(http: HttpClient, rootUrl: string, params?: GetReportList$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+export function getReportList(http: HttpClient, rootUrl: string, params?: GetReportList$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayKeyValueDto>> {
   const rb = new RequestBuilder(rootUrl, getReportList.PATH, 'get');
   if (params) {
   }
 
   return http.request(
-    rb.build({ responseType: 'text', accept: '*/*', context })
+    rb.build({ responseType: 'json', accept: 'application/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      return r as StrictHttpResponse<SuccessResponseArrayKeyValueDto>;
     })
   );
 }
