@@ -13,7 +13,7 @@ export class DocumentLinkComponent {
   categories: DocumentCategory[] = [];
 
   @Input()
-  pageSize: number = 10;
+  pageSize: number = 10
 
   @Output()
   documentClicked = new EventEmitter<{ doc: KeyValue, categoryName: string }>();

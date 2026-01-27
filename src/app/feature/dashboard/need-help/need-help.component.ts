@@ -34,8 +34,11 @@ export class NeedHelpComponent implements OnInit {
 
   ngOnInit(): void {
     this.sharedData.setPageName('Help & Support');
-    this.commonService.getPolicyLink().subscribe((res) => this.policies = res.map(m => this.toDocumentCategory(m)));
+    this.commonService.getPolicyLink().subscribe((res) =>
+      this.policies = res.map(m => this.toDocumentCategory(m))
+    );
     this.commonService.getUserGuideLink().subscribe((res) => this.userGuides = res.map(m => this.toDocumentCategory(m)));
+
   }
 
 

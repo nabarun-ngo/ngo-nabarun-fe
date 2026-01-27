@@ -1,3 +1,74 @@
+// .documents-page {
+//   max-width: 700px;
+//   margin: 24px auto;
+//   padding: 0 16px;
+// }
+
+// .section-title {
+//   text-align: center;
+//   font-size: 2rem;
+//   color: #1976d2;
+//   margin-bottom: 32px;
+// }
+
+// .category-card {
+//   background: #fff;
+//   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+//   border-radius: 8px;
+//   padding: 24px;
+//   margin-bottom: 24px;
+// }
+
+// .category-title {
+//   color: #1976d2;
+//   font-size: 1.4rem;
+//   margin-bottom: 16px;
+//   margin-top: 0;
+//   font-weight: 500;
+// }
+
+// .documents-list {
+//   padding: 0;
+//   margin: 0;
+//   list-style: none;
+// }
+
+// .document-item {
+//   margin-bottom: 12px;
+//   display: flex;
+//   align-items: center;
+
+//   &::before {
+//     content: "•";
+//     color: #388e3c;
+//     font-weight: bold;
+//     display: inline-block;
+//     width: 24px;
+//     font-size: 1.2rem;
+//     flex-shrink: 0;
+//   }
+
+//   &:last-child {
+//     margin-bottom: 0;
+//   }
+// }
+
+// .document-link {
+//   color: #388e3c;
+//   text-decoration: none;
+//   font-weight: 500;
+//   font-size: 1rem;
+//   transition: all 0.2s ease;
+
+//   &:hover,
+//   &:focus {
+//     text-decoration: underline;
+//     color: #2e7d32;
+//     transform: translateX(4px);
+//   }
+// }
+
+
 .documents-page {
   max-width: 700px;
   margin: 24px auto;
@@ -49,26 +120,47 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 12px;
-  margin-top: 16px;
-  padding-top: 12px;
-  border-top: 1px solid #efefef;
+  gap: 8px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
 
   .page-info {
-    font-size: 0.9rem;
-    color: #666;
+    font-size: 0.85rem;
+    color: #757575;
     font-weight: 500;
+    min-width: 100px;
+    text-align: center;
+    user-select: none;
+    letter-spacing: 0.3px;
   }
 
   button[mat-icon-button] {
-    width: 32px;
-    height: 32px;
-    line-height: 32px;
+    width: 32px !important;
+    height: 32px !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #1976d2;
+    transition: background-color 0.2s;
+
+    &:disabled {
+      color: #bdbdbd !important;
+    }
+
+    &:hover:not(:disabled) {
+      background-color: rgba(25, 118, 210, 0.08);
+    }
 
     mat-icon {
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
+      font-size: 20px !important;
+      width: 20px !important;
+      height: 20px !important;
+      margin: 0 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
     }
   }
 }
