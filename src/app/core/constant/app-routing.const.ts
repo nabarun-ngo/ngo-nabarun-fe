@@ -50,9 +50,9 @@ export const AppRoute = {
   },
   secured_report_dashboard_page: {
     id: 'secured_report_dashboard_page',
-    url: '/secured/finance/reports',
+    url: '/secured/dashboard/reports',
     parent: 'secured',
-    feature: 'finance',
+    feature: 'dashboard',
     path: 'reports',
   },
   secured_donation_bulk_edit_page: {

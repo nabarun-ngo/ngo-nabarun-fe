@@ -2,12 +2,11 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { AccountDashboardComponent } from './account-dashboard/account-dashboard.component';
-import { accountDashboardResolver, accountInfoResolver, accountRefDataResolver, accountTransactionResolver, donationDashboardResolverNew, donationRefDataResolverNew, expenseDashboardResolver, reportDashboardResolver } from './finance.resolver';
+import { accountDashboardResolver, accountInfoResolver, accountRefDataResolver, accountTransactionResolver, donationDashboardResolverNew, donationRefDataResolverNew, expenseDashboardResolver } from './finance.resolver';
 import { AccountTransactionComponent } from './account-transaction/account-transaction.component';
 import { ExpenseDashboardComponent } from './expense-dashboard/expense-dashboard.component';
 import { DonationDashboardComponent } from './donation-dashboard/donation-dashboard.component';
 import { BulkEditDonationComponent } from './donation-dashboard/bulk-edit-donation/bulk-edit-donation.component';
-import { ReportDashboardComponent } from './report-dashboard/report-dashboard.component';
 
 const route_data = AppRoute;
 
@@ -43,14 +42,6 @@ const routes: Routes = [
     resolve: {
       data: donationDashboardResolverNew,
       ref_data: donationRefDataResolverNew,
-    }
-  },
-  {
-    path: route_data.secured_report_dashboard_page.path,
-    component: ReportDashboardComponent,
-    resolve: {
-      data: reportDashboardResolver,
-      // ref_data: donationRefDataResolverNew,
     }
   },
   {

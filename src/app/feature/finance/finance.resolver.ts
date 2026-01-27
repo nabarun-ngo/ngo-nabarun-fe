@@ -2,13 +2,10 @@ import { ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot } from '@angular
 import { AccountService } from './service/account.service';
 import { inject } from '@angular/core';
 import { AccountDefaultValue, accountTab, DonationDefaultValue, donationTab, ExpenseDefaultValue, expenseTab, TransactionDefaultValue } from './finance.const';
-import { Account, PagedAccounts, PagedDonations, PagedExpenses, PagedTransactions } from './model';
+import { PagedAccounts, PagedExpenses, PagedTransactions } from './model';
 import { DonationService } from './service/donation.service';
-import { AccountRefDataDto, DonationRefDataDto, KeyValueDto } from 'src/app/core/api-client/models';
-import { ReportService } from './service/report.service';
+import { AccountRefDataDto, DonationRefDataDto } from 'src/app/core/api-client/models';
 import { ExpenseService } from './service/expense.service';
-import { KeyValue } from 'src/app/shared/model/key-value.model';
-import { AccordionData } from 'src/app/shared/model/accordion-list.model';
 
 export const accountDashboardResolver: ResolveFn<PagedAccounts | undefined> = (route, state) => {
   const tab = (route.queryParams['tab'] || AccountDefaultValue.tabName) as accountTab;
@@ -140,7 +137,3 @@ export const donationRefDataResolverNew: ResolveFn<DonationRefDataDto> =
     return inject(DonationService).fetchRefData();
   };
 
-export const reportDashboardResolver: ResolveFn<KeyValueDto[]> =
-  (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
-    return inject(ReportService).listActiveReports();
-  };

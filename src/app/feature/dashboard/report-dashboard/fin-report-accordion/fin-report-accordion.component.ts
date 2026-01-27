@@ -6,7 +6,7 @@ import { AccordionCell, AccordionButton } from 'src/app/shared/model/accordion-l
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { KeyValue } from 'src/app/shared/model/key-value.model';
 import { Accordion } from 'src/app/shared/utils/accordion';
-import { ReportService } from '../../service/report.service';
+import { ReportService } from '../../services/report.service';
 import { KeyValueDto } from 'src/app/core/api-client/models';
 
 @Component({

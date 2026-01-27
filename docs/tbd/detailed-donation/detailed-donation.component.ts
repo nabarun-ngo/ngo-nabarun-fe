@@ -8,7 +8,7 @@ import { DonationRefData, OperationMode, donationTab } from 'src/app/feature/don
 import { DonationService } from 'src/app/feature/donation/donation.service';
 import { FileUpload } from '../../../src/app/shared/components/generic/file-upload/file-upload.component';
 import { DatePipe } from '@angular/common';
-import { CommonService } from '../../../src/app/feature/dashboard/dashboard.service';
+import { CommonService } from '../../../src/app/feature/dashboard/services/dashboard.service';
 
 @Component({
   selector: 'app-detailed-donation',

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
-import { DashboardService } from '../dashboard.service';
+import { DashboardService } from '../services/dashboard.service';
 import { DocumentCategory } from 'src/app/shared/components/document-link/document-link.model';
 import { KeyValue } from 'src/app/shared/model/key-value.model';
 import { StaticDocumentDto } from 'src/app/core/api-client/models';

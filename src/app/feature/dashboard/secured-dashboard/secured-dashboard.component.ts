@@ -6,7 +6,7 @@ import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 import { getGreetings } from 'src/app/core/service/utilities.service';
 import { TileInfo } from 'src/app/shared/model/tile-info.model';
-import { DashboardService } from '../dashboard.service';
+import { DashboardService } from '../services/dashboard.service';
 import { UserMetricsDto } from 'src/app/core/api-client/models';
 
 @Component({
@@ -110,7 +110,7 @@ export class SecuredDashboardComponent implements OnInit {
         },
         {
           tile_html_id: 'reportTile',
-          tile_name: 'Financial Reports',
+          tile_name: 'Reports',
           tile_icon: 'icon_book',
           tile_link: this.route.secured_report_dashboard_page.url,
         },

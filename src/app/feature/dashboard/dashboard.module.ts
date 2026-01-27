@@ -7,6 +7,8 @@ import { NeedHelpComponent } from './need-help/need-help.component';
 import { NoticeBoardComponent } from './notice-board.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { DocumentViewerComponent } from './document-viewer/document-viewer.component';
+import { ReportDashboardComponent } from './report-dashboard/report-dashboard.component';
+import { FinReportAccordionComponent } from './report-dashboard/fin-report-accordion/fin-report-accordion.component';
 
 
 @NgModule({
@@ -14,7 +16,9 @@ import { DocumentViewerComponent } from './document-viewer/document-viewer.compo
     SecuredDashboardComponent,
     NeedHelpComponent,
     NoticeBoardComponent,
-    DocumentViewerComponent
+    DocumentViewerComponent,
+    ReportDashboardComponent,
+    FinReportAccordionComponent,
   ],
   imports: [
     CommonModule,
