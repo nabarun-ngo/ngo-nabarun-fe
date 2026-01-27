@@ -14,7 +14,6 @@ import { WorkflowControllerService } from './services/workflow-controller.servic
 import { DonationControllerService } from './services/donation-controller.service';
 import { AccountControllerService } from './services/account-controller.service';
 import { ExpenseControllerService } from './services/expense-controller.service';
-import { EarningControllerService } from './services/earning-controller.service';
 import { FinanceReportControllerService } from './services/finance-report-controller.service';
 import { DmsControllerService } from './services/dms-controller.service';
 import { StaticDocsControllerService } from './services/static-docs-controller.service';
@@ -42,7 +41,6 @@ import { CronControllerService } from './services/cron-controller.service';
     DonationControllerService,
     AccountControllerService,
     ExpenseControllerService,
-    EarningControllerService,
     FinanceReportControllerService,
     DmsControllerService,
     StaticDocsControllerService,
@@ -69,7 +67,7 @@ export class ApiModule {
     }
   }
 
-  constructor( 
+  constructor(
     @Optional() @SkipSelf() parentModule: ApiModule,
     @Optional() http: HttpClient
   ) {
@@ -78,7 +76,7 @@ export class ApiModule {
     }
     if (!http) {
       throw new Error('You need to import the HttpClientModule in your AppModule! \n' +
-      'See also https://github.com/angular/angular/issues/20575');
+        'See also https://github.com/angular/angular/issues/20575');
     }
   }
 }

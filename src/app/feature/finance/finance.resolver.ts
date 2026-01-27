@@ -5,6 +5,8 @@ import { AccountDefaultValue, accountTab, DonationDefaultValue, donationTab, Exp
 import { Account, PagedAccounts, PagedDonations, PagedExpenses, PagedTransactions } from './model';
 import { DonationService } from './service/donation.service';
 import { AccountRefDataDto, DonationRefDataDto } from 'src/app/core/api-client/models';
+import { ReportService } from './service/report.service';
+import { ExpenseService } from './service/expense.service';
 
 export const accountDashboardResolver: ResolveFn<PagedAccounts | undefined> = (route, state) => {
   const tab = (route.queryParams['tab'] || AccountDefaultValue.tabName) as accountTab;
@@ -32,13 +34,13 @@ export const expenseDashboardResolver: ResolveFn<PagedExpenses | undefined> = (r
   const activityId = route.queryParams['activityId'] as string;
 
   if (tab === 'my_expenses') {
-    return inject(AccountService).fetchMyExpenses(
+    return inject(ExpenseService).fetchMyExpenses(
       AccountDefaultValue.pageNumber,
       AccountDefaultValue.pageSize,
       { expenseId: id ? atob(id) : undefined, expenseRefId: activityId }
     );
   } else if (tab === 'expense_list') {
-    return inject(AccountService).fetchExpenses(
+    return inject(ExpenseService).fetchExpenses(
       AccountDefaultValue.pageNumber,
       AccountDefaultValue.pageSize,
       { expenseId: id ? atob(id) : undefined, expenseRefId: activityId }
@@ -135,3 +137,7 @@ export const donationRefDataResolverNew: ResolveFn<DonationRefDataDto> =
   (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
     return inject(DonationService).fetchRefData();
   };
+
+export const reportDashboardResolver: ResolveFn<any> = (route, state) => {
+  return inject(ReportService).listActiveReports();
+};

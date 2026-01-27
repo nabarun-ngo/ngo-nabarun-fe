@@ -10,7 +10,6 @@ export { WorkflowControllerService } from './services/workflow-controller.servic
 export { DonationControllerService } from './services/donation-controller.service';
 export { AccountControllerService } from './services/account-controller.service';
 export { ExpenseControllerService } from './services/expense-controller.service';
-export { EarningControllerService } from './services/earning-controller.service';
 export { FinanceReportControllerService } from './services/finance-report-controller.service';
 export { DmsControllerService } from './services/dms-controller.service';
 export { StaticDocsControllerService } from './services/static-docs-controller.service';
