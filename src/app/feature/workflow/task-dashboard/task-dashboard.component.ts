@@ -9,9 +9,9 @@ import { TaskDefaultValue, workListTab } from '../workflow.const';
 import { PendingTasksTabComponent } from './pending-tasks-tab/pending-tasks-tab.component';
 import { CompletedTasksTabComponent } from './completed-tasks-tab/completed-tasks-tab.component';
 import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
-import { taskSearchInput } from '../fields/request.field';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { PagedTask } from '../model/task.model';
+import { taskSearchInput } from '../fields/tasks.field';
 
 @Component({
   selector: 'app-task-dashboard',

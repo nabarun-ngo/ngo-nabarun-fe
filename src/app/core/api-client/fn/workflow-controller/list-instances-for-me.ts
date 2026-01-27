@@ -21,6 +21,10 @@ export interface ListInstancesForMe$Params {
  * Count of content to load per page
  */
   size?: number;
+  workflowId?: string;
+  status?: Array<'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'FAILED' | 'CANCELLED'>;
+  type?: Array<'JOIN_REQUEST' | 'CONTACT_REQUEST' | 'DONATION_REQUEST'>;
+  delegated?: boolean;
 }
 
 export function listInstancesForMe(http: HttpClient, rootUrl: string, params?: ListInstancesForMe$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultWorkflowInstanceDto>> {
@@ -28,6 +32,10 @@ export function listInstancesForMe(http: HttpClient, rootUrl: string, params?: L
   if (params) {
     rb.query('page', params.page, {});
     rb.query('size', params.size, {});
+    rb.query('workflowId', params.workflowId, {});
+    rb.query('status', params.status, {});
+    rb.query('type', params.type, {});
+    rb.query('delegated', params.delegated, {});
   }
 
   return http.request(

@@ -6,7 +6,7 @@ import { AppDialog } from '../../constant/app-dialog.const';
 import { AppRoute } from '../../constant/app-routing.const';
 import { Howl, Howler } from 'howler';
 import { SecuredDashboardComponent } from 'src/app/feature/dashboard/secured-dashboard/secured-dashboard.component';
-import { DashboardService } from 'src/app/feature/dashboard/dashboard.service';
+import { DashboardService } from 'src/app/feature/dashboard/services/dashboard.service';
 
 @Component({
   selector: 'app-header',

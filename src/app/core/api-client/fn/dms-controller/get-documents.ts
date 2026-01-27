@@ -15,7 +15,7 @@ export interface GetDocuments$Params {
 /**
  * Type of the entity
  */
-  type: 'DONATION' | 'PROFILE' | 'TRANSACTION' | 'EXPENSE' | 'EARNING';
+  type: 'DONATION' | 'PROFILE' | 'TRANSACTION' | 'EXPENSE' | 'EARNING' | 'REPORT';
 
 /**
  * ID of the entity

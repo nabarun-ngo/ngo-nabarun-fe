@@ -1,14 +1,28 @@
 <div class="documents-page">
-  <!-- <h2 class="section-title">Policies</h2> -->
   <div *ngFor="let category of categories" class="category-card">
     <h3 class="category-title">{{ category.name }}</h3>
+    <p *ngIf="category.description" class="category-description">{{ category.description }}</p>
     <ul class="documents-list">
-      <li *ngFor="let doc of category.documents" class="document-item">
-        <a href="javascript:void(0)" (click)="openDocument(doc, category.name)" class="document-link"
-          title="Open {{ doc.description }}">
-          {{ doc.description }}
+      <li *ngFor="let doc of getPagedDocuments(category)" class="document-item">
+        <a href="javascript:void(0)" (click)="onDocumentClick(doc, category.name)" class="document-link"
+          [title]="'Open ' + (doc.description || '')">
+          {{ doc.description || doc.key }}
         </a>
       </li>
     </ul>
+
+    <div *ngIf="category.documents.length > pageSize" class="pagination-controls">
+      <button mat-icon-button [disabled]="(currentPageMap[category.name] || 0) === 0"
+        (click)="onPageChange(category.name, (currentPageMap[category.name] || 0) - 1)">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <span class="page-info">
+        {{ (currentPageMap[category.name] || 0) + 1 }} of {{ getTotalPages(category) }}
+      </span>
+      <button mat-icon-button [disabled]="(currentPageMap[category.name] || 0) >= getTotalPages(category) - 1"
+        (click)="onPageChange(category.name, (currentPageMap[category.name] || 0) + 1)">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
   </div>
 </div>

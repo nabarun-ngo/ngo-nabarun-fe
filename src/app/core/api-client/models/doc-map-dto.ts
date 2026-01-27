@@ -4,5 +4,5 @@
 
 export interface DocMapDto {
   entityId: string;
-  entityType: 'DONATION' | 'PROFILE' | 'TRANSACTION' | 'EXPENSE' | 'EARNING';
+  entityType: 'DONATION' | 'PROFILE' | 'TRANSACTION' | 'EXPENSE' | 'EARNING' | 'REPORT';
 }

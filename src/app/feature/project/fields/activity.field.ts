@@ -16,16 +16,50 @@ export const activitySearchInput = (
     }
 ): SearchAndAdvancedSearchModel => {
     return {
-        normalSearchPlaceHolder: 'Search activities...',
+        normalSearchPlaceHolder: 'Search activities by name...',
         disableAdvancedSearchBtn: true,
         advancedSearch: {
             title: 'Advanced Activity Search',
             buttonText: {
-                search: 'Search Activities',
-                close: 'Clear & Close'
+                search: 'Search',
+                close: 'Close'
             },
             searchFormFields: [
-                // Add search form fields here later
+                {
+                    formControlName: 'name',
+                    inputModel: {
+                        tagName: 'input',
+                        inputType: 'text',
+                        html_id: 'activityName',
+                        labelName: 'Activity Name',
+                        placeholder: 'Enter Activity Name',
+                        cssInputClass: 'bg-white'
+                    }
+                },
+                {
+                    formControlName: 'type',
+                    inputModel: {
+                        tagName: 'select',
+                        inputType: 'multiselect',
+                        html_id: 'type',
+                        labelName: 'Type',
+                        placeholder: 'Select Type',
+                        selectList: refData[ActivityConstant.refDataKey.types],
+                        cssInputClass: 'bg-white'
+                    }
+                },
+                {
+                    formControlName: 'status',
+                    inputModel: {
+                        tagName: 'select',
+                        inputType: 'multiselect',
+                        html_id: 'status',
+                        labelName: 'Status',
+                        placeholder: 'Select Status',
+                        selectList: refData[ActivityConstant.refDataKey.statuses],
+                        cssInputClass: 'bg-white'
+                    }
+                }
             ]
         }
     };

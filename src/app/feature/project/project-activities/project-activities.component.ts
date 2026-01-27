@@ -1,11 +1,10 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
-import { ActivityDefaultValue, activityTab } from '../project.const';
+import { ActivityDefaultValue } from '../project.const';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
-import { StandardTabbedDashboard } from 'src/app/shared/utils/standard-tabbed-dashboard';
 import { PagedActivity } from '../model/activity.model';
 import { Project } from '../model/project.model';
 import { activitySearchInput } from '../fields/activity.field';
@@ -14,7 +13,6 @@ import { getProjectSection } from '../fields/project.field';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { StandardDashboard } from 'src/app/shared/utils/standard-dashboard';
 import { ActivityAccordionComponent } from './activity-accordion/activity-accordion.component';
-import { User } from '../../member/models/member.model';
 import { ProjectService } from '../service/project.service';
 
 @Component({

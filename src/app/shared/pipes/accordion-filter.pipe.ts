@@ -11,7 +11,7 @@ export class AccordionFilterPipe implements PipeTransform {
     if (!rows) {
       return [];
     }
-    if (!searchValue) {
+    if (!searchValue || typeof searchValue !== 'string') {
       return rows;
     }
     return rows.filter(f => {
@@ -27,7 +27,9 @@ export class AccordionFilterPipe implements PipeTransform {
           }
         })
       })
-      return all_values_in_row.find(s => s && s.toString().toLowerCase().includes(searchValue.toLowerCase()))
+      return all_values_in_row.find(s => {
+        return s && s.toString().toLowerCase().includes(searchValue.toLowerCase())
+      })
     })
   }
 

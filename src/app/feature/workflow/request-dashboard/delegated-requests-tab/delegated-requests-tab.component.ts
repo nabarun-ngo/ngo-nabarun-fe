@@ -5,8 +5,10 @@ import { WorkflowRequest } from '../../model/request.model';
 
 import { AccordionCell, AccordionButton } from 'src/app/shared/model/accordion-list.model';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
-import { RequestField, WorkflowConstant } from '../../workflow.const';
+import { RequestDefaultValue, RequestField, WorkflowConstant } from '../../workflow.const';
 import { MyRequestsTabComponent } from '../my-requests-tab/my-requests-tab.component';
+import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
+import { removeNullFields } from 'src/app/core/service/utilities.service';
 
 @Component({
   selector: 'app-delegated-requests-tab',
@@ -90,9 +92,23 @@ export class DelegatedRequestsTabComponent extends MyRequestsTabComponent {
     return super.prepareDetailedView(data, options);
   }
 
+  override onSearch($event: SearchEvent): void {
+    if ($event.advancedSearch && !$event.reset) {
+      this.requestService
+        .findRequests('others', undefined, undefined, {
+          ...removeNullFields($event.value),
+        })
+        .subscribe((s) => {
+          this.setContent(s?.content!, s?.totalSize);
+        });
+    } else if ($event.advancedSearch && $event.reset) {
+      this.loadData();
+    }
+  }
+
   override loadData(): void {
     this.requestService
-      .findRequests('others')
+      .findRequests('others', RequestDefaultValue.pageNumber, RequestDefaultValue.pageSize)
       .subscribe((data) => {
         this.setContent(data?.content!, data?.totalSize);
       });

@@ -1,7 +1,6 @@
-import { Component, Input } from '@angular/core';
-import { Router } from '@angular/router';
-import { KeyValueDto, StaticDocumentDto } from 'src/app/core/api-client/models';
-import { AppRoute } from 'src/app/core/constant/app-routing.const';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { KeyValue } from '../../model/key-value.model';
+import { DocumentCategory } from './document-link.model';
 
 @Component({
   selector: 'app-document-link',
@@ -10,35 +9,34 @@ import { AppRoute } from 'src/app/core/constant/app-routing.const';
 })
 export class DocumentLinkComponent {
 
-  //TODO: Change this to StaticDoc[]`
   @Input({ required: true })
-  categories: StaticDocumentDto[] = [];
+  categories: DocumentCategory[] = [];
 
-  constructor(private router: Router) { }
+  @Input()
+  pageSize: number = 10
 
-  openDocument(doc: KeyValueDto, secName: string) {
-    const url = this.getEmbedUrl(doc.displayValue);
-    if (secName.toLowerCase().includes('video')) {
-      window.open(url, '_blank');
-      return;
-    }
-    this.router.navigate([AppRoute.secured_dashboard_help_viewer_page.url], {
-      queryParams: {
-        title: doc.description,
-        url: url
-      }
-    });
+  @Output()
+  documentClicked = new EventEmitter<{ doc: KeyValue, categoryName: string }>();
+
+  // Track page per category
+  public currentPageMap: { [key: string]: number } = {};
+
+  onDocumentClick(doc: KeyValue, categoryName: string) {
+    this.documentClicked.emit({ doc, categoryName });
   }
 
-  private getEmbedUrl(url: string): string {
-    if (!url) return '';
+  getPagedDocuments(category: DocumentCategory): KeyValue[] {
+    const page = this.currentPageMap[category.name] || 0;
+    const start = page * this.pageSize;
+    return category.documents.slice(start, start + this.pageSize);
+  }
 
-    // Handle OneDrive view links
-    if (url.includes('onedrive.live.com') && url.includes('view.aspx')) {
-      return url.replace('view.aspx', 'embed.aspx');
-    }
+  onPageChange(categoryName: string, newPage: number) {
+    this.currentPageMap[categoryName] = newPage;
+  }
 
-    return url;
+  getTotalPages(category: DocumentCategory): number {
+    return Math.ceil(category.documents.length / this.pageSize);
   }
 }
 

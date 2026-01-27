@@ -14,7 +14,7 @@ import { WorkflowControllerService } from './services/workflow-controller.servic
 import { DonationControllerService } from './services/donation-controller.service';
 import { AccountControllerService } from './services/account-controller.service';
 import { ExpenseControllerService } from './services/expense-controller.service';
-import { EarningControllerService } from './services/earning-controller.service';
+import { FinanceReportControllerService } from './services/finance-report-controller.service';
 import { DmsControllerService } from './services/dms-controller.service';
 import { StaticDocsControllerService } from './services/static-docs-controller.service';
 import { PublicControllerService } from './services/public-controller.service';
@@ -41,7 +41,7 @@ import { CronControllerService } from './services/cron-controller.service';
     DonationControllerService,
     AccountControllerService,
     ExpenseControllerService,
-    EarningControllerService,
+    FinanceReportControllerService,
     DmsControllerService,
     StaticDocsControllerService,
     PublicControllerService,

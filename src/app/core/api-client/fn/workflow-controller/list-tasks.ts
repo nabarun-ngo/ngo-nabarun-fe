@@ -11,11 +11,14 @@ import { RequestBuilder } from '../../request-builder';
 import { SuccessResponsePagedResultWorkflowTaskDto } from '../../models/success-response-paged-result-workflow-task-dto';
 
 export interface ListTasks$Params {
+  taskId?: string;
+  workflowId?: string;
+  type?: Array<'VERIFICATION' | 'APPROVAL' | 'AUTOMATIC'>;
 
 /**
- * Filter by completed (set true to get completed tasks, set false to get pending tasks)
+ * Options Y/N
  */
-  completed: boolean;
+  completed?: string;
 
 /**
  * Index of the page to retrieve
@@ -28,9 +31,12 @@ export interface ListTasks$Params {
   size?: number;
 }
 
-export function listTasks(http: HttpClient, rootUrl: string, params: ListTasks$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultWorkflowTaskDto>> {
+export function listTasks(http: HttpClient, rootUrl: string, params?: ListTasks$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultWorkflowTaskDto>> {
   const rb = new RequestBuilder(rootUrl, listTasks.PATH, 'get');
   if (params) {
+    rb.query('taskId', params.taskId, {});
+    rb.query('workflowId', params.workflowId, {});
+    rb.query('type', params.type, {});
     rb.query('completed', params.completed, {});
     rb.query('page', params.page, {});
     rb.query('size', params.size, {});

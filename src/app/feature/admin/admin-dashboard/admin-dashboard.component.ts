@@ -13,6 +13,7 @@ import { AdminOauthTabComponent } from './admin-oauth-tab/admin-oauth-tab.compon
 import { AdminBgJobsTabComponent } from './admin-bg-jobs-tab/admin-bg-jobs-tab.component';
 import { AdminService } from '../admin.service';
 import { KeyValueDto } from 'src/app/core/api-client/models';
+import { AdminTasksTabComponent } from './admin-tasks-tab/admin-tasks-tab.component';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -29,10 +30,11 @@ export class AdminDashboardComponent extends StandardTabbedDashboard<adminTabs, 
   @ViewChild(AdminGlobalConfigTabComponent) configTab!: AdminGlobalConfigTabComponent;
   @ViewChild(AdminOauthTabComponent) oauthTab!: AdminOauthTabComponent;
   @ViewChild(AdminBgJobsTabComponent) jobTab!: AdminBgJobsTabComponent;
+  @ViewChild(AdminTasksTabComponent) taskTab!: AdminTasksTabComponent;
 
   defaultValue = AdminDefaultValue;
   constant = AdminConstant;
-  protected tabMapping: adminTabs[] = ['api_keys', 'global_config', 'oauth', 'jobs'];
+  protected tabMapping: adminTabs[] = ['api_keys', 'oauth', 'tasks'];
   navigations: NavigationButtonModel[] = [
     {
       displayName: 'Back to Dashboard',
@@ -56,6 +58,7 @@ export class AdminDashboardComponent extends StandardTabbedDashboard<adminTabs, 
       oauth: this.oauthTab,
       jobs: this.jobTab,
       service_list: this.serviceTab,
+      tasks: this.taskTab
     };
   }
   protected override get defaultTab(): adminTabs {

@@ -17,11 +17,19 @@ export class TaskService {
         completed: boolean,
         page?: number,
         size?: number,
+        filter?: {
+            taskId?: string,
+            type?: string[],
+            workflowId?: string
+        }
     ): Observable<PagedTask> {
         return this.workflowController.listTasks({
             page: page || RequestDefaultValue.pageNumber,
             size: size || RequestDefaultValue.pageSize,
-            completed
+            completed: completed ? 'Y' : 'N',
+            taskId: filter?.taskId,
+            type: filter?.type as any,
+            workflowId: filter?.workflowId
         }).pipe(
             map(d => d.responsePayload),
             map(mapPagedWorkflowTaskDtoToPagedTask)

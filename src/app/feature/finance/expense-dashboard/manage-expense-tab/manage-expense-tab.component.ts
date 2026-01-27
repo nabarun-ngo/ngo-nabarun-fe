@@ -31,7 +31,7 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
 
   override onSearch($event: SearchEvent): void {
     if ($event.advancedSearch && !$event.reset) {
-      this.accountService
+      this.expenseService
         .fetchExpenses(undefined, undefined, {
           expenseRefId: this.activityId,
           ...removeNullFields($event.value)
@@ -46,7 +46,7 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
 
   override loadData(): void {
     console.log(this.activityId)
-    this.accountService
+    this.expenseService
       .fetchExpenses(ExpenseDefaultValue.pageNumber, ExpenseDefaultValue.pageSize, {
         expenseRefId: this.activityId,
       })
@@ -132,7 +132,7 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
   protected override onAccordionOpen($event: { rowIndex: number; }): void {
     const expense = this.itemList[$event.rowIndex];
     if (expense.status == 'FINALIZED') {
-      this.accountService.fetchAccounts({
+      this.expenseService.fetchAccounts({
         type: ['WALLET'],
         status: ['ACTIVE'],
         accountHolderId: expense.paidBy?.id,
@@ -151,7 +151,7 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
   }
 
   override handlePageEvent($event: PageEvent): void {
-    this.accountService
+    this.expenseService
       .fetchExpenses($event.pageIndex, $event.pageSize, {
         expenseRefId: this.activityId,
       })
@@ -162,7 +162,7 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
 
   createExpenseAdmin() {
     this.createExpense();
-    this.accountService.fetchUsers().subscribe((data) => {
+    this.expenseService.fetchUsers().subscribe((data) => {
       this.users = data;
       let users: KeyValue[] = data?.map((m: any) => {
         return { key: m.id, displayValue: m.fullName } as KeyValue;
@@ -182,7 +182,7 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
     let dialog: MatDialogRef<SearchAndAdvancedSearchFormComponent, any>;
     switch ($event.buttonId) {
       case 'UPDATE_EXPENSE':
-        this.accountService.fetchUsers().subscribe((data) => {
+        this.expenseService.fetchUsers().subscribe((data) => {
           this.users = data;
           let users: KeyValue[] = data?.map((m: User) => {
             return { key: m.id, displayValue: m.fullName } as KeyValue;
@@ -204,7 +204,7 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
         );
         service.onAccept$.subscribe((data) => {
           var id = this.itemList[$event.rowIndex].id;
-          this.accountService
+          this.expenseService
             .updateExpense(id!, { status: 'FINALIZED' })
             .subscribe((d) => this.updateContentRow(d, $event.rowIndex));
         });
@@ -231,7 +231,7 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
         this.modalService
           .openNotificationModal(mesage, 'confirmation', 'warning')
           .onAccept$.subscribe((d) => {
-            this.accountService
+            this.expenseService
               .updateExpense(itemData.id!, { status: 'SETTLED', settlementAccountId: sett_acc })
               .subscribe((s) => {
                 this.updateContentRow(s, $event.rowIndex);
@@ -249,7 +249,7 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
           if (!s.reset) {
             var id = this.itemList[$event.rowIndex].id;
             const itemData = this.itemList[$event.rowIndex];
-            this.accountService
+            this.expenseService
               .updateExpense(id!, { status: 'REJECTED', remarks: itemData.remarks })
               .subscribe((d) => this.updateContentRow(d, $event.rowIndex));
           }

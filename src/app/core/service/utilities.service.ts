@@ -116,13 +116,20 @@ export function isDuplicateArray(a1: any, a2: any) {
 }
 
 export function saveAs(blob: Blob, fileName: string) {
+
+  // 2. Create a temporary URL for the blob
   const url = window.URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = fileName;
-  a.click();
+
+  // 3. Create a hidden <a> tag and click it
+  const link = window.document.createElement('a');
+  link.href = url;
+  link.download = fileName;
+  window.document.body.appendChild(link);
+  link.click();
+
+  // 4. Cleanup
+  window.document.body.removeChild(link);
   window.URL.revokeObjectURL(url);
-  a.remove();
 }
 
 export function saveFromURL(url: string, fileName: string) {

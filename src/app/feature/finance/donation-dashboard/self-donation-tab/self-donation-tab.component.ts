@@ -6,6 +6,10 @@ import { date, removeNullFields } from 'src/app/core/service/utilities.service';
 import { DonationRefData } from '../../finance.const';
 import { Donation, DonationSummary } from '../../model';
 import { BaseDonationTabComponent } from '../base-donation-tab.component';
+import { ProjectSelectionService } from 'src/app/feature/project/service/project-selection.service';
+import { DonationService } from '../../service/donation.service';
+import { UserIdentityService } from 'src/app/core/service/user-identity.service';
+import { ModalService } from 'src/app/core/service/modal.service';
 
 @Component({
   selector: 'app-self-donation-tab',
@@ -16,6 +20,15 @@ export class SelfDonationTabComponent extends BaseDonationTabComponent {
 
   @Input()
   summary: DonationSummary | undefined;
+
+  constructor(
+    protected override donationService: DonationService,
+    protected override identityService: UserIdentityService,
+    protected override modalService: ModalService,
+    protected override projectSelectionService: ProjectSelectionService,
+  ) {
+    super(donationService, identityService, modalService, projectSelectionService);
+  }
 
 
 

@@ -4,6 +4,7 @@ import { WorkflowConstant, workListTab } from "../workflow.const";
 import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import { date } from "src/app/core/service/utilities.service";
 import { KeyValue } from "src/app/shared/model/key-value.model";
+import { SearchAndAdvancedSearchModel } from "src/app/shared/model/search-and-advanced-search.model";
 
 export const getTaskDetailSection = (m: Task, tab: workListTab, refData: { [name: string]: KeyValue[]; }): DetailedView => {
     return {
@@ -126,5 +127,58 @@ export const getTaskCheckListSection = (m: Task, tab: workListTab): DetailedView
 
     };
 }
+
+
+export const taskSearchInput = (
+    tab: workListTab,
+    refData: {
+        [name: string]: any[];
+    }
+): SearchAndAdvancedSearchModel => {
+    return {
+        normalSearchPlaceHolder: 'Search by Task Id, Workflow Id, or Task Type...',
+        advancedSearch: {
+            searchFormFields: [
+                {
+                    formControlName: 'taskId',
+                    inputModel: {
+                        tagName: 'input',
+                        inputType: 'text',
+                        html_id: 'taskId',
+                        labelName: 'Task ID',
+                        placeholder: 'Enter Task ID',
+                        cssInputClass: 'bg-white'
+                    },
+                },
+                {
+                    formControlName: 'workflowId',
+                    inputModel: {
+                        tagName: 'input',
+                        inputType: 'text',
+                        html_id: 'workflowId',
+                        labelName: 'Workflow ID',
+                        placeholder: 'Enter Workflow ID',
+                        cssInputClass: 'bg-white'
+                    },
+
+                },
+                {
+                    formControlName: 'type',
+                    inputModel: {
+                        tagName: 'select',
+                        inputType: 'multiselect',
+                        html_id: 'type',
+                        labelName: 'Task Type',
+                        placeholder: 'Select Task Type',
+                        selectList: refData[WorkflowConstant.refDataKey.workflowTaskTypes] || [],
+                        cssInputClass: 'bg-white'
+                    },
+
+                },
+
+            ]
+        }
+    };
+};
 
 

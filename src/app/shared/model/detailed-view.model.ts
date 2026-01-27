@@ -127,7 +127,7 @@ export interface DetailedView<NumType = any> {
     /* ───────────── Alerts ───────────── */
 
     readonly section_alerts?: readonly AlertList[];
-    readonly form_alerts?: readonly AlertList[];
+    form_alerts?: AlertList[];
 
 
     /* ───────────── Table ───────────── */
