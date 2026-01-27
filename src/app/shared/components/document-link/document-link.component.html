@@ -1,6 +1,7 @@
 <div class="documents-page">
   <div *ngFor="let category of categories" class="category-card">
     <h3 class="category-title">{{ category.name }}</h3>
+    <p *ngIf="category.description" class="category-description">{{ category.description }}</p>
     <ul class="documents-list">
       <li *ngFor="let doc of getPagedDocuments(category)" class="document-item">
         <a href="javascript:void(0)" (click)="onDocumentClick(doc, category.name)" class="document-link"
