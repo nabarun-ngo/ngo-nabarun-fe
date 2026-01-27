@@ -27,6 +27,10 @@ export class FinanceReportControllerService extends BaseService {
   static readonly GetReportListPath = '/api/finance-report/list';
 
   /**
+   * Get list of reports.
+   *
+   *
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getReportList()` instead.
    *
@@ -37,6 +41,10 @@ export class FinanceReportControllerService extends BaseService {
   }
 
   /**
+   * Get list of reports.
+   *
+   *
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getReportList$Response()` instead.
    *

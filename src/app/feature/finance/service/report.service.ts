@@ -1,17 +1,15 @@
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
-import { FinanceReportControllerService } from 'src/app/core/api-client/services';
+import { DonationControllerService, FinanceReportControllerService } from 'src/app/core/api-client/services';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReportService {
 
-  constructor(private readonly financeReport: FinanceReportControllerService) { }
+  constructor(private donationController: FinanceReportControllerService) { }
 
   listActiveReports() {
-    return this.financeReport.getReportList().pipe(
-      map(m => m.responsePayload),
-    )
+    return this.donationController.getReportList().pipe(map(m => m.responsePayload));
   }
 }

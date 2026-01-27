@@ -1,21 +1,24 @@
 import { Component, ViewChild } from '@angular/core';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
-import { KeyValue } from 'src/app/shared/model/key-value.model';
 import { StandardDashboard } from 'src/app/shared/utils/standard-dashboard';
 import { FinReportAccordionComponent } from './fin-report-accordion/fin-report-accordion.component';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { ActivatedRoute } from '@angular/router';
+import { KeyValueDto } from 'src/app/core/api-client/models';
+import { AccordionData } from 'src/app/shared/model/accordion-list.model';
 
 @Component({
   selector: 'app-report-dashboard',
   templateUrl: './report-dashboard.component.html',
   styleUrls: ['./report-dashboard.component.scss']
 })
-export class ReportDashboardComponent extends StandardDashboard<KeyValue> {
+export class ReportDashboardComponent extends StandardDashboard<KeyValueDto[]> {
 
   @ViewChild(FinReportAccordionComponent) reportAccordion!: FinReportAccordionComponent;
+
+  protected accordionData!: AccordionData<KeyValueDto>;
 
   protected navigations: NavigationButtonModel[] = [
     {
@@ -37,7 +40,11 @@ export class ReportDashboardComponent extends StandardDashboard<KeyValue> {
     this.searchInput = {
       normalSearchPlaceHolder: 'Search Reports by Name'
     };
-    console.log(this.initialData)
+    this.accordionData = {
+      content: this.initialData!,
+      totalSize: this.initialData?.length
+    }
+
   }
 
 }

@@ -50,7 +50,7 @@ const routes: Routes = [
     component: ReportDashboardComponent,
     resolve: {
       data: reportDashboardResolver,
-      //ref_data: donationRefDataResolverNew,
+      // ref_data: donationRefDataResolverNew,
     }
   },
   {

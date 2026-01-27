@@ -6,17 +6,25 @@ import { AccordionCell, AccordionButton } from 'src/app/shared/model/accordion-l
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { KeyValue } from 'src/app/shared/model/key-value.model';
 import { Accordion } from 'src/app/shared/utils/accordion';
+import { ReportService } from '../../service/report.service';
+import { KeyValueDto } from 'src/app/core/api-client/models';
 
 @Component({
   selector: 'app-fin-report-accordion',
   templateUrl: './fin-report-accordion.component.html',
   styleUrls: ['./fin-report-accordion.component.scss']
 })
-export class FinReportAccordionComponent extends Accordion<KeyValue> implements TabComponentInterface<KeyValue> {
+export class FinReportAccordionComponent extends Accordion<KeyValueDto> implements TabComponentInterface<KeyValue> {
+
+  constructor(private reportService: ReportService) {
+    super()
+  }
 
   override onInitHook(): void {
+    console.log(this.getAccordionList())
   }
   protected override prepareHighLevelView(data: KeyValue, options?: { [key: string]: any; }): AccordionCell[] {
+    console.log(data)
     return [
       {
         value: data.displayValue,
