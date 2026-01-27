@@ -1,7 +1,8 @@
 <app-page-layout [navigations]="navigations">
-    <div class="flex lg:flex-row p-2 lg:p-4 justify-center items-start lg:items-stretch w-full">
-        <app-search-and-advanced-search-form [searchInput]="searchInput"
-            (onSearch)="onSearch($event)"></app-search-and-advanced-search-form>
-    </div>
-    <app-fin-report-accordion [accordionData]="accordionData!" [refData]="refData!"></app-fin-report-accordion>
+    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center">
+        <mat-tab id="finReports" label="Financial Reports">
+            <app-document-link [categories]="financeReports"
+                (documentClicked)="onDocumentClicked($event)"></app-document-link>
+        </mat-tab>
+    </mat-tab-group>
 </app-page-layout>

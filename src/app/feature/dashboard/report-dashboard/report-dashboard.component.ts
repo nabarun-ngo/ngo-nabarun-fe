@@ -1,50 +1,82 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
-import { StandardDashboard } from 'src/app/shared/utils/standard-dashboard';
-import { FinReportAccordionComponent } from './fin-report-accordion/fin-report-accordion.component';
-import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
-import { ActivatedRoute } from '@angular/router';
-import { KeyValueDto } from 'src/app/core/api-client/models';
-import { AccordionData } from 'src/app/shared/model/accordion-list.model';
+import { DocumentCategory } from 'src/app/shared/components/document-link/document-link.model';
+import { ReportService } from '../services/report.service';
+import { KeyValue } from 'src/app/shared/model/key-value.model';
+import { firstValueFrom } from 'rxjs';
+import { saveAs } from 'src/app/core/service/utilities.service';
 
 @Component({
   selector: 'app-report-dashboard',
   templateUrl: './report-dashboard.component.html',
   styleUrls: ['./report-dashboard.component.scss']
 })
-export class ReportDashboardComponent extends StandardDashboard<KeyValueDto[]> {
-
-  @ViewChild(FinReportAccordionComponent) reportAccordion!: FinReportAccordionComponent;
-
-  protected accordionData!: AccordionData<KeyValueDto>;
+export class ReportDashboardComponent implements OnInit {
 
   protected navigations: NavigationButtonModel[] = [
     {
       displayName: 'Back to Dashboard',
-      routerLink: AppRoute.secured_dashboard_help_page.url,
+      routerLink: AppRoute.secured_dashboard_page.url,
     }
   ];
-  protected searchInput!: SearchAndAdvancedSearchModel;
+
+  financeReports: DocumentCategory[] = [];
+
 
   constructor(
     private sharedDataService: SharedDataService,
-    protected override route: ActivatedRoute
-  ) {
-    super(route);
+    private reportService: ReportService) {
   }
 
-  protected override onInitHook(): void {
-    this.sharedDataService.setPageName(`Financial Reports`);
-    this.searchInput = {
-      normalSearchPlaceHolder: 'Search Reports by Name'
-    };
-    this.accordionData = {
-      content: this.initialData!,
-      totalSize: this.initialData?.length
-    }
 
+  ngOnInit(): void {
+    this.sharedDataService.setPageName(`Reports`);
+    this.reportService.listActiveReports().subscribe(data => {
+      data.forEach(async d => {
+        this.financeReports.push({
+          name: d.displayValue,
+          documents: await this.listDocuments(d.key)
+        })
+      })
+    })
+  }
+
+  private async listDocuments(key: string): Promise<KeyValue[]> {
+    const data = await firstValueFrom(this.reportService.getReports(key))
+    return data.map(d => {
+      return {
+        key: d.id,
+        displayValue: d.fileName,
+        description: d.fileName
+      } as KeyValue
+    })
+  }
+
+
+
+  onDocumentClicked($event: { doc: KeyValue, categoryName: string }) {
+    console.log($event);
+    this.reportService.downloadReports($event.doc.key!).subscribe((response) => {
+      const blob = response;
+
+      // 2. Create a temporary URL for the blob
+      const url = window.URL.createObjectURL(blob!);
+
+      // 3. Create a hidden <a> tag and click it
+      const link = window.document.createElement('a');
+      link.href = url;
+      link.download = $event.doc.description!;
+      window.document.body.appendChild(link);
+      link.click();
+
+      // 4. Cleanup
+      window.document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    }, error => {
+      console.error('Download failed', error);
+    });
   }
 
 }
