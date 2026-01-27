@@ -26,21 +26,7 @@ export class DocumentListComponent {
 
   downloadAttachment(document: Doc) {
     this.dmsService.downloadDocument({ id: document.id! }).subscribe((response) => {
-      const blob = response;
-
-      // 2. Create a temporary URL for the blob
-      const url = window.URL.createObjectURL(blob!);
-
-      // 3. Create a hidden <a> tag and click it
-      const link = window.document.createElement('a');
-      link.href = url;
-      link.download = document.fileName!;
-      window.document.body.appendChild(link);
-      link.click();
-
-      // 4. Cleanup
-      window.document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
+      saveAs(response, document.fileName!);
     }, error => {
       console.error('Download failed', error);
     });

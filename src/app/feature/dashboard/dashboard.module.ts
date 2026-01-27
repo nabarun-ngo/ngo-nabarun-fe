@@ -8,6 +8,7 @@ import { NoticeBoardComponent } from './notice-board.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { DocumentViewerComponent } from './document-viewer/document-viewer.component';
 import { ReportDashboardComponent } from './report-dashboard/report-dashboard.component';
+import { FinanceReportTabComponent } from './report-dashboard/finance-report-tab/finance-report-tab.component';
 
 
 @NgModule({
@@ -17,6 +18,7 @@ import { ReportDashboardComponent } from './report-dashboard/report-dashboard.co
     NoticeBoardComponent,
     DocumentViewerComponent,
     ReportDashboardComponent,
+    FinanceReportTabComponent,
   ],
   imports: [
     CommonModule,

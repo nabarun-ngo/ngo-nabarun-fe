@@ -1,8 +1,23 @@
 <app-page-layout [navigations]="navigations">
-    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center">
+    <div style="display: flex; justify-content: center; margin: 24px 0;">
+        <div style="max-width: 600px; text-align: center;">
+            <span style="display: block; margin-bottom: 8px; font-size: 1.1em;">
+                Looking for an interim report for the ongoing financial year, reflecting all data recorded so
+                far?
+            </span>
+            <a (click)="generateInterimReport()" href="javascript:void(0)"
+                style="font-weight: 600; color: #1976d2; text-decoration: underline; font-size: 1.13em; cursor: pointer;">
+                Generate an Interim Report &rarr;
+            </a>
+        </div>
+    </div>
+    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" (selectedTabChange)="tabChanged($event.index)"
+        [(selectedIndex)]="tabIndex">
         <mat-tab id="finReports" label="Financial Reports">
-            <app-document-link [categories]="financeReports"
-                (documentClicked)="onDocumentClicked($event)"></app-document-link>
+            <app-finance-report-tab></app-finance-report-tab>
+        </mat-tab>
+        <mat-tab id="projectReports" label="Project Reports" [disabled]="true">
+
         </mat-tab>
     </mat-tab-group>
 </app-page-layout>
