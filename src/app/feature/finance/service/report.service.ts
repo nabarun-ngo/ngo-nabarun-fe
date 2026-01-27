@@ -12,7 +12,6 @@ export class ReportService {
   listActiveReports() {
     return this.financeReport.getReportList().pipe(
       map(m => m.responsePayload),
-      map(c => c.filter(f => f.active))
     )
   }
 }

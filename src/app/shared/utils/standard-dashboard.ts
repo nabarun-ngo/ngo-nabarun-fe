@@ -64,6 +64,7 @@ export abstract class StandardDashboard<TData> extends Paginator
    */
   private handleRouteData(): void {
     // Extract data from resolver
+    console.log(this.route.snapshot.data)
     if (this.route.snapshot.data['data']) {
       this.#initialData = this.route.snapshot.data['data'] as TData;
       const pagedData = this.#initialData && this.#initialData as PagedResult<any>

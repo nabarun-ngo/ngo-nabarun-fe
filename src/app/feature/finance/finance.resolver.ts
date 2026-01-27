@@ -7,6 +7,7 @@ import { DonationService } from './service/donation.service';
 import { AccountRefDataDto, DonationRefDataDto } from 'src/app/core/api-client/models';
 import { ReportService } from './service/report.service';
 import { ExpenseService } from './service/expense.service';
+import { KeyValue } from 'src/app/shared/model/key-value.model';
 
 export const accountDashboardResolver: ResolveFn<PagedAccounts | undefined> = (route, state) => {
   const tab = (route.queryParams['tab'] || AccountDefaultValue.tabName) as accountTab;
@@ -138,6 +139,6 @@ export const donationRefDataResolverNew: ResolveFn<DonationRefDataDto> =
     return inject(DonationService).fetchRefData();
   };
 
-export const reportDashboardResolver: ResolveFn<any> = (route, state) => {
+export const reportDashboardResolver: ResolveFn<KeyValue[]> = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
   return inject(ReportService).listActiveReports();
 };

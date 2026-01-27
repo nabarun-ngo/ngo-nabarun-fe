@@ -16,6 +16,7 @@ import { GuestDonationTabComponent } from './donation-dashboard/guest-donation-t
 import { MemberDonationTabComponent } from './donation-dashboard/member-donation-tab/member-donation-tab.component';
 import { BulkEditDonationComponent } from './donation-dashboard/bulk-edit-donation/bulk-edit-donation.component';
 import { ReportDashboardComponent } from './report-dashboard/report-dashboard.component';
+import { FinReportAccordionComponent } from './report-dashboard/fin-report-accordion/fin-report-accordion.component';
 
 
 
@@ -35,6 +36,7 @@ import { ReportDashboardComponent } from './report-dashboard/report-dashboard.co
     MemberDonationTabComponent,
     BulkEditDonationComponent,
     ReportDashboardComponent,
+    FinReportAccordionComponent,
   ],
   imports: [
     CommonModule,

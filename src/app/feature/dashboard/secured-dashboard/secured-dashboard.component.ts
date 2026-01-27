@@ -109,8 +109,14 @@ export class SecuredDashboardComponent implements OnInit {
           tile_link: this.route.secured_request_list_page.url,
         },
         {
+          tile_html_id: 'reportTile',
+          tile_name: 'Financial Reports',
+          tile_icon: 'icon_book',
+          tile_link: this.route.secured_report_dashboard_page.url,
+        },
+        {
           tile_html_id: 'noticeTile',
-          tile_name: 'Meetings',
+          tile_name: 'Events & Meetings',
           tile_icon: 'icon_notices',
           tile_link: this.route.secured_meetings_list_page.url,
         },
