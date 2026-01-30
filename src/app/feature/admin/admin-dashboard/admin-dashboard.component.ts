@@ -74,4 +74,8 @@ export class AdminDashboardComponent extends StandardTabbedDashboard<adminTabs, 
 
   protected override onTabChangedHook(): void {
   }
+
+  protected override onAfterViewInitHook(): void {
+    this.getActiveComponent(this.getCurrentTab())?.loadData();
+  }
 }

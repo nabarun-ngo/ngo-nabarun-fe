@@ -4,6 +4,8 @@ import { CommunicationService } from './service/communication.service';
 import { NoticeDefaultValue, MeetingDefaultValue } from './communication.const';
 import { PagedNotice } from './model/notice.model';
 import { PagedMeeting } from './model/meeting.model';
+import { combineLatest } from 'rxjs';
+import { User } from '../member/models/member.model';
 
 const noticeDefaultValue = NoticeDefaultValue;
 const meetingDefaultValue = MeetingDefaultValue;
@@ -16,8 +18,11 @@ export const noticeRefDataResolver: ResolveFn<any> = (route, state) => {
   return inject(CommunicationService).getNoticeRefData();
 };
 
-export const meetingsResolver: ResolveFn<PagedMeeting> = (route, state) => {
-  return inject(CommunicationService).fetchMeetings(meetingDefaultValue.pageNumber, meetingDefaultValue.pageSize);
+export const meetingsResolver: ResolveFn<{ meetings: PagedMeeting, members: User[] }> = (route, state) => {
+  return combineLatest({
+    meetings: inject(CommunicationService).fetchMeetings(meetingDefaultValue.pageNumber, meetingDefaultValue.pageSize),
+    members: inject(CommunicationService).fetchUserList()
+  });
 };
 
 export const meetingRefDataResolver: ResolveFn<any> = (route, state) => {

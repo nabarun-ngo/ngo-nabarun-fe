@@ -7,6 +7,7 @@ export { AccountRefDataDto } from './models/account-ref-data-dto';
 export { ActivityDetailDto } from './models/activity-detail-dto';
 export { AddFundDto } from './models/add-fund-dto';
 export { AddressDto } from './models/address-dto';
+export { AgendaItemDto } from './models/agenda-item-dto';
 export { ApiKeyDto } from './models/api-key-dto';
 export { AuthTokenDto } from './models/auth-token-dto';
 export { BankDetailDto } from './models/bank-detail-dto';

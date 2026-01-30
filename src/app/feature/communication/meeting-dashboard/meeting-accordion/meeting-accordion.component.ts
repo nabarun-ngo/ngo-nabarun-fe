@@ -1,18 +1,18 @@
-import { Component, Input, AfterContentInit } from '@angular/core';
+import { Component, AfterContentInit, Input } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { AccordionCell, AccordionButton } from 'src/app/shared/model/accordion-list.model';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { Accordion } from 'src/app/shared/utils/accordion';
-import { Meeting, PagedMeeting } from '../../model/meeting.model';
-import { MeetingDefaultValue, MeetingConstant } from '../../communication.const';
-import { meetingHeader, getMeetingSection } from '../../fields/meeting.field';
+import { AgendaItem, Meeting, MeetingParticipant } from '../../model/meeting.model';
+import { MeetingDefaultValue } from '../../communication.const';
+import { meetingHeader, getMeetingSection, getMeetingAttendeeSection, getMeetingNotesSection } from '../../fields/meeting.field';
 import { CommunicationService } from '../../service/communication.service';
 import { compareObjects, date, removeNullFields, shareToWhatsApp } from 'src/app/core/service/utilities.service';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
-import { KeyValue } from 'src/app/shared/model/key-value.model';
 import { User } from 'src/app/feature/member/models/member.model';
-import { Validators } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { filterFormChange } from 'src/app/core/service/form.service';
+import { ModalService } from 'src/app/core/service/modal.service';
 
 @Component({
   selector: 'app-meeting-accordion',
@@ -20,7 +20,9 @@ import { filterFormChange } from 'src/app/core/service/form.service';
   styleUrls: ['./meeting-accordion.component.scss']
 })
 export class MeetingAccordionComponent extends Accordion<Meeting> implements AfterContentInit {
-  members: User[] = [];
+
+  @Input({ required: true })
+  members!: User[];
 
   protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
     return {
@@ -34,14 +36,14 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
   protected override activeButtonId: string = '';
 
   constructor(
-    protected communicationService: CommunicationService
+    protected communicationService: CommunicationService,
+    private dialog: ModalService
   ) {
     super();
   }
 
   override onInitHook(): void {
     this.setHeaderRow(meetingHeader);
-    this.communicationService.fetchUserList().subscribe(data => this.members = data)
   }
 
   protected override prepareHighLevelView(
@@ -74,6 +76,8 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
   ): DetailedView[] {
     return [
       getMeetingSection(data, this.getRefData() || {}, options && options['create']),
+      getMeetingNotesSection(data, this.getRefData() || {}, options && options['create']),
+      getMeetingAttendeeSection(data, this.getRefData() || {}, options && options['create'], this.members)
     ];
   }
 
@@ -94,28 +98,34 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
         }
       ];
     }
+
+    if (data.status == 'cancelled') {
+      return [];
+    }
+
     return [
-      {
-        button_id: 'UPDATE_MEETING',
-        button_name: 'Update Meeting'
-      },
+      ...this.isMeetingEnded(data) ? [] : [{
+        button_id: 'CANCEL_MEETING',
+        button_name: 'Cancel Event'
+      }],
       {
         button_id: 'SHARE_WHATSAPP',
-        button_name: 'Share on WhatsApp'
-      }
+        button_name: this.isMeetingEnded(data) ? 'Share Minutes' : 'Share Invite'
+      },
+      {
+        button_id: 'UPDATE_MEETING',
+        button_name: 'Update'
+      },
     ];
+  }
+
+  private isMeetingEnded(data: Meeting): boolean {
+    return data.endTime && data.endTime < new Date();
   }
 
   protected override onClick(event: { buttonId: string; rowIndex: number; }): void {
     if (event.buttonId === 'UPDATE_MEETING') {
-      this.showEditForm(event.rowIndex, ['meeting_detail']);
-      const options = this.members.map((d) => {
-        return {
-          key: d.email,
-          displayValue: `${d.fullName} (${d.email})`
-        } as KeyValue
-      })
-      this.updateFieldOptions('meeting_detail', event.rowIndex, 'attendees', options);
+      this.showEditForm(event.rowIndex, ['meeting_detail', 'meeting_notes', 'meeting_attendee']);
       this.activeButtonId = event.buttonId;
     } else if (event.buttonId === 'CANCEL') {
       this.hideForm(event.rowIndex);
@@ -130,8 +140,11 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
     } else if (event.buttonId === 'SHARE_WHATSAPP') {
       const message = this.createWhatsAppMessage(this.itemList[event.rowIndex]);
       shareToWhatsApp(message);
+    } else if (event.buttonId === 'CANCEL_MEETING') {
+      this.performCancelMeeting(event.rowIndex);
     }
   }
+
 
   protected override onAccordionOpen(event: { rowIndex: number; }): void {
   }
@@ -166,13 +179,6 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
 
   initCreateMeetingForm(): void {
     this.showCreateForm();
-    const options = this.members.map((d) => {
-      return {
-        key: d.email,
-        displayValue: `${d.fullName} (${d.email})`
-      } as KeyValue
-    })
-    this.updateFieldOptions('meeting_detail', 0, 'attendees', options, true);
     const form = this.getSectionForm('meeting_detail', 0, true);
     form?.valueChanges.pipe(filterFormChange(form.value)).subscribe((value) => {
       if (value.type) {
@@ -185,19 +191,35 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
 
   private performCreateMeeting(): void {
     const meetingForm = this.getSectionForm('meeting_detail', 0, true);
+    const meetingNotesForm = this.getSectionForm('meeting_notes', 0, true);
+    const meetingAttendeeForm = this.getSectionForm('meeting_attendee', 0, true);
+
     meetingForm?.markAllAsTouched();
-    if (meetingForm?.valid) {
+    meetingNotesForm?.markAllAsTouched();
+    meetingAttendeeForm?.markAllAsTouched();
+
+    if (meetingForm?.valid && meetingNotesForm?.valid && meetingAttendeeForm?.valid) {
+      if (this.validateMeetingForm(meetingNotesForm, meetingAttendeeForm).hasError) {
+        return;
+      }
       const meeting = meetingForm.value;
-      meeting.attendees = meeting.attendees.map((d: string) => {
+      const attendees: MeetingParticipant[] = meetingAttendeeForm.value.attendees.map((d: MeetingParticipant) => {
         return {
-          name: this.members.find((m) => m.email === d)?.fullName,
-          email: d
+          name: this.members.find((m) => m.email === d.email)?.fullName,
+          email: d.email
         }
       })
-      this.communicationService.createMeeting(removeNullFields(meeting)).subscribe(data => {
+      const data = removeNullFields(meeting);
+      this.communicationService.createMeeting({
+        ...data,
+        attendees: attendees,
+        agenda: meetingNotesForm.value.agenda,
+      }).subscribe(data => {
         this.hideForm(0, true);
         this.addContentRow(data, true);
       });
+    } else {
+      this.scrollToError(true);
     }
   }
 
@@ -206,31 +228,77 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
     if (!meeting.id) return;
 
     const meetingForm = this.getSectionForm('meeting_detail', rowIndex);
+    const meetingNotesForm = this.getSectionForm('meeting_notes', rowIndex);
+    const meetingAttendeeForm = this.getSectionForm('meeting_attendee', rowIndex);
     meetingForm?.markAllAsTouched();
-    if (meetingForm?.valid) {
+    meetingNotesForm?.markAllAsTouched();
+    meetingAttendeeForm?.markAllAsTouched();
+
+    if (meetingForm?.valid && meetingNotesForm?.valid && meetingAttendeeForm?.valid) {
+      if (this.validateMeetingForm(meetingNotesForm, meetingAttendeeForm).hasError) {
+        return;
+      }
+
+      const attendees = meetingAttendeeForm.value.attendees?.map((d: MeetingParticipant) => {
+        return {
+          name: this.members.find((m) => m.email === d.email)?.fullName,
+          email: d.email
+        }
+      })
+
       const updated = compareObjects(meetingForm.value, meeting);
       if (updated.startTime || updated.endTime) {
         updated.meetingDate = meetingForm.value.meetingDate;
       }
-      updated.attendees = updated.attendees?.map((d: string) => {
-        return {
-          name: this.members.find((m) => m.email === d)?.fullName,
-          email: d
-        }
-      })
-      this.communicationService.updateMeeting(meeting.id, updated).subscribe(data => {
+      this.communicationService.updateMeeting(meeting.id, {
+        ...updated,
+        attendees: attendees,
+        agenda: meetingNotesForm.value.agenda,
+      }).subscribe(data => {
         this.hideForm(rowIndex);
         this.updateContentRow(data, rowIndex);
       });
+    } else {
+      this.scrollToError(false, rowIndex);
     }
+  }
+  private validateMeetingForm(meetingNotesForm: FormGroup<any>, meetingAttendeeForm: FormGroup<any>) {
+    if (meetingNotesForm.value.agenda.length === 0) {
+      this.dialog.openNotificationModal({
+        title: 'Error',
+        description: 'Please add at least one agenda',
+      }, 'notification', 'error');
+      return { hasError: true };
+    }
+    if (meetingAttendeeForm.value.attendees.length === 0) {
+      this.dialog.openNotificationModal({
+        title: 'Error',
+        description: 'Please add at least one attendee',
+      }, 'notification', 'error');
+      return { hasError: true };
+    }
+    return { hasError: false };
+  }
+  performCancelMeeting(rowIndex: number) {
+    const modal = this.dialog.openNotificationModal({
+      title: 'Cancel Meeting',
+      description: 'Are you sure you want to cancel this meeting?',
+    }, 'confirmation', 'warning');
+    modal.onAccept$.subscribe(() => {
+      this.communicationService.cancelMeeting(this.itemList[rowIndex].id).subscribe(() => {
+        this.hideForm(rowIndex);
+        this.loadData();
+      });
+    });
   }
 
 
   private createWhatsAppMessage(meeting: Meeting): string {
+    const isMeetingEnded = this.isMeetingEnded(meeting);
     const lines: string[] = [];
 
     // Header with emojis
-    lines.push('📅 *MEETING INVITATION*');
+    lines.push(isMeetingEnded ? '📅 *MEETING MINUTES*' : '📅 *MEETING INVITATION*');
     lines.push('━━━━━━━━━━━━━━━━━━━');
     lines.push('');
 
@@ -241,39 +309,46 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
     // Date and time
     lines.push(`🗓️ *Date:* ${date(meeting.startTime)}`);
     lines.push(`🕐 *Time:* ${date(meeting.startTime, 'hh:mm a')} - ${date(meeting.endTime, 'hh:mm a')}`);
-    lines.push('');
 
     // Location or meeting link
-    if (meeting.location) {
+    if (!isMeetingEnded && meeting.location) {
       lines.push(`📍 *Location:* ${meeting.location}`);
-      lines.push('');
     }
 
-    if (meeting.meetLink) {
-      lines.push(`🔗 *Join Link:*`);
-      lines.push(meeting.meetLink);
-      lines.push('');
+    if (meeting.type == 'ONLINE') {
+      lines.push(`🔗 *Platform:* Google Meet`);
+    }
+
+    if (!isMeetingEnded && meeting.meetLink) {
+      lines.push(`🔗 *Join Link:* ${meeting.meetLink}`);
     }
 
     // Attendees
-    // if (meeting.attendees && meeting.attendees.length > 0) {
-    //   lines.push(`👥 *Attendees:*`);
-    //   meeting.attendees.forEach(attendee => {
-    //     lines.push(`   • ${attendee}`);
-    //   });
-    //   lines.push('');
-    // }
+    if (isMeetingEnded && meeting.attendees && meeting.attendees.length > 0) {
+      lines.push('');
+      lines.push(`👥 *Attendees:*`);
+      meeting.attendees.forEach(attendee => {
+        lines.push(`   • ${attendee.name ?? attendee.email}`);
+      });
+    }
 
-    // Agenda
     if (meeting.agenda && meeting.agenda.length > 0) {
-      lines.push(`📋 *Agenda:*`);
-      lines.push(`${meeting.agenda}`);
+      lines.push('');
+      lines.push(isMeetingEnded ? `📋 *Agenda & Outcome:*` : `📋 *Agenda:*`);
+      meeting.agenda.forEach((agenda: AgendaItem) => {
+        lines.push(isMeetingEnded ? `   • ${agenda.agenda} -> ${agenda.outcomes || 'Not Discussed'}` : `   • ${agenda.agenda}`);
+      });
       lines.push('');
     }
 
     // Footer
     lines.push('━━━━━━━━━━━━━━━━━━━');
-    lines.push('✨ Looking forward to seeing you!');
+    if (!isMeetingEnded) {
+      lines.push('✨ Looking forward to seeing you! ✨');
+      lines.push('*Please join with your registered email address with NABARUN*');
+    } else {
+      lines.push('✨ Thank you for joining! ✨');
+    }
 
     return lines.join('\n');
   }

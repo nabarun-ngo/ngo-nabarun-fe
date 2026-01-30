@@ -10,14 +10,13 @@
       </a>
     </div>
   </div>
-  <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center">
+  <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" (selectedTabChange)="tabChanged($event.index)"
+    [(selectedIndex)]="tabIndex">
     <mat-tab id="userGuide" label="User Guide">
-      <app-document-link [categories]="userGuides || []"
-        (documentClicked)="onDocumentClicked($event)"></app-document-link>
+      <app-user-guide-tab></app-user-guide-tab>
     </mat-tab>
     <mat-tab id="policy" label="Policy Hub">
-      <app-document-link [categories]="policies || []"
-        (documentClicked)="onDocumentClicked($event)"></app-document-link>
+      <app-policy-hub-tab></app-policy-hub-tab>
     </mat-tab>
   </mat-tab-group>
 </app-page-layout>

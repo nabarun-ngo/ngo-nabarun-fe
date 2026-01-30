@@ -1,11 +1,12 @@
-import { ValidatorFn, AsyncValidatorFn } from '@angular/forms';
+import { ValidatorFn, AsyncValidatorFn, AbstractControl } from '@angular/forms';
 import { UniversalInputModel } from './universal-input.model';
 
 /* ---------- Column ---------- */
 export interface EditableTableColumn {
     columnDef: string;
+    hideField?: boolean;
     header: string;
-    editable?: boolean;
+    editable?: boolean | ((row: AbstractControl) => boolean);
     inputModel?: UniversalInputModel;
 
     /** Angular field-level validators */
@@ -15,6 +16,9 @@ export interface EditableTableColumn {
     /** show display value */
     show_display_value?: boolean;
     ref_data_section?: string;
+
+    /** Hide this column when the table is in edit mode (show_form = true) */
+    hideInEditMode?: boolean;
 }
 
 /* ---------- Row-level validation rule ---------- */
@@ -36,7 +40,11 @@ export interface EditableTableConfig {
 
     allowAddRow?: boolean;
     allowDeleteRow?: boolean;
+    allowDeleteAll?: boolean;
 
     /** Generic row validation */
     rowValidationRules?: EditableTableRowRule[];
+
+    /** Max height for the table body (e.g. '400px'). If set, the table will scroll internally. */
+    maxHeight?: string;
 }

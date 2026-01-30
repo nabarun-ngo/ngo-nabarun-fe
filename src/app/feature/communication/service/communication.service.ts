@@ -13,6 +13,7 @@ import { User } from '../../member/models/member.model';
 })
 export class CommunicationService {
 
+
   constructor(private readonly meetingController: MeetingControllerService,
     private readonly userController: UserControllerService
   ) { }
@@ -233,5 +234,14 @@ export class CommunicationService {
       map(mapPagedUserDtoToPagedUser),
       map((d) => d.content!)
     );
+  }
+
+  cancelMeeting(id: string) {
+    return this.meetingController.updateMeeting({
+      id: id,
+      body: {
+        cancelEvent: true
+      }
+    });
   }
 }

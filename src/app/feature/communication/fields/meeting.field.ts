@@ -1,10 +1,11 @@
-import { FormGroup, Validators } from "@angular/forms";
+import { FormArray, FormControl, FormGroup, Validators, AbstractControl, ValidationErrors } from "@angular/forms";
 import { date } from "src/app/core/service/utilities.service";
 import { DetailedView } from "src/app/shared/model/detailed-view.model";
 import { SearchAndAdvancedSearchModel } from "src/app/shared/model/search-and-advanced-search.model";
 import { KeyValue } from "src/app/shared/model/key-value.model";
-import { Meeting } from "../model/meeting.model";
+import { AgendaItem, Meeting, MeetingParticipant } from "../model/meeting.model";
 import { timeRangeValidator } from "src/app/shared/utils/validator";
+import { User } from "../../member/models/member.model";
 
 const meetingTimeList: KeyValue[] = [
     {
@@ -258,7 +259,7 @@ export const getMeetingSection = (
         section_form: new FormGroup({}, { validators: timeRangeValidator }),
         content: [
             {
-                field_name: 'Summary',
+                field_name: 'Meeting Summary',
                 field_value: meeting?.summary || '',
                 editable: true,
                 form_control_name: 'summary',
@@ -269,7 +270,7 @@ export const getMeetingSection = (
                     inputType: 'text',
                     placeholder: 'Enter meeting summary'
                 },
-                form_input_validation: isCreate ? [Validators.required] : []
+                form_input_validation: [Validators.required]
             },
             {
                 field_name: 'Meeting Type',
@@ -295,20 +296,20 @@ export const getMeetingSection = (
                 },
                 form_input_validation: isCreate ? [Validators.required] : []
             },
-            {
-                field_name: 'Agenda',
-                field_value: meeting?.agenda || '',
-                editable: true,
-                form_control_name: 'agenda',
-                field_html_id: 'meeting_agenda',
-                form_input: {
-                    html_id: 'meeting_agenda',
-                    tagName: 'textarea',
-                    inputType: 'text',
-                    placeholder: 'Enter meeting agenda'
-                },
-                form_input_validation: isCreate ? [Validators.required] : []
-            },
+            // {
+            //     field_name: 'Meeting Description',
+            //     field_value: meeting?.description || '',
+            //     editable: true,
+            //     form_control_name: 'description',
+            //     field_html_id: 'meeting_description',
+            //     form_input: {
+            //         html_id: 'meeting_description',
+            //         tagName: 'textarea',
+            //         inputType: 'text',
+            //         placeholder: 'Enter meeting description'
+            //     },
+            //     form_input_validation: []
+            // },
             {
                 field_name: 'Meeting Date',
                 field_value: meeting?.startTime ? date(meeting.startTime, 'yyyy-MM-dd') : '',
@@ -322,10 +323,10 @@ export const getMeetingSection = (
                     inputType: 'date',
                     placeholder: 'Select meeting date'
                 },
-                form_input_validation: isCreate ? [Validators.required] : []
+                form_input_validation: [Validators.required]
             },
             {
-                field_name: 'Start Time',
+                field_name: 'Meeting Start Time',
                 field_value: meeting?.startTime ? date(meeting.startTime, 'HH:mm') : '',
                 field_display_value: date(meeting?.startTime, 'hh:mm a'),
                 editable: true,
@@ -338,10 +339,10 @@ export const getMeetingSection = (
                     placeholder: 'Select start time',
                     selectList: meetingTimeList
                 },
-                form_input_validation: isCreate ? [Validators.required] : []
+                form_input_validation: [Validators.required]
             },
             {
-                field_name: 'End Time',
+                field_name: 'Meeting End Time',
                 field_value: meeting?.endTime ? date(meeting.endTime, 'HH:mm') : '',
                 field_display_value: date(meeting?.endTime, 'hh:mm a'),
                 editable: true,
@@ -354,10 +355,10 @@ export const getMeetingSection = (
                     placeholder: 'Select end time',
                     selectList: meetingTimeList
                 },
-                form_input_validation: isCreate ? [Validators.required, timeRangeValidator] : []
+                form_input_validation: [Validators.required, timeRangeValidator]
             },
             {
-                field_name: 'Location',
+                field_name: 'Meeting Location',
                 field_value: meeting?.location || '',
                 editable: true,
                 form_control_name: 'location',
@@ -371,46 +372,181 @@ export const getMeetingSection = (
                 form_input_validation: []
             },
             {
-                field_name: 'Attendees',
-                field_value: meeting?.attendees?.map((attendee) => attendee.email).join(',') || '',
-                field_value_splitter: ',',
-                field_display_value: meeting?.attendees?.map((attendee) => `${attendee.name} (${attendee.email})`).join('<br>') || '',
-                editable: true,
-                form_control_name: 'attendees',
-                field_html_id: 'attendees',
-                form_input: {
-                    html_id: 'attendees',
-                    tagName: 'select',
-                    inputType: 'multiselect',
-                    placeholder: 'Select attendees',
-                    selectList: []
-                },
-                form_input_validation: isCreate ? [Validators.required] : []
+                field_name: 'Meeting Host Email',
+                field_value: meeting?.hostEmail || '',
+                hide_field: isCreate
             },
             {
-                field_name: 'Status',
+                field_name: 'Meeting Status',
                 field_value: meeting?.status,
                 hide_field: !meeting?.status
             },
             {
                 field_name: 'Meeting Link',
                 field_value: meeting?.meetLink || '',
+                field_display_value: `<a href="${meeting?.meetLink}" target="_blank">${meeting?.meetLink}</a>`,
                 hide_field: !meeting?.meetLink || isCreate
             },
-            {
-                field_name: 'Outcomes',
-                field_value: meeting?.outcomes || '',
-                editable: !isCreate,
-                form_control_name: 'outcomes',
-                field_html_id: 'meeting_outcomes',
-                form_input: {
-                    html_id: 'meeting_outcomes',
-                    tagName: 'textarea',
-                    inputType: 'text',
-                    placeholder: 'Enter meeting outcomes'
-                },
-                form_input_validation: []
-            }
         ]
     };
 };
+
+export const getMeetingAttendeeSection = (
+    meeting: Meeting,
+    refData: { [name: string]: KeyValue[] },
+    isCreate: boolean = false,
+    users: User[] = []
+): DetailedView => {
+    const attendees: MeetingParticipant[] = meeting?.attendees ?? users.map(user => ({
+        email: user.email,
+        name: user.fullName,
+    }));
+    const userKv: KeyValue[] = users.map(user => ({
+        key: user.email,
+        displayValue: `${user.email} (${user.fullName})`,
+    })) ?? [];
+
+    if (!isCreate) {
+        attendees.forEach(item => {
+            if (!userKv.find(user => user.key === item.email)) {
+                userKv.push({
+                    key: item.email,
+                    displayValue: `${item.email}`,
+                })
+            }
+        })
+    }
+
+    return {
+        section_name: 'Meeting Attendees',
+        section_type: 'editable_table',
+        section_html_id: 'meeting_attendee',
+        section_form: new FormGroup({
+            attendees: new FormArray([
+                ...attendees.map(item => new FormGroup({
+                    email: new FormControl(item.email, [Validators.required, Validators.email, duplicateEmailValidator]),
+                    name: new FormControl(item.name),
+                    attended: new FormControl(item.attended),
+                }))
+            ])
+        }),
+        editableTable: {
+            formArrayName: 'attendees',
+            columns: [
+                {
+                    hideInEditMode: true,
+                    columnDef: 'name',
+                    header: 'Name',
+                    editable: false,
+                    validators: [],
+                    inputModel: {
+                        html_id: 'meeting_attendee_name',
+                        tagName: 'input',
+                        inputType: 'text',
+                        placeholder: 'Enter attendee name',
+                    },
+                },
+                {
+                    columnDef: 'email',
+                    header: 'Email',
+                    editable: (row: AbstractControl) => !row.get('email')?.value || !!row.get('email')?.dirty,
+                    validators: [Validators.required, Validators.email, duplicateEmailValidator],
+                    inputModel: {
+                        html_id: 'meeting_attendee_email',
+                        tagName: 'input',
+                        inputType: 'email',
+                        placeholder: 'Enter attendee email',
+                        autocomplete: true,
+                        selectList: userKv
+                    },
+                },
+                {
+                    hideInEditMode: isCreate,
+                    columnDef: 'attended',
+                    header: 'Attended Meeting',
+                    hideField: isCreate,
+                    editable: !isCreate,
+                    validators: [],
+                    inputModel: {
+                        html_id: 'attended',
+                        tagName: 'input',
+                        inputType: 'check',
+                        placeholder: '',
+                    },
+                }
+            ],
+            allowAddRow: true,
+            allowDeleteRow: true,
+            allowDeleteAll: true,
+            maxHeight: '400px',
+            rowValidationRules: [
+            ]
+        }
+    };
+}
+
+
+function duplicateEmailValidator(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) return null;
+    const array = control.parent?.parent as FormArray;
+    if (!array) return null;
+    const count = array.controls.filter(c => c.get('email')?.value === control.value).length;
+    return count > 1 ? { duplicate: true } : null;
+}
+
+export const getMeetingNotesSection = (
+    meeting: Meeting,
+    refData: { [name: string]: KeyValue[] },
+    isCreate: boolean = false,
+): DetailedView => {
+    const agendaItems: AgendaItem[] = meeting?.agenda ?? [];
+    return {
+        section_name: 'Meeting Agenda',
+        section_type: 'editable_table',
+        section_html_id: 'meeting_notes',
+        section_form: new FormGroup({
+            agenda: new FormArray([
+                ...agendaItems.map(item => new FormGroup({
+                    agenda: new FormControl(item.agenda, [Validators.required]),
+                    outcomes: new FormControl(item.outcomes),
+                }))
+            ])
+        }),
+        show_form: isCreate,
+        editableTable: {
+            formArrayName: 'agenda',
+            columns: [
+                {
+                    hideInEditMode: false,
+                    columnDef: 'agenda',
+                    header: 'Agenda',
+                    editable: true,
+                    validators: [Validators.required],
+                    inputModel: {
+                        html_id: 'meeting_agenda',
+                        tagName: 'input',
+                        inputType: 'text',
+                        placeholder: 'Enter agenda item',
+                    },
+                },
+                {
+                    hideInEditMode: isCreate,
+                    columnDef: 'outcomes',
+                    header: 'Outcomes',
+                    editable: true,
+                    validators: [],
+                    inputModel: {
+                        html_id: 'meeting_outcomes',
+                        tagName: 'input',
+                        inputType: 'text',
+                        placeholder: 'Enter outcomes',
+                    },
+                }
+            ],
+            allowAddRow: true,
+            allowDeleteRow: true,
+            maxHeight: '400px',
+        }
+    };
+}
+

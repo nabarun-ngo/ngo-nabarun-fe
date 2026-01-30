@@ -56,6 +56,7 @@ export function mapDtoToMeeting(dto: MeetingDto): Meeting {
         status: dto.status,
         summary: dto.summary,
         type: dto.type,
+        hostEmail: dto.hostEmail,
     };
 }
 
