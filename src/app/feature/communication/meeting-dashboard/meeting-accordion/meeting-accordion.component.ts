@@ -1,11 +1,11 @@
-import { Component, Input, AfterContentInit } from '@angular/core';
+import { Component, AfterContentInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { AccordionCell, AccordionButton } from 'src/app/shared/model/accordion-list.model';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { Accordion } from 'src/app/shared/utils/accordion';
-import { Meeting, PagedMeeting } from '../../model/meeting.model';
-import { MeetingDefaultValue, MeetingConstant } from '../../communication.const';
-import { meetingHeader, getMeetingSection } from '../../fields/meeting.field';
+import { Meeting, MeetingParticipant } from '../../model/meeting.model';
+import { MeetingDefaultValue } from '../../communication.const';
+import { meetingHeader, getMeetingSection, getMeetingAttendeeSection, getMeetingNotesSection } from '../../fields/meeting.field';
 import { CommunicationService } from '../../service/communication.service';
 import { compareObjects, date, removeNullFields, shareToWhatsApp } from 'src/app/core/service/utilities.service';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
@@ -13,6 +13,7 @@ import { KeyValue } from 'src/app/shared/model/key-value.model';
 import { User } from 'src/app/feature/member/models/member.model';
 import { Validators } from '@angular/forms';
 import { filterFormChange } from 'src/app/core/service/form.service';
+import { ModalService } from 'src/app/core/service/modal.service';
 
 @Component({
   selector: 'app-meeting-accordion',
@@ -34,7 +35,8 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
   protected override activeButtonId: string = '';
 
   constructor(
-    protected communicationService: CommunicationService
+    protected communicationService: CommunicationService,
+    private dialog: ModalService
   ) {
     super();
   }
@@ -74,6 +76,8 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
   ): DetailedView[] {
     return [
       getMeetingSection(data, this.getRefData() || {}, options && options['create']),
+      getMeetingNotesSection(data, this.getRefData() || {}, options && options['create']),
+      getMeetingAttendeeSection(data, this.getRefData() || {}, options && options['create'], this.members)
     ];
   }
 
@@ -185,16 +189,44 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
 
   private performCreateMeeting(): void {
     const meetingForm = this.getSectionForm('meeting_detail', 0, true);
+    const meetingNotesForm = this.getSectionForm('meeting_notes', 0, true);
+    const meetingAttendeeForm = this.getSectionForm('meeting_attendee', 0, true);
+
     meetingForm?.markAllAsTouched();
-    if (meetingForm?.valid) {
+    meetingNotesForm?.markAllAsTouched();
+    meetingAttendeeForm?.markAllAsTouched();
+
+    console.log(meetingForm?.value, meetingNotesForm?.value, meetingAttendeeForm?.value)
+
+    if (meetingForm?.valid && meetingNotesForm?.valid && meetingAttendeeForm?.valid) {
+      if (meetingNotesForm.value.agenda.length === 0) {
+        this.dialog.openNotificationModal({
+          title: 'Error',
+          description: 'Please add at least one agenda item',
+        }, 'notification', 'error');
+        return;
+      }
+      if (meetingAttendeeForm.value.attendees.length === 0) {
+        this.dialog.openNotificationModal({
+          title: 'Error',
+          description: 'Please add at least one attendee',
+        }, 'notification', 'error');
+        return;
+      }
       const meeting = meetingForm.value;
-      meeting.attendees = meeting.attendees.map((d: string) => {
+      const attendees: MeetingParticipant[] = meetingAttendeeForm.value.attendees.map((d: string) => {
         return {
           name: this.members.find((m) => m.email === d)?.fullName,
           email: d
         }
       })
-      this.communicationService.createMeeting(removeNullFields(meeting)).subscribe(data => {
+      console.log(meetingAttendeeForm.value.attendees, attendees)
+      const data = removeNullFields(meeting);
+      this.communicationService.createMeeting({
+        ...data,
+        attendees: attendees,
+        agenda: meetingNotesForm.value.agenda,
+      }).subscribe(data => {
         this.hideForm(0, true);
         this.addContentRow(data, true);
       });
@@ -273,7 +305,7 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
 
     // Footer
     lines.push('━━━━━━━━━━━━━━━━━━━');
-    lines.push('✨ Looking forward to seeing you!');
+    lines.push('✨ Looking forward to seeing you! Please join with your registered email addedss with nabarun');
 
     return lines.join('\n');
   }

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { KeyValue } from 'src/app/shared/model/key-value.model';
@@ -9,10 +9,49 @@ import { buildRowValidator } from 'src/app/shared/utils/row-validator.factory';
     templateUrl: './editable-table-section.component.html',
     styleUrls: ['./editable-table-section.component.scss']
 })
-export class EditableTableSectionComponent {
+export class EditableTableSectionComponent implements OnInit {
 
     @Input() view!: DetailedView;
     @Input() refData!: { [name: string]: KeyValue[]; };
+
+    hiddenColumns = new Set<string>();
+
+    ngOnInit(): void {
+        this.view.editableTable?.columns.forEach(col => {
+            if (col.hideField) {
+                this.hiddenColumns.add(col.columnDef);
+            }
+        });
+    }
+
+    get visibleColumns() {
+        return this.view.editableTable?.columns.filter(c => {
+            // Manually hidden by user
+            if (this.hiddenColumns.has(c.columnDef)) {
+                return false;
+            }
+            // Configuration: hidden in edit mode
+            if (this.view.show_form && c.hideInEditMode) {
+                return false;
+            }
+            return true;
+        }) ?? [];
+    }
+
+    get gridStyle(): string {
+        const count = this.visibleColumns.length;
+        const actionCol = this.view.show_form ? '60px' : '';
+        return `repeat(${count}, 1fr) ${actionCol}`;
+    }
+
+    toggleColumn(colDef: string): void {
+        if (this.hiddenColumns.has(colDef)) {
+            this.hiddenColumns.delete(colDef);
+        } else {
+            this.hiddenColumns.add(colDef);
+        }
+    }
+
 
     get tableArray(): FormArray {
         return this.view.section_form.get(
@@ -49,6 +88,12 @@ export class EditableTableSectionComponent {
 
     removeRow(index: number): void {
         this.tableArray.removeAt(index);
+    }
+
+    deleteAll(): void {
+        while (this.tableArray.length !== 0) {
+            this.tableArray.removeAt(0);
+        }
     }
 
     markAllTouched(): void {

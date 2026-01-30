@@ -3,9 +3,16 @@ import { PagedResult } from "src/app/shared/model/paged-result.model";
 export interface MeetingParticipant {
     email: string;
     name: string;
+    attended?: boolean;
 }
+
+export interface AgendaItem {
+    agenda: string;
+    outcomes?: string;
+}
+
 export interface Meeting {
-    agenda?: string;
+    agenda?: AgendaItem[];
     attendees?: Array<MeetingParticipant>;
     calendarLink: string;
     description?: string;
@@ -19,6 +26,7 @@ export interface Meeting {
     status: string;
     summary: string;
     type: 'OFFLINE' | 'ONLINE';
+    hostEmail?: string;
 }
 
 export function formatMeetingDate(date: Date | string, time: string | Date): string {

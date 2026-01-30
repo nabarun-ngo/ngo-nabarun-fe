@@ -162,7 +162,7 @@ export const getRequestAdditionalDetailSection = (m: WorkflowRequest | undefined
                     displayValue: option
                 })),
             },
-            form_input_validation: [Validators.required],
+            form_input_validation: field.isMandatory ? [Validators.required] : [],
         }) as DetailedViewField)
     };
 }

@@ -1,21 +1,41 @@
 <div [formGroup]="view.section_form" class="editable-table-container">
 
+    <!-- Toolbar with Column Hiding -->
+    <div class="flex justify-end items-center mb-2 px-1" *ngIf="view.editableTable?.columns?.length">
+        <!-- <button mat-button class="text-gray-500 text-sm" [matMenuTriggerFor]="columnsMenu">
+            <mat-icon class="mr-1 text-base leading-none h-4 w-4">view_column</mat-icon>
+            Columns
+        </button> -->
+        <mat-menu #columnsMenu="matMenu" xPosition="before">
+            <div (click)="$event.stopPropagation()" class="outline-none max-h-80 overflow-y-auto">
+                <div *ngFor="let col of view.editableTable!.columns"
+                    class="px-4 py-2 hover:bg-gray-50 cursor-pointer flex items-center transition-colors border-b last:border-0"
+                    (click)="toggleColumn(col.columnDef)">
+                    <mat-icon class="mr-2 text-primary text-base w-4 h-4 leading-4 flex items-center justify-center"
+                        [class.text-gray-300]="hiddenColumns.has(col.columnDef)">
+                        {{ hiddenColumns.has(col.columnDef) ? 'check_box_outline_blank' : 'check_box' }}
+                    </mat-icon>
+                    <span class="text-sm text-gray-700 select-none">{{ col.header }}</span>
+                </div>
+            </div>
+        </mat-menu>
+    </div>
+
     <!-- Table Header (Desktop only) -->
-    <div class="table-header"
-        [style.grid-template-columns]="'repeat(' + view.editableTable!.columns.length + ', 1fr) ' + (view.show_form ? '60px' : '')">
-        <div *ngFor="let col of view.editableTable!.columns" class="header-cell">
+    <div class="table-header" [style.grid-template-columns]="gridStyle">
+        <div *ngFor="let col of visibleColumns" class="header-cell">
             {{ col.header }}
         </div>
         <div *ngIf="view.show_form" class="header-cell"></div>
     </div>
 
     <!-- Table Body -->
-    <div [formArrayName]="view.editableTable!.formArrayName">
+    <div [formArrayName]="view.editableTable!.formArrayName" [style.max-height]="view.editableTable!.maxHeight"
+        [class.overflow-y-auto]="view.editableTable!.maxHeight">
         <div *ngFor="let row of tableArray.controls; let i = index" [formGroupName]="i" class="table-row"
-            [style.grid-template-columns]="'repeat(' + view.editableTable!.columns.length + ', 1fr) ' + (view.show_form ? '60px' : '')"
-            [class.bg-red-50]="row.invalid && view.show_form">
+            [style.grid-template-columns]="gridStyle" [class.bg-red-50]="row.invalid && view.show_form">
 
-            <div *ngFor="let col of view.editableTable!.columns" class="cell-content">
+            <div *ngFor="let col of visibleColumns" class="cell-content">
                 <!-- Mobile Label -->
                 <div class="cell-label">{{ col.header }}</div>
 
@@ -60,8 +80,17 @@
     </div>
 
     <!-- Footer Actions -->
-    <div class="add-btn-container" *ngIf="view.show_form && view.editableTable?.allowAddRow">
-        <button mat-mini-fab color="primary" (click)="addRow()" matTooltip="Add Item">
+    <div class="add-btn-container flex gap-2"
+        *ngIf="view.show_form && (view.editableTable?.allowAddRow || view.editableTable?.allowDeleteAll)">
+
+        <button mat-mini-fab color="warn" class="mr-2"
+            *ngIf="view.editableTable?.allowDeleteAll && tableArray.length > 0" (click)="deleteAll()"
+            matTooltip="Delete All Items">
+            <mat-icon>delete_sweep</mat-icon>
+        </button>
+
+        <button mat-mini-fab color="primary" *ngIf="view.editableTable?.allowAddRow" (click)="addRow()"
+            matTooltip="Add Item">
             <mat-icon>add</mat-icon>
         </button>
     </div>
