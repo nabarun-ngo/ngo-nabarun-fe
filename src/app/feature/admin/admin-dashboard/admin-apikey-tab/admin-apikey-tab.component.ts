@@ -40,7 +40,6 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDto> implements Tab
 
   override onInitHook(): void {
     this.setHeaderRow([{ value: 'API Key Name' }, { value: 'API Key Scope' }])
-    this.loadData()
   }
 
   protected override prepareHighLevelView(data: ApiKeyDto, options?: { [key: string]: any; }): AccordionCell[] {
