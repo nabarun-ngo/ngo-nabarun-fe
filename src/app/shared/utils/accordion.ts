@@ -517,6 +517,13 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
       this.accordionList.contents[rowIndex].buttons?.push(b);
     })
     //////console.log(this.accordionList.contents[rowIndex].buttons, this.actionButtons)
+
+    setTimeout(() => {
+      const element = document.querySelector(`#accordion-row-${rowIndex}`);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
   }
   hideForm(rowIndex: number, create?: boolean) {
     if (create) {
@@ -759,6 +766,19 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
     const section = this.getSectionInAccordion(sectionId, rowIndex, create);
     if (section) {
       section.form_alerts = [];
+    }
+  }
+
+  protected scrollToError(create: boolean, rowIndex?: number) {
+    const containerId = create ? '#create' : `#accordion-row-${rowIndex}`;
+    const container = document.querySelector(containerId);
+    if (container) {
+      setTimeout(() => {
+        const invalidElement = container.querySelector('.ng-invalid.ng-touched');
+        if (invalidElement) {
+          invalidElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 10);
     }
   }
 

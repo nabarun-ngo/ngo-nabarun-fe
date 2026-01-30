@@ -7,6 +7,7 @@ import { MeetingParticipantDto } from '../models/meeting-participant-dto';
 export interface UpdateEventDto {
   agenda?: Array<AgendaItemDto>;
   attendees?: Array<MeetingParticipantDto>;
+  cancelEvent?: boolean;
   description?: string;
   endTime?: string;
   location?: string;

@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { Component, Input, OnInit, ViewChildren, QueryList, ElementRef } from '@angular/core';
+import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
+import { EditableTableColumn } from 'src/app/shared/model/editable-table.model';
 import { KeyValue } from 'src/app/shared/model/key-value.model';
 import { buildRowValidator } from 'src/app/shared/utils/row-validator.factory';
 
@@ -13,6 +14,7 @@ export class EditableTableSectionComponent implements OnInit {
 
     @Input() view!: DetailedView;
     @Input() refData!: { [name: string]: KeyValue[]; };
+    @ViewChildren('tableRow') tableRows!: QueryList<ElementRef>;
 
     hiddenColumns = new Set<string>();
 
@@ -84,6 +86,12 @@ export class EditableTableSectionComponent implements OnInit {
         });
 
         this.tableArray.push(row);
+
+        setTimeout(() => {
+            if (this.tableRows.last) {
+                this.tableRows.last.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        });
     }
 
     removeRow(index: number): void {
@@ -105,5 +113,12 @@ export class EditableTableSectionComponent implements OnInit {
             return this.refData[section]?.find(f => f.key == code)?.displayValue;
         }
         return code;
+    }
+
+    isColumnEditable(col: EditableTableColumn, row: AbstractControl): boolean {
+        if (typeof col.editable === 'function') {
+            return col.editable(row);
+        }
+        return !!col.editable;
     }
 }

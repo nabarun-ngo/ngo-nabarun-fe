@@ -1,4 +1,4 @@
-import { ValidatorFn, AsyncValidatorFn } from '@angular/forms';
+import { ValidatorFn, AsyncValidatorFn, AbstractControl } from '@angular/forms';
 import { UniversalInputModel } from './universal-input.model';
 
 /* ---------- Column ---------- */
@@ -6,7 +6,7 @@ export interface EditableTableColumn {
     columnDef: string;
     hideField?: boolean;
     header: string;
-    editable?: boolean;
+    editable?: boolean | ((row: AbstractControl) => boolean);
     inputModel?: UniversalInputModel;
 
     /** Angular field-level validators */

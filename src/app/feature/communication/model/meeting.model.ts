@@ -2,7 +2,7 @@ import { PagedResult } from "src/app/shared/model/paged-result.model";
 
 export interface MeetingParticipant {
     email: string;
-    name: string;
+    name?: string;
     attended?: boolean;
 }
 

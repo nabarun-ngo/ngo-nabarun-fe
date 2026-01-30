@@ -1,4 +1,4 @@
-import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
+import { FormArray, FormControl, FormGroup, Validators, AbstractControl, ValidationErrors } from "@angular/forms";
 import { date } from "src/app/core/service/utilities.service";
 import { DetailedView } from "src/app/shared/model/detailed-view.model";
 import { SearchAndAdvancedSearchModel } from "src/app/shared/model/search-and-advanced-search.model";
@@ -270,7 +270,7 @@ export const getMeetingSection = (
                     inputType: 'text',
                     placeholder: 'Enter meeting summary'
                 },
-                form_input_validation: isCreate ? [Validators.required] : []
+                form_input_validation: [Validators.required]
             },
             {
                 field_name: 'Meeting Type',
@@ -323,7 +323,7 @@ export const getMeetingSection = (
                     inputType: 'date',
                     placeholder: 'Select meeting date'
                 },
-                form_input_validation: isCreate ? [Validators.required] : []
+                form_input_validation: [Validators.required]
             },
             {
                 field_name: 'Meeting Start Time',
@@ -339,7 +339,7 @@ export const getMeetingSection = (
                     placeholder: 'Select start time',
                     selectList: meetingTimeList
                 },
-                form_input_validation: isCreate ? [Validators.required] : []
+                form_input_validation: [Validators.required]
             },
             {
                 field_name: 'Meeting End Time',
@@ -355,7 +355,7 @@ export const getMeetingSection = (
                     placeholder: 'Select end time',
                     selectList: meetingTimeList
                 },
-                form_input_validation: isCreate ? [Validators.required, timeRangeValidator] : []
+                form_input_validation: [Validators.required, timeRangeValidator]
             },
             {
                 field_name: 'Meeting Location',
@@ -404,7 +404,19 @@ export const getMeetingAttendeeSection = (
     const userKv: KeyValue[] = users.map(user => ({
         key: user.email,
         displayValue: `${user.email} (${user.fullName})`,
-    }));
+    })) ?? [];
+
+    if (!isCreate) {
+        attendees.forEach(item => {
+            if (!userKv.find(user => user.key === item.email)) {
+                userKv.push({
+                    key: item.email,
+                    displayValue: `${item.email}`,
+                })
+            }
+        })
+    }
+
     return {
         section_name: 'Meeting Attendees',
         section_type: 'editable_table',
@@ -412,13 +424,12 @@ export const getMeetingAttendeeSection = (
         section_form: new FormGroup({
             attendees: new FormArray([
                 ...attendees.map(item => new FormGroup({
-                    email: new FormControl(item.email, [Validators.required, Validators.email]),
-                    name: new FormControl(item.name, [Validators.required]),
-                    attended: new FormControl(false),
+                    email: new FormControl(item.email, [Validators.required, Validators.email, duplicateEmailValidator]),
+                    name: new FormControl(item.name),
+                    attended: new FormControl(item.attended),
                 }))
             ])
         }),
-        show_form: isCreate,
         editableTable: {
             formArrayName: 'attendees',
             columns: [
@@ -438,8 +449,8 @@ export const getMeetingAttendeeSection = (
                 {
                     columnDef: 'email',
                     header: 'Email',
-                    editable: true,
-                    validators: [Validators.required, Validators.email],
+                    editable: (row: AbstractControl) => !row.get('email')?.value || !!row.get('email')?.dirty,
+                    validators: [Validators.required, Validators.email, duplicateEmailValidator],
                     inputModel: {
                         html_id: 'meeting_attendee_email',
                         tagName: 'input',
@@ -450,9 +461,9 @@ export const getMeetingAttendeeSection = (
                     },
                 },
                 {
-                    hideInEditMode: true,
+                    hideInEditMode: isCreate,
                     columnDef: 'attended',
-                    header: 'Attended Meeting?',
+                    header: 'Attended Meeting',
                     hideField: isCreate,
                     editable: !isCreate,
                     validators: [],
@@ -474,6 +485,14 @@ export const getMeetingAttendeeSection = (
     };
 }
 
+
+function duplicateEmailValidator(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) return null;
+    const array = control.parent?.parent as FormArray;
+    if (!array) return null;
+    const count = array.controls.filter(c => c.get('email')?.value === control.value).length;
+    return count > 1 ? { duplicate: true } : null;
+}
 
 export const getMeetingNotesSection = (
     meeting: Meeting,

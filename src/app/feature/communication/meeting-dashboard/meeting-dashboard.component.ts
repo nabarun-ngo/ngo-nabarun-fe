@@ -10,13 +10,14 @@ import { PagedMeeting } from '../model/meeting.model';
 import { meetingSearchInput } from '../fields/meeting.field';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { MeetingAccordionComponent } from './meeting-accordion/meeting-accordion.component';
+import { User } from '../../member/models/member.model';
 
 @Component({
   selector: 'app-meeting-dashboard',
   templateUrl: './meeting-dashboard.component.html',
   styleUrls: ['./meeting-dashboard.component.scss'],
 })
-export class MeetingDashboardComponent extends StandardDashboard<PagedMeeting> {
+export class MeetingDashboardComponent extends StandardDashboard<{ meetings: PagedMeeting, members: User[] }> {
 
   @ViewChild(MeetingAccordionComponent) meetingAccordion!: MeetingAccordionComponent;
 

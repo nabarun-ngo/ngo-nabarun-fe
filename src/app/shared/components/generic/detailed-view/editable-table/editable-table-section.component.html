@@ -32,7 +32,7 @@
     <!-- Table Body -->
     <div [formArrayName]="view.editableTable!.formArrayName" [style.max-height]="view.editableTable!.maxHeight"
         [class.overflow-y-auto]="view.editableTable!.maxHeight">
-        <div *ngFor="let row of tableArray.controls; let i = index" [formGroupName]="i" class="table-row"
+        <div *ngFor="let row of tableArray.controls; let i = index" [formGroupName]="i" class="table-row" #tableRow
             [style.grid-template-columns]="gridStyle" [class.bg-red-50]="row.invalid && view.show_form">
 
             <div *ngFor="let col of visibleColumns" class="cell-content">
@@ -42,13 +42,13 @@
                 <!-- Value Area -->
                 <div class="w-full">
                     <!-- Read mode -->
-                    <span *ngIf="!(col.editable && view.show_form)" class="read-mode-value">
+                    <span *ngIf="!(isColumnEditable(col, row) && view.show_form)" class="read-mode-value">
                         {{ (col.show_display_value ? displayValue(col.ref_data_section,row.value[col.columnDef]) :
                         row.value[col.columnDef]) || '-' }}
                     </span>
 
                     <!-- Edit mode -->
-                    <div *ngIf="col.editable && view.show_form && col.inputModel" class="dense-3 w-full">
+                    <div *ngIf="isColumnEditable(col, row) && view.show_form && col.inputModel" class="dense-3 w-full">
                         <app-universal-input [formControlName]="col.columnDef" [inputModel]="col.inputModel">
                         </app-universal-input>
                     </div>
