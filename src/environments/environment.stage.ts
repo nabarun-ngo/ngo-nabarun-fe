@@ -30,18 +30,12 @@ const auth_config: AuthConfig = {
   }
 }
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyBLw5Ry_9dUOFPbuwoiAzwII99CVMpz978",
-  authDomain: "nabarun-test.firebaseapp.com",
-  databaseURL: "https://nabarun-test-default-rtdb.firebaseio.com",
-  projectId: "nabarun-test",
-  storageBucket: "nabarun-test.appspot.com",
-  messagingSenderId: "595475200212",
-  appId: "1:595475200212:web:5fb71eac858442e0046341",
-  measurementId: "G-PT9V4XMXWY"
-};
+// Import Firebase configuration from JSON file
+import firebaseConfigJson from './firebase-config.stage.json';
+import { FirebaseConfig } from './firebase-config.type';
+
+// Type assertion for Firebase config
+const firebaseConfig = firebaseConfigJson as FirebaseConfig;
 
 export const environment = {
   production: false,
@@ -51,7 +45,7 @@ export const environment = {
   api_base_url2: apiBaseUrl2,
   auth_config: auth_config,
   firebase_config: firebaseConfig,
-  firebase_vapidKey: 'BBDkLXhO325xFYbQ9v2yDhAlxRCBwB-MERVALRhUsiPjKWNAFiR1LVxgdxB8M8VVXD6ZBMQllGFdfjmIG0CGvig',
+  firebase_vapidKey: 'BGAsJtqzuGvkRCJKLFlOlkHGfkceQ1iRV1kcEZB2oCkLZY_vptQLBqWha5_P9kGgunGa4JVNG6Dm5VNOaCkv-ME',
   inactivityTimeOut: 30 * 60,
 };
 

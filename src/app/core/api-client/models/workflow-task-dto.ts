@@ -23,7 +23,7 @@ export interface WorkflowTaskDto {
   status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'FAILED' | 'SKIPPED';
   stepId: string;
   taskId: string;
-  type: 'VERIFICATION' | 'APPROVAL' | 'AUTOMATIC';
+  type: 'MANUAL' | 'AUTOMATIC';
   updatedAt: string;
   workflowId?: string;
 }

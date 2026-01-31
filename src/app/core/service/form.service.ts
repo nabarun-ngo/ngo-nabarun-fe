@@ -103,6 +103,9 @@ export function getErrorMessage(arg0: ValidationErrors | null, fieldName?: strin
     return (fieldName ? fieldName : 'End Time') + ' should be after Start Time.';
   }
 
+  else if (arg0 && arg0['duplicate']) {
+    return (fieldName ? fieldName : 'This field') + ' contains duplicate value.';
+  }
 
 
   // Validators.max

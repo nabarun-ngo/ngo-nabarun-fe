@@ -1,7 +1,7 @@
 import { PagedResult } from "src/app/shared/model/paged-result.model";
 
 export type TaskStatus = 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'FAILED' | 'SKIPPED';
-export type TaskType = 'VERIFICATION' | 'APPROVAL' | 'AUTOMATIC';
+export type TaskType = 'AUTOMATIC' | 'MANUAL';
 export type TaskAssignmentStatus = 'PENDING' | 'ACCEPTED' | 'REMOVED' | 'REJECTED';
 
 export interface TaskAssignment {

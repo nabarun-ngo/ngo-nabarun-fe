@@ -23,7 +23,7 @@ export interface ListInstancesForMe$Params {
   size?: number;
   workflowId?: string;
   status?: Array<'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'FAILED' | 'CANCELLED'>;
-  type?: Array<'JOIN_REQUEST' | 'CONTACT_REQUEST' | 'DONATION_REQUEST'>;
+  type?: Array<string>;
   delegated?: boolean;
 }
 

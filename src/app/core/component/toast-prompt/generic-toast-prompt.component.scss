@@ -1,0 +1,93 @@
+ .toast-prompt {
+     position: fixed;
+     left: 50%;
+     transform: translateX(-50%);
+     max-width: 400px;
+     width: calc(100% - 40px);
+     background: white;
+     border-radius: 12px;
+     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+     z-index: 10001;
+     animation: slideUp 0.3s ease-out;
+ }
+
+ @keyframes slideUp {
+     from {
+         transform: translateX(-50%) translateY(100%);
+         opacity: 0;
+     }
+
+     to {
+         transform: translateX(-50%) translateY(0);
+         opacity: 1;
+     }
+ }
+
+ .prompt-content {
+     padding: 20px;
+     display: flex;
+     flex-direction: column;
+     gap: 15px;
+ }
+
+ .prompt-icon {
+     font-size: 40px;
+     text-align: center;
+ }
+
+ .prompt-text {
+     text-align: center;
+ }
+
+ .prompt-text h3 {
+     margin: 0 0 8px 0;
+     font-size: 18px;
+     font-weight: 600;
+     color: #333;
+ }
+
+ .prompt-text p {
+     margin: 0;
+     font-size: 14px;
+     color: #666;
+ }
+
+ .prompt-actions {
+     display: flex;
+     gap: 10px;
+ }
+
+ .btn-dismiss,
+ .btn-action {
+     flex: 1;
+     padding: 12px 20px;
+     border: none;
+     border-radius: 8px;
+     font-size: 14px;
+     font-weight: 500;
+     cursor: pointer;
+     transition: all 0.2s;
+ }
+
+ .btn-dismiss {
+     background: #f5f5f5;
+     color: #333;
+ }
+
+ .btn-dismiss:hover {
+     background: #e0e0e0;
+ }
+
+ .btn-action {
+     color: white;
+ }
+
+ @media (max-width: 480px) {
+     .toast-prompt {
+         width: calc(100% - 20px);
+     }
+
+     .prompt-content {
+         padding: 16px;
+     }
+ }

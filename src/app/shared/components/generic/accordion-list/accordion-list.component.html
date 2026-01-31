@@ -46,7 +46,7 @@
     </section>
 
 
-    <mat-expansion-panel class="mb-4" [expanded]="true" *ngIf="accordionList.addContent" id="create"
+    <mat-expansion-panel #createSection class="mb-4" [expanded]="true" *ngIf="accordionList.addContent" id="create"
         style="border-radius: var(--radius-xl); box-shadow: var(--shadow-lg);">
         <mat-expansion-panel-header class="w-full items-center my-2"
             style="pointer-events: none; background: var(--gradient-success); border-radius: var(--radius-xl) var(--radius-xl) 0 0;">
@@ -67,6 +67,7 @@
 
     <mat-expansion-panel *ngFor="let content of accordionList.contents | accordionFilter:accordionList.searchValue;"
         (opened)="accordionOpened(content)" class="mb-3" [class.row-selected]="content.selected"
+        [id]="'accordion-row-'+content.index"
         style="border-radius: var(--radius-xl); box-shadow: var(--shadow-md);">
         <mat-expansion-panel-header class="w-full items-center my-2">
             <mat-panel-description class="w-full">

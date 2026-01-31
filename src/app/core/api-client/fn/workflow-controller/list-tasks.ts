@@ -13,7 +13,7 @@ import { SuccessResponsePagedResultWorkflowTaskDto } from '../../models/success-
 export interface ListTasks$Params {
   taskId?: string;
   workflowId?: string;
-  type?: Array<'VERIFICATION' | 'APPROVAL' | 'AUTOMATIC'>;
+  type?: Array<'MANUAL' | 'AUTOMATIC'>;
 
 /**
  * Options Y/N
