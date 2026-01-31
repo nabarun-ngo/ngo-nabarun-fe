@@ -24,6 +24,7 @@ import { ProjectControllerService } from './services/project-controller.service'
 import { CorrespondenceControllerService } from './services/correspondence-controller.service';
 import { MeetingControllerService } from './services/meeting-controller.service';
 import { CronControllerService } from './services/cron-controller.service';
+import { NotificationControllerService } from './services/notification-controller.service';
 
 /**
  * Module that provides all services and configuration.
@@ -51,6 +52,7 @@ import { CronControllerService } from './services/cron-controller.service';
     CorrespondenceControllerService,
     MeetingControllerService,
     CronControllerService,
+    NotificationControllerService,
     ApiConfiguration
   ],
 })

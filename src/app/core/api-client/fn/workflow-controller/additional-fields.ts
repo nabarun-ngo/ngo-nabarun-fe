@@ -15,7 +15,7 @@ export interface AdditionalFields$Params {
 /**
  * Workflow type
  */
-  workflowType: 'JOIN_REQUEST' | 'CONTACT_REQUEST' | 'DONATION_REQUEST';
+  workflowType: string;
 }
 
 export function additionalFields(http: HttpClient, rootUrl: string, params: AdditionalFields$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayFieldAttributeDto>> {

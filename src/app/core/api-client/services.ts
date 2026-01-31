@@ -20,3 +20,4 @@ export { ProjectControllerService } from './services/project-controller.service'
 export { CorrespondenceControllerService } from './services/correspondence-controller.service';
 export { MeetingControllerService } from './services/meeting-controller.service';
 export { CronControllerService } from './services/cron-controller.service';
+export { NotificationControllerService } from './services/notification-controller.service';
