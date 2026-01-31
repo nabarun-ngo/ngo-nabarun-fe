@@ -30,7 +30,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     provideDatabase(() => getDatabase()),
     provideAuth(() => getAuth()),
     ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: environment.production,
+      enabled: true, // Only enable in production builds
       registrationStrategy: 'registerWhenStable:30000'
     }),
     MatAutocompleteModule,

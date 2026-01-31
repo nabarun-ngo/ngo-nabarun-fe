@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-common-layout',
   template: `
      <router-outlet></router-outlet>
+     <app-pwa-install-prompt></app-pwa-install-prompt>
   `,
   styles: [
   ]

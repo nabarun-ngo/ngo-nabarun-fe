@@ -5,16 +5,45 @@
   <meta charset="utf-8">
   <title>NABARUN</title>
   <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes">
+  
+  <!-- PWA Meta Tags -->
+  <meta name="description" content="Nabarun NGO Management System">
+  <meta name="theme-color" content="#1976d2">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Nabarun">
+  
+  <!-- Icons for iOS -->
+  <link rel="apple-touch-icon" href="assets/icons/icon-192x192.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="assets/icons/icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="96x96" href="assets/icons/icon-96x96.png">
+  <link rel="apple-touch-icon" sizes="128x128" href="assets/icons/icon-128x128.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="assets/icons/icon-192x192.png">
+  <link rel="apple-touch-icon" sizes="512x512" href="assets/icons/icon-512x512.png">
+  
+  <!-- Standard Icons -->
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/icons/icon-512x512.png">
+  
+  <!-- Manifest -->
+  <link rel="manifest" href="manifest.webmanifest">
+  
+  <!-- Preconnect for performance -->
   <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link rel="preconnect" href="https://www.gstatic.com">
+  
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
   <script src="https://unpkg.com/@popperjs/core@2"></script>
   <script src='https://www.google.com/recaptcha/api.js'></script>
-  <link rel="manifest" href="manifest.webmanifest">
-  <!-- <script src='/assets/firebase-messaging-sw.js'></script> -->
+  
   <style>
     #loadOverlay {
       display: none;

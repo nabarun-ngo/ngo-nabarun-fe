@@ -21,7 +21,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatNativeDateModule } from '@angular/material/core';
 import { AuthHttpInterceptor, AuthModule } from '@auth0/auth0-angular';
 import { BaseModalComponent } from './component/base-modal/base-modal.component';
-
+import { GenericToastPromptComponent } from './component/toast-prompt/generic-toast-prompt.component';
+import { NotificationPromptComponent } from './component/toast-prompt/notification-prompt/notification-prompt.component';
+import { PwaInstallPromptComponent } from './component/toast-prompt/pwa-install-prompt/pwa-install-prompt.component';
 
 
 @NgModule({
@@ -37,6 +39,9 @@ import { BaseModalComponent } from './component/base-modal/base-modal.component'
     ModalComponent,
     DateDiffPipe,
     BaseModalComponent,
+    GenericToastPromptComponent,
+    NotificationPromptComponent,
+    PwaInstallPromptComponent,
   ],
   imports: [
     CommonModule,

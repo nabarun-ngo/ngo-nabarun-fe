@@ -28,5 +28,5 @@ export interface StartWorkflowDto {
   /**
    * Workflow type (e.g., JOIN_REQUEST)
    */
-  type: 'JOIN_REQUEST' | 'CONTACT_REQUEST' | 'DONATION_REQUEST';
+  type: string;
 }
