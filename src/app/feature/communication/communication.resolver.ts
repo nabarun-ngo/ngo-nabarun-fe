@@ -10,9 +10,7 @@ import { User } from '../member/models/member.model';
 const noticeDefaultValue = NoticeDefaultValue;
 const meetingDefaultValue = MeetingDefaultValue;
 
-export const noticesResolver: ResolveFn<PagedNotice> = (route, state) => {
-  return inject(CommunicationService).fetchNotices(noticeDefaultValue.pageNumber, noticeDefaultValue.pageSize);
-};
+
 
 export const noticeRefDataResolver: ResolveFn<any> = (route, state) => {
   return inject(CommunicationService).getNoticeRefData();

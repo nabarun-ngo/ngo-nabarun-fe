@@ -30,4 +30,4 @@ export function archiveNotification(http: HttpClient, rootUrl: string, params: A
   );
 }
 
-archiveNotification.PATH = '/api/notifications/me/update/{id}/archive';
+archiveNotification.PATH = '/api/notifications/me/update-as-archive/{id}';

@@ -17,5 +17,6 @@ export interface UniversalInputModel {
     labelName?: string;
     props?: { [key: string]: any };
     autocomplete?: boolean;
+    checkboxValues?: { checked: any; unchecked: any };
 
 }

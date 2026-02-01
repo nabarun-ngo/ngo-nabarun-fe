@@ -70,7 +70,7 @@ export abstract class StandardDashboard<TData> extends Paginator
       if (pagedData && pagedData.totalSize !== undefined) {
         this.pageEvent = {
           pageIndex: pagedData.pageIndex || 0,
-          pageSize: pagedData.pageSize || 100,
+          pageSize: pagedData.pageSize || 10,
           length: pagedData.totalSize
         };
       }

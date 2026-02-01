@@ -1,9 +1,10 @@
 import { PagedResult } from "src/app/shared/model/paged-result.model";
 
 export interface MeetingParticipant {
+    id?: string;
     email: string;
     name?: string;
-    attended?: boolean;
+    attended?: string;
 }
 
 export interface AgendaItem {

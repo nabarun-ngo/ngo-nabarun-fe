@@ -263,8 +263,6 @@ export class ExpenseService {
       .listUsers({
         status: filter.status as any,
         roleCodes: filter.roleCodes,
-        pageIndex: 0,
-        pageSize: 10000
       })
       .pipe(
         map((d) => d.responsePayload),

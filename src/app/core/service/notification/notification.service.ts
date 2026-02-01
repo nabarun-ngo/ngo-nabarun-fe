@@ -5,6 +5,8 @@ import { environment } from 'src/environments/environment';
 import { Messaging, getToken, onMessage } from '@angular/fire/messaging';
 import { NotificationControllerService } from '../../api-client/services/notification-controller.service';
 import { NotificationResponseDto } from '../../api-client/models/notification-response-dto';
+import { PagedResultNotificationResponseDto, SuccessResponse, SuccessResponseNotificationResponseDto } from '../../api-client/models';
+import { PagedResult } from 'src/app/shared/model/paged-result.model';
 
 export type AppNotification = NotificationResponseDto;
 
@@ -45,7 +47,6 @@ export class NotificationService {
     console.log('[NotificationService] Handling incoming signal...', payload);
     this.message$.next(payload);
     this.refreshUnreadCount();
-    this.refreshNotifications();
     this.playNotificationSound();
 
     // Update Badge
@@ -65,23 +66,25 @@ export class NotificationService {
   }
 
 
-  /**
-   * Get my notifications
-   */
-  getMyNotifications(includeArchived: boolean = false, page: number = 1, limit: number = 20): Observable<PagedNotifications> {
-    return this.notificationController.getMyNotifications({
-      isArchived: includeArchived ? 'Y' : 'N',
-      pageIndex: page,
-      pageSize: limit
-    }).pipe(
-      map((response: any) => {
-        // Casting to any to handle potential type mismatch in generated code
-        // Expected response: SuccessResponse<PagedResult<Notification>>
-        const payload = response.responsePayload || {};
-        const data = payload.data || [];
-        const total = payload.total || 0;
 
-        this.notificationsSubject.next(data);
+  /**
+   * Get my unread notifications with pagination (for infinite scroll)
+   */
+  getMyNotificationsPaged(page: number, limit: number): Observable<PagedNotifications> {
+    return this.notificationController.getMyNotifications({
+      isArchived: 'N',
+      pageSize: limit,
+      pageIndex: page
+    }).pipe(
+      map(m => m.responsePayload),
+      map((payload) => {
+        const data = payload.content || [];
+        const total = payload.totalSize || 0;
+
+        // For first page, replace; for subsequent pages, append is handled by component
+        if (page === 0) {
+          this.notificationsSubject.next(data);
+        }
 
         return {
           data: data,
@@ -94,22 +97,12 @@ export class NotificationService {
   }
 
   /**
-   * Get my unread notifications
-   * Note: Using getMyNotifications with isRead=false
+   * Append notifications to the current list (for infinite scroll)
    */
-  getMyUnreadNotifications(): Observable<AppNotification[]> {
-    return this.notificationController.getMyNotifications({
-      isRead: 'N',
-      pageSize: 100, // Fetch a reasonable amount
-      pageIndex: 0
-    }).pipe(
-      map((response: any) => {
-        const payload = response.responsePayload || {};
-        const data = payload.data || [];
-        this.notificationsSubject.next(data);
-        return data as AppNotification[];
-      })
-    );
+  appendNotifications(newNotifications: AppNotification[]): void {
+    const current = this.notificationsSubject.value;
+    const updated = [...current, ...newNotifications];
+    this.notificationsSubject.next(updated);
   }
 
   /**
@@ -192,13 +185,6 @@ export class NotificationService {
    */
   refreshUnreadCount(): void {
     this.getMyUnreadCount().subscribe();
-  }
-
-  /**
-   * Refresh notifications
-   */
-  refreshNotifications(): void {
-    this.getMyUnreadNotifications().subscribe();
   }
 
   /**
@@ -380,78 +366,7 @@ export class NotificationService {
 
     return 'Unknown';
   }
-  /**
-   * Get icon based on notification type/category
-   */
-  getNotificationIcon(notification: AppNotification): string {
-    if (notification.icon) {
-      return notification.icon;
-    }
 
-    // Default icons based on type
-    switch (notification.type) {
-      case 'SUCCESS':
-        return 'check_circle';
-      case 'WARNING':
-        return 'warning';
-      case 'ERROR':
-        return 'error';
-      case 'TASK':
-        return 'assignment';
-      case 'APPROVAL':
-        return 'approval';
-      case 'REMINDER':
-        return 'alarm';
-      case 'ANNOUNCEMENT':
-        return 'campaign';
-      default:
-        return 'notifications';
-    }
-  }
-
-  /**
-   * Get color class based on notification type
-   */
-  getNotificationColor(notification: AppNotification): string {
-    switch (notification.type) {
-      case 'SUCCESS':
-        return 'success';
-      case 'WARNING':
-        return 'warning';
-      case 'ERROR':
-        return 'error';
-      case 'TASK':
-        return 'primary';
-      case 'APPROVAL':
-        return 'accent';
-      default:
-        return 'default';
-    }
-  }
-
-  /**
-   * Format date as time ago string
-   */
-  getTimeAgo(date: string | Date): string {
-    const now = new Date();
-    const notificationDate = new Date(date);
-    const diffMs = now.getTime() - notificationDate.getTime();
-    const diffMins = Math.floor(diffMs / 60000);
-    const diffHours = Math.floor(diffMs / 3600000);
-    const diffDays = Math.floor(diffMs / 86400000);
-
-    if (diffMins < 1) {
-      return 'Just now';
-    } else if (diffMins < 60) {
-      return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
-    } else if (diffHours < 24) {
-      return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
-    } else if (diffDays < 7) {
-      return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
-    } else {
-      return notificationDate.toLocaleDateString();
-    }
-  }
 
   /**
    * Check if running on a mobile browser

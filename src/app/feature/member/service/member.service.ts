@@ -23,7 +23,9 @@ export class MemberService {
         map(d => mapPagedUserDtoToPagedUser(d)));
   }
   fetchAllMembers() {
-    return this.userController.listUsers().pipe(
+    return this.userController.listUsers({
+      status: 'ACTIVE'
+    }).pipe(
       map(d => d.responsePayload),
       map(d => mapPagedUserDtoToPagedUser(d))
     );

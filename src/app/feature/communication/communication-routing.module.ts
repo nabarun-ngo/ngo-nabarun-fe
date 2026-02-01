@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
-import { noticeRefDataResolver, noticesResolver, meetingRefDataResolver, meetingsResolver } from './communication.resolver';
+import { noticeRefDataResolver, meetingRefDataResolver, meetingsResolver } from './communication.resolver';
 import { NoticeDashboardComponent } from './notice-dashboard/notice-dashboard.component';
 import { MeetingDashboardComponent } from './meeting-dashboard/meeting-dashboard.component';
 

@@ -19,7 +19,9 @@ export class RequestService {
   ) { }
 
   getUsers() {
-    return this.userController.listUsers({}).pipe(
+    return this.userController.listUsers({
+      status: 'ACTIVE'
+    }).pipe(
       map(d => d.responsePayload),
       map(mapPagedUserDtoToPagedUser));
   }

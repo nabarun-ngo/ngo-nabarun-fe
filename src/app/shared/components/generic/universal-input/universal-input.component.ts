@@ -94,5 +94,43 @@ export class UniversalInputComponent {
     return selectedKeysCount === this.inputModel.selectList.length;
   }
 
+  /**
+   * Get the boolean value for the checkbox based on the form control value
+   * If custom checkbox values are defined, convert them to boolean
+   */
+  getCheckboxValue(): boolean {
+    const value = this.ngControl?.control?.value;
+    if (!this.inputModel?.checkboxValues) {
+      // Default behavior: treat value as boolean
+      return !!value;
+    }
+    // Custom values: check if value matches the 'checked' value
+    // Also handle truthy/falsy values that might not exactly match
+    if (value === this.inputModel.checkboxValues.checked) {
+      return true;
+    }
+    if (value === this.inputModel.checkboxValues.unchecked) {
+      return false;
+    }
+    // If value doesn't match either custom value, treat as truthy/falsy
+    // This handles cases where the value might be boolean, null, undefined, etc.
+    return !!value;
+  }
+  /**
+   * Handle checkbox change event and convert boolean to custom value if needed
+   */
+  onCheckboxChange(checked: boolean): void {
+    if (!this.inputModel?.checkboxValues) {
+      // Default behavior: set boolean value
+      this.ngControl?.control?.setValue(checked);
+      return;
+    }
+    // Custom values: convert boolean to custom value
+    const newValue = checked
+      ? this.inputModel.checkboxValues.checked
+      : this.inputModel.checkboxValues.unchecked;
+    this.ngControl?.control?.setValue(newValue);
+  }
+
 
 }

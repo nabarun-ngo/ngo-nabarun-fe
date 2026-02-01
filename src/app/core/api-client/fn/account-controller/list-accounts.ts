@@ -11,8 +11,8 @@ import { RequestBuilder } from '../../request-builder';
 import { SuccessResponsePagedResultAccountDetailDto } from '../../models/success-response-paged-result-account-detail-dto';
 
 export interface ListAccounts$Params {
-  pageIndex: number;
-  pageSize: number;
+  pageIndex?: number;
+  pageSize?: number;
   status?: Array<'ACTIVE' | 'INACTIVE' | 'BLOCKED' | 'CLOSED'>;
   type?: Array<'PRINCIPAL' | 'GENERAL' | 'DONATION' | 'PUBLIC_DONATION' | 'WALLET'>;
   accountHolderId?: string;
@@ -22,7 +22,7 @@ export interface ListAccounts$Params {
   accountId?: string;
 }
 
-export function listAccounts(http: HttpClient, rootUrl: string, params: ListAccounts$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultAccountDetailDto>> {
+export function listAccounts(http: HttpClient, rootUrl: string, params?: ListAccounts$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultAccountDetailDto>> {
   const rb = new RequestBuilder(rootUrl, listAccounts.PATH, 'get');
   if (params) {
     rb.query('pageIndex', params.pageIndex, {});

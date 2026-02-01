@@ -9,6 +9,7 @@ import { AccordionCell, AccordionButton } from 'src/app/shared/model/accordion-l
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { Accordion } from 'src/app/shared/utils/accordion';
 import { AdminService } from '../../admin.service';
+import { AdminDefaultValue } from '../../admin.const';
 
 @Component({
   selector: 'app-admin-tasks-tab',
@@ -67,9 +68,9 @@ export class AdminTasksTabComponent extends Accordion<Task> implements TabCompon
   }
   protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
     return {
-      pageNumber: 0,
-      pageSize: 10,
-      pageSizeOptions: [10, 20, 50]
+      pageNumber: AdminDefaultValue.pageNumber,
+      pageSize: AdminDefaultValue.pageSize,
+      pageSizeOptions: AdminDefaultValue.pageSizeOptions
     }
   }
   override handlePageEvent($event: PageEvent): void {

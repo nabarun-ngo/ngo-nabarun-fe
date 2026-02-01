@@ -171,14 +171,14 @@ export class DonationService {
     fetchMembers(options: {
         pageIndex?: number,
         pageSize?: number,
-        filter?: { firstName?: string; lastName?: string, status?: string[] }
+        filter?: { firstName?: string; lastName?: string, }
     }) {
         return this.userController.listUsers({
             pageIndex: options.pageIndex || DonationDefaultValue.pageNumber,
             pageSize: options.pageSize || DonationDefaultValue.pageSize,
             firstName: options.filter?.firstName,
             lastName: options.filter?.lastName,
-            // status: filter?.status ? filter.status : ['ACTIVE'] 
+            // status: (options.filter?.status ? options.filter.status : ['ACTIVE']) as any
         }).pipe(map(m => m.responsePayload), map(mapPagedUserDtoToPagedUser));
     }
 

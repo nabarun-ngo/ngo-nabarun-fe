@@ -50,8 +50,7 @@ export class AccountService {
   fetchAllAccounts(): Observable<PagedAccounts> {
     return this.accountController
       .listAccounts({
-        pageIndex: 0,
-        pageSize: 100000,
+        status: ['ACTIVE'],
         includeBalance: 'N',
         includePaymentDetail: 'N'
       })
@@ -209,8 +208,6 @@ export class AccountService {
       .listUsers({
         status: filter.status as any,
         roleCodes: filter.roleCodes,
-        pageIndex: 0,
-        pageSize: 10000
       })
       .pipe(
         map((d) => d.responsePayload),
