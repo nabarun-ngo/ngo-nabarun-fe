@@ -16,7 +16,7 @@ export class SecuredLayoutComponent {
     entryComponent: PageLoaderComponent,
     opacity: '0.9',
     filteredUrlPatterns: [
-      '/token',
+      'token',
       'openid-configuration',
       'jwks.json',
       'api/users/profile/metrics',
