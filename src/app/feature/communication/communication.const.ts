@@ -1,14 +1,14 @@
 export const NoticeDefaultValue = {
     pageNumber: 0,
-    pageSize: 20,
-    pageSizeOptions: [20, 50, 75, 100],
+    pageSize: 10,
+    pageSizeOptions: [10, 20, 50, 75, 100],
     pageTitle: 'Notices'
 }
 
 export const MeetingDefaultValue = {
     pageNumber: 0,
-    pageSize: 20,
-    pageSizeOptions: [20, 50, 75, 100],
+    pageSize: 10,
+    pageSizeOptions: [10, 20, 50, 75, 100],
     pageTitle: 'Meetings'
 }
 

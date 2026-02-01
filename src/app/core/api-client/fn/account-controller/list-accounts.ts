@@ -11,17 +11,18 @@ import { RequestBuilder } from '../../request-builder';
 import { SuccessResponsePagedResultAccountDetailDto } from '../../models/success-response-paged-result-account-detail-dto';
 
 export interface ListAccounts$Params {
-  pageIndex: number;
-  pageSize: number;
+  pageIndex?: number;
+  pageSize?: number;
   status?: Array<'ACTIVE' | 'INACTIVE' | 'BLOCKED' | 'CLOSED'>;
   type?: Array<'PRINCIPAL' | 'GENERAL' | 'DONATION' | 'PUBLIC_DONATION' | 'WALLET'>;
   accountHolderId?: string;
-  includePaymentDetail?: boolean;
-  includeBalance?: boolean;
+  accountHolderName?: string;
+  includePaymentDetail?: 'Y' | 'N';
+  includeBalance?: 'Y' | 'N';
   accountId?: string;
 }
 
-export function listAccounts(http: HttpClient, rootUrl: string, params: ListAccounts$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultAccountDetailDto>> {
+export function listAccounts(http: HttpClient, rootUrl: string, params?: ListAccounts$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultAccountDetailDto>> {
   const rb = new RequestBuilder(rootUrl, listAccounts.PATH, 'get');
   if (params) {
     rb.query('pageIndex', params.pageIndex, {});
@@ -29,6 +30,7 @@ export function listAccounts(http: HttpClient, rootUrl: string, params: ListAcco
     rb.query('status', params.status, {});
     rb.query('type', params.type, {});
     rb.query('accountHolderId', params.accountHolderId, {});
+    rb.query('accountHolderName', params.accountHolderName, {});
     rb.query('includePaymentDetail', params.includePaymentDetail, {});
     rb.query('includeBalance', params.includeBalance, {});
     rb.query('accountId', params.accountId, {});

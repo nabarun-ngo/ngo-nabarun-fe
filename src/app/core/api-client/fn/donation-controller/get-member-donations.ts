@@ -17,7 +17,7 @@ export interface GetMemberDonations$Params {
   donorId?: string;
   status?: Array<'RAISED' | 'PAID' | 'PENDING' | 'PAYMENT_FAILED' | 'PAY_LATER' | 'CANCELLED' | 'UPDATE_MISTAKE'>;
   type?: Array<'REGULAR' | 'ONETIME'>;
-  isGuest?: boolean;
+  isGuest?: 'Y' | 'N';
   startDate?: string;
   endDate?: string;
   donationId?: string;

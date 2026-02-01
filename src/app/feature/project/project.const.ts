@@ -1,7 +1,7 @@
 export const ProjectDefaultValue = {
     pageNumber: 0,
-    pageSize: 20,
-    pageSizeOptions: [20, 50, 75, 100],
+    pageSize: 10,
+    pageSizeOptions: [10, 20, 50, 75, 100],
     pageTitle: 'Projects'
 }
 
@@ -25,8 +25,8 @@ export type activityTab = 'in_progress' | 'other';
 
 export const ActivityDefaultValue = {
     pageNumber: 0,
-    pageSize: 20,
-    pageSizeOptions: [20, 50, 75, 100],
+    pageSize: 10,
+    pageSizeOptions: [10, 20, 50, 75, 100],
     pageTitle: 'Project Activities',
     tabName: 'in_progress' as activityTab
 }

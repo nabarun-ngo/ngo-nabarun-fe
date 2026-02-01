@@ -9,7 +9,7 @@ export class SharedDataService {
 
   constructor() { }
   private pageNameSource = new BehaviorSubject("Welcome");
-  pageName = this.pageNameSource.asObservable();
+  readonly pageName = this.pageNameSource.asObservable();
 
   //private isAuthenticatedSource = new BehaviorSubject(false);
   //isAuthenticated = this.isAuthenticatedSource.asObservable();
@@ -27,7 +27,11 @@ export class SharedDataService {
   getRefData(name: string) { return this.refDataMap.get(name) }
 
   private searchValueSource = new BehaviorSubject('');
-  searchValue = this.searchValueSource.asObservable();
+  readonly searchValue = this.searchValueSource.asObservable();
   setSearchValue(value: string) { this.searchValueSource.next(value) }
+
+  private notificationRefreshSource = new BehaviorSubject(false);
+  readonly notificationRefresh = this.notificationRefreshSource.asObservable();
+  setNotificationRefresh(value: boolean) { this.notificationRefreshSource.next(value) }
 
 }

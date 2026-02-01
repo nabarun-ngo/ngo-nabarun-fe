@@ -20,7 +20,8 @@ export class SecuredLayoutComponent {
       'openid-configuration',
       'jwks.json',
       'api/users/profile/metrics',
-      'api/users/profile/notifications',
+      'api/notifications/me/unread/count',
+      'api/notifications/me'
 
     ]
   }

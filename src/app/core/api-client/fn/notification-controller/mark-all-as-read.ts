@@ -28,4 +28,4 @@ export function markAllAsRead(http: HttpClient, rootUrl: string, params?: MarkAl
   );
 }
 
-markAllAsRead.PATH = '/api/notifications/me/update/read-all';
+markAllAsRead.PATH = '/api/notifications/me/update-as-read-all';

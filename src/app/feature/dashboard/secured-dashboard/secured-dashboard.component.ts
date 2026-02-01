@@ -140,6 +140,7 @@ export class SecuredDashboardComponent implements OnInit {
 
   reload() {
     this.fetchMetrics();
+    this.sharedDataService.setNotificationRefresh(true);
   }
 
   fetchMetrics() {

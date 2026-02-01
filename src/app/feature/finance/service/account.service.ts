@@ -50,10 +50,9 @@ export class AccountService {
   fetchAllAccounts(): Observable<PagedAccounts> {
     return this.accountController
       .listAccounts({
-        pageIndex: 0,
-        pageSize: 100000,
-        includeBalance: true,
-        includePaymentDetail: true
+        status: ['ACTIVE'],
+        includeBalance: 'N',
+        includePaymentDetail: 'N'
       })
       .pipe(
         map((d) => d.responsePayload),
@@ -81,8 +80,8 @@ export class AccountService {
         accountHolderId: options?.accountHolderId,
         accountId: options?.accountId,
         status: options?.status ?? ['ACTIVE'],
-        includeBalance: true,
-        includePaymentDetail: true,
+        includeBalance: 'Y',
+        includePaymentDetail: 'N',
         type: options?.type ?? []
       })
       .pipe(
@@ -111,8 +110,8 @@ export class AccountService {
       .listSelfAccounts({
         pageIndex: pageIndex ?? AccountDefaultValue.pageNumber,
         pageSize: pageSize ?? AccountDefaultValue.pageSize,
-        includeBalance: true,
-        includePaymentDetail: true,
+        includeBalance: 'Y',
+        includePaymentDetail: 'Y',
         ...filter
       })
       .pipe(
@@ -209,8 +208,6 @@ export class AccountService {
       .listUsers({
         status: filter.status as any,
         roleCodes: filter.roleCodes,
-        pageIndex: 0,
-        pageSize: 10000
       })
       .pipe(
         map((d) => d.responsePayload),

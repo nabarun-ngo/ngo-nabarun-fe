@@ -227,8 +227,8 @@ export class ExpenseService {
         accountHolderId: options?.accountHolderId,
         accountId: options?.accountId,
         status: options?.status ?? ['ACTIVE'],
-        includeBalance: true,
-        includePaymentDetail: true,
+        includeBalance: 'Y',
+        includePaymentDetail: 'Y',
         type: options?.type ?? []
       })
       .pipe(
@@ -263,8 +263,6 @@ export class ExpenseService {
       .listUsers({
         status: filter.status as any,
         roleCodes: filter.roleCodes,
-        pageIndex: 0,
-        pageSize: 10000
       })
       .pipe(
         map((d) => d.responsePayload),

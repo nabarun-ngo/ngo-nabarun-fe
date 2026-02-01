@@ -8,22 +8,22 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseNotificationResponseDto } from '../../models/success-response-notification-response-dto';
+import { SuccessResponsePagedResultNotificationResponseDto } from '../../models/success-response-paged-result-notification-response-dto';
 
 export interface GetMyNotifications$Params {
   pageIndex?: number;
   pageSize?: number;
   type?: 'INFO' | 'SUCCESS' | 'WARNING' | 'ERROR' | 'TASK' | 'APPROVAL' | 'REMINDER' | 'ANNOUNCEMENT';
   category?: 'SYSTEM' | 'WORKFLOW' | 'DONATION' | 'EXPENSE' | 'PROJECT' | 'MEETING' | 'TASK' | 'DOCUMENT';
-  isRead?: boolean;
-  isArchived?: boolean;
+  isRead?: 'Y' | 'N';
+  isArchived?: 'Y' | 'N';
   referenceId?: string;
   referenceType?: string;
   fromDate?: string;
   toDate?: string;
 }
 
-export function getMyNotifications(http: HttpClient, rootUrl: string, params?: GetMyNotifications$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseNotificationResponseDto>> {
+export function getMyNotifications(http: HttpClient, rootUrl: string, params?: GetMyNotifications$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultNotificationResponseDto>> {
   const rb = new RequestBuilder(rootUrl, getMyNotifications.PATH, 'get');
   if (params) {
     rb.query('pageIndex', params.pageIndex, {});
@@ -43,7 +43,7 @@ export function getMyNotifications(http: HttpClient, rootUrl: string, params?: G
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseNotificationResponseDto>;
+      return r as StrictHttpResponse<SuccessResponsePagedResultNotificationResponseDto>;
     })
   );
 }

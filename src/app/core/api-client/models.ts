@@ -44,6 +44,7 @@ export { PagedResultAccountDetailDto } from './models/paged-result-account-detai
 export { PagedResultActivityDetailDto } from './models/paged-result-activity-detail-dto';
 export { PagedResultDonationDto } from './models/paged-result-donation-dto';
 export { PagedResultExpenseDetailDto } from './models/paged-result-expense-detail-dto';
+export { PagedResultNotificationResponseDto } from './models/paged-result-notification-response-dto';
 export { PagedResultProjectDetailDto } from './models/paged-result-project-detail-dto';
 export { PagedResultTransactionDetailDto } from './models/paged-result-transaction-detail-dto';
 export { PagedResultUserDto } from './models/paged-result-user-dto';
@@ -90,6 +91,7 @@ export { SuccessResponsePagedResultAccountDetailDto } from './models/success-res
 export { SuccessResponsePagedResultActivityDetailDto } from './models/success-response-paged-result-activity-detail-dto';
 export { SuccessResponsePagedResultDonationDto } from './models/success-response-paged-result-donation-dto';
 export { SuccessResponsePagedResultExpenseDetailDto } from './models/success-response-paged-result-expense-detail-dto';
+export { SuccessResponsePagedResultNotificationResponseDto } from './models/success-response-paged-result-notification-response-dto';
 export { SuccessResponsePagedResultProjectDetailDto } from './models/success-response-paged-result-project-detail-dto';
 export { SuccessResponsePagedResultTransactionDetailDto } from './models/success-response-paged-result-transaction-detail-dto';
 export { SuccessResponsePagedResultUserDto } from './models/success-response-paged-result-user-dto';

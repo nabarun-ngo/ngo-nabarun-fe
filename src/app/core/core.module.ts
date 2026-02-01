@@ -24,6 +24,12 @@ import { BaseModalComponent } from './component/base-modal/base-modal.component'
 import { GenericToastPromptComponent } from './component/toast-prompt/generic-toast-prompt.component';
 import { NotificationPromptComponent } from './component/toast-prompt/notification-prompt/notification-prompt.component';
 import { PwaInstallPromptComponent } from './component/toast-prompt/pwa-install-prompt/pwa-install-prompt.component';
+import { NotificationBellComponent } from './component/notification-bell/notification-bell.component';
+import { ClickOutsideDirective } from './directive/click-outside.directive';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 
 
 @NgModule({
@@ -42,6 +48,8 @@ import { PwaInstallPromptComponent } from './component/toast-prompt/pwa-install-
     GenericToastPromptComponent,
     NotificationPromptComponent,
     PwaInstallPromptComponent,
+    NotificationBellComponent,
+    ClickOutsideDirective,
   ],
   imports: [
     CommonModule,
@@ -55,6 +63,9 @@ import { PwaInstallPromptComponent } from './component/toast-prompt/pwa-install-
     RouterModule,
     MatSnackBarModule,
     MatNativeDateModule,
+    MatIconModule,
+    MatTooltipModule,
+    MatProgressSpinnerModule,
   ],
   exports: [
     FooterComponent,

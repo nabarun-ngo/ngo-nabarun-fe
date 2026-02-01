@@ -18,32 +18,7 @@ export class CommunicationService {
     private readonly userController: UserControllerService
   ) { }
 
-  /**
-   * Fetch notices with pagination
-   * TODO: Replace with actual API call when NoticeControllerService is available in api-client
-   */
-  fetchNotices(
-    page?: number,
-    size?: number,
-  ): Observable<PagedNotice> {
-    // Placeholder - implement when API endpoint is available
-    // Example implementation:
-    // return this.noticeController.getAllNotice({
-    //   pageIndex: page || NoticeDefaultValue.pageNumber,
-    //   pageSize: size || NoticeDefaultValue.pageSize,
-    //   filter: { status: ['ACTIVE'] }
-    // }).pipe(
-    //   map((d) => d.responsePayload),
-    //   map(mapPagedDtoToPagedNotice)
-    // );
 
-    return of({
-      content: [],
-      totalSize: 0,
-      pageIndex: page || 0,
-      pageSize: size || 20,
-    } as PagedNotice);
-  }
 
   /**
    * Get notice detail by ID
@@ -227,8 +202,7 @@ export class CommunicationService {
 
   fetchUserList(): Observable<User[]> {
     return this.userController.listUsers({
-      pageIndex: 0,
-      pageSize: 100000,
+      status: 'ACTIVE'
     }).pipe(
       map((d) => d.responsePayload),
       map(mapPagedUserDtoToPagedUser),

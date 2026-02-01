@@ -5,6 +5,8 @@ import { environment } from 'src/environments/environment';
 import { Messaging, getToken, onMessage } from '@angular/fire/messaging';
 import { NotificationControllerService } from '../../api-client/services/notification-controller.service';
 import { NotificationResponseDto } from '../../api-client/models/notification-response-dto';
+import { PagedResultNotificationResponseDto, SuccessResponse, SuccessResponseNotificationResponseDto } from '../../api-client/models';
+import { PagedResult } from 'src/app/shared/model/paged-result.model';
 
 export type AppNotification = NotificationResponseDto;
 
@@ -14,6 +16,8 @@ export interface PagedNotifications {
   page: number;
   limit: number;
 }
+
+const MOBILE_UA_RE = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
 
 @Injectable({
   providedIn: 'root'
@@ -62,23 +66,25 @@ export class NotificationService {
   }
 
 
-  /**
-   * Get my notifications
-   */
-  getMyNotifications(includeArchived: boolean = false, page: number = 1, limit: number = 20): Observable<PagedNotifications> {
-    return this.notificationController.getMyNotifications({
-      isArchived: includeArchived,
-      pageIndex: page,
-      pageSize: limit
-    }).pipe(
-      map((response: any) => {
-        // Casting to any to handle potential type mismatch in generated code
-        // Expected response: SuccessResponse<PagedResult<Notification>>
-        const payload = response.responsePayload || {};
-        const data = payload.data || [];
-        const total = payload.total || 0;
 
-        this.notificationsSubject.next(data);
+  /**
+   * Get my unread notifications with pagination (for infinite scroll)
+   */
+  getMyNotificationsPaged(page: number, limit: number): Observable<PagedNotifications> {
+    return this.notificationController.getMyNotifications({
+      isArchived: 'N',
+      pageSize: limit,
+      pageIndex: page
+    }).pipe(
+      map(m => m.responsePayload),
+      map((payload) => {
+        const data = payload.content || [];
+        const total = payload.totalSize || 0;
+
+        // For first page, replace; for subsequent pages, append is handled by component
+        if (page === 0) {
+          this.notificationsSubject.next(data);
+        }
 
         return {
           data: data,
@@ -91,22 +97,12 @@ export class NotificationService {
   }
 
   /**
-   * Get my unread notifications
-   * Note: Using getMyNotifications with isRead=false
+   * Append notifications to the current list (for infinite scroll)
    */
-  getMyUnreadNotifications(): Observable<AppNotification[]> {
-    return this.notificationController.getMyNotifications({
-      isRead: false,
-      pageSize: 100, // Fetch a reasonable amount
-      pageIndex: 0
-    }).pipe(
-      map((response: any) => {
-        const payload = response.responsePayload || {};
-        const data = payload.data || [];
-        this.notificationsSubject.next(data);
-        return data as AppNotification[];
-      })
-    );
+  appendNotifications(newNotifications: AppNotification[]): void {
+    const current = this.notificationsSubject.value;
+    const updated = [...current, ...newNotifications];
+    this.notificationsSubject.next(updated);
   }
 
   /**
@@ -189,13 +185,6 @@ export class NotificationService {
    */
   refreshUnreadCount(): void {
     this.getMyUnreadCount().subscribe();
-  }
-
-  /**
-   * Refresh notifications
-   */
-  refreshNotifications(): void {
-    this.getMyUnreadNotifications().subscribe();
   }
 
   /**
@@ -305,13 +294,15 @@ export class NotificationService {
   }
 
   private registerToken(token: string) {
+    const isMobile = this.isMobileBrowser();
+
     this.notificationController.registerFcmToken({
       body: {
         token: token,
         deviceType: 'WEB',
         browser: this.getBrowserInfo(),
         os: this.getOSInfo(),
-        deviceName: navigator.platform
+        deviceName: isMobile ? `Mobile Web (${this.getOSInfo()})` : `Desktop Web (${navigator.platform})`
       }
     }).subscribe({
       next: () => console.log('FCM token registered with server'),
@@ -364,14 +355,23 @@ export class NotificationService {
    * Get OS information
    */
   private getOSInfo(): string {
-    const userAgent = navigator.userAgent;
+    const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera;
 
-    if (userAgent.includes('Win')) return 'Windows';
-    if (userAgent.includes('Mac')) return 'MacOS';
-    if (userAgent.includes('Linux')) return 'Linux';
-    if (userAgent.includes('Android')) return 'Android';
-    if (userAgent.includes('iOS')) return 'iOS';
+    if (/windows phone/i.test(userAgent)) return 'Windows Phone';
+    if (/win/i.test(userAgent)) return 'Windows';
+    if (/android/i.test(userAgent)) return 'Android';
+    if (/iPad|iPhone|iPod/.test(userAgent) && !(window as any).MSStream) return 'iOS';
+    if (/mac/i.test(userAgent)) return 'MacOS';
+    if (/linux/i.test(userAgent)) return 'Linux';
 
     return 'Unknown';
+  }
+
+
+  /**
+   * Check if running on a mobile browser
+   */
+  public isMobileBrowser(): boolean {
+    return MOBILE_UA_RE.test(navigator.userAgent);
   }
 }

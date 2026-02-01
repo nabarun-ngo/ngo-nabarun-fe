@@ -1,5 +1,5 @@
-<app-floating-action-button *ngIf="profile && permissions?.canCreateDonation" [icon]="'add'"
-    (buttonClick)="initCreateDonationForm(false)"></app-floating-action-button>
+<app-floating-action-button *ngIf="profile && permissions?.canCreateDonation && profile.status == 'ACTIVE'"
+    [icon]="'add'" (buttonClick)="initCreateDonationForm(false)"></app-floating-action-button>
 <div class="mb-4 flex justify-end relative z-10">
     <button mat-button color="primary" (click)="loadData(true)">
         <mat-icon>settings_backup_restore</mat-icon>

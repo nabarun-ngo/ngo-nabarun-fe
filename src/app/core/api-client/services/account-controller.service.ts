@@ -170,7 +170,7 @@ export class AccountControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listAccounts$Response(params: ListAccounts$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultAccountDetailDto>> {
+  listAccounts$Response(params?: ListAccounts$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultAccountDetailDto>> {
     return listAccounts(this.http, this.rootUrl, params, context);
   }
 
@@ -186,7 +186,7 @@ export class AccountControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listAccounts(params: ListAccounts$Params, context?: HttpContext): Observable<SuccessResponsePagedResultAccountDetailDto> {
+  listAccounts(params?: ListAccounts$Params, context?: HttpContext): Observable<SuccessResponsePagedResultAccountDetailDto> {
     return this.listAccounts$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponsePagedResultAccountDetailDto>): SuccessResponsePagedResultAccountDetailDto => r.body)
     );

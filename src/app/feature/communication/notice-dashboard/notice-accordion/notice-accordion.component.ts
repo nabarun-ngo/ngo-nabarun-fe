@@ -143,9 +143,9 @@ export class NoticeAccordionComponent extends Accordion<Notice> implements After
   }
 
   private fetchNotices(pageNumber?: number, pageSize?: number, filter?: any): void {
-    this.communicationService.fetchNotices(pageNumber, pageSize).subscribe((data) => {
-      this.setContent(data.content || [], data.totalSize);
-    });
+    // this.communicationService.fetchNotices(pageNumber, pageSize).subscribe((data) => {
+    //   this.setContent(data.content || [], data.totalSize);
+    // });
   }
 
   initCreateNoticeForm(): void {

@@ -30,4 +30,4 @@ export function markAsRead(http: HttpClient, rootUrl: string, params: MarkAsRead
   );
 }
 
-markAsRead.PATH = '/api/notifications/me/update/{id}/read';
+markAsRead.PATH = '/api/notifications/me/update-as-read/{id}';
