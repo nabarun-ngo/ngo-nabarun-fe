@@ -50,7 +50,7 @@ export class RequestService {
     return this.workflowController.listInstancesByMe({
       page: page,
       size: size,
-      delegated: true, // interested to get request by me for others 
+      delegated: 'Y', // interested to get request by me for others 
       workflowId: filter?.workflowId,
       status: filter?.status as any,
       type: filter?.type as any

@@ -52,8 +52,8 @@ export class AccountService {
       .listAccounts({
         pageIndex: 0,
         pageSize: 100000,
-        includeBalance: true,
-        includePaymentDetail: true
+        includeBalance: 'N',
+        includePaymentDetail: 'N'
       })
       .pipe(
         map((d) => d.responsePayload),
@@ -81,8 +81,8 @@ export class AccountService {
         accountHolderId: options?.accountHolderId,
         accountId: options?.accountId,
         status: options?.status ?? ['ACTIVE'],
-        includeBalance: true,
-        includePaymentDetail: true,
+        includeBalance: 'Y',
+        includePaymentDetail: 'N',
         type: options?.type ?? []
       })
       .pipe(
@@ -111,8 +111,8 @@ export class AccountService {
       .listSelfAccounts({
         pageIndex: pageIndex ?? AccountDefaultValue.pageNumber,
         pageSize: pageSize ?? AccountDefaultValue.pageSize,
-        includeBalance: true,
-        includePaymentDetail: true,
+        includeBalance: 'Y',
+        includePaymentDetail: 'Y',
         ...filter
       })
       .pipe(

@@ -227,8 +227,8 @@ export class ExpenseService {
         accountHolderId: options?.accountHolderId,
         accountId: options?.accountId,
         status: options?.status ?? ['ACTIVE'],
-        includeBalance: true,
-        includePaymentDetail: true,
+        includeBalance: 'Y',
+        includePaymentDetail: 'Y',
         type: options?.type ?? []
       })
       .pipe(

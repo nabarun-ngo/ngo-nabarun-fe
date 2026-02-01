@@ -70,7 +70,7 @@ export class NotificationService {
    */
   getMyNotifications(includeArchived: boolean = false, page: number = 1, limit: number = 20): Observable<PagedNotifications> {
     return this.notificationController.getMyNotifications({
-      isArchived: includeArchived,
+      isArchived: includeArchived ? 'Y' : 'N',
       pageIndex: page,
       pageSize: limit
     }).pipe(
@@ -99,7 +99,7 @@ export class NotificationService {
    */
   getMyUnreadNotifications(): Observable<AppNotification[]> {
     return this.notificationController.getMyNotifications({
-      isRead: false,
+      isRead: 'N',
       pageSize: 100, // Fetch a reasonable amount
       pageIndex: 0
     }).pipe(

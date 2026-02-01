@@ -370,7 +370,7 @@ export class DonationService {
             startDate: filter.startDate ? date(filter.startDate, 'yyyy-MM-dd') : undefined,
             endDate: filter.endDate ? date(filter.endDate, 'yyyy-MM-dd') : undefined,
             type: filter.donationType as any,
-            isGuest: filter.guest,
+            isGuest: filter.guest === true ? 'Y' : 'N',
             donorId: filter.donorId,
             pageIndex: DonationDefaultValue.pageNumber,
             pageSize: DonationDefaultValue.pageSize
