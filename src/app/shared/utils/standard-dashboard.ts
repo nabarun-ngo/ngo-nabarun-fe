@@ -41,7 +41,7 @@ export abstract class StandardDashboard<TData> extends Paginator
   protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
     return {
       pageNumber: 0,
-      pageSize: 100,
+      pageSize: 10,
       pageSizeOptions: [10, 20, 50, 100]
     }
   }

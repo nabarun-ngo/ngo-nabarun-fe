@@ -1,0 +1,92 @@
+<div class="notification-bell-container">
+  <!-- Bell Icon Button (Restored Design) -->
+  <button (click)="toggleDropdown($event)"
+    class="relative inline-flex items-center justify-center w-10 h-10 rounded-full text-white hover:bg-white hover:bg-opacity-20 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 transition-all duration-200"
+    style="backdrop-filter: blur(10px);" [attr.aria-label]="'View notifications (' + unreadCount + ' unread)'">
+    <span class="sr-only">View notifications</span>
+    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+      aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+    </svg>
+    <span *ngIf="unreadCount > 0"
+      class="absolute -top-1 -right-1 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white rounded-full"
+      style="background: var(--accent-red); box-shadow: var(--shadow-md);">
+      {{ unreadCount }}
+    </span>
+  </button>
+
+  <!-- Dropdown Panel -->
+  <div class="notification-dropdown" *ngIf="isDropdownOpen" (clickOutside)="closeDropdown()">
+    <!-- Header -->
+    <div class="dropdown-header">
+      <h3 class="header-title">Notifications</h3>
+      <div class="header-actions">
+        <button class="mark-all-read-btn" *ngIf="unreadCount > 0" (click)="markAllAsRead()"
+          matTooltip="Mark all as read">
+          <mat-icon>done_all</mat-icon>
+        </button>
+        <button class="close-btn" (click)="closeDropdown()" aria-label="Close notifications">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-container" *ngIf="loading">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+
+    <!-- Notifications List -->
+    <div class="notifications-list" *ngIf="!loading">
+      <!-- Empty State -->
+      <div class="empty-state" *ngIf="notifications.length === 0">
+        <mat-icon class="empty-icon">notifications_none</mat-icon>
+        <p>No new notifications</p>
+      </div>
+
+      <!-- Notification Items -->
+      <div class="notification-item" *ngFor="let notification of notifications" [class.unread]="!notification.isRead"
+        [class.priority-high]="notification.priority === 'HIGH'"
+        [class.priority-urgent]="notification.priority === 'URGENT'" (click)="onNotificationClick(notification)">
+        <!-- Icon -->
+        <div class="notification-icon" [class]="notificationService.getNotificationColor(notification)">
+          <mat-icon>{{ notificationService.getNotificationIcon(notification) }}</mat-icon>
+        </div>
+
+        <!-- Content -->
+        <div class="notification-content">
+          <div class="notification-header">
+            <span class="notification-title">{{ notification.title }}</span>
+            <span class="notification-time">{{ notificationService.getTimeAgo(notification.createdAt) }}</span>
+          </div>
+          <p class="notification-body">{{ notification.body }}</p>
+
+          <!-- Category Badge -->
+          <span class="notification-category">{{ notification.category }}</span>
+        </div>
+
+        <!-- Actions -->
+        <div class="notification-actions">
+          <button class="action-btn" *ngIf="!notification.isRead" (click)="markAsRead(notification, $event)"
+            matTooltip="Mark as read">
+            <mat-icon>check</mat-icon>
+          </button>
+          <button class="action-btn delete-btn" (click)="deleteNotification(notification, $event)" matTooltip="Delete">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+
+        <!-- Unread Indicator -->
+        <div class="unread-indicator" *ngIf="!notification.isRead"></div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="dropdown-footer" *ngIf="notifications.length > 0">
+      <button class="view-all-btn" (click)="viewAllNotifications()">
+        View All Notifications
+      </button>
+    </div>
+  </div>
+</div>

@@ -303,7 +303,7 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
     lines.push('');
 
     // Meeting title
-    lines.push(`📌 *${meeting.summary}*`);
+    lines.push(`📌 *${meeting.summary.replaceAll(' ', '')}*`);
     lines.push('');
 
     // Date and time
@@ -345,7 +345,7 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
     lines.push('━━━━━━━━━━━━━━━━━━━');
     if (!isMeetingEnded) {
       lines.push('✨ Looking forward to seeing you! ✨');
-      lines.push('*Please join with your registered email address with NABARUN*');
+      lines.push('*Please join with your registered email address with NABARUN !!*');
     } else {
       lines.push('✨ Thank you for joining! ✨');
     }

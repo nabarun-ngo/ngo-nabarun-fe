@@ -15,6 +15,8 @@ export interface PagedNotifications {
   limit: number;
 }
 
+const MOBILE_UA_RE = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -43,6 +45,7 @@ export class NotificationService {
     console.log('[NotificationService] Handling incoming signal...', payload);
     this.message$.next(payload);
     this.refreshUnreadCount();
+    this.refreshNotifications();
     this.playNotificationSound();
 
     // Update Badge
@@ -305,13 +308,15 @@ export class NotificationService {
   }
 
   private registerToken(token: string) {
+    const isMobile = this.isMobileBrowser();
+
     this.notificationController.registerFcmToken({
       body: {
         token: token,
         deviceType: 'WEB',
         browser: this.getBrowserInfo(),
         os: this.getOSInfo(),
-        deviceName: navigator.platform
+        deviceName: isMobile ? `Mobile Web (${this.getOSInfo()})` : `Desktop Web (${navigator.platform})`
       }
     }).subscribe({
       next: () => console.log('FCM token registered with server'),
@@ -364,14 +369,94 @@ export class NotificationService {
    * Get OS information
    */
   private getOSInfo(): string {
-    const userAgent = navigator.userAgent;
+    const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera;
 
-    if (userAgent.includes('Win')) return 'Windows';
-    if (userAgent.includes('Mac')) return 'MacOS';
-    if (userAgent.includes('Linux')) return 'Linux';
-    if (userAgent.includes('Android')) return 'Android';
-    if (userAgent.includes('iOS')) return 'iOS';
+    if (/windows phone/i.test(userAgent)) return 'Windows Phone';
+    if (/win/i.test(userAgent)) return 'Windows';
+    if (/android/i.test(userAgent)) return 'Android';
+    if (/iPad|iPhone|iPod/.test(userAgent) && !(window as any).MSStream) return 'iOS';
+    if (/mac/i.test(userAgent)) return 'MacOS';
+    if (/linux/i.test(userAgent)) return 'Linux';
 
     return 'Unknown';
+  }
+  /**
+   * Get icon based on notification type/category
+   */
+  getNotificationIcon(notification: AppNotification): string {
+    if (notification.icon) {
+      return notification.icon;
+    }
+
+    // Default icons based on type
+    switch (notification.type) {
+      case 'SUCCESS':
+        return 'check_circle';
+      case 'WARNING':
+        return 'warning';
+      case 'ERROR':
+        return 'error';
+      case 'TASK':
+        return 'assignment';
+      case 'APPROVAL':
+        return 'approval';
+      case 'REMINDER':
+        return 'alarm';
+      case 'ANNOUNCEMENT':
+        return 'campaign';
+      default:
+        return 'notifications';
+    }
+  }
+
+  /**
+   * Get color class based on notification type
+   */
+  getNotificationColor(notification: AppNotification): string {
+    switch (notification.type) {
+      case 'SUCCESS':
+        return 'success';
+      case 'WARNING':
+        return 'warning';
+      case 'ERROR':
+        return 'error';
+      case 'TASK':
+        return 'primary';
+      case 'APPROVAL':
+        return 'accent';
+      default:
+        return 'default';
+    }
+  }
+
+  /**
+   * Format date as time ago string
+   */
+  getTimeAgo(date: string | Date): string {
+    const now = new Date();
+    const notificationDate = new Date(date);
+    const diffMs = now.getTime() - notificationDate.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMins < 1) {
+      return 'Just now';
+    } else if (diffMins < 60) {
+      return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+    } else if (diffHours < 24) {
+      return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+    } else if (diffDays < 7) {
+      return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+    } else {
+      return notificationDate.toLocaleDateString();
+    }
+  }
+
+  /**
+   * Check if running on a mobile browser
+   */
+  public isMobileBrowser(): boolean {
+    return MOBILE_UA_RE.test(navigator.userAgent);
   }
 }

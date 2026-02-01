@@ -49,7 +49,7 @@ export const environment = {
   api_base_url2: apiBaseUrl2,
   auth_config: auth_config,
   firebase_config: firebaseConfig,
-  firebase_vapidKey: 'BG5qo111TmZDK1avMtzLlbzw3w5lsN6-iAyrg-giZ7RSAmm9xh9CvapLAdTmz4JXLboiQ8_c9toYK7PDxHDWzSs',
+  firebase_vapidKey: 'BB5aUQjSGz0v2f2mvf_PdMIsG5zl-uBZ3c8jW3oj6DXn0fLoA98oLG3GzJxWizKyTIME7GOrIzN_vdmI_XhhGps',
   inactivityTimeOut: 15 * 60,
 
 };
