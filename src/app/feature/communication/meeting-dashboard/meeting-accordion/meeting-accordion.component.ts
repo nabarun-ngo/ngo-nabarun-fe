@@ -296,31 +296,31 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
       });
     });
   }
-
-
   private createWhatsAppMessage(meeting: Meeting): string {
     const isMeetingEnded = this.isMeetingEnded(meeting);
     const lines: string[] = [];
 
-    // Header with emojis
+    const divider = '━━━━━━━━━━━━━━━━━━━';
+
+    // Header
     lines.push(isMeetingEnded ? '📅 *MEETING MINUTES*' : '📅 *MEETING INVITATION*');
-    lines.push('━━━━━━━━━━━━━━━━━━━');
-    lines.push('');
+    lines.push(divider, '');
 
-    // Meeting title
-    lines.push(`📢✨ *${meeting.summary.replaceAll(' ', '')}* ✨📢`);
-    lines.push('');
+    // Title
+    lines.push(`📢✨ *${meeting.summary.trim()}* ✨📢`, '');
 
-    // Date and time
-    lines.push(`🗓️ *Date:* ${date(meeting.startTime)}`);
-    lines.push(`🕐 *Time:* ${date(meeting.startTime, 'hh:mm a')} - ${date(meeting.endTime, 'hh:mm a')}`);
+    // Date & Time
+    lines.push(
+      `🗓️ *Date:* ${date(meeting.startTime)}`,
+      `🕐 *Time:* ${date(meeting.startTime, 'hh:mm a')} - ${date(meeting.endTime, 'hh:mm a')}`
+    );
 
-    // Location or meeting link
-    if (!isMeetingEnded && meeting.location && meeting.type == 'OFFLINE') {
+    // Location / Platform
+    if (meeting.type === 'OFFLINE' && meeting.location && !isMeetingEnded) {
       lines.push(`📍 *Location:* ${meeting.location}`);
     }
 
-    if (meeting.type == 'ONLINE') {
+    if (meeting.type === 'ONLINE') {
       lines.push(`💻 *Platform:* Google Meet`);
     }
 
@@ -328,35 +328,69 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
       lines.push(`🔗 *Join Link:* ${meeting.meetLink}`);
     }
 
-    // Attendees
-    if (isMeetingEnded && meeting.attendees && meeting.attendees.length > 0) {
-      lines.push('');
-      lines.push(`👥 *Attendees:*`);
-      meeting.attendees.forEach(attendee => {
-        if (attendee.attended === 'Yes') {
-          lines.push(`🙋‍♂️ ${attendee.name ?? attendee.email}`);
+    // Attendees (only after meeting)
+    if (isMeetingEnded && meeting.attendees?.length) {
+      lines.push('', '👥 *Attendees:*');
+      meeting.attendees
+        .filter(a => a.attended === 'Yes')
+        .forEach(a => {
+          lines.push(`🙋‍♂️ ${a.name ?? a.email}`);
+        });
+    }
+
+    // Agenda & Outcome
+    if (meeting.agenda?.length) {
+      lines.push('', isMeetingEnded ? '📋 *Agenda & Outcome:*' : '📋 *Agenda:*', '');
+
+      meeting.agenda.forEach((item: AgendaItem, index: number) => {
+        // Agenda title
+        lines.push(`🔷 *Agenda:* ${item.agenda}`);
+
+        // Outcome block (only if meeting ended)
+        if (isMeetingEnded) {
+
+          if (item.outcomes && item.outcomes?.split('\n').length > 1) {
+            // Preserve multi-line formatting
+            item.outcomes
+              .split('\n')
+              .map(line => line.trim())
+              .filter(Boolean)
+              .forEach((line: string, index: number) => {
+                if (index === 0) {
+                  lines.push(`🟢 *Outcome:* ${line}`);
+                } else {
+                  lines.push(` ${line}`);
+                }
+              });
+          }
+          else if (item.outcomes) {
+            lines.push(`🟢 *Outcome:* ${item.outcomes}`);
+          }
+          else {
+            lines.push('_Not Discussed_');
+          }
+        }
+
+        // Spacing between agenda items
+        if (index < meeting.agenda!.length - 1) {
+          lines.push('');
         }
       });
     }
 
-    if (meeting.agenda && meeting.agenda.length > 0) {
-      lines.push('');
-      lines.push(isMeetingEnded ? `📋 *Agenda & Outcome:*` : `📋 *Agenda:*`);
-      meeting.agenda.forEach((agenda: AgendaItem) => {
-        lines.push(isMeetingEnded ? `🔷 ${agenda.agenda} -> ${agenda.outcomes || 'Not Discussed'}` : `   • ${agenda.agenda}`);
-      });
-      lines.push('');
-    }
-
     // Footer
-    lines.push('━━━━━━━━━━━━━━━━━━━');
+    lines.push('', divider);
+
     if (!isMeetingEnded) {
-      lines.push('✨ Looking forward to seeing you! ✨');
-      lines.push('🔴 *Please join with your registered email address with NABARUN !!* 🔴');
+      lines.push(
+        '✨ Looking forward to seeing you! ✨',
+        '🔴 *Please join with your registered email address with NABARUN !!* 🔴'
+      );
     } else {
       lines.push('✨ Thank you for joining! ✨');
     }
 
     return lines.join('\n');
   }
+
 }

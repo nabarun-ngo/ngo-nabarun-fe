@@ -42,7 +42,7 @@
                 <!-- Value Area -->
                 <div class="w-full">
                     <!-- Read mode -->
-                    <span *ngIf="!(isColumnEditable(col, row) && view.show_form)" class="read-mode-value">
+                    <span *ngIf="!(isColumnEditable(col, row) && view.show_form)" class="read-mode-value output">
                         {{ (col.show_display_value ? displayValue(col.ref_data_section,row.value[col.columnDef]) :
                         row.value[col.columnDef]) || '-' }}
                     </span>
