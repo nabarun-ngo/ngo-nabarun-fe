@@ -28,4 +28,4 @@ export function getMyUnreadCount(http: HttpClient, rootUrl: string, params?: Get
   );
 }
 
-getMyUnreadCount.PATH = '/api/notifications/me/unread/count';
+getMyUnreadCount.PATH = '/api/notifications/me/unread-count';

@@ -1,10 +1,8 @@
 {
-  "apiKey": "AIzaSyD-kDzvTziMDGsDh40GJS3XVuL8A9_riQo",
-  "authDomain": "wengonabarun.firebaseapp.com",
-  "projectId": "wengonabarun",
-  "storageBucket": "wengonabarun.appspot.com",
-  "messagingSenderId": "496110742871",
-  "appId": "1:496110742871:web:ac779b109599ae719ae212",
-  "measurementId": "G-DY3169JJ99"
+  "apiKey": "AIzaSyB2EzMmq3uZUBcaubYMtISF-CKQPPujOxk",
+  "authDomain": "ngonabarun.firebaseapp.com",
+  "projectId": "ngonabarun",
+  "storageBucket": "ngonabarun.firebasestorage.app",
+  "messagingSenderId": "366182857375",
+  "appId": "1:366182857375:web:37146914cb8fd501a580aa"
 }
-

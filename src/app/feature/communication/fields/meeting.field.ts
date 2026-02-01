@@ -296,20 +296,20 @@ export const getMeetingSection = (
                 },
                 form_input_validation: isCreate ? [Validators.required] : []
             },
-            // {
-            //     field_name: 'Meeting Description',
-            //     field_value: meeting?.description || '',
-            //     editable: true,
-            //     form_control_name: 'description',
-            //     field_html_id: 'meeting_description',
-            //     form_input: {
-            //         html_id: 'meeting_description',
-            //         tagName: 'textarea',
-            //         inputType: 'text',
-            //         placeholder: 'Enter meeting description'
-            //     },
-            //     form_input_validation: []
-            // },
+            {
+                field_name: 'Meeting Description',
+                field_value: meeting?.description || '',
+                editable: true,
+                form_control_name: 'description',
+                field_html_id: 'meeting_description',
+                form_input: {
+                    html_id: 'meeting_description',
+                    tagName: 'textarea',
+                    inputType: 'text',
+                    placeholder: 'Enter meeting description'
+                },
+                form_input_validation: []
+            },
             {
                 field_name: 'Meeting Date',
                 field_value: meeting?.startTime ? date(meeting.startTime, 'yyyy-MM-dd') : '',
@@ -397,6 +397,7 @@ export const getMeetingAttendeeSection = (
     isCreate: boolean = false,
     users: User[] = []
 ): DetailedView => {
+    const isMeetingEnded = meeting?.endTime && meeting.endTime < new Date();
     const attendees: MeetingParticipant[] = meeting?.attendees ?? users.map(user => ({
         email: user.email,
         name: user.fullName,
@@ -426,7 +427,7 @@ export const getMeetingAttendeeSection = (
                 ...attendees.map(item => new FormGroup({
                     email: new FormControl(item.email, [Validators.required, Validators.email, duplicateEmailValidator]),
                     name: new FormControl(item.name),
-                    attended: new FormControl(item.attended),
+                    attended: new FormControl(item.attended, isMeetingEnded ? [Validators.required] : []),
                 }))
             ])
         }),
@@ -466,12 +467,16 @@ export const getMeetingAttendeeSection = (
                     header: 'Attended Meeting',
                     hideField: isCreate,
                     editable: !isCreate,
-                    validators: [],
+                    validators: isMeetingEnded ? [Validators.required] : [],
                     inputModel: {
                         html_id: 'attended',
-                        tagName: 'input',
-                        inputType: 'check',
-                        placeholder: '',
+                        tagName: 'select',
+                        inputType: '',
+                        placeholder: 'Select attendance status',
+                        selectList: [
+                            { key: 'Yes', displayValue: 'Yes' },
+                            { key: 'No', displayValue: 'No' }
+                        ]
                     },
                 }
             ],
@@ -499,6 +504,7 @@ export const getMeetingNotesSection = (
     refData: { [name: string]: KeyValue[] },
     isCreate: boolean = false,
 ): DetailedView => {
+    const isMeetingEnded = meeting?.endTime && meeting.endTime < new Date();
     const agendaItems: AgendaItem[] = meeting?.agenda ?? [];
     return {
         section_name: 'Meeting Agenda',
@@ -508,7 +514,7 @@ export const getMeetingNotesSection = (
             agenda: new FormArray([
                 ...agendaItems.map(item => new FormGroup({
                     agenda: new FormControl(item.agenda, [Validators.required]),
-                    outcomes: new FormControl(item.outcomes),
+                    outcomes: new FormControl(item.outcomes, isMeetingEnded ? [Validators.required] : []),
                 }))
             ])
         }),
@@ -524,7 +530,7 @@ export const getMeetingNotesSection = (
                     validators: [Validators.required],
                     inputModel: {
                         html_id: 'meeting_agenda',
-                        tagName: 'input',
+                        tagName: 'textarea',
                         inputType: 'text',
                         placeholder: 'Enter agenda item',
                     },
@@ -534,10 +540,10 @@ export const getMeetingNotesSection = (
                     columnDef: 'outcomes',
                     header: 'Outcomes',
                     editable: true,
-                    validators: [],
+                    validators: isMeetingEnded ? [Validators.required] : [],
                     inputModel: {
                         html_id: 'meeting_outcomes',
-                        tagName: 'input',
+                        tagName: 'textarea',
                         inputType: 'text',
                         placeholder: 'Enter outcomes',
                     },

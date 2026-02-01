@@ -29,6 +29,7 @@ import { registerFcmToken } from '../fn/notification-controller/register-fcm-tok
 import { RegisterFcmToken$Params } from '../fn/notification-controller/register-fcm-token';
 import { SuccessResponseNotificationResponseDto } from '../models/success-response-notification-response-dto';
 import { SuccessResponseNumber } from '../models/success-response-number';
+import { SuccessResponsePagedResultNotificationResponseDto } from '../models/success-response-paged-result-notification-response-dto';
 import { SuccessResponseString } from '../models/success-response-string';
 import { SuccessResponseVoid } from '../models/success-response-void';
 
@@ -84,7 +85,7 @@ export class NotificationControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getMyNotifications$Response(params?: GetMyNotifications$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseNotificationResponseDto>> {
+  getMyNotifications$Response(params?: GetMyNotifications$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultNotificationResponseDto>> {
     return getMyNotifications(this.http, this.rootUrl, params, context);
   }
 
@@ -98,14 +99,14 @@ export class NotificationControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getMyNotifications(params?: GetMyNotifications$Params, context?: HttpContext): Observable<SuccessResponseNotificationResponseDto> {
+  getMyNotifications(params?: GetMyNotifications$Params, context?: HttpContext): Observable<SuccessResponsePagedResultNotificationResponseDto> {
     return this.getMyNotifications$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseNotificationResponseDto>): SuccessResponseNotificationResponseDto => r.body)
+      map((r: StrictHttpResponse<SuccessResponsePagedResultNotificationResponseDto>): SuccessResponsePagedResultNotificationResponseDto => r.body)
     );
   }
 
   /** Path part for operation `getMyUnreadCount()` */
-  static readonly GetMyUnreadCountPath = '/api/notifications/me/unread/count';
+  static readonly GetMyUnreadCountPath = '/api/notifications/me/unread-count';
 
   /**
    * Get my unread notification count.
@@ -138,7 +139,7 @@ export class NotificationControllerService extends BaseService {
   }
 
   /** Path part for operation `markAsRead()` */
-  static readonly MarkAsReadPath = '/api/notifications/me/update/{id}/read';
+  static readonly MarkAsReadPath = '/api/notifications/me/update-as-read/{id}';
 
   /**
    * Mark notification as read.
@@ -171,7 +172,7 @@ export class NotificationControllerService extends BaseService {
   }
 
   /** Path part for operation `markAllAsRead()` */
-  static readonly MarkAllAsReadPath = '/api/notifications/me/update/read-all';
+  static readonly MarkAllAsReadPath = '/api/notifications/me/update-as-read-all';
 
   /**
    * Mark all my notifications as read.
@@ -204,7 +205,7 @@ export class NotificationControllerService extends BaseService {
   }
 
   /** Path part for operation `archiveNotification()` */
-  static readonly ArchiveNotificationPath = '/api/notifications/me/update/{id}/archive';
+  static readonly ArchiveNotificationPath = '/api/notifications/me/update-as-archive/{id}';
 
   /**
    * Archive notification.

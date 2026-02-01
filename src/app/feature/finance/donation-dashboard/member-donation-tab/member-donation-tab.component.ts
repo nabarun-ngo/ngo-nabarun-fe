@@ -152,7 +152,10 @@ export class MemberDonationTabComponent extends BaseDonationTabComponent {
 
       this.userSearch.advancedSearch?.searchFormFields.filter(f => f.inputModel.html_id == 'user_search').map(m => {
         m.inputModel.selectList = users.content?.map(m2 => {
-          return { key: m2.id, displayValue: m2.fullName } as KeyValue
+          return {
+            key: m2.id,
+            displayValue: m2.status == 'ACTIVE' ? `${m2.fullName}` : `${m2.fullName} (${m2.status})`
+          } as KeyValue
         })
       });
       let modal = this.modalService.openComponentDialog(SearchAndAdvancedSearchFormComponent,

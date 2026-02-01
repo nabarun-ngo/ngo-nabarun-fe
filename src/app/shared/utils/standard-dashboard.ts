@@ -41,7 +41,7 @@ export abstract class StandardDashboard<TData> extends Paginator
   protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
     return {
       pageNumber: 0,
-      pageSize: 100,
+      pageSize: 10,
       pageSizeOptions: [10, 20, 50, 100]
     }
   }
@@ -70,7 +70,7 @@ export abstract class StandardDashboard<TData> extends Paginator
       if (pagedData && pagedData.totalSize !== undefined) {
         this.pageEvent = {
           pageIndex: pagedData.pageIndex || 0,
-          pageSize: pagedData.pageSize || 100,
+          pageSize: pagedData.pageSize || 10,
           length: pagedData.totalSize
         };
       }

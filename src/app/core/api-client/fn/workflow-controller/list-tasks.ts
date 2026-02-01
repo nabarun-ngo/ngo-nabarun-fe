@@ -14,11 +14,7 @@ export interface ListTasks$Params {
   taskId?: string;
   workflowId?: string;
   type?: Array<'MANUAL' | 'AUTOMATIC'>;
-
-/**
- * Options Y/N
- */
-  completed?: string;
+  completed?: 'Y' | 'N';
 
 /**
  * Index of the page to retrieve

@@ -24,7 +24,7 @@ export interface ListInstancesByMe$Params {
   workflowId?: string;
   status?: Array<'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'FAILED' | 'CANCELLED'>;
   type?: Array<string>;
-  delegated?: boolean;
+  delegated?: 'Y' | 'N';
 }
 
 export function listInstancesByMe(http: HttpClient, rootUrl: string, params?: ListInstancesByMe$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultWorkflowInstanceDto>> {

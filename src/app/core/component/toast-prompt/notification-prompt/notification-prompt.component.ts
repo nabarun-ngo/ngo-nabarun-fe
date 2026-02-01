@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SpinnerVisibilityService } from 'ng-http-loader';
 import { NotificationService } from 'src/app/core/service/notification/notification.service';
 
 @Component({
@@ -7,25 +8,33 @@ import { NotificationService } from 'src/app/core/service/notification/notificat
     <app-generic-toast-prompt
       [show]="showPrompt"
       icon="🔔"
-      title="Enable Notifications"
-      description="Get real-time updates for donations and activities"
-      dismissText="Not now"
-      actionText="Enable"
+      [title]="title"
+      [description]="description"
+      [dismissText]="dismissText"
+      [actionText]="actionText"
+      [showAction]="showAction"
       (onDismiss)="dismissPrompt()"
       (onAction)="enableNotifications()"
     ></app-generic-toast-prompt>
   `
 })
 export class NotificationPromptComponent implements OnInit {
-    showPrompt = false;
+    showPrompt: boolean = false;
+    title!: string;
+    description!: string;
+    dismissText!: string;
+    actionText!: string;
+    showAction: boolean = true;
 
-    constructor(private notificationService: NotificationService) { }
+    constructor(private notificationService: NotificationService,
+    ) { }
 
     public showManually(): void {
         this.showPrompt = true;
     }
 
     ngOnInit(): void {
+        this.defaultPromptState();
         this.checkStatus();
     }
 
@@ -53,14 +62,19 @@ export class NotificationPromptComponent implements OnInit {
     }
 
     enableNotifications(): void {
+        this.title = 'Enabling Notifications...';
+        this.description = 'Please click on the Allow button to enable notifications...';
+        this.showAction = false;
         this.notificationService.requestPermission().subscribe({
             next: (token) => {
                 console.log('Push notifications enabled successfully');
                 this.showPrompt = false;
+                this.defaultPromptState();
             },
             error: (err) => {
                 console.error('Failed to enable push notifications', err);
                 this.showPrompt = false;
+                this.defaultPromptState()
             }
         });
     }
@@ -69,5 +83,13 @@ export class NotificationPromptComponent implements OnInit {
         this.showPrompt = false;
         // Store dismissal time
         localStorage.setItem('notification-prompt-dismissed', Date.now().toString());
+    }
+
+    private defaultPromptState(): void {
+        this.title = 'Enable Notifications';
+        this.description = 'Get real-time updates for donations and activities';
+        this.dismissText = 'Not now';
+        this.actionText = 'Enable';
+        this.showAction = true;
     }
 }

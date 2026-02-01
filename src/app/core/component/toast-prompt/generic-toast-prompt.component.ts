@@ -10,7 +10,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
           <h3>{{ title }}</h3>
           <p>{{ description }}</p>
         </div>
-        <div class="prompt-actions">
+        <div class="prompt-actions" *ngIf="showAction">
           <button (click)="onDismiss.emit()" class="btn-dismiss">{{ dismissText }}</button>
           <button (click)="onAction.emit()" class="btn-action" [style.background-color]="actionColor">{{ actionText }}</button>
         </div>
@@ -28,6 +28,7 @@ export class GenericToastPromptComponent {
   @Input() actionText = 'Action';
   @Input() actionColor = '#6366f1';
   @Input() bottomOffset = 20;
+  @Input() showAction = true;
 
   @Output() onDismiss = new EventEmitter<void>();
   @Output() onAction = new EventEmitter<void>();

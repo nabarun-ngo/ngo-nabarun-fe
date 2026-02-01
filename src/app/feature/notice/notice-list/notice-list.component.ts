@@ -5,9 +5,7 @@ import { Paginator } from 'src/app/shared/utils/paginator';
 import { NoticeDefaultValue } from '../notice.const';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { NoticeService } from '../notice.service';
-import { NoticeDetail, PaginateNoticeDetail } from 'src/app/core/api-client/models';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
-import { GoogleCalendarService } from 'src/app/core/service/google-calendar.service';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
 
@@ -28,7 +26,7 @@ export class NoticeListComponent extends Paginator implements OnInit {
 
   isCreateNotice: boolean = false;
   defaultValue = NoticeDefaultValue;
-  noticeList!: PaginateNoticeDetail;
+  noticeList!: any;
   // noticeListDetail!: {edit:boolean,notice:NoticeDetail}[];
 
   app_routes = AppRoute;
@@ -61,8 +59,8 @@ export class NoticeListComponent extends Paginator implements OnInit {
     }
 
     if (this.route.snapshot.data['data']) {
-      this.noticeList = this.route.snapshot.data['data'] as PaginateNoticeDetail;
-      this.itemLengthSubs.next(this.noticeList?.totalSize!);
+      this.noticeList = this.route.snapshot.data['data'] as any;
+      //  this.itemLengthSubs.next(this.noticeList?.totalSize!);
       ////console.log(this.noticeList)
     }
     //await this.googleCalService.init()
@@ -129,10 +127,10 @@ export class NoticeListComponent extends Paginator implements OnInit {
 
   override handlePageEvent($event: PageEvent): void {
     this.pageEvent = $event;
-    this.noticeService.retrieveNotices(this.pageNumber, this.pageSize).subscribe(data => {
-      this.noticeList = data!;
-      this.itemLengthSubs.next(data?.totalSize!);
-    });
+    // this.noticeService.retrieveNotices(this.pageNumber, this.pageSize).subscribe(data => {
+    //   this.noticeList = data!;
+    //   //this.itemLengthSubs.next(data?.totalSize!);
+    // });
   }
 
 
@@ -141,14 +139,14 @@ export class NoticeListComponent extends Paginator implements OnInit {
     if ($event.cancel) {
       this.isCreateNotice = false;
     } else {
-      this.noticeService.createNotice($event.formValue).subscribe(data => {
-        ////console.log(data)
-        this.isCreateNotice = false;
-        this.noticeService.retrieveNotices(this.pageNumber, this.pageSize).subscribe(data => {
-          this.noticeList = data!;
-          this.itemLengthSubs.next(data?.totalSize!);
-        });
-      });
+      // this.noticeService.createNotice($event.formValue).subscribe(data => {
+      //   ////console.log(data)
+      //   this.isCreateNotice = false;
+      //   this.noticeService.retrieveNotices(this.pageNumber, this.pageSize).subscribe(data => {
+      //     this.noticeList = data!;
+      //     //this.itemLengthSubs.next(data?.totalSize!);
+      //   });
+      // });
     }
   }
   editNotice($event: { id?: string; formValue?: any; cancel?: boolean }) {
@@ -160,25 +158,25 @@ export class NoticeListComponent extends Paginator implements OnInit {
 
 
   onSearch($event: { advancedSearch: boolean; reset: boolean; value: any; }) {
-    if ($event.advancedSearch && !$event.reset) {
-      // ////console.log($event.value)
-      this.noticeService.advancedSearch({
-        noticeTitle: $event.value.noticeTitle,
-        noticeNumber: $event.value.noticeNumber,
-        status: $event.value.status,
-        startDate: $event.value.startDate,
-        endDate: $event.value.endDate
-      }).subscribe(data => this.noticeList = data!)
-    }
-    else if ($event.advancedSearch && $event.reset) {
-      this.noticeService.retrieveNotices(this.pageNumber, this.pageSize).subscribe(data => {
-        this.noticeList = data!;
-        this.itemLengthSubs.next(data?.totalSize!);
-      });
-    }
-    else {
-      this.searchValue = $event.value as string;
-    }
+    // if ($event.advancedSearch && !$event.reset) {
+    //   // ////console.log($event.value)
+    //   this.noticeService.advancedSearch({
+    //     noticeTitle: $event.value.noticeTitle,
+    //     noticeNumber: $event.value.noticeNumber,
+    //     status: $event.value.status,
+    //     startDate: $event.value.startDate,
+    //     endDate: $event.value.endDate
+    //   }).subscribe(data => this.noticeList = data!)
+    // }
+    // else if ($event.advancedSearch && $event.reset) {
+    //   this.noticeService.retrieveNotices(this.pageNumber, this.pageSize).subscribe(data => {
+    //     this.noticeList = data!;
+    //     this.itemLengthSubs.next(data?.totalSize!);
+    //   });
+    // }
+    // else {
+    //   this.searchValue = $event.value as string;
+    // }
   }
 
 }

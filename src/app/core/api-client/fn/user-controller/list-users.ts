@@ -27,7 +27,7 @@ export interface ListUsers$Params {
   status?: 'DRAFT' | 'ACTIVE' | 'BLOCKED';
   roleCodes?: Array<string>;
   phoneNumber?: string;
-  public?: boolean;
+  public?: 'Y' | 'N';
 }
 
 export function listUsers(http: HttpClient, rootUrl: string, params?: ListUsers$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultUserDto>> {

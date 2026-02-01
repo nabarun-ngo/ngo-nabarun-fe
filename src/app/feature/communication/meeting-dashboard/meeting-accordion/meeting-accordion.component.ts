@@ -198,16 +198,18 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
     meetingNotesForm?.markAllAsTouched();
     meetingAttendeeForm?.markAllAsTouched();
 
-    if (meetingForm?.valid && meetingNotesForm?.valid && meetingAttendeeForm?.valid) {
+    if (meetingForm?.valid && meetingNotesForm?.get('agenda')?.valid && meetingAttendeeForm?.get('attendees')?.valid) {
       if (this.validateMeetingForm(meetingNotesForm, meetingAttendeeForm).hasError) {
         return;
       }
       const meeting = meetingForm.value;
       const attendees: MeetingParticipant[] = meetingAttendeeForm.value.attendees.map((d: MeetingParticipant) => {
+        const member = this.members.find((m) => m.email === d.email);
         return {
-          name: this.members.find((m) => m.email === d.email)?.fullName,
-          email: d.email
-        }
+          name: member?.fullName,
+          email: d.email,
+          id: member?.id
+        } as MeetingParticipant
       })
       const data = removeNullFields(meeting);
       this.communicationService.createMeeting({
@@ -234,16 +236,19 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
     meetingNotesForm?.markAllAsTouched();
     meetingAttendeeForm?.markAllAsTouched();
 
-    if (meetingForm?.valid && meetingNotesForm?.valid && meetingAttendeeForm?.valid) {
+    if (meetingForm?.valid && meetingNotesForm?.get('agenda')?.valid && meetingAttendeeForm?.get('attendees')?.valid) {
       if (this.validateMeetingForm(meetingNotesForm, meetingAttendeeForm).hasError) {
         return;
       }
 
-      const attendees = meetingAttendeeForm.value.attendees?.map((d: MeetingParticipant) => {
+      const attendees = meetingAttendeeForm.value.attendees?.map((d: any) => {
+        const member = this.members.find((m) => m.email === d.email);
         return {
-          name: this.members.find((m) => m.email === d.email)?.fullName,
-          email: d.email
-        }
+          name: member?.fullName,
+          email: d.email,
+          id: member?.id,
+          attended: d.attended
+        } as MeetingParticipant
       })
 
       const updated = compareObjects(meetingForm.value, meeting);
@@ -303,7 +308,7 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
     lines.push('');
 
     // Meeting title
-    lines.push(`📌 *${meeting.summary}*`);
+    lines.push(`📢✨ *${meeting.summary.replaceAll(' ', '')}* ✨📢`);
     lines.push('');
 
     // Date and time
@@ -311,12 +316,12 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
     lines.push(`🕐 *Time:* ${date(meeting.startTime, 'hh:mm a')} - ${date(meeting.endTime, 'hh:mm a')}`);
 
     // Location or meeting link
-    if (!isMeetingEnded && meeting.location) {
+    if (!isMeetingEnded && meeting.location && meeting.type == 'OFFLINE') {
       lines.push(`📍 *Location:* ${meeting.location}`);
     }
 
     if (meeting.type == 'ONLINE') {
-      lines.push(`🔗 *Platform:* Google Meet`);
+      lines.push(`💻 *Platform:* Google Meet`);
     }
 
     if (!isMeetingEnded && meeting.meetLink) {
@@ -328,7 +333,9 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
       lines.push('');
       lines.push(`👥 *Attendees:*`);
       meeting.attendees.forEach(attendee => {
-        lines.push(`   • ${attendee.name ?? attendee.email}`);
+        if (attendee.attended === 'Yes') {
+          lines.push(`🙋‍♂️ ${attendee.name ?? attendee.email}`);
+        }
       });
     }
 
@@ -336,7 +343,7 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
       lines.push('');
       lines.push(isMeetingEnded ? `📋 *Agenda & Outcome:*` : `📋 *Agenda:*`);
       meeting.agenda.forEach((agenda: AgendaItem) => {
-        lines.push(isMeetingEnded ? `   • ${agenda.agenda} -> ${agenda.outcomes || 'Not Discussed'}` : `   • ${agenda.agenda}`);
+        lines.push(isMeetingEnded ? `🔷 ${agenda.agenda} -> ${agenda.outcomes || 'Not Discussed'}` : `   • ${agenda.agenda}`);
       });
       lines.push('');
     }
@@ -345,7 +352,7 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
     lines.push('━━━━━━━━━━━━━━━━━━━');
     if (!isMeetingEnded) {
       lines.push('✨ Looking forward to seeing you! ✨');
-      lines.push('*Please join with your registered email address with NABARUN*');
+      lines.push('🔴 *Please join with your registered email address with NABARUN !!* 🔴');
     } else {
       lines.push('✨ Thank you for joining! ✨');
     }
