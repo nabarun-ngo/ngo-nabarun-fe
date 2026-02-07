@@ -5,8 +5,6 @@ import { environment } from 'src/environments/environment';
 import { Messaging, getToken, onMessage } from '@angular/fire/messaging';
 import { NotificationControllerService } from '../../api-client/services/notification-controller.service';
 import { NotificationResponseDto } from '../../api-client/models/notification-response-dto';
-import { PagedResultNotificationResponseDto, SuccessResponse, SuccessResponseNotificationResponseDto } from '../../api-client/models';
-import { PagedResult } from 'src/app/shared/model/paged-result.model';
 
 export type AppNotification = NotificationResponseDto;
 

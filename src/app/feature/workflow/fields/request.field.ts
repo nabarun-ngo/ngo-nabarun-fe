@@ -106,10 +106,10 @@ export const getRequestStepsSection = (
         section_name: 'Request Steps',
         section_type: 'editable_table',
         section_html_id: 'request_steps',
-        hide_section: isCreate || request?.steps.length == 0,
-        section_form: request?.steps ? new FormGroup({
+        hide_section: isCreate || request?.actualSteps?.length == 0,
+        section_form: request?.actualSteps ? new FormGroup({
             steps: new FormArray([
-                ...request?.steps?.map(item => new FormGroup({
+                ...request?.actualSteps?.map(item => new FormGroup({
                     stepName: new FormControl(item.name, [Validators.required]),
                     stepStatus: new FormControl(item.status, [Validators.required]),
                 }))
@@ -140,23 +140,23 @@ export const getRequestStepsSection = (
 
 export const getRequestAdditionalDetailSection = (m: WorkflowRequest | undefined, fields: FieldAttributeDto[], isCreate: boolean = false): DetailedView => {
     return {
-        section_name: 'Request Data',
+        section_name: 'Request Additional Data',
         section_type: 'key_value',
         section_html_id: 'request_data',
-        hide_section: !isCreate && (!m?.requestData || Object.keys(m?.requestData).length === 0),
+        hide_section: !isCreate && (!m?.requestData || Object.keys(m?.requestData || {}).length == 0),
         section_form: new FormGroup({}),
         show_form: isCreate,
         content: fields.map(field => ({
             editable: true,
             field_name: field.value,
             field_html_id: field.key,
-            field_value: m?.requestData[field.key],
+            field_value: m?.requestData ? m?.requestData[field.key] : undefined,
             form_control_name: field.key,
             form_input: {
                 html_id: field.key + '_field',
                 tagName: field.fieldType,
                 inputType: field.type,
-                placeholder: 'Enter ' + field.value,
+                placeholder: `Enter ${field.value}`,
                 selectList: field.fieldOptions.map(option => ({
                     key: option,
                     displayValue: option

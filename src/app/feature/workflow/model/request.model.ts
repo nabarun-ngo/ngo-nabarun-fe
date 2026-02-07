@@ -36,6 +36,7 @@ export interface WorkflowRequest {
     completedAt?: string;
     remarks?: string;
     steps: WorkflowStep[];
+    actualSteps: WorkflowStep[];
 }
 
 

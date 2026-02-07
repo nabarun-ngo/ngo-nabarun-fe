@@ -94,9 +94,11 @@ export class RequestService {
     );
   }
 
-  getAdditionalFields(requestType: string) {
+  getAdditionalFields(requestType: string, stepId?: string, taskId?: string) {
     return this.workflowController.additionalFields({
-      workflowType: requestType as any
+      workflowType: requestType,
+      stepId: stepId,
+      taskId: taskId
     }).pipe(
       map(d => d.responsePayload),
     );
