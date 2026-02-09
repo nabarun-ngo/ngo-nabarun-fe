@@ -79,13 +79,14 @@ export class RequestService {
     );
   }
 
-  withdrawRequest(id: string): Observable<any> {
-    // Currently no direct "cancel" in WorkflowControllerService, 
-    // but might be implemented as a task update or a different endpoint
-    // Returning an error observable for now
-    return new Observable(observer => {
-      observer.error('Withdrawal not implemented in new workflow API yet');
-    });
+  withdrawRequest(id: string, reason: string): Observable<WorkflowRequest> {
+    return this.workflowController.cancelWorkflow({
+      id,
+      reason
+    }).pipe(
+      map(d => d.responsePayload),
+      map(mapToWorkflowInstanceDtoToWorkflowRequest)
+    )
   }
 
   getRefData() {

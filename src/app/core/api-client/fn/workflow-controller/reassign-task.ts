@@ -8,7 +8,7 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseWorkflowInstanceDto } from '../../models/success-response-workflow-instance-dto';
+import { SuccessResponseWorkflowTaskDto } from '../../models/success-response-workflow-task-dto';
 
 export interface ReassignTask$Params {
   id: string;
@@ -25,7 +25,7 @@ export interface ReassignTask$Params {
   userId?: string;
 }
 
-export function reassignTask(http: HttpClient, rootUrl: string, params: ReassignTask$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseWorkflowInstanceDto>> {
+export function reassignTask(http: HttpClient, rootUrl: string, params: ReassignTask$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseWorkflowTaskDto>> {
   const rb = new RequestBuilder(rootUrl, reassignTask.PATH, 'post');
   if (params) {
     rb.path('id', params.id, {});
@@ -39,7 +39,7 @@ export function reassignTask(http: HttpClient, rootUrl: string, params: Reassign
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseWorkflowInstanceDto>;
+      return r as StrictHttpResponse<SuccessResponseWorkflowTaskDto>;
     })
   );
 }

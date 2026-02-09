@@ -20,13 +20,6 @@ export class CompletedTasksTabComponent extends PendingTasksTabComponent {
   protected override completed: boolean = true;
 
 
-  constructor(
-    protected override taskService: TaskService,
-    protected override requestService: RequestService,
-  ) {
-    super(taskService, requestService);
-  }
-
   override onInitHook(): void {
     this.setHeaderRow([
       {

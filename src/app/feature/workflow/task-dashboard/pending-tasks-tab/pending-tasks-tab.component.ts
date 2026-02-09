@@ -13,6 +13,7 @@ import { TaskService } from '../../service/task.service';
 import { RequestService } from '../../service/request.service';
 import { getTaskAdditionalDataSection, getTaskCheckListSection, getTaskDetailSection } from '../../fields/tasks.field';
 import { firstValueFrom } from 'rxjs';
+import { ModalService } from 'src/app/core/service/modal.service';
 
 
 @Component({
@@ -34,7 +35,7 @@ export class PendingTasksTabComponent extends Accordion<Task> implements TabComp
   protected actionName!: string;
 
   constructor(
-
+    protected modalService: ModalService,
     protected taskService: TaskService,
     protected requestService: RequestService,
   ) {
@@ -109,6 +110,10 @@ export class PendingTasksTabComponent extends Accordion<Task> implements TabComp
     }
     return [
       {
+        button_id: 'RELEASE',
+        button_name: 'Release'
+      },
+      {
         button_id: 'UPDATE',
         button_name: 'Update'
       }
@@ -130,6 +135,17 @@ export class PendingTasksTabComponent extends Accordion<Task> implements TabComp
       case 'UPDATE':
         this.showEditForm($event.rowIndex, ['work_detail', 'additional_data']);
         this.actionName = $event.buttonId;
+        break;
+      case 'RELEASE':
+        this.modalService.openNotificationModal({
+          title: 'Confirm Release',
+          description: 'Are you sure you want to release this task?',
+        }, 'confirmation', 'warning')
+          .onAccept$.subscribe(s => {
+            this.taskService.releaseTask(task.workflowId!, task.id!).subscribe(data => {
+              this.updateContentRow(data, $event.rowIndex)
+            })
+          })
         break;
       case 'CONFIRM':
         let form_work_detail = this.getSectionForm('work_detail', $event.rowIndex);

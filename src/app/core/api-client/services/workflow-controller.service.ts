@@ -13,6 +13,8 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { additionalFields } from '../fn/workflow-controller/additional-fields';
 import { AdditionalFields$Params } from '../fn/workflow-controller/additional-fields';
+import { cancelWorkflow } from '../fn/workflow-controller/cancel-workflow';
+import { CancelWorkflow$Params } from '../fn/workflow-controller/cancel-workflow';
 import { getInstance } from '../fn/workflow-controller/get-instance';
 import { GetInstance$Params } from '../fn/workflow-controller/get-instance';
 import { listAutomaticTasks } from '../fn/workflow-controller/list-automatic-tasks';
@@ -136,7 +138,7 @@ export class WorkflowControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  reassignTask$Response(params: ReassignTask$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseWorkflowInstanceDto>> {
+  reassignTask$Response(params: ReassignTask$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseWorkflowTaskDto>> {
     return reassignTask(this.http, this.rootUrl, params, context);
   }
 
@@ -152,9 +154,9 @@ export class WorkflowControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  reassignTask(params: ReassignTask$Params, context?: HttpContext): Observable<SuccessResponseWorkflowInstanceDto> {
+  reassignTask(params: ReassignTask$Params, context?: HttpContext): Observable<SuccessResponseWorkflowTaskDto> {
     return this.reassignTask$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseWorkflowInstanceDto>): SuccessResponseWorkflowInstanceDto => r.body)
+      map((r: StrictHttpResponse<SuccessResponseWorkflowTaskDto>): SuccessResponseWorkflowTaskDto => r.body)
     );
   }
 
@@ -385,6 +387,39 @@ export class WorkflowControllerService extends BaseService {
 }>): SuccessResponse & {
 'responsePayload'?: string;
 } => r.body)
+    );
+  }
+
+  /** Path part for operation `cancelWorkflow()` */
+  static readonly CancelWorkflowPath = '/api/workflows/{id}/cancel';
+
+  /**
+   * Cancel a workflow instance.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `cancelWorkflow()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  cancelWorkflow$Response(params: CancelWorkflow$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseWorkflowInstanceDto>> {
+    return cancelWorkflow(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Cancel a workflow instance.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `cancelWorkflow$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  cancelWorkflow(params: CancelWorkflow$Params, context?: HttpContext): Observable<SuccessResponseWorkflowInstanceDto> {
+    return this.cancelWorkflow$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseWorkflowInstanceDto>): SuccessResponseWorkflowInstanceDto => r.body)
     );
   }
 

@@ -3,6 +3,7 @@ import { map } from 'rxjs';
 import { UserDto, UserUpdateAdminDto, UserUpdateDto } from 'src/app/core/api-client/models';
 import { DmsControllerService, UserControllerService } from 'src/app/core/api-client/services';
 import { mapPagedUserDtoToPagedUser, mapUserDtoToUser } from '../models/member.mapper';
+import { KeyValue } from 'src/app/shared/model/key-value.model';
 
 @Injectable({
   providedIn: 'root'
@@ -32,8 +33,20 @@ export class MemberService {
   }
 
   fetchRefData(countryCode?: string, stateCode?: string) {
-    return this.userController.referenceData({ countryCode: countryCode, stateCode: stateCode }).pipe(map(d => d.responsePayload));
+    return this.userController.referenceData({ countryCode: countryCode, stateCode: stateCode })
+      .pipe(
+        map(d => d.responsePayload),
+        map(d => {
+          d.availableRoles = d.availableRoles?.filter(f => f.active);
+          d.userTitles = d.userTitles?.filter(f => f.active);
+          d.userStatuses = d.userStatuses?.filter(f => f.active);
+          d.loginMethods = d.loginMethods?.filter(f => f.active);
+          return d;
+        })
+      )
+      ;
   }
+
 
   uploadPicture(id: string, base64: string) {
     return this.dmsService.uploadFile({

@@ -132,12 +132,10 @@ export class MyRequestsTabComponent extends Accordion<WorkflowRequest> implement
         }
       ];
     }
-    return [
-      {
-        button_id: 'WITHDRAW',
-        button_name: 'Withdraw'
-      }
-    ];
+    return data.status == 'CANCELLED' || data.status == 'COMPLETED' ? [] : [{
+      button_id: 'WITHDRAW',
+      button_name: 'Cancel'
+    }];
   }
 
   protected override async onClick(event: {
@@ -266,8 +264,8 @@ export class MyRequestsTabComponent extends Accordion<WorkflowRequest> implement
       'warning'
     );
     decision.onAccept$.subscribe(() => {
-      this.requestService.withdrawRequest(this.itemList[rowIndex].id!).subscribe(() => {
-        this.removeContentRow(rowIndex);
+      this.requestService.withdrawRequest(this.itemList[rowIndex].id!, 'Cancelled by user').subscribe((d) => {
+        this.updateContentRow(d, rowIndex);
       });
     });
 
