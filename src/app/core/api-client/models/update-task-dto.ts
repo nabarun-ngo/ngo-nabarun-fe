@@ -7,7 +7,7 @@ export interface UpdateTaskDto {
   /**
    * Remarks for task update
    */
-  remarks: string;
+  remarks?: string;
 
   /**
    * Result data from task completion

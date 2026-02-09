@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { scrollToFirstInvalidControl } from 'src/app/core/service/form.service';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { AccordionButton, AccordionCell } from 'src/app/shared/model/accordion-list.model';
 import { date, removeNullFields } from 'src/app/core/service/utilities.service';
@@ -53,7 +52,7 @@ export class PendingTasksTabComponent extends Accordion<Task> implements TabComp
         rounded: true
       },
       {
-        value: 'Request Id',
+        value: 'Workflow Id',
         rounded: true
       },
       {
@@ -102,10 +101,6 @@ export class PendingTasksTabComponent extends Accordion<Task> implements TabComp
     }
     if (data.status == 'PENDING') {
       return [
-        {
-          button_id: 'VIEW_REQUEST',
-          button_name: 'View Request'
-        },
         {
           button_id: 'ACCEPT',
           button_name: 'Accept'
@@ -173,8 +168,8 @@ export class PendingTasksTabComponent extends Accordion<Task> implements TabComp
     const taskAddnlDetail = await firstValueFrom(this.requestService.getAdditionalFields(request.type!, task.stepId, task.taskId));
     const requestAddnlDetail = await firstValueFrom(this.requestService.getAdditionalFields(request.type!));
     this.addSectionInAccordion(getTaskAdditionalDataSection(task!, taskAddnlDetail), event.rowIndex)
-    this.addSectionInAccordion(getRequestAdditionalDetailSection(request!, requestAddnlDetail), event.rowIndex, false, true)
-    this.addSectionInAccordion(getRequestDetailSection(request!, this.getRefData()!), event.rowIndex, false, true)
+    this.addSectionInAccordion(getRequestAdditionalDetailSection(request!, requestAddnlDetail, false, true), event.rowIndex, false, true)
+    this.addSectionInAccordion(getRequestDetailSection(request!, this.getRefData()!, false, false, true), event.rowIndex, false, true)
   }
 
   override handlePageEvent($event: PageEvent): void {

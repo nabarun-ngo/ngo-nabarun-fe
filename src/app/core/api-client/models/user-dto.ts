@@ -29,7 +29,7 @@ export interface UserDto {
   roles: Array<RoleDto>;
   secondaryNumber?: PhoneNumberDto;
   socialMediaLinks: Array<LinkDto>;
-  status: 'DRAFT' | 'ACTIVE' | 'BLOCKED';
+  status: 'DRAFT' | 'ACTIVE' | 'BLOCKED' | 'DELETED';
   title?: string;
   userId?: string;
 }

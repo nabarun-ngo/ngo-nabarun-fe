@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { AfterViewInit, Component, Input } from '@angular/core';
+import { Validators } from '@angular/forms';
 import { getErrorMessage, injectNgControl } from 'src/app/core/service/form.service';
 import { KeyValue } from 'src/app/shared/model/key-value.model';
 import { inputType, UniversalInputModel } from 'src/app/shared/model/universal-input.model';
@@ -9,7 +10,7 @@ import { inputType, UniversalInputModel } from 'src/app/shared/model/universal-i
   templateUrl: './universal-input.component.html',
   styleUrls: ['./universal-input.component.scss']
 })
-export class UniversalInputComponent {
+export class UniversalInputComponent implements AfterViewInit {
 
   protected errorMessage = getErrorMessage
   protected ngControl = injectNgControl();
@@ -19,17 +20,20 @@ export class UniversalInputComponent {
 
   @Input({ required: true, alias: 'inputModel' })
   set model(_model: UniversalInputModel) {
-    //////console.log(_model)
     this.inputModel = _model;
     if (_model.autocomplete) {
-      // ////console.log(_model.selectList)
-      // this.autocompleteList = _model.selectList!;
-      //////console.log(this.autocompleteList)
+
     }
   }
 
   specialInputTypes: inputType[] = ['date', 'editor', 'html', 'radio', 'time', 'phone', 'check']
 
+  ngAfterViewInit(): void {
+    if (this.inputModel.inputType == 'email' && !this.ngControl.control?.hasValidator(Validators.email)) {
+      this.ngControl.control?.addValidators(Validators.email);
+      this.ngControl.control?.updateValueAndValidity();
+    }
+  }
 
 
   displayFn(id: string): string {

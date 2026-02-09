@@ -61,7 +61,7 @@ export const getTaskDetailSection = (m: Task, tab: workListTab, refData: { [name
             {
                 field_name: 'Assigned To',
                 field_html_id: 'assigned_to',
-                field_value: m.assignments?.map(x => `${x.assignedToName} (${x.status})`).join(', '),
+                field_value: m.assignments?.filter(x => x.status != 'DELETED').map(x => `${x.assignedToName} (${x.status})`).join(', '),
                 hide_field: !!m.assignedToId
             },
             {

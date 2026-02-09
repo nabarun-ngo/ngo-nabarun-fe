@@ -5,7 +5,6 @@
 export interface DonationFormDto {
   amount: number;
   contactNumber: string;
-  dialCode: string;
   email: string;
   fullName: string;
 }

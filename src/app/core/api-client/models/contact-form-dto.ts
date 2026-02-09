@@ -4,7 +4,6 @@
 
 export interface ContactFormDto {
   contactNumber: string;
-  dialCode: string;
   email: string;
   fullName: string;
   message: string;

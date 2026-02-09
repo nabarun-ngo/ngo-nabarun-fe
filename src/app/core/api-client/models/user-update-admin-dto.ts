@@ -5,5 +5,5 @@
 export interface UserUpdateAdminDto {
   loginMethods?: Array<'EMAIL' | 'PASSWORD'>;
   roleCodes?: Array<string>;
-  status?: 'DRAFT' | 'ACTIVE' | 'BLOCKED';
+  status?: 'DRAFT' | 'ACTIVE' | 'BLOCKED' | 'DELETED';
 }

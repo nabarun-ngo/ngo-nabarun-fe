@@ -10,6 +10,6 @@ export interface TaskAssignmentDto {
   id: string;
   notes?: string;
   roleName?: string | null;
-  status: 'PENDING' | 'ACCEPTED' | 'REMOVED' | 'REJECTED';
+  status: 'PENDING' | 'ACCEPTED' | 'REMOVED' | 'REJECTED' | 'DELETED';
   taskId: string;
 }

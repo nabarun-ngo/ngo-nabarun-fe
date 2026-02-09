@@ -25,6 +25,8 @@ import { listTasks } from '../fn/workflow-controller/list-tasks';
 import { ListTasks$Params } from '../fn/workflow-controller/list-tasks';
 import { processTask } from '../fn/workflow-controller/process-task';
 import { ProcessTask$Params } from '../fn/workflow-controller/process-task';
+import { reassignTask } from '../fn/workflow-controller/reassign-task';
+import { ReassignTask$Params } from '../fn/workflow-controller/reassign-task';
 import { startWorkflow } from '../fn/workflow-controller/start-workflow';
 import { StartWorkflow$Params } from '../fn/workflow-controller/start-workflow';
 import { SuccessResponse } from '../models/success-response';
@@ -116,6 +118,43 @@ export class WorkflowControllerService extends BaseService {
   updateTask(params: UpdateTask$Params, context?: HttpContext): Observable<SuccessResponseWorkflowTaskDto> {
     return this.updateTask$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseWorkflowTaskDto>): SuccessResponseWorkflowTaskDto => r.body)
+    );
+  }
+
+  /** Path part for operation `reassignTask()` */
+  static readonly ReassignTaskPath = '/api/workflows/{id}/tasks/{taskId}/reassign';
+
+  /**
+   * Reassign a workflow task.
+   *
+   * **Required Permissions:**
+   * - `update:work`
+   * _(All permissions required)_
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `reassignTask()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  reassignTask$Response(params: ReassignTask$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseWorkflowInstanceDto>> {
+    return reassignTask(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Reassign a workflow task.
+   *
+   * **Required Permissions:**
+   * - `update:work`
+   * _(All permissions required)_
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `reassignTask$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  reassignTask(params: ReassignTask$Params, context?: HttpContext): Observable<SuccessResponseWorkflowInstanceDto> {
+    return this.reassignTask$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseWorkflowInstanceDto>): SuccessResponseWorkflowInstanceDto => r.body)
     );
   }
 
