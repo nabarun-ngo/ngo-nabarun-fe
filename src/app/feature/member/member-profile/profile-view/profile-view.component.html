@@ -697,7 +697,7 @@
         <div class="my-4"></div>
 
         <!-- Roles and activity -->
-        <!-- <div class="bg-white p-3 shadow-sm rounded-sm">
+        <div class="bg-white p-3 shadow-sm rounded-sm">
 
             <div class="grid grid-cols-2">
                 <div>
@@ -709,22 +709,19 @@
                                     d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
                         </span>
-                        <span class="tracking-wide">Past Roles, Transactions, Documents, social media</span>
+                        <span class="tracking-wide">Past Roles</span>
                     </div>
-                    <ul class="list-inside space-y-2" *ngIf="profile.pastRoles">
-                        <li *ngIf="profile.pastRoles.length === 0">
-                            <div class="text-teal-600">No roles yet.</div>
+                    <ul class="list-inside space-y-2" *ngIf="profile.roleHistory">
+                        <li class="mx-2" *ngIf="profile.roleHistory.length === 0">
+                            <div class="text-gray-700 font-semibold">No roles yet.</div>
                         </li>
-                        <li *ngFor="let pastRole of profile.pastRoles; let i=index">
-                            <div class="text-teal-600 text-bold">{{pastRole.roleNames }}</div>
-                            <div class="text-gray-500 text-xs mt-1">{{pastRole.startDate | date:'MMMM y'}} -
-                                {{pastRole.endDate?(pastRole.endDate | date:'MMMM y'):'Now'}}</div>
+                        <li class="mx-2" *ngFor="let pastRole of profile.roleHistory; let i=index">
+                            <div class="text-gray-700 font-semibold">{{pastRole.roleNames.join(', ') }}</div>
+                            <div class="text-gray-500 text-xs mt-1">{{pastRole.period}}</div>
                         </li>
-
-
                     </ul>
                 </div>
-                <div>
+                <!-- <div>
                     <div class="flex items-center space-x-2 font-semibold text-gray-900 leading-8 mb-3">
                         <span clas="text-green-500">
                             <svg class="h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -752,9 +749,9 @@
                             <div class="text-gray-500 text-xs">March 2020 - Now</div>
                         </li>
                     </ul>
-                </div>
+                </div> -->
             </div>
-        </div> -->
+        </div>
         <!-- End of profile tab -->
 
     </div>

@@ -57,6 +57,7 @@ export { ProjectRefDataDto } from './models/project-ref-data-dto';
 export { RegisterFcmTokenDto } from './models/register-fcm-token-dto';
 export { ReverseTransactionDto } from './models/reverse-transaction-dto';
 export { RoleDto } from './models/role-dto';
+export { RoleHistoryDto } from './models/role-history-dto';
 export { SendEmailDto } from './models/send-email-dto';
 export { SendEmailResult } from './models/send-email-result';
 export { SignUpDto } from './models/sign-up-dto';

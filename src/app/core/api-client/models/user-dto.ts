@@ -6,6 +6,7 @@ import { AddressDto } from '../models/address-dto';
 import { LinkDto } from '../models/link-dto';
 import { PhoneNumberDto } from '../models/phone-number-dto';
 import { RoleDto } from '../models/role-dto';
+import { RoleHistoryDto } from '../models/role-history-dto';
 export interface UserDto {
   about?: string;
   activeDonor: boolean;
@@ -26,8 +27,7 @@ export interface UserDto {
   presentAddress?: AddressDto;
   primaryNumber?: PhoneNumberDto;
   publicProfile: boolean;
-  roleHistory?: {
-};
+  roleHistory?: Array<RoleHistoryDto>;
   roles: Array<RoleDto>;
   secondaryNumber?: PhoneNumberDto;
   socialMediaLinks: Array<LinkDto>;
