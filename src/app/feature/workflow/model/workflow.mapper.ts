@@ -51,7 +51,8 @@ export function mapToWorkflowInstanceDtoToWorkflowRequest(dto: WorkflowInstanceD
         updatedAt: dto.updatedAt,
         completedAt: dto.completedAt,
         remarks: dto.remarks,
-        steps: (dto.steps || []).map(s => mapToWorkflowStepDtoToWorkflowStep(s))
+        steps: (dto.steps || []).map(s => mapToWorkflowStepDtoToWorkflowStep(s)),
+        actualSteps: (dto.actualSteps || []).map(s => mapToWorkflowStepDtoToWorkflowStep(s))
     };
 }
 

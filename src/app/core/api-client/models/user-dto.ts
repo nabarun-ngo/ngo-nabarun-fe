@@ -26,10 +26,12 @@ export interface UserDto {
   presentAddress?: AddressDto;
   primaryNumber?: PhoneNumberDto;
   publicProfile: boolean;
+  roleHistory?: {
+};
   roles: Array<RoleDto>;
   secondaryNumber?: PhoneNumberDto;
   socialMediaLinks: Array<LinkDto>;
-  status: 'DRAFT' | 'ACTIVE' | 'BLOCKED';
+  status: 'DRAFT' | 'ACTIVE' | 'BLOCKED' | 'DELETED';
   title?: string;
   userId?: string;
 }

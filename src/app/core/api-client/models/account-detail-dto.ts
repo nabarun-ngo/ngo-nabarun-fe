@@ -7,7 +7,7 @@ import { UpiDetailDto } from '../models/upi-detail-dto';
 export interface AccountDetailDto {
   accountHolder?: string;
   accountHolderName?: string;
-  accountStatus: 'ACTIVE' | 'INACTIVE' | 'BLOCKED' | 'CLOSED';
+  accountStatus: 'ACTIVE' | 'CLOSED';
   accountType: 'PRINCIPAL' | 'GENERAL' | 'DONATION' | 'PUBLIC_DONATION' | 'WALLET';
   activatedOn?: string;
   bankDetail?: BankDetailDto;

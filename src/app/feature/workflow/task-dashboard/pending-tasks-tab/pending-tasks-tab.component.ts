@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { scrollToFirstInvalidControl } from 'src/app/core/service/form.service';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { AccordionButton, AccordionCell } from 'src/app/shared/model/accordion-list.model';
 import { date, removeNullFields } from 'src/app/core/service/utilities.service';
@@ -12,7 +11,9 @@ import { SearchEvent } from 'src/app/shared/components/search-and-advanced-searc
 import { Task } from '../../model/task.model';
 import { TaskService } from '../../service/task.service';
 import { RequestService } from '../../service/request.service';
-import { getTaskCheckListSection, getTaskDetailSection } from '../../fields/tasks.field';
+import { getTaskAdditionalDataSection, getTaskCheckListSection, getTaskDetailSection } from '../../fields/tasks.field';
+import { firstValueFrom } from 'rxjs';
+import { ModalService } from 'src/app/core/service/modal.service';
 
 
 @Component({
@@ -34,7 +35,7 @@ export class PendingTasksTabComponent extends Accordion<Task> implements TabComp
   protected actionName!: string;
 
   constructor(
-
+    protected modalService: ModalService,
     protected taskService: TaskService,
     protected requestService: RequestService,
   ) {
@@ -52,7 +53,7 @@ export class PendingTasksTabComponent extends Accordion<Task> implements TabComp
         rounded: true
       },
       {
-        value: 'Request Id',
+        value: 'Workflow Id',
         rounded: true
       },
       {
@@ -102,10 +103,6 @@ export class PendingTasksTabComponent extends Accordion<Task> implements TabComp
     if (data.status == 'PENDING') {
       return [
         {
-          button_id: 'VIEW_REQUEST',
-          button_name: 'View Request'
-        },
-        {
           button_id: 'ACCEPT',
           button_name: 'Accept'
         }
@@ -113,8 +110,8 @@ export class PendingTasksTabComponent extends Accordion<Task> implements TabComp
     }
     return [
       {
-        button_id: 'VIEW_REQUEST',
-        button_name: 'View Request'
+        button_id: 'RELEASE',
+        button_name: 'Release'
       },
       {
         button_id: 'UPDATE',
@@ -127,15 +124,6 @@ export class PendingTasksTabComponent extends Accordion<Task> implements TabComp
   protected override onClick($event: { buttonId: string; rowIndex: number; }) {
     let task = this.itemList![$event.rowIndex];
     switch ($event.buttonId) {
-      case 'VIEW_REQUEST':
-        const workflowId = task.workflowId!;
-        this.requestService.getRequestDetail(workflowId).subscribe(request => {
-          this.addSectionInAccordion(getRequestDetailSection(request!, this.getRefData()!), $event.rowIndex)
-          this.requestService.getAdditionalFields(request.type!).subscribe(s => {
-            this.addSectionInAccordion(getRequestAdditionalDetailSection(request!, s), $event.rowIndex)
-          })
-        })
-        break;
       case 'ACCEPT':
         this.taskService.updateTask(task.workflowId!, task.id!,
           'IN_PROGRESS', 'Accepted Task').subscribe(data => {
@@ -145,16 +133,30 @@ export class PendingTasksTabComponent extends Accordion<Task> implements TabComp
         this.actionName = $event.buttonId;
         break;
       case 'UPDATE':
-        this.showEditForm($event.rowIndex, ['work_detail']);
+        this.showEditForm($event.rowIndex, ['work_detail', 'additional_data']);
         this.actionName = $event.buttonId;
+        break;
+      case 'RELEASE':
+        this.modalService.openNotificationModal({
+          title: 'Confirm Release',
+          description: 'Are you sure you want to release this task?',
+        }, 'confirmation', 'warning')
+          .onAccept$.subscribe(s => {
+            this.taskService.releaseTask(task.workflowId!, task.id!).subscribe(data => {
+              this.updateContentRow(data, $event.rowIndex)
+            })
+          })
         break;
       case 'CONFIRM':
         let form_work_detail = this.getSectionForm('work_detail', $event.rowIndex);
-        if (form_work_detail?.valid) {
+        let form_additional_data = this.getSectionForm('additional_data', $event.rowIndex);
+
+        if (form_work_detail?.valid && form_additional_data?.valid) {
           const remarks = form_work_detail.value['remarks'];
           const status = form_work_detail.value['status'];
+          const additionalData = form_additional_data.value;
           this.taskService.updateTask(task.workflowId!, task.id!,
-            status, remarks).subscribe(data => {
+            status, remarks, additionalData).subscribe(data => {
               this.hideForm($event.rowIndex)
               if (data.completedAt) {
                 this.removeContentRow($event.rowIndex)
@@ -164,7 +166,8 @@ export class PendingTasksTabComponent extends Accordion<Task> implements TabComp
             })
         } else {
           form_work_detail?.markAllAsTouched();
-          scrollToFirstInvalidControl();
+          form_additional_data?.markAllAsTouched();
+          this.scrollToError(false, $event.rowIndex)
         }
         break;
       case 'CANCEL':
@@ -174,8 +177,15 @@ export class PendingTasksTabComponent extends Accordion<Task> implements TabComp
     }
   }
 
-  protected override onAccordionOpen(event: { rowIndex: number; }): void {
-
+  protected override async onAccordionOpen(event: { rowIndex: number; }): Promise<void> {
+    const task = this.itemList![event.rowIndex];
+    const workflowId = task.workflowId!;
+    const request = await firstValueFrom(this.requestService.getRequestDetail(workflowId));
+    const taskAddnlDetail = await firstValueFrom(this.requestService.getAdditionalFields(request.type!, task.stepId, task.taskId));
+    const requestAddnlDetail = await firstValueFrom(this.requestService.getAdditionalFields(request.type!));
+    this.addSectionInAccordion(getTaskAdditionalDataSection(task!, taskAddnlDetail), event.rowIndex)
+    this.addSectionInAccordion(getRequestAdditionalDetailSection(request!, requestAddnlDetail, false, true), event.rowIndex, false, true)
+    this.addSectionInAccordion(getRequestDetailSection(request!, this.getRefData()!, false, false, true), event.rowIndex, false, true)
   }
 
   override handlePageEvent($event: PageEvent): void {

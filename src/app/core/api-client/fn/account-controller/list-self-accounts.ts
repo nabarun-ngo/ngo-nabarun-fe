@@ -13,7 +13,7 @@ import { SuccessResponsePagedResultAccountDetailDto } from '../../models/success
 export interface ListSelfAccounts$Params {
   pageIndex: number;
   pageSize: number;
-  status?: Array<'ACTIVE' | 'INACTIVE' | 'BLOCKED' | 'CLOSED'>;
+  status?: Array<'ACTIVE' | 'CLOSED'>;
   type?: Array<'PRINCIPAL' | 'GENERAL' | 'DONATION' | 'PUBLIC_DONATION' | 'WALLET'>;
   accountHolderId?: string;
   accountHolderName?: string;

@@ -1,4 +1,4 @@
-import { PagedResultUserDto, UserDto } from "src/app/core/api-client/models";
+import { PagedResultUserDto, RoleDto, UserDto } from "src/app/core/api-client/models";
 import { Link, PagedUser, Role, User } from "./member.model";
 import { mapPagedResult } from "src/app/shared/model/paged-result.model";
 
@@ -37,7 +37,24 @@ export function mapUserDtoToUser(user: UserDto): User {
         status: user.status,
         title: user.title,
         userId: user.userId,
+        roleHistory: mapRolesRecord(user.roleHistory as any)
     }
+}
+
+function mapRolesRecord(
+    input: Record<string, RoleDto[]>
+): Record<string, Role[]> {
+
+    return Object.fromEntries(
+        Object.entries(input).map(([key, roles]) => [
+            key,
+            roles.map(role => ({
+                roleCode: role.roleCode,
+                description: role.description,
+                roleName: role.roleName
+            } as Role))
+        ])
+    );
 }
 
 /**

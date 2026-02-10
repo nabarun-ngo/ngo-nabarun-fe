@@ -1,10 +1,11 @@
-import { DetailedView } from "src/app/shared/model/detailed-view.model";
+import { DetailedView, DetailedViewField } from "src/app/shared/model/detailed-view.model";
 import { Task } from "../model/task.model";
 import { WorkflowConstant, workListTab } from "../workflow.const";
 import { FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import { date } from "src/app/core/service/utilities.service";
 import { KeyValue } from "src/app/shared/model/key-value.model";
 import { SearchAndAdvancedSearchModel } from "src/app/shared/model/search-and-advanced-search.model";
+import { FieldAttributeDto } from "src/app/core/api-client/models";
 
 export const getTaskDetailSection = (m: Task, tab: workListTab, refData: { [name: string]: KeyValue[]; }): DetailedView => {
     return {
@@ -45,7 +46,7 @@ export const getTaskDetailSection = (m: Task, tab: workListTab, refData: { [name
                 field_html_id: 'status',
                 field_value: m.status,
                 show_display_value: true,
-                ref_data_section: WorkflowConstant.refDataKey.workflowTaskStatuses,
+                ref_data_section: WorkflowConstant.refDataKey.visibleTaskStatuses,
                 editable: true,
                 form_control_name: 'status',
                 form_input: {
@@ -53,14 +54,14 @@ export const getTaskDetailSection = (m: Task, tab: workListTab, refData: { [name
                     inputType: '',
                     html_id: 'status',
                     placeholder: 'Select status',
-                    selectList: refData[WorkflowConstant.refDataKey.visibleTaskStatuses]
+                    selectList: refData[WorkflowConstant.refDataKey.completedTaskStatuses]
                 },
                 form_input_validation: [Validators.required]
             },
             {
                 field_name: 'Assigned To',
                 field_html_id: 'assigned_to',
-                field_value: m.assignments?.map(x => `${x.assignedToName} (${x.status})`).join(', '),
+                field_value: m.assignments?.filter(x => x.status != 'DELETED').map(x => `${x.assignedToName} (${x.status})`).join(', '),
                 hide_field: !!m.assignedToId
             },
             {
@@ -93,9 +94,38 @@ export const getTaskDetailSection = (m: Task, tab: workListTab, refData: { [name
                     html_id: 'remarks',
                     placeholder: 'Enter remarks',
                 },
-                form_input_validation: [Validators.required]
+                form_input_validation: []
             }
         ]
+    };
+}
+
+export const getTaskAdditionalDataSection = (m: Task, fields: FieldAttributeDto[], isCreate: boolean = false): DetailedView => {
+    return {
+        section_name: 'Task Additional Data',
+        section_type: 'key_value',
+        section_html_id: 'additional_data',
+        hide_section: !isCreate && (!m?.resultData || Object.keys(m?.resultData || {}).length == 0),
+        section_form: new FormGroup({}),
+        show_form: isCreate,
+        content: fields.map(field => ({
+            editable: true,
+            field_name: field.value,
+            field_html_id: field.key,
+            field_value: m?.resultData ? m?.resultData[field.key] : undefined,
+            form_control_name: field.key,
+            form_input: {
+                html_id: field.key + '_field',
+                tagName: field.fieldType,
+                inputType: field.type,
+                placeholder: 'Enter ' + field.value,
+                selectList: field.fieldOptions.map(option => ({
+                    key: option,
+                    displayValue: option
+                })),
+            },
+            form_input_validation: field.isMandatory ? [Validators.required] : [],
+        }) as DetailedViewField)
     };
 }
 

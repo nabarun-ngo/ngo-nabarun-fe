@@ -24,7 +24,7 @@ export interface ListUsers$Params {
   firstName?: string;
   lastName?: string;
   email?: string;
-  status?: 'DRAFT' | 'ACTIVE' | 'BLOCKED';
+  status?: 'DRAFT' | 'ACTIVE' | 'BLOCKED' | 'DELETED';
   roleCodes?: Array<string>;
   phoneNumber?: string;
   public?: 'Y' | 'N';

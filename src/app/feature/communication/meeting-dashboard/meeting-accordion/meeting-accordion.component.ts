@@ -13,6 +13,7 @@ import { User } from 'src/app/feature/member/models/member.model';
 import { FormGroup, Validators } from '@angular/forms';
 import { filterFormChange } from 'src/app/core/service/form.service';
 import { ModalService } from 'src/app/core/service/modal.service';
+import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 
 @Component({
   selector: 'app-meeting-accordion',
@@ -37,6 +38,7 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
 
   constructor(
     protected communicationService: CommunicationService,
+    protected userIdentityService: UserIdentityService,
     private dialog: ModalService
   ) {
     super();
@@ -123,7 +125,7 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
     return data.endTime && data.endTime < new Date();
   }
 
-  protected override onClick(event: { buttonId: string; rowIndex: number; }): void {
+  protected override async onClick(event: { buttonId: string; rowIndex: number; }): Promise<void> {
     if (event.buttonId === 'UPDATE_MEETING') {
       this.showEditForm(event.rowIndex, ['meeting_detail', 'meeting_notes', 'meeting_attendee']);
       this.activeButtonId = event.buttonId;
@@ -131,12 +133,12 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
       this.hideForm(event.rowIndex);
     } else if (event.buttonId === 'CONFIRM') {
       if (this.activeButtonId === 'UPDATE_MEETING') {
-        this.performUpdateMeeting(event.rowIndex);
+        await this.performUpdateMeeting(event.rowIndex);
       }
     } else if (event.buttonId === 'CANCEL_CREATE') {
       this.hideForm(0, true);
     } else if (event.buttonId === 'CONFIRM_CREATE') {
-      this.performCreateMeeting();
+      await this.performCreateMeeting();
     } else if (event.buttonId === 'SHARE_WHATSAPP') {
       const message = this.createWhatsAppMessage(this.itemList[event.rowIndex]);
       shareToWhatsApp(message);
@@ -189,7 +191,7 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
     })
   }
 
-  private performCreateMeeting(): void {
+  private async performCreateMeeting(): Promise<void> {
     const meetingForm = this.getSectionForm('meeting_detail', 0, true);
     const meetingNotesForm = this.getSectionForm('meeting_notes', 0, true);
     const meetingAttendeeForm = this.getSectionForm('meeting_attendee', 0, true);
@@ -212,20 +214,22 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
         } as MeetingParticipant
       })
       const data = removeNullFields(meeting);
-      this.communicationService.createMeeting({
-        ...data,
-        attendees: attendees,
-        agenda: meetingNotesForm.value.agenda,
-      }).subscribe(data => {
-        this.hideForm(0, true);
-        this.addContentRow(data, true);
+      await this.preCreateCheck(attendees, () => {
+        this.communicationService.createMeeting({
+          ...data,
+          attendees: attendees,
+          agenda: meetingNotesForm.value.agenda,
+        }).subscribe(data => {
+          this.hideForm(0, true);
+          this.addContentRow(data, true);
+        });
       });
     } else {
       this.scrollToError(true);
     }
   }
 
-  private performUpdateMeeting(rowIndex: number): void {
+  private async performUpdateMeeting(rowIndex: number): Promise<void> {
     const meeting = this.itemList[rowIndex];
     if (!meeting.id) return;
 
@@ -255,13 +259,16 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
       if (updated.startTime || updated.endTime) {
         updated.meetingDate = meetingForm.value.meetingDate;
       }
-      this.communicationService.updateMeeting(meeting.id, {
-        ...updated,
-        attendees: attendees,
-        agenda: meetingNotesForm.value.agenda,
-      }).subscribe(data => {
-        this.hideForm(rowIndex);
-        this.updateContentRow(data, rowIndex);
+
+      await this.preCreateCheck(attendees, () => {
+        this.communicationService.updateMeeting(meeting.id, {
+          ...updated,
+          attendees: attendees,
+          agenda: meetingNotesForm.value.agenda,
+        }).subscribe(data => {
+          this.hideForm(rowIndex);
+          this.updateContentRow(data, rowIndex);
+        });
       });
     } else {
       this.scrollToError(false, rowIndex);
@@ -391,6 +398,25 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
     }
 
     return lines.join('\n');
+  }
+
+  private async preCreateCheck(attendees: MeetingParticipant[], functionToExecute: Function) {
+    const user = await this.userIdentityService.getUser();
+    const isUserAttended = attendees.some(a => a.id === user?.profile_id!);
+    if (isUserAttended) {
+      functionToExecute();
+      return;
+    }
+    const modal = this.dialog.openNotificationModal({
+      title: 'Warning',
+      description: 'You have not added yourself in this meeting. Are you sure to continue?',
+    }, 'confirmation', 'warning', {
+      acceptButtonText: 'No',
+      declineButtonText: 'Yes'
+    });
+    modal.onDecline$.subscribe(() => {
+      functionToExecute();
+    });
   }
 
 }

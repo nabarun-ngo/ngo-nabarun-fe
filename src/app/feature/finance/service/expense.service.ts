@@ -214,7 +214,7 @@ export class ExpenseService {
     */
   fetchAccounts(options?: {
     type?: Array<'PRINCIPAL' | 'GENERAL' | 'DONATION' | 'PUBLIC_DONATION' | 'WALLET'>;
-    status?: Array<'ACTIVE' | 'INACTIVE' | 'BLOCKED'>;
+    status?: Array<'ACTIVE' | 'CLOSED'>;
     accountId?: string;
     accountHolderId?: string;
     pageIndex?: number;

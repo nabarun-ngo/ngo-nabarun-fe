@@ -20,6 +20,7 @@ import { filterFormChange } from 'src/app/core/service/form.service';
 import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { RequestService } from '../../service/request.service';
+import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 
 @Component({
   selector: 'app-my-requests-tab',
@@ -43,7 +44,8 @@ export class MyRequestsTabComponent extends Accordion<WorkflowRequest> implement
     protected route: ActivatedRoute,
     protected requestService: RequestService,
     protected router: Router,
-    protected modalService: ModalService
+    protected modalService: ModalService,
+    protected userIdentityService: UserIdentityService
   ) {
     super();
   }
@@ -130,21 +132,19 @@ export class MyRequestsTabComponent extends Accordion<WorkflowRequest> implement
         }
       ];
     }
-    return [
-      {
-        button_id: 'WITHDRAW',
-        button_name: 'Withdraw'
-      }
-    ];
+    return data.status == 'CANCELLED' || data.status == 'COMPLETED' ? [] : [{
+      button_id: 'WITHDRAW',
+      button_name: 'Cancel'
+    }];
   }
 
-  protected override onClick(event: {
+  protected override async onClick(event: {
     buttonId: string;
     rowIndex: number;
-  }): void {
+  }): Promise<void> {
     switch (event.buttonId) {
       case 'CREATE':
-        this.performCreateRequest();
+        await this.performCreateRequest();
         break;
       case 'CANCEL_CREATE':
         this.hideForm(0, true);
@@ -200,10 +200,14 @@ export class MyRequestsTabComponent extends Accordion<WorkflowRequest> implement
     form?.valueChanges.pipe(filterFormChange(form.value)).subscribe((val) => {
       //console.log(val);
       if (val.requestType) {
-        this.updateFieldVisibility('request_detail', 'initiatedFor', 0, val.requestType !== 'JOIN_REQUEST', true);
-        this.updateFieldValidators('request_detail', 0, {
-          'initiatedFor': val.requestType !== 'JOIN_REQUEST' ? [Validators.required] : [],
-        }, true);
+
+        if (isDelegated) {
+          this.updateFieldVisibility('request_detail', 'initiatedFor', 0, val.requestType !== 'JOIN_REQUEST', true);
+          this.updateFieldValidators('request_detail', 0, {
+            'initiatedFor': val.requestType !== 'JOIN_REQUEST' ? [Validators.required] : [],
+          }, true);
+        }
+
         this.requestService.getAdditionalFields(val.requestType).subscribe(s => {
           this.removeSectionInAccordion('request_data', 0, true);
           this.addSectionInAccordion(getRequestAdditionalDetailSection(undefined, s, true), 0, true)
@@ -224,7 +228,7 @@ export class MyRequestsTabComponent extends Accordion<WorkflowRequest> implement
 
   }
 
-  private performCreateRequest() {
+  private async performCreateRequest() {
     //console.log(this.isDelegatedRequest);
     let request_form = this.getSectionForm('request_detail', 0, true);
     let request_data_form = this.getSectionForm('request_data', 0, true);
@@ -234,8 +238,12 @@ export class MyRequestsTabComponent extends Accordion<WorkflowRequest> implement
     if (request_form?.valid && request_data_form?.valid) {
       const type = request_form?.value.requestType;
       const data = { ...request_data_form?.value };
-      const requestedFor = (this.isDelegatedRequest && request_form?.value.requestType !== 'JOIN_REQUEST') ?
-        request_form?.value.initiatedFor : undefined;
+      let requestedFor;
+      if (this.isDelegatedRequest && request_form?.value.requestType !== 'JOIN_REQUEST') {
+        requestedFor = request_form?.value.initiatedFor;
+      } else if (!this.isDelegatedRequest) {
+        requestedFor = (await this.userIdentityService.getUser())?.profile_id;
+      }
       const isExtUser = request_form?.value.requestType === 'JOIN_REQUEST';
       const extUserEmail = isExtUser ? data.email : undefined;
       this.requestService.createRequest(type, data, requestedFor, isExtUser, extUserEmail).subscribe(s => {
@@ -256,8 +264,8 @@ export class MyRequestsTabComponent extends Accordion<WorkflowRequest> implement
       'warning'
     );
     decision.onAccept$.subscribe(() => {
-      this.requestService.withdrawRequest(this.itemList[rowIndex].id!).subscribe(() => {
-        this.removeContentRow(rowIndex);
+      this.requestService.withdrawRequest(this.itemList[rowIndex].id!, 'Cancelled by user').subscribe((d) => {
+        this.updateContentRow(d, rowIndex);
       });
     });
 

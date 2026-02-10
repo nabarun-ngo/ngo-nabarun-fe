@@ -16,12 +16,24 @@ export interface AdditionalFields$Params {
  * Workflow type
  */
   workflowType: string;
+
+/**
+ * Step ID
+ */
+  stepId?: string;
+
+/**
+ * Task ID
+ */
+  taskId?: string;
 }
 
 export function additionalFields(http: HttpClient, rootUrl: string, params: AdditionalFields$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayFieldAttributeDto>> {
   const rb = new RequestBuilder(rootUrl, additionalFields.PATH, 'get');
   if (params) {
     rb.query('workflowType', params.workflowType, {});
+    rb.query('stepId', params.stepId, {});
+    rb.query('taskId', params.taskId, {});
   }
 
   return http.request(

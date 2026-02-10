@@ -51,9 +51,10 @@ export interface User {
     primaryNumber?: PhoneNumber;
     publicProfile: boolean;
     roles: Array<Role>;
+    roleHistory: Record<string, Array<Role>>;
     secondaryNumber?: PhoneNumber;
     socialMediaLinks: Array<Link>;
-    status: 'DRAFT' | 'ACTIVE' | 'BLOCKED';
+    status: 'DRAFT' | 'ACTIVE' | 'BLOCKED' | 'DELETED';
     title?: string;
     userId?: string;
 }

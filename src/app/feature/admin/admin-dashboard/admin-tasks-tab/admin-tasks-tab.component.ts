@@ -10,6 +10,9 @@ import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { Accordion } from 'src/app/shared/utils/accordion';
 import { AdminService } from '../../admin.service';
 import { AdminDefaultValue } from '../../admin.const';
+import { getRequestAdditionalDetailSection, getRequestDetailSection } from 'src/app/feature/workflow/fields/request.field';
+import { firstValueFrom } from 'rxjs';
+import { RequestService } from 'src/app/feature/workflow/service/request.service';
 
 @Component({
   selector: 'app-admin-tasks-tab',
@@ -18,7 +21,7 @@ import { AdminDefaultValue } from '../../admin.const';
 })
 export class AdminTasksTabComponent extends Accordion<Task> implements TabComponentInterface<string> {
 
-  constructor(private readonly adminService: AdminService) {
+  constructor(private readonly adminService: AdminService, private readonly requestService: RequestService) {
     super();
   }
 
@@ -63,7 +66,15 @@ export class AdminTasksTabComponent extends Accordion<Task> implements TabCompon
       })
     }
   }
-  protected override onAccordionOpen(event: { rowIndex: number; }): void {
+  protected override async onAccordionOpen(event: { rowIndex: number; }): Promise<void> {
+    const task = this.itemList![event.rowIndex];
+
+    const workflowId = task.workflowId!;
+    const request = await firstValueFrom(this.requestService.getRequestDetail(workflowId));
+    const requestAddnlDetail = await firstValueFrom(this.requestService.getAdditionalFields(request.type!));
+    this.addSectionInAccordion(getRequestAdditionalDetailSection(request!, requestAddnlDetail, false, true), event.rowIndex, false, true)
+    this.addSectionInAccordion(getRequestDetailSection(request!, this.getRefData()!, false, false, true), event.rowIndex, false, true)
+
 
   }
   protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {

@@ -8,7 +8,7 @@ import { sanitizeBase64 } from 'src/app/core/service/utilities.service';
 import { MemberService } from 'src/app/feature/member/service/member.service';
 import { UserDto } from 'src/app/core/api-client/models/user-dto';
 import { LinkDto, UserUpdateAdminDto, UserUpdateDto } from 'src/app/core/api-client/models';
-import { KeyValue } from '../../model/key-value.model';
+import { KeyValue } from '../../../../shared/model/key-value.model';
 import { ModalService } from 'src/app/core/service/modal.service';
 
 @Component({

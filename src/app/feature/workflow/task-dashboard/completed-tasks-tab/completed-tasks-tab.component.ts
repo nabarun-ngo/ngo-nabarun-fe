@@ -20,13 +20,6 @@ export class CompletedTasksTabComponent extends PendingTasksTabComponent {
   protected override completed: boolean = true;
 
 
-  constructor(
-    protected override taskService: TaskService,
-    protected override requestService: RequestService,
-  ) {
-    super(taskService, requestService);
-  }
-
   override onInitHook(): void {
     this.setHeaderRow([
       {
@@ -38,7 +31,7 @@ export class CompletedTasksTabComponent extends PendingTasksTabComponent {
         rounded: true
       },
       {
-        value: 'Request Id',
+        value: 'Workflow Id',
         rounded: true
       },
       {
@@ -80,10 +73,6 @@ export class CompletedTasksTabComponent extends PendingTasksTabComponent {
 
   protected override prepareDefaultButtons(data: Task, options?: { [key: string]: any }): AccordionButton[] {
     return [
-      {
-        button_id: 'VIEW_REQUEST',
-        button_name: 'View Request'
-      }
     ];
   }
 

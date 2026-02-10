@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
-import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -14,17 +14,14 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
-import { MAT_SELECT_SCROLL_STRATEGY, MatSelectModule } from '@angular/material/select';
+import { MatSelectModule } from '@angular/material/select';
 import { SearchAndAdvancedSearchFormComponent } from './components/search-and-advanced-search-form/search-and-advanced-search-form.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DocumentListComponent } from './components/generic/document-list/document-list.component';
 import { AccordionListComponent } from './components/generic/accordion-list/accordion-list.component';
 import { DetailedViewComponent } from './components/generic/detailed-view/detailed-view.component';
 import { FileUploadComponent } from './components/generic/file-upload/file-upload.component';
 import { MAT_RADIO_DEFAULT_OPTIONS, MatRadioModule } from '@angular/material/radio';
 import { UniversalInputComponent } from './components/generic/universal-input/universal-input.component';
-import { ProfileCardComponent } from './components/profile-card/profile-card.component';
-import { ProfileViewComponent } from './components/profile-view/profile-view.component';
 import { ReplaceNullPipe } from './pipes/replace-null.pipe';
 import { HtmlSanitizerPipe } from './pipes/html-sanitizer.pipe';
 import { AngularEditorModule } from '@kolkov/angular-editor';
@@ -64,8 +61,6 @@ import { SafeResourceUrlPipe } from './pipes/safe-resource-url.pipe';
     DetailedViewComponent,
     FileUploadComponent,
     UniversalInputComponent,
-    ProfileCardComponent,
-    ProfileViewComponent,
     ReplaceNullPipe,
     HtmlSanitizerPipe,
     DynamicInjectPipe,
@@ -126,8 +121,6 @@ import { SafeResourceUrlPipe } from './pipes/safe-resource-url.pipe';
     AccordionListComponent,
     FileUploadComponent,
     MatInputModule,
-    ProfileCardComponent,
-    ProfileViewComponent,
     ReplaceNullPipe,
     HtmlSanitizerPipe,
     UniversalInputComponent,
