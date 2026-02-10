@@ -26,7 +26,8 @@ export interface UserDto {
   presentAddress?: AddressDto;
   primaryNumber?: PhoneNumberDto;
   publicProfile: boolean;
-  roleHistory?: Array<RoleDto>;
+  roleHistory?: {
+};
   roles: Array<RoleDto>;
   secondaryNumber?: PhoneNumberDto;
   socialMediaLinks: Array<LinkDto>;
