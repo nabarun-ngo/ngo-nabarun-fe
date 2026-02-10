@@ -77,6 +77,7 @@ export { SuccessResponseArrayJobDetail } from './models/success-response-array-j
 export { SuccessResponseArrayKeyValueDto } from './models/success-response-array-key-value-dto';
 export { SuccessResponseArrayStaticDocumentDto } from './models/success-response-array-static-document-dto';
 export { SuccessResponseArrayString } from './models/success-response-array-string';
+export { SuccessResponseArraySuccessResponse } from './models/success-response-array-success-response';
 export { SuccessResponseBoolean } from './models/success-response-boolean';
 export { SuccessResponseDocumentDto } from './models/success-response-document-dto';
 export { SuccessResponseDonationDto } from './models/success-response-donation-dto';

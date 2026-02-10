@@ -7,7 +7,9 @@ import { MemberListComponent } from './member-list/member-list.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { MemberSearchPipe } from './member.pipe';
 import { MemberRoleComponent } from './member-role/member-role.component';
-import {DragDropModule} from '@angular/cdk/drag-drop';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ProfileViewComponent } from './member-profile/profile-view/profile-view.component';
+import { ProfileCardComponent } from './member-list/profile-card/profile-card.component';
 
 
 @NgModule({
@@ -15,17 +17,18 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
     MemberProfileComponent,
     MemberListComponent,
     MemberSearchPipe,
-    MemberRoleComponent
+    MemberRoleComponent,
+    ProfileCardComponent,
+    ProfileViewComponent,
   ],
   imports: [
     CommonModule,
     SharedModule,
     MemberRoutingModule,
     DragDropModule,
-],
-  providers:[
+  ],
+  providers: [
     MemberSearchPipe,
   ]
 })
 export class MemberModule { }
- 
