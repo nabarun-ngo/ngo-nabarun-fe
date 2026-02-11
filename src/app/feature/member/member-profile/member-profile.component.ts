@@ -17,6 +17,7 @@ import { ModalService } from 'src/app/core/service/modal.service';
 import { DocumentCategory } from 'src/app/shared/components/document-link/document-link.model';
 import { KeyValue } from 'src/app/shared/model/key-value.model';
 import { Doc, mapDocDtoToDoc } from 'src/app/shared/model/document.model';
+import { SCOPE } from 'src/app/core/constant/auth-scope.const';
 
 @Component({
   selector: 'app-member-profile',
@@ -87,9 +88,13 @@ export class MemberProfileComponent implements OnInit {
       ]
     }
 
-    this.memberService.getUserDocument(this.member.id).subscribe(data => {
-      this.documents = data.map(mapDocDtoToDoc)
-    })
+    if (this.identity.isAccrediatedTo(SCOPE.update.user) || this.isSelfProfile) {
+      this.memberService.getUserDocument(this.member.id).subscribe(data => {
+        this.documents = data.map(mapDocDtoToDoc)
+      })
+    }
+
+
 
   }
 
