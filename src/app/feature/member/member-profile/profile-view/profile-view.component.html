@@ -207,16 +207,16 @@
                         <span class="ml-auto">
                             <app-universal-input formControlName="aadharNumber" *ngIf="mode == 'edit_admin'"
                                 [inputModel]="{
-                                labelName: editAdminForm.value.aadharNumber && editAdminForm.controls.aadharNumber.valid ? 'Aadhar Number' : '',
+                                labelName: editAdminForm.value['aadharNumber'] && editAdminForm.controls['aadharNumber'].valid ? 'Aadhar Number' : '',
                                 html_id:'aadharNumber',
                                 tagName : 'input' ,
                                 inputType : 'text',
                                 placeholder:'Enter Aadhar Number'
                             }"></app-universal-input>
                             <app-universal-input formControlName="aadharNumberFile"
-                                *ngIf="mode == 'edit_admin' && editAdminForm.value.aadharNumber && editAdminForm.controls.aadharNumber.valid"
+                                *ngIf="mode == 'edit_admin' && editAdminForm.value['aadharNumber'] && editAdminForm.controls['aadharNumber'].valid"
                                 [inputModel]="{
-                                labelName: editAdminForm.value.aadharNumber && editAdminForm.controls.aadharNumber.valid ? 'Upload Aadhar Card' : '',
+                                labelName: editAdminForm.value['aadharNumber'] && editAdminForm.controls['aadharNumber'].valid ? 'Upload Aadhar Card' : '',
                                 html_id:'aadharNumber_file',
                                 tagName : 'input' ,
                                 inputType : 'file',
@@ -229,16 +229,16 @@
                         <span>PAN Number</span>
                         <span class="ml-auto">
                             <app-universal-input formControlName="panNumber" *ngIf="mode == 'edit_admin'" [inputModel]="{
-                                labelName: editAdminForm.value.panNumber && editAdminForm.controls.panNumber.valid ? 'PAN Number' : '',
+                                labelName: editAdminForm.value['panNumber'] && editAdminForm.controls['panNumber'].valid ? 'PAN Number' : '',
                                 html_id:'panNumber',
                                 tagName : 'input' ,
                                 inputType : 'text',
                                 placeholder:'Enter PAN Number'
                             }"></app-universal-input>
                             <app-universal-input formControlName="panNumberFile"
-                                *ngIf="mode == 'edit_admin' && editAdminForm.value.panNumber && editAdminForm.controls.panNumber.valid"
+                                *ngIf="mode == 'edit_admin' && editAdminForm.value['panNumber'] && editAdminForm.controls['panNumber'].valid"
                                 [inputModel]="{
-                                labelName: editAdminForm.value.panNumber && editAdminForm.controls.panNumber.valid ? 'Upload PAN Card' : '',
+                                labelName: editAdminForm.value['panNumber'] && editAdminForm.controls['panNumber'].valid ? 'Upload PAN Card' : '',
                                 html_id:'panNumber_file',
                                 tagName : 'input' ,
                                 inputType : 'file',
