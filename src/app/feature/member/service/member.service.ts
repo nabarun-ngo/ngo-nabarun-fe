@@ -49,17 +49,25 @@ export class MemberService {
 
 
   uploadPicture(id: string, base64: string) {
+    return this.uploadDocument(id, base64, 'PROFILE', 'profile_pic.png');
+  }
+
+  uploadDocument(id: string, base64: string, entityType: string, filename: string) {
     return this.dmsService.uploadFile({
       body: {
-        contentType: 'image/png',
+        contentType: base64.includes('pdf') ? 'application/pdf' : 'image/png',
         fileBase64: base64,
-        filename: 'profile_pic.png',
+        filename: filename,
         documentMapping: [{
           entityId: id,
-          entityType: 'PROFILE'
+          entityType: entityType as any
         }]
       }
     }).pipe(map(d => d.responsePayload))
+  }
+
+  getUserDocument(id: string) {
+    return this.dmsService.getDocuments({ type: 'PROFILE_DOC' as any, id }).pipe(map(d => d.responsePayload));
   }
 
   getUserDetail(id: string) {

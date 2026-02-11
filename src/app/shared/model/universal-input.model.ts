@@ -1,6 +1,6 @@
 import { KeyValue } from "./key-value.model";
 
-export type inputType = 'text' | 'email' | 'phone' | 'password' | 'number' | 'date' | 'time' | 'editor' | 'html' | 'multiselect' | 'radio' | 'check' | '';
+export type inputType = 'text' | 'email' | 'phone' | 'password' | 'number' | 'date' | 'time' | 'editor' | 'html' | 'multiselect' | 'radio' | 'check' | 'file' | '';
 
 export interface UniversalInputModel {
     tagName: 'input' | 'textarea' | 'select';

@@ -62,6 +62,15 @@ export interface User {
     status: 'DRAFT' | 'ACTIVE' | 'BLOCKED' | 'DELETED';
     title?: string;
     userId?: string;
+
+
+    /////
+    panNumber?: string;
+    aadharNumber?: string;
+    panFile?: string;
+    aadharFile?: string;
+    roleCodes: string[];
+
 }
 
 export type PagedUser = PagedResult<User>;

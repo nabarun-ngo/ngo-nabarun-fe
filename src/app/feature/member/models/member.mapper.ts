@@ -37,7 +37,8 @@ export function mapUserDtoToUser(user: UserDto): User {
         status: user.status,
         title: user.title,
         userId: user.userId,
-        roleHistory: user.roleHistory
+        roleHistory: user.roleHistory,
+        roleCodes: user.roles.map(role => role.roleCode),
     }
 }
 

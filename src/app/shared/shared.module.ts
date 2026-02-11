@@ -146,6 +146,8 @@ import { SafeResourceUrlPipe } from './pipes/safe-resource-url.pipe';
     MatAutocompleteModule,
     ScrollingModule,
     OverlayModule,
+    DocumentListComponent,
+
   ],
 
   providers: [{

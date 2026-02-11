@@ -181,3 +181,30 @@
         (change)="onCheckboxChange($event.checked)">{{inputModel.labelName}}</mat-checkbox>
     <mat-error>{{ errorMessage(ngControl.control.errors,inputModel.labelName)}}</mat-error>
 </ng-container>
+
+<ng-container *ngIf="inputModel.tagName == 'input' && inputModel.inputType == 'file'">
+    <label *ngIf="inputModel.labelName"
+        [for]="inputModel.html_id ?inputModel.html_id : inputModel.tagName+'_'+inputModel.inputType+'_'+inputModel.labelName"
+        class="block text-sm font-medium text-gray-700 mb-2">{{inputModel.labelName}}</label>
+
+    <mat-form-field class="dense-3 w-full" [appearance]="inputModel.appearance ? inputModel.appearance :'outline'"
+        [style]="inputModel.style? inputModel.style : ''" [ngClass]="inputModel.cssClass ? inputModel.cssClass : ''">
+
+        <input matInput [value]="getFileName()" [placeholder]="inputModel.placeholder!" readonly
+            (click)="fileInput.click()" [ngClass]="inputModel.cssInputClass ? inputModel.cssInputClass : ''"
+            style="cursor: pointer;">
+
+        <button type="button" mat-icon-button matSuffix *ngIf="getFileName()" (click)="removeFile($event)">
+            <mat-icon tooltip="Remove file">close</mat-icon>
+        </button>
+
+        <button type="button" mat-icon-button matSuffix *ngIf="!getFileName()" (click)="fileInput.click()">
+            <mat-icon tooltip="Select file">attach_file</mat-icon>
+        </button>
+
+        <input type="file" #fileInput (change)="onFileSelected($event)" style="display: none;"
+            [accept]="inputModel.props?.['accept'] || '*/*'">
+
+        <mat-error>{{ errorMessage(ngControl.control.errors,inputModel.labelName)}}</mat-error>
+    </mat-form-field>
+</ng-container>

@@ -13,6 +13,10 @@ import { UserIdentityService } from 'src/app/core/service/user-identity.service'
 import { firstValueFrom } from 'rxjs';
 import { UserUpdateAdminDto, UserUpdateDto } from 'src/app/core/api-client/models';
 import { User } from '../models/member.model';
+import { ModalService } from 'src/app/core/service/modal.service';
+import { DocumentCategory } from 'src/app/shared/components/document-link/document-link.model';
+import { KeyValue } from 'src/app/shared/model/key-value.model';
+import { Doc, mapDocDtoToDoc } from 'src/app/shared/model/document.model';
 
 @Component({
   selector: 'app-member-profile',
@@ -30,6 +34,9 @@ export class MemberProfileComponent implements OnInit {
   alertList: AlertData[] = [];
   constant = UserConstant
   isSelfCompleteProfile!: boolean;
+
+  documents: Doc[] = []
+
   constructor(
     private sharedDataService: SharedDataService,
     private route: ActivatedRoute,
@@ -79,6 +86,11 @@ export class MemberProfileComponent implements OnInit {
         }
       ]
     }
+
+    this.memberService.getUserDocument(this.member.id).subscribe(data => {
+      this.documents = data.map(mapDocDtoToDoc)
+    })
+
   }
 
   onNavigationClick($event: NavigationButtonModel) {
@@ -96,14 +108,16 @@ export class MemberProfileComponent implements OnInit {
       // if (this.isSelfCompleteProfile) {
       //   userDetail.profileCompleted = true;
       // }
-      let user = $event.profile as User;
+      let user = $event.profile as Partial<User>;
 
       if (user.picture) {
         const pic = await firstValueFrom(this.memberService.uploadPicture($event.id!, user.picture));
         user.picture = pic.fileUrl;
       }
 
-      this.memberService.updateMyProfiledetail(user).subscribe(data => {
+      this.memberService.updateMyProfiledetail({
+        ...user,
+      }).subscribe(data => {
         this.member = data!
         this.mode = 'view_self';
         this.alertList.push(AppAlert.profile_updated_self)
@@ -116,12 +130,29 @@ export class MemberProfileComponent implements OnInit {
     } else if ($event.actionName == 'CHANGE_MODE') {
       this.mode = $event.mode!;
     } else if ($event.actionName == 'ADMIN_UPDATE') {
-      this.memberService.updateProfiledetail($event?.id!, $event.profile as User).subscribe(data => {
+      const profile = $event.profile as Partial<User>;
+
+      if (profile.aadharNumber) {
+        await firstValueFrom(this.memberService.uploadDocument($event.id!, profile.aadharFile!, 'PROFILE_DOC', 'Aadhar Card'));
+      }
+      if (profile.panNumber) {
+        await firstValueFrom(this.memberService.uploadDocument($event.id!, profile.panFile!, 'PROFILE_DOC', 'Pan Card'));
+      }
+      profile.aadharFile = undefined
+      profile.panFile = undefined
+      this.memberService.updateProfiledetail($event?.id!, {
+        loginMethods: profile.loginMethod as any,
+        roleCodes: profile.roleCodes as any,
+        aadharNumber: profile.aadharNumber,
+        panNumber: profile.panNumber,
+        status: profile.status,
+      }).subscribe(data => {
         this.member = data!
         this.mode = 'view_admin';
-        //this.memberService.getUserDetail($event.profile?.id!).subscribe(data=>this.member=data!)
       })
     }
 
   }
+
+
 }
