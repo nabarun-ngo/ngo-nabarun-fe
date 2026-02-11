@@ -21,7 +21,7 @@ import { ProjectSelectionService } from 'src/app/feature/project/service/project
 })
 export abstract class BaseDonationTabComponent extends Accordion<Donation> implements TabComponentInterface<PagedDonations>, OnDestroy {
     protected formSubscription?: Subscription;
-    protected permissions: { canCreateDonation: boolean; canUpdateDonation: boolean; } | undefined;
+    protected permissions: { canCreateDonation: boolean; canUpdateDonation: boolean; canCreateGuestDonation: boolean; } | undefined;
     protected detailedViews: DetailedView[] = [];
 
 
@@ -39,6 +39,7 @@ export abstract class BaseDonationTabComponent extends Accordion<Donation> imple
         this.permissions = {
             canCreateDonation: this.identityService.isAccrediatedTo(SCOPE.create.donation),
             canUpdateDonation: this.identityService.isAccrediatedTo(SCOPE.update.donation),
+            canCreateGuestDonation: this.identityService.isAccrediatedTo(SCOPE.create.donation_guest),
         }
     }
 

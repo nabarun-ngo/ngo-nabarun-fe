@@ -13,6 +13,8 @@ import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.i
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { DonationDefaultValue, donationTab } from '../finance.const';
 import { donationSearchInput } from '../fields/donation.field';
+import { UserIdentityService } from 'src/app/core/service/user-identity.service';
+import { SCOPE } from 'src/app/core/constant/auth-scope.const';
 
 @Component({
   selector: 'app-donation-dashboard',
@@ -26,6 +28,11 @@ export class DonationDashboardComponent extends StandardTabbedDashboard<donation
   @ViewChild(SelfDonationTabComponent) selfDonationTab!: SelfDonationTabComponent;
   @ViewChild(GuestDonationTabComponent) guestDonationTab!: GuestDonationTabComponent;
   @ViewChild(MemberDonationTabComponent) memberDonationTab!: MemberDonationTabComponent;
+
+  protected permissions: {
+    canViewGuestDonation?: boolean;
+    canViewMemberDonation?: boolean;
+  } = {}
 
   protected navigations: NavigationButtonModel[] = [
     {
@@ -52,6 +59,7 @@ export class DonationDashboardComponent extends StandardTabbedDashboard<donation
   constructor(
     private sharedDataService: SharedDataService,
     protected override route: ActivatedRoute,
+    private identityService: UserIdentityService
   ) {
     super(route);
   }
@@ -74,6 +82,8 @@ export class DonationDashboardComponent extends StandardTabbedDashboard<donation
     }
 
     this.searchInput = donationSearchInput(this.getCurrentTab(), this.refData!);
+    this.permissions!.canViewGuestDonation = this.identityService.isAccrediatedToAny(SCOPE.read.donation_guest);
+    this.permissions!.canViewMemberDonation = this.identityService.isAccrediatedToAny(SCOPE.read.user_donations);
   }
 
 

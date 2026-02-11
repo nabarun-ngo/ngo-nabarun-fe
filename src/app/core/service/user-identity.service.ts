@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { AuthUser } from '../model/auth-user.model';
 import { firstValueFrom, map } from 'rxjs';
 import { Router } from '@angular/router';
@@ -24,24 +24,22 @@ export class UserIdentityService {
     private oAuthService: AuthService,
     private router: Router,
   ) {
-    this.oAuthService.isAuthenticated$.subscribe(data => {
-      ////console.log(data)
-      return this.isLoggedIn = data;
-    });
-    this.oAuthService.user$.pipe(map(m => m as AuthUser)).subscribe(data => {
-      this.loggedInUser = data;
-      ////console.log(data)
-    });
+
+  }
+
+  async configure() {
+    this.isLoggedIn = await this.isUserLoggedIn();
+    if (this.isLoggedIn) {
+      this.loggedInUser = await this.getUser();
+      console.log('Logged in User ->', this.loggedInUser)
+    }
     this.oAuthService.getAccessTokenSilently().subscribe((claims: string) => {
       if (claims && claims) {
         const decodedToken = jwtDecode(claims) as any;
         this.grantedScopes = decodedToken['permissions'] as string[];
-        ////console.log(this.grantedScopes)
+        console.log('Granted Scopes ->', this.grantedScopes)
       }
     });
-  }
-
-  configure() {
     const app_url = new URL(window.location.href);
     if (app_url.searchParams.has("state") && app_url.searchParams.has("code")) {
       this.oAuthService.handleRedirectCallback().subscribe(data => {
