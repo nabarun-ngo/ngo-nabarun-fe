@@ -37,25 +37,11 @@ export function mapUserDtoToUser(user: UserDto): User {
         status: user.status,
         title: user.title,
         userId: user.userId,
-        roleHistory: mapRolesRecord(user.roleHistory as any)
+        roleHistory: user.roleHistory,
+        roleCodes: user.roles.map(role => role.roleCode),
     }
 }
 
-function mapRolesRecord(
-    input: Record<string, RoleDto[]>
-): Record<string, Role[]> {
-
-    return Object.fromEntries(
-        Object.entries(input).map(([key, roles]) => [
-            key,
-            roles.map(role => ({
-                roleCode: role.roleCode,
-                description: role.description,
-                roleName: role.roleName
-            } as Role))
-        ])
-    );
-}
 
 /**
  * Map API PagedResultUserDto to domain PagedUser

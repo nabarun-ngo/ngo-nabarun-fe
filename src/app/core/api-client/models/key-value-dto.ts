@@ -7,4 +7,6 @@ export interface KeyValueDto {
   description?: string;
   displayValue: string;
   key: string;
+  value: {
+};
 }

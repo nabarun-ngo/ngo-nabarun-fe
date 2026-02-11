@@ -8,6 +8,8 @@ export interface UserRefDataDto {
   countries?: Array<KeyValueDto>;
   districts?: Array<KeyValueDto>;
   loginMethods?: Array<KeyValueDto>;
+  maxUserPerRole?: Array<KeyValueDto>;
+  minUserPerRole?: Array<KeyValueDto>;
   phoneCodes?: Array<KeyValueDto>;
   states?: Array<KeyValueDto>;
   userGenders?: Array<KeyValueDto>;

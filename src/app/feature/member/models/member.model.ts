@@ -29,6 +29,11 @@ export interface Link {
     linkValue: string;
 }
 
+export interface RoleHistory {
+    period: string;
+    roleNames: Array<string>;
+    roles: Array<Role>;
+}
 
 export interface User {
     about?: string;
@@ -44,6 +49,7 @@ export interface User {
     id: string;
     lastName: string;
     loginMethod: Array<string>;
+    roleHistory?: Array<RoleHistory>;
     middleName?: string;
     permanentAddress?: Address;
     picture?: string;
@@ -51,12 +57,20 @@ export interface User {
     primaryNumber?: PhoneNumber;
     publicProfile: boolean;
     roles: Array<Role>;
-    roleHistory: Record<string, Array<Role>>;
     secondaryNumber?: PhoneNumber;
     socialMediaLinks: Array<Link>;
     status: 'DRAFT' | 'ACTIVE' | 'BLOCKED' | 'DELETED';
     title?: string;
     userId?: string;
+
+
+    /////
+    panNumber?: string;
+    aadharNumber?: string;
+    panFile?: string;
+    aadharFile?: string;
+    roleCodes: string[];
+
 }
 
 export type PagedUser = PagedResult<User>;

@@ -15,7 +15,7 @@ export class DocumentListComponent {
   @Input('showHeading') showHeading: boolean = true;
 
   canViewAttachment: boolean = true;
-  canDeleteAttachment: boolean = true;
+  canDeleteAttachment: boolean = false;
 
   constructor(private dmsService: DmsControllerService) { }
 

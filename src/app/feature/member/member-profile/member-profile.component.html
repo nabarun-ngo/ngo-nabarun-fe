@@ -1,12 +1,13 @@
 <main class="p-4 m-4 bg-gray-200 rounded-lg">
     <div class="flex flex-col">
-        <app-alert *ngFor="let alertData of alertList" [alertData]="alertData" ></app-alert>
+        <app-alert *ngFor="let alertData of alertList" [alertData]="alertData"></app-alert>
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 mt-2">
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                <app-profile-view [profile]="member" (onUpdate)="onUpdate($event)" [mode]="mode"></app-profile-view>
+                <app-profile-view [profile]="member" [documents]="documents" (onUpdate)="onUpdate($event)"
+                    [mode]="mode"></app-profile-view>
             </div>
         </div>
     </div>
-    <app-page-navigation-buttons [navigations]="navigations" (onClick)="onNavigationClick($event)"
-    ></app-page-navigation-buttons>
+    <app-page-navigation-buttons [navigations]="navigations"
+        (onClick)="onNavigationClick($event)"></app-page-navigation-buttons>
 </main>
