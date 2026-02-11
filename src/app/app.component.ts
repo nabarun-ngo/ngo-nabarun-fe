@@ -26,7 +26,7 @@ export class AppComponent implements OnInit {
     /**
      * Configuring App callback
      */
-    this.identityService.configure();
+    await this.identityService.configure();
 
     /**
      * configuring idle timeout

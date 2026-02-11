@@ -55,7 +55,10 @@ export class SecuredDashboardComponent implements OnInit {
             tile_show_badge: false,
             tile_is_loading: true,
             tile_value: ''
-          }
+          },
+          hide_tile: !this.identityService.isAccrediatedToAny(
+            SCOPE.read.users,//using minimal role to check if user has access to any user
+          )
         },
         {
           tile_html_id: 'accountTile',
@@ -66,7 +69,10 @@ export class SecuredDashboardComponent implements OnInit {
             tile_label: 'My Wallet Balance',
             tile_show_badge: false,
             tile_is_loading: true
-          }
+          },
+          hide_tile: !this.identityService.isAccrediatedToAny(
+            SCOPE.read.users,//using minimal role to check if user has access to any user
+          )
         },
         {
           tile_html_id: 'expenseTile',
@@ -77,7 +83,10 @@ export class SecuredDashboardComponent implements OnInit {
             tile_label: 'My Unsettled Expenses',
             tile_show_badge: false,
             tile_is_loading: true
-          }
+          },
+          hide_tile: !this.identityService.isAccrediatedToAny(
+            SCOPE.read.expenses,
+          )
         },
         {
           tile_html_id: 'worklistTile',
@@ -87,38 +96,56 @@ export class SecuredDashboardComponent implements OnInit {
           additional_info: {
             tile_label: 'My Pending Tasks',
             tile_show_badge: false,
-            tile_is_loading: true
-          }
+            tile_is_loading: true,
+          },
+          hide_tile: !this.identityService.isAccrediatedToAny(
+            SCOPE.read.task,
+          )
         },
         {
           tile_html_id: 'memberTile',
           tile_name: 'Members',
           tile_icon: 'icon_members',
           tile_link: this.route.secured_member_members_page.url,
+          hide_tile: !this.identityService.isAccrediatedToAny(
+            SCOPE.read.users,
+          )
         },
         {
           tile_html_id: 'eventTile',
           tile_name: 'Projects',
           tile_icon: 'icon_projects',
           tile_link: this.route.secured_project_list_page.url,
+          hide_tile: !this.identityService.isAccrediatedToAny(
+            SCOPE.read.project,
+          )
         },
         {
           tile_html_id: 'requestTile',
           tile_name: 'Requests',
           tile_icon: 'icon_requests',
           tile_link: this.route.secured_request_list_page.url,
+          hide_tile: !this.identityService.isAccrediatedToAny(
+            SCOPE.read.workflow,
+          )
         },
         {
           tile_html_id: 'reportTile',
           tile_name: 'Reports',
           tile_icon: 'icon_book',
           tile_link: this.route.secured_report_dashboard_page.url,
+          hide_tile: !this.identityService.isAccrediatedToAny(
+            SCOPE.read.reports,
+          )
         },
         {
           tile_html_id: 'noticeTile',
           tile_name: 'Events & Meetings',
           tile_icon: 'icon_notices',
           tile_link: this.route.secured_meetings_list_page.url,
+          hide_tile: !this.identityService.isAccrediatedToAny(
+            SCOPE.read.meeting,
+          )
         },
 
         {
@@ -127,11 +154,9 @@ export class SecuredDashboardComponent implements OnInit {
           tile_icon: 'icon_admin',
           tile_link: this.route.secured_admin_dashboard_page.url,
           hide_tile: !this.identityService.isAccrediatedToAny(
-            SCOPE.read.actuator,
             SCOPE.read.apikey,
-            SCOPE.create.apikey,
-            SCOPE.update.apikey,
-            SCOPE.create.servicerun
+            SCOPE.read.cron,
+            SCOPE.read.jobs,
           )
         }
       ];
