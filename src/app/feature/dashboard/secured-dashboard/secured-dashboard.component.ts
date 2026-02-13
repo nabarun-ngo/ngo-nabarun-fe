@@ -42,6 +42,7 @@ export class SecuredDashboardComponent implements OnInit {
     this.fetchMetrics();
   }
 
+
   initTiles() {
     if (SecuredDashboardComponent.tileList.length == 0) {
       SecuredDashboardComponent.tileList = [
@@ -169,6 +170,13 @@ export class SecuredDashboardComponent implements OnInit {
   }
 
   fetchMetrics() {
+    if (!this.identityService.isAccrediatedToAny(
+      SCOPE.read.users,
+      SCOPE.read.expenses,
+      SCOPE.read.task,
+    )) {
+      return;
+    }
     const donationTile = SecuredDashboardComponent.tileList.find(tile => tile.tile_html_id === 'donationTile');
     const accountTile = SecuredDashboardComponent.tileList.find(tile => tile.tile_html_id === 'accountTile');
     const expenseTile = SecuredDashboardComponent.tileList.find(tile => tile.tile_html_id === 'expenseTile');

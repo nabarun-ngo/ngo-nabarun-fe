@@ -17,7 +17,6 @@ import { ManageExpenseTabComponent } from './manage-expense-tab/manage-expense-t
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { User } from '../../member/models/member.model';
 import { KeyValue } from 'src/app/shared/model/key-value.model';
-import { ProjectService } from '../../project/service/project.service';
 
 @Component({
   selector: 'app-expense-dashboard',
