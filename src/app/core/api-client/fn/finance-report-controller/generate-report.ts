@@ -19,6 +19,11 @@ export interface GenerateReport$Params {
   endDate?: string;
   uploadFile?: 'Y' | 'N';
   sendEmail?: 'Y' | 'N';
+
+/**
+ * Date on which the report should be generated
+ */
+  on?: 'paidOn' | 'confirmedOn';
 }
 
 export function generateReport(http: HttpClient, rootUrl: string, params: GenerateReport$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
@@ -29,6 +34,7 @@ export function generateReport(http: HttpClient, rootUrl: string, params: Genera
     rb.query('endDate', params.endDate, {});
     rb.query('uploadFile', params.uploadFile, {});
     rb.query('sendEmail', params.sendEmail, {});
+    rb.query('on', params.on, {});
   }
 
   return http.request(

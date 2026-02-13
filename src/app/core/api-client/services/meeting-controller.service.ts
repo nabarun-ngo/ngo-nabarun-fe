@@ -29,6 +29,10 @@ export class MeetingControllerService extends BaseService {
   static readonly CreateMeetingPath = '/api/communication/meeting/create';
 
   /**
+   * **Required Permissions:**
+   * - `create:meeting`
+   * _(Any of these permissions)_
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createMeeting()` instead.
    *
@@ -39,6 +43,10 @@ export class MeetingControllerService extends BaseService {
   }
 
   /**
+   * **Required Permissions:**
+   * - `create:meeting`
+   * _(Any of these permissions)_
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `createMeeting$Response()` instead.
    *
@@ -54,6 +62,10 @@ export class MeetingControllerService extends BaseService {
   static readonly ListMeetingsPath = '/api/communication/meeting/list';
 
   /**
+   * **Required Permissions:**
+   * - `read:meeting`
+   * _(Any of these permissions)_
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `listMeetings()` instead.
    *
@@ -64,6 +76,10 @@ export class MeetingControllerService extends BaseService {
   }
 
   /**
+   * **Required Permissions:**
+   * - `read:meeting`
+   * _(Any of these permissions)_
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `listMeetings$Response()` instead.
    *
@@ -79,6 +95,10 @@ export class MeetingControllerService extends BaseService {
   static readonly UpdateMeetingPath = '/api/communication/meeting/update/{id}';
 
   /**
+   * **Required Permissions:**
+   * - `update:meeting`
+   * _(Any of these permissions)_
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updateMeeting()` instead.
    *
@@ -89,6 +109,10 @@ export class MeetingControllerService extends BaseService {
   }
 
   /**
+   * **Required Permissions:**
+   * - `update:meeting`
+   * _(Any of these permissions)_
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `updateMeeting$Response()` instead.
    *

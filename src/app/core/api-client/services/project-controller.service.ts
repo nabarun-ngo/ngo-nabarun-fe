@@ -45,7 +45,9 @@ export class ProjectControllerService extends BaseService {
   /**
    * List projects with filters and pagination.
    *
-   *
+   * **Required Permissions:**
+   * - `read:project`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `listProjects()` instead.
@@ -59,7 +61,9 @@ export class ProjectControllerService extends BaseService {
   /**
    * List projects with filters and pagination.
    *
-   *
+   * **Required Permissions:**
+   * - `read:project`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `listProjects$Response()` instead.
@@ -78,7 +82,9 @@ export class ProjectControllerService extends BaseService {
   /**
    * Create a new project.
    *
-   *
+   * **Required Permissions:**
+   * - `create:project`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createProject()` instead.
@@ -92,7 +98,9 @@ export class ProjectControllerService extends BaseService {
   /**
    * Create a new project.
    *
-   *
+   * **Required Permissions:**
+   * - `create:project`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `createProject$Response()` instead.
@@ -111,7 +119,9 @@ export class ProjectControllerService extends BaseService {
   /**
    * Update a project.
    *
-   *
+   * **Required Permissions:**
+   * - `update:project`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updateProject()` instead.
@@ -125,7 +135,9 @@ export class ProjectControllerService extends BaseService {
   /**
    * Update a project.
    *
-   *
+   * **Required Permissions:**
+   * - `update:project`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `updateProject$Response()` instead.
@@ -144,7 +156,9 @@ export class ProjectControllerService extends BaseService {
   /**
    * Get project by ID.
    *
-   *
+   * **Required Permissions:**
+   * - `read:project`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getProjectById()` instead.
@@ -158,7 +172,9 @@ export class ProjectControllerService extends BaseService {
   /**
    * Get project by ID.
    *
-   *
+   * **Required Permissions:**
+   * - `read:project`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getProjectById$Response()` instead.
@@ -177,7 +193,9 @@ export class ProjectControllerService extends BaseService {
   /**
    * List project activities with filters and pagination.
    *
-   *
+   * **Required Permissions:**
+   * - `read:activity`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `listActivities()` instead.
@@ -191,7 +209,9 @@ export class ProjectControllerService extends BaseService {
   /**
    * List project activities with filters and pagination.
    *
-   *
+   * **Required Permissions:**
+   * - `read:activity`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `listActivities$Response()` instead.
@@ -210,7 +230,9 @@ export class ProjectControllerService extends BaseService {
   /**
    * create new activity.
    *
-   *
+   * **Required Permissions:**
+   * - `create:activity`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createActivity()` instead.
@@ -224,7 +246,9 @@ export class ProjectControllerService extends BaseService {
   /**
    * create new activity.
    *
-   *
+   * **Required Permissions:**
+   * - `create:activity`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `createActivity$Response()` instead.
@@ -243,7 +267,9 @@ export class ProjectControllerService extends BaseService {
   /**
    * Update project activity.
    *
-   *
+   * **Required Permissions:**
+   * - `update:activity`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updateActivity()` instead.
@@ -257,7 +283,9 @@ export class ProjectControllerService extends BaseService {
   /**
    * Update project activity.
    *
-   *
+   * **Required Permissions:**
+   * - `update:activity`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `updateActivity$Response()` instead.
@@ -276,7 +304,9 @@ export class ProjectControllerService extends BaseService {
   /**
    * Get project reference data.
    *
-   *
+   * **Required Permissions:**
+   * - `read:project`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getProjectReferenceData()` instead.
@@ -290,7 +320,9 @@ export class ProjectControllerService extends BaseService {
   /**
    * Get project reference data.
    *
-   *
+   * **Required Permissions:**
+   * - `read:project`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getProjectReferenceData$Response()` instead.

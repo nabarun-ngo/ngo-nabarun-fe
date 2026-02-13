@@ -35,7 +35,9 @@ export class DmsControllerService extends BaseService {
   /**
    * Upload a document.
    *
-   *
+   * **Required Permissions:**
+   * - `create:document`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `uploadFile()` instead.
@@ -49,7 +51,9 @@ export class DmsControllerService extends BaseService {
   /**
    * Upload a document.
    *
-   *
+   * **Required Permissions:**
+   * - `create:document`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `uploadFile$Response()` instead.
@@ -68,7 +72,9 @@ export class DmsControllerService extends BaseService {
   /**
    * Get all documents for a specific entity.
    *
-   *
+   * **Required Permissions:**
+   * - `read:document_list`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getDocuments()` instead.
@@ -82,7 +88,9 @@ export class DmsControllerService extends BaseService {
   /**
    * Get all documents for a specific entity.
    *
-   *
+   * **Required Permissions:**
+   * - `read:document_list`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getDocuments$Response()` instead.
@@ -101,7 +109,9 @@ export class DmsControllerService extends BaseService {
   /**
    * Get a signed URL to view a document.
    *
-   *
+   * **Required Permissions:**
+   * - `read:document`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `viewDocument()` instead.
@@ -117,7 +127,9 @@ export class DmsControllerService extends BaseService {
   /**
    * Get a signed URL to view a document.
    *
-   *
+   * **Required Permissions:**
+   * - `read:document`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `viewDocument$Response()` instead.
@@ -142,7 +154,9 @@ export class DmsControllerService extends BaseService {
   /**
    * Download a document file.
    *
-   *
+   * **Required Permissions:**
+   * - `read:document`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `downloadDocument()` instead.
@@ -156,7 +170,9 @@ export class DmsControllerService extends BaseService {
   /**
    * Download a document file.
    *
-   *
+   * **Required Permissions:**
+   * - `read:document`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `downloadDocument$Response()` instead.

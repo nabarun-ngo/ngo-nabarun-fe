@@ -42,7 +42,9 @@ export class JobControllerService extends BaseService {
   /**
    * Get failed jobs.
    *
-   *
+   * **Required Permissions:**
+   * - `read:jobs`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getJobs()` instead.
@@ -56,7 +58,9 @@ export class JobControllerService extends BaseService {
   /**
    * Get failed jobs.
    *
-   *
+   * **Required Permissions:**
+   * - `read:jobs`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getJobs$Response()` instead.
@@ -75,7 +79,9 @@ export class JobControllerService extends BaseService {
   /**
    * Get job details by ID.
    *
-   *
+   * **Required Permissions:**
+   * - `read:jobs`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getJobDetails()` instead.
@@ -89,7 +95,9 @@ export class JobControllerService extends BaseService {
   /**
    * Get job details by ID.
    *
-   *
+   * **Required Permissions:**
+   * - `read:jobs`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getJobDetails$Response()` instead.
@@ -108,30 +116,34 @@ export class JobControllerService extends BaseService {
   /**
    * Get comprehensive queue statistics.
    *
-   *
+   * **Required Permissions:**
+   * - `read:jobs`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getQueueStatistics()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getQueueStatistics$Response(params?: GetQueueStatistics$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  getQueueStatistics$Response(params?: GetQueueStatistics$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseJobDetail>> {
     return getQueueStatistics(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Get comprehensive queue statistics.
    *
-   *
+   * **Required Permissions:**
+   * - `read:jobs`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getQueueStatistics$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getQueueStatistics(params?: GetQueueStatistics$Params, context?: HttpContext): Observable<void> {
+  getQueueStatistics(params?: GetQueueStatistics$Params, context?: HttpContext): Observable<SuccessResponseJobDetail> {
     return this.getQueueStatistics$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+      map((r: StrictHttpResponse<SuccessResponseJobDetail>): SuccessResponseJobDetail => r.body)
     );
   }
 
@@ -141,30 +153,34 @@ export class JobControllerService extends BaseService {
   /**
    * Clean old jobs (manual cleanup - TTL handles automatic cleanup).
    *
-   *
+   * **Required Permissions:**
+   * - `delete:jobs`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `cleanOldJobs()` instead.
    *
    * This method doesn't expect any request body.
    */
-  cleanOldJobs$Response(params?: CleanOldJobs$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  cleanOldJobs$Response(params?: CleanOldJobs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseJobDetail>> {
     return cleanOldJobs(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Clean old jobs (manual cleanup - TTL handles automatic cleanup).
    *
-   *
+   * **Required Permissions:**
+   * - `delete:jobs`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `cleanOldJobs$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  cleanOldJobs(params?: CleanOldJobs$Params, context?: HttpContext): Observable<void> {
+  cleanOldJobs(params?: CleanOldJobs$Params, context?: HttpContext): Observable<SuccessResponseJobDetail> {
     return this.cleanOldJobs$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+      map((r: StrictHttpResponse<SuccessResponseJobDetail>): SuccessResponseJobDetail => r.body)
     );
   }
 
@@ -174,30 +190,34 @@ export class JobControllerService extends BaseService {
   /**
    * Pause the queue.
    *
-   *
+   * **Required Permissions:**
+   * - `update:jobs`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `pauseQueue()` instead.
    *
    * This method doesn't expect any request body.
    */
-  pauseQueue$Response(params: PauseQueue$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  pauseQueue$Response(params: PauseQueue$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseJobDetail>> {
     return pauseQueue(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Pause the queue.
    *
-   *
+   * **Required Permissions:**
+   * - `update:jobs`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `pauseQueue$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  pauseQueue(params: PauseQueue$Params, context?: HttpContext): Observable<void> {
+  pauseQueue(params: PauseQueue$Params, context?: HttpContext): Observable<SuccessResponseJobDetail> {
     return this.pauseQueue$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+      map((r: StrictHttpResponse<SuccessResponseJobDetail>): SuccessResponseJobDetail => r.body)
     );
   }
 
@@ -207,30 +227,34 @@ export class JobControllerService extends BaseService {
   /**
    * Remove a job.
    *
-   *
+   * **Required Permissions:**
+   * - `delete:jobs`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `removeJob()` instead.
    *
    * This method doesn't expect any request body.
    */
-  removeJob$Response(params: RemoveJob$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  removeJob$Response(params: RemoveJob$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseJobDetail>> {
     return removeJob(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Remove a job.
    *
-   *
+   * **Required Permissions:**
+   * - `delete:jobs`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `removeJob$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  removeJob(params: RemoveJob$Params, context?: HttpContext): Observable<void> {
+  removeJob(params: RemoveJob$Params, context?: HttpContext): Observable<SuccessResponseJobDetail> {
     return this.removeJob$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+      map((r: StrictHttpResponse<SuccessResponseJobDetail>): SuccessResponseJobDetail => r.body)
     );
   }
 
@@ -240,30 +264,34 @@ export class JobControllerService extends BaseService {
   /**
    * Retry a failed job.
    *
-   *
+   * **Required Permissions:**
+   * - `update:jobs`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `retryJob()` instead.
    *
    * This method doesn't expect any request body.
    */
-  retryJob$Response(params: RetryJob$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  retryJob$Response(params: RetryJob$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseJobDetail>> {
     return retryJob(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Retry a failed job.
    *
-   *
+   * **Required Permissions:**
+   * - `update:jobs`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `retryJob$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  retryJob(params: RetryJob$Params, context?: HttpContext): Observable<void> {
+  retryJob(params: RetryJob$Params, context?: HttpContext): Observable<SuccessResponseJobDetail> {
     return this.retryJob$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+      map((r: StrictHttpResponse<SuccessResponseJobDetail>): SuccessResponseJobDetail => r.body)
     );
   }
 
@@ -273,30 +301,34 @@ export class JobControllerService extends BaseService {
   /**
    * Retry all failed jobs.
    *
-   *
+   * **Required Permissions:**
+   * - `update:jobs`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `retryAllFailedJobs()` instead.
    *
    * This method doesn't expect any request body.
    */
-  retryAllFailedJobs$Response(params?: RetryAllFailedJobs$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  retryAllFailedJobs$Response(params?: RetryAllFailedJobs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseJobDetail>> {
     return retryAllFailedJobs(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Retry all failed jobs.
    *
-   *
+   * **Required Permissions:**
+   * - `update:jobs`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `retryAllFailedJobs$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  retryAllFailedJobs(params?: RetryAllFailedJobs$Params, context?: HttpContext): Observable<void> {
+  retryAllFailedJobs(params?: RetryAllFailedJobs$Params, context?: HttpContext): Observable<SuccessResponseJobDetail> {
     return this.retryAllFailedJobs$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+      map((r: StrictHttpResponse<SuccessResponseJobDetail>): SuccessResponseJobDetail => r.body)
     );
   }
 

@@ -38,7 +38,9 @@ export class ApiKeyControllerService extends BaseService {
   /**
    * Generate API Key.
    *
-   *
+   * **Required Permissions:**
+   * - `create:api_keys`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `generateApiKey()` instead.
@@ -52,7 +54,9 @@ export class ApiKeyControllerService extends BaseService {
   /**
    * Generate API Key.
    *
-   *
+   * **Required Permissions:**
+   * - `create:api_keys`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `generateApiKey$Response()` instead.
@@ -71,7 +75,9 @@ export class ApiKeyControllerService extends BaseService {
   /**
    * List all API keys.
    *
-   *
+   * **Required Permissions:**
+   * - `read:api_keys`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `listApiKeys()` instead.
@@ -85,7 +91,9 @@ export class ApiKeyControllerService extends BaseService {
   /**
    * List all API keys.
    *
-   *
+   * **Required Permissions:**
+   * - `read:api_keys`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `listApiKeys$Response()` instead.
@@ -104,7 +112,9 @@ export class ApiKeyControllerService extends BaseService {
   /**
    * List all API scopes.
    *
-   *
+   * **Required Permissions:**
+   * - `read:api_keys`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `listApiScopes()` instead.
@@ -118,7 +128,9 @@ export class ApiKeyControllerService extends BaseService {
   /**
    * List all API scopes.
    *
-   *
+   * **Required Permissions:**
+   * - `read:api_keys`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `listApiScopes$Response()` instead.
@@ -137,7 +149,9 @@ export class ApiKeyControllerService extends BaseService {
   /**
    * Update API key permissions.
    *
-   *
+   * **Required Permissions:**
+   * - `update:api_keys`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `updateApiKeyPermissions()` instead.
@@ -151,7 +165,9 @@ export class ApiKeyControllerService extends BaseService {
   /**
    * Update API key permissions.
    *
-   *
+   * **Required Permissions:**
+   * - `update:api_keys`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `updateApiKeyPermissions$Response()` instead.
@@ -170,7 +186,9 @@ export class ApiKeyControllerService extends BaseService {
   /**
    * Revoke API key.
    *
-   *
+   * **Required Permissions:**
+   * - `delete:api_keys`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `revokeApiKey()` instead.
@@ -184,7 +202,9 @@ export class ApiKeyControllerService extends BaseService {
   /**
    * Revoke API key.
    *
-   *
+   * **Required Permissions:**
+   * - `delete:api_keys`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `revokeApiKey$Response()` instead.
