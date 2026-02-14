@@ -367,7 +367,9 @@ export class AccountControllerService extends BaseService {
   /**
    * Reverse transaction for account.
    *
-   *
+   * **Required Permissions:**
+   * - `update:transactions`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `reverseTransaction()` instead.
@@ -381,7 +383,9 @@ export class AccountControllerService extends BaseService {
   /**
    * Reverse transaction for account.
    *
-   *
+   * **Required Permissions:**
+   * - `update:transactions`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `reverseTransaction$Response()` instead.

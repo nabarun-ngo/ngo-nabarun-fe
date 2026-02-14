@@ -56,7 +56,7 @@ export class WorkflowControllerService extends BaseService {
    * Start a new workflow instance.
    *
    * **Required Permissions:**
-   * - `create:request`
+   * - `create:workflow`
    * _(All permissions required)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -72,7 +72,7 @@ export class WorkflowControllerService extends BaseService {
    * Start a new workflow instance.
    *
    * **Required Permissions:**
-   * - `create:request`
+   * - `create:workflow`
    * _(All permissions required)_
    *
    * This method provides access only to the response body.
@@ -93,7 +93,7 @@ export class WorkflowControllerService extends BaseService {
    * Update a workflow task.
    *
    * **Required Permissions:**
-   * - `update:work`
+   * - `update:task`
    * _(All permissions required)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -109,7 +109,7 @@ export class WorkflowControllerService extends BaseService {
    * Update a workflow task.
    *
    * **Required Permissions:**
-   * - `update:work`
+   * - `update:task`
    * _(All permissions required)_
    *
    * This method provides access only to the response body.
@@ -130,7 +130,7 @@ export class WorkflowControllerService extends BaseService {
    * Reassign a workflow task.
    *
    * **Required Permissions:**
-   * - `update:work`
+   * - `update:task`
    * _(All permissions required)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -146,7 +146,7 @@ export class WorkflowControllerService extends BaseService {
    * Reassign a workflow task.
    *
    * **Required Permissions:**
-   * - `update:work`
+   * - `update:task`
    * _(All permissions required)_
    *
    * This method provides access only to the response body.
@@ -167,7 +167,7 @@ export class WorkflowControllerService extends BaseService {
    * Get workflow instance by ID.
    *
    * **Required Permissions:**
-   * - `read:request`
+   * - `read:workflow`
    * _(All permissions required)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -183,7 +183,7 @@ export class WorkflowControllerService extends BaseService {
    * Get workflow instance by ID.
    *
    * **Required Permissions:**
-   * - `read:request`
+   * - `read:workflow`
    * _(All permissions required)_
    *
    * This method provides access only to the response body.
@@ -204,7 +204,7 @@ export class WorkflowControllerService extends BaseService {
    * List workflow instances.
    *
    * **Required Permissions:**
-   * - `read:request`
+   * - `read:workflow`
    * _(All permissions required)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -220,7 +220,7 @@ export class WorkflowControllerService extends BaseService {
    * List workflow instances.
    *
    * **Required Permissions:**
-   * - `read:request`
+   * - `read:workflow`
    * _(All permissions required)_
    *
    * This method provides access only to the response body.
@@ -241,7 +241,7 @@ export class WorkflowControllerService extends BaseService {
    * List workflow instances.
    *
    * **Required Permissions:**
-   * - `read:request`
+   * - `read:workflow`
    * _(All permissions required)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -257,7 +257,7 @@ export class WorkflowControllerService extends BaseService {
    * List workflow instances.
    *
    * **Required Permissions:**
-   * - `read:request`
+   * - `read:workflow`
    * _(All permissions required)_
    *
    * This method provides access only to the response body.
@@ -280,7 +280,7 @@ export class WorkflowControllerService extends BaseService {
    * Filter by completed (set true to get completed tasks, set false to get pending tasks)
    *
    * **Required Permissions:**
-   * - `read:work`
+   * - `read:task`
    * _(All permissions required)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -298,7 +298,7 @@ export class WorkflowControllerService extends BaseService {
    * Filter by completed (set true to get completed tasks, set false to get pending tasks)
    *
    * **Required Permissions:**
-   * - `read:work`
+   * - `read:task`
    * _(All permissions required)_
    *
    * This method provides access only to the response body.
@@ -319,7 +319,7 @@ export class WorkflowControllerService extends BaseService {
    * List automatic workflow tasks.
    *
    * **Required Permissions:**
-   * - `read:work`
+   * - `read:task`
    * _(All permissions required)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -335,7 +335,7 @@ export class WorkflowControllerService extends BaseService {
    * List automatic workflow tasks.
    *
    * **Required Permissions:**
-   * - `read:work`
+   * - `read:task`
    * _(All permissions required)_
    *
    * This method provides access only to the response body.

@@ -45,7 +45,9 @@ export class NotificationControllerService extends BaseService {
   /**
    * Create bulk notifications.
    *
-   *
+   * **Required Permissions:**
+   * - `create:notification`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createBulkNotifications()` instead.
@@ -59,7 +61,9 @@ export class NotificationControllerService extends BaseService {
   /**
    * Create bulk notifications.
    *
-   *
+   * **Required Permissions:**
+   * - `create:notification`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `createBulkNotifications$Response()` instead.

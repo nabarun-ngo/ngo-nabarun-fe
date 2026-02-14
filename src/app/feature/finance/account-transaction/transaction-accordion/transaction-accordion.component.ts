@@ -11,6 +11,8 @@ import { AccountService } from '../../service/account.service';
 import { accountDocumentSection } from '../../fields/account.field';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { ModalService } from 'src/app/core/service/modal.service';
+import { UserIdentityService } from 'src/app/core/service/user-identity.service';
+import { SCOPE } from 'src/app/core/constant/auth-scope.const';
 
 @Component({
   selector: 'app-transaction-accordion',
@@ -18,6 +20,7 @@ import { ModalService } from 'src/app/core/service/modal.service';
   styleUrls: ['./transaction-accordion.component.scss']
 })
 export class TransactionAccordionComponent extends Accordion<Transaction> {
+  permissions!: { canReverseTxn: boolean; };
 
   protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
     return {
@@ -37,13 +40,17 @@ export class TransactionAccordionComponent extends Accordion<Transaction> {
   defaultValue = TransactionDefaultValue;
 
   constructor(protected accountService: AccountService,
-    protected modalService: ModalService
+    protected modalService: ModalService,
+    protected identityService: UserIdentityService
   ) {
     super();
   }
 
   override onInitHook(): void {
     this.setHeaderRow(transactionHeader);
+    this.permissions = {
+      canReverseTxn: this.identityService.isAccrediatedToAny(SCOPE.update.transactions)
+    }
   }
 
   protected override prepareHighLevelView(
@@ -82,10 +89,10 @@ export class TransactionAccordionComponent extends Accordion<Transaction> {
     data: Transaction,
     options?: { [key: string]: any }
   ): AccordionButton[] {
-    return this.isSelfAccount ? [] : [{
+    return !this.isSelfAccount && this.permissions.canReverseTxn ? [{
       button_id: 'REVERSE',
       button_name: 'Reverse Transaction',
-    }];
+    }] : [];
   }
   override handlePageEvent($event: PageEvent): void {
     this.pageEvent = $event;

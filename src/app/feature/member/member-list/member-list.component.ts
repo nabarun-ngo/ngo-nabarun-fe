@@ -9,6 +9,8 @@ import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { NavigationButtonModel } from 'src/app/shared/components/generic/page-navigation-buttons/page-navigation-buttons.component';
 import { PagedUser } from '../models/member.model';
 import { StandardDashboard } from 'src/app/shared/utils/standard-dashboard';
+import { UserIdentityService } from 'src/app/core/service/user-identity.service';
+import { SCOPE } from 'src/app/core/constant/auth-scope.const';
 
 @Component({
   selector: 'app-member-list',
@@ -23,11 +25,13 @@ export class MemberListComponent extends StandardDashboard<PagedUser> {
   searchInputData!: SearchAndAdvancedSearchModel;
   navigations!: NavigationButtonModel[];
   memberList?: PagedUser;
+  permissions!: { canManageRoles: boolean; canUpdateUser: boolean; };
 
   constructor(
     private sharedDataService: SharedDataService,
     protected override route: ActivatedRoute,
-    private memberService: MemberService
+    private memberService: MemberService,
+    private identityService: UserIdentityService
   ) {
     super(route);
   }
@@ -111,6 +115,10 @@ export class MemberListComponent extends StandardDashboard<PagedUser> {
         routerLink: this.app_route.secured_dashboard_page.url
       }
     ]
+    this.permissions = {
+      canManageRoles: this.identityService.isAccrediatedToAny(SCOPE.update.user_role, SCOPE.update.user),
+      canUpdateUser: this.identityService.isAccrediatedToAny(SCOPE.update.user)
+    }
   }
 
   override handlePageEvent($event: PageEvent) {

@@ -219,12 +219,12 @@ export abstract class BaseDonationTabComponent extends Accordion<Donation> imple
                 },
             ];
         }
-        return [
+        return this.permissions?.canUpdateDonation ? [
             {
                 button_id: 'UPDATE_DONATION',
                 button_name: 'Update'
             }
-        ];
+        ] : [];
     }
 
     abstract loadData(): void;

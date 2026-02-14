@@ -7,7 +7,7 @@
                         (onSearch)="onSearch($event)"></app-search-and-advanced-search-form>
                 </div>
                 <div class="flex justify-end mx-4 my-2">
-                    <div class="mx-1 px-2">
+                    <div class="mx-1 px-2" *ngIf="permissions.canManageRoles">
                         <a [routerLink]="[app_route.secured_member_roles_page.url]"
                             class="bg-indigo-600 py-3 px-6 w-full text-white font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer">Manage
                             Roles</a>
@@ -20,7 +20,7 @@
                 <div
                     class="container mx-auto grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 pt-6 gap-4">
                     <app-profile-card *ngFor="let profile of memberList?.content | memberSearch:searchValue"
-                        [profile]="profile"></app-profile-card>
+                        [profile]="profile" [permissions]="permissions"></app-profile-card>
                 </div>
                 <mat-paginator class="mt-4" style="background-color: transparent;" (page)="handlePageEvent($event)"
                     [length]="itemLength$ | async" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"

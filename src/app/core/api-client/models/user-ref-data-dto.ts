@@ -7,6 +7,8 @@ export interface UserRefDataDto {
   availableRoles?: Array<KeyValueDto>;
   countries?: Array<KeyValueDto>;
   districts?: Array<KeyValueDto>;
+  documentTypes?: Array<KeyValueDto>;
+  documents?: Array<KeyValueDto>;
   loginMethods?: Array<KeyValueDto>;
   maxUserPerRole?: Array<KeyValueDto>;
   minUserPerRole?: Array<KeyValueDto>;

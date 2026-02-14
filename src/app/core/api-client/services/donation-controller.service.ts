@@ -86,7 +86,7 @@ export class DonationControllerService extends BaseService {
    * Create new guest donation.
    *
    * **Required Permissions:**
-   * - `create:donation`
+   * - `create:donation_guest`
    * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -102,7 +102,7 @@ export class DonationControllerService extends BaseService {
    * Create new guest donation.
    *
    * **Required Permissions:**
-   * - `create:donation`
+   * - `create:donation_guest`
    * _(Any of these permissions)_
    *
    * This method provides access only to the response body.

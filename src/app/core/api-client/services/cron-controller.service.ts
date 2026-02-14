@@ -33,6 +33,10 @@ export class CronControllerService extends BaseService {
   static readonly ExecuteCronPath = '/api/cron/trigger';
 
   /**
+   * **Required Permissions:**
+   * - `update:cron`
+   * _(Any of these permissions)_
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `executeCron()` instead.
    *
@@ -43,6 +47,10 @@ export class CronControllerService extends BaseService {
   }
 
   /**
+   * **Required Permissions:**
+   * - `update:cron`
+   * _(Any of these permissions)_
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `executeCron$Response()` instead.
    *
@@ -58,6 +66,10 @@ export class CronControllerService extends BaseService {
   static readonly RunScheduledJobPath = '/api/cron/run/{name}';
 
   /**
+   * **Required Permissions:**
+   * - `update:cron`
+   * _(Any of these permissions)_
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `runScheduledJob()` instead.
    *
@@ -68,6 +80,10 @@ export class CronControllerService extends BaseService {
   }
 
   /**
+   * **Required Permissions:**
+   * - `update:cron`
+   * _(Any of these permissions)_
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `runScheduledJob$Response()` instead.
    *
@@ -83,6 +99,10 @@ export class CronControllerService extends BaseService {
   static readonly GetScheduledJobsPath = '/api/cron/jobs';
 
   /**
+   * **Required Permissions:**
+   * - `read:cron`
+   * _(Any of these permissions)_
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getScheduledJobs()` instead.
    *
@@ -93,6 +113,10 @@ export class CronControllerService extends BaseService {
   }
 
   /**
+   * **Required Permissions:**
+   * - `read:cron`
+   * _(Any of these permissions)_
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getScheduledJobs$Response()` instead.
    *
@@ -108,6 +132,10 @@ export class CronControllerService extends BaseService {
   static readonly GetCronLogsPath = '/api/cron/logs/{name}';
 
   /**
+   * **Required Permissions:**
+   * - `read:cron`
+   * _(Any of these permissions)_
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getCronLogs()` instead.
    *
@@ -118,6 +146,10 @@ export class CronControllerService extends BaseService {
   }
 
   /**
+   * **Required Permissions:**
+   * - `read:cron`
+   * _(Any of these permissions)_
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getCronLogs$Response()` instead.
    *
