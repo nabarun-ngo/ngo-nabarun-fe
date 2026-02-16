@@ -34,6 +34,7 @@ export { ErrorResponse } from './models/error-response';
 export { ExpenseDetailDto } from './models/expense-detail-dto';
 export { ExpenseItemDetailDto } from './models/expense-item-detail-dto';
 export { FieldAttributeDto } from './models/field-attribute-dto';
+export { FixTransactionDto } from './models/fix-transaction-dto';
 export { JobDetail } from './models/job-detail';
 export { KeyValueDto } from './models/key-value-dto';
 export { LinkDto } from './models/link-dto';

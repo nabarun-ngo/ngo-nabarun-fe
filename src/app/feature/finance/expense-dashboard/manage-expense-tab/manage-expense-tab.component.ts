@@ -138,7 +138,10 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
         accountHolderId: expense.paidBy?.id,
       }).subscribe((data) => {
         this.accounts[expense.id!] = this.resolveAccount(data?.content);
-        this.addSectionInAccordion(settlementSummary(expense, this.accounts[expense.id!]), $event.rowIndex);
+        const account = this.accounts[expense.id!]
+        this.expenseService.fetchAccountBalance(account?.id!).subscribe((balance) => {
+          this.addSectionInAccordion(settlementSummary(expense, balance, account), $event.rowIndex);
+        })
         super.onAccordionOpen($event);
       });
     }

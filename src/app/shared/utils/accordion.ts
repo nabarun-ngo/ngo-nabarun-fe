@@ -674,6 +674,21 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
     }
   }
 
+  protected updateFieldValue(
+    sectionId: string,
+    fieldName: string,
+    rowIndex: number,
+    value: any,
+    create?: boolean
+  ): void {
+    const section = this.getSectionInAccordion(sectionId, rowIndex, create);
+    const field = section?.content?.find(f => f.form_control_name === fieldName);
+
+    if (field) {
+      field.field_value = value;
+    }
+  }
+
   /**
    * Batch update visibility for multiple fields.
    * Useful when you need to update several fields at once without setting up rules.
