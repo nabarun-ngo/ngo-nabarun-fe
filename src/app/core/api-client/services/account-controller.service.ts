@@ -11,10 +11,14 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { accountBalance } from '../fn/account-controller/account-balance';
+import { AccountBalance$Params } from '../fn/account-controller/account-balance';
 import { addFundSelf } from '../fn/account-controller/add-fund-self';
 import { AddFundSelf$Params } from '../fn/account-controller/add-fund-self';
 import { createAccount } from '../fn/account-controller/create-account';
 import { CreateAccount$Params } from '../fn/account-controller/create-account';
+import { fixTransactions } from '../fn/account-controller/fix-transactions';
+import { FixTransactions$Params } from '../fn/account-controller/fix-transactions';
 import { getAccountReferenceData } from '../fn/account-controller/get-account-reference-data';
 import { GetAccountReferenceData$Params } from '../fn/account-controller/get-account-reference-data';
 import { listAccounts } from '../fn/account-controller/list-accounts';
@@ -29,6 +33,7 @@ import { payableAccount } from '../fn/account-controller/payable-account';
 import { PayableAccount$Params } from '../fn/account-controller/payable-account';
 import { reverseTransaction } from '../fn/account-controller/reverse-transaction';
 import { ReverseTransaction$Params } from '../fn/account-controller/reverse-transaction';
+import { SuccessResponse } from '../models/success-response';
 import { SuccessResponseAccountDetailDto } from '../models/success-response-account-detail-dto';
 import { SuccessResponseAccountRefDataDto } from '../models/success-response-account-ref-data-dto';
 import { SuccessResponseArrayAccountDetailDto } from '../models/success-response-array-account-detail-dto';
@@ -262,6 +267,51 @@ export class AccountControllerService extends BaseService {
     );
   }
 
+  /** Path part for operation `accountBalance()` */
+  static readonly AccountBalancePath = '/api/account/{id}/balance';
+
+  /**
+   * Get account balance.
+   *
+   * **Required Permissions:**
+   * - `read:accounts`
+   * _(Any of these permissions)_
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `accountBalance()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  accountBalance$Response(params: AccountBalance$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponse & {
+'responsePayload'?: number;
+}>> {
+    return accountBalance(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get account balance.
+   *
+   * **Required Permissions:**
+   * - `read:accounts`
+   * _(Any of these permissions)_
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `accountBalance$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  accountBalance(params: AccountBalance$Params, context?: HttpContext): Observable<SuccessResponse & {
+'responsePayload'?: number;
+}> {
+    return this.accountBalance$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponse & {
+'responsePayload'?: number;
+}>): SuccessResponse & {
+'responsePayload'?: number;
+} => r.body)
+    );
+  }
+
   /** Path part for operation `listSelfAccountTransactions()` */
   static readonly ListSelfAccountTransactionsPath = '/api/account/{id}/transactions/me';
 
@@ -394,6 +444,43 @@ export class AccountControllerService extends BaseService {
    */
   reverseTransaction(params: ReverseTransaction$Params, context?: HttpContext): Observable<SuccessResponseTransactionDetailDto> {
     return this.reverseTransaction$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseTransactionDetailDto>): SuccessResponseTransactionDetailDto => r.body)
+    );
+  }
+
+  /** Path part for operation `fixTransactions()` */
+  static readonly FixTransactionsPath = '/api/account/transaction/fix';
+
+  /**
+   * Fix transaction for account.
+   *
+   * **Required Permissions:**
+   * - `update:transactions`
+   * _(Any of these permissions)_
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `fixTransactions()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  fixTransactions$Response(params: FixTransactions$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseTransactionDetailDto>> {
+    return fixTransactions(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Fix transaction for account.
+   *
+   * **Required Permissions:**
+   * - `update:transactions`
+   * _(Any of these permissions)_
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `fixTransactions$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  fixTransactions(params: FixTransactions$Params, context?: HttpContext): Observable<SuccessResponseTransactionDetailDto> {
+    return this.fixTransactions$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseTransactionDetailDto>): SuccessResponseTransactionDetailDto => r.body)
     );
   }

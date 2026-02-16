@@ -11,7 +11,6 @@ export interface AccountDetailDto {
   accountType: 'PRINCIPAL' | 'GENERAL' | 'DONATION' | 'PUBLIC_DONATION' | 'WALLET';
   activatedOn?: string;
   bankDetail?: BankDetailDto;
-  currentBalance: number;
   id: string;
   upiDetail?: UpiDetailDto;
 }

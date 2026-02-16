@@ -37,6 +37,7 @@ import { mapDocDtoToDoc } from 'src/app/shared/model/document.model';
 })
 export class AccountService {
 
+
   constructor(
     private accountController: AccountControllerService,
     private userController: UserControllerService,
@@ -185,6 +186,16 @@ export class AccountService {
       .pipe(
         map((d) => d.responsePayload),
         map(mapAccountDtoToAccount)
+      );
+  }
+
+  fetchBalance(id: string): Observable<number> {
+    return this.accountController
+      .accountBalance({
+        id: id,
+      })
+      .pipe(
+        map((d) => d.responsePayload),
       );
   }
 

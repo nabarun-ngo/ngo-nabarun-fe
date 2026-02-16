@@ -12,7 +12,7 @@ export interface Account {
   accountHolder?: string;
   accountType: 'PRINCIPAL' | 'GENERAL' | 'DONATION' | 'PUBLIC_DONATION' | 'WALLET';
   status: 'ACTIVE' | 'INACTIVE' | 'BLOCKED' | 'CLOSED';
-  balance: number;
+  // balance: number;
   activatedOn?: string;
   bankDetail?: BankDetail;
   upiDetail?: UpiDetail;
