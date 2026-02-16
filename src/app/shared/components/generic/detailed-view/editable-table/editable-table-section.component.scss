@@ -143,3 +143,8 @@
     text-align: center;
     color: var(--secondary-500);
 }
+
+.output {
+    white-space: pre-wrap;
+    /* keeps new lines */
+}

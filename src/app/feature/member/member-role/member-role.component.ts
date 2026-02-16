@@ -57,6 +57,12 @@ export class MemberRoleComponent implements OnInit {
   rolesToEdit!: KeyValue[];
   navigations!: NavigationButtonModel[];
   allMembers!: User[];
+  rolesVsMinUser: {
+    [roleCode: string]: number
+  } = {};
+  rolesVsMaxUser: {
+    [roleCode: string]: number
+  } = {};
 
   constructor(
     private sharedDataService: SharedDataService,
@@ -64,7 +70,6 @@ export class MemberRoleComponent implements OnInit {
     private router: Router,
     private memberService: MemberService,
     private modalService: ModalService,
-    private adminService: AdminService,
 
   ) { }
 
@@ -74,7 +79,10 @@ export class MemberRoleComponent implements OnInit {
       this.refData = this.route.snapshot.data['ref_data'];
     }
 
-    this.rolesToEdit = this.refData['availableRoles'].filter(f => f.key != 'MEMBER');
+    this.rolesToEdit = this.refData['availableRoles'].filter(f => f.active && f.key != 'MEMBER');
+    this.refData['minUserPerRole']?.filter(f => f.active).map(m => this.rolesVsMinUser[m.key!] = m.value);
+    this.refData['maxUserPerRole']?.filter(f => f.active).map(m => this.rolesVsMaxUser[m.key!] = m.value);
+
 
     for (const f of this.rolesToEdit) {
       const data = await lastValueFrom(this.memberService.fetchMembersByRole([f.key!]));
@@ -93,6 +101,7 @@ export class MemberRoleComponent implements OnInit {
         routerLink: this.app_route.secured_member_members_page.url
       }
     ]
+    this.validate()
   }
 
 
@@ -108,15 +117,41 @@ export class MemberRoleComponent implements OnInit {
         event.currentIndex,
       );
     }
-    this.checkDuplicate()
+    this.validate()
   }
 
   clone(key: string, profile: User) {
     this.roleUserMaping[key].currentUsers.push(profile)
-    this.checkDuplicate()
+    this.validate()
   }
 
-  checkDuplicate() {
+  private validate() {
+    this.checkDuplicate()
+    this.checkUserCount();
+  }
+  private checkUserCount() {
+    this.rolesToEdit.forEach(f => {
+      if (this.roleUserMaping[f.key!]?.currentUsers.length < this.rolesVsMinUser[f.key!]) {
+        this.roleUserMaping[f.key!].errors = {
+          hasError: true,
+          message: `At least ${this.rolesVsMinUser[f.key!]} user should be assigned to this role.`,
+          duplicates: []
+        }
+      }
+
+      if (this.roleUserMaping[f.key!]?.currentUsers.length > this.rolesVsMaxUser[f.key!]) {
+        this.roleUserMaping[f.key!].errors = {
+          hasError: true,
+          message: `At most ${this.rolesVsMaxUser[f.key!]} user should be assigned to this role.`,
+          duplicates: []
+        }
+      }
+    })
+  }
+
+
+
+  private checkDuplicate() {
     this.rolesToEdit.forEach(f => {
       const duplicates = this.roleUserMaping[f.key!]?.currentUsers.map(m => m.userId).filter((item, index) => this.roleUserMaping[f.key!]?.currentUsers.map(m => m.userId).indexOf(item) !== index) as string[];
 
@@ -132,13 +167,12 @@ export class MemberRoleComponent implements OnInit {
           duplicates: duplicates
         };
     })
-
   }
 
   remove(key: string, profile: User) {
     let index = this.roleUserMaping[key].currentUsers.indexOf(profile);
     this.roleUserMaping[key].currentUsers.splice(index, 1)
-    this.checkDuplicate()
+    this.validate()
   }
 
   addUserToRole(roleId: string) {
@@ -162,7 +196,7 @@ export class MemberRoleComponent implements OnInit {
         if (profile) {
           this.roleUserMaping[roleId].currentUsers.push(profile!);
           modal.close();
-          this.checkDuplicate()
+          this.validate()
         }
       }
     })
@@ -170,6 +204,7 @@ export class MemberRoleComponent implements OnInit {
   }
 
   async saveRoles() {
+    this.validate();
     let noError = Object.keys(this.roleUserMaping).every(f => {
       return !this.roleUserMaping[f].errors?.hasError
     });

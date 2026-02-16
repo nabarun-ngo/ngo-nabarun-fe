@@ -14,6 +14,13 @@ import { User } from '../../member/models/member.model';
   providedIn: 'root'
 })
 export class ExpenseService {
+  fetchAccountBalance(accountId: string): Observable<number> {
+    return this.accountController
+      .accountBalance({ id: accountId })
+      .pipe(
+        map((d) => d.responsePayload)
+      );
+  }
 
   constructor(
     private readonly expenseController: ExpenseControllerService,
@@ -214,7 +221,7 @@ export class ExpenseService {
     */
   fetchAccounts(options?: {
     type?: Array<'PRINCIPAL' | 'GENERAL' | 'DONATION' | 'PUBLIC_DONATION' | 'WALLET'>;
-    status?: Array<'ACTIVE' | 'INACTIVE' | 'BLOCKED'>;
+    status?: Array<'ACTIVE' | 'CLOSED'>;
     accountId?: string;
     accountHolderId?: string;
     pageIndex?: number;

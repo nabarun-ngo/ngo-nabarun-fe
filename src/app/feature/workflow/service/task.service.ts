@@ -11,6 +11,7 @@ import { RequestDefaultValue } from "../workflow.const";
     providedIn: 'root'
 })
 export class TaskService {
+
     constructor(private workflowController: WorkflowControllerService) { }
 
     findMyTasks(
@@ -45,6 +46,14 @@ export class TaskService {
                 remarks,
                 resultData
             }
+        }).pipe(map(d => mapToWorkflowTaskDtoToTask(d.responsePayload!)));
+    }
+
+    releaseTask(workflowId: string, taskId: string) {
+        return this.workflowController.reassignTask({
+            id: workflowId,
+            taskId: taskId,
+            fromDefinition: true
         }).pipe(map(d => mapToWorkflowTaskDtoToTask(d.responsePayload!)));
     }
 

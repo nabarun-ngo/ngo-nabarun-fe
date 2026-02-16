@@ -13,11 +13,14 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { executeCron } from '../fn/cron-controller/execute-cron';
 import { ExecuteCron$Params } from '../fn/cron-controller/execute-cron';
+import { getCronLogs } from '../fn/cron-controller/get-cron-logs';
+import { GetCronLogs$Params } from '../fn/cron-controller/get-cron-logs';
 import { getScheduledJobs } from '../fn/cron-controller/get-scheduled-jobs';
 import { GetScheduledJobs$Params } from '../fn/cron-controller/get-scheduled-jobs';
 import { runScheduledJob } from '../fn/cron-controller/run-scheduled-job';
 import { RunScheduledJob$Params } from '../fn/cron-controller/run-scheduled-job';
 import { SuccessResponseArrayCronJobDto } from '../models/success-response-array-cron-job-dto';
+import { SuccessResponseArraySuccessResponse } from '../models/success-response-array-success-response';
 import { SuccessResponseSuccessResponse } from '../models/success-response-success-response';
 
 @Injectable({ providedIn: 'root' })
@@ -30,6 +33,10 @@ export class CronControllerService extends BaseService {
   static readonly ExecuteCronPath = '/api/cron/trigger';
 
   /**
+   * **Required Permissions:**
+   * - `update:cron`
+   * _(Any of these permissions)_
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `executeCron()` instead.
    *
@@ -40,6 +47,10 @@ export class CronControllerService extends BaseService {
   }
 
   /**
+   * **Required Permissions:**
+   * - `update:cron`
+   * _(Any of these permissions)_
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `executeCron$Response()` instead.
    *
@@ -55,6 +66,10 @@ export class CronControllerService extends BaseService {
   static readonly RunScheduledJobPath = '/api/cron/run/{name}';
 
   /**
+   * **Required Permissions:**
+   * - `update:cron`
+   * _(Any of these permissions)_
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `runScheduledJob()` instead.
    *
@@ -65,6 +80,10 @@ export class CronControllerService extends BaseService {
   }
 
   /**
+   * **Required Permissions:**
+   * - `update:cron`
+   * _(Any of these permissions)_
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `runScheduledJob$Response()` instead.
    *
@@ -80,6 +99,10 @@ export class CronControllerService extends BaseService {
   static readonly GetScheduledJobsPath = '/api/cron/jobs';
 
   /**
+   * **Required Permissions:**
+   * - `read:cron`
+   * _(Any of these permissions)_
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getScheduledJobs()` instead.
    *
@@ -90,6 +113,10 @@ export class CronControllerService extends BaseService {
   }
 
   /**
+   * **Required Permissions:**
+   * - `read:cron`
+   * _(Any of these permissions)_
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getScheduledJobs$Response()` instead.
    *
@@ -98,6 +125,39 @@ export class CronControllerService extends BaseService {
   getScheduledJobs(params?: GetScheduledJobs$Params, context?: HttpContext): Observable<SuccessResponseArrayCronJobDto> {
     return this.getScheduledJobs$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseArrayCronJobDto>): SuccessResponseArrayCronJobDto => r.body)
+    );
+  }
+
+  /** Path part for operation `getCronLogs()` */
+  static readonly GetCronLogsPath = '/api/cron/logs/{name}';
+
+  /**
+   * **Required Permissions:**
+   * - `read:cron`
+   * _(Any of these permissions)_
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getCronLogs()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCronLogs$Response(params: GetCronLogs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArraySuccessResponse>> {
+    return getCronLogs(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * **Required Permissions:**
+   * - `read:cron`
+   * _(Any of these permissions)_
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getCronLogs$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCronLogs(params: GetCronLogs$Params, context?: HttpContext): Observable<SuccessResponseArraySuccessResponse> {
+    return this.getCronLogs$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseArraySuccessResponse>): SuccessResponseArraySuccessResponse => r.body)
     );
   }
 

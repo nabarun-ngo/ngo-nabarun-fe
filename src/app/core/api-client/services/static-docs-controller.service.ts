@@ -32,7 +32,9 @@ export class StaticDocsControllerService extends BaseService {
   /**
    * Get user guides.
    *
-   *
+   * **Required Permissions:**
+   * - `read:static_docs`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getUserGuides()` instead.
@@ -46,7 +48,9 @@ export class StaticDocsControllerService extends BaseService {
   /**
    * Get user guides.
    *
-   *
+   * **Required Permissions:**
+   * - `read:static_docs`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getUserGuides$Response()` instead.
@@ -65,7 +69,9 @@ export class StaticDocsControllerService extends BaseService {
   /**
    * Get policies.
    *
-   *
+   * **Required Permissions:**
+   * - `read:static_docs`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getPolicies()` instead.
@@ -79,7 +85,9 @@ export class StaticDocsControllerService extends BaseService {
   /**
    * Get policies.
    *
-   *
+   * **Required Permissions:**
+   * - `read:static_docs`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getPolicies$Response()` instead.
@@ -98,7 +106,9 @@ export class StaticDocsControllerService extends BaseService {
   /**
    * Get app links.
    *
-   *
+   * **Required Permissions:**
+   * - `read:static_docs`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getStaticLinks()` instead.
@@ -112,7 +122,9 @@ export class StaticDocsControllerService extends BaseService {
   /**
    * Get app links.
    *
-   *
+   * **Required Permissions:**
+   * - `read:static_docs`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getStaticLinks$Response()` instead.

@@ -13,6 +13,8 @@ import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.i
 import { Project } from '../../model/project.model';
 import { Router } from '@angular/router';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
+import { SCOPE } from 'src/app/core/constant/auth-scope.const';
+import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 
 @Component({
   selector: 'app-activity-accordion',
@@ -32,6 +34,7 @@ export class ActivityAccordionComponent extends Accordion<ProjectActivity> imple
   @Input({ required: true })
   project!: Project;
 
+  permissions!: { canViewActivities: boolean, canCreateActivity: boolean, canUpdateActivity: boolean };
 
   defaultValue = ActivityDefaultValue;
   protected override activeButtonId: string = '';
@@ -39,14 +42,21 @@ export class ActivityAccordionComponent extends Accordion<ProjectActivity> imple
 
   constructor(
     protected projectService: ProjectService,
-    private router: Router
+    private router: Router,
+    private userIdentityService: UserIdentityService
   ) {
     super();
   }
 
   override onInitHook(): void {
     this.setHeaderRow(activityHeader);
-    this.allowActivityCreate = this.project?.status === 'ACTIVE' || false;
+    this.permissions = {
+      canViewActivities: this.userIdentityService.isAccrediatedToAny(SCOPE.read.activity),
+      canCreateActivity: this.userIdentityService.isAccrediatedToAny(SCOPE.create.activity),
+      canUpdateActivity: this.userIdentityService.isAccrediatedToAny(SCOPE.update.activity)
+    };
+    this.allowActivityCreate = (this.project?.status === 'ACTIVE' && this.permissions.canCreateActivity) || false;
+
   }
 
   protected override prepareHighLevelView(
@@ -103,20 +113,20 @@ export class ActivityAccordionComponent extends Accordion<ProjectActivity> imple
         }
       ];
     }
-    return [
-      // {
-      //   button_id: 'VIEW_DONATIONS',
-      //   button_name: 'View Donations'
-      // },
-      {
-        button_id: 'VIEW_EXPENSES',
-        button_name: 'Add/View Expenses'
-      },
-      {
-        button_id: 'UPDATE_ACTIVITY',
-        button_name: 'Update Activity'
-      }
-    ];
+    const buttons: AccordionButton[] = [];
+    if (this.permissions.canUpdateActivity) {
+      buttons.push(
+
+        {
+          button_id: 'UPDATE_ACTIVITY',
+          button_name: 'Update Activity'
+        }
+      );
+    }
+    return [{
+      button_id: 'VIEW_EXPENSES',
+      button_name: 'Add/View Expenses'
+    }, ...buttons];
   }
 
   protected override onClick(event: { buttonId: string; rowIndex: number; }): void {

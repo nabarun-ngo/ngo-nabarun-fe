@@ -5,7 +5,7 @@
 import { BankDetailDto } from '../models/bank-detail-dto';
 import { UpiDetailDto } from '../models/upi-detail-dto';
 export interface UpdateAccountDto {
-  accountStatus?: 'ACTIVE' | 'INACTIVE' | 'BLOCKED' | 'CLOSED';
+  accountStatus?: 'ACTIVE' | 'CLOSED';
   bankDetail?: BankDetailDto;
   description?: string;
   name?: string;

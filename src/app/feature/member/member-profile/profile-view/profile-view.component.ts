@@ -6,10 +6,11 @@ import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { OperationMode, UserConstant } from 'src/app/feature/member/member.const';
 import { sanitizeBase64 } from 'src/app/core/service/utilities.service';
 import { MemberService } from 'src/app/feature/member/service/member.service';
-import { UserDto } from 'src/app/core/api-client/models/user-dto';
-import { LinkDto, UserUpdateAdminDto, UserUpdateDto } from 'src/app/core/api-client/models';
-import { KeyValue } from '../../model/key-value.model';
+import { KeyValue } from '../../../../shared/model/key-value.model';
 import { ModalService } from 'src/app/core/service/modal.service';
+import { Link, User } from '../../models/member.model';
+import { DocumentCategory } from 'src/app/shared/components/document-link/document-link.model';
+import { Doc } from 'src/app/shared/model/document.model';
 
 @Component({
   selector: 'app-profile-view',
@@ -19,18 +20,20 @@ import { ModalService } from 'src/app/core/service/modal.service';
 export class ProfileViewComponent implements OnInit {
 
 
-  profile!: UserDto;
+  profile!: User;
   applicableLM!: KeyValue[];
   @Input({ required: true, alias: 'profile' })
-  set profileData(data: UserDto) {
+  set profileData(data: User) {
     this.profile = data;
     //////console.log(this.profile)
     this.initValues();
   }
   constant = UserConstant
 
+  @Input() documents: Doc[] = []
+
   @Output()
-  onUpdate: EventEmitter<{ actionName: 'SELF_UPDATE' | 'ADMIN_UPDATE' | 'CHANGE_MODE' | 'CHANGE_PASSWORD', id?: string; profile?: UserUpdateAdminDto | UserUpdateDto, mode?: OperationMode }> = new EventEmitter();
+  onUpdate: EventEmitter<{ actionName: 'SELF_UPDATE' | 'ADMIN_UPDATE' | 'CHANGE_MODE' | 'CHANGE_PASSWORD', id?: string; profile?: Partial<User>, mode?: OperationMode }> = new EventEmitter();
   @Input('mode') mode!: OperationMode;
 
   isInactiveUser: any;
@@ -49,11 +52,11 @@ export class ProfileViewComponent implements OnInit {
   } = {};
 
   protected socialMedia: {
-    facebookSM?: LinkDto,
-    instagramSM?: LinkDto,
-    linkedInSM?: LinkDto,
-    twitterSM?: LinkDto
-    whatsappSM?: LinkDto
+    facebookSM?: Link,
+    instagramSM?: Link,
+    linkedInSM?: Link,
+    twitterSM?: Link,
+    whatsappSM?: Link
 
   } = {}
 
@@ -73,6 +76,10 @@ export class ProfileViewComponent implements OnInit {
       status: new FormControl(this.profile.status, [Validators.required]),
       roles: new FormControl(this.profile.roles?.map(m => m.roleCode), []),
       loginMethod: new FormControl(this.profile.loginMethod, [Validators.required]),
+      aadharNumber: new FormControl('', [Validators.pattern('^[0-9]{12}$')]),
+      panNumber: new FormControl('', [Validators.pattern('^[A-Z]{5}[0-9]{4}[A-Z]{1}$')]),
+      panNumberFile: new FormControl('', []),
+      aadharNumberFile: new FormControl('', [])
     });
     this.initValues();
 
@@ -140,6 +147,8 @@ export class ProfileViewComponent implements OnInit {
       //whatsappLink: new FormControl(this.socialMedia.whatsappSM?.mediaLink, []),
       about: new FormControl(this.profile.about, []),
       picture: new FormControl('', []),
+      panNumber: new FormControl((this.profile as any).panNumber || '', []),
+      aadharNumber: new FormControl((this.profile as any).aadharNumber || '', []),
 
     });
 
@@ -237,7 +246,7 @@ export class ProfileViewComponent implements OnInit {
 
   updateDetailAdmin() {
     if (this.editAdminForm.valid) {
-      let userDetail: UserUpdateAdminDto = {};
+      let userDetail: User = {} as User;
       if (this.profile.status != this.editAdminForm.value.status) {
         userDetail.status = this.editAdminForm.value.status;
       }
@@ -250,7 +259,33 @@ export class ProfileViewComponent implements OnInit {
       })
       if (this.editAdminForm.value.loginMethod) {
         let lm = this.editAdminForm.value.loginMethod as string[];
-        userDetail.loginMethods = lm.filter(f => !this.profile.loginMethod?.includes(f as any)) as any;
+        userDetail.loginMethod = lm.filter(f => !this.profile.loginMethod?.includes(f as any)) as any;
+      }
+
+
+      if (this.editAdminForm.value.aadharNumber && !this.editAdminForm.value.aadharNumberFile) {
+        this.modalService.openNotificationModal({
+          title: 'Error',
+          description: 'Please upload Aadhar card to proceed.',
+        }, 'notification', 'error')
+        return;
+      }
+      if (this.editAdminForm.value.panNumber && !this.editAdminForm.value.panNumberFile) {
+        this.modalService.openNotificationModal({
+          title: 'Error',
+          description: 'Please upload Pan card to proceed.',
+        }, 'notification', 'error')
+        return;
+      }
+
+      if (this.editAdminForm.value.aadharNumber) {
+        userDetail.aadharNumber = this.editAdminForm.value.aadharNumber;
+        userDetail.aadharFile = this.editAdminForm.value.aadharNumberFile?.detail?.base64Content;
+      }
+
+      if (this.editAdminForm.value.panNumber) {
+        userDetail.panNumber = this.editAdminForm.value.panNumber;
+        userDetail.panFile = this.editAdminForm.value.panNumberFile?.detail?.base64Content;
       }
       this.onUpdate.emit({ actionName: 'ADMIN_UPDATE', profile: userDetail, id: this.profile.id! })
 
@@ -259,10 +294,20 @@ export class ProfileViewComponent implements OnInit {
     }
   }
 
+  hideAdmin() {
+    this.onUpdate.emit({ actionName: 'CHANGE_MODE', mode: 'view_admin' });
+  }
+
+  hideSelf() {
+    this.pictureBase64 = undefined;
+    this.onUpdate.emit({ actionName: 'CHANGE_MODE', mode: 'view_self' });
+  }
+
   updateSelfProfile() {
     //////console.log(this.editSelfForm)
     if (this.editSelfForm.valid) {
-      let userDetail: UserUpdateDto = {
+      let userDetail: Partial<User> = {
+        email: this.editSelfForm.value.email,
         title: this.editSelfForm.value.title,
         firstName: this.editSelfForm.value.firstName,
         middleName: this.editSelfForm.value.middleName,
@@ -270,9 +315,6 @@ export class ProfileViewComponent implements OnInit {
         gender: this.editSelfForm.value.gender,
         dateOfBirth: this.editSelfForm.value.dateOfBirth,
         about: this.editSelfForm.value.about,
-
-
-
       };
 
       if (this.editSelfForm.value.phoneNumber_p) {
@@ -291,7 +333,7 @@ export class ProfileViewComponent implements OnInit {
         }
 
       }
-      userDetail.isAddressSame = this.editSelfForm.value.presentParmanentSame;
+      userDetail.addressSame = this.editSelfForm.value.presentParmanentSame;
       userDetail.presentAddress = {
         addressLine1: this.editSelfForm.value.addressLine1_p,
         addressLine2: this.editSelfForm.value.addressLine2_p,
@@ -344,6 +386,12 @@ export class ProfileViewComponent implements OnInit {
       }
       userDetail.socialMediaLinks.push({ linkType: 'whatsapp', linkName: 'Whatsapp', linkValue: 'https://wa.me/' + this.editSelfForm.value.phoneNumber_p })
 
+      if (this.editSelfForm.value.panNumber) {
+        (userDetail as any).panNumber = this.editSelfForm.value.panNumber;
+      }
+      if (this.editSelfForm.value.aadharNumber) {
+        (userDetail as any).aadharNumber = this.editSelfForm.value.aadharNumber;
+      }
 
       ////console.log(this.editSelfForm.value)
       if (this.pictureBase64) {
@@ -385,5 +433,6 @@ export class ProfileViewComponent implements OnInit {
     }
     return this.refData[name].find(f => f.key == code)?.displayValue;
   }
+
 
 }

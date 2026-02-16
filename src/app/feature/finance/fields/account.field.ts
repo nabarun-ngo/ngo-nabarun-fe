@@ -23,15 +23,10 @@ export const accountTabHeader = (tab: accountTab) => {
       value: 'Account Status',
       rounded: true,
     },
-    tab == 'my_accounts'
-      ? {
-        value: 'Account Balance',
-        rounded: true,
-      }
-      : {
-        value: 'Account Holder Name',
-        rounded: true,
-      },
+    {
+      value: 'Account Holder Name',
+      rounded: true,
+    },
   ];
 };
 
@@ -120,15 +115,10 @@ export const accountHighLevelView = (
       showDisplayValue: true,
       refDataSection: AccountConstant.refDataKey.accountStatus,
     },
-    tab == 'my_accounts'
-      ? {
-        type: 'text',
-        value: '₹ ' + item?.balance,
-      }
-      : {
-        type: 'text',
-        value: item?.accountHolderName || '',
-      },
+    {
+      type: 'text',
+      value: item?.accountHolderName || '',
+    },
   ];
 };
 
@@ -192,7 +182,7 @@ export const accountDetailSection = (
         field_name: 'Current Balance',
         field_html_id: 'balance',
         hide_field: isCreate,
-        field_value: '₹ ' + (m?.balance || 0),
+        field_value: '₹ 0',
       },
 
       {

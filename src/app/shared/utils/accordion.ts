@@ -348,21 +348,22 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
     }
   }
 
-  protected addSectionInAccordion(section_detail: DetailedView, rowIndex: number, create?: boolean) {
+  protected addSectionInAccordion(section_detail: DetailedView, rowIndex: number, create?: boolean, addOnTop?: boolean) {
     section_detail.content?.forEach(m1 => {
       section_detail.section_form?.setControl(m1.form_control_name!, new FormControl(m1.field_value, m1.form_input_validation));
     })
     if (create) {
       let indexAddDet = this.accordionList.addContent?.detailed.findIndex(f => f.section_html_id == section_detail.section_html_id)!;
       if (indexAddDet == -1) {
-        this.accordionList.addContent?.detailed.push(section_detail);
+        addOnTop ? this.accordionList.addContent?.detailed.unshift(section_detail) : this.accordionList.addContent?.detailed.push(section_detail);
       } else if (this.accordionList.addContent) {
         this.accordionList.addContent.detailed[indexAddDet] = section_detail;
       }
     } else {
       let indexAddDet = this.accordionList.contents[rowIndex].detailed.findIndex(f => f.section_html_id == section_detail.section_html_id);
       if (indexAddDet == -1) {
-        this.accordionList.contents[rowIndex].detailed.push(section_detail);
+        const section = this.accordionList.contents[rowIndex].detailed;
+        addOnTop ? section.unshift(section_detail) : section.push(section_detail);
       } else {
         this.accordionList.contents[rowIndex].detailed[indexAddDet] = section_detail;
       }
@@ -670,6 +671,21 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
 
     if (field) {
       field.hide_field = !shouldShow;
+    }
+  }
+
+  protected updateFieldValue(
+    sectionId: string,
+    fieldName: string,
+    rowIndex: number,
+    value: any,
+    create?: boolean
+  ): void {
+    const section = this.getSectionInAccordion(sectionId, rowIndex, create);
+    const field = section?.content?.find(f => f.form_control_name === fieldName);
+
+    if (field) {
+      field.field_value = value;
     }
   }
 

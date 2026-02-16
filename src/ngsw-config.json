@@ -32,15 +32,14 @@
   ],
   "dataGroups": [
     {
-      "name": "api-calls",
+      "name": "api-cache",
       "urls": [
-        "http://localhost:8082/**",
-        "http://localhost:8080/**"
+        "/api/**"
       ],
       "cacheConfig": {
-        "strategy": "freshness",
-        "maxAge": "1h",
-        "timeout": "5s"
+        "strategy": "performance",
+        "maxSize": 100,
+        "maxAge": "1h"
       }
     }
   ]

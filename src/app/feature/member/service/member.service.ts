@@ -3,6 +3,7 @@ import { map } from 'rxjs';
 import { UserDto, UserUpdateAdminDto, UserUpdateDto } from 'src/app/core/api-client/models';
 import { DmsControllerService, UserControllerService } from 'src/app/core/api-client/services';
 import { mapPagedUserDtoToPagedUser, mapUserDtoToUser } from '../models/member.mapper';
+import { KeyValue } from 'src/app/shared/model/key-value.model';
 
 @Injectable({
   providedIn: 'root'
@@ -32,21 +33,41 @@ export class MemberService {
   }
 
   fetchRefData(countryCode?: string, stateCode?: string) {
-    return this.userController.referenceData({ countryCode: countryCode, stateCode: stateCode }).pipe(map(d => d.responsePayload));
+    return this.userController.referenceData({ countryCode: countryCode, stateCode: stateCode })
+      .pipe(
+        map(d => d.responsePayload),
+        map(d => {
+          d.availableRoles = d.availableRoles?.filter(f => f.active);
+          d.userTitles = d.userTitles?.filter(f => f.active);
+          d.userStatuses = d.userStatuses?.filter(f => f.active);
+          d.loginMethods = d.loginMethods?.filter(f => f.active);
+          return d;
+        })
+      )
+      ;
   }
 
+
   uploadPicture(id: string, base64: string) {
+    return this.uploadDocument(id, base64, 'PROFILE', 'profile_pic.png');
+  }
+
+  uploadDocument(id: string, base64: string, entityType: string, filename: string) {
     return this.dmsService.uploadFile({
       body: {
-        contentType: 'image/png',
+        contentType: base64.includes('pdf') ? 'application/pdf' : 'image/png',
         fileBase64: base64,
-        filename: 'profile_pic.png',
+        filename: filename,
         documentMapping: [{
           entityId: id,
-          entityType: 'PROFILE'
+          entityType: entityType as any
         }]
       }
     }).pipe(map(d => d.responsePayload))
+  }
+
+  getUserDocument(id: string) {
+    return this.dmsService.getDocuments({ type: 'PROFILE_DOC' as any, id }).pipe(map(d => d.responsePayload));
   }
 
   getUserDetail(id: string) {

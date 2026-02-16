@@ -26,15 +26,16 @@ export class AppComponent implements OnInit {
     /**
      * Configuring App callback
      */
-    this.identityService.configure();
+    await this.identityService.configure();
 
     /**
      * configuring idle timeout
      */
     this.bnIdle.startWatching(environment.inactivityTimeOut).subscribe((isTimedOut: boolean) => {
       if (isTimedOut) {
-        console.warn('session expired due to inactivity');
-        this.identityService.logout();
+        //console.warn('session expired due to inactivity');
+        //this.identityService.logout();
+        //window.close()
       }
     });
   }

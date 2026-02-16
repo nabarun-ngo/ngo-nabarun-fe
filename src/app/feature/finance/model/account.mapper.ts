@@ -66,7 +66,6 @@ function getAccountTypeLabel(type: string): string {
  * Map API AccountDetailDto to domain Account
  */
 export function mapAccountDtoToAccount(dto: AccountDetailDto): Account {
-  const balance = dto.currentBalance ?? 0;
   const accountId = dto.id || '';
   const accountName = dto.accountHolderName || dto.accountHolder || 'Unknown';
 
@@ -76,7 +75,7 @@ export function mapAccountDtoToAccount(dto: AccountDetailDto): Account {
     accountHolderName: dto.accountHolderName || dto.accountHolder,
     accountType: dto.accountType,
     status: dto.accountStatus,
-    balance: balance,
+    // balance: balance,
     activatedOn: dto.activatedOn,
     bankDetail: mapBankDetail(dto.bankDetail),
     upiDetail: mapUpiDetail(dto.upiDetail),
@@ -84,7 +83,7 @@ export function mapAccountDtoToAccount(dto: AccountDetailDto): Account {
     // Computed properties
     displayName: `${accountId} - ${accountName}`,
     isActive: dto.accountStatus === 'ACTIVE',
-    formattedBalance: `₹${balance.toLocaleString('en-IN')}`,
+    formattedBalance: `₹ 0`,
     accountTypeLabel: getAccountTypeLabel(dto.accountType)
   };
 }

@@ -13,11 +13,11 @@
                             [summary]="initialData?.summary!" [payableAccounts]="initialData?.accounts!"
                             [refData]="refData"></app-self-donation-tab>
                     </mat-tab>
-                    <mat-tab id="guestDonationTab" label="Guest Donations">
+                    <mat-tab id="guestDonationTab" label="Guest Donations" *ngIf="permissions?.canViewGuestDonation">
                         <app-guest-donation-tab [accordionData]="initialData?.donations!"
                             [refData]="refData"></app-guest-donation-tab>
                     </mat-tab>
-                    <mat-tab id="memberDonationTab" label="Member Donations">
+                    <mat-tab id="memberDonationTab" label="Member Donations" *ngIf="permissions?.canViewMemberDonation">
                         <app-member-donation-tab [accordionData]="initialData?.donations!"
                             [refData]="refData"></app-member-donation-tab>
                     </mat-tab>

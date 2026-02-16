@@ -13,6 +13,8 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { additionalFields } from '../fn/workflow-controller/additional-fields';
 import { AdditionalFields$Params } from '../fn/workflow-controller/additional-fields';
+import { cancelWorkflow } from '../fn/workflow-controller/cancel-workflow';
+import { CancelWorkflow$Params } from '../fn/workflow-controller/cancel-workflow';
 import { getInstance } from '../fn/workflow-controller/get-instance';
 import { GetInstance$Params } from '../fn/workflow-controller/get-instance';
 import { listAutomaticTasks } from '../fn/workflow-controller/list-automatic-tasks';
@@ -25,6 +27,8 @@ import { listTasks } from '../fn/workflow-controller/list-tasks';
 import { ListTasks$Params } from '../fn/workflow-controller/list-tasks';
 import { processTask } from '../fn/workflow-controller/process-task';
 import { ProcessTask$Params } from '../fn/workflow-controller/process-task';
+import { reassignTask } from '../fn/workflow-controller/reassign-task';
+import { ReassignTask$Params } from '../fn/workflow-controller/reassign-task';
 import { startWorkflow } from '../fn/workflow-controller/start-workflow';
 import { StartWorkflow$Params } from '../fn/workflow-controller/start-workflow';
 import { SuccessResponse } from '../models/success-response';
@@ -52,7 +56,7 @@ export class WorkflowControllerService extends BaseService {
    * Start a new workflow instance.
    *
    * **Required Permissions:**
-   * - `create:request`
+   * - `create:workflow`
    * _(All permissions required)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -68,7 +72,7 @@ export class WorkflowControllerService extends BaseService {
    * Start a new workflow instance.
    *
    * **Required Permissions:**
-   * - `create:request`
+   * - `create:workflow`
    * _(All permissions required)_
    *
    * This method provides access only to the response body.
@@ -89,7 +93,7 @@ export class WorkflowControllerService extends BaseService {
    * Update a workflow task.
    *
    * **Required Permissions:**
-   * - `update:work`
+   * - `update:task`
    * _(All permissions required)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -105,7 +109,7 @@ export class WorkflowControllerService extends BaseService {
    * Update a workflow task.
    *
    * **Required Permissions:**
-   * - `update:work`
+   * - `update:task`
    * _(All permissions required)_
    *
    * This method provides access only to the response body.
@@ -119,6 +123,43 @@ export class WorkflowControllerService extends BaseService {
     );
   }
 
+  /** Path part for operation `reassignTask()` */
+  static readonly ReassignTaskPath = '/api/workflows/{id}/tasks/{taskId}/reassign';
+
+  /**
+   * Reassign a workflow task.
+   *
+   * **Required Permissions:**
+   * - `update:task`
+   * _(All permissions required)_
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `reassignTask()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  reassignTask$Response(params: ReassignTask$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseWorkflowTaskDto>> {
+    return reassignTask(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Reassign a workflow task.
+   *
+   * **Required Permissions:**
+   * - `update:task`
+   * _(All permissions required)_
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `reassignTask$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  reassignTask(params: ReassignTask$Params, context?: HttpContext): Observable<SuccessResponseWorkflowTaskDto> {
+    return this.reassignTask$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseWorkflowTaskDto>): SuccessResponseWorkflowTaskDto => r.body)
+    );
+  }
+
   /** Path part for operation `getInstance()` */
   static readonly GetInstancePath = '/api/workflows/{id}/instance';
 
@@ -126,7 +167,7 @@ export class WorkflowControllerService extends BaseService {
    * Get workflow instance by ID.
    *
    * **Required Permissions:**
-   * - `read:request`
+   * - `read:workflow`
    * _(All permissions required)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -142,7 +183,7 @@ export class WorkflowControllerService extends BaseService {
    * Get workflow instance by ID.
    *
    * **Required Permissions:**
-   * - `read:request`
+   * - `read:workflow`
    * _(All permissions required)_
    *
    * This method provides access only to the response body.
@@ -163,7 +204,7 @@ export class WorkflowControllerService extends BaseService {
    * List workflow instances.
    *
    * **Required Permissions:**
-   * - `read:request`
+   * - `read:workflow`
    * _(All permissions required)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -179,7 +220,7 @@ export class WorkflowControllerService extends BaseService {
    * List workflow instances.
    *
    * **Required Permissions:**
-   * - `read:request`
+   * - `read:workflow`
    * _(All permissions required)_
    *
    * This method provides access only to the response body.
@@ -200,7 +241,7 @@ export class WorkflowControllerService extends BaseService {
    * List workflow instances.
    *
    * **Required Permissions:**
-   * - `read:request`
+   * - `read:workflow`
    * _(All permissions required)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -216,7 +257,7 @@ export class WorkflowControllerService extends BaseService {
    * List workflow instances.
    *
    * **Required Permissions:**
-   * - `read:request`
+   * - `read:workflow`
    * _(All permissions required)_
    *
    * This method provides access only to the response body.
@@ -239,7 +280,7 @@ export class WorkflowControllerService extends BaseService {
    * Filter by completed (set true to get completed tasks, set false to get pending tasks)
    *
    * **Required Permissions:**
-   * - `read:work`
+   * - `read:task`
    * _(All permissions required)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -257,7 +298,7 @@ export class WorkflowControllerService extends BaseService {
    * Filter by completed (set true to get completed tasks, set false to get pending tasks)
    *
    * **Required Permissions:**
-   * - `read:work`
+   * - `read:task`
    * _(All permissions required)_
    *
    * This method provides access only to the response body.
@@ -278,7 +319,7 @@ export class WorkflowControllerService extends BaseService {
    * List automatic workflow tasks.
    *
    * **Required Permissions:**
-   * - `read:work`
+   * - `read:task`
    * _(All permissions required)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -294,7 +335,7 @@ export class WorkflowControllerService extends BaseService {
    * List automatic workflow tasks.
    *
    * **Required Permissions:**
-   * - `read:work`
+   * - `read:task`
    * _(All permissions required)_
    *
    * This method provides access only to the response body.
@@ -346,6 +387,39 @@ export class WorkflowControllerService extends BaseService {
 }>): SuccessResponse & {
 'responsePayload'?: string;
 } => r.body)
+    );
+  }
+
+  /** Path part for operation `cancelWorkflow()` */
+  static readonly CancelWorkflowPath = '/api/workflows/{id}/cancel';
+
+  /**
+   * Cancel a workflow instance.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `cancelWorkflow()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  cancelWorkflow$Response(params: CancelWorkflow$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseWorkflowInstanceDto>> {
+    return cancelWorkflow(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Cancel a workflow instance.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `cancelWorkflow$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  cancelWorkflow(params: CancelWorkflow$Params, context?: HttpContext): Observable<SuccessResponseWorkflowInstanceDto> {
+    return this.cancelWorkflow$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseWorkflowInstanceDto>): SuccessResponseWorkflowInstanceDto => r.body)
     );
   }
 

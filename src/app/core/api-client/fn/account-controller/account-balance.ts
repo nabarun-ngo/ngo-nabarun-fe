@@ -8,14 +8,18 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseJobDetail } from '../../models/success-response-job-detail';
+import { SuccessResponse } from '../../models/success-response';
 
-export interface GetQueueStatistics$Params {
+export interface AccountBalance$Params {
+  id: string;
 }
 
-export function getQueueStatistics(http: HttpClient, rootUrl: string, params?: GetQueueStatistics$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseJobDetail>> {
-  const rb = new RequestBuilder(rootUrl, getQueueStatistics.PATH, 'get');
+export function accountBalance(http: HttpClient, rootUrl: string, params: AccountBalance$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponse & {
+'responsePayload'?: number;
+}>> {
+  const rb = new RequestBuilder(rootUrl, accountBalance.PATH, 'get');
   if (params) {
+    rb.path('id', params.id, {});
   }
 
   return http.request(
@@ -23,9 +27,11 @@ export function getQueueStatistics(http: HttpClient, rootUrl: string, params?: G
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseJobDetail>;
+      return r as StrictHttpResponse<SuccessResponse & {
+      'responsePayload'?: number;
+      }>;
     })
   );
 }
 
-getQueueStatistics.PATH = '/api/jobs/statistics';
+accountBalance.PATH = '/api/account/{id}/balance';

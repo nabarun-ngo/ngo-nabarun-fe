@@ -444,13 +444,13 @@ export const expenseSearchInput = (
 
 export const settlementSummary = (
   expense: Expense,
-  payerAccount?: Account
+  walletBalance: number = 0,
+  payerAccount?: Account,
 ) => {
   //const walletCount = (payerAccounts?.length ?? 0);
   //const payerAccount = walletCount > 0 ? payerAccounts![0] : null;
 
   const finalAmount = Number(expense?.finalAmount ?? 0);
-  const walletBalance = Number(payerAccount?.balance ?? 0);
 
   const walletUsed = Math.min(walletBalance, finalAmount);
   const transferAmount = Math.max(finalAmount - walletBalance, 0);

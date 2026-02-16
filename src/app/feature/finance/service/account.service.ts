@@ -37,6 +37,7 @@ import { mapDocDtoToDoc } from 'src/app/shared/model/document.model';
 })
 export class AccountService {
 
+
   constructor(
     private accountController: AccountControllerService,
     private userController: UserControllerService,
@@ -67,7 +68,7 @@ export class AccountService {
    */
   fetchAccounts(options?: {
     type?: Array<'PRINCIPAL' | 'GENERAL' | 'DONATION' | 'PUBLIC_DONATION' | 'WALLET'>;
-    status?: Array<'ACTIVE' | 'INACTIVE' | 'BLOCKED'>;
+    status?: Array<'ACTIVE' | 'CLOSED'>;
     accountId?: string;
     accountHolderId?: string;
     pageIndex?: number;
@@ -102,7 +103,7 @@ export class AccountService {
     pageSize?: number,
     filter?: {
       accountId?: string;
-      status?: Array<'ACTIVE' | 'INACTIVE' | 'BLOCKED'>;
+      status?: Array<'ACTIVE' | 'CLOSED'>;
       type?: Array<'PRINCIPAL' | 'GENERAL' | 'DONATION' | 'PUBLIC_DONATION'>;
     }
   ): Observable<PagedAccounts> {
@@ -126,7 +127,7 @@ export class AccountService {
    * @param value Update data with account status
    * @returns Observable of updated account (domain model)
    */
-  updateAccountDetail(id: string, value: { status: 'ACTIVE' | 'INACTIVE' | 'BLOCKED' }): Observable<Account> {
+  updateAccountDetail(id: string, value: { status: 'ACTIVE' | 'CLOSED' }): Observable<Account> {
     return this.accountController
       .updateAccount({
         id: id,
@@ -185,6 +186,16 @@ export class AccountService {
       .pipe(
         map((d) => d.responsePayload),
         map(mapAccountDtoToAccount)
+      );
+  }
+
+  fetchBalance(id: string): Observable<number> {
+    return this.accountController
+      .accountBalance({
+        id: id,
+      })
+      .pipe(
+        map((d) => d.responsePayload),
       );
   }
 

@@ -27,6 +27,8 @@ export class DetailedViewComponent {
         }
         else if (m1.form_input?.inputType == 'number') {
           m.section_form?.setControl(m1.form_control_name!, new FormControl(value, m1.form_input_validation));
+        } else if (m1.form_input?.inputType == 'email') {
+          m.section_form?.setControl(m1.form_control_name!, new FormControl(value, m1.form_input_validation));
         } else {
           m.section_form?.setControl(m1.form_control_name!, new FormControl(value, m1.form_input_validation));
         }

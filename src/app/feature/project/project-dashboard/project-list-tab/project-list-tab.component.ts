@@ -13,6 +13,8 @@ import { ProjectService } from '../../service/project.service';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { compareObjects, removeNullFields } from 'src/app/core/service/utilities.service';
 import { User } from 'src/app/feature/member/models/member.model';
+import { UserIdentityService } from 'src/app/core/service/user-identity.service';
+import { SCOPE } from 'src/app/core/constant/auth-scope.const';
 
 @Component({
   selector: 'app-project-list-tab',
@@ -23,9 +25,12 @@ export class ProjectListTabComponent extends Accordion<Project> implements TabCo
 
   @Input() managers: User[] | undefined;
 
+  permissions!: { canCreateProject: boolean; canUpdateProject: boolean; canViewActivities: boolean, canCreateActivity: boolean, canUpdateActivity: boolean };
+
   constructor(
     protected projectService: ProjectService,
-    protected router: Router
+    protected router: Router,
+    protected userIdentityService: UserIdentityService
   ) {
     super();
   }
@@ -57,6 +62,13 @@ export class ProjectListTabComponent extends Accordion<Project> implements TabCo
         rounded: true
       }
     ]);
+    this.permissions = {
+      canCreateProject: this.userIdentityService.isAccrediatedToAny(SCOPE.create.project),
+      canUpdateProject: this.userIdentityService.isAccrediatedToAny(SCOPE.update.project),
+      canViewActivities: this.userIdentityService.isAccrediatedToAny(SCOPE.read.activity),
+      canCreateActivity: this.userIdentityService.isAccrediatedToAny(SCOPE.create.activity),
+      canUpdateActivity: this.userIdentityService.isAccrediatedToAny(SCOPE.update.activity)
+    };
   }
 
   protected override prepareHighLevelView(data: Project, options?: { [key: string]: any; }): AccordionCell[] {
@@ -102,16 +114,20 @@ export class ProjectListTabComponent extends Accordion<Project> implements TabCo
         }
       ];
     }
-    return [
-      {
+    let buttons = [];
+    if (this.permissions.canViewActivities || this.permissions.canCreateActivity || this.permissions.canUpdateActivity) {
+      buttons.push({
         button_id: 'VIEW_ACTIVITIES',
         button_name: 'Add/View Activities'
-      },
-      {
+      });
+    }
+    if (this.permissions.canUpdateProject) {
+      buttons.push({
         button_id: 'UPDATE_PROJECT',
         button_name: 'Update Project'
-      }
-    ];
+      });
+    }
+    return buttons;
   }
 
   protected override onClick(event: { buttonId: string; rowIndex: number; }): void {

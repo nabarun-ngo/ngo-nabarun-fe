@@ -8,14 +8,16 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseJobDetail } from '../../models/success-response-job-detail';
+import { SuccessResponseArraySuccessResponse } from '../../models/success-response-array-success-response';
 
-export interface GetQueueStatistics$Params {
+export interface GetCronLogs$Params {
+  name: string;
 }
 
-export function getQueueStatistics(http: HttpClient, rootUrl: string, params?: GetQueueStatistics$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseJobDetail>> {
-  const rb = new RequestBuilder(rootUrl, getQueueStatistics.PATH, 'get');
+export function getCronLogs(http: HttpClient, rootUrl: string, params: GetCronLogs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArraySuccessResponse>> {
+  const rb = new RequestBuilder(rootUrl, getCronLogs.PATH, 'get');
   if (params) {
+    rb.path('name', params.name, {});
   }
 
   return http.request(
@@ -23,9 +25,9 @@ export function getQueueStatistics(http: HttpClient, rootUrl: string, params?: G
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseJobDetail>;
+      return r as StrictHttpResponse<SuccessResponseArraySuccessResponse>;
     })
   );
 }
 
-getQueueStatistics.PATH = '/api/jobs/statistics';
+getCronLogs.PATH = '/api/cron/logs/{name}';

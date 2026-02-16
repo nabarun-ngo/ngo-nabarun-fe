@@ -22,17 +22,6 @@ import { getActivitySection } from 'src/app/feature/project/fields/activity.fiel
 })
 export class GuestDonationTabComponent extends BaseDonationTabComponent {
   protected override detailedViews: DetailedView[] = [];
-
-  constructor(
-    protected override donationService: DonationService,
-    protected override identityService: UserIdentityService,
-    protected override modalService: ModalService,
-    protected override projectSelectionService: ProjectSelectionService,
-  ) {
-    super(donationService, identityService, modalService, projectSelectionService);
-  }
-
-
   override onInitHook(): void {
     const state = history.state;
     if (state && state.project && state.activity) {

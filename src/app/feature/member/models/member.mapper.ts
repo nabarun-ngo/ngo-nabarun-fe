@@ -1,4 +1,4 @@
-import { PagedResultUserDto, UserDto } from "src/app/core/api-client/models";
+import { PagedResultUserDto, RoleDto, UserDto } from "src/app/core/api-client/models";
 import { Link, PagedUser, Role, User } from "./member.model";
 import { mapPagedResult } from "src/app/shared/model/paged-result.model";
 
@@ -37,8 +37,11 @@ export function mapUserDtoToUser(user: UserDto): User {
         status: user.status,
         title: user.title,
         userId: user.userId,
+        roleHistory: user.roleHistory,
+        roleCodes: user.roles.map(role => role.roleCode),
     }
 }
+
 
 /**
  * Map API PagedResultUserDto to domain PagedUser

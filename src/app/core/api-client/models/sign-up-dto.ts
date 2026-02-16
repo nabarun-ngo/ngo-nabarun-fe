@@ -4,7 +4,6 @@
 
 export interface SignUpDto {
   contactNumber: string;
-  dialCode: string;
   email: string;
   firstName: string;
   hometown: string;

@@ -13,8 +13,8 @@ export class ReportService {
     const firstDate = new Date(now.getFullYear(), now.getMonth(), 1);
     return this.donationController.generateReport({
       reportName: reportName,
-      startDate: date(firstDate, 'yyyy-MM-dd'),
-      endDate: date(now, 'yyyy-MM-dd'),
+      startDate: firstDate.toISOString(),
+      endDate: now.toISOString(),
       sendEmail: 'N',
       uploadFile: 'N'
     });

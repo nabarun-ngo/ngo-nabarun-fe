@@ -1,5 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { AfterViewInit, Component, Input } from '@angular/core';
+import { Validators } from '@angular/forms';
 import { getErrorMessage, injectNgControl } from 'src/app/core/service/form.service';
+import { sanitizeBase64 } from 'src/app/core/service/utilities.service';
 import { KeyValue } from 'src/app/shared/model/key-value.model';
 import { inputType, UniversalInputModel } from 'src/app/shared/model/universal-input.model';
 
@@ -9,7 +11,7 @@ import { inputType, UniversalInputModel } from 'src/app/shared/model/universal-i
   templateUrl: './universal-input.component.html',
   styleUrls: ['./universal-input.component.scss']
 })
-export class UniversalInputComponent {
+export class UniversalInputComponent implements AfterViewInit {
 
   protected errorMessage = getErrorMessage
   protected ngControl = injectNgControl();
@@ -19,17 +21,20 @@ export class UniversalInputComponent {
 
   @Input({ required: true, alias: 'inputModel' })
   set model(_model: UniversalInputModel) {
-    //////console.log(_model)
     this.inputModel = _model;
     if (_model.autocomplete) {
-      // ////console.log(_model.selectList)
-      // this.autocompleteList = _model.selectList!;
-      //////console.log(this.autocompleteList)
+
     }
   }
 
-  specialInputTypes: inputType[] = ['date', 'editor', 'html', 'radio', 'time', 'phone', 'check']
+  specialInputTypes: inputType[] = ['date', 'editor', 'html', 'radio', 'time', 'phone', 'check', 'file']
 
+  ngAfterViewInit(): void {
+    if (this.inputModel.inputType == 'email' && !this.ngControl.control?.hasValidator(Validators.email)) {
+      this.ngControl.control?.addValidators(Validators.email);
+      this.ngControl.control?.updateValueAndValidity();
+    }
+  }
 
 
   displayFn(id: string): string {
@@ -132,5 +137,43 @@ export class UniversalInputComponent {
     this.ngControl?.control?.setValue(newValue);
   }
 
+  onFileSelected(event: any): void {
+    const files = event.target.files as FileList;
+    if (files.length > 0) {
+      const file = files[0];
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        const fileData = {
+          file: file,
+          detail: {
+            base64Content: sanitizeBase64(reader.result as string),
+            contentType: file.type,
+            originalFileName: file.name
+          }
+        };
+        this.ngControl.control?.setValue(fileData);
+        this.ngControl.control?.markAsDirty();
+        this.ngControl.control?.markAsTouched();
+      };
+    }
+  }
+
+  getFileName(): string {
+    const value = this.ngControl.control?.value;
+    if (value && value.detail && value.detail.originalFileName) {
+      return value.detail.originalFileName;
+    }
+    if (value && value.name) {
+      return value.name;
+    }
+    return '';
+  }
+
+  removeFile(event: Event): void {
+    event.stopPropagation();
+    this.ngControl.control?.setValue(null);
+    this.ngControl.control?.markAsDirty();
+  }
 
 }

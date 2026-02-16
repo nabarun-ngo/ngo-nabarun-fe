@@ -19,7 +19,7 @@ export const UserConstant = {
         userGenders: 'userGenders',
         userStatuses: 'userStatuses',
         userTitles: 'userTitles',
-
+        documentTypes: 'documentTypes'
     },
     enum: {
 
