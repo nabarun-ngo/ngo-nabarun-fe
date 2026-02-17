@@ -32,14 +32,14 @@
   ],
   "dataGroups": [
     {
-      "name": "api-cache",
+      "name": "assets-cache",
       "urls": [
-        "/api/**"
+        "/firebasestorage.googleapis.com/**"
       ],
       "cacheConfig": {
         "strategy": "performance",
         "maxSize": 100,
-        "maxAge": "1h"
+        "maxAge": "24h"
       }
     }
   ]
