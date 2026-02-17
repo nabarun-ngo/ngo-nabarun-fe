@@ -106,6 +106,13 @@ export class MemberService {
     });
   }
 
+  saveUserRoleWise(userId: string, roleCodes: string[]) {
+    return this.userController.assignRole({
+      id: userId,
+      body: roleCodes
+    });
+  }
+
   updateMyProfiledetail(updatedDetail: UserUpdateDto) {
     return this.userController.updateMyDetails({
       body: updatedDetail,
