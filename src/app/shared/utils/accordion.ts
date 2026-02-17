@@ -682,7 +682,7 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
     create?: boolean
   ): void {
     const section = this.getSectionInAccordion(sectionId, rowIndex, create);
-    const field = section?.content?.find(f => f.form_control_name === fieldName);
+    const field = section?.content?.find(f => f.form_control_name === fieldName || f.field_html_id === fieldName);
 
     if (field) {
       field.field_value = value;

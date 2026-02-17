@@ -14,7 +14,6 @@ import {
   expenseHighLevelView,
   expenseTabHeader,
 } from '../../fields/expense.field';
-import { AccountService } from '../../service/account.service';
 import { AccountDefaultValue } from '../../finance.const';
 import { filterFormChange } from 'src/app/core/service/form.service';
 import { ModalService } from 'src/app/core/service/modal.service';
@@ -25,7 +24,6 @@ import { removeNullFields } from 'src/app/core/service/utilities.service';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { User } from 'src/app/feature/member/models/member.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Validators } from '@angular/forms';
 import { getProjectSection } from 'src/app/feature/project/fields/project.field';
 import { getActivitySection } from 'src/app/feature/project/fields/activity.field';
 import { ProjectSelectionService, ProjectSelectionResult } from 'src/app/feature/project/service/project-selection.service';
@@ -292,7 +290,7 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
   }
 
   protected override onAccordionOpen($event: { rowIndex: number }) {
-    let item = this.itemList![$event.rowIndex];
+    let item = this.itemList[$event.rowIndex];
     this.expenseService.getExpenseDocuments(item.id!).subscribe((data) => {
       this.addSectionInAccordion(expenseDocumentSection(data), $event.rowIndex);
     });
