@@ -14,7 +14,7 @@ import { AdminService } from '../../admin/admin.service';
 import { FormGroup, Validators } from '@angular/forms';
 import { SearchAndAdvancedSearchFormComponent } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search-form.component';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
-import { User } from '../models/member.model';
+import { Role, User } from '../models/member.model';
 
 @Component({
   selector: 'app-member-role',
@@ -89,7 +89,7 @@ export class MemberRoleComponent implements OnInit {
 
       this.roleUserMaping[f.key!] = {
         currentUsers: data?.content!,
-        previousUsersId: data?.content!.map(m => m.userId) as string[],
+        previousUsersId: data?.content!.map(m => m.id) as string[],
       }
 
     }
@@ -210,20 +210,53 @@ export class MemberRoleComponent implements OnInit {
     });
     if (noError) {
       let isChanged: boolean = false;
-      for (const f of this.rolesToEdit) {
-        let currentUsers = this.roleUserMaping[f.key!].currentUsers.map(m => m.userId) as string[];
-        let pastUsers = this.roleUserMaping[f.key!].previousUsersId;
-        ////console.log(f.key!, currentUsers, pastUsers)
+      const rolesInGrid = this.rolesToEdit.map(r => r.key!);
+      const usersToRole: Record<string, string[]> = {};
+      const previousUsersToRole: Record<string, string[]> = {};
 
-        if (!arraysEqual(currentUsers, pastUsers)) {
+      // 1. Aggregate current state: user -> roles
+      for (const roleCode of rolesInGrid) {
+        this.roleUserMaping[roleCode].currentUsers.forEach(user => {
+          if (!usersToRole[user.id]) {
+            usersToRole[user.id] = [];
+          }
+          if (!usersToRole[user.id].includes(roleCode)) {
+            usersToRole[user.id].push(roleCode);
+          }
+        });
+
+        // 2. Aggregate previous state for comparison
+        this.roleUserMaping[roleCode].previousUsersId.forEach(userId => {
+          if (!previousUsersToRole[userId]) {
+            previousUsersToRole[userId] = [];
+          }
+          if (!previousUsersToRole[userId].includes(roleCode)) {
+            previousUsersToRole[userId].push(roleCode);
+          }
+        });
+      }
+
+      // 3. Identify all users who were either previously or are currently in the grid
+      const allUserIds = new Set([...Object.keys(usersToRole), ...Object.keys(previousUsersToRole)]);
+
+      // 4. Update roles for users with changes
+      for (const userId of allUserIds) {
+        const currentGridRoles = (usersToRole[userId] || []).sort();
+        const previousGridRoles = (previousUsersToRole[userId] || []).sort();
+
+        if (!arraysEqual(currentGridRoles, previousGridRoles)) {
           isChanged = true;
-          await lastValueFrom(this.memberService.saveRoleUserWise(f.key!, this.roleUserMaping[f.key!].currentUsers))
+          // Preserve roles not managed by this grid (e.g., MEMBER)
+          const user = this.allMembers.find(m => m.id === userId);
+          const otherRoles = user ? user.roleCodes.filter(rc => !rolesInGrid.includes(rc)) : [];
+          const finalRoles = [...otherRoles, ...currentGridRoles];
+
+          await lastValueFrom(this.memberService.saveUserRoleWise(userId, finalRoles));
         }
       }
+
       if (isChanged) {
-        // this.adminService.clearCache(['auth0_role_users']).subscribe(data => {
         this.router.navigateByUrl(this.app_route.secured_member_members_page.url)
-        // })
       } else {
         this.modalService.openNotificationModal(AppDialog.err_no_change_made, 'notification', 'error');
       }
@@ -231,8 +264,6 @@ export class MemberRoleComponent implements OnInit {
     } else {
       this.modalService.openNotificationModal(AppDialog.err_incorrect_role, 'notification', 'error');
     }
-
-    ////console.log(noError)
   }
 
 }
