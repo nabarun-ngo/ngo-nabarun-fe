@@ -37,9 +37,9 @@
         "/api/**"
       ],
       "cacheConfig": {
-        "strategy": "performance",
-        "maxSize": 100,
-        "maxAge": "1h"
+        "strategy": "freshness",
+        "maxAge": "1h",
+        "timeout": "5s"
       }
     }
   ]

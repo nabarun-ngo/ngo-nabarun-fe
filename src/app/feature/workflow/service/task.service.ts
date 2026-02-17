@@ -3,8 +3,7 @@ import { PagedTask } from "../model/task.model";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { WorkflowControllerService } from "src/app/core/api-client/services";
-import { mapPagedWorkflowTaskDtoToPagedTask, mapToWorkflowInstanceDtoToWorkflowRequest, mapToWorkflowTaskDtoToTask } from "../model/workflow.mapper";
-import { WorkflowRequest } from "../model/request.model";
+import { mapPagedWorkflowTaskDtoToPagedTask, mapToWorkflowTaskDtoToTask } from "../model/workflow.mapper";
 import { RequestDefaultValue } from "../workflow.const";
 
 @Injectable({

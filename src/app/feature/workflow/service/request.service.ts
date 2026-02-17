@@ -1,16 +1,18 @@
 import { Injectable } from '@angular/core';
-import { Observable, filter, map } from 'rxjs';
+import { Observable, map, of, shareReplay, tap } from 'rxjs';
 import { WorkflowControllerService, UserControllerService, DmsControllerService } from 'src/app/core/api-client/services';
 import { mapPagedWorkflowInstanceDtoToPagedRequest, mapToWorkflowInstanceDtoToWorkflowRequest } from '../model/workflow.mapper';
 import { PagedRequest, WorkflowRequest } from '../model/request.model';
 import { mapPagedUserDtoToPagedUser } from '../../member/models/member.mapper';
-import { KeyValue } from 'src/app/shared/model/key-value.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RequestService {
 
+
+  private additionalFieldsCache = new Map<string, Observable<any>>();
+  private requestDetailCache = new Map<string, Observable<WorkflowRequest>>();
 
   constructor(
     private workflowController: WorkflowControllerService,
@@ -36,7 +38,6 @@ export class RequestService {
       type?: string[];
     }
   ): Observable<PagedRequest> {
-    console.log(filter);
     if (requestFor === 'me') {
       return this.workflowController.listInstancesForMe({
         page: page,
@@ -74,8 +75,9 @@ export class RequestService {
         externalUserEmail: extUserEmail
       }
     }).pipe(
-      map(d => d.responsePayload),
-      map(mapToWorkflowInstanceDtoToWorkflowRequest)
+      map(d => d.responsePayload as any),
+      map(mapToWorkflowInstanceDtoToWorkflowRequest),
+      tap(request => this.requestDetailCache.set(request.id, of(request).pipe(shareReplay(1))))
     );
   }
 
@@ -84,8 +86,9 @@ export class RequestService {
       id,
       reason
     }).pipe(
-      map(d => d.responsePayload),
-      map(mapToWorkflowInstanceDtoToWorkflowRequest)
+      map(d => d.responsePayload as any),
+      map(mapToWorkflowInstanceDtoToWorkflowRequest),
+      tap(request => this.requestDetailCache.set(request.id, of(request).pipe(shareReplay(1))))
     )
   }
 
@@ -96,20 +99,36 @@ export class RequestService {
   }
 
   getAdditionalFields(requestType: string, stepId?: string, taskId?: string) {
-    return this.workflowController.additionalFields({
-      workflowType: requestType,
-      stepId: stepId,
-      taskId: taskId
-    }).pipe(
-      map(d => d.responsePayload),
-    );
+    const cacheKey = `${requestType}-${stepId || ''}-${taskId || ''}`;
+    if (!this.additionalFieldsCache.has(cacheKey)) {
+      const obs = this.workflowController.additionalFields({
+        workflowType: requestType,
+        stepId: stepId,
+        taskId: taskId
+      }).pipe(
+        map(d => d.responsePayload),
+        shareReplay(1)
+      );
+      this.additionalFieldsCache.set(cacheKey, obs);
+    }
+    return this.additionalFieldsCache.get(cacheKey)!;
   }
 
-  getRequestDetail(id: string): Observable<WorkflowRequest> {
-    return this.workflowController.getInstance({ id }).pipe(
-      map(d => d.responsePayload),
-      map(mapToWorkflowInstanceDtoToWorkflowRequest)
-    );
+  getRequestDetail(id: string, force?: boolean): Observable<WorkflowRequest> {
+    if (force || !this.requestDetailCache.has(id)) {
+      const obs: Observable<WorkflowRequest> = this.workflowController.getInstance({ id }).pipe(
+        map(d => d.responsePayload as any),
+        map(mapToWorkflowInstanceDtoToWorkflowRequest),
+        shareReplay(1)
+      );
+      this.requestDetailCache.set(id, obs);
+    }
+    return this.requestDetailCache.get(id)!;
+  }
+
+  clearCache() {
+    this.additionalFieldsCache.clear();
+    this.requestDetailCache.clear();
   }
 }
 
