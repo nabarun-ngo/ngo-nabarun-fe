@@ -125,7 +125,8 @@ export const accountHighLevelView = (
 export const accountDetailSection = (
   m: Account,
   refData: { [name: string]: KeyValue[] },
-  isCreate: boolean = false
+  isCreate: boolean = false,
+  balance: number = 0
 ): DetailedView => {
   return {
     section_name: 'Account Detail',
@@ -182,7 +183,7 @@ export const accountDetailSection = (
         field_name: 'Current Balance',
         field_html_id: 'balance',
         hide_field: isCreate,
-        field_value: '₹ 0',
+        field_value: `₹ ${balance}`,
       },
 
       {

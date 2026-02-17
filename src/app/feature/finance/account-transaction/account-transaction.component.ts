@@ -12,6 +12,8 @@ import { SearchEvent } from 'src/app/shared/components/search-and-advanced-searc
 import { Account, PagedAccounts, PagedTransactions } from '../model';
 import { accountDetailSection } from '../fields/account.field';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
+import { AccountService } from '../service/account.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-account-transaction',
@@ -38,15 +40,19 @@ export class AccountTransactionComponent
 
   constructor(
     private sharedDataService: SharedDataService,
+    private accountService: AccountService,
     protected override route: ActivatedRoute) {
     super(route);
   }
 
-  protected override onInitHook(): void {
+  protected override async onInitHook() {
     this.sharedDataService.setPageName(TransactionDefaultValue.pageTitle);
     this.searchInput = transactionSearchInput(this.refData!);
     const accountInfo = this.route.snapshot.data['account'] as PagedAccounts;
-    this.detailedViews = accountInfo.content?.map((account) => accountDetailSection(account, this.refData!)) || [];
+    this.detailedViews = await Promise.all(accountInfo.content?.map(async (account) => {
+      const balance = await firstValueFrom(this.accountService.fetchBalance(account.id));
+      return accountDetailSection(account, this.refData!, false, balance)
+    }) || []);
   }
 
   protected override onHandleRouteDataHook(): void {
