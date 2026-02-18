@@ -148,7 +148,7 @@
                         <span>Role(s)</span>
                         <span class="flex flex-wrap justify-end ml-auto">
                             <ng-container *ngIf="mode != 'edit_admin'">
-                                <span *ngFor="let role of profile.roles"
+                                <span *ngFor="let role of filterRoles(profile.roles)"
                                     class="bg-green-500 py-1 px-2 m-1 rounded text-white text-sm text-center">
                                     {{role.roleName}}
                                 </span>

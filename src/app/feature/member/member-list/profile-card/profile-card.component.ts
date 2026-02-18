@@ -38,6 +38,9 @@ export class ProfileCardComponent {
   }
 
   roleString(roles: RoleDto[]) {
+    if (roles && roles.length > 1) {
+      return roles.filter(f => f.roleCode !== 'MEMBER').map(r => r.roleName).join(', ')
+    }
     return roles.map(r => r.roleName).join(', ')
   }
 
