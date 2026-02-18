@@ -8,7 +8,7 @@ import { sanitizeBase64 } from 'src/app/core/service/utilities.service';
 import { MemberService } from 'src/app/feature/member/service/member.service';
 import { KeyValue } from '../../../../shared/model/key-value.model';
 import { ModalService } from 'src/app/core/service/modal.service';
-import { Link, User } from '../../models/member.model';
+import { Link, Role, User } from '../../models/member.model';
 import { DocumentCategory } from 'src/app/shared/components/document-link/document-link.model';
 import { Doc } from 'src/app/shared/model/document.model';
 
@@ -434,5 +434,10 @@ export class ProfileViewComponent implements OnInit {
     return this.refData[name].find(f => f.key == code)?.displayValue;
   }
 
-
+  filterRoles(roles: Role[]) {
+    if (roles && roles.length > 1) {
+      return roles.filter(f => f.roleCode !== 'MEMBER');
+    }
+    return roles;
+  }
 }
