@@ -52,7 +52,6 @@ export class AccountService {
     return this.accountController
       .listAccounts({
         status: ['ACTIVE'],
-        includeBalance: 'N',
         includePaymentDetail: 'N'
       })
       .pipe(
@@ -81,7 +80,6 @@ export class AccountService {
         accountHolderId: options?.accountHolderId,
         accountId: options?.accountId,
         status: options?.status ?? ['ACTIVE'],
-        includeBalance: 'Y',
         includePaymentDetail: 'N',
         type: options?.type ?? []
       })
@@ -111,8 +109,8 @@ export class AccountService {
       .listSelfAccounts({
         pageIndex: pageIndex ?? AccountDefaultValue.pageNumber,
         pageSize: pageSize ?? AccountDefaultValue.pageSize,
-        includeBalance: 'Y',
         includePaymentDetail: 'Y',
+        status: filter?.status ?? ['ACTIVE'],
         ...filter
       })
       .pipe(

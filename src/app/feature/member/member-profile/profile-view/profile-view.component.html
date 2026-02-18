@@ -148,7 +148,7 @@
                         <span>Role(s)</span>
                         <span class="flex flex-wrap justify-end ml-auto">
                             <ng-container *ngIf="mode != 'edit_admin'">
-                                <span *ngFor="let role of profile.roles"
+                                <span *ngFor="let role of filterRoles(profile.roles)"
                                     class="bg-green-500 py-1 px-2 m-1 rounded text-white text-sm text-center">
                                     {{role.roleName}}
                                 </span>
@@ -270,7 +270,7 @@
 
                 </ul>
             </form>
-            <div *ngIf="mode == 'view_admin'" class="grid grid-cols-1">
+            <div *ngIf="mode == 'view_admin' && canUpdateProfile" class="grid grid-cols-1">
                 <button (click)="editAdmin()"
                     class="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">
                     Update Details</button>
