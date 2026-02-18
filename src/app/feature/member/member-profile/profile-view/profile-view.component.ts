@@ -11,6 +11,8 @@ import { ModalService } from 'src/app/core/service/modal.service';
 import { Link, Role, User } from '../../models/member.model';
 import { DocumentCategory } from 'src/app/shared/components/document-link/document-link.model';
 import { Doc } from 'src/app/shared/model/document.model';
+import { UserIdentityService } from 'src/app/core/service/user-identity.service';
+import { SCOPE } from 'src/app/core/constant/auth-scope.const';
 
 @Component({
   selector: 'app-profile-view',
@@ -43,6 +45,7 @@ export class ProfileViewComponent implements OnInit {
   editLoginInfoForm!: FormGroup;
 
   refData!: { [key: string]: KeyValue[]; };
+  canUpdateProfile?: boolean;
 
   protected address: {
     presentAddressStates?: KeyValue[],
@@ -66,12 +69,14 @@ export class ProfileViewComponent implements OnInit {
     private sharedDataService: SharedDataService,
     private memberService: MemberService,
     private modalService: ModalService,
+    private userIdentity: UserIdentityService
 
   ) { }
 
 
   ngOnInit(): void {
     this.refData = this.sharedDataService.getRefData(UserConstant.refDataName)!;
+    this.canUpdateProfile = this.userIdentity.isAccrediatedTo(SCOPE.update.user)
     this.editAdminForm = new FormGroup({
       status: new FormControl(this.profile.status, [Validators.required]),
       roles: new FormControl(this.profile.roles?.map(m => m.roleCode), []),
