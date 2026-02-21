@@ -4,7 +4,6 @@ import { forkJoin, map, of, Observable, switchMap, catchError } from 'rxjs';
 import {
   AccountControllerService,
   UserControllerService,
-  ExpenseControllerService,
   DmsControllerService
 } from 'src/app/core/api-client/services';
 import { date } from 'src/app/core/service/utilities.service';
@@ -12,21 +11,16 @@ import { AccountDefaultValue } from '../finance.const';
 import {
   Account,
   PagedAccounts,
-  Expense,
-  PagedExpenses,
   Transaction,
   PagedTransactions,
   mapAccountDtoToAccount,
   mapPagedAccountDtoToPagedAccounts,
-  mapExpenseDtoToExpense,
-  mapPagedExpenseDtoToPagedExpenses,
   mapPagedTransactionDtoToPagedTransactions,
   mapTransactionDtoToTransaction,
   BankDetail,
-  UpiDetail,
-  ExpenseItem
+  UpiDetail
 } from '../model';
-import { CreateExpenseDto, DmsUploadDto, TransactionDetailDto, UpdateExpenseDto } from 'src/app/core/api-client/models';
+import { DmsUploadDto, TransactionDetailDto } from 'src/app/core/api-client/models';
 import { User } from '../../member/models/member.model';
 import { mapUserDtoToUser } from '../../member/models/member.mapper';
 import { FileUpload } from 'src/app/shared/components/generic/file-upload/file-upload.component';
@@ -81,6 +75,7 @@ export class AccountService {
         accountId: options?.accountId,
         status: options?.status ?? ['ACTIVE'],
         includePaymentDetail: 'N',
+        includeBalance: 'Y',
         type: options?.type ?? []
       })
       .pipe(
@@ -110,6 +105,7 @@ export class AccountService {
         pageIndex: pageIndex ?? AccountDefaultValue.pageNumber,
         pageSize: pageSize ?? AccountDefaultValue.pageSize,
         includePaymentDetail: 'Y',
+        includeBalance: 'Y',
         status: filter?.status ?? ['ACTIVE'],
         ...filter
       })
@@ -187,16 +183,6 @@ export class AccountService {
       );
   }
 
-  fetchBalance(id: string): Observable<number> {
-    return this.accountController
-      .accountBalance({
-        id: id,
-      })
-      .pipe(
-        map((d) => d.responsePayload),
-      );
-  }
-
   /**
    * Fetch users based on account type
    * @param accountType Type of account to filter users by role
@@ -237,15 +223,24 @@ export class AccountService {
     pageIndex?: number,
     pageSize?: number,
     filter?: {
+      transactionRef?: string;
+      txnType?: string | string[];
+      txnStatus?: string | string[];
+      txnId?: string;
       startDate?: Date | string;
       endDate?: Date | string;
     }
   ): Observable<PagedTransactions> {
+    console.log(filter)
     return this.accountController
       .listAccountTransactions({
         id: id,
         pageIndex: pageIndex ?? AccountDefaultValue.pageNumber,
         pageSize: pageSize ?? AccountDefaultValue.pageSize,
+        transactionRef: filter?.transactionRef,
+        txnType: filter?.txnType as any,
+        txnStatus: filter?.txnStatus as any,
+        txnId: filter?.txnId,
         ...(filter?.startDate && {
           startDate: typeof filter.startDate === 'string'
             ? filter.startDate
@@ -278,6 +273,10 @@ export class AccountService {
     filter?: {
       startDate?: Date | string;
       endDate?: Date | string;
+      transactionRef?: string;
+      txnType?: string | string[];
+      txnStatus?: string | string[];
+      txnId?: string;
     }
   ): Observable<PagedTransactions> {
     return this.accountController
@@ -285,6 +284,10 @@ export class AccountService {
         id: id,
         pageIndex: pageIndex ?? AccountDefaultValue.pageNumber,
         pageSize: pageSize ?? AccountDefaultValue.pageSize,
+        transactionRef: filter?.transactionRef,
+        txnType: filter?.txnType as any,
+        txnStatus: filter?.txnStatus as any,
+        txnId: filter?.txnId,
         ...(filter?.startDate && {
           startDate: typeof filter.startDate === 'string'
             ? filter.startDate
@@ -331,7 +334,7 @@ export class AccountService {
               fileBase64: doc.detail.base64Content,
               filename: doc.detail.originalFileName,
               documentMapping: [{
-                entityId: transaction.txnId,
+                entityId: transaction.transactionRef,
                 entityType: 'TRANSACTION'
               }]
             }
@@ -344,12 +347,12 @@ export class AccountService {
     );
   }
 
-  reverseTransaction(accId: string, txnId: string, reasonForReversal: string) {
+  reverseTransaction(accId: string, txnRef: string, reasonForReversal: string) {
     return this.accountController.reverseTransaction({
       id: accId,
       body: {
         comment: reasonForReversal,
-        transactionId: txnId
+        transactionRef: txnRef
       }
     }).pipe(
       map(response => response.responsePayload),

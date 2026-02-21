@@ -14,13 +14,6 @@ import { User } from '../../member/models/member.model';
   providedIn: 'root'
 })
 export class ExpenseService {
-  fetchAccountBalance(accountId: string): Observable<number> {
-    return this.accountController
-      .accountBalance({ id: accountId })
-      .pipe(
-        map((d) => d.responsePayload)
-      );
-  }
 
   constructor(
     private readonly expenseController: ExpenseControllerService,
@@ -235,6 +228,7 @@ export class ExpenseService {
         accountId: options?.accountId,
         status: options?.status ?? ['ACTIVE'],
         includePaymentDetail: 'Y',
+        includeBalance: 'Y',
         type: options?.type ?? []
       })
       .pipe(

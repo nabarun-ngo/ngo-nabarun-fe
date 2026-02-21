@@ -89,10 +89,11 @@ export class TransactionAccordionComponent extends Accordion<Transaction> {
     data: Transaction,
     options?: { [key: string]: any }
   ): AccordionButton[] {
-    return !this.isSelfAccount && this.permissions.canReverseTxn ? [{
-      button_id: 'REVERSE',
-      button_name: 'Reverse Transaction',
-    }] : [];
+    // return !this.isSelfAccount && this.permissions.canReverseTxn ? [{
+    //   button_id: 'REVERSE',
+    //   button_name: 'Reverse Transaction',
+    // }] : [];
+    return [];
   }
   override handlePageEvent($event: PageEvent): void {
     this.pageEvent = $event;
@@ -128,7 +129,7 @@ export class TransactionAccordionComponent extends Accordion<Transaction> {
 
       modalRef.onAccept$.subscribe((data) => {
         if (data) {
-          this.accountService.reverseTransaction(this.accountId, item.txnId, reverse_form?.value.reasonForReversal).subscribe((data) => {
+          this.accountService.reverseTransaction(this.accountId, item.transactionRef, reverse_form?.value.reasonForReversal).subscribe((data) => {
             this.removeSectionInAccordion('reverse_txn', rowIndex);
             this.hideForm(rowIndex);
             this.fetchDetails(this.pageNumber, this.pageSize);
@@ -144,7 +145,7 @@ export class TransactionAccordionComponent extends Accordion<Transaction> {
   onAccordionOpen($event: { rowIndex: number }) {
     let item = this.itemList![$event.rowIndex];
     this.accountService
-      .getTransactionDocuments(item.txnId)
+      .getTransactionDocuments(item.transactionRef)
       .subscribe((data) => {
         this.addSectionInAccordion(
           accountDocumentSection(data!),
@@ -155,6 +156,7 @@ export class TransactionAccordionComponent extends Accordion<Transaction> {
 
 
   performSearch($event: SearchEvent) {
+    console.log($event)
     if ($event.advancedSearch && !$event.reset) {
       this.fetchDetails(undefined, undefined, removeNullFields($event.value));
     } else if ($event.advancedSearch && $event.reset) {
@@ -165,6 +167,7 @@ export class TransactionAccordionComponent extends Accordion<Transaction> {
   }
 
   private fetchDetails(pageNumber?: number, pageSize?: number, filter?: any): void {
+    console.log(filter)
     if (this.isSelfAccount) {
       this.accountService
         .fetchMyTransactions(this.accountId, pageNumber, pageSize, filter)
