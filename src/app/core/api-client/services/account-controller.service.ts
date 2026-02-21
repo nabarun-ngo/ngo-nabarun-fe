@@ -36,7 +36,7 @@ import { SuccessResponseAccountRefDataDto } from '../models/success-response-acc
 import { SuccessResponseArrayAccountDetailDto } from '../models/success-response-array-account-detail-dto';
 import { SuccessResponsePagedResultAccountDetailDto } from '../models/success-response-paged-result-account-detail-dto';
 import { SuccessResponsePagedResultTransactionDetailDto } from '../models/success-response-paged-result-transaction-detail-dto';
-import { SuccessResponseTransactionDetailDto } from '../models/success-response-transaction-detail-dto';
+import { SuccessResponseString } from '../models/success-response-string';
 import { transferAmountSelf } from '../fn/account-controller/transfer-amount-self';
 import { TransferAmountSelf$Params } from '../fn/account-controller/transfer-amount-self';
 import { updateAccount } from '../fn/account-controller/update-account';
@@ -310,7 +310,7 @@ export class AccountControllerService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  transferAmountSelf$Response(params: TransferAmountSelf$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseTransactionDetailDto>> {
+  transferAmountSelf$Response(params: TransferAmountSelf$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
     return transferAmountSelf(this.http, this.rootUrl, params, context);
   }
 
@@ -324,9 +324,9 @@ export class AccountControllerService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  transferAmountSelf(params: TransferAmountSelf$Params, context?: HttpContext): Observable<SuccessResponseTransactionDetailDto> {
+  transferAmountSelf(params: TransferAmountSelf$Params, context?: HttpContext): Observable<SuccessResponseString> {
     return this.transferAmountSelf$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseTransactionDetailDto>): SuccessResponseTransactionDetailDto => r.body)
+      map((r: StrictHttpResponse<SuccessResponseString>): SuccessResponseString => r.body)
     );
   }
 
@@ -343,7 +343,7 @@ export class AccountControllerService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  addFundSelf$Response(params: AddFundSelf$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseTransactionDetailDto>> {
+  addFundSelf$Response(params: AddFundSelf$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
     return addFundSelf(this.http, this.rootUrl, params, context);
   }
 
@@ -357,9 +357,9 @@ export class AccountControllerService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  addFundSelf(params: AddFundSelf$Params, context?: HttpContext): Observable<SuccessResponseTransactionDetailDto> {
+  addFundSelf(params: AddFundSelf$Params, context?: HttpContext): Observable<SuccessResponseString> {
     return this.addFundSelf$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseTransactionDetailDto>): SuccessResponseTransactionDetailDto => r.body)
+      map((r: StrictHttpResponse<SuccessResponseString>): SuccessResponseString => r.body)
     );
   }
 
@@ -378,7 +378,7 @@ export class AccountControllerService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  reverseTransaction$Response(params: ReverseTransaction$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseTransactionDetailDto>> {
+  reverseTransaction$Response(params: ReverseTransaction$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
     return reverseTransaction(this.http, this.rootUrl, params, context);
   }
 
@@ -394,9 +394,9 @@ export class AccountControllerService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  reverseTransaction(params: ReverseTransaction$Params, context?: HttpContext): Observable<SuccessResponseTransactionDetailDto> {
+  reverseTransaction(params: ReverseTransaction$Params, context?: HttpContext): Observable<SuccessResponseString> {
     return this.reverseTransaction$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseTransactionDetailDto>): SuccessResponseTransactionDetailDto => r.body)
+      map((r: StrictHttpResponse<SuccessResponseString>): SuccessResponseString => r.body)
     );
   }
 
@@ -415,7 +415,7 @@ export class AccountControllerService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  fixTransactions$Response(params: FixTransactions$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseTransactionDetailDto>> {
+  fixTransactions$Response(params: FixTransactions$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
     return fixTransactions(this.http, this.rootUrl, params, context);
   }
 
@@ -431,9 +431,9 @@ export class AccountControllerService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  fixTransactions(params: FixTransactions$Params, context?: HttpContext): Observable<SuccessResponseTransactionDetailDto> {
+  fixTransactions(params: FixTransactions$Params, context?: HttpContext): Observable<SuccessResponseString> {
     return this.fixTransactions$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseTransactionDetailDto>): SuccessResponseTransactionDetailDto => r.body)
+      map((r: StrictHttpResponse<SuccessResponseString>): SuccessResponseString => r.body)
     );
   }
 

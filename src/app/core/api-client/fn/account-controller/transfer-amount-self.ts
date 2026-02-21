@@ -8,7 +8,7 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseTransactionDetailDto } from '../../models/success-response-transaction-detail-dto';
+import { SuccessResponseString } from '../../models/success-response-string';
 import { TransferDto } from '../../models/transfer-dto';
 
 export interface TransferAmountSelf$Params {
@@ -16,7 +16,7 @@ export interface TransferAmountSelf$Params {
       body: TransferDto
 }
 
-export function transferAmountSelf(http: HttpClient, rootUrl: string, params: TransferAmountSelf$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseTransactionDetailDto>> {
+export function transferAmountSelf(http: HttpClient, rootUrl: string, params: TransferAmountSelf$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
   const rb = new RequestBuilder(rootUrl, transferAmountSelf.PATH, 'post');
   if (params) {
     rb.path('id', params.id, {});
@@ -28,7 +28,7 @@ export function transferAmountSelf(http: HttpClient, rootUrl: string, params: Tr
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseTransactionDetailDto>;
+      return r as StrictHttpResponse<SuccessResponseString>;
     })
   );
 }
