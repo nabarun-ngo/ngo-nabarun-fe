@@ -9,14 +9,14 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 import { AddFundDto } from '../../models/add-fund-dto';
-import { SuccessResponseTransactionDetailDto } from '../../models/success-response-transaction-detail-dto';
+import { SuccessResponseString } from '../../models/success-response-string';
 
 export interface AddFundSelf$Params {
   id: string;
       body: AddFundDto
 }
 
-export function addFundSelf(http: HttpClient, rootUrl: string, params: AddFundSelf$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseTransactionDetailDto>> {
+export function addFundSelf(http: HttpClient, rootUrl: string, params: AddFundSelf$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
   const rb = new RequestBuilder(rootUrl, addFundSelf.PATH, 'post');
   if (params) {
     rb.path('id', params.id, {});
@@ -28,7 +28,7 @@ export function addFundSelf(http: HttpClient, rootUrl: string, params: AddFundSe
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseTransactionDetailDto>;
+      return r as StrictHttpResponse<SuccessResponseString>;
     })
   );
 }

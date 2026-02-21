@@ -105,7 +105,6 @@ export { SuccessResponseProjectRefDataDto } from './models/success-response-proj
 export { SuccessResponseSendEmailResult } from './models/success-response-send-email-result';
 export { SuccessResponseString } from './models/success-response-string';
 export { SuccessResponseSuccessResponse } from './models/success-response-success-response';
-export { SuccessResponseTransactionDetailDto } from './models/success-response-transaction-detail-dto';
 export { SuccessResponseUserDto } from './models/success-response-user-dto';
 export { SuccessResponseUserMetricsDto } from './models/success-response-user-metrics-dto';
 export { SuccessResponseUserRefDataDto } from './models/success-response-user-ref-data-dto';

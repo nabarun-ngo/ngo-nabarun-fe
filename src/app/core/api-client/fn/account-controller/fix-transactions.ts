@@ -9,13 +9,13 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 import { FixTransactionDto } from '../../models/fix-transaction-dto';
-import { SuccessResponseTransactionDetailDto } from '../../models/success-response-transaction-detail-dto';
+import { SuccessResponseString } from '../../models/success-response-string';
 
 export interface FixTransactions$Params {
       body: FixTransactionDto
 }
 
-export function fixTransactions(http: HttpClient, rootUrl: string, params: FixTransactions$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseTransactionDetailDto>> {
+export function fixTransactions(http: HttpClient, rootUrl: string, params: FixTransactions$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
   const rb = new RequestBuilder(rootUrl, fixTransactions.PATH, 'post');
   if (params) {
     rb.body(params.body, 'application/json');
@@ -26,7 +26,7 @@ export function fixTransactions(http: HttpClient, rootUrl: string, params: FixTr
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseTransactionDetailDto>;
+      return r as StrictHttpResponse<SuccessResponseString>;
     })
   );
 }

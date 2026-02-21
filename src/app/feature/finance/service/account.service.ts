@@ -311,7 +311,7 @@ export class AccountService {
    * @param value Transfer details
    * @returns Observable of transaction result
    */
-  performTransfer(from: Account, value: any, document_list: FileUpload[]): Observable<Transaction> {
+  performTransfer(from: Account, value: any, document_list: FileUpload[]): Observable<string> {
     return this.accountController.transferAmountSelf({
       id: from.id,
       body: {
@@ -322,9 +322,9 @@ export class AccountService {
       }
     }).pipe(
       map(response => response.responsePayload),
-      switchMap((transaction: TransactionDetailDto) => {
+      switchMap((transaction: string) => {
         if (!document_list || document_list.length === 0) {
-          return of(mapTransactionDtoToTransaction(transaction));
+          return of(transaction);
         }
 
         const uploadRequests = document_list.map(doc => {
@@ -334,7 +334,7 @@ export class AccountService {
               fileBase64: doc.detail.base64Content,
               filename: doc.detail.originalFileName,
               documentMapping: [{
-                entityId: transaction.transactionRef,
+                entityId: transaction,
                 entityType: 'TRANSACTION'
               }]
             }
@@ -343,7 +343,6 @@ export class AccountService {
 
         return forkJoin(uploadRequests).pipe(map(() => transaction));
       }),
-      map(mapTransactionDtoToTransaction),
     );
   }
 
@@ -356,7 +355,6 @@ export class AccountService {
       }
     }).pipe(
       map(response => response.responsePayload),
-      map(mapTransactionDtoToTransaction)
     );
   }
 
@@ -376,9 +374,9 @@ export class AccountService {
       }
     }).pipe(
       map(response => response.responsePayload),
-      switchMap((transaction: TransactionDetailDto) => {
+      switchMap((transaction: string) => {
         if (!document_list || document_list.length === 0) {
-          return of(mapTransactionDtoToTransaction(transaction));
+          return of(transaction);
         }
 
         const uploadRequests = document_list.map(doc => {
@@ -388,7 +386,7 @@ export class AccountService {
               fileBase64: doc.detail.base64Content,
               filename: doc.detail.originalFileName,
               documentMapping: [{
-                entityId: transaction.txnId!,
+                entityId: transaction,
                 entityType: 'TRANSACTION'
               }]
             }
