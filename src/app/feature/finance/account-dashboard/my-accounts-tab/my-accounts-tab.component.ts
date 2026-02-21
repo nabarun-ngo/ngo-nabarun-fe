@@ -320,10 +320,6 @@ export class MyAccountsTabComponent extends Accordion<Account> implements TabCom
   }
 
   protected override onAccordionOpen(event: { rowIndex: number }): void {
-    let item = this.itemList[event.rowIndex];
-    this.accountService.fetchBalance(item.id).subscribe((data) => {
-      this.updateFieldValue('account_detail', 'balance', event.rowIndex, data);
-    });
   }
 
   override handlePageEvent($event: PageEvent): void {

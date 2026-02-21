@@ -7,15 +7,16 @@ import { PagedResult } from '../../../shared/model/paged-result.model';
 export interface Transaction {
   txnId: string;
   txnNumber?: string;
+  transactionRef: string;
   txnDate: string;
-  txnType: 'IN' | 'OUT' | 'TRANSFER';
-  txnStatus: 'SUCCESS' | 'FAILURE' | 'REVERSED';
+  txnType: 'IN' | 'OUT';
+  txnStatus: 'SUCCESS' | 'REVERSED';
   txnAmount: number;
   txnDescription: string;
   txnParticulars?: string;
   accTxnType?: string;
   txnRefId?: string;
-  txnRefType?: 'DONATION' | 'NONE' | 'EXPENSE' | 'EARNING';
+  txnRefType?: 'DONATION' | 'NONE' | 'EXPENSE' | 'EARNING' | 'TXN_REVERSE';
   accBalance?: number;
   comment?: string;
 

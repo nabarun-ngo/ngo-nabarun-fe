@@ -15,10 +15,9 @@ export interface ListAccountTransactions$Params {
   pageIndex: number;
   pageSize: number;
   txnId?: string;
-  txnType?: Array<'IN' | 'OUT' | 'TRANSFER'>;
-  txnStatus?: Array<'SUCCESS' | 'FAILURE' | 'REVERSED'>;
-  txnRefId?: string;
-  txnRefType?: 'DONATION' | 'NONE' | 'EXPENSE' | 'EARNING';
+  txnType?: Array<'IN' | 'OUT'>;
+  txnStatus?: Array<'SUCCESS' | 'REVERSED'>;
+  transactionRef?: string;
   startDate?: string;
   endDate?: string;
 }
@@ -32,8 +31,7 @@ export function listAccountTransactions(http: HttpClient, rootUrl: string, param
     rb.query('txnId', params.txnId, {});
     rb.query('txnType', params.txnType, {});
     rb.query('txnStatus', params.txnStatus, {});
-    rb.query('txnRefId', params.txnRefId, {});
-    rb.query('txnRefType', params.txnRefType, {});
+    rb.query('transactionRef', params.transactionRef, {});
     rb.query('startDate', params.startDate, {});
     rb.query('endDate', params.endDate, {});
   }

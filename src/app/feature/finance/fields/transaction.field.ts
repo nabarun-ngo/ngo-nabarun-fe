@@ -38,6 +38,11 @@ export const transactionDetailSection = (data: Transaction, refData: { [name: st
         field_html_id: 'txn_id',
       },
       {
+        field_name: 'Transaction Reference Number',
+        field_value: data.transactionRef!,
+        field_html_id: 'txn_id',
+      },
+      {
         field_name: 'Transaction Type',
         field_value: data.txnType!,
         field_html_id: 'txn_type',
@@ -83,13 +88,13 @@ export const transactionDetailSection = (data: Transaction, refData: { [name: st
         field_name: 'Transfer From Account',
         field_value: data.transferFrom!,
         field_html_id: 'txn_status',
-        hide_field: data.txnType != 'TRANSFER',
+        hide_field: !data.transferFrom,
       },
       {
         field_name: 'Transfer To Account',
         field_value: data.transferTo!,
         field_html_id: 'txn_status',
-        hide_field: data.txnType != 'TRANSFER',
+        hide_field: !data.transferTo,
       },
       {
         field_name: 'Balance After Transaction',
@@ -109,7 +114,6 @@ export const transactionSearchInput = (
     [name: string]: KeyValue[];
   }
 ): SearchAndAdvancedSearchModel => {
-
   return {
     normalSearchPlaceHolder:
       'Search for anything related to transactions here',
@@ -136,23 +140,25 @@ export const transactionSearchInput = (
             selectList: [
               { key: 'IN', displayValue: 'IN' },
               { key: 'OUT', displayValue: 'OUT' },
-              { key: 'TRANSFER', displayValue: 'Transfer' },
             ],
           },
         },
         {
-          formControlName: 'txnRefType',
+          formControlName: 'txnStatus',
           inputModel: {
             tagName: 'select',
             inputType: 'multiselect',
-            html_id: 'txnType',
-            labelName: 'Transaction Type',
-            placeholder: 'Select Transaction Type',
-            selectList: refData!['transactionRefTypes'],
+            html_id: 'txnStatus',
+            labelName: 'Transaction Status',
+            placeholder: 'Select Transaction Status',
+            selectList: [
+              { key: 'SUCCESS', displayValue: 'Success' },
+              { key: 'REVERSED', displayValue: 'Reversed' },
+            ],
           },
         },
         {
-          formControlName: 'txnRefId',
+          formControlName: 'transactionRef',
           inputModel: {
             tagName: 'input',
             inputType: 'text',
