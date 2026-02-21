@@ -18,9 +18,7 @@ export class AdminService {
     private staticDocs: StaticDocsControllerService,
     private jobController: JobControllerService,
     private apiKeyController: ApiKeyControllerService,
-    private workflowController: WorkflowControllerService,
-
-    private httpClient: HttpClient) { }
+    private workflowController: WorkflowControllerService) { }
 
   getAPIKeyList() {
     return this.apiKeyController.listApiKeys().pipe(map(m => m.responsePayload));
@@ -73,5 +71,17 @@ export class AdminService {
 
   retryTask(id: string, workflowId: string) {
     return this.workflowController.processTask({ id: workflowId!, taskId: id }).pipe(map(m => m.responsePayload));
+  }
+
+  retryJob(id: string) {
+    return this.jobController.retryJob({ jobId: id }).pipe(map(m => m.responsePayload));
+  }
+
+  getBgJobs(status?: string) {
+    return this.jobController.getJobs({
+      status: status as any
+    }).pipe(
+      map(d => d.responsePayload)
+    )
   }
 }

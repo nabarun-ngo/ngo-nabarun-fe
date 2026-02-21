@@ -34,7 +34,7 @@ export class AdminDashboardComponent extends StandardTabbedDashboard<adminTabs, 
 
   defaultValue = AdminDefaultValue;
   constant = AdminConstant;
-  protected tabMapping: adminTabs[] = ['api_keys', 'oauth', 'tasks'];
+  protected tabMapping: adminTabs[] = ['api_keys', 'oauth', 'tasks', 'jobs'];
   navigations: NavigationButtonModel[] = [
     {
       displayName: 'Back to Dashboard',

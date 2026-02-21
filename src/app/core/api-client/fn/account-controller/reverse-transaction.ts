@@ -9,14 +9,14 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 import { ReverseTransactionDto } from '../../models/reverse-transaction-dto';
-import { SuccessResponseTransactionDetailDto } from '../../models/success-response-transaction-detail-dto';
+import { SuccessResponseString } from '../../models/success-response-string';
 
 export interface ReverseTransaction$Params {
   id: string;
       body: ReverseTransactionDto
 }
 
-export function reverseTransaction(http: HttpClient, rootUrl: string, params: ReverseTransaction$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseTransactionDetailDto>> {
+export function reverseTransaction(http: HttpClient, rootUrl: string, params: ReverseTransaction$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
   const rb = new RequestBuilder(rootUrl, reverseTransaction.PATH, 'post');
   if (params) {
     rb.path('id', params.id, {});
@@ -28,7 +28,7 @@ export function reverseTransaction(http: HttpClient, rootUrl: string, params: Re
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseTransactionDetailDto>;
+      return r as StrictHttpResponse<SuccessResponseString>;
     })
   );
 }
