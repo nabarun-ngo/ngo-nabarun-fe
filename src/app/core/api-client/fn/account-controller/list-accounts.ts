@@ -18,6 +18,7 @@ export interface ListAccounts$Params {
   accountHolderId?: string;
   accountHolderName?: string;
   includePaymentDetail?: 'Y' | 'N';
+  includeBalance?: 'Y' | 'N';
   accountId?: string;
 }
 
@@ -31,6 +32,7 @@ export function listAccounts(http: HttpClient, rootUrl: string, params?: ListAcc
     rb.query('accountHolderId', params.accountHolderId, {});
     rb.query('accountHolderName', params.accountHolderName, {});
     rb.query('includePaymentDetail', params.includePaymentDetail, {});
+    rb.query('includeBalance', params.includeBalance, {});
     rb.query('accountId', params.accountId, {});
   }
 

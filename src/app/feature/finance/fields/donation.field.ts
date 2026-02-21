@@ -286,7 +286,7 @@ export const getDonationSection = (
                 }
             },
             {
-                field_name: 'Transaction ID',
+                field_name: 'Transaction Ref',
                 field_value: donation?.transactionRef || '',
                 hide_field: !(!isCreate && donation?.status === 'PAID')
             },

@@ -75,7 +75,7 @@ export function mapAccountDtoToAccount(dto: AccountDetailDto): Account {
     accountHolderName: dto.accountHolderName || dto.accountHolder,
     accountType: dto.accountType,
     status: dto.accountStatus,
-    // balance: balance,
+    balance: dto.balance ?? 0,
     activatedOn: dto.activatedOn,
     bankDetail: mapBankDetail(dto.bankDetail),
     upiDetail: mapUpiDetail(dto.upiDetail),

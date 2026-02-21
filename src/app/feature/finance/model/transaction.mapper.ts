@@ -40,7 +40,6 @@ function getTransactionStatusLabel(status: string): string {
  */
 export function mapTransactionDtoToTransaction(dto: TransactionDetailDto): Transaction {
   const isSuccess = dto.txnStatus === 'SUCCESS';
-  const isTransfer = dto.txnType === 'TRANSFER';
   const isIncoming = dto.txnType === 'IN';
   const isOutgoing = dto.txnType === 'OUT';
 
@@ -63,7 +62,8 @@ export function mapTransactionDtoToTransaction(dto: TransactionDetailDto): Trans
     txnRefId: dto.txnRefId,
     txnRefType: dto.txnRefType,
     accBalance: dto.accBalance,
-    comment: dto.comment,
+    isTransfer: false,
+    transactionRef: dto.transactionRef,
 
     // Account references
     transferFrom: dto.transferFrom,
@@ -78,7 +78,6 @@ export function mapTransactionDtoToTransaction(dto: TransactionDetailDto): Trans
     typeLabel: getTransactionTypeLabel(dto.txnType),
     statusLabel: getTransactionStatusLabel(dto.txnStatus),
     isSuccess,
-    isTransfer,
     isIncoming,
     isOutgoing
   };

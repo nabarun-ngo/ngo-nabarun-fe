@@ -4,5 +4,5 @@
 
 export interface ReverseTransactionDto {
   comment: string;
-  transactionId: string;
+  transactionRef: string;
 }

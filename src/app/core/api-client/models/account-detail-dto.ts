@@ -10,6 +10,7 @@ export interface AccountDetailDto {
   accountStatus: 'ACTIVE' | 'CLOSED';
   accountType: 'PRINCIPAL' | 'GENERAL' | 'DONATION' | 'PUBLIC_DONATION' | 'WALLET';
   activatedOn?: string;
+  balance?: number;
   bankDetail?: BankDetailDto;
   id: string;
   upiDetail?: UpiDetailDto;

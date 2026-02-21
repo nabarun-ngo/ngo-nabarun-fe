@@ -7,7 +7,7 @@ export interface TransactionDetailDto {
   accBalance?: number;
   accTxnType?: string;
   account?: AccountDetailDto;
-  comment?: string;
+  transactionRef: string;
   transferFrom?: string;
   transferTo?: string;
   txnAmount: number;
@@ -17,7 +17,7 @@ export interface TransactionDetailDto {
   txnNumber?: string;
   txnParticulars?: string;
   txnRefId?: string;
-  txnRefType?: 'DONATION' | 'NONE' | 'EXPENSE' | 'EARNING';
-  txnStatus: 'SUCCESS' | 'FAILURE' | 'REVERSED';
-  txnType: 'IN' | 'OUT' | 'TRANSFER';
+  txnRefType?: 'DONATION' | 'NONE' | 'EXPENSE' | 'EARNING' | 'TXN_REVERSE';
+  txnStatus: 'SUCCESS' | 'REVERSED';
+  txnType: 'IN' | 'OUT';
 }

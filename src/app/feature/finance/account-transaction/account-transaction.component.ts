@@ -40,7 +40,6 @@ export class AccountTransactionComponent
 
   constructor(
     private sharedDataService: SharedDataService,
-    private accountService: AccountService,
     protected override route: ActivatedRoute) {
     super(route);
   }
@@ -49,10 +48,9 @@ export class AccountTransactionComponent
     this.sharedDataService.setPageName(TransactionDefaultValue.pageTitle);
     this.searchInput = transactionSearchInput(this.refData!);
     const accountInfo = this.route.snapshot.data['account'] as PagedAccounts;
-    this.detailedViews = await Promise.all(accountInfo.content?.map(async (account) => {
-      const balance = await firstValueFrom(this.accountService.fetchBalance(account.id));
-      return accountDetailSection(account, this.refData!, false, balance)
-    }) || []);
+    this.detailedViews = accountInfo.content?.map((account) => {
+      return accountDetailSection(account, this.refData!, false)
+    }) || [];
   }
 
   protected override onHandleRouteDataHook(): void {
