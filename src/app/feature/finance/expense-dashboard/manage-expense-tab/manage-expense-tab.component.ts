@@ -122,6 +122,10 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
       this.permissions.canSettleExpense
     ) {
       buttons.push({
+        button_id: 'REJECT',
+        button_name: 'Reject',
+      });
+      buttons.push({
         button_id: 'SETTLE_EXPENSE',
         button_name: 'Settle',
       });

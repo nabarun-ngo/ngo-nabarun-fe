@@ -1,52 +1,44 @@
-<main class="p-4 m-4 bg-gray-200 rounded-lg">
-    <div class="flex flex-col">
-        <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-            <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                <mat-accordion>
-                    <mat-expansion-panel>
-                        <mat-expansion-panel-header>
-                            <mat-panel-title class="font-bold text-center text-xl">
-                                <div class="w-full text-center text-indigo-500 text-xl">Important links</div>
-                            </mat-panel-title>
-                        </mat-expansion-panel-header>
-                        <div class="text-gray-700">
-                            <div class="grid text-sm">
-                                <div class="grid grid-cols-1 sm:grid-cols-8 gap-2 items-center border-b border-gray-300 py-2"
-                                    *ngFor="let data of appLinks">
-                                    <div class="font-semibold sm:col-span-1">{{data.key}}</div>
-                                    <div class="sm:col-span-6">{{data.description}}</div>
-                                    <div class="text-center sm:col-span-1 mt-2 sm:mt-0">
-                                        <a class="text-blue-700 break-all" [href]="data.displayValue"
-                                            target="_blank">Click
-                                            here</a>
-                                    </div>
-                                </div>
-                            </div>
+<main class="p-2 sm:p-4 m-2 sm:m-4 bg-gray-200 rounded-lg">
+    <mat-accordion>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title class="font-bold text-center text-xl">
+                    <div class="w-full text-center text-indigo-500 text-xl">Important links</div>
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="text-gray-700">
+                <div class="grid text-sm">
+                    <div class="grid grid-cols-1 sm:grid-cols-8 gap-2 items-center border-b border-gray-300 py-2"
+                        *ngFor="let data of appLinks">
+                        <div class="font-semibold sm:col-span-1 text-center">{{data.key}}</div>
+                        <div class="sm:col-span-6">{{data.description}}</div>
+                        <div class="text-center sm:col-span-1 mt-2 sm:mt-0">
+                            <a class="text-blue-700 break-all" [href]="data.displayValue" target="_blank">Click
+                                here</a>
                         </div>
-                    </mat-expansion-panel>
-                </mat-accordion>
-                <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center"
-                    (selectedTabChange)="tabChanged($event.index)" [(selectedIndex)]="tabIndex">
-                    <mat-tab id="apiKey" label="Manage API keys">
-                        <app-admin-apikey-tab [accordionData]="initialData" [refData]="refData"></app-admin-apikey-tab>
-                    </mat-tab>
-                    <mat-tab id="oauthToken" label="Manage OAuth Tokens">
-                        <app-admin-oauth-tab [accordionData]="initialData" [refData]="refData"></app-admin-oauth-tab>
-                    </mat-tab>
-                    <mat-tab id="tasks" label="Automatic Tasks">
-                        <app-admin-tasks-tab [accordionData]="initialData" [refData]="refData"></app-admin-tasks-tab>
-                    </mat-tab>
-                    <!-- <mat-tab id="config" label="Manage Global Config">
-                        <app-admin-global-config-tab [initialData]="initialData"
-                            [refData]="refData"></app-admin-global-config-tab>
-                    </mat-tab> -->
-                    <mat-tab id="backgroundJobs" label="Background Jobs">
-                        <app-admin-bg-jobs-tab [accordionData]="initialData"
-                            [refData]="refData"></app-admin-bg-jobs-tab>
-                    </mat-tab>
-                </mat-tab-group>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+        </mat-expansion-panel>
+    </mat-accordion>
+    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" class="mat-tab-group-mobile-scroll"
+        (selectedTabChange)="tabChanged($event.index)" [(selectedIndex)]="tabIndex">
+        <mat-tab id="apiKey" label="Manage API keys">
+            <app-admin-apikey-tab [accordionData]="initialData" [refData]="refData"></app-admin-apikey-tab>
+        </mat-tab>
+        <mat-tab id="oauthToken" label="Manage OAuth Tokens">
+            <app-admin-oauth-tab [accordionData]="initialData" [refData]="refData"></app-admin-oauth-tab>
+        </mat-tab>
+        <mat-tab id="tasks" label="Automatic Tasks">
+            <app-admin-tasks-tab [accordionData]="initialData" [refData]="refData"></app-admin-tasks-tab>
+        </mat-tab>
+        <!-- <mat-tab id="config" label="Manage Global Config">
+            <app-admin-global-config-tab [initialData]="initialData"
+                [refData]="refData"></app-admin-global-config-tab>
+        </mat-tab> -->
+        <mat-tab id="backgroundJobs" label="Background Jobs">
+            <app-admin-bg-jobs-tab [accordionData]="initialData" [refData]="refData"></app-admin-bg-jobs-tab>
+        </mat-tab>
+    </mat-tab-group>
     <app-page-navigation-buttons [navigations]="navigations"></app-page-navigation-buttons>
 </main>
