@@ -18,8 +18,11 @@ export class AdminService {
     private apiKeyController: ApiKeyControllerService,
     private workflowController: WorkflowControllerService) { }
 
-  getAPIKeyList() {
-    return this.apiKeyController.listApiKeys().pipe(map(m => m.responsePayload));
+  getAPIKeyList(pageIndex: number, pageSize: number) {
+    return this.apiKeyController.listApiKeys({
+      pageIndex: pageIndex,
+      pageSize: pageSize
+    }).pipe(map(m => m.responsePayload));
   }
 
   createAPIKey(body: CreateApiKeyDto) {

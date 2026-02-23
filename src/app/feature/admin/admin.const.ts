@@ -1,4 +1,4 @@
-export type adminTabs = 'service_list' | 'global_config' | 'api_keys' | 'oauth' | 'jobs' | 'tasks';
+export type adminTabs = 'api_keys' | 'oauth' | 'bg_jobs' | 'tasks' | 'cron_jobs' | 'cron_trigger';
 
 
 export const AdminDefaultValue = {

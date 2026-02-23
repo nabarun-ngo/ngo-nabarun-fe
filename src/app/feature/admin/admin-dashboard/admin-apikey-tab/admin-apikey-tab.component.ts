@@ -39,7 +39,7 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDto> implements Tab
   }
 
   override onInitHook(): void {
-    this.setHeaderRow([{ value: 'API Key Name' }, { value: 'API Key Scope' }])
+    this.setHeaderRow([{ value: 'Name' }, { value: 'Scope' }, { value: 'Status' }])
   }
 
   protected override prepareHighLevelView(data: ApiKeyDto, options?: { [key: string]: any; }): AccordionCell[] {
@@ -54,6 +54,10 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDto> implements Tab
       {
         type: 'text',
         value: apiKey?.permissions?.join(", ")!,
+      },
+      {
+        type: 'text',
+        value: new Date(apiKey?.expiresAt!) > new Date() ? 'Active' : 'Expired',
       },
     ];
 
@@ -151,14 +155,19 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDto> implements Tab
   }
 
 
-  override handlePageEvent($event: PageEvent): void { }
+  override handlePageEvent($event: PageEvent): void {
+    this.pageEvent = $event;
+    this.adminService.getAPIKeyList($event.pageIndex, $event.pageSize).subscribe(data => {
+      this.setContent(data.content!, data?.totalSize);
+    });
+  }
   onAccordionOpen($event: { rowIndex: number; }) { }
   onSearch($event: SearchEvent): void { }
 
   loadData(): void {
     this.adminService.getAPIScopeList().subscribe(d => {
       this.permissions = d.map(x => ({ key: x, displayValue: x } as KeyValue))
-      this.adminService.getAPIKeyList().subscribe(data => {
+      this.adminService.getAPIKeyList(AdminDefaultValue.pageNumber, AdminDefaultValue.pageSize).subscribe(data => {
         this.setContent(data.content!, data?.totalSize);
       });
     })

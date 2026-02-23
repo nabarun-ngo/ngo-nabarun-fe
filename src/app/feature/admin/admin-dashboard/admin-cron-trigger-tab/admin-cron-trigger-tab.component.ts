@@ -8,11 +8,11 @@ import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { Accordion } from 'src/app/shared/utils/accordion';
 
 @Component({
-  selector: 'app-admin-cron-job-tab',
-  templateUrl: './admin-cron-job-tab.component.html',
-  styleUrls: ['./admin-cron-job-tab.component.scss']
+  selector: 'app-admin-cron-trigger-tab',
+  templateUrl: './admin-cron-trigger-tab.component.html',
+  styleUrls: ['./admin-cron-trigger-tab.component.scss']
 })
-export class AdminCronJobTabComponent extends Accordion<ApiKeyDto> implements TabComponentInterface<ApiKeyDto> {
+export class AdminCronTriggerTabComponent extends Accordion<ApiKeyDto> implements TabComponentInterface<ApiKeyDto> {
   override onInitHook(): void {
     throw new Error('Method not implemented.');
   }
