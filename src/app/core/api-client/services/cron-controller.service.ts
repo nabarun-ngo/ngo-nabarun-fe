@@ -22,8 +22,9 @@ import { GetTriggerLogs$Params } from '../fn/cron-controller/get-trigger-logs';
 import { runScheduledJob } from '../fn/cron-controller/run-scheduled-job';
 import { RunScheduledJob$Params } from '../fn/cron-controller/run-scheduled-job';
 import { SuccessResponseArrayCronJobDto } from '../models/success-response-array-cron-job-dto';
-import { SuccessResponseArraySuccessResponse } from '../models/success-response-array-success-response';
-import { SuccessResponseSuccessResponse } from '../models/success-response-success-response';
+import { SuccessResponseArraySchedulerLogDto } from '../models/success-response-array-scheduler-log-dto';
+import { SuccessResponsePagedResultCronExecutionDto } from '../models/success-response-paged-result-cron-execution-dto';
+import { SuccessResponseString } from '../models/success-response-string';
 
 @Injectable({ providedIn: 'root' })
 export class CronControllerService extends BaseService {
@@ -77,7 +78,7 @@ export class CronControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  runScheduledJob$Response(params: RunScheduledJob$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseSuccessResponse>> {
+  runScheduledJob$Response(params: RunScheduledJob$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
     return runScheduledJob(this.http, this.rootUrl, params, context);
   }
 
@@ -91,9 +92,9 @@ export class CronControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  runScheduledJob(params: RunScheduledJob$Params, context?: HttpContext): Observable<SuccessResponseSuccessResponse> {
+  runScheduledJob(params: RunScheduledJob$Params, context?: HttpContext): Observable<SuccessResponseString> {
     return this.runScheduledJob$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseSuccessResponse>): SuccessResponseSuccessResponse => r.body)
+      map((r: StrictHttpResponse<SuccessResponseString>): SuccessResponseString => r.body)
     );
   }
 
@@ -143,7 +144,7 @@ export class CronControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getCronLogs$Response(params: GetCronLogs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArraySuccessResponse>> {
+  getCronLogs$Response(params: GetCronLogs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultCronExecutionDto>> {
     return getCronLogs(this.http, this.rootUrl, params, context);
   }
 
@@ -157,9 +158,9 @@ export class CronControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getCronLogs(params: GetCronLogs$Params, context?: HttpContext): Observable<SuccessResponseArraySuccessResponse> {
+  getCronLogs(params: GetCronLogs$Params, context?: HttpContext): Observable<SuccessResponsePagedResultCronExecutionDto> {
     return this.getCronLogs$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseArraySuccessResponse>): SuccessResponseArraySuccessResponse => r.body)
+      map((r: StrictHttpResponse<SuccessResponsePagedResultCronExecutionDto>): SuccessResponsePagedResultCronExecutionDto => r.body)
     );
   }
 
@@ -176,7 +177,7 @@ export class CronControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getTriggerLogs$Response(params?: GetTriggerLogs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArraySuccessResponse>> {
+  getTriggerLogs$Response(params?: GetTriggerLogs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArraySchedulerLogDto>> {
     return getTriggerLogs(this.http, this.rootUrl, params, context);
   }
 
@@ -190,9 +191,9 @@ export class CronControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getTriggerLogs(params?: GetTriggerLogs$Params, context?: HttpContext): Observable<SuccessResponseArraySuccessResponse> {
+  getTriggerLogs(params?: GetTriggerLogs$Params, context?: HttpContext): Observable<SuccessResponseArraySchedulerLogDto> {
     return this.getTriggerLogs$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseArraySuccessResponse>): SuccessResponseArraySuccessResponse => r.body)
+      map((r: StrictHttpResponse<SuccessResponseArraySchedulerLogDto>): SuccessResponseArraySchedulerLogDto => r.body)
     );
   }
 

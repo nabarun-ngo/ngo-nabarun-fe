@@ -8,12 +8,12 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseArraySuccessResponse } from '../../models/success-response-array-success-response';
+import { SuccessResponseArraySchedulerLogDto } from '../../models/success-response-array-scheduler-log-dto';
 
 export interface GetTriggerLogs$Params {
 }
 
-export function getTriggerLogs(http: HttpClient, rootUrl: string, params?: GetTriggerLogs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArraySuccessResponse>> {
+export function getTriggerLogs(http: HttpClient, rootUrl: string, params?: GetTriggerLogs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArraySchedulerLogDto>> {
   const rb = new RequestBuilder(rootUrl, getTriggerLogs.PATH, 'get');
   if (params) {
   }
@@ -23,7 +23,7 @@ export function getTriggerLogs(http: HttpClient, rootUrl: string, params?: GetTr
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseArraySuccessResponse>;
+      return r as StrictHttpResponse<SuccessResponseArraySchedulerLogDto>;
     })
   );
 }
