@@ -11,6 +11,7 @@ import { mapPagedWorkflowTaskDtoToPagedTask } from '../workflow/model/workflow.m
 export class AdminService {
 
 
+
   constructor(
     private oauthController: OAuthControllerService,
     private staticDocs: StaticDocsControllerService,
@@ -42,16 +43,23 @@ export class AdminService {
   }
 
   getOAuthTokenList() {
-    return this.oauthController.getGoogleTokens().pipe(map(m => m.responsePayload));
+    return this.oauthController.getTokens({
+      provider: 'google'
+    }).pipe(map(m => m.responsePayload));
   }
 
   getOAuthScopes() {
-    return this.oauthController.getGoogleScopes().pipe(map(m => m.responsePayload));
+    return this.oauthController.getScopes({
+      provider: 'google'
+    }).pipe(map(m => m.responsePayload));
   }
 
 
   createOAuthToken(scopes: string[]) {
-    return this.oauthController.getGmailAuthUrl({ scopes: scopes.join(" ") }).pipe(map(m => m.responsePayload));
+    return this.oauthController.getAuthUrl({
+      provider: 'google',
+      scopes: scopes.join(" ")
+    }).pipe(map(m => m.responsePayload));
   }
 
   getAppLinks() {
@@ -80,11 +88,18 @@ export class AdminService {
 
   getBgJobs(pageIndex: number = AdminDefaultValue.pageNumber, pageSize: number = AdminDefaultValue.pageSize, status?: string) {
     return this.jobController.getJobs({
-      status: status as any,
+      status: 'completed',
       pageIndex: pageIndex,
       pageSize: pageSize
     }).pipe(
       map(d => d.responsePayload)
     )
+  }
+
+  revokeOAuthToken(id: string) {
+    return this.oauthController.revokeTokens({
+      provider: 'google',
+      id: id
+    }).pipe(map(m => m.responsePayload));
   }
 }

@@ -9,7 +9,9 @@ import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { Accordion } from 'src/app/shared/utils/accordion';
 import { AdminService } from '../../admin.service';
 import { KeyValue } from 'src/app/shared/model/key-value.model';
-import { AdminConstant, AdminDefaultValue } from '../../admin.const';
+import { AdminDefaultValue } from '../../admin.const';
+import { ModalService } from 'src/app/core/service/modal.service';
+import { AppDialog } from 'src/app/core/constant/app-dialog.const';
 
 @Component({
   selector: 'app-admin-oauth-tab',
@@ -21,24 +23,31 @@ export class AdminOauthTabComponent extends Accordion<AuthTokenDto> implements T
 
   constructor(
     private adminService: AdminService,
+    private modalService: ModalService
   ) {
     super();
   }
 
   override onInitHook(): void {
-    this.setHeaderRow([{ value: 'Client ID' }, { value: 'Provider' }])
+    this.setHeaderRow([{ value: 'Provider' }, { value: 'Scopes' }, { value: 'Access Token Status' }])
   }
   protected override prepareHighLevelView(data: AuthTokenDto, options?: { [key: string]: any; }): AccordionCell[] {
+    const permissions = data?.scope?.join(", ")!;
+    const permissions_display = permissions?.length > 100 ? `${permissions?.substring(0, 100)}...` : permissions;
     return [
       {
         type: 'text',
-        value: data?.clientId!,
+        value: data?.provider!,
         bgColor: 'bg-purple-200',
         rounded: true
       },
       {
         type: 'text',
-        value: data?.provider!,
+        value: permissions_display,
+      },
+      {
+        type: 'text',
+        value: new Date(data?.expiresAt!) > new Date() ? 'Active' : 'Expired',
       },
     ];
   }
@@ -123,7 +132,10 @@ export class AdminOauthTabComponent extends Accordion<AuthTokenDto> implements T
         }
       ];
     }
-    return [];
+    return [{
+      button_id: 'REVOKE',
+      button_name: 'Revoke'
+    }];
   }
   protected override onClick(event: { buttonId: string; rowIndex: number; }): void {
     switch (event.buttonId) {
@@ -143,6 +155,14 @@ export class AdminOauthTabComponent extends Accordion<AuthTokenDto> implements T
         this.hideForm(0, true);
         break;
       case 'REVOKE':
+        let modal = this.modalService.openNotificationModal(AppDialog.warning_confirm_revoke, 'confirmation', 'warning')
+        modal.onAccept$.subscribe(s => {
+          let oauth = this.itemList[event.rowIndex];
+          this.adminService.revokeOAuthToken(oauth.id!).subscribe(s => {
+            this.loadData();
+          });
+        })
+
         break;
     }
 

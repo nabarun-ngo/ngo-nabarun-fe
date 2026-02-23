@@ -25,7 +25,7 @@ export interface GetJobs$Params {
 /**
  * Status of the failed jobs to return
  */
-  status?: 'completed' | 'failed' | 'paused' | 'delayed' | 'paused' | 'active';
+  status: 'completed' | 'failed' | 'paused' | 'delayed' | 'paused' | 'active';
 
 /**
  * Name of the failed jobs to return

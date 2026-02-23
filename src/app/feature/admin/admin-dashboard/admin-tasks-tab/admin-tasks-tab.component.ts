@@ -26,18 +26,19 @@ export class AdminTasksTabComponent extends Accordion<Task> implements TabCompon
   }
 
   override onInitHook(): void {
-    this.setHeaderRow([{ value: 'Name' }, { value: 'Description' }, { value: 'Status' }])
+    this.setHeaderRow([{ value: 'Task ID' }, { value: 'Name' }, { value: 'Status' }])
   }
   protected override prepareHighLevelView(data: Task, options?: { [key: string]: any; }): AccordionCell[] {
     return [
       {
         type: 'text',
-        value: data?.name
+        value: data?.id
       },
       {
         type: 'text',
-        value: data?.description!
+        value: data?.name
       },
+
       {
         type: 'text',
         value: data?.status!

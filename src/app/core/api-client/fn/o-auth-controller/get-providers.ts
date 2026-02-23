@@ -8,16 +8,14 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseString } from '../../models/success-response-string';
+import { SuccessResponseArrayString } from '../../models/success-response-array-string';
 
-export interface RevokeGoogleTokens$Params {
-  id: string;
+export interface GetProviders$Params {
 }
 
-export function revokeGoogleTokens(http: HttpClient, rootUrl: string, params: RevokeGoogleTokens$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
-  const rb = new RequestBuilder(rootUrl, revokeGoogleTokens.PATH, 'get');
+export function getProviders(http: HttpClient, rootUrl: string, params?: GetProviders$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayString>> {
+  const rb = new RequestBuilder(rootUrl, getProviders.PATH, 'get');
   if (params) {
-    rb.path('id', params.id, {});
   }
 
   return http.request(
@@ -25,9 +23,9 @@ export function revokeGoogleTokens(http: HttpClient, rootUrl: string, params: Re
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseString>;
+      return r as StrictHttpResponse<SuccessResponseArrayString>;
     })
   );
 }
 
-revokeGoogleTokens.PATH = '/api/auth/oauth/tokens/{id}/revoke';
+getProviders.PATH = '/api/auth/oauth/providers';

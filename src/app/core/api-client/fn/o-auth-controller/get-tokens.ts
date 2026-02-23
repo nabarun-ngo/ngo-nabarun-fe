@@ -10,14 +10,20 @@ import { RequestBuilder } from '../../request-builder';
 
 import { SuccessResponsePagedResultAuthTokenDto } from '../../models/success-response-paged-result-auth-token-dto';
 
-export interface GetGoogleTokens$Params {
+export interface GetTokens$Params {
+
+/**
+ * OAuth provider (e.g., google)
+ */
+  provider: string;
   pageIndex?: number;
   pageSize?: number;
 }
 
-export function getGoogleTokens(http: HttpClient, rootUrl: string, params?: GetGoogleTokens$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultAuthTokenDto>> {
-  const rb = new RequestBuilder(rootUrl, getGoogleTokens.PATH, 'get');
+export function getTokens(http: HttpClient, rootUrl: string, params: GetTokens$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultAuthTokenDto>> {
+  const rb = new RequestBuilder(rootUrl, getTokens.PATH, 'get');
   if (params) {
+    rb.path('provider', params.provider, {});
     rb.query('pageIndex', params.pageIndex, {});
     rb.query('pageSize', params.pageSize, {});
   }
@@ -32,4 +38,4 @@ export function getGoogleTokens(http: HttpClient, rootUrl: string, params?: GetG
   );
 }
 
-getGoogleTokens.PATH = '/api/auth/oauth/tokens';
+getTokens.PATH = '/api/auth/oauth/{provider}/tokens';

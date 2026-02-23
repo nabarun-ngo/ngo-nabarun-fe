@@ -44,6 +44,8 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDto> implements Tab
 
   protected override prepareHighLevelView(data: ApiKeyDto, options?: { [key: string]: any; }): AccordionCell[] {
     let apiKey = data as ApiKeyDto;
+    const permissions = data?.permissions?.join(", ")!;
+    const permissions_display = permissions?.length > 100 ? `${permissions?.substring(0, 100)}...` : permissions;
     return [
       {
         type: 'text',
@@ -53,7 +55,7 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDto> implements Tab
       },
       {
         type: 'text',
-        value: apiKey?.permissions?.join(", ")!,
+        value: permissions_display,
       },
       {
         type: 'text',
@@ -205,7 +207,9 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDto> implements Tab
         let modal = this.modalService.openNotificationModal(AppDialog.warning_confirm_revoke, 'confirmation', 'warning')
         modal.onAccept$.subscribe(s => {
           let apiKey = this.itemList[$event.rowIndex];
-          this.adminService.revokeAPIKey(apiKey.id!).subscribe(s => { });
+          this.adminService.revokeAPIKey(apiKey.id!).subscribe(s => {
+            this.loadData();
+          });
         })
         break;
       case 'UPDATE':
