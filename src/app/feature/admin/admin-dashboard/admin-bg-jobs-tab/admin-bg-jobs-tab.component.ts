@@ -213,7 +213,6 @@ export class AdminBgJobsTabComponent extends Accordion<JobDetail> implements Tab
 
   changeStatus() {
     this.dialogService.open(this.statusFilterConfig, { width: 700 }).subscribe((response) => {
-      console.log(response);
       this.statusFilter = response.value.status;
       this.loadData();
     });

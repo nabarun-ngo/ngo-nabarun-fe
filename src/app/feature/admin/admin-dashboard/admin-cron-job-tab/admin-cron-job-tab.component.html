@@ -1,1 +1,27 @@
-<p>admin-cron-job-tab works!</p>
+<div class="mb-4 flex justify-end relative z-10">
+    <button mat-button color="secondary" (click)="loadSchedulerLogs()">
+        <mat-icon>description</mat-icon>
+        Scheduler Logs
+    </button>
+    <button mat-button color="secondary" (click)="loadData()">
+        <mat-icon>refresh</mat-icon>
+        Refresh
+    </button>
+    <button mat-button color="secondary" (click)="triggerJob()">
+        <mat-icon>play_circle</mat-icon>
+        Run Job
+    </button>
+    <button mat-button color="primary" (click)="changeJobName()">
+        <mat-icon>filter_alt</mat-icon>
+        Change Job
+    </button>
+</div>
+<app-detailed-view [detailedViews]="detailedView" [refData]="refData!"></app-detailed-view>
+<h1 class="text-center mb-2 text-indigo-500 py-2"> Cron Executions : {{selectedJob?.name}}
+</h1>
+<app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)"
+    (onAccordionOpen)="onAccordionOpen($event)"></app-accordion-list>
+<mat-paginator class="mt-4" style="background-color: transparent;" (page)="handlePageEvent($event)"
+    [length]="itemLength$ | async" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" [pageIndex]="pageNumber"
+    aria-label="Select page">
+</mat-paginator>

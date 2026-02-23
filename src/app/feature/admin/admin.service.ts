@@ -11,8 +11,6 @@ import { mapPagedWorkflowTaskDtoToPagedTask } from '../workflow/model/workflow.m
 export class AdminService {
 
 
-
-
   constructor(
     private oauthController: OAuthControllerService,
     private staticDocs: StaticDocsControllerService,
@@ -23,6 +21,9 @@ export class AdminService {
 
 
 
+  getCronJobNames() {
+    return this.cronController.getScheduledJobs().pipe(map(m => m.responsePayload));
+  }
 
 
   /**
@@ -142,4 +143,17 @@ export class AdminService {
   getCronTriggers() {
     return this.cronController.getTriggerLogs().pipe(map(m => m.responsePayload));
   }
+
+  getCronJobExecutions(name: string, pageIndex: number = AdminDefaultValue.pageNumber, pageSize: number = AdminDefaultValue.pageSize) {
+    return this.cronController.getCronLogs({
+      name: name,
+      pageIndex: pageIndex,
+      pageSize: pageSize
+    }).pipe(map(m => m.responsePayload));
+  }
+
+  triggerCronJob(name: string) {
+    return this.cronController.runScheduledJob({ name: name }).pipe(map(m => m.responsePayload));
+  }
+
 }

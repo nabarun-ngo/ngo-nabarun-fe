@@ -12,12 +12,16 @@ import { SuccessResponsePagedResultCronExecutionDto } from '../../models/success
 
 export interface GetCronLogs$Params {
   name: string;
+  pageIndex?: number;
+  pageSize?: number;
 }
 
 export function getCronLogs(http: HttpClient, rootUrl: string, params: GetCronLogs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultCronExecutionDto>> {
   const rb = new RequestBuilder(rootUrl, getCronLogs.PATH, 'get');
   if (params) {
     rb.path('name', params.name, {});
+    rb.query('pageIndex', params.pageIndex, {});
+    rb.query('pageSize', params.pageSize, {});
   }
 
   return http.request(

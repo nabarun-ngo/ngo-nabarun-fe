@@ -13,7 +13,6 @@ import { AdminService } from '../admin.service';
 import { KeyValueDto } from 'src/app/core/api-client/models';
 import { AdminTasksTabComponent } from './admin-tasks-tab/admin-tasks-tab.component';
 import { AdminCronJobTabComponent } from './admin-cron-job-tab/admin-cron-job-tab.component';
-import { AdminCronTriggerTabComponent } from './admin-cron-trigger-tab/admin-cron-trigger-tab.component';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -30,11 +29,10 @@ export class AdminDashboardComponent extends StandardTabbedDashboard<adminTabs, 
   @ViewChild(AdminBgJobsTabComponent) jobTab!: AdminBgJobsTabComponent;
   @ViewChild(AdminTasksTabComponent) taskTab!: AdminTasksTabComponent;
   @ViewChild(AdminCronJobTabComponent) cronJobTab!: AdminCronJobTabComponent;
-  @ViewChild(AdminCronTriggerTabComponent) crontriggerTab!: AdminCronTriggerTabComponent;
 
   defaultValue = AdminDefaultValue;
   constant = AdminConstant;
-  protected tabMapping: adminTabs[] = ['api_keys', 'oauth', 'tasks', 'bg_jobs'];
+  protected tabMapping: adminTabs[] = ['api_keys', 'oauth', 'tasks', 'bg_jobs', 'cron_jobs'];
   navigations: NavigationButtonModel[] = [
     {
       displayName: 'Back to Dashboard',
@@ -58,7 +56,6 @@ export class AdminDashboardComponent extends StandardTabbedDashboard<adminTabs, 
       bg_jobs: this.jobTab,
       tasks: this.taskTab,
       cron_jobs: this.cronJobTab,
-      cron_trigger: this.crontriggerTab
     };
   }
   protected override get defaultTab(): adminTabs {

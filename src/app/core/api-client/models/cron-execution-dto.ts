@@ -7,6 +7,7 @@ export interface CronExecutionDto {
   error?: string;
   executedAt: string;
   executionLogs: Array<string>;
+  id: string;
   jobName: string;
   result?: {
 };
