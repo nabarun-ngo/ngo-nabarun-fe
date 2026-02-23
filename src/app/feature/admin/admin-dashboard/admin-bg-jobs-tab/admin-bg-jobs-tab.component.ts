@@ -9,11 +9,12 @@ import { Accordion } from 'src/app/shared/utils/accordion';
 import { AdminService } from '../../admin.service';
 import { FormGroup } from '@angular/forms';
 import { date } from 'src/app/core/service/utilities.service';
+import { AdminDefaultValue } from '../../admin.const';
 
 function duration(start?: string, end?: string): string {
   if (!start || !end) return '-';
 
-  const diff = Number(end) - Number(start);
+  const diff = new Date(end).getTime() - new Date(start).getTime();
   if (diff <= 0) return '-';
 
   const seconds = Math.floor(diff / 1000);
@@ -44,9 +45,9 @@ export class AdminBgJobsTabComponent extends Accordion<JobDetail> implements Tab
   }
   protected override prepareHighLevelView(data: JobDetail, options?: { [key: string]: any; }): AccordionCell[] {
     return [
-      { value: data.id, type: 'text' },
-      { value: data.name, type: 'text' },
-      { value: data.state, type: 'text' },
+      { value: data.id!, type: 'text' },
+      { value: data.name!, type: 'text' },
+      { value: data.state as any, type: 'text' },
       { value: date(data.timestamp), type: 'text' },
     ]
   }
@@ -60,7 +61,7 @@ export class AdminBgJobsTabComponent extends Accordion<JobDetail> implements Tab
         content: [
           { field_name: 'Job ID', field_value: data.id },
           { field_name: 'Job Name', field_value: data.name },
-          { field_name: 'State', field_value: data.state },
+          { field_name: 'State', field_value: data.state as any },
         ],
       },
 
@@ -84,8 +85,8 @@ export class AdminBgJobsTabComponent extends Accordion<JobDetail> implements Tab
         section_form: new FormGroup({}),
         section_html_id: 'bg-job-lifecycle',
         content: [
-          { field_name: 'Processing Started', field_value: date(data.processedOn) },
-          { field_name: 'Finished At', field_value: date(data.finishedOn) },
+          { field_name: 'Processing Started', field_value: date(data.processedOn, 'dd-MM-YYYY HH:mm:ss') },
+          { field_name: 'Finished At', field_value: date(data.finishedOn, 'dd-MM-YYYY HH:mm:ss') },
           { field_name: 'Execution Time', field_value: duration(data.processedOn, data.finishedOn) },
           { field_name: 'Progress', field_value: `${data.progress ?? 0}%` },
         ],
@@ -98,9 +99,8 @@ export class AdminBgJobsTabComponent extends Accordion<JobDetail> implements Tab
         section_form: new FormGroup({}),
         section_html_id: 'bg-job-queue',
         content: [
-          { field_name: 'Queued At', field_value: date(data.timestamp) },
+          { field_name: 'Queued At', field_value: date(data.timestamp, 'dd-MM-YYYY HH:mm:ss') },
           { field_name: 'Delay', field_value: `${data.delay ?? 0} ms` },
-          { field_name: 'TTL', field_value: data.ttl ? `${data.ttl} ms` : '-' },
           { field_name: 'Job Options', field_value: pretty(data.opts) },
         ],
       },
@@ -128,7 +128,7 @@ export class AdminBgJobsTabComponent extends Accordion<JobDetail> implements Tab
   }
   protected override onClick(event: { buttonId: string; rowIndex: number; }): void {
     if (event.buttonId == 'retry') {
-      this.adminService.retryJob(this.itemList[event.rowIndex].id).subscribe({
+      this.adminService.retryJob(this.itemList[event.rowIndex].id!).subscribe({
         next: () => {
           this.loadData();
         }
@@ -139,18 +139,22 @@ export class AdminBgJobsTabComponent extends Accordion<JobDetail> implements Tab
   }
   protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
     return {
-      pageNumber: 0,
-      pageSize: 10,
-      pageSizeOptions: [10, 25, 50, 100],
+      pageNumber: AdminDefaultValue.pageNumber,
+      pageSize: AdminDefaultValue.pageSize,
+      pageSizeOptions: AdminDefaultValue.pageSizeOptions,
     };
   }
   override handlePageEvent($event: PageEvent): void {
+    this.pageEvent = $event;
+    this.adminService.getBgJobs($event.pageIndex, $event.pageSize).subscribe((response) => {
+      this.setContent(response.content, response.totalSize);
+    });;
   }
   onSearch($event: SearchEvent): void {
   }
   loadData(): void {
     this.adminService.getBgJobs().subscribe((response) => {
-      this.setContent(response, response.length);
+      this.setContent(response.content, response.totalSize);
     });
   }
 

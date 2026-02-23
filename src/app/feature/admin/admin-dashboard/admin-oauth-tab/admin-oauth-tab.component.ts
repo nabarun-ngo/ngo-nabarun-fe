@@ -167,7 +167,7 @@ export class AdminOauthTabComponent extends Accordion<AuthTokenDto> implements T
         } as KeyValue
       });
       this.adminService.getOAuthTokenList().subscribe(data => {
-        this.setContent(data!, data?.length);
+        this.setContent(data.content!, data?.totalSize);
       });
     });
 

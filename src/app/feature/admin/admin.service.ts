@@ -1,9 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
 import { CreateApiKeyDto } from 'src/app/core/api-client/models';
 import { ApiKeyControllerService, JobControllerService, OAuthControllerService, StaticDocsControllerService, WorkflowControllerService } from 'src/app/core/api-client/services';
-import { environment } from 'src/environments/environment';
 import { AdminDefaultValue } from './admin.const';
 import { mapPagedWorkflowTaskDtoToPagedTask } from '../workflow/model/workflow.mapper';
 
@@ -61,8 +59,8 @@ export class AdminService {
 
   getFailedTasks(pageIndex: number = AdminDefaultValue.pageNumber, pageSize: number = AdminDefaultValue.pageSize) {
     return this.workflowController.listAutomaticTasks({
-      page: pageIndex,
-      size: pageSize
+      pageIndex: pageIndex,
+      pageSize: pageSize
     }).pipe(
       map(d => d.responsePayload),
       map(mapPagedWorkflowTaskDtoToPagedTask)
@@ -77,9 +75,11 @@ export class AdminService {
     return this.jobController.retryJob({ jobId: id }).pipe(map(m => m.responsePayload));
   }
 
-  getBgJobs(status?: string) {
+  getBgJobs(pageIndex: number = AdminDefaultValue.pageNumber, pageSize: number = AdminDefaultValue.pageSize, status?: string) {
     return this.jobController.getJobs({
-      status: status as any
+      status: status as any,
+      pageIndex: pageIndex,
+      pageSize: pageSize
     }).pipe(
       map(d => d.responsePayload)
     )

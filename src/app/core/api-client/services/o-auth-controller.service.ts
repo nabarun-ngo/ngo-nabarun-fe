@@ -17,8 +17,10 @@ import { getGoogleScopes } from '../fn/o-auth-controller/get-google-scopes';
 import { GetGoogleScopes$Params } from '../fn/o-auth-controller/get-google-scopes';
 import { getGoogleTokens } from '../fn/o-auth-controller/get-google-tokens';
 import { GetGoogleTokens$Params } from '../fn/o-auth-controller/get-google-tokens';
-import { SuccessResponseArrayAuthTokenDto } from '../models/success-response-array-auth-token-dto';
+import { revokeGoogleTokens } from '../fn/o-auth-controller/revoke-google-tokens';
+import { RevokeGoogleTokens$Params } from '../fn/o-auth-controller/revoke-google-tokens';
 import { SuccessResponseArrayString } from '../models/success-response-array-string';
+import { SuccessResponsePagedResultAuthTokenDto } from '../models/success-response-paged-result-auth-token-dto';
 import { SuccessResponseString } from '../models/success-response-string';
 
 @Injectable({ providedIn: 'root' })
@@ -35,6 +37,10 @@ export class OAuthControllerService extends BaseService {
    *
    * Returns the OAuth URL to redirect users to for Gmail authentication. State parameter is automatically generated server-side for security.
    *
+   * **Required Permissions:**
+   * - `create:oauth_token`
+   * _(Any of these permissions)_
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getGmailAuthUrl()` instead.
    *
@@ -48,6 +54,10 @@ export class OAuthControllerService extends BaseService {
    * Get Gmail OAuth authorization URL.
    *
    * Returns the OAuth URL to redirect users to for Gmail authentication. State parameter is automatically generated server-side for security.
+   *
+   * **Required Permissions:**
+   * - `create:oauth_token`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getGmailAuthUrl$Response()` instead.
@@ -99,30 +109,71 @@ export class OAuthControllerService extends BaseService {
   /**
    * Get available OAuth tokens.
    *
-   *
+   * **Required Permissions:**
+   * - `read:oauth_token`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getGoogleTokens()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getGoogleTokens$Response(params?: GetGoogleTokens$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayAuthTokenDto>> {
+  getGoogleTokens$Response(params?: GetGoogleTokens$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultAuthTokenDto>> {
     return getGoogleTokens(this.http, this.rootUrl, params, context);
   }
 
   /**
    * Get available OAuth tokens.
    *
-   *
+   * **Required Permissions:**
+   * - `read:oauth_token`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getGoogleTokens$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getGoogleTokens(params?: GetGoogleTokens$Params, context?: HttpContext): Observable<SuccessResponseArrayAuthTokenDto> {
+  getGoogleTokens(params?: GetGoogleTokens$Params, context?: HttpContext): Observable<SuccessResponsePagedResultAuthTokenDto> {
     return this.getGoogleTokens$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseArrayAuthTokenDto>): SuccessResponseArrayAuthTokenDto => r.body)
+      map((r: StrictHttpResponse<SuccessResponsePagedResultAuthTokenDto>): SuccessResponsePagedResultAuthTokenDto => r.body)
+    );
+  }
+
+  /** Path part for operation `revokeGoogleTokens()` */
+  static readonly RevokeGoogleTokensPath = '/api/auth/oauth/tokens/{id}/revoke';
+
+  /**
+   * Revoke OAuth tokens.
+   *
+   * **Required Permissions:**
+   * - `delete:oauth_token`
+   * _(Any of these permissions)_
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `revokeGoogleTokens()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  revokeGoogleTokens$Response(params: RevokeGoogleTokens$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
+    return revokeGoogleTokens(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Revoke OAuth tokens.
+   *
+   * **Required Permissions:**
+   * - `delete:oauth_token`
+   * _(Any of these permissions)_
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `revokeGoogleTokens$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  revokeGoogleTokens(params: RevokeGoogleTokens$Params, context?: HttpContext): Observable<SuccessResponseString> {
+    return this.revokeGoogleTokens$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseString>): SuccessResponseString => r.body)
     );
   }
 

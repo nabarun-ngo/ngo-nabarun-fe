@@ -8,14 +8,18 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseArrayAuthTokenDto } from '../../models/success-response-array-auth-token-dto';
+import { SuccessResponsePagedResultAuthTokenDto } from '../../models/success-response-paged-result-auth-token-dto';
 
 export interface GetGoogleTokens$Params {
+  pageIndex?: number;
+  pageSize?: number;
 }
 
-export function getGoogleTokens(http: HttpClient, rootUrl: string, params?: GetGoogleTokens$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayAuthTokenDto>> {
+export function getGoogleTokens(http: HttpClient, rootUrl: string, params?: GetGoogleTokens$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultAuthTokenDto>> {
   const rb = new RequestBuilder(rootUrl, getGoogleTokens.PATH, 'get');
   if (params) {
+    rb.query('pageIndex', params.pageIndex, {});
+    rb.query('pageSize', params.pageSize, {});
   }
 
   return http.request(
@@ -23,7 +27,7 @@ export function getGoogleTokens(http: HttpClient, rootUrl: string, params?: GetG
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseArrayAuthTokenDto>;
+      return r as StrictHttpResponse<SuccessResponsePagedResultAuthTokenDto>;
     })
   );
 }

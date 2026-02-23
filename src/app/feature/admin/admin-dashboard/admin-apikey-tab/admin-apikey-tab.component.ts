@@ -159,7 +159,7 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDto> implements Tab
     this.adminService.getAPIScopeList().subscribe(d => {
       this.permissions = d.map(x => ({ key: x, displayValue: x } as KeyValue))
       this.adminService.getAPIKeyList().subscribe(data => {
-        this.setContent(data!, data?.length);
+        this.setContent(data.content!, data?.totalSize);
       });
     })
 

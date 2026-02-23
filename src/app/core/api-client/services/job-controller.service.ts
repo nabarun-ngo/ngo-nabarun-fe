@@ -27,8 +27,8 @@ import { retryAllFailedJobs } from '../fn/job-controller/retry-all-failed-jobs';
 import { RetryAllFailedJobs$Params } from '../fn/job-controller/retry-all-failed-jobs';
 import { retryJob } from '../fn/job-controller/retry-job';
 import { RetryJob$Params } from '../fn/job-controller/retry-job';
-import { SuccessResponseArrayJobDetail } from '../models/success-response-array-job-detail';
 import { SuccessResponseJobDetail } from '../models/success-response-job-detail';
+import { SuccessResponsePagedResultJobDetail } from '../models/success-response-paged-result-job-detail';
 
 @Injectable({ providedIn: 'root' })
 export class JobControllerService extends BaseService {
@@ -51,7 +51,7 @@ export class JobControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getJobs$Response(params?: GetJobs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayJobDetail>> {
+  getJobs$Response(params: GetJobs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultJobDetail>> {
     return getJobs(this.http, this.rootUrl, params, context);
   }
 
@@ -67,9 +67,9 @@ export class JobControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getJobs(params?: GetJobs$Params, context?: HttpContext): Observable<SuccessResponseArrayJobDetail> {
+  getJobs(params: GetJobs$Params, context?: HttpContext): Observable<SuccessResponsePagedResultJobDetail> {
     return this.getJobs$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseArrayJobDetail>): SuccessResponseArrayJobDetail => r.body)
+      map((r: StrictHttpResponse<SuccessResponsePagedResultJobDetail>): SuccessResponsePagedResultJobDetail => r.body)
     );
   }
 

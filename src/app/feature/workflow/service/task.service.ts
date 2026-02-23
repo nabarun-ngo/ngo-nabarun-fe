@@ -24,8 +24,8 @@ export class TaskService {
         }
     ): Observable<PagedTask> {
         return this.workflowController.listTasks({
-            page: page || RequestDefaultValue.pageNumber,
-            size: size || RequestDefaultValue.pageSize,
+            pageIndex: page || RequestDefaultValue.pageNumber,
+            pageSize: size || RequestDefaultValue.pageSize,
             completed: completed ? 'Y' : 'N',
             taskId: filter?.taskId,
             type: filter?.type as any,

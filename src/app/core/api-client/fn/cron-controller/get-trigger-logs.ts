@@ -10,14 +10,12 @@ import { RequestBuilder } from '../../request-builder';
 
 import { SuccessResponseArraySuccessResponse } from '../../models/success-response-array-success-response';
 
-export interface GetCronLogs$Params {
-  name: string;
+export interface GetTriggerLogs$Params {
 }
 
-export function getCronLogs(http: HttpClient, rootUrl: string, params: GetCronLogs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArraySuccessResponse>> {
-  const rb = new RequestBuilder(rootUrl, getCronLogs.PATH, 'get');
+export function getTriggerLogs(http: HttpClient, rootUrl: string, params?: GetTriggerLogs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArraySuccessResponse>> {
+  const rb = new RequestBuilder(rootUrl, getTriggerLogs.PATH, 'get');
   if (params) {
-    rb.path('name', params.name, {});
   }
 
   return http.request(
@@ -30,4 +28,4 @@ export function getCronLogs(http: HttpClient, rootUrl: string, params: GetCronLo
   );
 }
 
-getCronLogs.PATH = '/api/cron/executions/{name}';
+getTriggerLogs.PATH = '/api/cron/trigger-logs';

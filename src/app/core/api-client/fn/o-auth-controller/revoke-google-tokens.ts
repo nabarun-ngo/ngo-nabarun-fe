@@ -8,16 +8,16 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseArraySuccessResponse } from '../../models/success-response-array-success-response';
+import { SuccessResponseString } from '../../models/success-response-string';
 
-export interface GetCronLogs$Params {
-  name: string;
+export interface RevokeGoogleTokens$Params {
+  id: string;
 }
 
-export function getCronLogs(http: HttpClient, rootUrl: string, params: GetCronLogs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArraySuccessResponse>> {
-  const rb = new RequestBuilder(rootUrl, getCronLogs.PATH, 'get');
+export function revokeGoogleTokens(http: HttpClient, rootUrl: string, params: RevokeGoogleTokens$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
+  const rb = new RequestBuilder(rootUrl, revokeGoogleTokens.PATH, 'get');
   if (params) {
-    rb.path('name', params.name, {});
+    rb.path('id', params.id, {});
   }
 
   return http.request(
@@ -25,9 +25,9 @@ export function getCronLogs(http: HttpClient, rootUrl: string, params: GetCronLo
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseArraySuccessResponse>;
+      return r as StrictHttpResponse<SuccessResponseString>;
     })
   );
 }
 
-getCronLogs.PATH = '/api/cron/executions/{name}';
+revokeGoogleTokens.PATH = '/api/auth/oauth/tokens/{id}/revoke';

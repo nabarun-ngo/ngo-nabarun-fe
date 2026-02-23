@@ -15,12 +15,12 @@ export interface ListInstancesByMe$Params {
 /**
  * Index of the page to retrieve
  */
-  page?: number;
+  pageIndex?: number;
 
 /**
  * Count of content to load per page
  */
-  size?: number;
+  pageSize?: number;
   workflowId?: string;
   status?: Array<'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'FAILED' | 'CANCELLED'>;
   type?: Array<string>;
@@ -30,8 +30,8 @@ export interface ListInstancesByMe$Params {
 export function listInstancesByMe(http: HttpClient, rootUrl: string, params?: ListInstancesByMe$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultWorkflowInstanceDto>> {
   const rb = new RequestBuilder(rootUrl, listInstancesByMe.PATH, 'get');
   if (params) {
-    rb.query('page', params.page, {});
-    rb.query('size', params.size, {});
+    rb.query('pageIndex', params.pageIndex, {});
+    rb.query('pageSize', params.pageSize, {});
     rb.query('workflowId', params.workflowId, {});
     rb.query('status', params.status, {});
     rb.query('type', params.type, {});

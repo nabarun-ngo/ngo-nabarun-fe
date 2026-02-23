@@ -20,9 +20,9 @@ import { ListApiScopes$Params } from '../fn/api-key-controller/list-api-scopes';
 import { revokeApiKey } from '../fn/api-key-controller/revoke-api-key';
 import { RevokeApiKey$Params } from '../fn/api-key-controller/revoke-api-key';
 import { SuccessResponseApiKeyDto } from '../models/success-response-api-key-dto';
-import { SuccessResponseArrayApiKeyDto } from '../models/success-response-array-api-key-dto';
 import { SuccessResponseArrayString } from '../models/success-response-array-string';
 import { SuccessResponseBoolean } from '../models/success-response-boolean';
+import { SuccessResponsePagedResultApiKeyDto } from '../models/success-response-paged-result-api-key-dto';
 import { updateApiKeyPermissions } from '../fn/api-key-controller/update-api-key-permissions';
 import { UpdateApiKeyPermissions$Params } from '../fn/api-key-controller/update-api-key-permissions';
 
@@ -84,7 +84,7 @@ export class ApiKeyControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listApiKeys$Response(params?: ListApiKeys$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayApiKeyDto>> {
+  listApiKeys$Response(params?: ListApiKeys$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultApiKeyDto>> {
     return listApiKeys(this.http, this.rootUrl, params, context);
   }
 
@@ -100,9 +100,9 @@ export class ApiKeyControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listApiKeys(params?: ListApiKeys$Params, context?: HttpContext): Observable<SuccessResponseArrayApiKeyDto> {
+  listApiKeys(params?: ListApiKeys$Params, context?: HttpContext): Observable<SuccessResponsePagedResultApiKeyDto> {
     return this.listApiKeys$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseArrayApiKeyDto>): SuccessResponseArrayApiKeyDto => r.body)
+      map((r: StrictHttpResponse<SuccessResponsePagedResultApiKeyDto>): SuccessResponsePagedResultApiKeyDto => r.body)
     );
   }
 
