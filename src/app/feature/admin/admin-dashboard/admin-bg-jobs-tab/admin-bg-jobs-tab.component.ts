@@ -7,9 +7,13 @@ import { AccordionCell, AccordionButton } from 'src/app/shared/model/accordion-l
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { Accordion } from 'src/app/shared/utils/accordion';
 import { AdminService } from '../../admin.service';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { date } from 'src/app/core/service/utilities.service';
 import { AdminDefaultValue } from '../../admin.const';
+import { UniversalInputModel } from 'src/app/shared/model/universal-input.model';
+import { SearchSelectModalService } from 'src/app/shared/components/search-select-modal/search-select-modal.service';
+import { SearchSelectModalConfig } from 'src/app/shared/components/search-select-modal/search-select-modal.component';
+import { KeyValue } from 'src/app/shared/model/key-value.model';
 
 function duration(start?: string, end?: string): string {
   if (!start || !end) return '-';
@@ -37,7 +41,9 @@ function pretty(v: any): string {
 export class AdminBgJobsTabComponent extends Accordion<JobDetail> implements TabComponentInterface<string> {
 
 
-  constructor(private readonly adminService: AdminService) {
+  constructor(private readonly adminService: AdminService,
+    private readonly dialogService: SearchSelectModalService
+  ) {
     super();
   }
   override onInitHook(): void {
@@ -119,18 +125,30 @@ export class AdminBgJobsTabComponent extends Accordion<JobDetail> implements Tab
     ]
   }
   protected override prepareDefaultButtons(data: JobDetail, options?: { [key: string]: any; }): AccordionButton[] {
-    return data.failedReason ? [
+    return [
       {
-        button_id: 'retry',
-        button_name: 'Retry',
+        button_id: 'remove',
+        button_name: 'Remove',
       },
-    ] : [];
+      ...(data.state == 'failed' ?
+        [{
+          button_id: 'retry',
+          button_name: 'Retry',
+        }] : []),
+    ];
   }
   protected override onClick(event: { buttonId: string; rowIndex: number; }): void {
     if (event.buttonId == 'retry') {
       this.adminService.retryJob(this.itemList[event.rowIndex].id!).subscribe({
         next: () => {
           this.loadData();
+        }
+      });
+    }
+    else if (event.buttonId == 'remove') {
+      this.adminService.removeJob(this.itemList[event.rowIndex].id!).subscribe({
+        next: () => {
+          this.removeContentRow(event.rowIndex);
         }
       });
     }
@@ -146,17 +164,56 @@ export class AdminBgJobsTabComponent extends Accordion<JobDetail> implements Tab
   }
   override handlePageEvent($event: PageEvent): void {
     this.pageEvent = $event;
-    this.adminService.getBgJobs($event.pageIndex, $event.pageSize).subscribe((response) => {
+    this.adminService.getBgJobs(this.statusFilter, $event.pageIndex, $event.pageSize).subscribe((response) => {
       this.setContent(response.content, response.totalSize);
     });;
   }
   onSearch($event: SearchEvent): void {
   }
   loadData(): void {
-    this.adminService.getBgJobs().subscribe((response) => {
+    this.adminService.getBgJobs(this.statusFilter, AdminDefaultValue.pageNumber, AdminDefaultValue.pageSize).subscribe((response) => {
       this.setContent(response.content, response.totalSize);
     });
   }
+
+  protected statusFilter: string = 'failed';
+  protected statusMap: Record<string, string> = {
+    'completed': 'Completed',
+    'failed': 'Failed',
+    'paused': 'Paused',
+    'active': 'Active',
+    'delayed': 'Delayed'
+  }
+  protected statusFilterConfig: SearchSelectModalConfig = {
+    searchFormFields: [
+      {
+        formControlName: 'status',
+        validations: [Validators.required],
+        inputModel: {
+          html_id: 'status_F',
+          inputType: '',
+          tagName: 'select',
+          placeholder: 'Select Job Status',
+          selectList: Object.keys(this.statusMap).map(key => {
+            return {
+              key: key,
+              displayValue: this.statusMap[key]
+            } as KeyValue
+          })
+        }
+      }
+    ],
+    title: 'Filter Job Status',
+  }
+
+  changeStatus() {
+    this.dialogService.open(this.statusFilterConfig, { width: 700 }).subscribe((response) => {
+      console.log(response);
+      this.statusFilter = response.value.status;
+      this.loadData();
+    });
+  }
+
 
 
 

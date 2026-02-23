@@ -86,9 +86,14 @@ export class AdminService {
     return this.jobController.retryJob({ jobId: id }).pipe(map(m => m.responsePayload));
   }
 
-  getBgJobs(pageIndex: number = AdminDefaultValue.pageNumber, pageSize: number = AdminDefaultValue.pageSize, status?: string) {
+  removeJob(id: string) {
+    return this.jobController.removeJob({ jobId: id }).pipe(map(m => m.responsePayload));
+  }
+
+
+  getBgJobs(status: string, pageIndex: number = AdminDefaultValue.pageNumber, pageSize: number = AdminDefaultValue.pageSize) {
     return this.jobController.getJobs({
-      status: 'completed',
+      status: status as any,
       pageIndex: pageIndex,
       pageSize: pageSize
     }).pipe(

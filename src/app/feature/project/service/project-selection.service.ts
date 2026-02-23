@@ -76,7 +76,6 @@ export class ProjectSelectionService {
                 SearchAndAdvancedSearchFormComponent,
                 projectSearch,
                 {
-                    height: 300,
                     width: 700,
                     disableClose: true
                 }

@@ -244,20 +244,11 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
           });
         break;
       case 'REJECT':
-        dialog = this.modalService.openComponentDialog(
-          SearchAndAdvancedSearchFormComponent,
-          rejectionModal()
-        );
-        dialog.componentInstance.onSearch.subscribe((s) => {
-          dialog?.close();
-          ////console.log(s);
-          if (!s.reset) {
-            var id = this.itemList[$event.rowIndex].id;
-            const itemData = this.itemList[$event.rowIndex];
-            this.expenseService
-              .updateExpense(id!, { status: 'REJECTED', remarks: itemData.remarks })
-              .subscribe((d) => this.updateContentRow(d, $event.rowIndex));
-          }
+        this.searchSelectModalService.open(rejectionModal()).subscribe(data => {
+          var id = this.itemList[$event.rowIndex].id;
+          this.expenseService
+            .updateExpense(id!, { status: 'REJECTED', remarks: data.value.remarks })
+            .subscribe((d) => this.updateContentRow(d, $event.rowIndex));
         });
         break;
       default:
