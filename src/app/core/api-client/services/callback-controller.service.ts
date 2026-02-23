@@ -21,7 +21,7 @@ export class CallbackControllerService extends BaseService {
   }
 
   /** Path part for operation `handleOAuthCallbackRedirect()` */
-  static readonly HandleOAuthCallbackRedirectPath = '/api/callback/oauth/{provider}';
+  static readonly HandleOAuthCallbackRedirectPath = '/callback/oauth/{provider}';
 
   /**
    * Backend callback endpoint - Providers redirect here directly

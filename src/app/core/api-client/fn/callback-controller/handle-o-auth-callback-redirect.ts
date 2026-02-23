@@ -29,4 +29,4 @@ export function handleOAuthCallbackRedirect(http: HttpClient, rootUrl: string, p
   );
 }
 
-handleOAuthCallbackRedirect.PATH = '/api/callback/oauth/{provider}';
+handleOAuthCallbackRedirect.PATH = '/callback/oauth/{provider}';
