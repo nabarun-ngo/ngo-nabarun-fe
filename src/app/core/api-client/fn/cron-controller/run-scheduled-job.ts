@@ -8,13 +8,13 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseSuccessResponse } from '../../models/success-response-success-response';
+import { SuccessResponseString } from '../../models/success-response-string';
 
 export interface RunScheduledJob$Params {
   name: string;
 }
 
-export function runScheduledJob(http: HttpClient, rootUrl: string, params: RunScheduledJob$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseSuccessResponse>> {
+export function runScheduledJob(http: HttpClient, rootUrl: string, params: RunScheduledJob$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
   const rb = new RequestBuilder(rootUrl, runScheduledJob.PATH, 'post');
   if (params) {
     rb.path('name', params.name, {});
@@ -25,7 +25,7 @@ export function runScheduledJob(http: HttpClient, rootUrl: string, params: RunSc
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseSuccessResponse>;
+      return r as StrictHttpResponse<SuccessResponseString>;
     })
   );
 }

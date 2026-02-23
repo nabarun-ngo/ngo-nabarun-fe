@@ -44,20 +44,8 @@ export class BulkEditDonationComponent extends MemberDonationTabComponent {
     protected config: BulkEditConfig = {};
     protected canUpdate: boolean = false;
 
-    constructor(
-        protected override route: ActivatedRoute,
-        protected override router: Router,
-        protected location: Location,
-        protected override donationService: DonationService,
-        protected override identityService: UserIdentityService,
-        protected override modalService: ModalService,
-        protected override projectSelectionService: ProjectSelectionService,
-    ) {
-        super(donationService, identityService, modalService, projectSelectionService, router, route);
-        this.canUpdate = this.identityService.isAccrediatedTo(SCOPE.update.donation);
-    }
-
     override onInitHook(): void {
+        this.canUpdate = this.identityService.isAccrediatedTo(SCOPE.update.donation);
         // Check permissions
         if (!this.canUpdate) {
             this.modalService.openNotificationModal(
@@ -259,7 +247,7 @@ export class BulkEditDonationComponent extends MemberDonationTabComponent {
         if (this.config.returnUrl) {
             this.router.navigateByUrl(this.config.returnUrl);
         } else {
-            this.location.back();
+            window.history.back();
         }
     }
 

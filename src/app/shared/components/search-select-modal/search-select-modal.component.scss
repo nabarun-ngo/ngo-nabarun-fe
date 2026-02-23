@@ -1,0 +1,9 @@
+/*
+  SearchSelectModalComponent – minimal host styles.
+  All field/button/title styles are owned by SearchAndAdvancedSearchFormComponent.
+*/
+
+:host {
+  display: block;
+  /* ensures the dialog sizes correctly */
+}

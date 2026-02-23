@@ -8,7 +8,7 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseJobDetail } from '../../models/success-response-job-detail';
+import { SuccessResponseString } from '../../models/success-response-string';
 
 export interface PauseQueue$Params {
 
@@ -18,7 +18,7 @@ export interface PauseQueue$Params {
   operation: 'pause' | 'resume';
 }
 
-export function pauseQueue(http: HttpClient, rootUrl: string, params: PauseQueue$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseJobDetail>> {
+export function pauseQueue(http: HttpClient, rootUrl: string, params: PauseQueue$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
   const rb = new RequestBuilder(rootUrl, pauseQueue.PATH, 'post');
   if (params) {
     rb.path('operation', params.operation, {});
@@ -29,7 +29,7 @@ export function pauseQueue(http: HttpClient, rootUrl: string, params: PauseQueue
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseJobDetail>;
+      return r as StrictHttpResponse<SuccessResponseString>;
     })
   );
 }

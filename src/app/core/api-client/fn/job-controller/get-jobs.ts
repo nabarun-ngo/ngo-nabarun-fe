@@ -8,26 +8,38 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseArrayJobDetail } from '../../models/success-response-array-job-detail';
+import { SuccessResponsePagedResultJobDetail } from '../../models/success-response-paged-result-job-detail';
 
 export interface GetJobs$Params {
 
 /**
- * Status of the failed jobs to return
+ * Page index of the failed jobs to return
  */
-  status?: 'completed' | 'failed' | 'paused' | 'delayed' | 'paused' | 'active';
+  pageIndex: number;
 
 /**
- * Number of failed jobs to return
+ * Page size of the failed jobs to return
  */
-  limit?: number;
+  pageSize: number;
+
+/**
+ * Status of the failed jobs to return
+ */
+  status: 'completed' | 'failed' | 'paused' | 'delayed' | 'paused' | 'active';
+
+/**
+ * Name of the failed jobs to return
+ */
+  name?: string;
 }
 
-export function getJobs(http: HttpClient, rootUrl: string, params?: GetJobs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayJobDetail>> {
+export function getJobs(http: HttpClient, rootUrl: string, params: GetJobs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultJobDetail>> {
   const rb = new RequestBuilder(rootUrl, getJobs.PATH, 'get');
   if (params) {
+    rb.query('pageIndex', params.pageIndex, {});
+    rb.query('pageSize', params.pageSize, {});
     rb.query('status', params.status, {});
-    rb.query('limit', params.limit, {});
+    rb.query('name', params.name, {});
   }
 
   return http.request(
@@ -35,7 +47,7 @@ export function getJobs(http: HttpClient, rootUrl: string, params?: GetJobs$Para
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseArrayJobDetail>;
+      return r as StrictHttpResponse<SuccessResponsePagedResultJobDetail>;
     })
   );
 }

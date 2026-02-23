@@ -40,8 +40,8 @@ export class RequestService {
   ): Observable<PagedRequest> {
     if (requestFor === 'me') {
       return this.workflowController.listInstancesForMe({
-        page: page,
-        size: size,
+        pageIndex: page,
+        pageSize: size,
         workflowId: filter?.workflowId,
         status: filter?.status as any,
         type: filter?.type as any
@@ -51,8 +51,8 @@ export class RequestService {
       );
     }
     return this.workflowController.listInstancesByMe({
-      page: page,
-      size: size,
+      pageIndex: page,
+      pageSize: size,
       delegated: 'Y', // interested to get request by me for others 
       workflowId: filter?.workflowId,
       status: filter?.status as any,

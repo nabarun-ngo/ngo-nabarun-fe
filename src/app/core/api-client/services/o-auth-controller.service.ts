@@ -11,14 +11,18 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { getGmailAuthUrl } from '../fn/o-auth-controller/get-gmail-auth-url';
-import { GetGmailAuthUrl$Params } from '../fn/o-auth-controller/get-gmail-auth-url';
-import { getGoogleScopes } from '../fn/o-auth-controller/get-google-scopes';
-import { GetGoogleScopes$Params } from '../fn/o-auth-controller/get-google-scopes';
-import { getGoogleTokens } from '../fn/o-auth-controller/get-google-tokens';
-import { GetGoogleTokens$Params } from '../fn/o-auth-controller/get-google-tokens';
-import { SuccessResponseArrayAuthTokenDto } from '../models/success-response-array-auth-token-dto';
+import { getAuthUrl } from '../fn/o-auth-controller/get-auth-url';
+import { GetAuthUrl$Params } from '../fn/o-auth-controller/get-auth-url';
+import { getProviders } from '../fn/o-auth-controller/get-providers';
+import { GetProviders$Params } from '../fn/o-auth-controller/get-providers';
+import { getScopes } from '../fn/o-auth-controller/get-scopes';
+import { GetScopes$Params } from '../fn/o-auth-controller/get-scopes';
+import { getTokens } from '../fn/o-auth-controller/get-tokens';
+import { GetTokens$Params } from '../fn/o-auth-controller/get-tokens';
+import { revokeTokens } from '../fn/o-auth-controller/revoke-tokens';
+import { RevokeTokens$Params } from '../fn/o-auth-controller/revoke-tokens';
 import { SuccessResponseArrayString } from '../models/success-response-array-string';
+import { SuccessResponsePagedResultAuthTokenDto } from '../models/success-response-paged-result-auth-token-dto';
 import { SuccessResponseString } from '../models/success-response-string';
 
 @Injectable({ providedIn: 'root' })
@@ -27,102 +31,184 @@ export class OAuthControllerService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `getGmailAuthUrl()` */
-  static readonly GetGmailAuthUrlPath = '/api/auth/oauth/google/auth-url';
+  /** Path part for operation `getAuthUrl()` */
+  static readonly GetAuthUrlPath = '/api/auth/oauth/{provider}/auth-url';
 
   /**
-   * Get Gmail OAuth authorization URL.
+   * Get OAuth authorization URL.
    *
-   * Returns the OAuth URL to redirect users to for Gmail authentication. State parameter is automatically generated server-side for security.
+   * Returns the OAuth URL to redirect users to for authentication. State parameter is automatically generated server-side for security.
+   *
+   * **Required Permissions:**
+   * - `create:oauth_token`
+   * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getGmailAuthUrl()` instead.
+   * To access only the response body, use `getAuthUrl()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getGmailAuthUrl$Response(params?: GetGmailAuthUrl$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
-    return getGmailAuthUrl(this.http, this.rootUrl, params, context);
+  getAuthUrl$Response(params: GetAuthUrl$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
+    return getAuthUrl(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * Get Gmail OAuth authorization URL.
+   * Get OAuth authorization URL.
    *
-   * Returns the OAuth URL to redirect users to for Gmail authentication. State parameter is automatically generated server-side for security.
+   * Returns the OAuth URL to redirect users to for authentication. State parameter is automatically generated server-side for security.
+   *
+   * **Required Permissions:**
+   * - `create:oauth_token`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getGmailAuthUrl$Response()` instead.
+   * To access the full response (for headers, for example), `getAuthUrl$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getGmailAuthUrl(params?: GetGmailAuthUrl$Params, context?: HttpContext): Observable<SuccessResponseString> {
-    return this.getGmailAuthUrl$Response(params, context).pipe(
+  getAuthUrl(params: GetAuthUrl$Params, context?: HttpContext): Observable<SuccessResponseString> {
+    return this.getAuthUrl$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseString>): SuccessResponseString => r.body)
     );
   }
 
-  /** Path part for operation `getGoogleScopes()` */
-  static readonly GetGoogleScopesPath = '/api/auth/oauth/google/scopes';
+  /** Path part for operation `getScopes()` */
+  static readonly GetScopesPath = '/api/auth/oauth/{provider}/scopes';
 
   /**
-   * Get available Google OAuth scopes.
+   * Get available OAuth scopes for provider.
    *
    *
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getGoogleScopes()` instead.
+   * To access only the response body, use `getScopes()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getGoogleScopes$Response(params?: GetGoogleScopes$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayString>> {
-    return getGoogleScopes(this.http, this.rootUrl, params, context);
+  getScopes$Response(params: GetScopes$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayString>> {
+    return getScopes(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * Get available Google OAuth scopes.
+   * Get available OAuth scopes for provider.
    *
    *
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getGoogleScopes$Response()` instead.
+   * To access the full response (for headers, for example), `getScopes$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getGoogleScopes(params?: GetGoogleScopes$Params, context?: HttpContext): Observable<SuccessResponseArrayString> {
-    return this.getGoogleScopes$Response(params, context).pipe(
+  getScopes(params: GetScopes$Params, context?: HttpContext): Observable<SuccessResponseArrayString> {
+    return this.getScopes$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseArrayString>): SuccessResponseArrayString => r.body)
     );
   }
 
-  /** Path part for operation `getGoogleTokens()` */
-  static readonly GetGoogleTokensPath = '/api/auth/oauth/tokens';
+  /** Path part for operation `getTokens()` */
+  static readonly GetTokensPath = '/api/auth/oauth/{provider}/tokens';
 
   /**
-   * Get available OAuth tokens.
+   * Get available OAuth tokens for provider.
+   *
+   * **Required Permissions:**
+   * - `read:oauth_token`
+   * _(Any of these permissions)_
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getTokens()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getTokens$Response(params: GetTokens$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultAuthTokenDto>> {
+    return getTokens(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get available OAuth tokens for provider.
+   *
+   * **Required Permissions:**
+   * - `read:oauth_token`
+   * _(Any of these permissions)_
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getTokens$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getTokens(params: GetTokens$Params, context?: HttpContext): Observable<SuccessResponsePagedResultAuthTokenDto> {
+    return this.getTokens$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponsePagedResultAuthTokenDto>): SuccessResponsePagedResultAuthTokenDto => r.body)
+    );
+  }
+
+  /** Path part for operation `revokeTokens()` */
+  static readonly RevokeTokensPath = '/api/auth/oauth/{provider}/tokens/{id}/revoke';
+
+  /**
+   * Revoke OAuth tokens.
+   *
+   * **Required Permissions:**
+   * - `delete:oauth_token`
+   * _(Any of these permissions)_
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `revokeTokens()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  revokeTokens$Response(params: RevokeTokens$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
+    return revokeTokens(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Revoke OAuth tokens.
+   *
+   * **Required Permissions:**
+   * - `delete:oauth_token`
+   * _(Any of these permissions)_
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `revokeTokens$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  revokeTokens(params: RevokeTokens$Params, context?: HttpContext): Observable<SuccessResponseString> {
+    return this.revokeTokens$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseString>): SuccessResponseString => r.body)
+    );
+  }
+
+  /** Path part for operation `getProviders()` */
+  static readonly GetProvidersPath = '/api/auth/oauth/providers';
+
+  /**
+   * Get available OAuth providers.
    *
    *
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getGoogleTokens()` instead.
+   * To access only the response body, use `getProviders()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getGoogleTokens$Response(params?: GetGoogleTokens$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayAuthTokenDto>> {
-    return getGoogleTokens(this.http, this.rootUrl, params, context);
+  getProviders$Response(params?: GetProviders$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayString>> {
+    return getProviders(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * Get available OAuth tokens.
+   * Get available OAuth providers.
    *
    *
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getGoogleTokens$Response()` instead.
+   * To access the full response (for headers, for example), `getProviders$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getGoogleTokens(params?: GetGoogleTokens$Params, context?: HttpContext): Observable<SuccessResponseArrayAuthTokenDto> {
-    return this.getGoogleTokens$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseArrayAuthTokenDto>): SuccessResponseArrayAuthTokenDto => r.body)
+  getProviders(params?: GetProviders$Params, context?: HttpContext): Observable<SuccessResponseArrayString> {
+    return this.getProviders$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseArrayString>): SuccessResponseArrayString => r.body)
     );
   }
 

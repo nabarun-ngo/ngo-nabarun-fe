@@ -8,13 +8,13 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseArrayAuthTokenDto } from '../../models/success-response-array-auth-token-dto';
+import { SuccessResponseArrayString } from '../../models/success-response-array-string';
 
-export interface GetGoogleTokens$Params {
+export interface GetProviders$Params {
 }
 
-export function getGoogleTokens(http: HttpClient, rootUrl: string, params?: GetGoogleTokens$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayAuthTokenDto>> {
-  const rb = new RequestBuilder(rootUrl, getGoogleTokens.PATH, 'get');
+export function getProviders(http: HttpClient, rootUrl: string, params?: GetProviders$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayString>> {
+  const rb = new RequestBuilder(rootUrl, getProviders.PATH, 'get');
   if (params) {
   }
 
@@ -23,9 +23,9 @@ export function getGoogleTokens(http: HttpClient, rootUrl: string, params?: GetG
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseArrayAuthTokenDto>;
+      return r as StrictHttpResponse<SuccessResponseArrayString>;
     })
   );
 }
 
-getGoogleTokens.PATH = '/api/auth/oauth/tokens';
+getProviders.PATH = '/api/auth/oauth/providers';

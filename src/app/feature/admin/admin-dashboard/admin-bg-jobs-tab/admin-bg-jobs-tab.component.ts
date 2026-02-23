@@ -1,19 +1,24 @@
 import { Component } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { JobDetail } from 'src/app/core/api-client/models';
+import { JobDetail, QueueStatistics } from 'src/app/core/api-client/models';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
 import { AccordionCell, AccordionButton } from 'src/app/shared/model/accordion-list.model';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { Accordion } from 'src/app/shared/utils/accordion';
 import { AdminService } from '../../admin.service';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { date } from 'src/app/core/service/utilities.service';
+import { AdminDefaultValue } from '../../admin.const';
+import { SearchSelectModalService } from 'src/app/shared/components/search-select-modal/search-select-modal.service';
+import { SearchSelectModalConfig } from 'src/app/shared/components/search-select-modal/search-select-modal.component';
+import { KeyValue } from 'src/app/shared/model/key-value.model';
+import { ModalService } from 'src/app/core/service/modal.service';
 
 function duration(start?: string, end?: string): string {
   if (!start || !end) return '-';
 
-  const diff = Number(end) - Number(start);
+  const diff = new Date(end).getTime() - new Date(start).getTime();
   if (diff <= 0) return '-';
 
   const seconds = Math.floor(diff / 1000);
@@ -34,9 +39,13 @@ function pretty(v: any): string {
   styleUrls: ['./admin-bg-jobs-tab.component.scss']
 })
 export class AdminBgJobsTabComponent extends Accordion<JobDetail> implements TabComponentInterface<string> {
+  statistics!: QueueStatistics;
 
 
-  constructor(private readonly adminService: AdminService) {
+  constructor(private readonly adminService: AdminService,
+    private readonly dialogService: SearchSelectModalService,
+    private readonly modalService: ModalService
+  ) {
     super();
   }
   override onInitHook(): void {
@@ -44,9 +53,9 @@ export class AdminBgJobsTabComponent extends Accordion<JobDetail> implements Tab
   }
   protected override prepareHighLevelView(data: JobDetail, options?: { [key: string]: any; }): AccordionCell[] {
     return [
-      { value: data.id, type: 'text' },
-      { value: data.name, type: 'text' },
-      { value: data.state, type: 'text' },
+      { value: data.id!, type: 'text' },
+      { value: data.name!, type: 'text' },
+      { value: data.state as any, type: 'text' },
       { value: date(data.timestamp), type: 'text' },
     ]
   }
@@ -60,7 +69,7 @@ export class AdminBgJobsTabComponent extends Accordion<JobDetail> implements Tab
         content: [
           { field_name: 'Job ID', field_value: data.id },
           { field_name: 'Job Name', field_value: data.name },
-          { field_name: 'State', field_value: data.state },
+          { field_name: 'State', field_value: data.state as any },
         ],
       },
 
@@ -84,8 +93,8 @@ export class AdminBgJobsTabComponent extends Accordion<JobDetail> implements Tab
         section_form: new FormGroup({}),
         section_html_id: 'bg-job-lifecycle',
         content: [
-          { field_name: 'Processing Started', field_value: date(data.processedOn) },
-          { field_name: 'Finished At', field_value: date(data.finishedOn) },
+          { field_name: 'Processing Started', field_value: date(data.processedOn, 'dd-MM-YYYY HH:mm:ss') },
+          { field_name: 'Finished At', field_value: date(data.finishedOn, 'dd-MM-YYYY HH:mm:ss') },
           { field_name: 'Execution Time', field_value: duration(data.processedOn, data.finishedOn) },
           { field_name: 'Progress', field_value: `${data.progress ?? 0}%` },
         ],
@@ -98,9 +107,8 @@ export class AdminBgJobsTabComponent extends Accordion<JobDetail> implements Tab
         section_form: new FormGroup({}),
         section_html_id: 'bg-job-queue',
         content: [
-          { field_name: 'Queued At', field_value: date(data.timestamp) },
+          { field_name: 'Queued At', field_value: date(data.timestamp, 'dd-MM-YYYY HH:mm:ss') },
           { field_name: 'Delay', field_value: `${data.delay ?? 0} ms` },
-          { field_name: 'TTL', field_value: data.ttl ? `${data.ttl} ms` : '-' },
           { field_name: 'Job Options', field_value: pretty(data.opts) },
         ],
       },
@@ -119,18 +127,30 @@ export class AdminBgJobsTabComponent extends Accordion<JobDetail> implements Tab
     ]
   }
   protected override prepareDefaultButtons(data: JobDetail, options?: { [key: string]: any; }): AccordionButton[] {
-    return data.failedReason ? [
+    return [
       {
-        button_id: 'retry',
-        button_name: 'Retry',
+        button_id: 'remove',
+        button_name: 'Remove',
       },
-    ] : [];
+      ...(data.state == 'failed' ?
+        [{
+          button_id: 'retry',
+          button_name: 'Retry',
+        }] : []),
+    ];
   }
   protected override onClick(event: { buttonId: string; rowIndex: number; }): void {
     if (event.buttonId == 'retry') {
-      this.adminService.retryJob(this.itemList[event.rowIndex].id).subscribe({
+      this.adminService.retryJob(this.itemList[event.rowIndex].id!).subscribe({
         next: () => {
           this.loadData();
+        }
+      });
+    }
+    else if (event.buttonId == 'remove') {
+      this.adminService.removeJob(this.itemList[event.rowIndex].id!).subscribe({
+        next: () => {
+          this.removeContentRow(event.rowIndex);
         }
       });
     }
@@ -139,20 +159,87 @@ export class AdminBgJobsTabComponent extends Accordion<JobDetail> implements Tab
   }
   protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
     return {
-      pageNumber: 0,
-      pageSize: 10,
-      pageSizeOptions: [10, 25, 50, 100],
+      pageNumber: AdminDefaultValue.pageNumber,
+      pageSize: AdminDefaultValue.pageSize,
+      pageSizeOptions: AdminDefaultValue.pageSizeOptions,
     };
   }
   override handlePageEvent($event: PageEvent): void {
+    this.pageEvent = $event;
+    this.adminService.getBgJobs(this.statusFilter, $event.pageIndex, $event.pageSize).subscribe((response) => {
+      this.setContent(response.content, response.totalSize);
+    });;
   }
   onSearch($event: SearchEvent): void {
   }
   loadData(): void {
-    this.adminService.getBgJobs().subscribe((response) => {
-      this.setContent(response, response.length);
+    this.adminService.getBgJobStatistics().subscribe((response) => {
+      this.statistics = response;
+    });
+    this.adminService.getBgJobs(this.statusFilter, AdminDefaultValue.pageNumber, AdminDefaultValue.pageSize).subscribe((response) => {
+      this.setContent(response.content, response.totalSize);
     });
   }
+
+  protected statusFilter: string = 'failed';
+  protected statusMap: Record<string, string> = {
+    'completed': 'Completed',
+    'failed': 'Failed',
+    'paused': 'Paused',
+    'active': 'Active',
+    'delayed': 'Delayed'
+  }
+  protected statusFilterConfig: SearchSelectModalConfig = {
+    searchFormFields: [
+      {
+        formControlName: 'status',
+        validations: [Validators.required],
+        inputModel: {
+          html_id: 'status_F',
+          inputType: '',
+          tagName: 'select',
+          placeholder: 'Select Job Status',
+          selectList: Object.keys(this.statusMap).map(key => {
+            return {
+              key: key,
+              displayValue: this.statusMap[key]
+            } as KeyValue
+          })
+        }
+      }
+    ],
+    title: 'Filter Job Status',
+  }
+
+  changeStatus() {
+    this.dialogService.open(this.statusFilterConfig, { width: 700 }).subscribe((response) => {
+      this.statusFilter = response.value.status;
+      this.loadData();
+    });
+  }
+
+  clearJobs() {
+    this.modalService.openNotificationModal({
+      title: 'Clear Jobs',
+      description: 'Are you sure you want to clean old jobs?',
+    }, 'confirmation', 'warning').onAccept$.subscribe(() => {
+      this.adminService.clearBgJobs().subscribe({
+        next: () => {
+          this.loadData();
+        }
+      });
+    });
+  }
+
+  resumeOrPauseQueue() {
+    const isPaused = this.statistics.health.isPaused;
+    this.adminService.updateQueueState(isPaused ? 'resume' : 'pause').subscribe({
+      next: () => {
+        this.loadData();
+      }
+    });
+  }
+
 
 
 

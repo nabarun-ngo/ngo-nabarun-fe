@@ -9,12 +9,14 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 
-export interface HandleGmailCallbackRedirect$Params {
+export interface HandleOAuthCallbackRedirect$Params {
+  provider: string;
 }
 
-export function handleGmailCallbackRedirect(http: HttpClient, rootUrl: string, params?: HandleGmailCallbackRedirect$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, handleGmailCallbackRedirect.PATH, 'get');
+export function handleOAuthCallbackRedirect(http: HttpClient, rootUrl: string, params: HandleOAuthCallbackRedirect$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, handleOAuthCallbackRedirect.PATH, 'get');
   if (params) {
+    rb.path('provider', params.provider, {});
   }
 
   return http.request(
@@ -27,4 +29,4 @@ export function handleGmailCallbackRedirect(http: HttpClient, rootUrl: string, p
   );
 }
 
-handleGmailCallbackRedirect.PATH = '/callback/oauth/google';
+handleOAuthCallbackRedirect.PATH = '/callback/oauth/{provider}';

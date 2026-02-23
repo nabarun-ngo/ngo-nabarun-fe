@@ -7,17 +7,20 @@ export interface JobDetail {
   data: {
 };
   delay: number;
-  failedReason: string;
-  finishedOn: string;
-  id: string;
-  name: string;
+  failedReason?: string;
+  finishedOn?: string;
+  id?: string;
+  logs?: Array<string>;
+  name?: string;
   opts: {
 };
-  processedOn: string;
-  progress: number;
-  returnvalue: {
+  processedOn?: string;
+  progress: {
 };
-  state: string;
-  timestamp: string;
-  ttl: number;
+  returnvalue?: {
+};
+  stacktrace?: Array<string>;
+  state: {
+};
+  timestamp?: string;
 }

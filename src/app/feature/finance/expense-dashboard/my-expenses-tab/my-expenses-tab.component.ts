@@ -28,6 +28,7 @@ import { getProjectSection } from 'src/app/feature/project/fields/project.field'
 import { getActivitySection } from 'src/app/feature/project/fields/activity.field';
 import { ProjectSelectionService, ProjectSelectionResult } from 'src/app/feature/project/service/project-selection.service';
 import { ExpenseService } from '../../service/expense.service';
+import { SearchSelectModalService } from 'src/app/shared/components/search-select-modal/search-select-modal.service';
 
 
 @Component({
@@ -61,6 +62,7 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
     protected route: ActivatedRoute,
     protected router: Router,
     private projectSelectionService: ProjectSelectionService,
+    protected searchSelectModalService: SearchSelectModalService,
   ) {
     super();
   }

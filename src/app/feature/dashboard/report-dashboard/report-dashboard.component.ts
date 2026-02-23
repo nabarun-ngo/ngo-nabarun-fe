@@ -7,12 +7,11 @@ import { StandardTabbedDashboard } from 'src/app/shared/utils/standard-tabbed-da
 import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
 import { ActivatedRoute } from '@angular/router';
 import { FinanceReportTabComponent } from './finance-report-tab/finance-report-tab.component';
-import { ModalService } from 'src/app/core/service/modal.service';
-import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
 import { Validators } from '@angular/forms';
 import { ReportService } from '../services/report.service';
-import { SearchAndAdvancedSearchFormComponent } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search-form.component';
 import { date, saveAs } from 'src/app/core/service/utilities.service';
+import { SearchSelectModalConfig } from 'src/app/shared/components/search-select-modal/search-select-modal.component';
+import { SearchSelectModalService } from 'src/app/shared/components/search-select-modal/search-select-modal.service';
 
 type reportTabs = 'financeReports' | 'interimReports';
 
@@ -37,7 +36,7 @@ export class ReportDashboardComponent extends StandardTabbedDashboard<reportTabs
   constructor(
     private sharedDataService: SharedDataService,
     protected override route: ActivatedRoute,
-    protected modalService: ModalService,
+    protected modalService: SearchSelectModalService,
     private reportService: ReportService
   ) {
     super(route);
@@ -68,48 +67,31 @@ export class ReportDashboardComponent extends StandardTabbedDashboard<reportTabs
   generateInterimReport() {
     this.reportService.listFinanceReports().subscribe(reportList => {
       const report = this.getReportSearch(reportList);
-      let modal = this.modalService.openComponentDialog(SearchAndAdvancedSearchFormComponent,
-        report,
-        {
-          height: 290,
-          width: 700,
+      this.modalService.open(report, { width: 700, }).subscribe(data => {
+        this.reportService.generateInterimReport(data.value.reportName).subscribe((blob) => {
+          const fileName = `Interim_Report_${reportList.find(r => r.key === data.value.reportName)?.displayValue}_${date(new Date(), 'yyyyMMddHHmmss')}`;
+          saveAs(blob, fileName);
         });
-      modal.componentInstance.onSearch.subscribe(data => {
-        if (data.reset) {
-          modal.close();
-        }
-        else {
-          this.reportService.generateInterimReport(data.value.reportName).subscribe((blob) => {
-            modal.close();
-            data
-            const fileName = `Interim_Report_${reportList.find(r => r.key === data.value.reportName)?.displayValue}_${date(new Date(), 'yyyyMMddHHmmss')}`;
-            saveAs(blob, fileName);
-          });
-        }
       })
     });
   }
 
-  private getReportSearch(reportList: KeyValue[]) {
+  private getReportSearch(reportList: KeyValue[]): SearchSelectModalConfig {
     return {
-      normalSearchPlaceHolder: '',
-      showOnlyAdvancedSearch: true,
-      advancedSearch: {
-        buttonText: { search: 'Generate', close: 'Close' },
-        title: 'Generate Interim Report',
-        searchFormFields: [{
-          formControlName: 'reportName',
-          inputModel: {
-            html_id: 'report_name',
-            inputType: 'text',
-            tagName: 'input',
-            autocomplete: true,
-            placeholder: 'Select Report',
-            selectList: reportList
-          },
-          validations: [Validators.required]
-        }]
-      }
+      buttonText: { search: 'Generate', close: 'Close' },
+      title: 'Generate Interim Report',
+      searchFormFields: [{
+        formControlName: 'reportName',
+        inputModel: {
+          html_id: 'report_name',
+          inputType: 'text',
+          tagName: 'input',
+          autocomplete: true,
+          placeholder: 'Select Report',
+          selectList: reportList
+        },
+        validations: [Validators.required]
+      }]
     };
   }
 }

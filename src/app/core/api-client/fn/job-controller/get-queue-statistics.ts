@@ -8,12 +8,12 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseJobDetail } from '../../models/success-response-job-detail';
+import { SuccessResponseQueueStatistics } from '../../models/success-response-queue-statistics';
 
 export interface GetQueueStatistics$Params {
 }
 
-export function getQueueStatistics(http: HttpClient, rootUrl: string, params?: GetQueueStatistics$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseJobDetail>> {
+export function getQueueStatistics(http: HttpClient, rootUrl: string, params?: GetQueueStatistics$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseQueueStatistics>> {
   const rb = new RequestBuilder(rootUrl, getQueueStatistics.PATH, 'get');
   if (params) {
   }
@@ -23,7 +23,7 @@ export function getQueueStatistics(http: HttpClient, rootUrl: string, params?: G
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseJobDetail>;
+      return r as StrictHttpResponse<SuccessResponseQueueStatistics>;
     })
   );
 }

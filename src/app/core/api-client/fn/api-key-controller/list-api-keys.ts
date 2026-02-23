@@ -8,14 +8,18 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseArrayApiKeyDto } from '../../models/success-response-array-api-key-dto';
+import { SuccessResponsePagedResultApiKeyDto } from '../../models/success-response-paged-result-api-key-dto';
 
 export interface ListApiKeys$Params {
+  pageIndex?: number;
+  pageSize?: number;
 }
 
-export function listApiKeys(http: HttpClient, rootUrl: string, params?: ListApiKeys$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayApiKeyDto>> {
+export function listApiKeys(http: HttpClient, rootUrl: string, params?: ListApiKeys$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultApiKeyDto>> {
   const rb = new RequestBuilder(rootUrl, listApiKeys.PATH, 'get');
   if (params) {
+    rb.query('pageIndex', params.pageIndex, {});
+    rb.query('pageSize', params.pageSize, {});
   }
 
   return http.request(
@@ -23,7 +27,7 @@ export function listApiKeys(http: HttpClient, rootUrl: string, params?: ListApiK
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseArrayApiKeyDto>;
+      return r as StrictHttpResponse<SuccessResponsePagedResultApiKeyDto>;
     })
   );
 }

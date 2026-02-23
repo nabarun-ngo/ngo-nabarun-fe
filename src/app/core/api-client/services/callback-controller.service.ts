@@ -11,8 +11,8 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { handleGmailCallbackRedirect } from '../fn/callback-controller/handle-gmail-callback-redirect';
-import { HandleGmailCallbackRedirect$Params } from '../fn/callback-controller/handle-gmail-callback-redirect';
+import { handleOAuthCallbackRedirect } from '../fn/callback-controller/handle-o-auth-callback-redirect';
+import { HandleOAuthCallbackRedirect$Params } from '../fn/callback-controller/handle-o-auth-callback-redirect';
 
 @Injectable({ providedIn: 'root' })
 export class CallbackControllerService extends BaseService {
@@ -20,35 +20,33 @@ export class CallbackControllerService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `handleGmailCallbackRedirect()` */
-  static readonly HandleGmailCallbackRedirectPath = '/callback/oauth/google';
+  /** Path part for operation `handleOAuthCallbackRedirect()` */
+  static readonly HandleOAuthCallbackRedirectPath = '/callback/oauth/{provider}';
 
   /**
-   * Backend callback endpoint - Google redirects here directly
+   * Backend callback endpoint - Providers redirect here directly
    * This is the SECURE approach - code never exposed to frontend
-   * Returns HTML page directly (no redirect to frontend)
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `handleGmailCallbackRedirect()` instead.
+   * To access only the response body, use `handleOAuthCallbackRedirect()` instead.
    *
    * This method doesn't expect any request body.
    */
-  handleGmailCallbackRedirect$Response(params?: HandleGmailCallbackRedirect$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    return handleGmailCallbackRedirect(this.http, this.rootUrl, params, context);
+  handleOAuthCallbackRedirect$Response(params: HandleOAuthCallbackRedirect$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return handleOAuthCallbackRedirect(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * Backend callback endpoint - Google redirects here directly
+   * Backend callback endpoint - Providers redirect here directly
    * This is the SECURE approach - code never exposed to frontend
-   * Returns HTML page directly (no redirect to frontend)
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `handleGmailCallbackRedirect$Response()` instead.
+   * To access the full response (for headers, for example), `handleOAuthCallbackRedirect$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  handleGmailCallbackRedirect(params?: HandleGmailCallbackRedirect$Params, context?: HttpContext): Observable<void> {
-    return this.handleGmailCallbackRedirect$Response(params, context).pipe(
+  handleOAuthCallbackRedirect(params: HandleOAuthCallbackRedirect$Params, context?: HttpContext): Observable<void> {
+    return this.handleOAuthCallbackRedirect$Response(params, context).pipe(
       map((r: StrictHttpResponse<void>): void => r.body)
     );
   }

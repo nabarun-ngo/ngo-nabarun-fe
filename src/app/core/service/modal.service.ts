@@ -112,38 +112,6 @@ export class ModalService {
     return this.dialog.open(component, config);
   }
 
-  // openComponentDialog2<T extends object>(
-  //   component: ComponentType<T>,
-  //   inputs: Partial<T>,
-  //   dimention?: { width?: number; height?: number; fullScreen?: boolean }
-  // ) {
-  //   const config = new MatDialogConfig();
-
-  //   if (dimention?.width != null) {
-  //     config.width = dimention.width + 'px';
-  //   }
-  //   if (dimention?.height != null) {
-  //     config.height = dimention.height + 'px';
-  //   }
-
-  //   if (dimention?.fullScreen) {
-  //     config.panelClass = 'fullscreen-dialog';
-  //     config.width = '100%';
-  //     config.height = '100%';
-  //     config.maxWidth = '100vw';
-  //     config.maxHeight = '100vh';
-  //   }
-
-  //   // Open the dialog
-  //   const dialogRef = this.dialog.open(component, config);
-
-  //   // Set the inputs dynamically
-  //   const instance = dialogRef.componentInstance;
-  //   Object.assign(instance, inputs);
-
-  //   return dialogRef;
-  // }
-
   openBaseModal<T extends object>(
     bodyComponent: ComponentType<T>,
     bodyInputs: Partial<T>,

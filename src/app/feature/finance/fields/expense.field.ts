@@ -18,6 +18,7 @@ import { AccountConstant, AccountDefaultValue, ExpenseDefaultValue, expenseTab }
 import { Account, Expense, ExpenseItem } from '../model';
 import { Doc } from 'src/app/shared/model/document.model';
 import { KeyValue } from 'src/app/shared/model/key-value.model';
+import { SearchSelectModalConfig } from 'src/app/shared/components/search-select-modal/search-select-modal.component';
 
 export const expenseTabHeader = [
   {
@@ -353,25 +354,21 @@ export const expenseEventField = (events: KeyValue[]) => {
   } as DetailedViewField;
 };
 
-export const rejectionModal = (): SearchAndAdvancedSearchModel => {
+export const rejectionModal = (): SearchSelectModalConfig => {
   return {
-    normalSearchPlaceHolder: '',
-    showOnlyAdvancedSearch: true,
-    advancedSearch: {
-      buttonText: { search: 'Reject', close: 'Cancel' },
-      title: 'Confirm Rejection',
-      searchFormFields: [{
-        formControlName: 'remarks',
-        inputModel: {
-          html_id: 'remarks',
-          labelName: 'Reason for reject',
-          inputType: 'text',
-          tagName: 'textarea',
-          placeholder: 'Enter reason for rejection',
-        },
-        validations: [Validators.required]
-      }]
-    }
+    buttonText: { search: 'Reject', close: 'Cancel' },
+    title: 'Confirm Rejection',
+    searchFormFields: [{
+      formControlName: 'remarks',
+      inputModel: {
+        html_id: 'remarks',
+        labelName: 'Reason for reject',
+        inputType: 'text',
+        tagName: 'textarea',
+        placeholder: 'Enter reason for rejection',
+      },
+      validations: [Validators.required]
+    }]
   }
 };
 

@@ -10,12 +10,18 @@ import { RequestBuilder } from '../../request-builder';
 
 import { SuccessResponseArrayString } from '../../models/success-response-array-string';
 
-export interface GetGoogleScopes$Params {
+export interface GetScopes$Params {
+
+/**
+ * OAuth provider (e.g., google)
+ */
+  provider: string;
 }
 
-export function getGoogleScopes(http: HttpClient, rootUrl: string, params?: GetGoogleScopes$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayString>> {
-  const rb = new RequestBuilder(rootUrl, getGoogleScopes.PATH, 'get');
+export function getScopes(http: HttpClient, rootUrl: string, params: GetScopes$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayString>> {
+  const rb = new RequestBuilder(rootUrl, getScopes.PATH, 'get');
   if (params) {
+    rb.path('provider', params.provider, {});
   }
 
   return http.request(
@@ -28,4 +34,4 @@ export function getGoogleScopes(http: HttpClient, rootUrl: string, params?: GetG
   );
 }
 
-getGoogleScopes.PATH = '/api/auth/oauth/google/scopes';
+getScopes.PATH = '/api/auth/oauth/{provider}/scopes';

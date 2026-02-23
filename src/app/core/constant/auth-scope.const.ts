@@ -36,7 +36,8 @@ export const SCOPE = {
     cron: 'read:cron',
 
     // api
-    apikey: 'read:api_keys'
+    apikey: 'read:api_keys',
+    oauth_token: 'read:oauth_token'
   },
 
   create: {
@@ -65,7 +66,8 @@ export const SCOPE = {
     document: 'create:document',
 
     // system
-    apikey: 'create:api_keys'
+    apikey: 'create:api_keys',
+    oauth_token: 'create:oauth_token'
   },
 
   update: {
@@ -90,25 +92,26 @@ export const SCOPE = {
     // system
     jobs: 'update:jobs',
     cron: 'update:cron',
-    apikey: 'update:api_keys'
+    apikey: 'update:api_keys',
   },
 
   delete: {
     jobs: 'delete:jobs',
-    apikey: 'delete:api_keys'
+    apikey: 'delete:api_keys',
+    oauth_token: 'delete:oauth_token'
   }
 };
 
 
 export function getScopes() {
-    var scope = '';
+  var scope = '';
 
-    Object.values(SCOPE).forEach(level1 => {
-        Object.values(level1).forEach(level2 => {
-            scope = scope + ' ' + level2;
-        })
+  Object.values(SCOPE).forEach(level1 => {
+    Object.values(level1).forEach(level2 => {
+      scope = scope + ' ' + level2;
     })
-    //////console.log('Additional scope : '+scope)
-    return scope;
+  })
+  //////console.log('Additional scope : '+scope)
+  return scope;
 }
 

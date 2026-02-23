@@ -15,6 +15,8 @@ import { FormGroup, Validators } from '@angular/forms';
 import { SearchAndAdvancedSearchFormComponent } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search-form.component';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
 import { Role, User } from '../models/member.model';
+import { SearchSelectModalService } from 'src/app/shared/components/search-select-modal/search-select-modal.service';
+import { SearchSelectModalConfig } from 'src/app/shared/components/search-select-modal/search-select-modal.component';
 
 @Component({
   selector: 'app-member-role',
@@ -33,10 +35,9 @@ export class MemberRoleComponent implements OnInit {
       errors?: { hasError: boolean, message: string, duplicates: string[] };
     }
   } = {};
-  userSearch: SearchAndAdvancedSearchModel = {
-    normalSearchPlaceHolder: '',
-    showOnlyAdvancedSearch: true,
-    advancedSearch: {
+  private userSearch = (kv: KeyValue[]): SearchSelectModalConfig => {
+    return {
+
       buttonText: { search: 'Add', close: 'Close' },
       title: 'Search Members',
       searchFormFields: [{
@@ -47,7 +48,7 @@ export class MemberRoleComponent implements OnInit {
           tagName: 'input',
           autocomplete: true,
           placeholder: 'Search members here',
-          selectList: []
+          selectList: kv
         },
         validations: [Validators.required]
       }]
@@ -70,6 +71,7 @@ export class MemberRoleComponent implements OnInit {
     private router: Router,
     private memberService: MemberService,
     private modalService: ModalService,
+    private searchService: SearchSelectModalService,
 
   ) { }
 
@@ -176,28 +178,17 @@ export class MemberRoleComponent implements OnInit {
   }
 
   addUserToRole(roleId: string) {
-    this.userSearch.advancedSearch?.searchFormFields.filter(f => f.inputModel.html_id == 'user_search').map(m => {
-      m.inputModel.selectList = this.allMembers?.map(m2 => {
-        return { key: m2.id, displayValue: m2.fullName } as KeyValue
-      })
+    const users = this.allMembers?.map(m2 => {
+      return { key: m2.id, displayValue: m2.fullName } as KeyValue
     })
-    let modal = this.modalService.openComponentDialog(SearchAndAdvancedSearchFormComponent,
-      this.userSearch
-      , {
-        height: 290,
-        width: 700
-      });
-    modal.componentInstance.onSearch.subscribe(data => {
-      if (data.reset) {
-        modal.close();
-      }
-      else {
-        let profile = this.allMembers.find(f => f.id == data.value.users);
-        if (profile) {
-          this.roleUserMaping[roleId].currentUsers.push(profile!);
-          modal.close();
-          this.validate()
-        }
+    const searchModel = this.userSearch(users)
+
+    let modal = this.searchService.open(searchModel, { width: 700 });
+    modal.subscribe(data => {
+      let profile = this.allMembers.find(f => f.id == data.value.users);
+      if (profile) {
+        this.roleUserMaping[roleId].currentUsers.push(profile!);
+        this.validate()
       }
     })
 

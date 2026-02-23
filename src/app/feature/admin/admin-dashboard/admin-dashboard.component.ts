@@ -7,13 +7,12 @@ import { NavigationButtonModel } from 'src/app/shared/components/generic/page-na
 import { StandardTabbedDashboard } from 'src/app/shared/utils/standard-tabbed-dashboard';
 import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
 import { AdminApikeyTabComponent } from './admin-apikey-tab/admin-apikey-tab.component';
-import { AdminServiceTabComponent } from './admin-service-tab/admin-service-tab.component';
-import { AdminGlobalConfigTabComponent } from './admin-global-config-tab/admin-global-config-tab.component';
 import { AdminOauthTabComponent } from './admin-oauth-tab/admin-oauth-tab.component';
 import { AdminBgJobsTabComponent } from './admin-bg-jobs-tab/admin-bg-jobs-tab.component';
 import { AdminService } from '../admin.service';
 import { KeyValueDto } from 'src/app/core/api-client/models';
 import { AdminTasksTabComponent } from './admin-tasks-tab/admin-tasks-tab.component';
+import { AdminCronJobTabComponent } from './admin-cron-job-tab/admin-cron-job-tab.component';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -26,15 +25,14 @@ export class AdminDashboardComponent extends StandardTabbedDashboard<adminTabs, 
      * Declariring variables
      */
   @ViewChild(AdminApikeyTabComponent) apiKeyTab!: AdminApikeyTabComponent;
-  @ViewChild(AdminServiceTabComponent) serviceTab!: AdminServiceTabComponent;
-  @ViewChild(AdminGlobalConfigTabComponent) configTab!: AdminGlobalConfigTabComponent;
   @ViewChild(AdminOauthTabComponent) oauthTab!: AdminOauthTabComponent;
   @ViewChild(AdminBgJobsTabComponent) jobTab!: AdminBgJobsTabComponent;
   @ViewChild(AdminTasksTabComponent) taskTab!: AdminTasksTabComponent;
+  @ViewChild(AdminCronJobTabComponent) cronJobTab!: AdminCronJobTabComponent;
 
   defaultValue = AdminDefaultValue;
   constant = AdminConstant;
-  protected tabMapping: adminTabs[] = ['api_keys', 'oauth', 'tasks', 'jobs'];
+  protected tabMapping: adminTabs[] = ['api_keys', 'oauth', 'tasks', 'bg_jobs', 'cron_jobs'];
   navigations: NavigationButtonModel[] = [
     {
       displayName: 'Back to Dashboard',
@@ -54,11 +52,10 @@ export class AdminDashboardComponent extends StandardTabbedDashboard<adminTabs, 
   protected override get tabComponents(): { [tab in adminTabs]: TabComponentInterface } {
     return {
       api_keys: this.apiKeyTab,
-      global_config: this.configTab,
       oauth: this.oauthTab,
-      jobs: this.jobTab,
-      service_list: this.serviceTab,
-      tasks: this.taskTab
+      bg_jobs: this.jobTab,
+      tasks: this.taskTab,
+      cron_jobs: this.cronJobTab,
     };
   }
   protected override get defaultTab(): adminTabs {
