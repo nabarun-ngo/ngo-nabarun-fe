@@ -207,7 +207,7 @@ export class AccountControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listSelfAccounts$Response(params: ListSelfAccounts$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultAccountDetailDto>> {
+  listSelfAccounts$Response(params?: ListSelfAccounts$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultAccountDetailDto>> {
     return listSelfAccounts(this.http, this.rootUrl, params, context);
   }
 
@@ -221,7 +221,7 @@ export class AccountControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  listSelfAccounts(params: ListSelfAccounts$Params, context?: HttpContext): Observable<SuccessResponsePagedResultAccountDetailDto> {
+  listSelfAccounts(params?: ListSelfAccounts$Params, context?: HttpContext): Observable<SuccessResponsePagedResultAccountDetailDto> {
     return this.listSelfAccounts$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponsePagedResultAccountDetailDto>): SuccessResponsePagedResultAccountDetailDto => r.body)
     );
@@ -401,7 +401,7 @@ export class AccountControllerService extends BaseService {
   }
 
   /** Path part for operation `fixTransactions()` */
-  static readonly FixTransactionsPath = '/api/account/transaction/fix';
+  static readonly FixTransactionsPath = '/api/account/support/transaction-fix';
 
   /**
    * Fix transaction for account.

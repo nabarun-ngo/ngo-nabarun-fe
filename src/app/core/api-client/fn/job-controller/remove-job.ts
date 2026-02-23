@@ -8,7 +8,7 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseJobDetail } from '../../models/success-response-job-detail';
+import { SuccessResponseString } from '../../models/success-response-string';
 
 export interface RemoveJob$Params {
 
@@ -18,7 +18,7 @@ export interface RemoveJob$Params {
   jobId: string;
 }
 
-export function removeJob(http: HttpClient, rootUrl: string, params: RemoveJob$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseJobDetail>> {
+export function removeJob(http: HttpClient, rootUrl: string, params: RemoveJob$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
   const rb = new RequestBuilder(rootUrl, removeJob.PATH, 'delete');
   if (params) {
     rb.path('jobId', params.jobId, {});
@@ -29,7 +29,7 @@ export function removeJob(http: HttpClient, rootUrl: string, params: RemoveJob$P
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseJobDetail>;
+      return r as StrictHttpResponse<SuccessResponseString>;
     })
   );
 }

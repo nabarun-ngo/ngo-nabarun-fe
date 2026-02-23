@@ -31,4 +31,4 @@ export function fixTransactions(http: HttpClient, rootUrl: string, params: FixTr
   );
 }
 
-fixTransactions.PATH = '/api/account/transaction/fix';
+fixTransactions.PATH = '/api/account/support/transaction-fix';

@@ -39,11 +39,13 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDto> implements Tab
   }
 
   override onInitHook(): void {
-    this.setHeaderRow([{ value: 'API Key Name' }, { value: 'API Key Scope' }])
+    this.setHeaderRow([{ value: 'Name' }, { value: 'Scope' }, { value: 'Status' }])
   }
 
   protected override prepareHighLevelView(data: ApiKeyDto, options?: { [key: string]: any; }): AccordionCell[] {
     let apiKey = data as ApiKeyDto;
+    const permissions = data?.permissions?.join(", ")!;
+    const permissions_display = permissions?.length > 100 ? `${permissions?.substring(0, 100)}...` : permissions;
     return [
       {
         type: 'text',
@@ -53,7 +55,11 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDto> implements Tab
       },
       {
         type: 'text',
-        value: apiKey?.permissions?.join(", ")!,
+        value: permissions_display,
+      },
+      {
+        type: 'text',
+        value: new Date(apiKey?.expiresAt!) > new Date() ? 'Active' : 'Expired',
       },
     ];
 
@@ -151,15 +157,20 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDto> implements Tab
   }
 
 
-  override handlePageEvent($event: PageEvent): void { }
+  override handlePageEvent($event: PageEvent): void {
+    this.pageEvent = $event;
+    this.adminService.getAPIKeyList($event.pageIndex, $event.pageSize).subscribe(data => {
+      this.setContent(data.content!, data?.totalSize);
+    });
+  }
   onAccordionOpen($event: { rowIndex: number; }) { }
   onSearch($event: SearchEvent): void { }
 
   loadData(): void {
     this.adminService.getAPIScopeList().subscribe(d => {
       this.permissions = d.map(x => ({ key: x, displayValue: x } as KeyValue))
-      this.adminService.getAPIKeyList().subscribe(data => {
-        this.setContent(data!, data?.length);
+      this.adminService.getAPIKeyList(AdminDefaultValue.pageNumber, AdminDefaultValue.pageSize).subscribe(data => {
+        this.setContent(data.content!, data?.totalSize);
       });
     })
 
@@ -196,7 +207,9 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDto> implements Tab
         let modal = this.modalService.openNotificationModal(AppDialog.warning_confirm_revoke, 'confirmation', 'warning')
         modal.onAccept$.subscribe(s => {
           let apiKey = this.itemList[$event.rowIndex];
-          this.adminService.revokeAPIKey(apiKey.id!).subscribe(s => { });
+          this.adminService.revokeAPIKey(apiKey.id!).subscribe(s => {
+            this.loadData();
+          });
         })
         break;
       case 'UPDATE':

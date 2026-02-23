@@ -8,16 +8,20 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseArraySuccessResponse } from '../../models/success-response-array-success-response';
+import { SuccessResponsePagedResultCronExecutionDto } from '../../models/success-response-paged-result-cron-execution-dto';
 
 export interface GetCronLogs$Params {
   name: string;
+  pageIndex?: number;
+  pageSize?: number;
 }
 
-export function getCronLogs(http: HttpClient, rootUrl: string, params: GetCronLogs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArraySuccessResponse>> {
+export function getCronLogs(http: HttpClient, rootUrl: string, params: GetCronLogs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultCronExecutionDto>> {
   const rb = new RequestBuilder(rootUrl, getCronLogs.PATH, 'get');
   if (params) {
     rb.path('name', params.name, {});
+    rb.query('pageIndex', params.pageIndex, {});
+    rb.query('pageSize', params.pageSize, {});
   }
 
   return http.request(
@@ -25,9 +29,9 @@ export function getCronLogs(http: HttpClient, rootUrl: string, params: GetCronLo
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseArraySuccessResponse>;
+      return r as StrictHttpResponse<SuccessResponsePagedResultCronExecutionDto>;
     })
   );
 }
 
-getCronLogs.PATH = '/api/cron/logs/{name}';
+getCronLogs.PATH = '/api/cron/executions/{name}';

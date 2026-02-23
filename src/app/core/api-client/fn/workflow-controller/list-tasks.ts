@@ -19,12 +19,12 @@ export interface ListTasks$Params {
 /**
  * Index of the page to retrieve
  */
-  page?: number;
+  pageIndex?: number;
 
 /**
  * Count of content to load per page
  */
-  size?: number;
+  pageSize?: number;
 }
 
 export function listTasks(http: HttpClient, rootUrl: string, params?: ListTasks$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultWorkflowTaskDto>> {
@@ -34,8 +34,8 @@ export function listTasks(http: HttpClient, rootUrl: string, params?: ListTasks$
     rb.query('workflowId', params.workflowId, {});
     rb.query('type', params.type, {});
     rb.query('completed', params.completed, {});
-    rb.query('page', params.page, {});
-    rb.query('size', params.size, {});
+    rb.query('pageIndex', params.pageIndex, {});
+    rb.query('pageSize', params.pageSize, {});
   }
 
   return http.request(

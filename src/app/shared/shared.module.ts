@@ -50,6 +50,7 @@ import { StandardTabGroupComponent } from './components/standard-tab-group/stand
 import { EditableTableSectionComponent } from './components/generic/detailed-view/editable-table/editable-table-section.component';
 import { EditableListSectionComponent } from './components/generic/detailed-view/editable-list/editable-list-section.component';
 import { SafeResourceUrlPipe } from './pipes/safe-resource-url.pipe';
+import { SearchSelectModalComponent } from './components/search-select-modal/search-select-modal.component';
 
 
 @NgModule({
@@ -77,6 +78,7 @@ import { SafeResourceUrlPipe } from './pipes/safe-resource-url.pipe';
     EditableTableSectionComponent,
     EditableListSectionComponent,
     SafeResourceUrlPipe,
+    SearchSelectModalComponent,
   ],
 
   imports: [

@@ -1,24 +1,23 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PageEvent } from '@angular/material/paginator';
-import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { AccordionCell, AccordionRow } from 'src/app/shared/model/accordion-list.model';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { Donation, DonationSummary } from '../../model';
 import { BaseDonationTabComponent } from '../base-donation-tab.component';
-import { SearchAndAdvancedSearchFormComponent } from 'src/app/shared/components/search-and-advanced-search-form/search-and-advanced-search-form.component';
+import { SearchSelectModalConfig } from 'src/app/shared/components/search-select-modal/search-select-modal.component';
+import { SearchSelectModalService } from 'src/app/shared/components/search-select-modal/search-select-modal.service';
 import { Validators } from '@angular/forms';
 import { KeyValue } from 'src/app/shared/model/key-value.model';
 import { getDonorSection } from '../../fields/donation.field';
 import { DonationRefData } from '../../finance.const';
 import { date, removeNullFields } from 'src/app/core/service/utilities.service';
-import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
+import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { User } from 'src/app/feature/member/models/member.model';
 import { AppDialog } from 'src/app/core/constant/app-dialog.const';
 import { DonationService } from '../../service/donation.service';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 import { ModalService } from 'src/app/core/service/modal.service';
-import { getActivitySection } from 'src/app/feature/project/fields/activity.field';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { ProjectSelectionService } from 'src/app/feature/project/service/project-selection.service';
 
@@ -30,12 +29,10 @@ import { ProjectSelectionService } from 'src/app/feature/project/service/project
 export class MemberDonationTabComponent extends BaseDonationTabComponent {
   protected override detailedViews: DetailedView[] = [];
   protected summary!: DonationSummary;
-  protected userSearch: SearchAndAdvancedSearchModel = {
-    normalSearchPlaceHolder: '',
-    showOnlyAdvancedSearch: true,
-    advancedSearch: {
+  private readonly memberModalConfig = (kv: KeyValue[]) => {
+    return {
+      title: 'Select Member',
       buttonText: { search: 'Select', close: 'Close' },
-      title: 'Select Members',
       searchFormFields: [{
         formControlName: 'userId',
         inputModel: {
@@ -44,11 +41,11 @@ export class MemberDonationTabComponent extends BaseDonationTabComponent {
           tagName: 'input',
           autocomplete: true,
           placeholder: 'Select a member',
-          selectList: []
+          selectList: kv
         },
         validations: [Validators.required]
       }]
-    }
+    } as SearchSelectModalConfig;
   };
   protected profile: User | undefined;
   private selectedRows: AccordionRow[] = [];
@@ -59,7 +56,8 @@ export class MemberDonationTabComponent extends BaseDonationTabComponent {
     protected override modalService: ModalService,
     protected override projectSelectionService: ProjectSelectionService,
     protected router: Router,
-    protected route: ActivatedRoute
+    protected route: ActivatedRoute,
+    private searchSelectModalService: SearchSelectModalService
   ) {
     super(donationService, identityService, modalService, projectSelectionService);
   }
@@ -149,32 +147,19 @@ export class MemberDonationTabComponent extends BaseDonationTabComponent {
         this.loadUserData();
         return;
       }
+      const kv = users.content?.map(u => ({
+        key: u.id,
+        displayValue: u.status === 'ACTIVE' ? u.fullName : `${u.fullName} (${u.status})`
+      } as KeyValue));
 
-      this.userSearch.advancedSearch?.searchFormFields.filter(f => f.inputModel.html_id == 'user_search').map(m => {
-        m.inputModel.selectList = users.content?.map(m2 => {
-          return {
-            key: m2.id,
-            displayValue: m2.status == 'ACTIVE' ? `${m2.fullName}` : `${m2.fullName} (${m2.status})`
-          } as KeyValue
-        })
+      const config = this.memberModalConfig(kv!);
+
+      this.searchSelectModalService.open(config, {
+        width: 700,
+      }).subscribe((event: SearchEvent) => {
+        this.profile = users.content?.find(f => f.id === event.value.userId);
+        this.loadUserData();
       });
-      let modal = this.modalService.openComponentDialog(SearchAndAdvancedSearchFormComponent,
-        this.userSearch,
-        {
-          height: 290,
-          width: 700,
-          disableClose: true
-        });
-      modal.componentInstance.onSearch.subscribe(data => {
-        if (data.reset) {
-          modal.close();
-        }
-        else {
-          modal.close();
-          this.profile = users.content?.find(f => f.id == data.value.userId);
-          this.loadUserData();
-        }
-      })
     });
   }
 

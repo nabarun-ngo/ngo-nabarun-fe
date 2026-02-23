@@ -1,0 +1,9 @@
+<!--
+  SearchSelectModalComponent
+  ─────────────────────────────────────────────────────────────────────────────
+  The entire form UI (fields, Search button, Close button, title, layout) is
+  handled by SearchAndAdvancedSearchFormComponent.
+  This wrapper only owns the dialog lifecycle and the optional apiCall execution.
+-->
+<app-search-and-advanced-search-form [searchInput]="searchModel" (onSearch)="handleSearch($event)">
+</app-search-and-advanced-search-form>

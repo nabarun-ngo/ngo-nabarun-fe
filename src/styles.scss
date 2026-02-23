@@ -692,7 +692,7 @@ h6 {
 
   /* Tab group with stretched tabs and no scroll on mobile */
   ::ng-deep .mat-tab-group.mat-tab-group-mobile-scroll {
-    max-width: 100vw !important;
+    max-width: 100% !important;
     overflow-x: hidden !important;
 
     .mat-tab-header {

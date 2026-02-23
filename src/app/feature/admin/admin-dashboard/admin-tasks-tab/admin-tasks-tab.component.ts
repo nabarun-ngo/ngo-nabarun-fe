@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { WorkflowTaskDto } from 'src/app/core/api-client/models';
 import { getTaskDetailSection } from 'src/app/feature/workflow/fields/tasks.field';
 import { Task } from 'src/app/feature/workflow/model/task.model';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
@@ -13,6 +12,10 @@ import { AdminDefaultValue } from '../../admin.const';
 import { getRequestAdditionalDetailSection, getRequestDetailSection } from 'src/app/feature/workflow/fields/request.field';
 import { firstValueFrom } from 'rxjs';
 import { RequestService } from 'src/app/feature/workflow/service/request.service';
+import { SearchSelectModalConfig } from 'src/app/shared/components/search-select-modal/search-select-modal.component';
+import { Validators } from '@angular/forms';
+import { KeyValue } from 'src/app/shared/model/key-value.model';
+import { SearchSelectModalService } from 'src/app/shared/components/search-select-modal/search-select-modal.service';
 
 @Component({
   selector: 'app-admin-tasks-tab',
@@ -21,23 +24,25 @@ import { RequestService } from 'src/app/feature/workflow/service/request.service
 })
 export class AdminTasksTabComponent extends Accordion<Task> implements TabComponentInterface<string> {
 
-  constructor(private readonly adminService: AdminService, private readonly requestService: RequestService) {
+  constructor(private readonly adminService: AdminService, private readonly requestService: RequestService,
+    private readonly dialogService: SearchSelectModalService) {
     super();
   }
 
   override onInitHook(): void {
-    this.setHeaderRow([{ value: 'Name' }, { value: 'Description' }, { value: 'Status' }])
+    this.setHeaderRow([{ value: 'Task ID' }, { value: 'Name' }, { value: 'Status' }])
   }
   protected override prepareHighLevelView(data: Task, options?: { [key: string]: any; }): AccordionCell[] {
     return [
       {
         type: 'text',
-        value: data?.name
+        value: data?.id
       },
       {
         type: 'text',
-        value: data?.description!
+        value: data?.name
       },
+
       {
         type: 'text',
         value: data?.status!
@@ -86,7 +91,7 @@ export class AdminTasksTabComponent extends Accordion<Task> implements TabCompon
   }
   override handlePageEvent($event: PageEvent): void {
     this.pageEvent = $event;
-    this.adminService.getFailedTasks($event.pageIndex, $event.pageSize).subscribe(s => {
+    this.adminService.getTasks(this.statusFilter, $event.pageIndex, $event.pageSize).subscribe(s => {
       this.setContent(s.content!, s.totalSize)
     })
   }
@@ -94,9 +99,46 @@ export class AdminTasksTabComponent extends Accordion<Task> implements TabCompon
 
   }
   loadData(): void {
-    this.adminService.getFailedTasks().subscribe(s => {
+    this.adminService.getTasks(this.statusFilter).subscribe(s => {
       this.setContent(s.content!, s.totalSize)
     })
+  }
+
+  protected statusFilter: string = 'FAILED';
+  protected statusMap: Record<string, string> = {
+    'PENDING': 'Pending',
+    'IN_PROGRESS': 'In Progress',
+    'COMPLETED': 'Completed',
+    'FAILED': 'Failed',
+    'SKIPPED': 'Skipped'
+  }
+  protected statusFilterConfig: SearchSelectModalConfig = {
+    searchFormFields: [
+      {
+        formControlName: 'status',
+        validations: [Validators.required],
+        inputModel: {
+          html_id: 'status_F',
+          inputType: '',
+          tagName: 'select',
+          placeholder: 'Select Task Status',
+          selectList: Object.keys(this.statusMap).map(key => {
+            return {
+              key: key,
+              displayValue: this.statusMap[key]
+            } as KeyValue
+          })
+        }
+      }
+    ],
+    title: 'Filter Task Status',
+  }
+
+  changeStatus() {
+    this.dialogService.open(this.statusFilterConfig, { width: 700 }).subscribe((response) => {
+      this.statusFilter = response.value.status;
+      this.loadData();
+    });
   }
 
 }

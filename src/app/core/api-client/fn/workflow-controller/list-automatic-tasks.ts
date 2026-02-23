@@ -15,19 +15,25 @@ export interface ListAutomaticTasks$Params {
 /**
  * Index of the page to retrieve
  */
-  page?: number;
+  pageIndex?: number;
 
 /**
  * Count of content to load per page
  */
-  size?: number;
+  pageSize?: number;
+
+/**
+ * Status of the task
+ */
+  status?: string;
 }
 
 export function listAutomaticTasks(http: HttpClient, rootUrl: string, params?: ListAutomaticTasks$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultWorkflowTaskDto>> {
   const rb = new RequestBuilder(rootUrl, listAutomaticTasks.PATH, 'get');
   if (params) {
-    rb.query('page', params.page, {});
-    rb.query('size', params.size, {});
+    rb.query('pageIndex', params.pageIndex, {});
+    rb.query('pageSize', params.pageSize, {});
+    rb.query('status', params.status, {});
   }
 
   return http.request(

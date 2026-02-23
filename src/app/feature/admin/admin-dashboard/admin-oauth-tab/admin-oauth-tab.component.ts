@@ -9,7 +9,10 @@ import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { Accordion } from 'src/app/shared/utils/accordion';
 import { AdminService } from '../../admin.service';
 import { KeyValue } from 'src/app/shared/model/key-value.model';
-import { AdminConstant, AdminDefaultValue } from '../../admin.const';
+import { AdminDefaultValue } from '../../admin.const';
+import { ModalService } from 'src/app/core/service/modal.service';
+import { AppDialog } from 'src/app/core/constant/app-dialog.const';
+import { SearchSelectModalService } from 'src/app/shared/components/search-select-modal/search-select-modal.service';
 
 @Component({
   selector: 'app-admin-oauth-tab',
@@ -18,27 +21,36 @@ import { AdminConstant, AdminDefaultValue } from '../../admin.const';
 })
 export class AdminOauthTabComponent extends Accordion<AuthTokenDto> implements TabComponentInterface<string> {
   scopes: KeyValue[] = [];
+  provider: string = 'google';
 
   constructor(
     private adminService: AdminService,
+    private modalService: ModalService,
+    private searchSelectModalService: SearchSelectModalService
   ) {
     super();
   }
 
   override onInitHook(): void {
-    this.setHeaderRow([{ value: 'Client ID' }, { value: 'Provider' }])
+    this.setHeaderRow([{ value: 'Provider' }, { value: 'Scopes' }, { value: 'Access Token Status' }])
   }
   protected override prepareHighLevelView(data: AuthTokenDto, options?: { [key: string]: any; }): AccordionCell[] {
+    const permissions = data?.scope?.join(", ")!;
+    const permissions_display = permissions?.length > 100 ? `${permissions?.substring(0, 100)}...` : permissions;
     return [
       {
         type: 'text',
-        value: data?.clientId!,
+        value: data?.provider!,
         bgColor: 'bg-purple-200',
         rounded: true
       },
       {
         type: 'text',
-        value: data?.provider!,
+        value: permissions_display,
+      },
+      {
+        type: 'text',
+        value: new Date(data?.expiresAt!) > new Date() ? 'Active' : 'Expired',
       },
     ];
   }
@@ -123,7 +135,10 @@ export class AdminOauthTabComponent extends Accordion<AuthTokenDto> implements T
         }
       ];
     }
-    return [];
+    return [{
+      button_id: 'REVOKE',
+      button_name: 'Revoke'
+    }];
   }
   protected override onClick(event: { buttonId: string; rowIndex: number; }): void {
     switch (event.buttonId) {
@@ -143,6 +158,14 @@ export class AdminOauthTabComponent extends Accordion<AuthTokenDto> implements T
         this.hideForm(0, true);
         break;
       case 'REVOKE':
+        let modal = this.modalService.openNotificationModal(AppDialog.warning_confirm_revoke, 'confirmation', 'warning')
+        modal.onAccept$.subscribe(s => {
+          let oauth = this.itemList[event.rowIndex];
+          this.adminService.revokeOAuthToken(oauth.id!).subscribe(s => {
+            this.loadData();
+          });
+        })
+
         break;
     }
 
@@ -159,18 +182,48 @@ export class AdminOauthTabComponent extends Accordion<AuthTokenDto> implements T
   override handlePageEvent($event: PageEvent): void { }
   onSearch($event: SearchEvent): void { }
   loadData(): void {
-    this.adminService.getOAuthScopes().subscribe(data => {
+    this.adminService.getOAuthScopes(this.provider).subscribe(data => {
       this.scopes = data.map((item) => {
         return {
           key: item,
           displayValue: item.split("/")[item.split("/").length - 1]
         } as KeyValue
       });
-      this.adminService.getOAuthTokenList().subscribe(data => {
-        this.setContent(data!, data?.length);
+      this.adminService.getOAuthTokenList(this.provider).subscribe(data => {
+        this.setContent(data.content!, data?.totalSize);
       });
     });
 
+  }
+
+  changeProvider() {
+    this.adminService.getOAuthProviders().subscribe(data => {
+      this.searchSelectModalService.open({
+        title: 'Select Provider',
+        searchFormFields: [
+          {
+            formControlName: 'provider',
+            validations: [Validators.required],
+            inputModel: {
+              html_id: 'provider',
+              inputType: '',
+              tagName: 'select',
+              placeholder: 'Select Provider',
+              selectList: data.map(m => {
+                return {
+                  key: m,
+                  displayValue: m.substring(0, 1).toUpperCase() + m.substring(1)
+                } as KeyValue
+              })
+            }
+          }
+        ]
+
+      }, { width: 700 }).subscribe(s => {
+        this.provider = s.value.provider!;
+        this.loadData();
+      });
+    });
   }
 
 }

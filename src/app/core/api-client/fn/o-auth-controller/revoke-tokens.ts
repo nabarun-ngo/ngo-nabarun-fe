@@ -10,24 +10,24 @@ import { RequestBuilder } from '../../request-builder';
 
 import { SuccessResponseString } from '../../models/success-response-string';
 
-export interface GetGmailAuthUrl$Params {
+export interface RevokeTokens$Params {
 
 /**
- * Space-separated list of OAuth scopes (must be whitelisted)
+ * OAuth provider (e.g., google)
  */
-  scopes?: string;
+  provider: string;
 
 /**
- * Optional custom state parameter (if not provided, secure state will be generated server-side)
+ * Token ID to revoke
  */
-  state?: string;
+  id: string;
 }
 
-export function getGmailAuthUrl(http: HttpClient, rootUrl: string, params?: GetGmailAuthUrl$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
-  const rb = new RequestBuilder(rootUrl, getGmailAuthUrl.PATH, 'get');
+export function revokeTokens(http: HttpClient, rootUrl: string, params: RevokeTokens$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
+  const rb = new RequestBuilder(rootUrl, revokeTokens.PATH, 'get');
   if (params) {
-    rb.query('scopes', params.scopes, {});
-    rb.query('state', params.state, {});
+    rb.path('provider', params.provider, {});
+    rb.path('id', params.id, {});
   }
 
   return http.request(
@@ -40,4 +40,4 @@ export function getGmailAuthUrl(http: HttpClient, rootUrl: string, params?: GetG
   );
 }
 
-getGmailAuthUrl.PATH = '/api/auth/oauth/google/auth-url';
+revokeTokens.PATH = '/api/auth/oauth/{provider}/tokens/{id}/revoke';

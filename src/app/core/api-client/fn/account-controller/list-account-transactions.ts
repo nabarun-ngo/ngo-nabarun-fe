@@ -12,8 +12,8 @@ import { SuccessResponsePagedResultTransactionDetailDto } from '../../models/suc
 
 export interface ListAccountTransactions$Params {
   id: string;
-  pageIndex: number;
-  pageSize: number;
+  pageIndex?: number;
+  pageSize?: number;
   txnId?: string;
   txnType?: Array<'IN' | 'OUT'>;
   txnStatus?: Array<'SUCCESS' | 'REVERSED'>;
