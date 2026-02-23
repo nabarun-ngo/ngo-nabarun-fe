@@ -29,6 +29,8 @@ import { retryJob } from '../fn/job-controller/retry-job';
 import { RetryJob$Params } from '../fn/job-controller/retry-job';
 import { SuccessResponseJobDetail } from '../models/success-response-job-detail';
 import { SuccessResponsePagedResultJobDetail } from '../models/success-response-paged-result-job-detail';
+import { SuccessResponseQueueStatistics } from '../models/success-response-queue-statistics';
+import { SuccessResponseString } from '../models/success-response-string';
 
 @Injectable({ providedIn: 'root' })
 export class JobControllerService extends BaseService {
@@ -125,7 +127,7 @@ export class JobControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getQueueStatistics$Response(params?: GetQueueStatistics$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseJobDetail>> {
+  getQueueStatistics$Response(params?: GetQueueStatistics$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseQueueStatistics>> {
     return getQueueStatistics(this.http, this.rootUrl, params, context);
   }
 
@@ -141,14 +143,14 @@ export class JobControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getQueueStatistics(params?: GetQueueStatistics$Params, context?: HttpContext): Observable<SuccessResponseJobDetail> {
+  getQueueStatistics(params?: GetQueueStatistics$Params, context?: HttpContext): Observable<SuccessResponseQueueStatistics> {
     return this.getQueueStatistics$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseJobDetail>): SuccessResponseJobDetail => r.body)
+      map((r: StrictHttpResponse<SuccessResponseQueueStatistics>): SuccessResponseQueueStatistics => r.body)
     );
   }
 
   /** Path part for operation `cleanOldJobs()` */
-  static readonly CleanOldJobsPath = '/api/jobs/clean';
+  static readonly CleanOldJobsPath = '/api/jobs/clean-old-jobs';
 
   /**
    * Clean old jobs (manual cleanup - TTL handles automatic cleanup).
@@ -162,7 +164,7 @@ export class JobControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  cleanOldJobs$Response(params?: CleanOldJobs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseJobDetail>> {
+  cleanOldJobs$Response(params?: CleanOldJobs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
     return cleanOldJobs(this.http, this.rootUrl, params, context);
   }
 
@@ -178,9 +180,9 @@ export class JobControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  cleanOldJobs(params?: CleanOldJobs$Params, context?: HttpContext): Observable<SuccessResponseJobDetail> {
+  cleanOldJobs(params?: CleanOldJobs$Params, context?: HttpContext): Observable<SuccessResponseString> {
     return this.cleanOldJobs$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseJobDetail>): SuccessResponseJobDetail => r.body)
+      map((r: StrictHttpResponse<SuccessResponseString>): SuccessResponseString => r.body)
     );
   }
 
@@ -199,7 +201,7 @@ export class JobControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  pauseQueue$Response(params: PauseQueue$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseJobDetail>> {
+  pauseQueue$Response(params: PauseQueue$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
     return pauseQueue(this.http, this.rootUrl, params, context);
   }
 
@@ -215,9 +217,9 @@ export class JobControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  pauseQueue(params: PauseQueue$Params, context?: HttpContext): Observable<SuccessResponseJobDetail> {
+  pauseQueue(params: PauseQueue$Params, context?: HttpContext): Observable<SuccessResponseString> {
     return this.pauseQueue$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseJobDetail>): SuccessResponseJobDetail => r.body)
+      map((r: StrictHttpResponse<SuccessResponseString>): SuccessResponseString => r.body)
     );
   }
 
@@ -236,7 +238,7 @@ export class JobControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  removeJob$Response(params: RemoveJob$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseJobDetail>> {
+  removeJob$Response(params: RemoveJob$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
     return removeJob(this.http, this.rootUrl, params, context);
   }
 
@@ -252,9 +254,9 @@ export class JobControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  removeJob(params: RemoveJob$Params, context?: HttpContext): Observable<SuccessResponseJobDetail> {
+  removeJob(params: RemoveJob$Params, context?: HttpContext): Observable<SuccessResponseString> {
     return this.removeJob$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseJobDetail>): SuccessResponseJobDetail => r.body)
+      map((r: StrictHttpResponse<SuccessResponseString>): SuccessResponseString => r.body)
     );
   }
 
@@ -273,7 +275,7 @@ export class JobControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  retryJob$Response(params: RetryJob$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseJobDetail>> {
+  retryJob$Response(params: RetryJob$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
     return retryJob(this.http, this.rootUrl, params, context);
   }
 
@@ -289,9 +291,9 @@ export class JobControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  retryJob(params: RetryJob$Params, context?: HttpContext): Observable<SuccessResponseJobDetail> {
+  retryJob(params: RetryJob$Params, context?: HttpContext): Observable<SuccessResponseString> {
     return this.retryJob$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseJobDetail>): SuccessResponseJobDetail => r.body)
+      map((r: StrictHttpResponse<SuccessResponseString>): SuccessResponseString => r.body)
     );
   }
 
@@ -310,7 +312,7 @@ export class JobControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  retryAllFailedJobs$Response(params?: RetryAllFailedJobs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseJobDetail>> {
+  retryAllFailedJobs$Response(params?: RetryAllFailedJobs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
     return retryAllFailedJobs(this.http, this.rootUrl, params, context);
   }
 
@@ -326,9 +328,9 @@ export class JobControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  retryAllFailedJobs(params?: RetryAllFailedJobs$Params, context?: HttpContext): Observable<SuccessResponseJobDetail> {
+  retryAllFailedJobs(params?: RetryAllFailedJobs$Params, context?: HttpContext): Observable<SuccessResponseString> {
     return this.retryAllFailedJobs$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseJobDetail>): SuccessResponseJobDetail => r.body)
+      map((r: StrictHttpResponse<SuccessResponseString>): SuccessResponseString => r.body)
     );
   }
 

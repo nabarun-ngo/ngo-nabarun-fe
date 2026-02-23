@@ -1,9 +1,111 @@
 <div class="mb-4 flex justify-end relative z-10">
+    <button mat-button color="warn" (click)="clearJobs()">
+        <mat-icon>clear</mat-icon>
+        Clear Jobs
+    </button>
+    <button mat-button color="secondary" (click)="loadData()">
+        <mat-icon>refresh</mat-icon>
+        Refresh
+    </button>
+    <button mat-button color="secondary" (click)="resumeOrPauseQueue()">
+        <mat-icon>{{statistics?.health?.isPaused ? 'play_arrow' : 'pause'}}</mat-icon>
+        {{statistics?.health?.isPaused ? 'Resume' : 'Pause'}} Queue
+    </button>
     <button mat-button color="primary" (click)="changeStatus()">
         <mat-icon>filter_alt</mat-icon>
         Change Job Status
     </button>
 </div>
+<mat-card class="mb-4" *ngIf="statistics">
+    <div class="m-4 text-sm text-gray-800">
+
+        <!-- ================= JOB COUNTS ================= -->
+        <div class="grid grid-cols-8 gap-x-4 gap-y-2 py-2 border-b">
+
+            <div class="font-semibold text-right">Total Jobs</div>
+            <div>{{ statistics?.metrics?.total }}</div>
+
+            <div class="font-semibold text-right">Completed</div>
+            <div class="text-green-600">{{ statistics?.metrics?.completed }}</div>
+
+            <div class="font-semibold text-right">Failed</div>
+            <div class="text-red-600">{{ statistics?.metrics?.failed }}</div>
+
+            <div class="font-semibold text-right">Active</div>
+            <div class="text-blue-600">{{ statistics?.metrics?.active }}</div>
+        </div>
+
+
+        <!-- ================= QUEUE STATE ================= -->
+        <div class="grid grid-cols-8 gap-x-4 gap-y-2 py-2 border-b">
+
+            <div class="font-semibold text-right">Waiting</div>
+            <div class="text-yellow-600">{{ statistics?.metrics?.waiting }}</div>
+
+            <div class="font-semibold text-right">Delayed</div>
+            <div class="text-purple-600">{{ statistics?.metrics?.delayed }}</div>
+
+            <div class="font-semibold text-right">Success Rate</div>
+            <div class="text-green-700">
+                {{ statistics?.metrics?.successRate | number:'1.0-2' }} %
+            </div>
+
+            <div class="font-semibold text-right">Failure Rate</div>
+            <div class="text-red-700">
+                {{ statistics?.metrics?.failureRate | number:'1.0-2' }} %
+            </div>
+        </div>
+
+
+        <!-- ================= PERFORMANCE ================= -->
+        <div class="grid grid-cols-8 gap-x-4 gap-y-2 py-2 border-b">
+
+            <div class="font-semibold text-right">Avg Time</div>
+            <div>{{ statistics?.performance?.averageProcessingTime }} ms</div>
+
+            <div class="font-semibold text-right">Fastest Job</div>
+            <div class="text-green-600">{{ statistics?.performance?.fastestJob }} ms</div>
+
+            <div class="font-semibold text-right">Slowest Job</div>
+            <div class="text-red-600">{{ statistics?.performance?.slowestJob }} ms</div>
+
+            <div class="font-semibold text-right">Total Time</div>
+            <div>{{ statistics?.performance?.totalProcessingTime }} ms</div>
+        </div>
+
+
+        <!-- ================= HEALTH ================= -->
+        <div class="grid grid-cols-8 gap-x-4 gap-y-2 py-2">
+
+            <div class="font-semibold text-right">Queue Status</div>
+            <div>
+                <span class="px-2 py-1 rounded text-white text-xs" [ngClass]="{
+            'bg-green-600': statistics?.health?.status === 'healthy',
+            'bg-yellow-600': statistics?.health?.status === 'degraded',
+            'bg-red-600': statistics?.health?.status === 'unhealthy' || statistics?.health?.status === 'paused'
+          }">
+                    {{ statistics?.health?.status }}
+                </span>
+            </div>
+
+            <div class="font-semibold text-right">Paused</div>
+            <div>
+                {{ statistics?.health?.isPaused ? 'Yes' : 'No' }}
+            </div>
+
+            <div class="font-semibold text-right">Last Updated</div>
+            <div>
+                {{ statistics?.timestamp | date:'medium' }}
+            </div>
+
+            <div class="font-semibold text-right">Issues</div>
+            <div>
+                {{ statistics?.health?.issues?.length || 0 }}
+            </div>
+        </div>
+
+    </div>
+</mat-card>
 <h1 class="text-center mb-2 text-indigo-500 py-2">{{statusMap[statusFilter]}} Background
     Jobs
 </h1>

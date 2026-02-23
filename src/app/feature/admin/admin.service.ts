@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
 import { CreateApiKeyDto } from 'src/app/core/api-client/models';
-import { ApiKeyControllerService, JobControllerService, OAuthControllerService, StaticDocsControllerService, WorkflowControllerService } from 'src/app/core/api-client/services';
+import { ApiKeyControllerService, CronControllerService, JobControllerService, OAuthControllerService, StaticDocsControllerService, WorkflowControllerService } from 'src/app/core/api-client/services';
 import { AdminDefaultValue } from './admin.const';
 import { mapPagedWorkflowTaskDtoToPagedTask } from '../workflow/model/workflow.mapper';
 
@@ -12,13 +12,25 @@ export class AdminService {
 
 
 
+
   constructor(
     private oauthController: OAuthControllerService,
     private staticDocs: StaticDocsControllerService,
     private jobController: JobControllerService,
     private apiKeyController: ApiKeyControllerService,
-    private workflowController: WorkflowControllerService) { }
+    private workflowController: WorkflowControllerService,
+    private cronController: CronControllerService) { }
 
+
+
+
+
+  /**
+   * Get list of API keys
+   * @param pageIndex Page index
+   * @param pageSize Page size
+   * @returns Observable of list of API keys
+   */
   getAPIKeyList(pageIndex: number, pageSize: number) {
     return this.apiKeyController.listApiKeys({
       pageIndex: pageIndex,
@@ -42,16 +54,28 @@ export class AdminService {
     return this.apiKeyController.listApiScopes().pipe(map(m => m.responsePayload));
   }
 
-  getOAuthTokenList() {
+  getOAuthTokenList(provider: string) {
     return this.oauthController.getTokens({
-      provider: 'google'
+      provider: provider
     }).pipe(map(m => m.responsePayload));
   }
 
-  getOAuthScopes() {
+  getOAuthScopes(provider: string) {
     return this.oauthController.getScopes({
-      provider: 'google'
+      provider: provider
     }).pipe(map(m => m.responsePayload));
+  }
+
+  getOAuthProviders() {
+    return this.oauthController.getProviders().pipe(map(m => m.responsePayload));
+  }
+
+  clearBgJobs() {
+    return this.jobController.cleanOldJobs().pipe(map(m => m.responsePayload));
+  }
+
+  getBgJobStatistics() {
+    return this.jobController.getQueueStatistics().pipe(map(m => m.responsePayload));
   }
 
 
@@ -68,8 +92,9 @@ export class AdminService {
     }).pipe(map(m => m.responsePayload));
   }
 
-  getFailedTasks(pageIndex: number = AdminDefaultValue.pageNumber, pageSize: number = AdminDefaultValue.pageSize) {
+  getTasks(status: string, pageIndex: number = AdminDefaultValue.pageNumber, pageSize: number = AdminDefaultValue.pageSize) {
     return this.workflowController.listAutomaticTasks({
+      status: status as any,
       pageIndex: pageIndex,
       pageSize: pageSize
     }).pipe(
@@ -101,10 +126,20 @@ export class AdminService {
     )
   }
 
+  updateQueueState(state: string) {
+    return this.jobController.pauseQueue({
+      operation: state as any
+    }).pipe(map(m => m.responsePayload));
+  }
+
   revokeOAuthToken(id: string) {
     return this.oauthController.revokeTokens({
       provider: 'google',
       id: id
     }).pipe(map(m => m.responsePayload));
+  }
+
+  getCronTriggers() {
+    return this.cronController.getTriggerLogs().pipe(map(m => m.responsePayload));
   }
 }

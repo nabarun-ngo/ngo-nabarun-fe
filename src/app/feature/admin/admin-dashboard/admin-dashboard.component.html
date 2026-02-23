@@ -23,21 +23,20 @@
     </mat-accordion>
     <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" class="mat-tab-group-mobile-scroll"
         (selectedTabChange)="tabChanged($event.index)" [(selectedIndex)]="tabIndex">
-        <mat-tab id="apiKey" label="Manage API keys">
+        <mat-tab id="apiKey" label="API keys">
             <app-admin-apikey-tab [accordionData]="initialData" [refData]="refData"></app-admin-apikey-tab>
         </mat-tab>
-        <mat-tab id="oauthToken" label="Manage OAuth Tokens">
+        <mat-tab id="oauthToken" label="OAuth Tokens">
             <app-admin-oauth-tab [accordionData]="initialData" [refData]="refData"></app-admin-oauth-tab>
         </mat-tab>
         <mat-tab id="tasks" label="Automatic Tasks">
             <app-admin-tasks-tab [accordionData]="initialData" [refData]="refData"></app-admin-tasks-tab>
         </mat-tab>
-        <!-- <mat-tab id="config" label="Manage Global Config">
-            <app-admin-global-config-tab [initialData]="initialData"
-                [refData]="refData"></app-admin-global-config-tab>
-        </mat-tab> -->
         <mat-tab id="backgroundJobs" label="Background Jobs">
             <app-admin-bg-jobs-tab [accordionData]="initialData" [refData]="refData"></app-admin-bg-jobs-tab>
+        </mat-tab>
+        <mat-tab id="cronjobs" label="Cron Jobs">
+            <app-admin-cron-job-tab [accordionData]="initialData" [refData]="refData"></app-admin-cron-job-tab>
         </mat-tab>
     </mat-tab-group>
     <app-page-navigation-buttons [navigations]="navigations"></app-page-navigation-buttons>

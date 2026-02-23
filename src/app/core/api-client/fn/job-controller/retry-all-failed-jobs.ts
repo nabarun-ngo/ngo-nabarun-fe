@@ -8,12 +8,12 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseJobDetail } from '../../models/success-response-job-detail';
+import { SuccessResponseString } from '../../models/success-response-string';
 
 export interface RetryAllFailedJobs$Params {
 }
 
-export function retryAllFailedJobs(http: HttpClient, rootUrl: string, params?: RetryAllFailedJobs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseJobDetail>> {
+export function retryAllFailedJobs(http: HttpClient, rootUrl: string, params?: RetryAllFailedJobs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
   const rb = new RequestBuilder(rootUrl, retryAllFailedJobs.PATH, 'post');
   if (params) {
   }
@@ -23,7 +23,7 @@ export function retryAllFailedJobs(http: HttpClient, rootUrl: string, params?: R
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseJobDetail>;
+      return r as StrictHttpResponse<SuccessResponseString>;
     })
   );
 }

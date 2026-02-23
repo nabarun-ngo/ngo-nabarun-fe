@@ -12,6 +12,7 @@ import { KeyValue } from 'src/app/shared/model/key-value.model';
 import { AdminDefaultValue } from '../../admin.const';
 import { ModalService } from 'src/app/core/service/modal.service';
 import { AppDialog } from 'src/app/core/constant/app-dialog.const';
+import { SearchSelectModalService } from 'src/app/shared/components/search-select-modal/search-select-modal.service';
 
 @Component({
   selector: 'app-admin-oauth-tab',
@@ -20,10 +21,12 @@ import { AppDialog } from 'src/app/core/constant/app-dialog.const';
 })
 export class AdminOauthTabComponent extends Accordion<AuthTokenDto> implements TabComponentInterface<string> {
   scopes: KeyValue[] = [];
+  provider: string = 'google';
 
   constructor(
     private adminService: AdminService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private searchSelectModalService: SearchSelectModalService
   ) {
     super();
   }
@@ -179,18 +182,48 @@ export class AdminOauthTabComponent extends Accordion<AuthTokenDto> implements T
   override handlePageEvent($event: PageEvent): void { }
   onSearch($event: SearchEvent): void { }
   loadData(): void {
-    this.adminService.getOAuthScopes().subscribe(data => {
+    this.adminService.getOAuthScopes(this.provider).subscribe(data => {
       this.scopes = data.map((item) => {
         return {
           key: item,
           displayValue: item.split("/")[item.split("/").length - 1]
         } as KeyValue
       });
-      this.adminService.getOAuthTokenList().subscribe(data => {
+      this.adminService.getOAuthTokenList(this.provider).subscribe(data => {
         this.setContent(data.content!, data?.totalSize);
       });
     });
 
+  }
+
+  changeProvider() {
+    this.adminService.getOAuthProviders().subscribe(data => {
+      this.searchSelectModalService.open({
+        title: 'Select Provider',
+        searchFormFields: [
+          {
+            formControlName: 'provider',
+            validations: [Validators.required],
+            inputModel: {
+              html_id: 'provider',
+              inputType: '',
+              tagName: 'select',
+              placeholder: 'Select Provider',
+              selectList: data.map(m => {
+                return {
+                  key: m,
+                  displayValue: m.substring(0, 1).toUpperCase() + m.substring(1)
+                } as KeyValue
+              })
+            }
+          }
+        ]
+
+      }, { width: 700 }).subscribe(s => {
+        this.provider = s.value.provider!;
+        this.loadData();
+      });
+    });
   }
 
 }

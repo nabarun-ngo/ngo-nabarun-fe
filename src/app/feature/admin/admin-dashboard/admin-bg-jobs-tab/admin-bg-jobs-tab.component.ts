@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { JobDetail } from 'src/app/core/api-client/models';
+import { JobDetail, QueueStatistics } from 'src/app/core/api-client/models';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
 import { AccordionCell, AccordionButton } from 'src/app/shared/model/accordion-list.model';
@@ -10,10 +10,10 @@ import { AdminService } from '../../admin.service';
 import { FormGroup, Validators } from '@angular/forms';
 import { date } from 'src/app/core/service/utilities.service';
 import { AdminDefaultValue } from '../../admin.const';
-import { UniversalInputModel } from 'src/app/shared/model/universal-input.model';
 import { SearchSelectModalService } from 'src/app/shared/components/search-select-modal/search-select-modal.service';
 import { SearchSelectModalConfig } from 'src/app/shared/components/search-select-modal/search-select-modal.component';
 import { KeyValue } from 'src/app/shared/model/key-value.model';
+import { ModalService } from 'src/app/core/service/modal.service';
 
 function duration(start?: string, end?: string): string {
   if (!start || !end) return '-';
@@ -39,10 +39,12 @@ function pretty(v: any): string {
   styleUrls: ['./admin-bg-jobs-tab.component.scss']
 })
 export class AdminBgJobsTabComponent extends Accordion<JobDetail> implements TabComponentInterface<string> {
+  statistics!: QueueStatistics;
 
 
   constructor(private readonly adminService: AdminService,
-    private readonly dialogService: SearchSelectModalService
+    private readonly dialogService: SearchSelectModalService,
+    private readonly modalService: ModalService
   ) {
     super();
   }
@@ -171,6 +173,9 @@ export class AdminBgJobsTabComponent extends Accordion<JobDetail> implements Tab
   onSearch($event: SearchEvent): void {
   }
   loadData(): void {
+    this.adminService.getBgJobStatistics().subscribe((response) => {
+      this.statistics = response;
+    });
     this.adminService.getBgJobs(this.statusFilter, AdminDefaultValue.pageNumber, AdminDefaultValue.pageSize).subscribe((response) => {
       this.setContent(response.content, response.totalSize);
     });
@@ -211,6 +216,28 @@ export class AdminBgJobsTabComponent extends Accordion<JobDetail> implements Tab
       console.log(response);
       this.statusFilter = response.value.status;
       this.loadData();
+    });
+  }
+
+  clearJobs() {
+    this.modalService.openNotificationModal({
+      title: 'Clear Jobs',
+      description: 'Are you sure you want to clean old jobs?',
+    }, 'confirmation', 'warning').onAccept$.subscribe(() => {
+      this.adminService.clearBgJobs().subscribe({
+        next: () => {
+          this.loadData();
+        }
+      });
+    });
+  }
+
+  resumeOrPauseQueue() {
+    const isPaused = this.statistics.health.isPaused;
+    this.adminService.updateQueueState(isPaused ? 'resume' : 'pause').subscribe({
+      next: () => {
+        this.loadData();
+      }
     });
   }
 

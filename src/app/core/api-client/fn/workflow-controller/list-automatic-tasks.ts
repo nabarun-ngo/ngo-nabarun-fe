@@ -21,6 +21,11 @@ export interface ListAutomaticTasks$Params {
  * Count of content to load per page
  */
   pageSize?: number;
+
+/**
+ * Status of the task
+ */
+  status?: string;
 }
 
 export function listAutomaticTasks(http: HttpClient, rootUrl: string, params?: ListAutomaticTasks$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultWorkflowTaskDto>> {
@@ -28,6 +33,7 @@ export function listAutomaticTasks(http: HttpClient, rootUrl: string, params?: L
   if (params) {
     rb.query('pageIndex', params.pageIndex, {});
     rb.query('pageSize', params.pageSize, {});
+    rb.query('status', params.status, {});
   }
 
   return http.request(
