@@ -1,6 +1,6 @@
 <app-floating-action-button *ngIf="provider === 'google'" [icon]="'add'"
     (buttonClick)="showCreateForm()"></app-floating-action-button>
-<div class="mb-4 flex justify-end relative z-10">
+<div class="mb-4 flex flex-wrap justify-end gap-2 relative z-10">
     <button mat-button color="secondary" (click)="loadData()">
         <mat-icon>refresh</mat-icon>
         Refresh
