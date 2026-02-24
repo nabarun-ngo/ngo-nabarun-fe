@@ -8,6 +8,7 @@ import { KeyValue } from "src/app/shared/model/key-value.model";
 import { Donation } from "../model";
 import { EventEmitter } from "@angular/core";
 import { FieldVisibilityRule } from "src/app/shared/utils/accordion";
+import { UniversalInputModel } from "src/app/shared/model/universal-input.model";
 
 
 export const donationSearchInput = (
@@ -16,7 +17,7 @@ export const donationSearchInput = (
         [name: string]: KeyValue[];
     }
 ): SearchAndAdvancedSearchModel => {
-
+    const showDonorName = tab === 'all_donation' || tab === 'guest_donation';
     return {
         normalSearchPlaceHolder: 'Search by Donation ID, Type, Status, Date',
         advancedSearch: {
@@ -83,6 +84,19 @@ export const donationSearchInput = (
                         cssInputClass: 'bg-white'
                     }
                 },
+                ...(showDonorName ? [
+                    {
+                        formControlName: 'donorName',
+                        inputModel: {
+                            tagName: 'input',
+                            inputType: 'text',
+                            html_id: 'donorName',
+                            labelName: 'Donor Name',
+                            placeholder: 'Enter Donor Name',
+                            cssInputClass: 'bg-white'
+                        } as UniversalInputModel
+                    }
+                ] : [])
 
             ]
         }

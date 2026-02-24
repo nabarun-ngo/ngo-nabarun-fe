@@ -15,6 +15,7 @@ import { DonationDefaultValue, donationTab } from '../finance.const';
 import { donationSearchInput } from '../fields/donation.field';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 import { SCOPE } from 'src/app/core/constant/auth-scope.const';
+import { AllDonationTabComponent } from './all-donation-tab/all-donation-tab.component';
 
 @Component({
   selector: 'app-donation-dashboard',
@@ -23,15 +24,17 @@ import { SCOPE } from 'src/app/core/constant/auth-scope.const';
 })
 export class DonationDashboardComponent extends StandardTabbedDashboard<donationTab, DonationDashboardData> {
 
-  protected tabMapping: donationTab[] = ['self_donation', 'guest_donation', 'member_donation'];
+  protected tabMapping: donationTab[] = ['self_donation', 'guest_donation', 'member_donation', 'all_donation'];
 
   @ViewChild(SelfDonationTabComponent) selfDonationTab!: SelfDonationTabComponent;
   @ViewChild(GuestDonationTabComponent) guestDonationTab!: GuestDonationTabComponent;
   @ViewChild(MemberDonationTabComponent) memberDonationTab!: MemberDonationTabComponent;
+  @ViewChild(AllDonationTabComponent) allDonationTab!: AllDonationTabComponent;
 
   protected permissions: {
     canViewGuestDonation?: boolean;
     canViewMemberDonation?: boolean;
+    canViewAllDonation?: boolean;
   } = {}
 
   protected navigations: NavigationButtonModel[] = [
@@ -46,7 +49,8 @@ export class DonationDashboardComponent extends StandardTabbedDashboard<donation
     return {
       self_donation: this.selfDonationTab,
       guest_donation: this.guestDonationTab,
-      member_donation: this.memberDonationTab
+      member_donation: this.memberDonationTab,
+      all_donation: this.allDonationTab
     };
   }
 
@@ -84,6 +88,7 @@ export class DonationDashboardComponent extends StandardTabbedDashboard<donation
     this.searchInput = donationSearchInput(this.getCurrentTab(), this.refData!);
     this.permissions!.canViewGuestDonation = this.identityService.isAccrediatedToAny(SCOPE.read.donation_guest);
     this.permissions!.canViewMemberDonation = this.identityService.isAccrediatedToAny(SCOPE.read.user_donations);
+    this.permissions!.canViewAllDonation = this.identityService.isAccrediatedToAny(SCOPE.update.donation);
   }
 
 

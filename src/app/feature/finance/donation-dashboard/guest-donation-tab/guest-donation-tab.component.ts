@@ -3,15 +3,11 @@ import { PageEvent } from '@angular/material/paginator';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { AccordionCell } from 'src/app/shared/model/accordion-list.model';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
-import { DonationRefData } from '../../finance.const';
+import { DonationDefaultValue, DonationRefData } from '../../finance.const';
 import { Donation } from '../../model';
 import { getDonorSection } from '../../fields/donation.field';
 import { BaseDonationTabComponent } from '../base-donation-tab.component';
 import { removeNullFields } from 'src/app/core/service/utilities.service';
-import { ProjectSelectionService } from 'src/app/feature/project/service/project-selection.service';
-import { DonationService } from '../../service/donation.service';
-import { UserIdentityService } from 'src/app/core/service/user-identity.service';
-import { ModalService } from 'src/app/core/service/modal.service';
 import { getProjectSection } from 'src/app/feature/project/fields/project.field';
 import { getActivitySection } from 'src/app/feature/project/fields/activity.field';
 
@@ -113,8 +109,8 @@ export class GuestDonationTabComponent extends BaseDonationTabComponent {
 
   loadData(): void {
     this.donationService.fetchGuestDonations({
-      pageIndex: this.paginationConfig.pageNumber,
-      pageSize: this.paginationConfig.pageSize,
+      pageIndex: DonationDefaultValue.pageNumber,
+      pageSize: DonationDefaultValue.pageSize,
     }).subscribe(data => {
       this.setContent(data.donations.content!, data.donations.totalSize);
     })
