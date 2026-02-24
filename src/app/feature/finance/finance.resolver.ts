@@ -88,49 +88,29 @@ export const accountRefDataResolver: ResolveFn<AccountRefDataDto> = (route, stat
 export const donationDashboardResolverNew: ResolveFn<any> = (route, state) => {
   const tab = (route.queryParams['tab'] || DonationDefaultValue.tabName) as donationTab;
   const id = route.queryParams['id'] as string;
-
+  const donation = inject(DonationService);
   if (tab === 'member_donation') {
     return;
   }
+  else if (tab === 'all_donation') {
+    return donation.fetchDonations({
+      pageIndex: DonationDefaultValue.pageNumber,
+      pageSize: DonationDefaultValue.pageSize
+    });
+  }
   else if (tab === 'guest_donation') {
-    return inject(DonationService).fetchGuestDonations({
+    return donation.fetchGuestDonations({
       pageIndex: DonationDefaultValue.pageNumber,
       pageSize: DonationDefaultValue.pageSize
     });
   }
   else {
-    return inject(DonationService).fetchMyDonations({
+    return donation.getSelfDonations({
       pageIndex: DonationDefaultValue.pageNumber,
       pageSize: DonationDefaultValue.pageSize
     });
   }
 };
-
-export const donationDashboardResolver: ResolveFn<any> =
-  async (route, state) => {
-    let tab = (route.queryParams['tab'] || DonationDefaultValue.tabName) as donationTab;
-    //console.log(route.queryParams, tab)
-    if (tab == 'member_donation') {
-      return await inject(DonationService).fetchMembers({
-        pageIndex: DonationDefaultValue.pageNumber,
-        pageSize: DonationDefaultValue.pageSize
-      });
-    }
-    else if (tab == 'guest_donation') {
-      //console.log("fetching guest donations");
-      return await inject(DonationService).fetchMembers({
-        pageIndex: DonationDefaultValue.pageNumber,
-        pageSize: DonationDefaultValue.pageSize
-      });
-
-    } else {
-      ////console.log("fetching my donations");
-      return await inject(DonationService).fetchMyDonations({
-        pageIndex: DonationDefaultValue.pageNumber,
-        pageSize: DonationDefaultValue.pageSize
-      });
-    }
-  };
 
 export const donationRefDataResolverNew: ResolveFn<DonationRefDataDto> =
   (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {

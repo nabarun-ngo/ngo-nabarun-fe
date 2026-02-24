@@ -28,7 +28,7 @@ import { ProjectSelectionService } from 'src/app/feature/project/service/project
 })
 export class MemberDonationTabComponent extends BaseDonationTabComponent {
   protected override detailedViews: DetailedView[] = [];
-  protected summary!: DonationSummary;
+  protected summary: DonationSummary | undefined;
   private readonly memberModalConfig = (kv: KeyValue[]) => {
     return {
       title: 'Select Member',
@@ -99,7 +99,7 @@ export class MemberDonationTabComponent extends BaseDonationTabComponent {
       },
       {
         type: 'text',
-        value: data?.startDate && data?.endDate ? `${date(data?.startDate)} - ${date(data?.endDate)}` : '-'
+        value: data?.startDate && data?.endDate ? `${date(data?.startDate, 'dd MMM yyyy')} - ${date(data?.endDate, 'dd MMM yyyy')}` : '-'
       },
       {
         type: 'text',
@@ -112,11 +112,12 @@ export class MemberDonationTabComponent extends BaseDonationTabComponent {
 
   override handlePageEvent($event: PageEvent): void {
     this.pageEvent = $event;
-    this.donationService.getUserDonations(this.profile?.id!, {
+    this.donationService.fetchUserDonations(this.profile?.id!, {
       pageIndex: $event.pageIndex,
-      pageSize: $event.pageSize
+      pageSize: $event.pageSize,
+      skipSummary: true
     }).subscribe(data => {
-      this.setContent(data.content!, data.totalSize);
+      this.setContent(data.donations.content!, data.donations.totalSize);
     });
   }
 
@@ -126,15 +127,18 @@ export class MemberDonationTabComponent extends BaseDonationTabComponent {
 
   onSearch($event: SearchEvent): void {
     if ($event.advancedSearch) {
-      this.donationService.getUserDonations(this.profile?.id!, {
-        filter: removeNullFields($event.value)
+      this.donationService.fetchUserDonations(this.profile?.id!, {
+        filter: removeNullFields($event.value),
+        skipSummary: true
       }).subscribe(data => {
-        this.setContent(data.content!, data.totalSize);
+        this.setContent(data.donations.content!, data.donations.totalSize);
       });
     }
     else if ($event.reset) {
-      this.donationService.getUserDonations(this.profile?.id!, {}).subscribe(data => {
-        this.setContent(data.content!, data.totalSize);
+      this.donationService.fetchUserDonations(this.profile?.id!, {
+        skipSummary: true
+      }).subscribe(data => {
+        this.setContent(data.donations.content!, data.donations.totalSize);
       });
     }
   }
@@ -177,9 +181,11 @@ export class MemberDonationTabComponent extends BaseDonationTabComponent {
           donorEmail: this.profile.email,
           donorPhone: this.profile.primaryNumber?.fullNumber!
         }, {})];
-      this.donationService.fetchUserDonations(this.profile.id, {}).subscribe(data => {
+      this.donationService.fetchUserDonations(this.profile.id, {
+        skipSummary: false
+      }).subscribe(data => {
         this.setContent(data.donations?.content!, data.donations?.totalSize);
-        this.summary = data.summary;
+        this.summary = data.summary!;
       });
     }
   }
