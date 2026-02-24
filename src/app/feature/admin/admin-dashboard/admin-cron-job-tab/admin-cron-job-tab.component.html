@@ -1,4 +1,4 @@
-<div class="mb-4 flex justify-end relative z-10">
+<div class="mb-4 flex flex-wrap justify-end gap-2 relative z-10">
     <button mat-button color="secondary" (click)="loadSchedulerLogs()">
         <mat-icon>description</mat-icon>
         Scheduler Logs
@@ -17,7 +17,7 @@
     </button>
 </div>
 <app-detailed-view [detailedViews]="detailedView" [refData]="{}"></app-detailed-view>
-<h1 class="text-center mb-2 text-indigo-500 py-2"> Cron Executions : {{selectedJob?.name}}
+<h1 class="text-center mb-2 text-indigo-500 py-2"> Cron Executions : {{selectedJob.name}}
 </h1>
 <app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)"
     (onAccordionOpen)="onAccordionOpen($event)"></app-accordion-list>

@@ -21,6 +21,10 @@
                         <app-member-donation-tab [accordionData]="initialData?.donations!"
                             [refData]="refData"></app-member-donation-tab>
                     </mat-tab>
+                    <mat-tab id="allDonationTab" label="All Donations" *ngIf="permissions?.canViewAllDonation">
+                        <app-all-donation-tab [accordionData]="initialData?.donations!"
+                            [refData]="refData"></app-all-donation-tab>
+                    </mat-tab>
                 </mat-tab-group>
             </div>
         </div>

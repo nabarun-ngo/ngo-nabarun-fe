@@ -66,7 +66,7 @@ export class SelfDonationTabComponent extends BaseDonationTabComponent {
       },
       {
         type: 'text',
-        value: data?.startDate && data?.endDate ? `${date(data?.startDate)} - ${date(data?.endDate)}` : '-'
+        value: data?.startDate && data?.endDate ? `${date(data?.startDate, 'dd MMM yyyy')} - ${date(data?.endDate, 'dd MMM yyyy')}` : '-'
       },
       {
         type: 'text',
@@ -104,9 +104,11 @@ export class SelfDonationTabComponent extends BaseDonationTabComponent {
     this.pageEvent = $event;
     this.donationService.getSelfDonations({
       pageIndex: $event.pageIndex,
-      pageSize: $event.pageSize
+      pageSize: $event.pageSize,
+      skipSummary: true,
+      skipAccounts: true
     }).subscribe(data => {
-      this.setContent(data.content!, data.totalSize);
+      this.setContent(data.donations.content!, data.donations.totalSize);
     });
   }
 
@@ -114,21 +116,29 @@ export class SelfDonationTabComponent extends BaseDonationTabComponent {
   onSearch($event: SearchEvent): void {
     if ($event.advancedSearch) {
       this.donationService.getSelfDonations({
-        filter: removeNullFields($event.value)
+        filter: removeNullFields($event.value),
+        skipSummary: true,
+        skipAccounts: true
       }).subscribe(data => {
-        this.setContent(data.content!, data.totalSize);
+        this.setContent(data.donations.content!, data.donations.totalSize);
       });
     }
     else if ($event.reset) {
-      this.donationService.getSelfDonations({}).subscribe(data => {
-        this.setContent(data.content!, data.totalSize);
+      this.donationService.getSelfDonations({
+        skipSummary: true,
+        skipAccounts: true
+      }).subscribe(data => {
+        this.setContent(data.donations.content!, data.donations.totalSize);
       });
     }
   }
 
 
   loadData(): void {
-    this.donationService.fetchMyDonations({}).subscribe(data => {
+    this.donationService.getSelfDonations({
+      skipSummary: false,
+      skipAccounts: false
+    }).subscribe(data => {
       this.summary = data.summary;
       this.payableAccounts = data.accounts;
       this.setContent(data.donations.content!, data.donations.totalSize);
