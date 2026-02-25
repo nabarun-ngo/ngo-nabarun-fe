@@ -97,7 +97,7 @@ export class TransactionAccordionComponent extends Accordion<Transaction> {
   }
   override handlePageEvent($event: PageEvent): void {
     this.pageEvent = $event;
-    this.fetchDetails(this.pageNumber, this.pageSize);
+    this.fetchDetails($event.pageIndex, $event.pageSize);
   }
 
 
@@ -129,11 +129,11 @@ export class TransactionAccordionComponent extends Accordion<Transaction> {
 
       modalRef.onAccept$.subscribe((data) => {
         if (data) {
-          this.accountService.reverseTransaction(this.accountId, item.transactionRef, reverse_form?.value.reasonForReversal).subscribe((data) => {
-            this.removeSectionInAccordion('reverse_txn', rowIndex);
-            this.hideForm(rowIndex);
-            this.fetchDetails(this.pageNumber, this.pageSize);
-          });
+          // this.accountService.reverseTransaction(this.accountId, item.transactionRef, reverse_form?.value.reasonForReversal).subscribe((data) => {
+          //   this.removeSectionInAccordion('reverse_txn', rowIndex);
+          //   this.hideForm(rowIndex);
+          //   this.fetchDetails(this.pageNumber, this.pageSize);
+          // });
         }
       });
     } else {

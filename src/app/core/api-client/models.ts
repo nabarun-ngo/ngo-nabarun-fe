@@ -65,7 +65,6 @@ export { ProjectRefDataDto } from './models/project-ref-data-dto';
 export { QueueHealth } from './models/queue-health';
 export { QueueStatistics } from './models/queue-statistics';
 export { RegisterFcmTokenDto } from './models/register-fcm-token-dto';
-export { ReverseTransactionDto } from './models/reverse-transaction-dto';
 export { RoleDto } from './models/role-dto';
 export { RoleHistoryDto } from './models/role-history-dto';
 export { SchedulerLogDto } from './models/scheduler-log-dto';
