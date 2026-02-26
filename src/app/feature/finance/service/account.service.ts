@@ -11,16 +11,14 @@ import { AccountDefaultValue } from '../finance.const';
 import {
   Account,
   PagedAccounts,
-  Transaction,
   PagedTransactions,
   mapAccountDtoToAccount,
   mapPagedAccountDtoToPagedAccounts,
   mapPagedTransactionDtoToPagedTransactions,
-  mapTransactionDtoToTransaction,
   BankDetail,
   UpiDetail
 } from '../model';
-import { DmsUploadDto, TransactionDetailDto } from 'src/app/core/api-client/models';
+import { DmsUploadDto } from 'src/app/core/api-client/models';
 import { User } from '../../member/models/member.model';
 import { mapUserDtoToUser } from '../../member/models/member.mapper';
 import { FileUpload } from 'src/app/shared/components/generic/file-upload/file-upload.component';
@@ -311,8 +309,8 @@ export class AccountService {
    * @param value Transfer details
    * @returns Observable of transaction result
    */
-  performTransfer(from: Account, value: any, document_list: FileUpload[]): Observable<string> {
-    return this.accountController.transferAmountSelf({
+  performTransfer(from: Account, value: any, document_list: FileUpload[], isManageAccountsTab: boolean): Observable<string> {
+    const payload = {
       id: from.id,
       body: {
         amount: value.amount,
@@ -320,43 +318,47 @@ export class AccountService {
         description: value.description,
         transferDate: value.transferDate,
       }
-    }).pipe(
-      map(response => response.responsePayload),
-      switchMap((transaction: string) => {
-        if (!document_list || document_list.length === 0) {
-          return of(transaction);
-        }
+    };
+    return (isManageAccountsTab ?
+      this.accountController.transferAmount(payload)
+      : this.accountController.transferAmountSelf(payload))
+      .pipe(
+        map(response => response.responsePayload),
+        switchMap((transaction: string) => {
+          if (!document_list || document_list.length === 0) {
+            return of(transaction);
+          }
 
-        const uploadRequests = document_list.map(doc => {
-          return this.dmsController.uploadFile({
-            body: {
-              contentType: doc.detail.contentType,
-              fileBase64: doc.detail.base64Content,
-              filename: doc.detail.originalFileName,
-              documentMapping: [{
-                entityId: transaction,
-                entityType: 'TRANSACTION'
-              }]
-            }
+          const uploadRequests = document_list.map(doc => {
+            return this.dmsController.uploadFile({
+              body: {
+                contentType: doc.detail.contentType,
+                fileBase64: doc.detail.base64Content,
+                filename: doc.detail.originalFileName,
+                documentMapping: [{
+                  entityId: transaction,
+                  entityType: 'TRANSACTION'
+                }]
+              }
+            });
           });
-        });
 
-        return forkJoin(uploadRequests).pipe(map(() => transaction));
-      }),
-    );
+          return forkJoin(uploadRequests).pipe(map(() => transaction));
+        }),
+      );
   }
 
-  reverseTransaction(accId: string, txnRef: string, reasonForReversal: string) {
-    return this.accountController.reverseTransaction({
-      id: accId,
-      body: {
-        comment: reasonForReversal,
-        transactionRef: txnRef
-      }
-    }).pipe(
-      map(response => response.responsePayload),
-    );
-  }
+  // reverseTransaction(accId: string, txnRef: string, reasonForReversal: string) {
+  //   return this.accountController.reverseTransaction({
+  //     id: accId,
+  //     body: {
+  //       comment: reasonForReversal,
+  //       transactionRef: txnRef
+  //     }
+  //   }).pipe(
+  //     map(response => response.responsePayload),
+  //   );
+  // }
 
   /**
    * Add money to account
@@ -364,43 +366,47 @@ export class AccountService {
    * @param value Money in details
    * @returns Observable of transaction result
    */
-  performMoneyIn(accountTo: Account, value: any, document_list: FileUpload[]): Observable<any> {
-    return this.accountController.addFundSelf({
+  performMoneyIn(accountTo: Account, value: any, document_list: FileUpload[], isManageAccountsTab: boolean): Observable<any> {
+    const payload = {
       id: accountTo.id,
       body: {
         amount: value.amount,
         description: value.description,
         transferDate: value.inDate,
       }
-    }).pipe(
-      map(response => response.responsePayload),
-      switchMap((transaction: string) => {
-        if (!document_list || document_list.length === 0) {
-          return of(transaction);
-        }
+    };
+    return (isManageAccountsTab ?
+      this.accountController.addFund(payload)
+      : this.accountController.addFundSelf(payload))
+      .pipe(
+        map(response => response.responsePayload),
+        switchMap((transaction: string) => {
+          if (!document_list || document_list.length === 0) {
+            return of(transaction);
+          }
 
-        const uploadRequests = document_list.map(doc => {
-          return this.dmsController.uploadFile({
-            body: {
-              contentType: doc.detail.contentType,
-              fileBase64: doc.detail.base64Content,
-              filename: doc.detail.originalFileName,
-              documentMapping: [{
-                entityId: transaction,
-                entityType: 'TRANSACTION'
-              }]
-            }
-          }).pipe(
-            catchError(err => {
-              console.error('File upload failed', err);
-              return of(null); // swallow error
-            })
-          )
-        });
+          const uploadRequests = document_list.map(doc => {
+            return this.dmsController.uploadFile({
+              body: {
+                contentType: doc.detail.contentType,
+                fileBase64: doc.detail.base64Content,
+                filename: doc.detail.originalFileName,
+                documentMapping: [{
+                  entityId: transaction,
+                  entityType: 'TRANSACTION'
+                }]
+              }
+            }).pipe(
+              catchError(err => {
+                console.error('File upload failed', err);
+                return of(null); // swallow error
+              })
+            )
+          });
 
-        return forkJoin(uploadRequests).pipe(map(() => transaction));
-      }),
-    );
+          return forkJoin(uploadRequests).pipe(map(() => transaction));
+        }),
+      );
   }
 
 

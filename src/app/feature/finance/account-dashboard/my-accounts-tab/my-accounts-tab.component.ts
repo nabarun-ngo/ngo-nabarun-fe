@@ -35,6 +35,7 @@ import { KeyValue } from 'src/app/shared/model/key-value.model';
   styleUrls: ['./my-accounts-tab.component.scss'],
 })
 export class MyAccountsTabComponent extends Accordion<Account> implements TabComponentInterface<PagedAccounts> {
+  protected isManageAccountsTab = false;
   protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
     return {
       pageNumber: AccountDefaultValue.pageNumber,
@@ -207,7 +208,7 @@ export class MyAccountsTabComponent extends Accordion<Account> implements TabCom
       let account = this.itemList[rowIndex];
       let message = {
         title: 'Confirm',
-        description: `I confirm that I have received Rs.${money_in_acc.value.amount} in my account ${account.id}`,
+        description: this.isManageAccountsTab ? `I confirm that the account ${account.id} has received Rs.${money_in_acc.value.amount}` : `I confirm that I have received Rs.${money_in_acc.value.amount} in my account ${account.id}`,
       };
       let modal = this.modalService.openNotificationModal(
         message,
@@ -216,7 +217,7 @@ export class MyAccountsTabComponent extends Accordion<Account> implements TabCom
       );
       modal.onAccept$.subscribe(() => {
         this.accountService
-          .performMoneyIn(account, money_in_acc?.value, document_list || [])
+          .performMoneyIn(account, money_in_acc?.value, document_list || [], this.isManageAccountsTab)
           .subscribe((d) => {
             ////console.log(d);
             this.hideForm(rowIndex);
@@ -266,7 +267,7 @@ export class MyAccountsTabComponent extends Accordion<Account> implements TabCom
       let account = this.itemList[rowIndex];
       let message = {
         title: 'Confirm',
-        description: `I confirm that I have transferred Rs.${transfer_form.value.amount} to account ${transfer_form.value.transferTo} and uploaded related document.`,
+        description: this.isManageAccountsTab ? `I confirm that the account ${account.id} has received Rs.${transfer_form.value.amount} and I have uploaded related document.` : `I confirm that I have transferred Rs.${transfer_form.value.amount} to account ${transfer_form.value.transferTo} and uploaded related document.`,
       };
       let modal = this.modalService.openNotificationModal(
         message,
@@ -275,7 +276,7 @@ export class MyAccountsTabComponent extends Accordion<Account> implements TabCom
       );
       modal.onAccept$.subscribe(() => {
         this.accountService
-          .performTransfer(account, transfer_form?.value, document_list!)
+          .performTransfer(account, transfer_form?.value, document_list!, this.isManageAccountsTab)
           .subscribe((d) => {
             ////console.log(d);
             this.hideForm(rowIndex);

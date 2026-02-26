@@ -8,16 +8,16 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { ReverseTransactionDto } from '../../models/reverse-transaction-dto';
 import { SuccessResponseString } from '../../models/success-response-string';
+import { TransferDto } from '../../models/transfer-dto';
 
-export interface ReverseTransaction$Params {
+export interface TransferAmount$Params {
   id: string;
-      body: ReverseTransactionDto
+      body: TransferDto
 }
 
-export function reverseTransaction(http: HttpClient, rootUrl: string, params: ReverseTransaction$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
-  const rb = new RequestBuilder(rootUrl, reverseTransaction.PATH, 'post');
+export function transferAmount(http: HttpClient, rootUrl: string, params: TransferAmount$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
+  const rb = new RequestBuilder(rootUrl, transferAmount.PATH, 'post');
   if (params) {
     rb.path('id', params.id, {});
     rb.body(params.body, 'application/json');
@@ -33,4 +33,4 @@ export function reverseTransaction(http: HttpClient, rootUrl: string, params: Re
   );
 }
 
-reverseTransaction.PATH = '/api/account/{id}/transaction/reverse';
+transferAmount.PATH = '/api/account/{id}/transfer';

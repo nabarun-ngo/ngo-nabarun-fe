@@ -6,7 +6,7 @@ export const AdminDefaultValue = {
     pageSize: 10,
     pageSizeOptions: [10, 20, 50, 100],
     pageTitle: 'Admin Console',
-    tabName: 'api_keys'
+    tabName: 'bg_jobs'
 }
 export const AdminConstant = {
     refDataName: 'ADMIN',
