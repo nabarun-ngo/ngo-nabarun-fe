@@ -19,6 +19,7 @@ import { User } from 'src/app/feature/member/models/member.model';
   styleUrls: ['./manage-accounts-tab.component.scss'],
 })
 export class ManageAccountsTabComponent extends MyAccountsTabComponent {
+  protected override isManageAccountsTab = true;
   protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
     return {
       pageNumber: AccountDefaultValue.pageNumber,
@@ -31,6 +32,7 @@ export class ManageAccountsTabComponent extends MyAccountsTabComponent {
     canCreateAccount: boolean;
     canUpdateAccount: boolean;
     canReadTransactions: boolean;
+    canUpdateTransactions: boolean;
   };
 
   override onInitHook(): void {
@@ -40,7 +42,8 @@ export class ManageAccountsTabComponent extends MyAccountsTabComponent {
     this.permissions = {
       canCreateAccount: this.userIdentityService.isAccrediatedTo(SCOPE.create.account),
       canUpdateAccount: this.userIdentityService.isAccrediatedTo(SCOPE.update.account),
-      canReadTransactions: this.userIdentityService.isAccrediatedTo(SCOPE.read.transactions)
+      canReadTransactions: this.userIdentityService.isAccrediatedTo(SCOPE.read.transactions),
+      canUpdateTransactions: this.userIdentityService.isAccrediatedTo(SCOPE.update.transactions)
     };
   }
 
@@ -109,6 +112,16 @@ export class ManageAccountsTabComponent extends MyAccountsTabComponent {
         props: { disabled: !this.permissions.canReadTransactions }
       },
       {
+        button_id: 'TRANSFER',
+        button_name: 'Transfer Funds',
+        props: { disabled: !(this.permissions.canUpdateAccount && this.permissions.canUpdateTransactions) }
+      },
+      {
+        button_id: 'MONEY_IN',
+        button_name: 'Add Funds',
+        props: { disabled: !(this.permissions.canUpdateAccount && this.permissions.canUpdateTransactions) }
+      },
+      {
         button_id: 'UPDATE_ACCOUNT',
         button_name: 'Update Account',
         props: { disabled: !this.permissions.canUpdateAccount }
@@ -144,13 +157,21 @@ export class ManageAccountsTabComponent extends MyAccountsTabComponent {
         if (this.activeButtonId == 'UPDATE_ACCOUNT') {
           this.performUpdateAccount(event.rowIndex);
         }
-
+        else if (this.activeButtonId == 'TRANSFER') {
+          super.onClick(event);
+        }
+        else if (this.activeButtonId == 'MONEY_IN') {
+          super.onClick(event);
+        }
         break;
       case 'CANCEL_CREATE':
         this.hideForm(0, true);
         break;
       case 'CONFIRM_CREATE':
         this.performCreateAccount();
+        break;
+      default:
+        super.onClick(event);
         break;
     }
   }

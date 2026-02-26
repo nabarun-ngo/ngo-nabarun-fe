@@ -56,7 +56,7 @@ export class DonationDashboardComponent extends StandardTabbedDashboard<donation
 
 
   protected get defaultTab(): donationTab {
-    return 'self_donation';
+    return DonationDefaultValue.tabName as donationTab;
   }
 
 
