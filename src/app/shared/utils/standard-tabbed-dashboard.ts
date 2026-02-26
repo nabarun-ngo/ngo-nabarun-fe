@@ -82,31 +82,38 @@ export abstract class StandardTabbedDashboard<TTab extends string | number, TDat
   protected readonly destroyRef = inject(DestroyRef);
 
   override ngOnInit(): void {
-    //ORDER OF EXECUTION IS IMPORTANT
+    // Determine the initial tab index before parent initialization
+    // so that hooks like onHandleRouteDataHook can use the correct tab
+    this.initializeTabIndex();
+
+    // ORDER OF EXECUTION IS IMPORTANT
     super.ngOnInit();
+
     // Subscribe to query params to handle tab changes (including back/forward button)
     this.route.queryParams
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(params => {
         const tab = params['tab'] as TTab | undefined;
-        if (tab) {
-          this.handleTabChangeFromUrl(tab);
+        // Fallback to default tab if parameter is missing
+        const targetTab = tab || this.defaultTab;
+        if (targetTab) {
+          this.handleTabChangeFromUrl(targetTab);
         }
       });
-    this.initializeTabIndex();
   }
 
   /**
-   * Initializes the tab index based on the route data.
+   * Initializes the tab index based on the route data or the default tab.
    */
   private initializeTabIndex(): void {
-    const tab = this.route.snapshot.queryParams['tab'] as TTab | undefined;
-    if (tab) {
-      this.tabMapping.forEach((value: TTab, key: number) => {
-        if (tab === value) {
-          this.tabIndex = key;
-        }
-      });
+    const tabFromUrl = this.route.snapshot.queryParams['tab'] as TTab | undefined;
+    const tabToUse = tabFromUrl || this.defaultTab;
+
+    if (tabToUse) {
+      const index = this.tabMapping.indexOf(tabToUse);
+      if (index !== -1) {
+        this.#tabIndex = index;
+      }
     }
   }
 
