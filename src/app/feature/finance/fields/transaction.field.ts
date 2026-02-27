@@ -16,11 +16,11 @@ export const transactionHeader = [
     rounded: true,
   },
   {
-    value: 'Transaction Type',
+    value: 'Transaction Date',
     rounded: true,
   },
   {
-    value: 'Transaction Date',
+    value: 'Balance After Transaction',
     rounded: true,
   },
 ];
