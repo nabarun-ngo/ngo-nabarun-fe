@@ -65,15 +65,15 @@ export class TransactionAccordionComponent extends Accordion<Transaction> {
       },
       {
         type: 'text',
-        value: '₹ ' + data?.txnAmount,
-      },
-      {
-        type: 'text',
-        value: data?.accTxnType || '',
+        value: `₹ ${data?.txnAmount} (${data?.accTxnType})`,
       },
       {
         type: 'date',
         value: data?.txnDate,
+      },
+      {
+        type: 'text',
+        value: `₹ ${data?.accBalance}`,
       },
     ];
   }
