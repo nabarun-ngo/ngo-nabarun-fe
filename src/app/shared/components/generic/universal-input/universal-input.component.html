@@ -170,7 +170,8 @@
         [appearance]="inputModel.appearance ? inputModel.appearance :'outline'"
         [style]="inputModel.style? inputModel.style : ''" [ngClass]="inputModel.cssClass ? inputModel.cssClass : ''">
         <ngx-mat-input-tel matInput [preferredCountries]="['in']" [enablePlaceholder]="true" [enableSearch]="true"
-            [placeholder]="inputModel.placeholder!" [formControl]="ngControl.control"></ngx-mat-input-tel>
+            [placeholder]="inputModel.placeholder!" [formControl]="ngControl.control"
+            (countryChange)="onDialCodeSelect($event)" (blur)="formatPhoneNumber()"></ngx-mat-input-tel>
         <mat-error>{{ errorMessage(ngControl.control.errors,inputModel.labelName)}}</mat-error>
     </mat-form-field>
 

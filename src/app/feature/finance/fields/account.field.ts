@@ -54,7 +54,7 @@ export const accountSearchInput = (
           formControlName: 'type',
           inputModel: {
             tagName: 'select',
-            inputType: 'multiselect',
+            inputType: '',
             html_id: 'type',
             labelName: 'Account Type',
             placeholder: 'Select Account Type',
