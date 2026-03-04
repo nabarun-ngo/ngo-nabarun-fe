@@ -323,7 +323,7 @@ export class ProfileViewComponent implements OnInit {
       };
 
       if (this.editSelfForm.value.phoneNumber_p) {
-        ////console.log(this.editSelfForm.value.phoneNumber_p)
+        console.log(this.editSelfForm.value.phoneNumber_p)
         let pPhNo = parsePhoneNumber(this.editSelfForm.value.phoneNumber_p);
         userDetail.primaryNumber = {
           code: pPhNo.countryCallingCode,

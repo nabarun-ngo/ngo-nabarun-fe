@@ -99,6 +99,10 @@ export class ManageExpenseTabComponent extends MyExpensesTabComponent {
 
     if (data.status == 'DRAFT') {
       buttons.push({
+        button_id: 'UPDATE_EXPENSE',
+        button_name: 'Update',
+      });
+      buttons.push({
         button_id: 'SUBMIT_EXPENSE',
         button_name: 'Submit',
       });

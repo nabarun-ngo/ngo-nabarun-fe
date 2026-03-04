@@ -238,6 +238,7 @@ export class MyRequestsTabComponent extends Accordion<WorkflowRequest> implement
     if (request_form?.valid && request_data_form?.valid) {
       const type = request_form?.value.requestType;
       const data = { ...request_data_form?.value };
+
       let requestedFor;
       if (this.isDelegatedRequest && request_form?.value.requestType !== 'JOIN_REQUEST') {
         requestedFor = request_form?.value.initiatedFor;
