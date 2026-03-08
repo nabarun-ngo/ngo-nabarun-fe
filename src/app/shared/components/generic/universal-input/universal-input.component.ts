@@ -4,6 +4,8 @@ import { getErrorMessage, injectNgControl } from 'src/app/core/service/form.serv
 import { sanitizeBase64 } from 'src/app/core/service/utilities.service';
 import { KeyValue } from 'src/app/shared/model/key-value.model';
 import { inputType, UniversalInputModel } from 'src/app/shared/model/universal-input.model';
+import { parsePhoneNumber } from 'libphonenumber-js';
+
 
 
 @Component({
@@ -34,7 +36,16 @@ export class UniversalInputComponent implements AfterViewInit {
       this.ngControl.control?.addValidators(Validators.email);
       this.ngControl.control?.updateValueAndValidity();
     }
+
+    if (this.inputModel.inputType == 'phone' && this.ngControl.control) {
+      this.ngControl.control.valueChanges.subscribe(value => {
+        if (value && typeof value === 'string' && value.startsWith('+') && !value.includes('-')) {
+          this.formatPhoneNumber();
+        }
+      });
+    }
   }
+
 
 
   displayFn(id: string): string {
@@ -44,16 +55,33 @@ export class UniversalInputComponent implements AfterViewInit {
     return '';
   }
 
-  onDialCodeSelect(code: string) {
-    const number = this.ngControl.control?.value || '';
-
-    if (this.inputModel.props?.['separateDialCode'] === false) {
-      // prefix phone number with code inside the input
-      if (!number.startsWith(code)) {
-        this.ngControl.control?.setValue(`${code} ${number.replace(/^\+\d+\s*/, '')}`);
-      }
+  onDialCodeSelect(event: any) {
+    if (event.dialCode) {
+      this.formatPhoneNumber(event.countryCode);
     }
   }
+
+  formatPhoneNumber(countryCode?: any) {
+    // Small delay to let the component's internal state settle
+    setTimeout(() => {
+      const value = this.ngControl.control?.value;
+      if (value && typeof value === 'string') {
+        try {
+          const phoneNumber = parsePhoneNumber(value.startsWith('+') ? value : '+' + value, countryCode);
+          if (phoneNumber && phoneNumber.isValid()) {
+            const formatted = `+${phoneNumber.countryCallingCode}-${phoneNumber.nationalNumber}`;
+            if (this.ngControl.control?.value !== formatted) {
+              this.ngControl.control?.setValue(formatted);
+            }
+          }
+        } catch (e) {
+          // Ignore parsing errors during entry
+        }
+      }
+    }, 100);
+  }
+
+
 
   selectAll(event?: Event): void {
     if (event) {
