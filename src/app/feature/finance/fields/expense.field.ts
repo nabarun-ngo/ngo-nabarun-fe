@@ -1,21 +1,17 @@
 import { EventEmitter } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { PageEvent } from '@angular/material/paginator';
 
-import { Accordion } from 'src/app/shared/utils/accordion';
 import {
-  AccordionButton,
   AccordionCell,
 } from 'src/app/shared/model/accordion-list.model';
 import {
-  AlertList,
   DetailedView,
   DetailedViewField,
 } from 'src/app/shared/model/detailed-view.model';
 import { date } from 'src/app/core/service/utilities.service';
 import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
-import { AccountConstant, AccountDefaultValue, ExpenseDefaultValue, expenseTab } from '../finance.const';
-import { Account, Expense, ExpenseItem } from '../model';
+import { AccountConstant, expenseTab } from '../finance.const';
+import { Account, Expense } from '../model';
 import { Doc } from 'src/app/shared/model/document.model';
 import { KeyValue } from 'src/app/shared/model/key-value.model';
 import { SearchSelectModalConfig } from 'src/app/shared/components/search-select-modal/search-select-modal.component';
@@ -125,6 +121,15 @@ export const expenseDetailSection = (
     section_html_id: 'expense_detail',
     section_form: new FormGroup({}),
     hide_section: false,
+    section_alerts: [
+      {
+        hide_alert: !(isCreate && isAdminView),
+        data: {
+          alertType: 'info',
+          message: 'You are creating this expense on behalf of another user'
+        }
+      }
+    ],
     content: [
       {
         field_name: 'Expense Id',
