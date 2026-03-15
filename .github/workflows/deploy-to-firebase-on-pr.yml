@@ -6,7 +6,7 @@ on:
     - '.github/**'
     types: [opened, synchronize, reopened, closed] 
     branches:
-    - master
+    - main
     - stage
 
 permissions:
@@ -18,7 +18,7 @@ jobs:
    uses: nabarun-ngo/ngo-nabarun-templates/.github/workflows/Build-Test.yml@main
    with:
       platform: "node"
-      command: "npm install && npm run ${{ github.base_ref == 'master' && 'build' || 'build:stage' }}"
+      command: "npm install && npm run ${{ github.base_ref == 'main' && 'build' || 'build:stage' }}"
       
   create_release:
     if: github.event.pull_request.merged == true
@@ -40,7 +40,7 @@ jobs:
         {
           "fe_deploy": true,
           "fe_tag_name": "${{ needs.create_release.outputs.tag_name }}",
-          "target_env": "${{ github.base_ref == 'master' && 'prod' || 'stage' }}",
+          "target_env": "${{ github.base_ref == 'main' && 'prod' || 'stage' }}",
           "auth0_sync" : ${{ contains(join(fromJSON(toJSON(github.event.pull_request.labels)).name, ','),'auth0') }},
           "run_smoke_test" : true ,
           "pr_number": "PR#${{github.event.pull_request.number}}"
