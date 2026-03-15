@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, OnInit } from '@angular/core';
+import { Component, EventEmitter, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subject } from 'rxjs';
 import { isEmpty } from 'src/app/core/service/utilities.service';
@@ -8,7 +8,7 @@ import { isEmpty } from 'src/app/core/service/utilities.service';
   templateUrl: './notification-modal.component.html',
   styleUrls: ['./notification-modal.component.scss']
 })
-export class NotificationModalComponent implements OnInit {
+export class NotificationModalComponent implements OnInit, OnDestroy {
 
   protected details!: NotificationData;
 
@@ -31,6 +31,11 @@ export class NotificationModalComponent implements OnInit {
   }
   ngOnInit(): void {
 
+  }
+
+  ngOnDestroy(): void {
+    this.acceptEvent.complete();
+    this.declineEvent.complete();
   }
 
   /**

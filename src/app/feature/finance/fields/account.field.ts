@@ -20,11 +20,11 @@ export const accountTabHeader = (tab: accountTab) => {
       rounded: true,
     },
     {
-      value: 'Account Status',
+      value: tab == 'my_accounts' ? 'Account Status' : 'Account Holder Name',
       rounded: true,
     },
     {
-      value: tab == 'my_accounts' ? 'Current Balance' : 'Account Holder Name',
+      value: 'Current Balance',
       rounded: true,
     },
   ];
@@ -97,6 +97,8 @@ export const accountHighLevelView = (
   tab: accountTab,
   refData: { [name: string]: KeyValue[] }
 ): AccordionCell[] => {
+  let accountType = refData[AccountConstant.refDataKey.accountType].find((x) => x.key == item?.accountType)?.displayValue || item?.accountType;
+  let accountStatus = refData[AccountConstant.refDataKey.accountStatus].find((x) => x.key == item?.status)?.displayValue || item?.status;
   return [
     {
       type: 'text',
@@ -105,19 +107,15 @@ export const accountHighLevelView = (
     },
     {
       type: 'text',
-      value: item?.accountType,
-      showDisplayValue: true,
-      refDataSection: AccountConstant.refDataKey.accountType,
+      value: tab == 'my_accounts' ? accountType : `${accountStatus} ${accountType}`,
     },
     {
       type: 'text',
-      value: item?.status,
-      showDisplayValue: true,
-      refDataSection: AccountConstant.refDataKey.accountStatus,
+      value: tab == 'my_accounts' ? accountStatus : (item?.accountHolderName || ''),
     },
     {
       type: 'text',
-      value: tab == 'my_accounts' ? `₹ ${item?.balance}` : item?.accountHolderName || '',
+      value: `₹ ${item?.balance}`,
     },
   ];
 };
