@@ -38,6 +38,7 @@ export interface Task {
     checklist?: string[];
     resultData?: any;
     assignments: TaskAssignment[];
+    autoCloseable: boolean;
 }
 
 export type PagedTask = PagedResult<Task>;

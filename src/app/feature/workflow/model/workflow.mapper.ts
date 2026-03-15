@@ -115,7 +115,8 @@ export function mapToWorkflowTaskDtoToTask(dto: WorkflowTaskDto): Task {
         checklist: dto.checklist,
         resultData: dto.resultData,
         workflowId: dto.workflowId,
-        assignments: (dto.assignments || []).map(a => mapToTaskAssignmentDtoToTaskAssignment(a))
+        assignments: (dto.assignments || []).map(a => mapToTaskAssignmentDtoToTaskAssignment(a)),
+        autoCloseable: dto.autoCloseable ?? false
     };
 }
 

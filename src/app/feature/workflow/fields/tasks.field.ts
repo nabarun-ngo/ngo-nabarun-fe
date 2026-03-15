@@ -13,6 +13,15 @@ export const getTaskDetailSection = (m: Task, tab: workListTab, refData: { [name
         section_type: 'key_value',
         section_html_id: 'work_detail',
         section_form: new FormGroup({}),
+        section_alerts: [
+            {
+                hide_alert: !m.autoCloseable || tab == 'completed_worklist',
+                data: {
+                    alertType: 'info',
+                    message: 'This task will be automatically completed once you complete the To-Do list.',
+                }
+            }
+        ],
         content: [
             {
                 field_name: 'Task Id',
