@@ -14,6 +14,7 @@ import { KeyValue } from 'src/app/shared/model/key-value.model';
 import { SearchSelectModalConfig } from 'src/app/shared/components/search-select-modal/search-select-modal.component';
 import { firstValueFrom } from 'rxjs';
 import { date } from 'src/app/core/service/utilities.service';
+import { ModalService } from 'src/app/core/service/modal.service';
 
 @Component({
   selector: 'app-admin-cron-job-tab',
@@ -25,7 +26,8 @@ export class AdminCronJobTabComponent extends Accordion<CronExecutionDto> implem
   detailedView: DetailedView<CronJobDto>[] = [];
 
   constructor(private adminService: AdminService,
-    private searchSelectorService: SearchSelectModalService
+    private searchSelectorService: SearchSelectModalService,
+    private modalService: ModalService
   ) {
     super();
   }
@@ -135,8 +137,13 @@ export class AdminCronJobTabComponent extends Accordion<CronExecutionDto> implem
   }
 
   triggerJob() {
-    this.adminService.triggerCronJob(this.selectedJob.name).subscribe(d => {
-      this.loadData();
+    this.modalService.openNotificationModal({
+      description: 'Are you sure you want to run this job?',
+      title: 'Run Job',
+    }, 'confirmation', 'info').onAccept$.subscribe(d => {
+      this.adminService.triggerCronJob(this.selectedJob.name).subscribe(d => {
+        this.loadData();
+      })
     })
   }
 
