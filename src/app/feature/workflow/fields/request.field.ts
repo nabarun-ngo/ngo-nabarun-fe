@@ -18,6 +18,15 @@ export const getRequestDetailSection = (
         section_type: `key_value`,
         section_html_id: `request_detail`,
         section_form: new FormGroup({}),
+        section_alerts: [
+            {
+                hide_alert: !(isCreate && isDelegated),
+                data: {
+                    alertType: 'info',
+                    message: 'You are creating this request on behalf of another user'
+                }
+            }
+        ],
         content: [
             {
                 field_name: `${showAsWorkflow ? `Workflow` : `Request`} Id`,
