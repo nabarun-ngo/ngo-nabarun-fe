@@ -137,6 +137,9 @@ export class AdminCronJobTabComponent extends Accordion<CronExecutionDto> implem
   }
 
   triggerJob() {
+    if (!this.selectedJob?.name) {
+      return;
+    }
     this.modalService.openNotificationModal({
       description: 'Are you sure you want to run this job?',
       title: 'Run Job',
