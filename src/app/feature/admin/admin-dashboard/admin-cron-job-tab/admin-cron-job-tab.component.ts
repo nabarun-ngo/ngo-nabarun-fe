@@ -12,7 +12,7 @@ import { AdminService } from '../../admin.service';
 import { SearchSelectModalService } from 'src/app/shared/components/search-select-modal/search-select-modal.service';
 import { KeyValue } from 'src/app/shared/model/key-value.model';
 import { SearchSelectModalConfig } from 'src/app/shared/components/search-select-modal/search-select-modal.component';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, switchMap, take } from 'rxjs';
 import { date } from 'src/app/core/service/utilities.service';
 import { ModalService } from 'src/app/core/service/modal.service';
 
@@ -140,10 +140,11 @@ export class AdminCronJobTabComponent extends Accordion<CronExecutionDto> implem
     this.modalService.openNotificationModal({
       description: 'Are you sure you want to run this job?',
       title: 'Run Job',
-    }, 'confirmation', 'info').onAccept$.subscribe(d => {
-      this.adminService.triggerCronJob(this.selectedJob.name).subscribe(d => {
-        this.loadData();
-      })
+    }, 'confirmation', 'info').onAccept$.pipe(
+      take(1),
+      switchMap(() => this.adminService.triggerCronJob(this.selectedJob.name))
+    ).subscribe(d => {
+      this.loadData();
     })
   }
 
