@@ -40,6 +40,12 @@ const auth_config: AuthConfig = {
   }
 }
 
+const mobile_auth_config = {
+  ...auth_config,
+  clientId: 'o1WzBSYjyhinq1U9CHBmBHZ5GWNDV70D', // Update if different for Prod Mobile
+  appId: 'com.ngonabarun.app'
+}
+
 
 export const environment = {
   production: true,
@@ -51,6 +57,5 @@ export const environment = {
   firebase_config: firebaseConfig,
   firebase_vapidKey: 'BB5aUQjSGz0v2f2mvf_PdMIsG5zl-uBZ3c8jW3oj6DXn0fLoA98oLG3GzJxWizKyTIME7GOrIzN_vdmI_XhhGps',
   inactivityTimeOut: 15 * 60,
-
+  mobile_auth_config: mobile_auth_config,
 };
-

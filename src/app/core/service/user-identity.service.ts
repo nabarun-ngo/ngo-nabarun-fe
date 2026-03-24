@@ -6,6 +6,7 @@ import { AppRoute } from '../constant/app-routing.const';
 import { AuthService } from '@auth0/auth0-angular';
 import { environment } from 'src/environments/environment';
 import { jwtDecode } from 'jwt-decode';
+import { CapacitorAuthService } from './capacitor-auth.service';
 
 export type LoginType = 'email' | 'password' | 'sms';
 export type AuthEventType = 'login_success' | 'login_error';
@@ -23,11 +24,13 @@ export class UserIdentityService {
   constructor(
     private oAuthService: AuthService,
     private router: Router,
+    private capAuth: CapacitorAuthService,
   ) {
 
   }
 
   async configure() {
+    this.capAuth.initialize();
     this.isLoggedIn = await this.isUserLoggedIn();
     if (this.isLoggedIn) {
       this.loggedInUser = await this.getUser();
@@ -62,20 +65,21 @@ export class UserIdentityService {
     }
     ////console.log(loginType)
     let return_url = redirectUrl ? redirectUrl : AppRoute.secured_dashboard_page.url;
+    const redirect_uri = this.capAuth.getRedirectUri();
+    const openUrl = (url: string) => this.capAuth.openUrl(url);
+
     if (loginType == 'email') {
       params.connection = 'email';
-      //this.oAuthService.initCodeFlow(additionalState, params);
       this.oAuthService.loginWithRedirect({
         appState: {
           target: return_url
         },
         authorizationParams: {
           connection: 'email',
-          prompt: params.prompt as any
+          prompt: params.prompt as any,
+          redirect_uri: redirect_uri
         },
-        async openUrl(url) {
-          window.location.href = url
-        },
+        openUrl
       });
     } else if (loginType == 'sms') {
       params.connection = 'sms';
@@ -85,24 +89,21 @@ export class UserIdentityService {
         },
         authorizationParams: {
           connection: 'sms',
-          prompt: params.prompt as any
+          prompt: params.prompt as any,
+          redirect_uri: redirect_uri
         },
-        async openUrl(url) {
-          window.location.href = url
-        },
+        openUrl
       });
     } else {
-      //this.oAuthService.initCodeFlow(additionalState, params);
       this.oAuthService.loginWithRedirect({
         appState: {
           target: return_url
         },
         authorizationParams: {
-          prompt: params.prompt as any
+          prompt: params.prompt as any,
+          redirect_uri: redirect_uri
         },
-        async openUrl(url) {
-          window.location.href = url
-        },
+        openUrl
       });
     }
   }
@@ -115,11 +116,9 @@ export class UserIdentityService {
     this.oAuthService.logout({
       clientId: environment.auth_config.clientId,
       logoutParams: {
-        returnTo: window.location.origin,
+        returnTo: this.capAuth.getRedirectUri(),
       },
-      async openUrl(url) {
-        window.location.href = url
-      },
+      openUrl: (url: string) => this.capAuth.openUrl(url)
     })
   }
 
