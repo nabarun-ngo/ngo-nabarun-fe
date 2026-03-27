@@ -20,6 +20,7 @@ import { DateDiffPipe } from './pipe/date-diff.pipe';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatNativeDateModule } from '@angular/material/core';
 import { AuthHttpInterceptor, AuthModule } from '@auth0/auth0-angular';
+import { Capacitor } from '@capacitor/core';
 import { BaseModalComponent } from './component/base-modal/base-modal.component';
 import { GenericToastPromptComponent } from './component/toast-prompt/generic-toast-prompt.component';
 import { NotificationPromptComponent } from './component/toast-prompt/notification-prompt/notification-prompt.component';
@@ -30,6 +31,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
+
+const authConfig = Capacitor.isNativePlatform()
+  ? environment.mobile_auth_config
+  : environment.auth_config;
 
 
 @NgModule({
@@ -54,7 +59,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   imports: [
     CommonModule,
     HttpClientModule,
-    AuthModule.forRoot(environment.auth_config),
+    AuthModule.forRoot(authConfig),
     MatDialogModule,
     ApiClientModule.forRoot({
       rootUrl: environment.api_base_url2

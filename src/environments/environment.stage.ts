@@ -30,6 +30,12 @@ const auth_config: AuthConfig = {
   }
 }
 
+const mobile_auth_config = {
+  ...auth_config,
+  clientId: 'JWk5uhtVVP2clxe9At7xdor9vbGakFv2', // Update if different for Stage Mobile
+  appId: 'com.ngonabarun.app'
+}
+
 // Import Firebase configuration from JSON file
 import firebaseConfigJson from './firebase-config.stage.json';
 import { FirebaseConfig } from './firebase-config.type';
@@ -47,6 +53,7 @@ export const environment = {
   firebase_config: firebaseConfig,
   firebase_vapidKey: 'BGAsJtqzuGvkRCJKLFlOlkHGfkceQ1iRV1kcEZB2oCkLZY_vptQLBqWha5_P9kGgunGa4JVNG6Dm5VNOaCkv-ME',
   inactivityTimeOut: 30 * 60,
+  mobile_auth_config: mobile_auth_config,
 };
 
 

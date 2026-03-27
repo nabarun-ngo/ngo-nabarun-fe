@@ -28,6 +28,12 @@ const auth_config: AuthConfig = {
   },
 }
 
+const mobile_auth_config = {
+  ...auth_config,
+  clientId: 'eTrMFsU97X71Dve76lbYuZmUN6k3PN66', // Replace with your Mobile Client ID
+  appId: 'com.ngonabarun.app'
+}
+
 
 // Import Firebase configuration from JSON file
 import firebaseConfigJson from './firebase-config.json';
@@ -46,4 +52,5 @@ export const environment = {
   firebase_vapidKey: 'BGAsJtqzuGvkRCJKLFlOlkHGfkceQ1iRV1kcEZB2oCkLZY_vptQLBqWha5_P9kGgunGa4JVNG6Dm5VNOaCkv-ME',
   inactivityTimeOut: 120 * 60,
   auth_config: auth_config,
+  mobile_auth_config: mobile_auth_config,
 };
