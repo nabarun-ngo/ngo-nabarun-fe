@@ -1,12 +1,9 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { AuthUser } from '../model/auth-user.model';
 import { firstValueFrom, map } from 'rxjs';
 import { Router } from '@angular/router';
-import { AppRoute } from '../constant/app-routing.const';
-import { AuthService } from '@auth0/auth0-angular';
-import { environment } from 'src/environments/environment';
 import { jwtDecode } from 'jwt-decode';
-import { CapacitorAuthService } from './capacitor-auth.service';
+import { PlatformAuthService } from './platform-auth.service';
 
 export type LoginType = 'email' | 'password' | 'sms';
 export type AuthEventType = 'login_success' | 'login_error';
@@ -22,113 +19,46 @@ export class UserIdentityService {
 
 
   constructor(
-    private oAuthService: AuthService,
     private router: Router,
-    private capAuth: CapacitorAuthService,
+    private platformAuth: PlatformAuthService,
   ) {
 
   }
 
   async configure() {
-    this.capAuth.initialize();
+    this.platformAuth.initialize();
     this.isLoggedIn = await this.isUserLoggedIn();
     if (this.isLoggedIn) {
       this.loggedInUser = await this.getUser();
       console.log('Logged in User ->', this.loggedInUser)
     }
-    this.oAuthService.getAccessTokenSilently().subscribe((claims: string) => {
+    this.platformAuth.getAccessTokenSilently().subscribe((claims: string) => {
       if (claims && claims) {
         const decodedToken = jwtDecode(claims) as any;
         this.grantedScopes = decodedToken['permissions'] as string[];
         console.log('Granted Scopes ->', this.grantedScopes)
       }
     });
-    const app_url = new URL(window.location.href);
-    if (app_url.searchParams.has("state") && app_url.searchParams.has("code")) {
-      this.oAuthService.handleRedirectCallback().subscribe(data => {
-        this.router.navigate([data.appState?.target]);
-      })
-    }
-    this.oAuthService.error$.subscribe(d => {
-      this.router.navigate([AppRoute.login_page.url], { state: { isError: true, description: d.name + ' : ' + d.message, state: app_url.searchParams.get("state") } });
-    })
-
   }
 
 
 
 
   loginWith(loginType: LoginType, prompt?: string, redirectUrl?: string) {
-    let params: { connection?: string; prompt?: string } = {};
-    if (prompt) {
-      params.prompt = prompt;
-    }
-    ////console.log(loginType)
-    let return_url = redirectUrl ? redirectUrl : AppRoute.secured_dashboard_page.url;
-    const redirect_uri = this.capAuth.getRedirectUri();
-    const openUrl = (url: string) => this.capAuth.openUrl(url);
-
-    if (loginType == 'email') {
-      params.connection = 'email';
-      this.oAuthService.loginWithRedirect({
-        appState: {
-          target: return_url
-        },
-        authorizationParams: {
-          connection: 'email',
-          prompt: params.prompt as any,
-          redirect_uri: redirect_uri
-        },
-        openUrl
-      });
-    } else if (loginType == 'sms') {
-      params.connection = 'sms';
-      this.oAuthService.loginWithRedirect({
-        appState: {
-          target: return_url
-        },
-        authorizationParams: {
-          connection: 'sms',
-          prompt: params.prompt as any,
-          redirect_uri: redirect_uri
-        },
-        openUrl
-      });
-    } else {
-      this.oAuthService.loginWithRedirect({
-        appState: {
-          target: return_url
-        },
-        authorizationParams: {
-          prompt: params.prompt as any,
-          redirect_uri: redirect_uri
-        },
-        openUrl
-      });
-    }
+    this.platformAuth.loginWith(loginType, prompt, redirectUrl);
   }
 
   logout() {
-    // this.oAuthService.revokeTokenAndLogout({
-    //   returnTo: window.location.origin,
-    //   client_id: environment.auth_config.clientId
-    // });
-    this.oAuthService.logout({
-      clientId: environment.auth_config.clientId,
-      logoutParams: {
-        returnTo: this.capAuth.getRedirectUri(),
-      },
-      openUrl: (url: string) => this.capAuth.openUrl(url)
-    })
+    this.platformAuth.logout();
   }
 
 
   async isUserLoggedIn() {
-    return await firstValueFrom(this.oAuthService.isAuthenticated$);
+    return await firstValueFrom(this.platformAuth.isAuthenticated$);
   }
 
   async getAccessToken() {
-    return await firstValueFrom(this.oAuthService.getAccessTokenSilently());
+    return await firstValueFrom(this.platformAuth.getAccessTokenSilently());
   }
 
   isAccrediatedTo(access: string): boolean {
@@ -147,7 +77,7 @@ export class UserIdentityService {
   }
 
   async getUser(): Promise<AuthUser> {
-    return await firstValueFrom(this.oAuthService.user$.pipe(map(m => m as AuthUser)))
+    return await firstValueFrom(this.platformAuth.user$.pipe(map(m => m as AuthUser)))
   }
 
   async isProfileUpdated() {
