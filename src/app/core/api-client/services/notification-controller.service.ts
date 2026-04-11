@@ -15,20 +15,24 @@ import { archiveNotification } from '../fn/notification-controller/archive-notif
 import { ArchiveNotification$Params } from '../fn/notification-controller/archive-notification';
 import { createBulkNotifications } from '../fn/notification-controller/create-bulk-notifications';
 import { CreateBulkNotifications$Params } from '../fn/notification-controller/create-bulk-notifications';
-import { deactivateFcmToken } from '../fn/notification-controller/deactivate-fcm-token';
-import { DeactivateFcmToken$Params } from '../fn/notification-controller/deactivate-fcm-token';
+import { deleteFcmToken } from '../fn/notification-controller/delete-fcm-token';
+import { DeleteFcmToken$Params } from '../fn/notification-controller/delete-fcm-token';
 import { getFcmTokensMetadata } from '../fn/notification-controller/get-fcm-tokens-metadata';
 import { GetFcmTokensMetadata$Params } from '../fn/notification-controller/get-fcm-tokens-metadata';
 import { getMyNotifications } from '../fn/notification-controller/get-my-notifications';
 import { GetMyNotifications$Params } from '../fn/notification-controller/get-my-notifications';
 import { getMyUnreadCount } from '../fn/notification-controller/get-my-unread-count';
 import { GetMyUnreadCount$Params } from '../fn/notification-controller/get-my-unread-count';
+import { getNotifications } from '../fn/notification-controller/get-notifications';
+import { GetNotifications$Params } from '../fn/notification-controller/get-notifications';
 import { markAllAsRead } from '../fn/notification-controller/mark-all-as-read';
 import { MarkAllAsRead$Params } from '../fn/notification-controller/mark-all-as-read';
 import { markAsRead } from '../fn/notification-controller/mark-as-read';
 import { MarkAsRead$Params } from '../fn/notification-controller/mark-as-read';
 import { registerFcmToken } from '../fn/notification-controller/register-fcm-token';
 import { RegisterFcmToken$Params } from '../fn/notification-controller/register-fcm-token';
+import { resendPushNotification } from '../fn/notification-controller/resend-push-notification';
+import { ResendPushNotification$Params } from '../fn/notification-controller/resend-push-notification';
 import { SuccessResponseNotificationResponseDto } from '../models/success-response-notification-response-dto';
 import { SuccessResponseNumber } from '../models/success-response-number';
 import { SuccessResponsePagedResultNotificationResponseDto } from '../models/success-response-paged-result-notification-response-dto';
@@ -277,35 +281,35 @@ export class NotificationControllerService extends BaseService {
     );
   }
 
-  /** Path part for operation `deactivateFcmToken()` */
-  static readonly DeactivateFcmTokenPath = '/api/notifications/fcm-token/{token}';
+  /** Path part for operation `deleteFcmToken()` */
+  static readonly DeleteFcmTokenPath = '/api/notifications/fcm-token/{tokenId}';
 
   /**
-   * Deactivate FCM token.
+   * Delete FCM token.
    *
    *
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `deactivateFcmToken()` instead.
+   * To access only the response body, use `deleteFcmToken()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deactivateFcmToken$Response(params: DeactivateFcmToken$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
-    return deactivateFcmToken(this.http, this.rootUrl, params, context);
+  deleteFcmToken$Response(params: DeleteFcmToken$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
+    return deleteFcmToken(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * Deactivate FCM token.
+   * Delete FCM token.
    *
    *
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `deactivateFcmToken$Response()` instead.
+   * To access the full response (for headers, for example), `deleteFcmToken$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  deactivateFcmToken(params: DeactivateFcmToken$Params, context?: HttpContext): Observable<SuccessResponseVoid> {
-    return this.deactivateFcmToken$Response(params, context).pipe(
+  deleteFcmToken(params: DeleteFcmToken$Params, context?: HttpContext): Observable<SuccessResponseVoid> {
+    return this.deleteFcmToken$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseVoid>): SuccessResponseVoid => r.body)
     );
   }
@@ -344,6 +348,80 @@ export class NotificationControllerService extends BaseService {
   getFcmTokensMetadata(params: GetFcmTokensMetadata$Params, context?: HttpContext): Observable<SuccessResponsePagedResultUserFcmTokensDto> {
     return this.getFcmTokensMetadata$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponsePagedResultUserFcmTokensDto>): SuccessResponsePagedResultUserFcmTokensDto => r.body)
+    );
+  }
+
+  /** Path part for operation `getNotifications()` */
+  static readonly GetNotificationsPath = '/api/notifications';
+
+  /**
+   * Get push notifications.
+   *
+   * **Required Permissions:**
+   * - `read:notifications`
+   * _(Any of these permissions)_
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getNotifications()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getNotifications$Response(params: GetNotifications$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultNotificationResponseDto>> {
+    return getNotifications(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get push notifications.
+   *
+   * **Required Permissions:**
+   * - `read:notifications`
+   * _(Any of these permissions)_
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getNotifications$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getNotifications(params: GetNotifications$Params, context?: HttpContext): Observable<SuccessResponsePagedResultNotificationResponseDto> {
+    return this.getNotifications$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponsePagedResultNotificationResponseDto>): SuccessResponsePagedResultNotificationResponseDto => r.body)
+    );
+  }
+
+  /** Path part for operation `resendPushNotification()` */
+  static readonly ResendPushNotificationPath = '/api/notifications/resend/{id}';
+
+  /**
+   * Resend a push notification.
+   *
+   * **Required Permissions:**
+   * - `create:notification`
+   * _(Any of these permissions)_
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `resendPushNotification()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  resendPushNotification$Response(params: ResendPushNotification$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
+    return resendPushNotification(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Resend a push notification.
+   *
+   * **Required Permissions:**
+   * - `create:notification`
+   * _(Any of these permissions)_
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `resendPushNotification$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  resendPushNotification(params: ResendPushNotification$Params, context?: HttpContext): Observable<SuccessResponseVoid> {
+    return this.resendPushNotification$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseVoid>): SuccessResponseVoid => r.body)
     );
   }
 

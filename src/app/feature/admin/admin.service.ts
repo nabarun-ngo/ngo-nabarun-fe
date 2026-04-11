@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
 import { CreateApiKeyDto } from 'src/app/core/api-client/models';
-import { ApiKeyControllerService, CronControllerService, JobControllerService, OAuthControllerService, StaticDocsControllerService, WorkflowControllerService, NotificationControllerService, UserControllerService } from 'src/app/core/api-client/services';
+import { NotificationControllerService, UserControllerService, ApiKeyControllerService, CronControllerService, JobControllerService, OAuthControllerService, StaticDocsControllerService, WorkflowControllerService } from 'src/app/core/api-client/services';
 import { AdminDefaultValue } from './admin.const';
 import { mapPagedWorkflowTaskDtoToPagedTask } from '../workflow/model/workflow.mapper';
 import { mapPagedUserDtoToPagedUser } from '../member/models/member.mapper';
@@ -159,13 +159,23 @@ export class AdminService {
     return this.cronController.runScheduledJob({ name: name }).pipe(map(m => m.responsePayload));
   }
 
-  getUsers() {
+  getFcmTokenMetadataList(pageIndex: number = AdminDefaultValue.pageNumber, pageSize: number = AdminDefaultValue.pageSize) {
     return this.notificationController.getFcmTokensMetadata({
-      pageIndex: 0,
-      pageSize: 1000
+      pageIndex: pageIndex,
+      pageSize: pageSize
     }).pipe(
       map(m => m.responsePayload)
     );
+  }
+
+  deleteFcmToken(tokenId: string) {
+    return this.notificationController.deleteFcmToken({
+      tokenId: tokenId
+    });
+  }
+
+  getUsers() {
+    return this.getFcmTokenMetadataList(0, 1000);
   }
 
   sendTestPushNotification(userIds: string[], body: string, title: string, category: string = 'SYSTEM', type: string = 'INFO') {
@@ -179,6 +189,19 @@ export class AdminService {
         userIds: userIds
       }
     }).pipe(map(m => m.responsePayload));
+  }
+
+  getUndeliveredNotifications(pageIndex: number = AdminDefaultValue.pageNumber, pageSize: number = AdminDefaultValue.pageSize) {
+    return this.notificationController.getNotifications({
+      pageIndex: pageIndex,
+      pageSize: pageSize,
+      isPushSent: 'Y',
+      pushDelivered: 'N'
+    }).pipe(map(m => m.responsePayload));
+  }
+
+  resendPushNotification(notificationId: string) {
+    return this.notificationController.resendPushNotification({ id: notificationId });
   }
 
 }

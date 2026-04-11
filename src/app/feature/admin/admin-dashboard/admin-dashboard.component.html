@@ -21,7 +21,7 @@
             </div>
         </mat-expansion-panel>
     </mat-accordion>
-    <mat-accordion class="mt-4 block">
+    <!-- <mat-accordion class="mt-4 block">
         <mat-expansion-panel>
             <mat-expansion-panel-header>
                 <mat-panel-title class="font-bold text-center text-xl">
@@ -35,7 +35,7 @@
                 </button>
             </div>
         </mat-expansion-panel>
-    </mat-accordion>
+    </mat-accordion> -->
     <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" class="mat-tab-group-mobile-scroll"
         (selectedTabChange)="tabChanged($event.index)" [(selectedIndex)]="tabIndex">
         <mat-tab id="apiKey" label="API keys">
@@ -50,8 +50,15 @@
         <mat-tab id="backgroundJobs" label="Background Jobs">
             <app-admin-bg-jobs-tab [accordionData]="initialData" [refData]="refData"></app-admin-bg-jobs-tab>
         </mat-tab>
-        <mat-tab id="cronjobs" label="Cron Jobs">
+        <mat-tab id="cronjobs" label="Cron Triggers">
             <app-admin-cron-job-tab [accordionData]="initialData" [refData]="refData"></app-admin-cron-job-tab>
+        </mat-tab>
+        <mat-tab id="fcmTokens" label="FCM Tokens">
+            <app-admin-fcm-token-tab [accordionData]="initialData" [refData]="refData"></app-admin-fcm-token-tab>
+        </mat-tab>
+        <mat-tab id="notificationLogs" label="Notifications">
+            <app-admin-notifications-tab [accordionData]="initialData"
+                [refData]="refData"></app-admin-notifications-tab>
         </mat-tab>
     </mat-tab-group>
     <app-page-navigation-buttons [navigations]="navigations"></app-page-navigation-buttons>

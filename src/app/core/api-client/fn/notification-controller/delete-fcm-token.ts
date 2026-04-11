@@ -10,14 +10,14 @@ import { RequestBuilder } from '../../request-builder';
 
 import { SuccessResponseVoid } from '../../models/success-response-void';
 
-export interface DeactivateFcmToken$Params {
-  token: string;
+export interface DeleteFcmToken$Params {
+  tokenId: string;
 }
 
-export function deactivateFcmToken(http: HttpClient, rootUrl: string, params: DeactivateFcmToken$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
-  const rb = new RequestBuilder(rootUrl, deactivateFcmToken.PATH, 'delete');
+export function deleteFcmToken(http: HttpClient, rootUrl: string, params: DeleteFcmToken$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
+  const rb = new RequestBuilder(rootUrl, deleteFcmToken.PATH, 'delete');
   if (params) {
-    rb.path('token', params.token, {});
+    rb.path('tokenId', params.tokenId, {});
   }
 
   return http.request(
@@ -30,4 +30,4 @@ export function deactivateFcmToken(http: HttpClient, rootUrl: string, params: De
   );
 }
 
-deactivateFcmToken.PATH = '/api/notifications/fcm-token/{token}';
+deleteFcmToken.PATH = '/api/notifications/fcm-token/{tokenId}';

@@ -40,6 +40,7 @@ export const SCOPE = {
     oauth_token: 'read:oauth_token',
 
     // notification
+    notifications: 'read:notifications',
     fcm_tokens: 'read:fcm_tokens',
   },
 

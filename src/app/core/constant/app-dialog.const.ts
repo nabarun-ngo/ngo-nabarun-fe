@@ -46,9 +46,12 @@ export const AppDialog = {
     description:
       'No changes are allowed once expense is finalized. Are you sure to continue?',
   },
-  warn_confirm_reject:{
+  warn_confirm_reject: {
     title: 'Warning',
-    description:
-      'Are you sure to reject this expense?',
+    description: 'Are you sure to reject this expense?',
+  },
+  warn_confirm_resend: {
+    title: 'Warning',
+    description: 'Are you sure you want to resend this push notification?',
   }
 };

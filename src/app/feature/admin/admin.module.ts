@@ -9,6 +9,8 @@ import { AdminOauthTabComponent } from './admin-dashboard/admin-oauth-tab/admin-
 import { AdminBgJobsTabComponent } from './admin-dashboard/admin-bg-jobs-tab/admin-bg-jobs-tab.component';
 import { AdminTasksTabComponent } from './admin-dashboard/admin-tasks-tab/admin-tasks-tab.component';
 import { AdminCronJobTabComponent } from './admin-dashboard/admin-cron-job-tab/admin-cron-job-tab.component';
+import { AdminFcmTokenTabComponent } from './admin-dashboard/admin-fcm-token-tab/admin-fcm-token-tab.component';
+import { AdminNotificationsTabComponent } from './admin-dashboard/admin-notifications-tab/admin-notifications-tab.component';
 
 
 @NgModule({
@@ -20,6 +22,8 @@ import { AdminCronJobTabComponent } from './admin-dashboard/admin-cron-job-tab/a
     AdminBgJobsTabComponent,
     AdminTasksTabComponent,
     AdminCronJobTabComponent,
+    AdminFcmTokenTabComponent,
+    AdminNotificationsTabComponent
   ],
   imports: [
     CommonModule,
