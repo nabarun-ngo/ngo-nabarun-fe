@@ -17,6 +17,8 @@ import { createBulkNotifications } from '../fn/notification-controller/create-bu
 import { CreateBulkNotifications$Params } from '../fn/notification-controller/create-bulk-notifications';
 import { deactivateFcmToken } from '../fn/notification-controller/deactivate-fcm-token';
 import { DeactivateFcmToken$Params } from '../fn/notification-controller/deactivate-fcm-token';
+import { getFcmTokensMetadata } from '../fn/notification-controller/get-fcm-tokens-metadata';
+import { GetFcmTokensMetadata$Params } from '../fn/notification-controller/get-fcm-tokens-metadata';
 import { getMyNotifications } from '../fn/notification-controller/get-my-notifications';
 import { GetMyNotifications$Params } from '../fn/notification-controller/get-my-notifications';
 import { getMyUnreadCount } from '../fn/notification-controller/get-my-unread-count';
@@ -30,6 +32,7 @@ import { RegisterFcmToken$Params } from '../fn/notification-controller/register-
 import { SuccessResponseNotificationResponseDto } from '../models/success-response-notification-response-dto';
 import { SuccessResponseNumber } from '../models/success-response-number';
 import { SuccessResponsePagedResultNotificationResponseDto } from '../models/success-response-paged-result-notification-response-dto';
+import { SuccessResponsePagedResultUserFcmTokensDto } from '../models/success-response-paged-result-user-fcm-tokens-dto';
 import { SuccessResponseString } from '../models/success-response-string';
 import { SuccessResponseVoid } from '../models/success-response-void';
 
@@ -304,6 +307,43 @@ export class NotificationControllerService extends BaseService {
   deactivateFcmToken(params: DeactivateFcmToken$Params, context?: HttpContext): Observable<SuccessResponseVoid> {
     return this.deactivateFcmToken$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseVoid>): SuccessResponseVoid => r.body)
+    );
+  }
+
+  /** Path part for operation `getFcmTokensMetadata()` */
+  static readonly GetFcmTokensMetadataPath = '/api/notifications/fcm-tokens/metadata';
+
+  /**
+   * Get all FCM token metadata (grouped by user).
+   *
+   * **Required Permissions:**
+   * - `read:fcm_tokens`
+   * _(Any of these permissions)_
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getFcmTokensMetadata()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getFcmTokensMetadata$Response(params: GetFcmTokensMetadata$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultUserFcmTokensDto>> {
+    return getFcmTokensMetadata(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get all FCM token metadata (grouped by user).
+   *
+   * **Required Permissions:**
+   * - `read:fcm_tokens`
+   * _(Any of these permissions)_
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getFcmTokensMetadata$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getFcmTokensMetadata(params: GetFcmTokensMetadata$Params, context?: HttpContext): Observable<SuccessResponsePagedResultUserFcmTokensDto> {
+    return this.getFcmTokensMetadata$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponsePagedResultUserFcmTokensDto>): SuccessResponsePagedResultUserFcmTokensDto => r.body)
     );
   }
 

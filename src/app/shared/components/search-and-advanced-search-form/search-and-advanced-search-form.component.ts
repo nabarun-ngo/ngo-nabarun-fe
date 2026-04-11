@@ -49,11 +49,28 @@ export class SearchAndAdvancedSearchFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.searchformGroup.valueChanges.subscribe(d => {
+      this.search.advancedSearch?.searchFormFields.forEach(field => {
+        if (field.displayCondition && !this.isFieldVisible(field)) {
+          const control = this.searchformGroup.get(field.formControlName);
+          if (control && control.value !== '') {
+            control.setValue('', { emitEvent: false });
+            d[field.formControlName] = '';
+          }
+        }
+      });
+
       this.isSearchDisabled = !this.searchformGroup.valid || isEmptyObject(removeNullFields(d));
       ////console.log(isEmptyObject(removeNullFields(d)))
       ////console.log('Disabled',this.isSearchDisabled)
 
     })
+  }
+
+  isFieldVisible(field: any): boolean {
+    if (field.hidden) return false;
+    if (!field.displayCondition) return true;
+
+    return field.displayCondition(this.searchformGroup.getRawValue());
   }
 
   advSearch() {

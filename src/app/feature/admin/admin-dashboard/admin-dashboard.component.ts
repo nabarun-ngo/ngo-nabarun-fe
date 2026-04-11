@@ -13,6 +13,10 @@ import { AdminService } from '../admin.service';
 import { KeyValueDto } from 'src/app/core/api-client/models';
 import { AdminTasksTabComponent } from './admin-tasks-tab/admin-tasks-tab.component';
 import { AdminCronJobTabComponent } from './admin-cron-job-tab/admin-cron-job-tab.component';
+import { SearchSelectModalConfig } from 'src/app/shared/components/search-select-modal/search-select-modal.component';
+import { KeyValue } from 'src/app/shared/model/key-value.model';
+import { Validators } from '@angular/forms';
+import { SearchSelectModalService } from 'src/app/shared/components/search-select-modal/search-select-modal.service';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -44,7 +48,9 @@ export class AdminDashboardComponent extends StandardTabbedDashboard<adminTabs, 
   constructor(
     private sharedDataService: SharedDataService,
     public override route: ActivatedRoute,
-    private adminService: AdminService
+    private adminService: AdminService,
+    private searchService: SearchSelectModalService,
+
   ) {
     super(route);
   }
@@ -75,4 +81,111 @@ export class AdminDashboardComponent extends StandardTabbedDashboard<adminTabs, 
   protected override onAfterViewInitHook(): void {
     this.getActiveComponent(this.getCurrentTab())?.loadData();
   }
+
+  async sendPushNotification() {
+    this.adminService.getUsers().subscribe(m => {
+      const kv = m.content?.map(m2 => {
+        return { key: m2.userId, displayValue: `${m2.user.firstName} ${m2.user.lastName} (${m2.user.email})` } as KeyValue
+      })
+      let modal = this.searchService.open(this.notificationModal(kv!), { width: 700 });
+      modal.subscribe(data => {
+        if (data) {
+          const values = data.value;
+          this.adminService.sendTestPushNotification(values.users, values.body, values.title, values.category, values.type).subscribe(res => {
+            ////console.log('Notification sent', res);
+            alert('Notification sent successfully');
+          });
+        }
+      });
+    });
+
+  }
+
+
+
+  private notificationModal = (kv: KeyValue[]): SearchSelectModalConfig => {
+    return {
+      buttonText: { search: 'Send', close: 'Close' },
+      title: 'Send Notification',
+      searchFormFields: [
+        {
+          formControlName: 'users',
+          inputModel: {
+            labelName: 'Target Users',
+            html_id: 'user_search',
+            inputType: 'multiselect',
+            tagName: 'select',
+            placeholder: 'Select users to send notification',
+            selectList: kv
+          },
+          validations: [Validators.required]
+        },
+        {
+          formControlName: 'title',
+          inputModel: {
+            labelName: 'Notification Title',
+            html_id: 'title',
+            inputType: 'text',
+            tagName: 'input',
+            placeholder: 'Enter notification title',
+          },
+          validations: [Validators.required]
+        },
+        {
+          formControlName: 'body',
+          inputModel: {
+            labelName: 'Notification Body',
+            html_id: 'body',
+            inputType: 'text',
+            tagName: 'textarea',
+            placeholder: 'Enter notification body',
+          },
+          validations: [Validators.required]
+        },
+        {
+          formControlName: 'category',
+          inputModel: {
+            labelName: 'Notification Category',
+            html_id: 'category',
+            inputType: '',
+            tagName: 'select',
+            placeholder: 'Select notification category',
+            selectList: [
+              { key: 'SYSTEM', displayValue: 'System' },
+              { key: 'WORKFLOW', displayValue: 'Workflow' },
+              { key: 'DONATION', displayValue: 'Donation' },
+              { key: 'EXPENSE', displayValue: 'Expense' },
+              { key: 'PROJECT', displayValue: 'Project' },
+              { key: 'MEETING', displayValue: 'Meeting' },
+              { key: 'TASK', displayValue: 'Task' },
+              { key: 'DOCUMENT', displayValue: 'Document' },
+            ]
+          },
+          validations: [Validators.required]
+        },
+        {
+          formControlName: 'type',
+          inputModel: {
+            labelName: 'Notification Type',
+            html_id: 'type',
+            inputType: '',
+            tagName: 'select',
+            placeholder: 'Select notification type',
+            selectList: [
+              { key: 'INFO', displayValue: 'Info' },
+              { key: 'SUCCESS', displayValue: 'Success' },
+              { key: 'WARNING', displayValue: 'Warning' },
+              { key: 'ERROR', displayValue: 'Error' },
+              { key: 'TASK', displayValue: 'Task' },
+              { key: 'APPROVAL', displayValue: 'Approval' },
+              { key: 'REMINDER', displayValue: 'Reminder' },
+              { key: 'ANNOUNCEMENT', displayValue: 'Announcement' },
+            ]
+          },
+          validations: [Validators.required]
+        }
+      ]
+    }
+  };
+
 }

@@ -21,6 +21,21 @@
             </div>
         </mat-expansion-panel>
     </mat-accordion>
+    <mat-accordion class="mt-4 block">
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title class="font-bold text-center text-xl">
+                    <div class="w-full text-center text-indigo-500 text-xl">Admin Actions</div>
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="text-gray-700 flex justify-center py-4">
+                <button mat-raised-button color="primary" (click)="sendPushNotification()">
+                    <mat-icon>notifications_active</mat-icon>
+                    Send Push Notification
+                </button>
+            </div>
+        </mat-expansion-panel>
+    </mat-accordion>
     <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" class="mat-tab-group-mobile-scroll"
         (selectedTabChange)="tabChanged($event.index)" [(selectedIndex)]="tabIndex">
         <mat-tab id="apiKey" label="API keys">

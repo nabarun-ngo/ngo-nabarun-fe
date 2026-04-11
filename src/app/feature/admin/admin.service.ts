@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
 import { CreateApiKeyDto } from 'src/app/core/api-client/models';
-import { ApiKeyControllerService, CronControllerService, JobControllerService, OAuthControllerService, StaticDocsControllerService, WorkflowControllerService } from 'src/app/core/api-client/services';
+import { ApiKeyControllerService, CronControllerService, JobControllerService, OAuthControllerService, StaticDocsControllerService, WorkflowControllerService, NotificationControllerService, UserControllerService } from 'src/app/core/api-client/services';
 import { AdminDefaultValue } from './admin.const';
 import { mapPagedWorkflowTaskDtoToPagedTask } from '../workflow/model/workflow.mapper';
+import { mapPagedUserDtoToPagedUser } from '../member/models/member.mapper';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,9 @@ export class AdminService {
     private jobController: JobControllerService,
     private apiKeyController: ApiKeyControllerService,
     private workflowController: WorkflowControllerService,
-    private cronController: CronControllerService) { }
+    private cronController: CronControllerService,
+    private notificationController: NotificationControllerService,
+    private userController: UserControllerService) { }
 
 
 
@@ -154,6 +157,28 @@ export class AdminService {
 
   triggerCronJob(name: string) {
     return this.cronController.runScheduledJob({ name: name }).pipe(map(m => m.responsePayload));
+  }
+
+  getUsers() {
+    return this.notificationController.getFcmTokensMetadata({
+      pageIndex: 0,
+      pageSize: 1000
+    }).pipe(
+      map(m => m.responsePayload)
+    );
+  }
+
+  sendTestPushNotification(userIds: string[], body: string, title: string, category: string = 'SYSTEM', type: string = 'INFO') {
+    return this.notificationController.createBulkNotifications({
+      body: {
+        body: body,
+        title: title,
+        category: category as any,
+        type: type as any,
+        sendPush: true,
+        userIds: userIds
+      }
+    }).pipe(map(m => m.responsePayload));
   }
 
 }

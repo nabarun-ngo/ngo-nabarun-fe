@@ -1,6 +1,8 @@
 import { FormGroup, ValidatorFn } from "@angular/forms";
 import { UniversalInputModel } from "./universal-input.model";
 
+export type DisplayCondition = (formValues: any) => boolean;
+
 export interface SearchAndAdvancedSearchModel {
   normalSearchPlaceHolder: string;
   normalSearchButtonText?: string;
@@ -12,6 +14,7 @@ export interface SearchAndAdvancedSearchModel {
       inputModel: UniversalInputModel;
       validations?: ValidatorFn[];
       hidden?: boolean;
+      displayCondition?: DisplayCondition;
     }[];
     title?: string;
     buttonText?: {
@@ -20,6 +23,4 @@ export interface SearchAndAdvancedSearchModel {
     };
     hideCloseButton?: boolean;
   },
-
-
 }
