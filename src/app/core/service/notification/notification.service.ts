@@ -3,6 +3,9 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Messaging, getToken, onMessage } from '@angular/fire/messaging';
+import { Capacitor } from '@capacitor/core';
+import { PushNotifications, ActionPerformed, PushNotificationSchema, Token } from '@capacitor/push-notifications';
+import { FCM } from '@capacitor-community/fcm';
 import { NotificationControllerService } from '../../api-client/services/notification-controller.service';
 import { NotificationResponseDto } from '../../api-client/models/notification-response-dto';
 
@@ -211,7 +214,19 @@ export class NotificationService {
 
         if (!registration) {
           console.log('[NotificationService] Registering new firebase-messaging-sw.js...');
-          registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js', {
+          
+          // Construct query parameters from firebase config
+          const config = environment.firebase_config;
+          const params = new URLSearchParams({
+            apiKey: config.apiKey,
+            authDomain: config.authDomain,
+            projectId: config.projectId,
+            storageBucket: config.storageBucket,
+            messagingSenderId: config.messagingSenderId,
+            appId: config.appId
+          });
+
+          registration = await navigator.serviceWorker.register(`/firebase-messaging-sw.js?${params.toString()}`, {
             scope: '/',
             type: 'classic'
           });
@@ -246,10 +261,17 @@ export class NotificationService {
    * Request permission for push notifications
    */
   requestPermission() {
-    return new Observable(observer => {
-      console.log('[NotificationService] Starting requestPermission flow...');
+    if (Capacitor.isNativePlatform()) {
+      return this.requestNativePermission();
+    } else {
+      return this.requestWebPermission();
+    }
+  }
 
-      // 1. Request Browser Permission FIRST (independent of Service Worker)
+  private requestWebPermission(): Observable<string> {
+    return new Observable(observer => {
+      console.log('[NotificationService] Starting requestWebPermission flow...');
+
       window.Notification.requestPermission().then(permission => {
         if (permission !== 'granted') {
           console.error('[NotificationService] Permission denied by user');
@@ -259,7 +281,6 @@ export class NotificationService {
 
         console.log('[NotificationService] Permission granted, now preparing Service Worker...');
 
-        // 2. Ensure Service Worker is ready
         this.ensureServiceWorkerReady().then(registration => {
           if (!registration) {
             console.error('[NotificationService] Could not initialize Service Worker');
@@ -267,7 +288,6 @@ export class NotificationService {
             return;
           }
 
-          // 3. Get FCM Token using the specific registration
           console.log('[NotificationService] Getting FCM token...');
           getToken(this.messaging, {
             vapidKey: environment.firebase_vapidKey,
@@ -288,6 +308,64 @@ export class NotificationService {
           observer.error(err);
         });
       });
+    });
+  }
+
+  private requestNativePermission(): Observable<string> {
+    return new Observable(observer => {
+      console.log('[NotificationService] Starting requestNativePermission flow...');
+
+      (async () => {
+        try {
+          const result = await PushNotifications.requestPermissions();
+          if (result.receive === 'granted') {
+            // Register with Apple / Google to receive push via APNS/FCM
+            PushNotifications.register();
+            
+            // Add listeners for registration success/error
+            const registrationListener = await PushNotifications.addListener('registration', async (token: Token) => {
+              console.log('[NotificationService] Native Push registration success, token:', token.value);
+              
+              // For Capacitor-FCM, sometimes we need the FCM specific token
+              try {
+                const fcmToken = await FCM.getToken();
+                console.log('[NotificationService] Native FCM Token obtained:', fcmToken.token);
+                this.registerToken(fcmToken.token);
+                observer.next(fcmToken.token);
+              } catch (err) {
+                console.warn('[NotificationService] Failed to get FCM token, using Push token instead', err);
+                this.registerToken(token.value);
+                observer.next(token.value);
+              }
+              
+              observer.complete();
+              await registrationListener.remove();
+            });
+
+            PushNotifications.addListener('registrationError', (error: any) => {
+              console.error('[NotificationService] Native Push registration error:', JSON.stringify(error));
+              observer.error(error);
+            });
+
+            // Handle incoming notifications while app is in foreground
+            PushNotifications.addListener('pushNotificationReceived', (notification: PushNotificationSchema) => {
+              console.log('[NotificationService] Native Push received:', notification);
+              this.handleIncomingSignal({ notification: { title: notification.title, body: notification.body }, data: notification.data });
+            });
+
+            // Handle notification click
+            PushNotifications.addListener('pushNotificationActionPerformed', (notification: ActionPerformed) => {
+              console.log('[NotificationService] Native Push action performed:', notification);
+            });
+          } else {
+            console.error('[NotificationService] Native permission denied');
+            observer.error('Permission denied');
+          }
+        } catch (err) {
+          console.error('[NotificationService] Error in native push flow:', err);
+          observer.error(err);
+        }
+      })();
     });
   }
 

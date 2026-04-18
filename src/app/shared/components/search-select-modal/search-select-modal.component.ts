@@ -8,7 +8,7 @@ import { ValidatorFn } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { UniversalInputModel } from '../../model/universal-input.model';
-import { SearchAndAdvancedSearchModel } from '../../model/search-and-advanced-search.model';
+import { SearchAndAdvancedSearchModel, DisplayCondition } from '../../model/search-and-advanced-search.model';
 import { SearchEvent } from '../search-and-advanced-search-form/search-event.model';
 
 // ─── Public types ─────────────────────────────────────────────────────────────
@@ -17,12 +17,18 @@ import { SearchEvent } from '../search-and-advanced-search-form/search-event.mod
 export interface SearchSelectField {
     /** Reactive form control name */
     formControlName: string;
+    /** Default value for the form control */
+    defaultValue?: string;
     /** Model passed to <app-universal-input> — supports select, autocomplete, text, … */
     inputModel: UniversalInputModel;
     /** Optional Angular validators */
     validations?: ValidatorFn[];
     /** Hide the field from the rendered form */
     hidden?: boolean;
+    /** Condition to display the field based on form values */
+    displayCondition?: DisplayCondition;
+    /** Transform field value based on other form values */
+    valueTransformation?: (formValues: any) => any;
 }
 
 /**
@@ -135,9 +141,12 @@ export class SearchSelectModalComponent {
                 hideCloseButton: cfg.hideCloseButton,
                 searchFormFields: cfg.searchFormFields.map(f => ({
                     formControlName: f.formControlName,
+                    defaultValue: f.defaultValue,
                     inputModel: f.inputModel,
                     validations: f.validations,
                     hidden: f.hidden,
+                    displayCondition: f.displayCondition,
+                    valueTransformation: f.valueTransformation,
                 })),
             },
         };

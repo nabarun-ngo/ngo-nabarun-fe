@@ -28,12 +28,14 @@
                     'sm:grid-cols-2': search.advancedSearch?.searchFormFields?.length! > 1,
                     'lg:grid-cols-3': search.advancedSearch?.searchFormFields?.length! > 2
                 }">
-                        <div class="col-span-6"
-                            [ngClass]="search.advancedSearch?.searchFormFields?.length! > 2 ? 'sm:col-span-2 lg:col-span-1' : 'sm:col-span-3 lg:col-span-1'"
-                            *ngFor="let input of search.advancedSearch?.searchFormFields">
-                            <app-universal-input *ngIf="!input.hidden" [formControlName]="input.formControlName"
-                                [inputModel]="input.inputModel"></app-universal-input>
-                        </div>
+                        <ng-container *ngFor="let input of search.advancedSearch?.searchFormFields">
+                            <div class="col-span-6"
+                                [ngClass]="search.advancedSearch?.searchFormFields?.length! > 2 ? 'sm:col-span-2 lg:col-span-1' : 'sm:col-span-3 lg:col-span-1'"
+                                *ngIf="isFieldVisible(input)">
+                                <app-universal-input [formControlName]="input.formControlName"
+                                    [inputModel]="input.inputModel"></app-universal-input>
+                            </div>
+                        </ng-container>
                     </div>
                 </div>
             </div>

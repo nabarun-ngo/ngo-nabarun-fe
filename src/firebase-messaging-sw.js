@@ -2,68 +2,58 @@
 importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js');
 
-// Firebase configuration - loaded from firebase-config.json
+// Extract Firebase config from script URL query parameters
+const params = new URL(location).searchParams;
+const config = {
+  apiKey: params.get('apiKey'),
+  authDomain: params.get('authDomain'),
+  projectId: params.get('projectId'),
+  storageBucket: params.get('storageBucket'),
+  messagingSenderId: params.get('messagingSenderId'),
+  appId: params.get('appId')
+};
+
+console.log('[firebase-messaging-sw.js] Initializing with params:', config.projectId);
+
 let messaging = null;
 
-// Function to initialize Firebase and messaging
-function initializeFirebaseMessaging(config) {
+if (config.apiKey && config.appId) {
   if (!firebase.apps.length) {
     firebase.initializeApp(config);
   }
-  if (!messaging) {
-    messaging = firebase.messaging();
-    setupMessageHandlers();
-  }
-}
-
-// Setup message handlers after messaging is initialized
-function setupMessageHandlers() {
+  messaging = firebase.messaging();
+  
   // Handle background messages
   messaging.onBackgroundMessage(function (payload) {
-    console.log('[firebase-messaging-sw.js] Received background message ', payload);
-
-    // Customize notification here
-    const notificationTitle = payload.notification?.title || payload.data?.title || 'New Notification';
-    const notificationBody = payload.notification?.body || payload.data?.body || 'You have a new notification';
-    const notificationIcon = payload.notification?.icon || '/assets/icons/icon-192x192.png';
-    const notificationImage = payload.notification?.image;
-
-    const notificationOptions = {
-      body: notificationBody,
-      icon: notificationIcon,
-      badge: '/assets/icons/icon-96x96.png',
-      image: notificationImage,
-      data: payload.data || {},
-      tag: payload.data?.tag || 'default',
-      requireInteraction: false,
-      silent: false,
-      vibrate: [200, 100, 200],
-      actions: payload.data?.actions || [],
-      timestamp: Date.now()
-    };
-
-    return self.registration.showNotification(notificationTitle, notificationOptions);
+    console.log('[firebase-messaging-sw.js] Received background message via Firebase');
+    showCustomNotification(payload);
   });
+} else {
+  console.error('[firebase-messaging-sw.js] Missing required Firebase config parameters.');
 }
 
-// Fetch and initialize Firebase config from JSON file
-fetch('/firebase-config.json')
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Failed to fetch firebase-config.json');
-    }
-    return response.json();
-  })
-  .then(config => {
-    console.log('[firebase-messaging-sw.js] Firebase config loaded from JSON');
-    initializeFirebaseMessaging(config);
-  })
-  .catch(error => {
-    console.error('[firebase-messaging-sw.js] Failed to load Firebase config from JSON:', error);
-    // Fallback: try to use config from environment (if available in global scope)
-    // This should not happen in production, but provides a safety net
-    console.warn('[firebase-messaging-sw.js] Using fallback initialization');
-  });
+function showCustomNotification(payload) {
+  const notificationTitle = payload.notification?.title || payload.data?.title || 'New Notification';
+  const notificationBody = payload.notification?.body || payload.data?.body || 'You have a new notification';
+  const notificationIcon = payload.notification?.icon || '/assets/icons/icon-192x192.png';
+  const notificationImage = payload.notification?.image;
+
+  const notificationOptions = {
+    body: notificationBody,
+    icon: notificationIcon,
+    badge: '/assets/icons/icon-96x96.png',
+    image: notificationImage,
+    data: payload.data || {},
+    tag: payload.data?.tag || 'default',
+    requireInteraction: false,
+    silent: false,
+    vibrate: [200, 100, 200],
+    actions: payload.data?.actions || [],
+    timestamp: Date.now()
+  };
+
+  return self.registration.showNotification(notificationTitle, notificationOptions);
+}
 
 
 // Handle notification clicks

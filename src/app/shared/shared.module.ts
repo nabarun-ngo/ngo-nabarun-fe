@@ -15,6 +15,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { SearchAndAdvancedSearchFormComponent } from './components/search-and-advanced-search-form/search-and-advanced-search-form.component';
 import { DocumentListComponent } from './components/generic/document-list/document-list.component';
 import { AccordionListComponent } from './components/generic/accordion-list/accordion-list.component';
@@ -107,6 +108,7 @@ import { SearchSelectModalComponent } from './components/search-select-modal/sea
     MatAutocompleteModule,
     OverlayModule,
     ScrollingModule,
+    MatTooltipModule,
   ],
   exports: [
     ItemTileListComponent,
@@ -149,7 +151,7 @@ import { SearchSelectModalComponent } from './components/search-select-modal/sea
     ScrollingModule,
     OverlayModule,
     DocumentListComponent,
-
+    MatTooltipModule,
   ],
 
   providers: [{

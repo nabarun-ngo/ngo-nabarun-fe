@@ -8,14 +8,16 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseQueueStatistics } from '../../models/success-response-queue-statistics';
+import { SuccessResponseVoid } from '../../models/success-response-void';
 
-export interface GetQueueStatistics$Params {
+export interface ResendPushNotification$Params {
+  id: string;
 }
 
-export function getQueueStatistics(http: HttpClient, rootUrl: string, params?: GetQueueStatistics$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseQueueStatistics>> {
-  const rb = new RequestBuilder(rootUrl, getQueueStatistics.PATH, 'get');
+export function resendPushNotification(http: HttpClient, rootUrl: string, params: ResendPushNotification$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseVoid>> {
+  const rb = new RequestBuilder(rootUrl, resendPushNotification.PATH, 'post');
   if (params) {
+    rb.path('id', params.id, {});
   }
 
   return http.request(
@@ -23,9 +25,9 @@ export function getQueueStatistics(http: HttpClient, rootUrl: string, params?: G
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseQueueStatistics>;
+      return r as StrictHttpResponse<SuccessResponseVoid>;
     })
   );
 }
 
-getQueueStatistics.PATH = '/api/jobs/statistics';
+resendPushNotification.PATH = '/api/notifications/resend/{id}';

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "382914885174",
+    "project_id": "ngonabarun-stage",
+    "storage_bucket": "ngonabarun-stage.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:382914885174:android:a8a73e8432c1e450500a97",
+        "android_client_info": {
+          "package_name": "com.ngonabarun.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "382914885174-grd5ata1v6h8j0nj43d4a1mpm6s61l54.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfYq4nEy7CgqdHNoSeJuefI2gUB6tSXLc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "382914885174-grd5ata1v6h8j0nj43d4a1mpm6s61l54.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

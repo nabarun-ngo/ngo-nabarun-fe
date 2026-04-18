@@ -13,8 +13,6 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { executeCron } from '../fn/cron-controller/execute-cron';
 import { ExecuteCron$Params } from '../fn/cron-controller/execute-cron';
-import { getCronLogs } from '../fn/cron-controller/get-cron-logs';
-import { GetCronLogs$Params } from '../fn/cron-controller/get-cron-logs';
 import { getScheduledJobs } from '../fn/cron-controller/get-scheduled-jobs';
 import { GetScheduledJobs$Params } from '../fn/cron-controller/get-scheduled-jobs';
 import { getTriggerLogs } from '../fn/cron-controller/get-trigger-logs';
@@ -22,8 +20,7 @@ import { GetTriggerLogs$Params } from '../fn/cron-controller/get-trigger-logs';
 import { runScheduledJob } from '../fn/cron-controller/run-scheduled-job';
 import { RunScheduledJob$Params } from '../fn/cron-controller/run-scheduled-job';
 import { SuccessResponseArrayCronJobDto } from '../models/success-response-array-cron-job-dto';
-import { SuccessResponseArraySchedulerLogDto } from '../models/success-response-array-scheduler-log-dto';
-import { SuccessResponsePagedResultCronExecutionDto } from '../models/success-response-paged-result-cron-execution-dto';
+import { SuccessResponsePagedResultSchedulerLogDto } from '../models/success-response-paged-result-scheduler-log-dto';
 import { SuccessResponseString } from '../models/success-response-string';
 
 @Injectable({ providedIn: 'root' })
@@ -65,39 +62,6 @@ export class CronControllerService extends BaseService {
     );
   }
 
-  /** Path part for operation `runScheduledJob()` */
-  static readonly RunScheduledJobPath = '/api/cron/run/{name}';
-
-  /**
-   * **Required Permissions:**
-   * - `update:cron`
-   * _(Any of these permissions)_
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `runScheduledJob()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  runScheduledJob$Response(params: RunScheduledJob$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
-    return runScheduledJob(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * **Required Permissions:**
-   * - `update:cron`
-   * _(Any of these permissions)_
-   *
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `runScheduledJob$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  runScheduledJob(params: RunScheduledJob$Params, context?: HttpContext): Observable<SuccessResponseString> {
-    return this.runScheduledJob$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseString>): SuccessResponseString => r.body)
-    );
-  }
-
   /** Path part for operation `getScheduledJobs()` */
   static readonly GetScheduledJobsPath = '/api/cron/jobs';
 
@@ -131,39 +95,6 @@ export class CronControllerService extends BaseService {
     );
   }
 
-  /** Path part for operation `getCronLogs()` */
-  static readonly GetCronLogsPath = '/api/cron/executions/{name}';
-
-  /**
-   * **Required Permissions:**
-   * - `read:cron`
-   * _(Any of these permissions)_
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getCronLogs()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getCronLogs$Response(params: GetCronLogs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultCronExecutionDto>> {
-    return getCronLogs(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * **Required Permissions:**
-   * - `read:cron`
-   * _(Any of these permissions)_
-   *
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getCronLogs$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getCronLogs(params: GetCronLogs$Params, context?: HttpContext): Observable<SuccessResponsePagedResultCronExecutionDto> {
-    return this.getCronLogs$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponsePagedResultCronExecutionDto>): SuccessResponsePagedResultCronExecutionDto => r.body)
-    );
-  }
-
   /** Path part for operation `getTriggerLogs()` */
   static readonly GetTriggerLogsPath = '/api/cron/trigger-logs';
 
@@ -177,7 +108,7 @@ export class CronControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getTriggerLogs$Response(params?: GetTriggerLogs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArraySchedulerLogDto>> {
+  getTriggerLogs$Response(params?: GetTriggerLogs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultSchedulerLogDto>> {
     return getTriggerLogs(this.http, this.rootUrl, params, context);
   }
 
@@ -191,9 +122,42 @@ export class CronControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getTriggerLogs(params?: GetTriggerLogs$Params, context?: HttpContext): Observable<SuccessResponseArraySchedulerLogDto> {
+  getTriggerLogs(params?: GetTriggerLogs$Params, context?: HttpContext): Observable<SuccessResponsePagedResultSchedulerLogDto> {
     return this.getTriggerLogs$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseArraySchedulerLogDto>): SuccessResponseArraySchedulerLogDto => r.body)
+      map((r: StrictHttpResponse<SuccessResponsePagedResultSchedulerLogDto>): SuccessResponsePagedResultSchedulerLogDto => r.body)
+    );
+  }
+
+  /** Path part for operation `runScheduledJob()` */
+  static readonly RunScheduledJobPath = '/api/cron/run/{name}';
+
+  /**
+   * **Required Permissions:**
+   * - `update:cron`
+   * _(Any of these permissions)_
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `runScheduledJob()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  runScheduledJob$Response(params: RunScheduledJob$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
+    return runScheduledJob(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * **Required Permissions:**
+   * - `update:cron`
+   * _(Any of these permissions)_
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `runScheduledJob$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  runScheduledJob(params: RunScheduledJob$Params, context?: HttpContext): Observable<SuccessResponseString> {
+    return this.runScheduledJob$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseString>): SuccessResponseString => r.body)
     );
   }
 

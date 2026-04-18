@@ -11,4 +11,5 @@ export interface JobMetrics {
   successRate: number;
   total: number;
   waiting: number;
+  waitingChildren: number;
 }

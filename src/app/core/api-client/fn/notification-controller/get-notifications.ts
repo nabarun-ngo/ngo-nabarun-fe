@@ -10,9 +10,9 @@ import { RequestBuilder } from '../../request-builder';
 
 import { SuccessResponsePagedResultNotificationResponseDto } from '../../models/success-response-paged-result-notification-response-dto';
 
-export interface GetMyNotifications$Params {
-  pageIndex?: number;
-  pageSize?: number;
+export interface GetNotifications$Params {
+  pageIndex: number;
+  pageSize: number;
   type?: 'INFO' | 'SUCCESS' | 'WARNING' | 'ERROR' | 'TASK' | 'APPROVAL' | 'REMINDER' | 'ANNOUNCEMENT';
   category?: 'SYSTEM' | 'WORKFLOW' | 'DONATION' | 'EXPENSE' | 'PROJECT' | 'MEETING' | 'TASK' | 'DOCUMENT';
   isRead?: 'Y' | 'N';
@@ -26,8 +26,8 @@ export interface GetMyNotifications$Params {
   userId?: string;
 }
 
-export function getMyNotifications(http: HttpClient, rootUrl: string, params?: GetMyNotifications$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultNotificationResponseDto>> {
-  const rb = new RequestBuilder(rootUrl, getMyNotifications.PATH, 'get');
+export function getNotifications(http: HttpClient, rootUrl: string, params: GetNotifications$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultNotificationResponseDto>> {
+  const rb = new RequestBuilder(rootUrl, getNotifications.PATH, 'get');
   if (params) {
     rb.query('pageIndex', params.pageIndex, {});
     rb.query('pageSize', params.pageSize, {});
@@ -54,4 +54,4 @@ export function getMyNotifications(http: HttpClient, rootUrl: string, params?: G
   );
 }
 
-getMyNotifications.PATH = '/api/notifications/me';
+getNotifications.PATH = '/api/notifications';
