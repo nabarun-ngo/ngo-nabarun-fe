@@ -36,7 +36,7 @@ export class SearchAndAdvancedSearchFormComponent implements OnInit {
 
   inputInit(input: SearchAndAdvancedSearchModel) {
     input.advancedSearch?.searchFormFields.forEach(e => {
-      this.searchformGroup.setControl(e.formControlName, new FormControl('', e.validations));
+      this.searchformGroup.setControl(e.formControlName, new FormControl(e.defaultValue, e.validations));
     })
     this.search = input;
     let len = input.advancedSearch?.searchFormFields?.length!;

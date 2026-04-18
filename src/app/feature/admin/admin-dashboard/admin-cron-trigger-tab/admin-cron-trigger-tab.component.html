@@ -1,0 +1,17 @@
+<div class="mb-4 flex flex-wrap justify-end gap-2 relative z-10">
+    <button mat-button color="secondary" (click)="loadData()">
+        <mat-icon>refresh</mat-icon>
+        Refresh
+    </button>
+    <button mat-button color="secondary" (click)="runJob()">
+        <mat-icon>play_arrow</mat-icon>
+        Run Job
+    </button>
+</div>
+<h1 class="text-xl font-bold">Cron Trigger List</h1>
+<app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)"
+    (onAccordionOpen)="onAccordionOpen($event)"></app-accordion-list>
+<mat-paginator class="mt-4" style="background-color: transparent;" (page)="handlePageEvent($event)"
+    [length]="itemLength$ | async" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" [pageIndex]="pageNumber"
+    aria-label="Select page">
+</mat-paginator>

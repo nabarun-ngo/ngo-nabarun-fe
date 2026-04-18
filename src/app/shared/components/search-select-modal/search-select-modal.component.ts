@@ -17,6 +17,8 @@ import { SearchEvent } from '../search-and-advanced-search-form/search-event.mod
 export interface SearchSelectField {
     /** Reactive form control name */
     formControlName: string;
+    /** Default value for the form control */
+    defaultValue?: string;
     /** Model passed to <app-universal-input> — supports select, autocomplete, text, … */
     inputModel: UniversalInputModel;
     /** Optional Angular validators */
@@ -135,6 +137,7 @@ export class SearchSelectModalComponent {
                 hideCloseButton: cfg.hideCloseButton,
                 searchFormFields: cfg.searchFormFields.map(f => ({
                     formControlName: f.formControlName,
+                    defaultValue: f.defaultValue,
                     inputModel: f.inputModel,
                     validations: f.validations,
                     hidden: f.hidden,

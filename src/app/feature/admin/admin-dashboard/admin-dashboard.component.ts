@@ -12,9 +12,10 @@ import { AdminBgJobsTabComponent } from './admin-bg-jobs-tab/admin-bg-jobs-tab.c
 import { AdminService } from '../admin.service';
 import { KeyValueDto } from 'src/app/core/api-client/models';
 import { AdminTasksTabComponent } from './admin-tasks-tab/admin-tasks-tab.component';
-import { AdminCronJobTabComponent } from './admin-cron-job-tab/admin-cron-job-tab.component';
+//import { AdminCronJobTabComponent } from './admin-cron-job-tab/admin-cron-job-tab.component';
 import { AdminFcmTokenTabComponent } from './admin-fcm-token-tab/admin-fcm-token-tab.component';
 import { AdminNotificationsTabComponent } from './admin-notifications-tab/admin-notifications-tab.component';
+import { AdminCronTriggerTabComponent } from './admin-cron-trigger-tab/admin-cron-trigger-tab.component';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -30,13 +31,14 @@ export class AdminDashboardComponent extends StandardTabbedDashboard<adminTabs, 
   @ViewChild(AdminOauthTabComponent) oauthTab!: AdminOauthTabComponent;
   @ViewChild(AdminBgJobsTabComponent) jobTab!: AdminBgJobsTabComponent;
   @ViewChild(AdminTasksTabComponent) taskTab!: AdminTasksTabComponent;
-  @ViewChild(AdminCronJobTabComponent) cronJobTab!: AdminCronJobTabComponent;
+  //@ViewChild(AdminCronJobTabComponent) cronJobTab!: AdminCronJobTabComponent;
   @ViewChild(AdminFcmTokenTabComponent) fcmTokenTab!: AdminFcmTokenTabComponent;
+  @ViewChild(AdminCronTriggerTabComponent) cronTriggerTab!: AdminCronTriggerTabComponent;
   @ViewChild(AdminNotificationsTabComponent) notificationLogsTab!: AdminNotificationsTabComponent;
 
   defaultValue = AdminDefaultValue;
   constant = AdminConstant;
-  protected tabMapping: adminTabs[] = ['api_keys', 'oauth', 'tasks', 'bg_jobs', 'cron_jobs', 'fcm_tokens', 'notification_logs'];
+  protected tabMapping: adminTabs[] = ['api_keys', 'oauth', 'tasks', 'bg_jobs', 'cron_triggers', 'fcm_tokens', 'adm_notifications'];
   navigations: NavigationButtonModel[] = [
     {
       displayName: 'Back to Dashboard',
@@ -59,9 +61,10 @@ export class AdminDashboardComponent extends StandardTabbedDashboard<adminTabs, 
       oauth: this.oauthTab,
       bg_jobs: this.jobTab,
       tasks: this.taskTab,
-      cron_jobs: this.cronJobTab,
+      // cron_jobs: ,
       fcm_tokens: this.fcmTokenTab,
-      notification_logs: this.notificationLogsTab
+      adm_notifications: this.notificationLogsTab,
+      cron_triggers: this.cronTriggerTab
     };
   }
   protected override get defaultTab(): adminTabs {

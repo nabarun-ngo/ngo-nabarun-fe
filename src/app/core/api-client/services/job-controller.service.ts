@@ -17,10 +17,10 @@ import { getJobDetails } from '../fn/job-controller/get-job-details';
 import { GetJobDetails$Params } from '../fn/job-controller/get-job-details';
 import { getJobs } from '../fn/job-controller/get-jobs';
 import { GetJobs$Params } from '../fn/job-controller/get-jobs';
-import { getQueueStatistics } from '../fn/job-controller/get-queue-statistics';
-import { GetQueueStatistics$Params } from '../fn/job-controller/get-queue-statistics';
-import { pauseQueue } from '../fn/job-controller/pause-queue';
-import { PauseQueue$Params } from '../fn/job-controller/pause-queue';
+import { getPerformanceMetrics } from '../fn/job-controller/get-performance-metrics';
+import { GetPerformanceMetrics$Params } from '../fn/job-controller/get-performance-metrics';
+import { queueOperation } from '../fn/job-controller/queue-operation';
+import { QueueOperation$Params } from '../fn/job-controller/queue-operation';
 import { removeJob } from '../fn/job-controller/remove-job';
 import { RemoveJob$Params } from '../fn/job-controller/remove-job';
 import { retryAllFailedJobs } from '../fn/job-controller/retry-all-failed-jobs';
@@ -42,7 +42,7 @@ export class JobControllerService extends BaseService {
   static readonly GetJobsPath = '/api/jobs';
 
   /**
-   * Get failed jobs.
+   * Get jobs by status.
    *
    * **Required Permissions:**
    * - `read:jobs`
@@ -58,7 +58,7 @@ export class JobControllerService extends BaseService {
   }
 
   /**
-   * Get failed jobs.
+   * Get jobs by status.
    *
    * **Required Permissions:**
    * - `read:jobs`
@@ -112,39 +112,39 @@ export class JobControllerService extends BaseService {
     );
   }
 
-  /** Path part for operation `getQueueStatistics()` */
-  static readonly GetQueueStatisticsPath = '/api/jobs/statistics';
+  /** Path part for operation `getPerformanceMetrics()` */
+  static readonly GetPerformanceMetricsPath = '/api/jobs/statistics';
 
   /**
-   * Get comprehensive queue statistics.
+   * Get job performance metrics.
    *
    * **Required Permissions:**
    * - `read:jobs`
    * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getQueueStatistics()` instead.
+   * To access only the response body, use `getPerformanceMetrics()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getQueueStatistics$Response(params?: GetQueueStatistics$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseQueueStatistics>> {
-    return getQueueStatistics(this.http, this.rootUrl, params, context);
+  getPerformanceMetrics$Response(params?: GetPerformanceMetrics$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseQueueStatistics>> {
+    return getPerformanceMetrics(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * Get comprehensive queue statistics.
+   * Get job performance metrics.
    *
    * **Required Permissions:**
    * - `read:jobs`
    * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getQueueStatistics$Response()` instead.
+   * To access the full response (for headers, for example), `getPerformanceMetrics$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getQueueStatistics(params?: GetQueueStatistics$Params, context?: HttpContext): Observable<SuccessResponseQueueStatistics> {
-    return this.getQueueStatistics$Response(params, context).pipe(
+  getPerformanceMetrics(params?: GetPerformanceMetrics$Params, context?: HttpContext): Observable<SuccessResponseQueueStatistics> {
+    return this.getPerformanceMetrics$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseQueueStatistics>): SuccessResponseQueueStatistics => r.body)
     );
   }
@@ -153,7 +153,7 @@ export class JobControllerService extends BaseService {
   static readonly CleanOldJobsPath = '/api/jobs/clean-old-jobs';
 
   /**
-   * Clean old jobs (manual cleanup - TTL handles automatic cleanup).
+   * Clean old jobs.
    *
    * **Required Permissions:**
    * - `delete:jobs`
@@ -169,7 +169,7 @@ export class JobControllerService extends BaseService {
   }
 
   /**
-   * Clean old jobs (manual cleanup - TTL handles automatic cleanup).
+   * Clean old jobs.
    *
    * **Required Permissions:**
    * - `delete:jobs`
@@ -186,39 +186,39 @@ export class JobControllerService extends BaseService {
     );
   }
 
-  /** Path part for operation `pauseQueue()` */
-  static readonly PauseQueuePath = '/api/jobs/queue/{operation}';
+  /** Path part for operation `queueOperation()` */
+  static readonly QueueOperationPath = '/api/jobs/queue/{operation}';
 
   /**
-   * Pause the queue.
+   * Pause/Resume the queue.
    *
    * **Required Permissions:**
    * - `update:jobs`
    * _(Any of these permissions)_
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `pauseQueue()` instead.
+   * To access only the response body, use `queueOperation()` instead.
    *
    * This method doesn't expect any request body.
    */
-  pauseQueue$Response(params: PauseQueue$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
-    return pauseQueue(this.http, this.rootUrl, params, context);
+  queueOperation$Response(params: QueueOperation$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
+    return queueOperation(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * Pause the queue.
+   * Pause/Resume the queue.
    *
    * **Required Permissions:**
    * - `update:jobs`
    * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `pauseQueue$Response()` instead.
+   * To access the full response (for headers, for example), `queueOperation$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  pauseQueue(params: PauseQueue$Params, context?: HttpContext): Observable<SuccessResponseString> {
-    return this.pauseQueue$Response(params, context).pipe(
+  queueOperation(params: QueueOperation$Params, context?: HttpContext): Observable<SuccessResponseString> {
+    return this.queueOperation$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseString>): SuccessResponseString => r.body)
     );
   }

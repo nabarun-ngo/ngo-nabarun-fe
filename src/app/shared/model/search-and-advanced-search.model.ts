@@ -11,6 +11,7 @@ export interface SearchAndAdvancedSearchModel {
   advancedSearch?: {
     searchFormFields: {
       formControlName: string;
+      defaultValue?: string;
       inputModel: UniversalInputModel;
       validations?: ValidatorFn[];
       hidden?: boolean;

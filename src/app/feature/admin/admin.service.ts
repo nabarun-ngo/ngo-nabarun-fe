@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { map } from 'rxjs';
+import { map, of } from 'rxjs';
 import { CreateApiKeyDto } from 'src/app/core/api-client/models';
 import { NotificationControllerService, UserControllerService, ApiKeyControllerService, CronControllerService, JobControllerService, OAuthControllerService, StaticDocsControllerService, WorkflowControllerService } from 'src/app/core/api-client/services';
 import { AdminDefaultValue } from './admin.const';
@@ -79,7 +79,7 @@ export class AdminService {
   }
 
   getBgJobStatistics() {
-    return this.jobController.getQueueStatistics().pipe(map(m => m.responsePayload));
+    return this.jobController.getPerformanceMetrics().pipe(map(m => m.responsePayload));
   }
 
 
@@ -124,14 +124,14 @@ export class AdminService {
     return this.jobController.getJobs({
       status: status as any,
       pageIndex: pageIndex,
-      pageSize: pageSize
+      pageSize: pageSize,
     }).pipe(
       map(d => d.responsePayload)
     )
   }
 
   updateQueueState(state: string) {
-    return this.jobController.pauseQueue({
+    return this.jobController.queueOperation({
       operation: state as any
     }).pipe(map(m => m.responsePayload));
   }
@@ -143,20 +143,27 @@ export class AdminService {
     }).pipe(map(m => m.responsePayload));
   }
 
-  getCronTriggers() {
-    return this.cronController.getTriggerLogs().pipe(map(m => m.responsePayload));
-  }
-
-  getCronJobExecutions(name: string, pageIndex: number = AdminDefaultValue.pageNumber, pageSize: number = AdminDefaultValue.pageSize) {
-    return this.cronController.getCronLogs({
-      name: name,
+  getCronTriggers(pageIndex: number = AdminDefaultValue.pageNumber, pageSize: number = AdminDefaultValue.pageSize) {
+    return this.cronController.getTriggerLogs({
       pageIndex: pageIndex,
       pageSize: pageSize
     }).pipe(map(m => m.responsePayload));
   }
 
-  triggerCronJob(name: string) {
-    return this.cronController.runScheduledJob({ name: name }).pipe(map(m => m.responsePayload));
+  getCronJobExecutions(name: string, pageIndex: number = AdminDefaultValue.pageNumber, pageSize: number = AdminDefaultValue.pageSize) {
+    // return this.cronController.getCronLogs({
+    //   name: name,
+    //   pageIndex: pageIndex,
+    //   pageSize: pageSize
+    // }).pipe(map(m => m.responsePayload));
+    return of({
+      content: [],
+      totalSize: 0
+    })
+  }
+
+  triggerCronJob(name: string, inputData?: any) {
+    return this.cronController.runScheduledJob({ name: name, body: inputData }).pipe(map(m => m.responsePayload));
   }
 
   getFcmTokenMetadataList(pageIndex: number = AdminDefaultValue.pageNumber, pageSize: number = AdminDefaultValue.pageSize) {

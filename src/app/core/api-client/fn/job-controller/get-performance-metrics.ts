@@ -10,11 +10,11 @@ import { RequestBuilder } from '../../request-builder';
 
 import { SuccessResponseQueueStatistics } from '../../models/success-response-queue-statistics';
 
-export interface GetQueueStatistics$Params {
+export interface GetPerformanceMetrics$Params {
 }
 
-export function getQueueStatistics(http: HttpClient, rootUrl: string, params?: GetQueueStatistics$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseQueueStatistics>> {
-  const rb = new RequestBuilder(rootUrl, getQueueStatistics.PATH, 'get');
+export function getPerformanceMetrics(http: HttpClient, rootUrl: string, params?: GetPerformanceMetrics$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseQueueStatistics>> {
+  const rb = new RequestBuilder(rootUrl, getPerformanceMetrics.PATH, 'get');
   if (params) {
   }
 
@@ -28,4 +28,4 @@ export function getQueueStatistics(http: HttpClient, rootUrl: string, params?: G
   );
 }
 
-getQueueStatistics.PATH = '/api/jobs/statistics';
+getPerformanceMetrics.PATH = '/api/jobs/statistics';

@@ -173,7 +173,7 @@ export class AdminBgJobsTabComponent extends Accordion<JobDetail> implements Tab
   onSearch($event: SearchEvent): void {
   }
   loadData(): void {
-    this.adminService.getBgJobStatistics().subscribe((response) => {
+    this.adminService.getBgJobStatistics().subscribe((response: QueueStatistics) => {
       this.statistics = response;
     });
     this.adminService.getBgJobs(this.statusFilter, AdminDefaultValue.pageNumber, AdminDefaultValue.pageSize).subscribe((response) => {
@@ -187,7 +187,9 @@ export class AdminBgJobsTabComponent extends Accordion<JobDetail> implements Tab
     'failed': 'Failed',
     'paused': 'Paused',
     'active': 'Active',
-    'delayed': 'Delayed'
+    'delayed': 'Delayed',
+    'waiting-children': 'Waiting for Job'
+
   }
   protected statusFilterConfig: SearchSelectModalConfig = {
     searchFormFields: [

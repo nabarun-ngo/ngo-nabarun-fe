@@ -10,7 +10,7 @@ import { RequestBuilder } from '../../request-builder';
 
 import { SuccessResponseString } from '../../models/success-response-string';
 
-export interface PauseQueue$Params {
+export interface QueueOperation$Params {
 
 /**
  * Operation to trigger
@@ -18,8 +18,8 @@ export interface PauseQueue$Params {
   operation: 'pause' | 'resume';
 }
 
-export function pauseQueue(http: HttpClient, rootUrl: string, params: PauseQueue$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
-  const rb = new RequestBuilder(rootUrl, pauseQueue.PATH, 'post');
+export function queueOperation(http: HttpClient, rootUrl: string, params: QueueOperation$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
+  const rb = new RequestBuilder(rootUrl, queueOperation.PATH, 'post');
   if (params) {
     rb.path('operation', params.operation, {});
   }
@@ -34,4 +34,4 @@ export function pauseQueue(http: HttpClient, rootUrl: string, params: PauseQueue
   );
 }
 
-pauseQueue.PATH = '/api/jobs/queue/{operation}';
+queueOperation.PATH = '/api/jobs/queue/{operation}';
