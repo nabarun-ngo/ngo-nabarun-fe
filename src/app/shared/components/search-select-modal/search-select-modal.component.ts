@@ -8,7 +8,7 @@ import { ValidatorFn } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { UniversalInputModel } from '../../model/universal-input.model';
-import { SearchAndAdvancedSearchModel } from '../../model/search-and-advanced-search.model';
+import { SearchAndAdvancedSearchModel, DisplayCondition } from '../../model/search-and-advanced-search.model';
 import { SearchEvent } from '../search-and-advanced-search-form/search-event.model';
 
 // ─── Public types ─────────────────────────────────────────────────────────────
@@ -25,6 +25,10 @@ export interface SearchSelectField {
     validations?: ValidatorFn[];
     /** Hide the field from the rendered form */
     hidden?: boolean;
+    /** Condition to display the field based on form values */
+    displayCondition?: DisplayCondition;
+    /** Transform field value based on other form values */
+    valueTransformation?: (formValues: any) => any;
 }
 
 /**
@@ -141,6 +145,8 @@ export class SearchSelectModalComponent {
                     inputModel: f.inputModel,
                     validations: f.validations,
                     hidden: f.hidden,
+                    displayCondition: f.displayCondition,
+                    valueTransformation: f.valueTransformation,
                 })),
             },
         };

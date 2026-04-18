@@ -16,6 +16,7 @@ export interface SearchAndAdvancedSearchModel {
       validations?: ValidatorFn[];
       hidden?: boolean;
       displayCondition?: DisplayCondition;
+      valueTransformation?: (formValues: any) => any;
     }[];
     title?: string;
     buttonText?: {

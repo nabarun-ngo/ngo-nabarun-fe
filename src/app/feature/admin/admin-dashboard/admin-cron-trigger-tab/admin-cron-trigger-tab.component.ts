@@ -10,10 +10,8 @@ import { AdminDefaultValue } from '../../admin.const';
 import { AdminService } from '../../admin.service';
 import { date } from 'src/app/core/service/utilities.service';
 import { CronJobDto, SchedulerLogDto } from 'src/app/core/api-client/models';
-import { SearchSelectModalConfig } from 'src/app/shared/components/search-select-modal/search-select-modal.component';
-import { KeyValue } from 'src/app/shared/model/key-value.model';
 import { firstValueFrom } from 'rxjs';
-import { SearchSelectModalService } from 'src/app/shared/components/search-select-modal/search-select-modal.service';
+import { ModalService } from 'src/app/core/service/modal.service';
 
 @Component({
   selector: 'app-admin-cron-trigger-tab',
@@ -24,7 +22,7 @@ export class AdminCronTriggerTabComponent extends Accordion<SchedulerLogDto> imp
   jobList: CronJobDto[] = [];
 
   constructor(private adminService: AdminService,
-    private searchSelectorService: SearchSelectModalService,
+    private modalService: ModalService,
   ) {
     super();
   }
@@ -67,16 +65,19 @@ export class AdminCronTriggerTabComponent extends Accordion<SchedulerLogDto> imp
         editableList: {
           formArrayName: 'jobs',
           itemFields: [
-            {
-              field_html_id: 'id',
-              field_value: '',
-              form_control_name: 'id',
-              editable: false,
-            },
+
             {
               field_html_id: 'jobName',
               field_value: '',
               form_control_name: 'jobName',
+              editable: false,
+              field_name: 'Job Name'
+            },
+            {
+              field_html_id: 'id',
+              field_value: '',
+              form_control_name: 'id',
+              field_name: 'Job ID',
               editable: false,
             },
           ],
@@ -104,11 +105,13 @@ export class AdminCronTriggerTabComponent extends Accordion<SchedulerLogDto> imp
               field_value: '',
               form_control_name: 'jobName',
               editable: false,
+              field_name: 'Job Name'
             },
             {
               field_html_id: 'remarks',
               field_value: '',
               form_control_name: 'remarks',
+              field_name: 'Remarks',
               editable: false,
             },
           ],
@@ -152,49 +155,24 @@ export class AdminCronTriggerTabComponent extends Accordion<SchedulerLogDto> imp
     })
   }
 
-  async runJob(): Promise<void> {
-    const kv = this.jobList.map(m => {
-      return {
-        key: m.name,
-        displayValue: m.name
-      } as KeyValue
-    })
-    this.searchSelectorService.open(this.jobNameConfig(kv), { width: 700 }).subscribe({
-      next: (resp) => {
-        this.adminService.triggerCronJob(resp.value.jobName, resp.value.inputData).subscribe({
-          next: () => {
-            this.loadData();
-          }
-        })
-      }
+  async triggerDirectly(jobName: string): Promise<void> {
+    const confirm = this.modalService.openNotificationModal(
+      { title: 'Run Job', description: `Are you sure you want to trigger the job "${jobName}"?` },
+      'confirmation',
+      'info'
+    );
+    confirm.onAccept$.subscribe(() => {
+      this.adminService.triggerCronJob(jobName).subscribe({
+        next: () => {
+          this.loadData();
+          this.modalService.openNotificationModal(
+            { title: 'Success', description: `Job "${jobName}" has been triggered successfully.` },
+            'notification',
+            'success'
+          );
+        }
+      });
     });
   }
 
-  protected jobNameConfig = (kv: KeyValue[]) => {
-    return {
-      title: 'Select Job',
-      searchFormFields: [
-        {
-          formControlName: 'jobName',
-          inputModel: {
-            html_id: 'jobName',
-            inputType: '',
-            tagName: 'select',
-            placeholder: 'Select Job Name',
-            selectList: kv
-          }
-        },
-        {
-          formControlName: 'inputData',
-
-          inputModel: {
-            html_id: 'inputData',
-            inputType: '',
-            tagName: 'textarea',
-            placeholder: 'Enter Input Data',
-          }
-        }
-      ]
-    } as SearchSelectModalConfig
-  }
 }

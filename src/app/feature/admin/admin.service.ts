@@ -12,6 +12,7 @@ import { mapPagedUserDtoToPagedUser } from '../member/models/member.mapper';
 export class AdminService {
 
 
+
   constructor(
     private oauthController: OAuthControllerService,
     private staticDocs: StaticDocsControllerService,
@@ -27,7 +28,9 @@ export class AdminService {
   getCronJobNames() {
     return this.cronController.getScheduledJobs().pipe(map(m => m.responsePayload));
   }
-
+  getBgJob(id: string) {
+    return this.jobController.getJobDetails({ jobId: id }).pipe(map(m => m.responsePayload));
+  }
 
   /**
    * Get list of API keys
@@ -120,11 +123,13 @@ export class AdminService {
   }
 
 
-  getBgJobs(status: string, pageIndex: number = AdminDefaultValue.pageNumber, pageSize: number = AdminDefaultValue.pageSize) {
+  getBgJobs(status?: string, pageIndex: number = AdminDefaultValue.pageNumber, pageSize: number = AdminDefaultValue.pageSize, jobId?: string) {
     return this.jobController.getJobs({
       status: status as any,
       pageIndex: pageIndex,
       pageSize: pageSize,
+      jobId: jobId || undefined,
+      includeLogs: 'Y'
     }).pipe(
       map(d => d.responsePayload)
     )

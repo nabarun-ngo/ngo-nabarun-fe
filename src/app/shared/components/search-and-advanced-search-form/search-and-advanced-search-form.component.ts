@@ -57,6 +57,15 @@ export class SearchAndAdvancedSearchFormComponent implements OnInit {
             d[field.formControlName] = '';
           }
         }
+
+        if (field.valueTransformation && this.isFieldVisible(field)) {
+          const newValue = field.valueTransformation(this.searchformGroup.getRawValue());
+          const control = this.searchformGroup.get(field.formControlName);
+          if (control && control.value !== newValue) {
+            control.setValue(newValue, { emitEvent: false });
+            d[field.formControlName] = newValue;
+          }
+        }
       });
 
       this.isSearchDisabled = !this.searchformGroup.valid || isEmptyObject(removeNullFields(d));

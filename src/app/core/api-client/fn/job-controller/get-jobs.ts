@@ -31,6 +31,7 @@ export interface GetJobs$Params {
  * Filter by job ID
  */
   jobId?: string;
+  includeLogs: string;
 }
 
 export function getJobs(http: HttpClient, rootUrl: string, params: GetJobs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultJobDetail>> {
@@ -40,6 +41,7 @@ export function getJobs(http: HttpClient, rootUrl: string, params: GetJobs$Param
     rb.query('pageSize', params.pageSize, {});
     rb.query('status', params.status, {});
     rb.query('jobId', params.jobId, {});
+    rb.query('includeLogs', params.includeLogs, {});
   }
 
   return http.request(
