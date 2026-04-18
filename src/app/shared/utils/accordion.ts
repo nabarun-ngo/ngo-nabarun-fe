@@ -56,7 +56,7 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
     this.viewInitialized = true;
   }
 
-  private accordionList: AccordionList = {
+  public accordionList: AccordionList = {
     contents: [],
     searchValue: ''
   };

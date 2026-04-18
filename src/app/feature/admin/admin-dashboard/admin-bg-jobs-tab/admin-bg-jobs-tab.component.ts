@@ -222,10 +222,10 @@ export class AdminBgJobsTabComponent extends Accordion<JobDetail> implements Tab
     this.loadData();
   }
 
-  protected statusFilter: string | undefined = undefined;
-  protected jobIdFilter: string | undefined = undefined;
+  public statusFilter: string | undefined = undefined;
+  public jobIdFilter: string | undefined = undefined;
 
-  protected statusMap: Record<string, string> = {
+  public statusMap: Record<string, string> = {
     'completed': 'Completed',
     'failed': 'Failed',
     'paused': 'Paused',
