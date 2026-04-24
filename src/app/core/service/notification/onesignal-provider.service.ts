@@ -17,7 +17,7 @@ export class OneSignalProviderService implements PushNotificationProvider {
         appId: environment.onesignal_app_id,
         allowLocalhostAsSecureOrigin: !environment.production,
         path: '/',
-        serviceWorkerPath: 'OneSignalSDKWorker.js',
+        serviceWorkerPath: 'combined-sw.js',
         serviceWorkerParam: { scope: '/' },
         autoRegister: true
       });

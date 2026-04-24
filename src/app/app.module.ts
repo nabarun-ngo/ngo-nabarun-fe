@@ -27,7 +27,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     provideFirebaseApp(() => initializeApp(environment.firebase_config)),
     provideDatabase(() => getDatabase()),
     provideAuth(() => getAuth()),
-    ServiceWorkerModule.register('ngsw-worker.js', {
+    ServiceWorkerModule.register('combined-sw.js', {
       enabled: environment.production,
       registrationStrategy: 'registerWhenStable:30000'
     }),
