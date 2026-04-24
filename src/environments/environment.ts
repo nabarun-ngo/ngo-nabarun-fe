@@ -35,12 +35,17 @@ const mobile_auth_config = {
 }
 
 
-// Import Firebase configuration from JSON file
-import firebaseConfigJson from './firebase-config.json';
 import { FirebaseConfig } from './firebase-config.type';
 
-// Type assertion for Firebase config
-const firebaseConfig = firebaseConfigJson as FirebaseConfig;
+// Firebase configuration
+const firebaseConfig: FirebaseConfig = {
+  apiKey: "AIzaSyCSfQoDJnVrJgB_q4mVFfL6IWGPyxEmEmI",
+  authDomain: "ngonabarun-stage.firebaseapp.com",
+  projectId: "ngonabarun-stage",
+  storageBucket: "ngonabarun-stage.firebasestorage.app",
+  messagingSenderId: "382914885174",
+  appId: "1:382914885174:web:f308be7d09692f3c500a97"
+};
 
 export const environment = {
   production: false,

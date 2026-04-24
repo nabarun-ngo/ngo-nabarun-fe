@@ -7,12 +7,17 @@ import { version } from "./version";
 import { AuthConfig } from "@auth0/auth0-angular";
 
 
-// Import Firebase configuration from JSON file
-import firebaseConfigJson from './firebase-config.prod.json';
 import { FirebaseConfig } from './firebase-config.type';
 
-// Type assertion for Firebase config
-const firebaseConfig = firebaseConfigJson as FirebaseConfig;
+// Firebase configuration
+const firebaseConfig: FirebaseConfig = {
+  apiKey: "AIzaSyB2EzMmq3uZUBcaubYMtISF-CKQPPujOxk",
+  authDomain: "ngonabarun.firebaseapp.com",
+  projectId: "ngonabarun",
+  storageBucket: "ngonabarun.firebasestorage.app",
+  messagingSenderId: "366182857375",
+  appId: "1:366182857375:web:37146914cb8fd501a580aa"
+};
 
 
 
