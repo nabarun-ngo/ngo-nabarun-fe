@@ -1,6 +1,7 @@
 {
+  "$schema": "https://json.schemastore.org/web-manifest-combined.json",
   "name": "Nabarun NGO",
-  "short_name": "Nabarun",
+  "short_name": "Nabarun NGO",
   "description": "Nabarun NGO Management System",
   "theme_color": "#1976d2",
   "background_color": "#ffffff",
@@ -17,21 +18,7 @@
   ],
   "prefer_related_applications": false,
   "screenshots": [],
-  "shortcuts": [
-    {
-      "name": "Notifications",
-      "short_name": "Notifications",
-      "description": "View your notifications",
-      "url": "/notifications",
-      "icons": [
-        {
-          "src": "assets/icons/icon-96x96.png",
-          "sizes": "96x96",
-          "type": "image/png"
-        }
-      ]
-    }
-  ],
+  "shortcuts": [],
   "icons": [
     {
       "src": "assets/icons/icon-48x48.png",
