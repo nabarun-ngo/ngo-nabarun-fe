@@ -47,12 +47,17 @@ export class NotificationService {
    * Automatically setup push notifications based on current identity state
    */
   async setup() {
-    const userId = this.identityService.loggedInUser?.user_id;
-    if (this.identityService.isLoggedIn && userId) {
-      console.log('[NotificationService] Secure user found, initializing push provider.');
-      await this.pushProvider.init(userId);
-    } else {
-      console.log('[NotificationService] No secure user logged in, skipping push setup.');
+    try {
+      const userId = this.identityService.loggedInUser?.user_id;
+      if (this.identityService.isLoggedIn && userId) {
+        console.log('[NotificationService] Secure user found, initializing push provider.');
+        await this.pushProvider.init(userId);
+      } else {
+        console.log('[NotificationService] No secure user logged in, skipping push setup.');
+      }
+    } catch (error) {
+      console.error('[NotificationService] Setup failed:', error);
+      throw error;
     }
   }
 

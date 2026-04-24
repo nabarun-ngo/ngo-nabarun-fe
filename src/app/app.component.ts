@@ -30,10 +30,14 @@ export class AppComponent implements OnInit {
      */
     await this.identityService.configure();
 
-    /**
-     * Configuring Notifications for secure logged-in users
-     */
-    this.notificationService.setup();
+    try {
+      /**
+       * Configuring Notifications for secure logged-in users
+       */
+      await this.notificationService.setup();
+    } catch (err) {
+      console.error('[AppComponent] Notification setup failed:', err);
+    }
 
     /**
      * configuring idle timeout
