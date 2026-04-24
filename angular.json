@@ -33,6 +33,11 @@
                 "input": "src/service-workers",
                 "output": "/"
               },
+              {
+                "glob": "combined-sw.js",
+                "input": "src/service-workers",
+                "output": "/"
+              },
               "src/manifest.webmanifest"
             ],
             "styles": [
