@@ -1,5 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/web-manifest-combined.json",
+  "id": "/",
   "name": "Nabarun NGO",
   "short_name": "Nabarun NGO",
   "description": "Nabarun NGO Management System",
@@ -17,7 +18,22 @@
     "utilities"
   ],
   "prefer_related_applications": false,
-  "screenshots": [],
+  "screenshots": [
+    {
+      "src": "assets/screenshots/desktop-screenshot.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Desktop Dashboard"
+    },
+    {
+      "src": "assets/screenshots/mobile-screenshot.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Mobile View"
+    }
+  ],
   "shortcuts": [],
   "icons": [
     {
@@ -48,13 +64,25 @@
       "src": "assets/icons/icon-192x192.png",
       "type": "image/png",
       "sizes": "192x192",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "maskable"
     },
     {
       "src": "assets/icons/icon-512x512.png",
       "type": "image/png",
       "sizes": "512x512",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
     }
   ]
 }
