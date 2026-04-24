@@ -26,6 +26,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
   deferredPrompt: BeforeInstallPromptEvent | null = null;
   showInstallButton: boolean = false;
   isAndroid: boolean = false;
+  isIOS: boolean = true;
+  showIOSInstructions: boolean = false;
   playStoreUrl = `https://play.google.com/store/apps/details?id=${environment.mobile_auth_config.appId}`;
   constructor(
     private identityService: UserIdentityService,
@@ -58,6 +60,14 @@ export class LoginComponent implements OnInit, AfterViewInit {
     }
 
     this.isAndroid = /Android/i.test(window.navigator.userAgent);
+    this.isIOS = /iPad|iPhone|iPod/.test(window.navigator.userAgent) && !(window as any).MSStream;
+
+    // Detect if PWA is already installed (standalone mode)
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone;
+
+    if (this.isIOS && !isStandalone) {
+      this.showInstallButton = true;
+    }
 
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
@@ -67,6 +77,10 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   async installPWA() {
+    if (this.isIOS) {
+      this.showIOSInstructions = !this.showIOSInstructions;
+      return;
+    }
     if (!this.deferredPrompt) return;
     this.deferredPrompt.prompt();
     const { outcome } = await this.deferredPrompt.userChoice;
