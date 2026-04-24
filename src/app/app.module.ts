@@ -28,7 +28,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     provideDatabase(() => getDatabase()),
     provideAuth(() => getAuth()),
     ServiceWorkerModule.register('combined-sw.js', {
-      enabled: environment.production,
+      enabled: environment.registerServiceWorker,
       registrationStrategy: 'registerWhenStable:30000'
     }),
     MatAutocompleteModule,

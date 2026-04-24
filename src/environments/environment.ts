@@ -49,6 +49,7 @@ const firebaseConfig: FirebaseConfig = {
 
 export const environment = {
   production: false,
+  registerServiceWorker: false,
   name: 'DEV-WEB ' + version,
   max_idle_time_in_sec: 10,
   api_base_url: apiBaseUrl,

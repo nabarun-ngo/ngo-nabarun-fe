@@ -54,6 +54,7 @@ const mobile_auth_config = {
 
 export const environment = {
   production: true,
+  registerServiceWorker: true,
   name: version,
   max_idle_time_in_sec: 600,
   api_base_url: apiBaseUrl,
