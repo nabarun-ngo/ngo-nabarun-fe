@@ -35,15 +35,21 @@ const mobile_auth_config = {
 }
 
 
-// Import Firebase configuration from JSON file
-import firebaseConfigJson from './firebase-config.json';
 import { FirebaseConfig } from './firebase-config.type';
 
-// Type assertion for Firebase config
-const firebaseConfig = firebaseConfigJson as FirebaseConfig;
+// Firebase configuration
+const firebaseConfig: FirebaseConfig = {
+  apiKey: "AIzaSyCSfQoDJnVrJgB_q4mVFfL6IWGPyxEmEmI",
+  authDomain: "ngonabarun-stage.firebaseapp.com",
+  projectId: "ngonabarun-stage",
+  storageBucket: "ngonabarun-stage.firebasestorage.app",
+  messagingSenderId: "382914885174",
+  appId: "1:382914885174:web:f308be7d09692f3c500a97"
+};
 
 export const environment = {
   production: false,
+  registerServiceWorker: false,
   name: 'DEV-WEB ' + version,
   max_idle_time_in_sec: 10,
   api_base_url: apiBaseUrl,
@@ -53,4 +59,5 @@ export const environment = {
   inactivityTimeOut: 120 * 60,
   auth_config: auth_config,
   mobile_auth_config: mobile_auth_config,
+  onesignal_app_id: "88685178-dbd3-4bfd-adcc-b72a232a8dd0",
 };

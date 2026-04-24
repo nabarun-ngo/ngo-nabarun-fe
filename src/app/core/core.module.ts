@@ -11,6 +11,8 @@ import { NotificationModalComponent, SnackComponent } from './component/notifica
 import { environment } from 'src/environments/environment';
 import { ApiModule as ApiClientModule } from './api-client/api.module';
 import { HttpErrorIntercepterService } from './intercepter/http-error-intercepter.service';
+import { PUSH_NOTIFICATION_PROVIDER } from './service/notification/push-notification-provider.interface';
+import { OneSignalProviderService } from './service/notification/onesignal-provider.service';
 import { NgHttpLoaderModule } from 'ng-http-loader';
 import { RouterModule } from '@angular/router';
 import { CommonLayoutComponent } from './layout/common-layout/common-layout.component';
@@ -90,6 +92,10 @@ const authConfig = Capacitor.isNativePlatform()
       useClass: AuthHttpInterceptor,
       multi: true
     },
+    {
+      provide: PUSH_NOTIFICATION_PROVIDER,
+      useClass: OneSignalProviderService
+    }
   ]
 })
 export class CoreModule {

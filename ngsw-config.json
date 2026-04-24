@@ -11,8 +11,6 @@
           "/favicon.ico",
           "/index.html",
           "/manifest.webmanifest",
-          "/firebase-config.json",
-          "/firebase-messaging-sw.js",
           "/*.css",
           "/*.js"
         ]

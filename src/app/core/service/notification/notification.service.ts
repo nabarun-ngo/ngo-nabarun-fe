@@ -2,12 +2,14 @@ import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { Messaging, getToken, onMessage } from '@angular/fire/messaging';
 import { Capacitor } from '@capacitor/core';
 import { PushNotifications, ActionPerformed, PushNotificationSchema, Token } from '@capacitor/push-notifications';
 import { FCM } from '@capacitor-community/fcm';
+import { PushNotificationProvider, PUSH_NOTIFICATION_PROVIDER } from './push-notification-provider.interface';
 import { NotificationControllerService } from '../../api-client/services/notification-controller.service';
+import { UserIdentityService } from '../user-identity.service';
 import { NotificationResponseDto } from '../../api-client/models/notification-response-dto';
+import { Inject } from '@angular/core';
 
 export type AppNotification = NotificationResponseDto;
 
@@ -36,8 +38,27 @@ export class NotificationService {
 
   constructor(
     private notificationController: NotificationControllerService,
-    private messaging: Messaging
+    private identityService: UserIdentityService,
+    @Inject(PUSH_NOTIFICATION_PROVIDER) private pushProvider: PushNotificationProvider
   ) {
+  }
+
+  /**
+   * Automatically setup push notifications based on current identity state
+   */
+  async setup() {
+    try {
+      const userId = this.identityService.loggedInUser?.user_id;
+      if (this.identityService.isLoggedIn && userId) {
+        console.log('[NotificationService] Secure user found, initializing push provider.');
+        await this.pushProvider.init(userId);
+      } else {
+        console.log('[NotificationService] No secure user logged in, skipping push setup.');
+      }
+    } catch (error) {
+      console.error('[NotificationService] Setup failed:', error);
+      throw error;
+    }
   }
 
   /**
@@ -203,56 +224,11 @@ export class NotificationService {
   }
 
   /**
-   * Register Firebase messaging service worker and wait for it to be ready
+   * Ensure service worker is ready (placeholder for future logic)
    */
   private async ensureServiceWorkerReady(): Promise<ServiceWorkerRegistration | null> {
     if ('serviceWorker' in navigator) {
-      console.log('[NotificationService] Service worker is available');
-      try {
-        const registrations = await navigator.serviceWorker.getRegistrations();
-        let registration = registrations.find(r => r.active?.scriptURL.includes('firebase-messaging-sw.js'));
-
-        if (!registration) {
-          console.log('[NotificationService] Registering new firebase-messaging-sw.js...');
-          
-          // Construct query parameters from firebase config
-          const config = environment.firebase_config;
-          const params = new URLSearchParams({
-            apiKey: config.apiKey,
-            authDomain: config.authDomain,
-            projectId: config.projectId,
-            storageBucket: config.storageBucket,
-            messagingSenderId: config.messagingSenderId,
-            appId: config.appId
-          });
-
-          registration = await navigator.serviceWorker.register(`/firebase-messaging-sw.js?${params.toString()}`, {
-            scope: '/',
-            type: 'classic'
-          });
-        }
-
-        // Wait for the worker to be active if it's still installing
-        if (registration.installing || registration.waiting) {
-          console.log('[NotificationService] Waiting for service worker to activate...');
-          const worker = registration.installing || registration.waiting;
-          if (worker) {
-            await new Promise<void>((resolve) => {
-              worker.addEventListener('statechange', (e: any) => {
-                if (e.target.state === 'activated') resolve();
-              });
-              // Safety timeout
-              setTimeout(resolve, 5000);
-            });
-          }
-        }
-
-        console.log('[NotificationService] Service worker is ready');
-        return registration;
-      } catch (error) {
-        console.error('[NotificationService] Service worker registration failed:', error);
-        return null;
-      }
+      return await navigator.serviceWorker.ready;
     }
     return null;
   }
@@ -270,44 +246,10 @@ export class NotificationService {
 
   private requestWebPermission(): Observable<string> {
     return new Observable(observer => {
-      console.log('[NotificationService] Starting requestWebPermission flow...');
-
-      window.Notification.requestPermission().then(permission => {
-        if (permission !== 'granted') {
-          console.error('[NotificationService] Permission denied by user');
-          observer.error('Permission denied');
-          return;
-        }
-
-        console.log('[NotificationService] Permission granted, now preparing Service Worker...');
-
-        this.ensureServiceWorkerReady().then(registration => {
-          if (!registration) {
-            console.error('[NotificationService] Could not initialize Service Worker');
-            observer.error('Service Worker failure');
-            return;
-          }
-
-          console.log('[NotificationService] Getting FCM token...');
-          getToken(this.messaging, {
-            vapidKey: environment.firebase_vapidKey,
-            serviceWorkerRegistration: registration
-          })
-            .then(token => {
-              console.log('[NotificationService] FCM Token obtained:', token);
-              this.registerToken(token);
-              observer.next(token);
-              observer.complete();
-            })
-            .catch(error => {
-              console.error('[NotificationService] FCM token retrieval failed:', error);
-              observer.error(error);
-            });
-        }).catch(err => {
-          console.error('[NotificationService] SW Setup failed:', err);
-          observer.error(err);
-        });
-      });
+      console.log('[NotificationService] Web permission request should be handled by OneSignal.');
+      // OneSignal handles this automatically or via their SDK
+      observer.next('Handled by OneSignal');
+      observer.complete();
     });
   }
 
@@ -387,12 +329,10 @@ export class NotificationService {
   }
 
   /**
-   * Listen for incoming messages
+   * Listen for incoming messages (Handled by OneSignal)
    */
   listen() {
-    onMessage(this.messaging, (payload) => {
-      this.handleIncomingSignal(payload);
-    });
+    // onMessage removal
   }
 
   /**

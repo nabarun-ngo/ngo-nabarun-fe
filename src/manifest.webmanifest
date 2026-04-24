@@ -1,6 +1,8 @@
 {
+  "$schema": "https://json.schemastore.org/web-manifest-combined.json",
+  "id": "/",
   "name": "Nabarun NGO",
-  "short_name": "Nabarun",
+  "short_name": "Nabarun NGO",
   "description": "Nabarun NGO Management System",
   "theme_color": "#1976d2",
   "background_color": "#ffffff",
@@ -16,22 +18,23 @@
     "utilities"
   ],
   "prefer_related_applications": false,
-  "screenshots": [],
-  "shortcuts": [
+  "screenshots": [
     {
-      "name": "Notifications",
-      "short_name": "Notifications",
-      "description": "View your notifications",
-      "url": "/notifications",
-      "icons": [
-        {
-          "src": "assets/icons/icon-96x96.png",
-          "sizes": "96x96",
-          "type": "image/png"
-        }
-      ]
+      "src": "assets/screenshots/desktop-screenshot.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Desktop Dashboard"
+    },
+    {
+      "src": "assets/screenshots/mobile-screenshot.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Mobile View"
     }
   ],
+  "shortcuts": [],
   "icons": [
     {
       "src": "assets/icons/icon-48x48.png",
@@ -61,13 +64,25 @@
       "src": "assets/icons/icon-192x192.png",
       "type": "image/png",
       "sizes": "192x192",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "maskable"
     },
     {
       "src": "assets/icons/icon-512x512.png",
       "type": "image/png",
       "sizes": "512x512",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
     }
   ]
 }

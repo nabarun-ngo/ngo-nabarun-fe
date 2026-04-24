@@ -28,10 +28,14 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/firebase-messaging-sw.js",
               {
-                "glob": "firebase-config.json",
-                "input": "src/environments",
+                "glob": "OneSignalSDKWorker.js",
+                "input": "src/service-workers",
+                "output": "/"
+              },
+              {
+                "glob": "combined-sw.js",
+                "input": "src/service-workers",
                 "output": "/"
               },
               "src/manifest.webmanifest"
@@ -48,10 +52,6 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prod.ts"
-                },
-                {
-                  "replace": "src/environments/firebase-config.json",
-                  "with": "src/environments/firebase-config.prod.json"
                 }
               ],
               "budgets": [
@@ -75,10 +75,6 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.stage.ts"
-                },
-                {
-                  "replace": "src/environments/firebase-config.json",
-                  "with": "src/environments/firebase-config.stage.json"
                 }
               ],
               "budgets": [
@@ -147,7 +143,6 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/firebase-messaging-sw.js",
               "src/manifest.webmanifest"
             ],
             "styles": [
