@@ -30,7 +30,8 @@ export class UserIdentityService {
     this.isLoggedIn = await this.isUserLoggedIn();
     if (this.isLoggedIn) {
       this.loggedInUser = await this.getUser();
-      console.log('Logged in User ->', this.loggedInUser)
+      console.log('Logged in User ->', this.loggedInUser);
+
     }
     this.platformAuth.getAccessTokenSilently().subscribe((claims: string) => {
       if (claims && claims) {
@@ -49,6 +50,7 @@ export class UserIdentityService {
   }
 
   logout() {
+    console.log('[UserIdentityService] Logging out from OneSignal');
     this.platformAuth.logout();
   }
 

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserIdentityService } from './core/service/user-identity.service';
 import { environment } from 'src/environments/environment';
 import { BnNgIdleService } from 'bn-ng-idle';
+import { NotificationService } from './core/service/notification/notification.service';
 
 @Component({
   selector: 'app-root',
@@ -12,6 +13,7 @@ export class AppComponent implements OnInit {
   constructor(
     private identityService: UserIdentityService,
     private bnIdle: BnNgIdleService,
+    private notificationService: NotificationService
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -27,6 +29,11 @@ export class AppComponent implements OnInit {
      * Configuring App callback
      */
     await this.identityService.configure();
+
+    /**
+     * Configuring Notifications for secure logged-in users
+     */
+    this.notificationService.setup();
 
     /**
      * configuring idle timeout

@@ -12,7 +12,8 @@
           "/index.html",
           "/manifest.webmanifest",
           "/firebase-config.json",
-          "/firebase-messaging-sw.js",
+          "/OneSignalSDKWorker.js",
+          "/combined-sw.js",
           "/*.css",
           "/*.js"
         ]

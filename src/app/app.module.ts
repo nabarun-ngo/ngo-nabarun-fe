@@ -8,7 +8,6 @@ import { CommonModule } from '@angular/common';
 import { CoreModule } from './core/core.module';
 import { BnNgIdleService } from 'bn-ng-idle';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-import { getMessaging, provideMessaging } from '@angular/fire/messaging';
 import { provideDatabase, getDatabase } from '@angular/fire/database';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { environment } from 'src/environments/environment';
@@ -26,11 +25,10 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     BrowserAnimationsModule,
     CoreModule,
     provideFirebaseApp(() => initializeApp(environment.firebase_config)),
-    provideMessaging(() => getMessaging()),
     provideDatabase(() => getDatabase()),
     provideAuth(() => getAuth()),
     ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: true, // Only enable in production builds
+      enabled: environment.production,
       registrationStrategy: 'registerWhenStable:30000'
     }),
     MatAutocompleteModule,

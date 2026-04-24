@@ -58,4 +58,5 @@ export const environment = {
   firebase_vapidKey: 'BB5aUQjSGz0v2f2mvf_PdMIsG5zl-uBZ3c8jW3oj6DXn0fLoA98oLG3GzJxWizKyTIME7GOrIzN_vdmI_XhhGps',
   inactivityTimeOut: 15 * 60,
   mobile_auth_config: mobile_auth_config,
+  onesignal_app_id: "88685178-dbd3-4bfd-adcc-b72a232a8dd0",
 };

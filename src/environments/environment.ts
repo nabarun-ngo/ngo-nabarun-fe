@@ -53,4 +53,5 @@ export const environment = {
   inactivityTimeOut: 120 * 60,
   auth_config: auth_config,
   mobile_auth_config: mobile_auth_config,
+  onesignal_app_id: "88685178-dbd3-4bfd-adcc-b72a232a8dd0",
 };
