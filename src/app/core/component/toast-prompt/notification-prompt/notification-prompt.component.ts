@@ -65,18 +65,18 @@ export class NotificationPromptComponent implements OnInit {
         this.title = 'Enabling Notifications...';
         this.description = 'Please click on the Allow button to enable notifications...';
         this.showAction = false;
-        this.notificationService.requestPermission().subscribe({
-            next: (token) => {
-                console.log('Push notifications enabled successfully');
-                this.showPrompt = false;
-                this.defaultPromptState();
-            },
-            error: (err) => {
-                console.error('Failed to enable push notifications', err);
-                this.showPrompt = false;
-                this.defaultPromptState()
-            }
-        });
+        // this.notificationService.requestPermission().subscribe({
+        //     next: (token) => {
+        //         console.log('Push notifications enabled successfully');
+        //         this.showPrompt = false;
+        //         this.defaultPromptState();
+        //     },
+        //     error: (err) => {
+        //         console.error('Failed to enable push notifications', err);
+        //         this.showPrompt = false;
+        //         this.defaultPromptState()
+        //     }
+        // });
     }
 
     dismissPrompt(): void {
