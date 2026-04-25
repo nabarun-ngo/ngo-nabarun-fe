@@ -533,7 +533,7 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
       }
     }, 100);
   }
-  hideForm(rowIndex: number, create?: boolean) {
+  hideForm(rowIndex: number, reason: 'user_cancelled' | 'request_completed', create?: boolean) {
     const sections = create
       ? this.accordionList.addContent?.detailed
       : this.accordionList.contents[rowIndex]?.detailed;

@@ -151,7 +151,7 @@ export class ManageAccountsTabComponent extends MyAccountsTabComponent {
         this.activeButtonId = event.buttonId;
         break;
       case 'CANCEL':
-        this.hideForm(event.rowIndex);
+        this.hideForm(event.rowIndex, 'user_cancelled');
         break;
       case 'CONFIRM':
         if (this.activeButtonId == 'UPDATE_ACCOUNT') {
@@ -165,7 +165,7 @@ export class ManageAccountsTabComponent extends MyAccountsTabComponent {
         }
         break;
       case 'CANCEL_CREATE':
-        this.hideForm(0, true);
+        this.hideForm(0, 'user_cancelled', true);
         break;
       case 'CONFIRM_CREATE':
         this.performCreateAccount();
@@ -181,7 +181,7 @@ export class ManageAccountsTabComponent extends MyAccountsTabComponent {
     if (accountForm?.valid) {
       //console.log(accountForm.value);
       this.accountService.createAccount(accountForm.value).subscribe((d) => {
-        this.hideForm(0, true);
+        this.hideForm(0, 'request_completed', true);
         this.addContentRow(d!, true);
       });
     }
@@ -195,7 +195,7 @@ export class ManageAccountsTabComponent extends MyAccountsTabComponent {
       this.accountService
         .updateAccountDetail(account.id, accountForm?.value)
         .subscribe((d) => {
-          this.hideForm(rowIndex);
+          this.hideForm(rowIndex, 'request_completed');
           this.updateContentRow(d, rowIndex);
         });
     }

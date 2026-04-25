@@ -185,7 +185,7 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDto> implements Tab
 
         if (api_key_detail?.valid) {
           this.adminService.createAPIKey(api_key_detail.value).subscribe(s => {
-            this.hideForm(0, true)
+            this.hideForm(0, 'request_completed', true)
             this.addContentRow(s!)
             window.navigator.clipboard.writeText(s?.apiToken!)
             this.modalService.openNotificationModal({
@@ -198,10 +198,10 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDto> implements Tab
         }
         break;
       case 'CANCEL':
-        this.hideForm($event.rowIndex);
+        this.hideForm($event.rowIndex, 'user_cancelled');
         break;
       case 'CANCEL_CREATE':
-        this.hideForm(0, true);
+        this.hideForm(0, 'user_cancelled', true);
         break;
       case 'REVOKE':
         let modal = this.modalService.openNotificationModal(AppDialog.warning_confirm_revoke, 'confirmation', 'warning')
@@ -220,7 +220,7 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDto> implements Tab
         const api_key_detail_update = this.getSectionForm('api_key_detail', $event.rowIndex);
         if (api_key_detail_update?.valid) {
           this.adminService.updateAPIKeyDetail(id, api_key_detail_update.value.permissions).subscribe(d => {
-            this.hideForm($event.rowIndex);
+            this.hideForm($event.rowIndex, 'request_completed');
             this.updateContentRow(d!, $event.rowIndex);
           })
         } else {

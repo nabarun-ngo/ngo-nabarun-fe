@@ -75,15 +75,15 @@ export abstract class BaseDonationTabComponent extends Accordion<Donation> imple
             this.handleUpdateDonation(event.rowIndex);
         }
         else if (event.buttonId === 'CANCEL' && this.activeButtonId === 'UPDATE_DONATION') {
+            this.hideForm(event.rowIndex, 'user_cancelled');
             this.formSubscription?.unsubscribe();
-            this.hideForm(event.rowIndex);
         }
         else if (event.buttonId === 'CONFIRM' && this.activeButtonId === 'UPDATE_DONATION') {
             this.handleConfirmUpdate(event.rowIndex);
         }
         else if (event.buttonId === 'CANCEL_CREATE') {
+            this.hideForm(0, 'user_cancelled', true);
             this.formSubscription?.unsubscribe();
-            this.hideForm(0, true);
         }
         else if (event.buttonId === 'CONFIRM_CREATE') {
             this.handleConfirmCreate();
@@ -175,7 +175,7 @@ export abstract class BaseDonationTabComponent extends Accordion<Donation> imple
                 return;
             }
             this.donationService.updateDonation(donation.id, compareObjects(donationFormValue, donation), documents).subscribe((data: Donation) => {
-                this.hideForm(rowIndex);
+                this.hideForm(rowIndex, 'request_completed');
                 this.updateContentRow(data, rowIndex);
             });
         } else {

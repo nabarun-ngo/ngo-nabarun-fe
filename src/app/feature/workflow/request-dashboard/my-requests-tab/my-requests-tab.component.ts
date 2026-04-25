@@ -147,7 +147,7 @@ export class MyRequestsTabComponent extends Accordion<WorkflowRequest> implement
         await this.performCreateRequest();
         break;
       case 'CANCEL_CREATE':
-        this.hideForm(0, true);
+        this.hideForm(0, 'user_cancelled', true);
         break;
       case 'WITHDRAW':
         this.performWithdrawRequest(event.rowIndex);
@@ -248,7 +248,7 @@ export class MyRequestsTabComponent extends Accordion<WorkflowRequest> implement
       const isExtUser = request_form?.value.requestType === 'JOIN_REQUEST';
       const extUserEmail = isExtUser ? data.email : undefined;
       this.requestService.createRequest(type, data, requestedFor, isExtUser, extUserEmail).subscribe(s => {
-        this.hideForm(0, true);
+        this.hideForm(0, 'request_completed', true);
         this.addContentRow(s!, true);
       });
     } else {

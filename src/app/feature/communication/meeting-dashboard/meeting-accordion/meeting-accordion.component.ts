@@ -130,13 +130,13 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
       this.showEditForm(event.rowIndex, ['meeting_detail', 'meeting_notes', 'meeting_attendee']);
       this.activeButtonId = event.buttonId;
     } else if (event.buttonId === 'CANCEL') {
-      this.hideForm(event.rowIndex);
+      this.hideForm(event.rowIndex, 'user_cancelled');
     } else if (event.buttonId === 'CONFIRM') {
       if (this.activeButtonId === 'UPDATE_MEETING') {
         await this.performUpdateMeeting(event.rowIndex);
       }
     } else if (event.buttonId === 'CANCEL_CREATE') {
-      this.hideForm(0, true);
+      this.hideForm(0, 'user_cancelled', true);
     } else if (event.buttonId === 'CONFIRM_CREATE') {
       await this.performCreateMeeting();
     } else if (event.buttonId === 'SHARE_WHATSAPP') {
@@ -220,7 +220,7 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
           attendees: attendees,
           agenda: meetingNotesForm.value.agenda,
         }).subscribe(data => {
-          this.hideForm(0, true);
+          this.hideForm(0, 'request_completed', true);
           this.addContentRow(data, true);
         });
       });
@@ -266,7 +266,7 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
           attendees: attendees,
           agenda: meetingNotesForm.value.agenda,
         }).subscribe(data => {
-          this.hideForm(rowIndex);
+          this.hideForm(rowIndex, 'request_completed');
           this.updateContentRow(data, rowIndex);
         });
       });
@@ -298,7 +298,7 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
     }, 'confirmation', 'warning');
     modal.onAccept$.subscribe(() => {
       this.communicationService.cancelMeeting(this.itemList[rowIndex].id).subscribe(() => {
-        this.hideForm(rowIndex);
+        this.hideForm(rowIndex, 'user_cancelled');
         this.loadData();
       });
     });

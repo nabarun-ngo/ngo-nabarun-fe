@@ -146,13 +146,13 @@ export class ProjectListTabComponent extends Accordion<Project> implements TabCo
       this.showEditForm(event.rowIndex, ['project_detail']);
       this.activeButtonId = event.buttonId;
     } else if (event.buttonId === 'CANCEL') {
-      this.hideForm(event.rowIndex);
+      this.hideForm(event.rowIndex, 'user_cancelled');
     } else if (event.buttonId === 'CONFIRM') {
       if (this.activeButtonId === 'UPDATE_PROJECT') {
         this.performUpdateProject(event.rowIndex);
       }
     } else if (event.buttonId === 'CANCEL_CREATE') {
-      this.hideForm(0, true);
+      this.hideForm(0, 'user_cancelled', true);
     } else if (event.buttonId === 'CONFIRM_CREATE') {
       this.performCreateProject();
     }
@@ -167,7 +167,7 @@ export class ProjectListTabComponent extends Accordion<Project> implements TabCo
     projectForm?.markAllAsTouched();
     if (projectForm?.valid) {
       this.projectService.createProject(removeNullFields(projectForm.value)).subscribe((data) => {
-        this.hideForm(0, true);
+        this.hideForm(0, 'request_completed', true);
         this.addContentRow(data, true);
       });
     }
@@ -180,7 +180,7 @@ export class ProjectListTabComponent extends Accordion<Project> implements TabCo
     if (projectForm?.valid) {
       const updatedProject = compareObjects(projectForm.value, project);
       this.projectService.updateProject(project.id, updatedProject).subscribe((data) => {
-        this.hideForm(rowIndex);
+        this.hideForm(rowIndex, 'request_completed');
         this.updateContentRow(data, rowIndex);
       });
     }

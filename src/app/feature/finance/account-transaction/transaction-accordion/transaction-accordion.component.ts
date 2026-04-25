@@ -113,8 +113,8 @@ export class TransactionAccordionComponent extends Accordion<Transaction> {
       this.reverseTransaction($event.rowIndex);
     }
     else if ($event.buttonId == 'CANCEL') {
+      this.hideForm($event.rowIndex, 'user_cancelled');
       this.removeSectionInAccordion('reverse_txn', $event.rowIndex);
-      this.hideForm($event.rowIndex);
     }
   }
 
@@ -130,8 +130,8 @@ export class TransactionAccordionComponent extends Accordion<Transaction> {
       modalRef.onAccept$.subscribe((data) => {
         if (data) {
           // this.accountService.reverseTransaction(this.accountId, item.transactionRef, reverse_form?.value.reasonForReversal).subscribe((data) => {
+          //   this.hideForm(rowIndex,'request_completed');
           //   this.removeSectionInAccordion('reverse_txn', rowIndex);
-          //   this.hideForm(rowIndex);
           //   this.fetchDetails(this.pageNumber, this.pageSize);
           // });
         }

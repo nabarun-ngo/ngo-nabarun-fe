@@ -171,7 +171,7 @@ export class MyAccountsTabComponent extends Accordion<Account> implements TabCom
         this.activeButtonId = event.buttonId;
         break;
       case 'CANCEL':
-        this.hideForm(event.rowIndex);
+        this.hideForm(event.rowIndex, 'user_cancelled');
         if (this.activeButtonId == 'TRANSFER') {
           this.removeSectionInAccordion('transfer_amt', event.rowIndex);
           this.removeSectionInAccordion('document_list', event.rowIndex);
@@ -222,7 +222,7 @@ export class MyAccountsTabComponent extends Accordion<Account> implements TabCom
           .performMoneyIn(account, money_in_acc?.value, document_list || [], this.isManageAccountsTab)
           .subscribe((d) => {
             ////console.log(d);
-            this.hideForm(rowIndex);
+            this.hideForm(rowIndex, 'request_completed');
             this.removeSectionInAccordion('money_in_acc', rowIndex);
             this.removeSectionInAccordion('document_list', rowIndex);
             this.loadData();
@@ -248,7 +248,7 @@ export class MyAccountsTabComponent extends Accordion<Account> implements TabCom
       this.accountService
         .updateBankingAndUPIDetail(item.id, bankForm?.value, upiForm?.value)
         .subscribe((d) => {
-          this.hideForm(rowIndex);
+          this.hideForm(rowIndex, 'request_completed');
           this.updateContentRow(d, rowIndex);
         });
     }
@@ -281,7 +281,7 @@ export class MyAccountsTabComponent extends Accordion<Account> implements TabCom
           .performTransfer(account, transfer_form?.value, document_list!, this.isManageAccountsTab)
           .subscribe((d) => {
             ////console.log(d);
-            this.hideForm(rowIndex);
+            this.hideForm(rowIndex, 'request_completed');
             this.removeSectionInAccordion('transfer_amt', rowIndex);
             this.removeSectionInAccordion('document_list', rowIndex);
             this.loadData();

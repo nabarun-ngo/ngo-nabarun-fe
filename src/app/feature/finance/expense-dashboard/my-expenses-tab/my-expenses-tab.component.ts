@@ -237,7 +237,7 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
               expenseItems: expenseItems,
               payerId: payerId
             }).subscribe((d) => {
-              this.hideForm(0, true);
+              this.hideForm(0, 'request_completed', true);
               this.addContentRow(d!, true);
             });
           } else {
@@ -261,7 +261,7 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
                     payerId: expenseForm?.value.expense_by
                   })
                   .subscribe((d) => {
-                    this.hideForm($event.rowIndex);
+                    this.hideForm($event.rowIndex, 'request_completed');
                     this.updateContentRow(d, $event.rowIndex);
                     this.expenseService.uploadDocuments(expenseDocuments ?? [], id!, 'EXPENSE').subscribe();
                   });
@@ -275,7 +275,7 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
                   payerId: expenseForm?.value.expense_by
                 })
                 .subscribe((d) => {
-                  this.hideForm($event.rowIndex);
+                  this.hideForm($event.rowIndex, 'request_completed');
                   this.updateContentRow(d, $event.rowIndex);
                   this.expenseService.uploadDocuments(expenseDocuments ?? [], id!, 'EXPENSE').subscribe();
                 });
@@ -286,7 +286,7 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
         break;
       case 'CREATE_CANCEL':
       case 'CANCEL':
-        this.hideForm($event.rowIndex, $event.buttonId == 'CREATE_CANCEL');
+        this.hideForm($event.rowIndex, 'user_cancelled', $event.buttonId == 'CREATE_CANCEL');
         break;
     }
   }

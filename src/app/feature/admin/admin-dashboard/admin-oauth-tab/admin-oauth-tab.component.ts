@@ -147,7 +147,7 @@ export class AdminOauthTabComponent extends Accordion<AuthTokenDto> implements T
         if (oauth_detail?.valid) {
           const scopes = oauth_detail.value.scopes as string[];
           this.adminService.createOAuthToken(scopes).subscribe(s => {
-            this.hideForm(0, true)
+            this.hideForm(0, 'request_completed', true)
             window.open(s!, '_blank')?.focus();
           });
         } else {
@@ -155,7 +155,7 @@ export class AdminOauthTabComponent extends Accordion<AuthTokenDto> implements T
         }
         break;
       case 'CANCEL_CREATE':
-        this.hideForm(0, true);
+        this.hideForm(0, 'user_cancelled', true);
         break;
       case 'REVOKE':
         let modal = this.modalService.openNotificationModal(AppDialog.warning_confirm_revoke, 'confirmation', 'warning')
