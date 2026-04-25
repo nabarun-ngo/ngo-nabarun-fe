@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { IndexedDbService } from './indexed-db.service';
-import { debounceTime, Subject } from 'rxjs';
+import { debounceTime, Subject, groupBy, mergeMap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,9 +10,15 @@ export class FormAutosaveService {
   private saveRequests$ = new Subject<{ id: string; data: any }>();
 
   constructor() {
-    // Process save requests with debounce to avoid excessive DB writes
+    // Process save requests with per-id debouncing to avoid cross-form interference.
+    // Each autosaveId gets its own 1s debounce window.
     this.saveRequests$.pipe(
-      debounceTime(1000) // Wait for 1 second of inactivity before saving
+      groupBy(
+        ({ id }) => id,
+        undefined,
+        group$ => group$.pipe(debounceTime(5000)) // Cleanup group after 5s of inactivity
+      ),
+      mergeMap(group$ => group$.pipe(debounceTime(1000)))
     ).subscribe(({ id, data }) => {
       this.dbService.set(id, data).catch(err => {
         console.warn('FormAutosaveService: Failed to save form data', id, err);
