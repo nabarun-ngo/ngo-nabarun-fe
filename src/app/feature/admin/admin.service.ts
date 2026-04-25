@@ -186,10 +186,10 @@ export class AdminService {
     });
   }
 
-  getUsers(pageIndex: number = AdminDefaultValue.pageNumber, pageSize: number = AdminDefaultValue.pageSize) {
+  getUsers() {
     return this.userController.listUsers({
-      pageIndex: pageIndex,
-      pageSize: pageSize
+      pageIndex: 0,
+      pageSize: 10000
     }).pipe(map(m => m.responsePayload));
   }
 

@@ -113,8 +113,11 @@ export class TransactionAccordionComponent extends Accordion<Transaction> {
       this.reverseTransaction($event.rowIndex);
     }
     else if ($event.buttonId == 'CANCEL') {
-      this.hideForm($event.rowIndex, 'user_cancelled');
-      this.removeSectionInAccordion('reverse_txn', $event.rowIndex);
+      this.hideForm($event.rowIndex, 'user_cancelled').subscribe(hidden => {
+        if (hidden) {
+          this.removeSectionInAccordion('reverse_txn', $event.rowIndex);
+        }
+      });
     }
   }
 

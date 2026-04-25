@@ -2,7 +2,7 @@ import { Paginator } from "src/app/shared/utils/paginator";
 import { AccordionButton, AccordionCell, AccordionData, AccordionList, AccordionRow } from "../model/accordion-list.model";
 import { DetailedView, DetailedViewField } from "../model/detailed-view.model";
 import { FormControl, ValidatorFn } from "@angular/forms";
-import { BehaviorSubject, Subscription } from "rxjs";
+import { BehaviorSubject, from, map, Observable, of, Subject, Subscription, switchMap } from "rxjs";
 import { FileUpload } from "../components/generic/file-upload/file-upload.component";
 import { AfterContentInit, AfterViewInit, Component, ElementRef, inject, Input, OnInit, ViewChild } from "@angular/core";
 import { KeyValue } from "../model/key-value.model";
@@ -537,7 +537,7 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
       }
     }, 100);
   }
-  hideForm(rowIndex: number, reason: 'user_cancelled' | 'request_completed', create?: boolean) {
+  hideForm(rowIndex: number, reason: 'user_cancelled' | 'request_completed', create?: boolean): Observable<boolean> {
     const sections = create
       ? this.accordionList.addContent?.detailed
       : this.accordionList.contents[rowIndex]?.detailed;
@@ -564,23 +564,47 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
       }
     };
 
-    const hasEnteredData = sections?.some(s =>
-      s.section_form?.dirty ||
-      (s.doc?.docList?.value && s.doc.docList.value.length > 0)
+    const dbCheckPromises = sections?.map(async s => {
+      if (s.autoSaveId) {
+        const data = await this.autosaveService.getSavedForm(s.autoSaveId);
+        return data && (typeof data !== 'object' || Object.keys(data).length > 0);
+      }
+      return false;
+    }) || [];
+
+    return from(Promise.all(dbCheckPromises)).pipe(
+      switchMap(dbResults => {
+        const hasDbData = dbResults.some(r => r);
+        const hasLocalData = sections?.some(s =>
+          s.section_form?.dirty ||
+          (s.doc?.docList?.value && s.doc.docList.value.length > 0)
+        );
+
+        if (reason === 'user_cancelled' && (hasDbData || hasLocalData)) {
+          const result$ = new Subject<boolean>();
+          const modal = this.ms.openNotificationModal({
+            title: 'Confirm Cancellation',
+            description: 'You have entered some data. Are you sure you want to cancel? All unsaved changes will be lost.'
+          }, 'confirmation', 'warning');
+
+          modal.onAccept$.subscribe(() => {
+            performHide();
+            result$.next(true);
+            result$.complete();
+          });
+
+          modal.onDecline$.subscribe(() => {
+            result$.next(false);
+            result$.complete();
+          });
+
+          return result$.asObservable();
+        } else {
+          performHide();
+          return of(true);
+        }
+      })
     );
-
-    if (reason === 'user_cancelled' && hasEnteredData) {
-      const modal = this.ms.openNotificationModal({
-        title: 'Confirm Cancellation',
-        description: 'You have entered some data. Are you sure you want to cancel? All unsaved changes will be lost.'
-      }, 'confirmation', 'warning');
-
-      modal.onAccept$.subscribe(() => {
-        performHide();
-      });
-    } else {
-      performHide();
-    }
   }
 
 
