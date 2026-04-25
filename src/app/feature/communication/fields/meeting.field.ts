@@ -235,6 +235,10 @@ export const meetingHeader: any[] = [
         rounded: true
     },
     {
+        value: 'Meeting Type',
+        rounded: true
+    },
+    {
         value: 'Meeting Date',
         rounded: true
     },

@@ -55,11 +55,19 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
     const timeRange = data?.startTime && data?.endTime
       ? `${date(data.startTime, 'hh:mm a')} - ${date(data.endTime, 'hh:mm a')}`
       : data?.startTime ? date(data.startTime, 'hh:mm a') : '';
+    const dataMap = {
+      'ONLINE': 'Online',
+      'OFFLINE': 'Offline',
+    }
 
     return [
       {
         type: 'text',
         value: data?.summary!,
+      },
+      {
+        type: 'text',
+        value: dataMap[data?.type!],
       },
       {
         type: 'date',
