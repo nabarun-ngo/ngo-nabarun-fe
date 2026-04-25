@@ -186,8 +186,11 @@ export class AdminService {
     });
   }
 
-  getUsers() {
-    return this.getFcmTokenMetadataList(0, 1000);
+  getUsers(pageIndex: number = AdminDefaultValue.pageNumber, pageSize: number = AdminDefaultValue.pageSize) {
+    return this.userController.listUsers({
+      pageIndex: pageIndex,
+      pageSize: pageSize
+    }).pipe(map(m => m.responsePayload));
   }
 
   sendTestPushNotification(userIds: string[], body: string, title: string, category: string = 'SYSTEM', type: string = 'INFO') {

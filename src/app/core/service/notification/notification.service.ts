@@ -47,10 +47,10 @@ export class NotificationService {
    */
   async setup(): Promise<void> {
     try {
-      const userId = this.identityService.loggedInUser?.user_id;
-      if (this.identityService.isLoggedIn && userId) {
+      const profileId = this.identityService.loggedInUser?.profile_id;
+      if (this.identityService.isLoggedIn && profileId) {
         console.log('[NotificationService] Secure user found, initializing push provider.');
-        await this.pushProvider.init(userId);
+        await this.pushProvider.init(profileId);
 
         // Wire the foreground listener so notifications received while the
         // user is actively using the app still update the badge / unread count.

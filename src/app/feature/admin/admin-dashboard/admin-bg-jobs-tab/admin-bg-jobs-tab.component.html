@@ -7,7 +7,7 @@
         <mat-icon>refresh</mat-icon>
         Refresh
     </button>
-    <button mat-button color="secondary" (click)="resumeOrPauseQueue()">
+    <button *ngIf="statistics && statistics.health" mat-button color="secondary" (click)="resumeOrPauseQueue()">
         <mat-icon>{{statistics.health && statistics.health.isPaused ? 'play_arrow' : 'pause'}}</mat-icon>
         {{statistics.health && statistics.health.isPaused ? 'Resume' : 'Pause'}} Queue
     </button>
