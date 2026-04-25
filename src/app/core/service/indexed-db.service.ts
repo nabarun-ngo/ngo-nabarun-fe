@@ -15,25 +15,40 @@ export class IndexedDbService {
       return this.db;
     }
 
+    if (typeof indexedDB === 'undefined') {
+      return Promise.reject(new Error('IndexedDB is not supported in this environment'));
+    }
+
     return new Promise((resolve, reject) => {
-      const request = indexedDB.open(this.dbName, 1);
+      try {
+        const request = indexedDB.open(this.dbName, 1);
 
-      request.onupgradeneeded = (event: any) => {
-        const db = event.target.result;
-        if (!db.objectStoreNames.contains(this.storeName)) {
-          db.createObjectStore(this.storeName);
-        }
-      };
+        request.onupgradeneeded = (event: any) => {
+          const db = event.target.result;
+          if (!db.objectStoreNames.contains(this.storeName)) {
+            db.createObjectStore(this.storeName);
+          }
+        };
 
-      request.onsuccess = (event: any) => {
-        this.db = event.target.result;
-        resolve(this.db!);
-      };
+        request.onsuccess = (event: any) => {
+          this.db = event.target.result;
+          resolve(this.db!);
+        };
 
-      request.onerror = (event: any) => {
-        console.error('IndexedDB error:', event.target.error);
-        reject(event.target.error);
-      };
+        request.onerror = (event: any) => {
+          const error = event.target.error;
+          console.warn('IndexedDB connection error:', error);
+          reject(error || new Error('Unknown IndexedDB error'));
+        };
+
+        request.onblocked = () => {
+          console.warn('IndexedDB connection blocked');
+          reject(new Error('IndexedDB connection blocked'));
+        };
+      } catch (err) {
+        console.warn('Failed to open IndexedDB:', err);
+        reject(err);
+      }
     });
   }
 

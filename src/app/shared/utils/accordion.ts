@@ -379,7 +379,10 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
 
 
   protected clearAutosave(autosaveId: string) {
-    this.autosaveService.clearSavedForm(autosaveId);
+    // Autosave is best-effort; failure to clear should not crash the UI.
+    void this.autosaveService.clearSavedForm(autosaveId).catch(err => {
+      console.warn('Accordion: Failed to clear autosave data', autosaveId, err);
+    });
   }
 
   protected removeSectionInAccordion(section_id: string, rowIndex: number, create?: boolean) {
@@ -566,8 +569,13 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
 
     const dbCheckPromises = sections?.map(async s => {
       if (s.autoSaveId) {
-        const data = await this.autosaveService.getSavedForm(s.autoSaveId);
-        return data && (typeof data !== 'object' || Object.keys(data).length > 0);
+        try {
+          const data = await this.autosaveService.getSavedForm(s.autoSaveId);
+          return data && (typeof data !== 'object' || Object.keys(data).length > 0);
+        } catch (err) {
+          console.warn('Accordion: Failed to check autosave data during hideForm', s.autoSaveId, err);
+          return false;
+        }
       }
       return false;
     }) || [];

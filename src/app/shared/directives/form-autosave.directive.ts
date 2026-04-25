@@ -21,19 +21,24 @@ export class FormAutosaveDirective implements OnInit, OnDestroy {
 
   async ngOnInit() {
     if (!this.autosaveId) {
-      console.warn('FormAutosaveDirective: No autoSaveId provided');
+      console.warn('FormAutosaveDirective: No autoSaveId provided for ' + this.view?.section_name + ' section.');
       return;
     }
 
     // 1. Try to restore saved data
-    const savedData = await this.autosaveService.getSavedForm(this.autosaveId);
-    if (savedData) {
-      if (this.view) {
-        this.reconstructFormArrays(this.formGroupDirective.form, savedData, this.view);
+    // Autosave is best-effort; failure to restore should not block the form from rendering.
+    try {
+      const savedData = await this.autosaveService.getSavedForm(this.autosaveId);
+      if (savedData) {
+        if (this.view) {
+          this.reconstructFormArrays(this.formGroupDirective.form, savedData, this.view);
+        }
+        // Use patchValue to restore saved fields. 
+        // We use emitEvent: false to avoid triggering a save immediately after restore
+        this.formGroupDirective.form.patchValue(savedData, { emitEvent: false });
       }
-      // Use patchValue to restore saved fields. 
-      // We use emitEvent: false to avoid triggering a save immediately after restore
-      this.formGroupDirective.form.patchValue(savedData, { emitEvent: false });
+    } catch (err) {
+      console.warn('FormAutosaveDirective: Failed to restore form data', err);
     }
 
     // 2. Subscribe to value changes to save data

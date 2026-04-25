@@ -42,7 +42,13 @@ export class FormAutosaveService {
    */
   async getSavedForm(id: string): Promise<any | undefined> {
     if (!id) return undefined;
-    return this.dbService.get(id);
+    try {
+      return await this.dbService.get(id);
+    } catch (err) {
+      // Autosave is best-effort; failure to read should not block the app.
+      console.warn('FormAutosaveService: Failed to retrieve saved form data', id, err);
+      return undefined;
+    }
   }
 
   /**
@@ -51,6 +57,11 @@ export class FormAutosaveService {
    */
   async clearSavedForm(id: string): Promise<void> {
     if (!id) return;
-    return this.dbService.delete(id);
+    try {
+      await this.dbService.delete(id);
+    } catch (err) {
+      // Autosave is best-effort; failure to clear should not block the app.
+      console.warn('FormAutosaveService: Failed to clear saved form data', id, err);
+    }
   }
 }
