@@ -4,9 +4,10 @@ import { DetailedView, DetailedViewField } from "../model/detailed-view.model";
 import { FormControl, ValidatorFn } from "@angular/forms";
 import { BehaviorSubject, Subscription } from "rxjs";
 import { FileUpload } from "../components/generic/file-upload/file-upload.component";
-import { AfterContentInit, AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
+import { AfterContentInit, AfterViewInit, Component, ElementRef, inject, Input, OnInit, ViewChild } from "@angular/core";
 import { KeyValue } from "../model/key-value.model";
 import { AlertData } from "../model/alert.model";
+import { FormAutosaveService } from "src/app/core/service/form-autosave.service";
 
 /**
  * Type definition for field visibility rules
@@ -371,6 +372,12 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
 
   }
 
+  private autosaveService = inject(FormAutosaveService);
+
+  protected clearAutosave(autosaveId: string) {
+    this.autosaveService.clearSavedForm(autosaveId);
+  }
+
   protected removeSectionInAccordion(section_id: string, rowIndex: number, create?: boolean) {
     if (create) {
       let indexAddDet = this.accordionList.addContent?.detailed.findIndex(f => f.section_html_id == section_id)!;
@@ -527,6 +534,16 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
     }, 100);
   }
   hideForm(rowIndex: number, create?: boolean) {
+    const sections = create
+      ? this.accordionList.addContent?.detailed
+      : this.accordionList.contents[rowIndex]?.detailed;
+
+    sections?.forEach(s => {
+      if (s.autosaveId) {
+        this.clearAutosave(s.autosaveId);
+      }
+    });
+
     if (create) {
       this.accordionList.addContent = undefined;
     } else {
@@ -540,7 +557,6 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
         this.accordionList.contents[rowIndex].buttons?.push(b);
       })
     }
-
   }
 
   getSectionAccordion(sectionId: string, rowIndex: number, create?: boolean) {

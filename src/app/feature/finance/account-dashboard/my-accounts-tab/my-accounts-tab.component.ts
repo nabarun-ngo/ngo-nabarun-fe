@@ -151,14 +151,16 @@ export class MyAccountsTabComponent extends Accordion<Account> implements TabCom
         );
         break;
       case 'TRANSFER':
-        this.addSectionInAccordion(transferAmountSection(), event.rowIndex);
+        let accountTransfer = this.itemList[event.rowIndex];
+        this.addSectionInAccordion(transferAmountSection(accountTransfer), event.rowIndex);
         this.addSectionInAccordion(accountDocumentSection([], true), event.rowIndex);
         this.showEditForm(event.rowIndex, ['transfer_amt', 'document_list']);
         this.initTransferForm(event.rowIndex);
         this.activeButtonId = event.buttonId;
         break;
       case 'MONEY_IN':
-        this.addSectionInAccordion(moneyInSection(), event.rowIndex);
+        let accountMoneyIn = this.itemList[event.rowIndex];
+        this.addSectionInAccordion(moneyInSection(accountMoneyIn), event.rowIndex);
         this.addSectionInAccordion(accountDocumentSection([], true), event.rowIndex);
         this.showEditForm(event.rowIndex, ['money_in_acc', 'document_list']);
         this.activeButtonId = event.buttonId;

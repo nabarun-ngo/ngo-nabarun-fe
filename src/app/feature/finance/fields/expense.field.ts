@@ -121,6 +121,7 @@ export const expenseDetailSection = (
     section_html_id: 'expense_detail',
     section_form: new FormGroup({}),
     hide_section: false,
+    autosaveId: isCreate ? 'expense-create' : `expense-edit-${m.id}`,
     section_alerts: [
       {
         hide_alert: !(isCreate && isAdminView),
@@ -303,6 +304,7 @@ export const expenseEditableTable = (
         }))
       ])
     }),
+    autosaveId: isCreate ? 'expense-items-create' : `expense-items-edit-${m.id}`,
     show_form: false,
     hide_section: false,
     editableTable: {

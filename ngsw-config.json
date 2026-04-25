@@ -32,13 +32,26 @@
     {
       "name": "api-cache",
       "urls": [
-        "/api/**"
+        "/api/**",
+        "!**/static/**"
       ],
       "cacheConfig": {
         "strategy": "freshness",
         "maxSize": 100,
         "maxAge": "1h",
         "timeout": "5s"
+      }
+    },
+    {
+      "name": "static-data-cache",
+      "urls": [
+        "**/static/**"
+      ],
+      "cacheConfig": {
+        "strategy": "performance",
+        "maxSize": 1000,
+        "maxAge": "30d",
+        "timeout": "120s"
       }
     }
   ]

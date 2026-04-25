@@ -131,6 +131,7 @@ export const accountDetailSection = (
     section_html_id: 'account_detail',
     section_form: new FormGroup({}),
     show_form: false,
+    autosaveId: isCreate ? 'account-create' : `account-edit-${m.id}`,
     content: [
       {
         field_name: 'Account Id',
@@ -223,6 +224,7 @@ export const bankDetailSection = (m: Account) => {
     section_html_id: 'bank_detail',
     section_form: new FormGroup({}),
     hide_section: !m?.bankDetail,
+    autosaveId: `bank-edit-${m.id}`,
     content: [
       {
         field_name: 'Bank Account Number',
@@ -315,6 +317,7 @@ export const upiDetailSection = (m: Account) => {
     section_html_id: 'upi_detail',
     section_form: new FormGroup({}),
     hide_section: !m?.upiDetail,
+    autosaveId: `upi-edit-${m.id}`,
     content: [
       {
         field_name: 'UPI Id',
@@ -361,12 +364,13 @@ export const upiDetailSection = (m: Account) => {
   } as DetailedView;
 };
 
-export const transferAmountSection = () => {
+export const transferAmountSection = (m: Account) => {
   return {
     section_form: new FormGroup({}),
     section_name: 'Record Amount Transfer',
     section_type: 'key_value',
     section_html_id: 'transfer_amt',
+    autosaveId: `transfer-amount-${m.id}`,
     form_alerts: [
       {
         data: {
@@ -437,12 +441,13 @@ export const transferAmountSection = () => {
 };
 
 
-export const moneyInSection = () => {
+export const moneyInSection = (m: Account) => {
   return {
     section_form: new FormGroup({}),
     section_name: 'Record Fund Addition',
     section_type: 'key_value',
     section_html_id: 'money_in_acc',
+    autosaveId: `money-in-${m.id}`,
     form_alerts: [
       {
         data: {

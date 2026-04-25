@@ -72,6 +72,12 @@ export interface DetailedView<NumType = any> {
      */
     readonly section_form: FormGroup;
 
+    /**
+     * Optional unique identifier for form autosave.
+     * If provided, the form state will be persisted to IndexedDB.
+     */
+    autosaveId?: string;
+
     /* ───────────── Documents ───────────── */
 
     readonly documentHeader?: string;

@@ -52,6 +52,7 @@ import { EditableTableSectionComponent } from './components/generic/detailed-vie
 import { EditableListSectionComponent } from './components/generic/detailed-view/editable-list/editable-list-section.component';
 import { SafeResourceUrlPipe } from './pipes/safe-resource-url.pipe';
 import { SearchSelectModalComponent } from './components/search-select-modal/search-select-modal.component';
+import { FormAutosaveDirective } from './directives/form-autosave.directive';
 
 
 @NgModule({
@@ -109,6 +110,7 @@ import { SearchSelectModalComponent } from './components/search-select-modal/sea
     OverlayModule,
     ScrollingModule,
     MatTooltipModule,
+    FormAutosaveDirective
   ],
   exports: [
     ItemTileListComponent,
@@ -152,6 +154,7 @@ import { SearchSelectModalComponent } from './components/search-select-modal/sea
     OverlayModule,
     DocumentListComponent,
     MatTooltipModule,
+    FormAutosaveDirective
   ],
 
   providers: [{
