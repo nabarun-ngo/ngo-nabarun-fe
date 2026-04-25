@@ -28,6 +28,15 @@ export class OneSignalProviderService implements PushNotificationProvider {
     }
   }
 
+  addForegroundListener(listener: (notification: any) => void): void {
+    this.oneSignal.Notifications.addEventListener("foregroundWillDisplay", (event) => {
+      // Prevent the default notification popup
+      event.preventDefault();
+      listener(event.notification);
+    });
+
+  }
+
   async login(userId: string): Promise<void> {
     console.log('[OneSignalProvider] Logging in user:', userId);
     await this.oneSignal.login(userId);

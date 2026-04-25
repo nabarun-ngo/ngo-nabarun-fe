@@ -28,16 +28,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
   async ngOnInit(): Promise<void> {
     this.user = await this.identityService.getUser();
     // Check for existing permission and initialize listening if granted
-    if ('Notification' in window && Notification.permission === 'granted') {
-      this.notificationService.requestPermission().subscribe({
-        next: () => {
-          this.notificationService.listen();
-        },
-        error: (error) => {
-          console.error('Failed to initialize notifications:', error);
-        }
-      });
-    }
+    // if ('Notification' in window && Notification.permission === 'granted') {
+    //   this.notificationService.requestPermission().subscribe({
+    //     next: () => {
+    //       this.notificationService.listen();
+    //     },
+    //     error: (error) => {
+    //       console.error('Failed to initialize notifications:', error);
+    //     }
+    //   });
+    // }
 
     // Load initial unread count
     this.notificationService.refreshUnreadCount();
