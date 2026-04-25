@@ -1,5 +1,5 @@
 <div *ngFor="let view of detailed_views">
-    <form [formGroup]="view.section_form!" *ngIf="!view.hide_section" [appAutosave]="view.autosaveId!">
+    <form [formGroup]="view.section_form!" *ngIf="!view.hide_section" [appAutosave]="view.autoSaveId!" [appAutosaveView]="view">
         <div class="py-4" *ngIf="!view.hide_section">
             <div class="bg-white p-3 shadow-lg rounded-sm">
                 <div class="flex items-center space-x-2 font-semibold text-gray-900 leading-8"
