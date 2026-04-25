@@ -8,6 +8,8 @@ import { AfterContentInit, AfterViewInit, Component, ElementRef, inject, Input, 
 import { KeyValue } from "../model/key-value.model";
 import { AlertData } from "../model/alert.model";
 import { FormAutosaveService } from "src/app/core/service/form-autosave.service";
+import { ModalService } from "src/app/core/service/modal.service";
+
 
 /**
  * Type definition for field visibility rules
@@ -373,6 +375,8 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
   }
 
   private autosaveService = inject(FormAutosaveService);
+  private ms = inject(ModalService);
+
 
   protected clearAutosave(autosaveId: string) {
     this.autosaveService.clearSavedForm(autosaveId);
@@ -538,26 +542,47 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
       ? this.accordionList.addContent?.detailed
       : this.accordionList.contents[rowIndex]?.detailed;
 
-    sections?.forEach(s => {
-      if (s.autosaveId) {
-        this.clearAutosave(s.autosaveId);
-      }
-    });
-
-    if (create) {
-      this.accordionList.addContent = undefined;
-    } else {
-      this.accordionList.contents[rowIndex].detailed.map(m => {
-        m.show_form = false;
-        //EXPERIMENTAL//m.section_form?.reset();
-        return m;
+    const performHide = () => {
+      sections?.forEach(s => {
+        if (s.autosaveId) {
+          this.clearAutosave(s.autosaveId);
+        }
       });
-      this.accordionList.contents[rowIndex].buttons?.splice(0);
-      this.functionButtons.forEach(b => {
-        this.accordionList.contents[rowIndex].buttons?.push(b);
-      })
+
+      if (create) {
+        this.accordionList.addContent = undefined;
+      } else {
+        this.accordionList.contents[rowIndex].detailed.map(m => {
+          m.show_form = false;
+          //EXPERIMENTAL//m.section_form?.reset();
+          return m;
+        });
+        this.accordionList.contents[rowIndex].buttons?.splice(0);
+        this.functionButtons.forEach(b => {
+          this.accordionList.contents[rowIndex].buttons?.push(b);
+        })
+      }
+    };
+
+    const hasEnteredData = sections?.some(s =>
+      s.section_form?.dirty ||
+      (s.doc?.docList?.value && s.doc.docList.value.length > 0)
+    );
+
+    if (reason === 'user_cancelled' && hasEnteredData) {
+      const modal = this.ms.openNotificationModal({
+        title: 'Confirm Cancellation',
+        description: 'You have entered some data. Are you sure you want to cancel? All unsaved changes will be lost.'
+      }, 'confirmation', 'warning');
+
+      modal.onAccept$.subscribe(() => {
+        performHide();
+      });
+    } else {
+      performHide();
     }
   }
+
 
   getSectionAccordion(sectionId: string, rowIndex: number, create?: boolean) {
     if (create) {
