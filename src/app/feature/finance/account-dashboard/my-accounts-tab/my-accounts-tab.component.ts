@@ -171,16 +171,14 @@ export class MyAccountsTabComponent extends Accordion<Account> implements TabCom
         this.activeButtonId = event.buttonId;
         break;
       case 'CANCEL':
-        this.hideForm(event.rowIndex, 'user_cancelled').subscribe(hidden => {
-          if (hidden) {
-            if (this.activeButtonId == 'TRANSFER') {
-              this.removeSectionInAccordion('transfer_amt', event.rowIndex);
-              this.removeSectionInAccordion('document_list', event.rowIndex);
-            }
-            if (this.activeButtonId == 'MONEY_IN') {
-              this.removeSectionInAccordion('money_in_acc', event.rowIndex);
-              this.removeSectionInAccordion('document_list', event.rowIndex);
-            }
+        this.hideForm(event.rowIndex, 'user_cancelled', false, () => {
+          if (this.activeButtonId == 'TRANSFER') {
+            this.removeSectionInAccordion('transfer_amt', event.rowIndex);
+            this.removeSectionInAccordion('document_list', event.rowIndex);
+          }
+          if (this.activeButtonId == 'MONEY_IN') {
+            this.removeSectionInAccordion('money_in_acc', event.rowIndex);
+            this.removeSectionInAccordion('document_list', event.rowIndex);
           }
         });
         break;

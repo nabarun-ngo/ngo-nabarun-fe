@@ -540,7 +540,8 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
       }
     }, 100);
   }
-  hideForm(rowIndex: number, reason: 'user_cancelled' | 'request_completed', create?: boolean): Observable<boolean> {
+
+  hideForm(rowIndex: number, reason: 'user_cancelled' | 'request_completed', create?: boolean, callback?: () => void): void {
     const sections = create
       ? this.accordionList.addContent?.detailed
       : this.accordionList.contents[rowIndex]?.detailed;
@@ -565,6 +566,10 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
           this.accordionList.contents[rowIndex].buttons?.push(b);
         })
       }
+
+      if (callback) {
+        callback();
+      }
     };
 
     const dbCheckPromises = sections?.map(async s => {
@@ -580,39 +585,26 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
       return false;
     }) || [];
 
-    return from(Promise.all(dbCheckPromises)).pipe(
-      switchMap(dbResults => {
-        const hasDbData = dbResults.some(r => r);
-        const hasLocalData = sections?.some(s =>
-          s.section_form?.dirty ||
-          (s.doc?.docList?.value && s.doc.docList.value.length > 0)
-        );
+    from(Promise.all(dbCheckPromises)).subscribe(dbResults => {
+      const hasDbData = dbResults.some(r => r);
+      const hasLocalData = sections?.some(s =>
+        s.section_form?.dirty ||
+        (s.doc?.docList?.value && s.doc.docList.value.length > 0)
+      );
 
-        if (reason === 'user_cancelled' && (hasDbData || hasLocalData)) {
-          const result$ = new Subject<boolean>();
-          const modal = this.ms.openNotificationModal({
-            title: 'Confirm Cancellation',
-            description: 'You have entered some data. Are you sure you want to cancel? All unsaved changes will be lost.'
-          }, 'confirmation', 'warning');
+      if (reason === 'user_cancelled' && (hasDbData || hasLocalData)) {
+        const modal = this.ms.openNotificationModal({
+          title: 'Confirm Cancellation',
+          description: 'You have entered some data. Are you sure you want to cancel? All unsaved changes will be lost.'
+        }, 'confirmation', 'warning');
 
-          modal.onAccept$.subscribe(() => {
-            performHide();
-            result$.next(true);
-            result$.complete();
-          });
-
-          modal.onDecline$.subscribe(() => {
-            result$.next(false);
-            result$.complete();
-          });
-
-          return result$.asObservable();
-        } else {
+        modal.onAccept$.subscribe(() => {
           performHide();
-          return of(true);
-        }
-      })
-    );
+        });
+      } else {
+        performHide();
+      }
+    });
   }
 
 
