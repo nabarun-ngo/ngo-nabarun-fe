@@ -100,7 +100,7 @@ export const getActivitySection = (
         section_type: 'key_value',
         section_html_id: 'activity_detail',
         section_form: new FormGroup({}),
-        autosaveId: isCreate ? 'activity-create' : `activity-edit-${activity.id}`,
+        autoSaveId: isCreate ? 'activity-create' : `activity-edit-${activity.id}`,
         content: [
             {
                 field_name: 'Activity Name',

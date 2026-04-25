@@ -544,8 +544,8 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
 
     const performHide = () => {
       sections?.forEach(s => {
-        if (s.autosaveId) {
-          this.clearAutosave(s.autosaveId);
+        if (s.autoSaveId) {
+          this.clearAutosave(s.autoSaveId);
         }
       });
 

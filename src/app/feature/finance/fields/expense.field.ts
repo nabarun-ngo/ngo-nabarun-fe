@@ -296,6 +296,7 @@ export const expenseEditableTable = (
     section_name: 'Expense Items',
     section_type: 'editable_table',
     section_html_id: 'expense_list_detail',
+    autosaveId: isCreate ? 'expense-items-create' : `expense-items-edit-${m.id}`,
     section_form: new FormGroup({
       items: new FormArray([
         ...items.map(item => new FormGroup({
@@ -304,7 +305,7 @@ export const expenseEditableTable = (
         }))
       ])
     }),
-    autosaveId: isCreate ? 'expense-items-create' : `expense-items-edit-${m.id}`,
+    autoSaveId: isCreate ? 'expense-items-create' : `expense-items-edit-${m.id}`,
     show_form: false,
     hide_section: false,
     editableTable: {
@@ -471,6 +472,7 @@ export const settlementSummary = (
     section_html_id: 'settlement_summary',
     section_form: new FormGroup({}),
     hide_section: false,
+    autoSaveId: `settlement-summary-${expense.id}`,
     section_alerts: [
       {
         hide_alert: !(payerAccount && walletBalance < finalAmount),

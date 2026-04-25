@@ -31,6 +31,7 @@ export const transactionDetailSection = (data: Transaction, refData: { [name: st
     section_name: 'Transaction Detail',
     section_type: 'key_value',
     section_html_id: 'txn_det',
+    autoSaveId: `transaction-detail-${data.txnId}`,
     content: [
       {
         field_name: 'Transaction Number',
@@ -199,6 +200,7 @@ export const reverseTransactionSection = (data: Transaction, refData: { [name: s
     section_name: 'Reverse Transaction',
     section_type: 'key_value',
     section_html_id: 'reverse_txn',
+    autoSaveId: `reverse-transaction-${data.txnId}`,
     show_form: false,
     content: [
       {

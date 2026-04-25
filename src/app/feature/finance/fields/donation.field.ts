@@ -117,7 +117,7 @@ export const getDonationSection = (
         section_html_id: 'donation_detail',
         section_form: new FormGroup({}),
         form_alerts: [],
-        autosaveId: isCreate ? `donation-create-${isGuest ? 'guest' : 'member'}` : `donation-edit-${donation.id}`,
+        autoSaveId: isCreate ? `donation-create-${isGuest ? 'guest' : 'member'}` : `donation-edit-${donation.id}`,
         content: [
             {
                 field_name: 'Donation number',
@@ -394,7 +394,7 @@ export const getDonorSection = (
         section_type: 'key_value',
         section_html_id: 'donor_detail',
         section_form: new FormGroup({}),
-        autosaveId: 'donor-create-guest',
+        autoSaveId: 'donor-create-guest',
         content: [
             {
                 field_name: 'Donor name',

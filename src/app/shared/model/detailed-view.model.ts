@@ -76,7 +76,7 @@ export interface DetailedView<NumType = any> {
      * Optional unique identifier for form autosave.
      * If provided, the form state will be persisted to IndexedDB.
      */
-    autosaveId?: string;
+    autoSaveId?: string;
 
     /* ───────────── Documents ───────────── */
 

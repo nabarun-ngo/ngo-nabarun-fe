@@ -72,6 +72,7 @@ export class AdminApikeyTabComponent extends Accordion<ApiKeyDto> implements Tab
       section_name: 'API Key Detail',
       section_type: 'key_value',
       section_html_id: 'api_key_detail',
+      autoSaveId: isCreate ? 'api-key-create' : `api-key-edit-${apikey.id}`,
       section_form: new FormGroup({}),
       show_form: false,
       hide_section: false,

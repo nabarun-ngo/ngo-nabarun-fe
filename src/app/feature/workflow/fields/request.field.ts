@@ -18,6 +18,7 @@ export const getRequestDetailSection = (
         section_type: `key_value`,
         section_html_id: `request_detail`,
         section_form: new FormGroup({}),
+        autoSaveId: isCreate ? `request-create` : `request-detail-${request.id}`,
         section_alerts: [
             {
                 hide_alert: !(isCreate && isDelegated),
@@ -115,6 +116,7 @@ export const getRequestStepsSection = (
         section_name: `Request Steps`,
         section_type: `editable_table`,
         section_html_id: `request_steps`,
+        autoSaveId: isCreate ? `request-steps-create` : `request-steps-edit-${request.id}`,
         hide_section: isCreate || request?.actualSteps?.length == 0,
         section_form: request?.actualSteps ? new FormGroup({
             steps: new FormArray([
@@ -155,6 +157,7 @@ export const getRequestAdditionalDetailSection = (m: WorkflowRequest | undefined
         hide_section: !isCreate && (!m?.requestData || Object.keys(m?.requestData || {}).length == 0),
         section_form: new FormGroup({}),
         show_form: isCreate,
+        autoSaveId: isCreate ? `request-additional-data-create` : `request-additional-data-edit-${m?.id}`,
         content: fields.map(field => ({
             editable: true,
             field_name: field.value,

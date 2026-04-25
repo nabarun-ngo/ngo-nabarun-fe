@@ -224,7 +224,7 @@ export const bankDetailSection = (m: Account) => {
     section_html_id: 'bank_detail',
     section_form: new FormGroup({}),
     hide_section: !m?.bankDetail,
-    autosaveId: `bank-edit-${m.id}`,
+    autoSaveId: `bank-edit-${m.id}`,
     content: [
       {
         field_name: 'Bank Account Number',
@@ -317,7 +317,7 @@ export const upiDetailSection = (m: Account) => {
     section_html_id: 'upi_detail',
     section_form: new FormGroup({}),
     hide_section: !m?.upiDetail,
-    autosaveId: `upi-edit-${m.id}`,
+    autoSaveId: `upi-edit-${m.id}`,
     content: [
       {
         field_name: 'UPI Id',

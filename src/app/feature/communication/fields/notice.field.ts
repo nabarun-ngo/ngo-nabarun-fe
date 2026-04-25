@@ -65,6 +65,7 @@ export const getNoticeSection = (
         section_type: 'key_value',
         section_html_id: 'notice_detail',
         section_form: new FormGroup({}),
+        autoSaveId: isCreate ? 'notice-create' : `notice-edit-${notice.id}`,
         content: [
             {
                 field_name: 'Notice ID',
