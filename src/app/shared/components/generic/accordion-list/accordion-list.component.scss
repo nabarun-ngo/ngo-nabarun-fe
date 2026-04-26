@@ -11,12 +11,12 @@
     &:hover {
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
       transform: translateY(-2px) !important;
-      border-color: #3b82f6 !important;
+      border-color: var(--primary-500) !important;
     }
 
     &.mat-expanded {
       box-shadow: 0 8px 24px rgba(59, 130, 246, 0.15) !important;
-      border-color: #3b82f6 !important;
+      border-color: var(--primary-500) !important;
       background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%) !important;
     }
   }
@@ -280,7 +280,7 @@
 
 /* Selected Row Styling */
 ::ng-deep .mat-accordion .mat-expansion-panel.row-selected {
-  border-left: 4px solid #3b82f6 !important;
+  border-left: 4px solid var(--primary-500) !important;
   background: #eff6ff !important;
 
   .mat-expansion-panel-header {
@@ -295,7 +295,7 @@
   }
 
   .mat-checkbox-checkmark-path {
-    stroke: #3b82f6 !important;
+    stroke: var(--primary-500) !important;
   }
 
   &.mat-checkbox-checked .mat-checkbox-background,
