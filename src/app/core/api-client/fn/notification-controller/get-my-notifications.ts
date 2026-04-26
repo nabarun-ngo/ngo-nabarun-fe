@@ -19,8 +19,11 @@ export interface GetMyNotifications$Params {
   isArchived?: 'Y' | 'N';
   referenceId?: string;
   referenceType?: string;
+  isPushSent?: 'Y' | 'N';
+  pushDelivered?: 'Y' | 'N';
   fromDate?: string;
   toDate?: string;
+  userId?: string;
 }
 
 export function getMyNotifications(http: HttpClient, rootUrl: string, params?: GetMyNotifications$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultNotificationResponseDto>> {
@@ -34,8 +37,11 @@ export function getMyNotifications(http: HttpClient, rootUrl: string, params?: G
     rb.query('isArchived', params.isArchived, {});
     rb.query('referenceId', params.referenceId, {});
     rb.query('referenceType', params.referenceType, {});
+    rb.query('isPushSent', params.isPushSent, {});
+    rb.query('pushDelivered', params.pushDelivered, {});
     rb.query('fromDate', params.fromDate, {});
     rb.query('toDate', params.toDate, {});
+    rb.query('userId', params.userId, {});
   }
 
   return http.request(

@@ -8,14 +8,18 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseArraySchedulerLogDto } from '../../models/success-response-array-scheduler-log-dto';
+import { SuccessResponsePagedResultSchedulerLogDto } from '../../models/success-response-paged-result-scheduler-log-dto';
 
 export interface GetTriggerLogs$Params {
+  pageIndex?: number;
+  pageSize?: number;
 }
 
-export function getTriggerLogs(http: HttpClient, rootUrl: string, params?: GetTriggerLogs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArraySchedulerLogDto>> {
+export function getTriggerLogs(http: HttpClient, rootUrl: string, params?: GetTriggerLogs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultSchedulerLogDto>> {
   const rb = new RequestBuilder(rootUrl, getTriggerLogs.PATH, 'get');
   if (params) {
+    rb.query('pageIndex', params.pageIndex, {});
+    rb.query('pageSize', params.pageSize, {});
   }
 
   return http.request(
@@ -23,7 +27,7 @@ export function getTriggerLogs(http: HttpClient, rootUrl: string, params?: GetTr
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseArraySchedulerLogDto>;
+      return r as StrictHttpResponse<SuccessResponsePagedResultSchedulerLogDto>;
     })
   );
 }

@@ -147,7 +147,7 @@ export class GuestDonationTabComponent extends BaseDonationTabComponent {
         return;
       }
       this.donationService.createDonation(donation, true).subscribe((data) => {
-        this.hideForm(0, true);
+        this.hideForm(0, 'request_completed', true);
         this.addContentRow(data, true);
       });
     } else {

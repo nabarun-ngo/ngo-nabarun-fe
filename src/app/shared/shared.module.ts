@@ -15,6 +15,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { SearchAndAdvancedSearchFormComponent } from './components/search-and-advanced-search-form/search-and-advanced-search-form.component';
 import { DocumentListComponent } from './components/generic/document-list/document-list.component';
 import { AccordionListComponent } from './components/generic/accordion-list/accordion-list.component';
@@ -51,6 +52,8 @@ import { EditableTableSectionComponent } from './components/generic/detailed-vie
 import { EditableListSectionComponent } from './components/generic/detailed-view/editable-list/editable-list-section.component';
 import { SafeResourceUrlPipe } from './pipes/safe-resource-url.pipe';
 import { SearchSelectModalComponent } from './components/search-select-modal/search-select-modal.component';
+import { FormAutosaveDirective } from './directives/form-autosave.directive';
+import { CarouselComponent } from './components/generic/carousel/carousel.component';
 
 
 @NgModule({
@@ -79,6 +82,7 @@ import { SearchSelectModalComponent } from './components/search-select-modal/sea
     EditableListSectionComponent,
     SafeResourceUrlPipe,
     SearchSelectModalComponent,
+    CarouselComponent,
   ],
 
   imports: [
@@ -107,6 +111,8 @@ import { SearchSelectModalComponent } from './components/search-select-modal/sea
     MatAutocompleteModule,
     OverlayModule,
     ScrollingModule,
+    MatTooltipModule,
+    FormAutosaveDirective
   ],
   exports: [
     ItemTileListComponent,
@@ -149,7 +155,9 @@ import { SearchSelectModalComponent } from './components/search-select-modal/sea
     ScrollingModule,
     OverlayModule,
     DocumentListComponent,
-
+    MatTooltipModule,
+    FormAutosaveDirective,
+    CarouselComponent
   ],
 
   providers: [{

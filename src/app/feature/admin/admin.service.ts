@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
-import { map } from 'rxjs';
+import { map, of } from 'rxjs';
 import { CreateApiKeyDto } from 'src/app/core/api-client/models';
-import { ApiKeyControllerService, CronControllerService, JobControllerService, OAuthControllerService, StaticDocsControllerService, WorkflowControllerService } from 'src/app/core/api-client/services';
+import { NotificationControllerService, UserControllerService, ApiKeyControllerService, CronControllerService, JobControllerService, OAuthControllerService, StaticDocsControllerService, WorkflowControllerService } from 'src/app/core/api-client/services';
 import { AdminDefaultValue } from './admin.const';
 import { mapPagedWorkflowTaskDtoToPagedTask } from '../workflow/model/workflow.mapper';
+import { mapPagedUserDtoToPagedUser } from '../member/models/member.mapper';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminService {
+
 
 
   constructor(
@@ -17,14 +19,18 @@ export class AdminService {
     private jobController: JobControllerService,
     private apiKeyController: ApiKeyControllerService,
     private workflowController: WorkflowControllerService,
-    private cronController: CronControllerService) { }
+    private cronController: CronControllerService,
+    private notificationController: NotificationControllerService,
+    private userController: UserControllerService) { }
 
 
 
   getCronJobNames() {
     return this.cronController.getScheduledJobs().pipe(map(m => m.responsePayload));
   }
-
+  getBgJob(id: string) {
+    return this.jobController.getJobDetails({ jobId: id }).pipe(map(m => m.responsePayload));
+  }
 
   /**
    * Get list of API keys
@@ -76,7 +82,7 @@ export class AdminService {
   }
 
   getBgJobStatistics() {
-    return this.jobController.getQueueStatistics().pipe(map(m => m.responsePayload));
+    return this.jobController.getPerformanceMetrics().pipe(map(m => m.responsePayload));
   }
 
 
@@ -117,18 +123,20 @@ export class AdminService {
   }
 
 
-  getBgJobs(status: string, pageIndex: number = AdminDefaultValue.pageNumber, pageSize: number = AdminDefaultValue.pageSize) {
+  getBgJobs(status?: string, pageIndex: number = AdminDefaultValue.pageNumber, pageSize: number = AdminDefaultValue.pageSize, jobId?: string) {
     return this.jobController.getJobs({
       status: status as any,
       pageIndex: pageIndex,
-      pageSize: pageSize
+      pageSize: pageSize,
+      jobId: jobId || undefined,
+      includeLogs: 'Y'
     }).pipe(
       map(d => d.responsePayload)
     )
   }
 
   updateQueueState(state: string) {
-    return this.jobController.pauseQueue({
+    return this.jobController.queueOperation({
       operation: state as any
     }).pipe(map(m => m.responsePayload));
   }
@@ -140,20 +148,75 @@ export class AdminService {
     }).pipe(map(m => m.responsePayload));
   }
 
-  getCronTriggers() {
-    return this.cronController.getTriggerLogs().pipe(map(m => m.responsePayload));
-  }
-
-  getCronJobExecutions(name: string, pageIndex: number = AdminDefaultValue.pageNumber, pageSize: number = AdminDefaultValue.pageSize) {
-    return this.cronController.getCronLogs({
-      name: name,
+  getCronTriggers(pageIndex: number = AdminDefaultValue.pageNumber, pageSize: number = AdminDefaultValue.pageSize) {
+    return this.cronController.getTriggerLogs({
       pageIndex: pageIndex,
       pageSize: pageSize
     }).pipe(map(m => m.responsePayload));
   }
 
-  triggerCronJob(name: string) {
-    return this.cronController.runScheduledJob({ name: name }).pipe(map(m => m.responsePayload));
+  getCronJobExecutions(name: string, pageIndex: number = AdminDefaultValue.pageNumber, pageSize: number = AdminDefaultValue.pageSize) {
+    // return this.cronController.getCronLogs({
+    //   name: name,
+    //   pageIndex: pageIndex,
+    //   pageSize: pageSize
+    // }).pipe(map(m => m.responsePayload));
+    return of({
+      content: [],
+      totalSize: 0
+    })
+  }
+
+  triggerCronJob(name: string, inputData?: any) {
+    return this.cronController.runScheduledJob({ name: name, body: inputData }).pipe(map(m => m.responsePayload));
+  }
+
+  getFcmTokenMetadataList(pageIndex: number = AdminDefaultValue.pageNumber, pageSize: number = AdminDefaultValue.pageSize) {
+    return this.notificationController.getFcmTokensMetadata({
+      pageIndex: pageIndex,
+      pageSize: pageSize
+    }).pipe(
+      map(m => m.responsePayload)
+    );
+  }
+
+  deleteFcmToken(tokenId: string) {
+    return this.notificationController.deleteFcmToken({
+      tokenId: tokenId
+    });
+  }
+
+  getUsers() {
+    return this.userController.listUsers({
+      pageIndex: 0,
+      pageSize: 10000
+    }).pipe(map(m => m.responsePayload));
+  }
+
+  sendTestPushNotification(userIds: string[], body: string, title: string, category: string = 'SYSTEM', type: string = 'INFO') {
+    return this.notificationController.createBulkNotifications({
+      body: {
+        body: body,
+        title: title,
+        category: category as any,
+        type: type as any,
+        sendPush: true,
+        userIds: userIds
+      }
+    }).pipe(map(m => m.responsePayload));
+  }
+
+  getUndeliveredNotifications(pageIndex: number = AdminDefaultValue.pageNumber, pageSize: number = AdminDefaultValue.pageSize) {
+    return this.notificationController.getNotifications({
+      pageIndex: pageIndex,
+      pageSize: pageSize,
+      isPushSent: 'Y',
+      pushDelivered: 'N'
+    }).pipe(map(m => m.responsePayload));
+  }
+
+  resendPushNotification(notificationId: string) {
+    return this.notificationController.resendPushNotification({ id: notificationId });
   }
 
 }

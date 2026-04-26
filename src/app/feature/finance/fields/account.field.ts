@@ -20,11 +20,11 @@ export const accountTabHeader = (tab: accountTab) => {
       rounded: true,
     },
     {
-      value: 'Account Status',
+      value: tab == 'my_accounts' ? 'Account Status' : 'Account Holder Name',
       rounded: true,
     },
     {
-      value: tab == 'my_accounts' ? 'Current Balance' : 'Account Holder Name',
+      value: 'Current Balance',
       rounded: true,
     },
   ];
@@ -97,6 +97,8 @@ export const accountHighLevelView = (
   tab: accountTab,
   refData: { [name: string]: KeyValue[] }
 ): AccordionCell[] => {
+  let accountType = refData[AccountConstant.refDataKey.accountType].find((x) => x.key == item?.accountType)?.displayValue || item?.accountType;
+  let accountStatus = refData[AccountConstant.refDataKey.accountStatus].find((x) => x.key == item?.status)?.displayValue || item?.status;
   return [
     {
       type: 'text',
@@ -105,19 +107,15 @@ export const accountHighLevelView = (
     },
     {
       type: 'text',
-      value: item?.accountType,
-      showDisplayValue: true,
-      refDataSection: AccountConstant.refDataKey.accountType,
+      value: tab == 'my_accounts' ? accountType : `${accountStatus} ${accountType}`,
     },
     {
       type: 'text',
-      value: item?.status,
-      showDisplayValue: true,
-      refDataSection: AccountConstant.refDataKey.accountStatus,
+      value: tab == 'my_accounts' ? accountStatus : (item?.accountHolderName || ''),
     },
     {
       type: 'text',
-      value: tab == 'my_accounts' ? `₹ ${item?.balance}` : item?.accountHolderName || '',
+      value: `₹ ${item?.balance}`,
     },
   ];
 };
@@ -133,6 +131,7 @@ export const accountDetailSection = (
     section_html_id: 'account_detail',
     section_form: new FormGroup({}),
     show_form: false,
+    autosaveId: isCreate ? 'account-create' : `account-edit-${m.id}`,
     content: [
       {
         field_name: 'Account Id',
@@ -225,6 +224,7 @@ export const bankDetailSection = (m: Account) => {
     section_html_id: 'bank_detail',
     section_form: new FormGroup({}),
     hide_section: !m?.bankDetail,
+    autoSaveId: `bank-edit-${m.id}`,
     content: [
       {
         field_name: 'Bank Account Number',
@@ -317,6 +317,7 @@ export const upiDetailSection = (m: Account) => {
     section_html_id: 'upi_detail',
     section_form: new FormGroup({}),
     hide_section: !m?.upiDetail,
+    autoSaveId: `upi-edit-${m.id}`,
     content: [
       {
         field_name: 'UPI Id',
@@ -363,12 +364,13 @@ export const upiDetailSection = (m: Account) => {
   } as DetailedView;
 };
 
-export const transferAmountSection = () => {
+export const transferAmountSection = (m: Account) => {
   return {
     section_form: new FormGroup({}),
     section_name: 'Record Amount Transfer',
     section_type: 'key_value',
     section_html_id: 'transfer_amt',
+    autosaveId: `transfer-amount-${m.id}`,
     form_alerts: [
       {
         data: {
@@ -439,12 +441,13 @@ export const transferAmountSection = () => {
 };
 
 
-export const moneyInSection = () => {
+export const moneyInSection = (m: Account) => {
   return {
     section_form: new FormGroup({}),
     section_name: 'Record Fund Addition',
     section_type: 'key_value',
     section_html_id: 'money_in_acc',
+    autosaveId: `money-in-${m.id}`,
     form_alerts: [
       {
         data: {

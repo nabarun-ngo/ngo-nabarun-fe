@@ -22,6 +22,7 @@ export interface NotificationResponseDto {
 };
   priority: 'LOW' | 'NORMAL' | 'HIGH' | 'URGENT';
   pushDelivered: boolean;
+  pushError?: string;
   pushSentAt?: string;
   readAt?: string;
   referenceId?: string;
@@ -29,4 +30,10 @@ export interface NotificationResponseDto {
   title: string;
   type: 'INFO' | 'SUCCESS' | 'WARNING' | 'ERROR' | 'TASK' | 'APPROVAL' | 'REMINDER' | 'ANNOUNCEMENT';
   updatedAt: string;
+  user?: {
+'id': string;
+'firstName': string;
+'lastName': string;
+'email': string;
+};
 }

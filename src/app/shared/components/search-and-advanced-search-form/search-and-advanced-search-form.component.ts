@@ -36,7 +36,7 @@ export class SearchAndAdvancedSearchFormComponent implements OnInit {
 
   inputInit(input: SearchAndAdvancedSearchModel) {
     input.advancedSearch?.searchFormFields.forEach(e => {
-      this.searchformGroup.setControl(e.formControlName, new FormControl('', e.validations));
+      this.searchformGroup.setControl(e.formControlName, new FormControl(e.defaultValue, e.validations));
     })
     this.search = input;
     let len = input.advancedSearch?.searchFormFields?.length!;
@@ -49,11 +49,37 @@ export class SearchAndAdvancedSearchFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.searchformGroup.valueChanges.subscribe(d => {
+      this.search.advancedSearch?.searchFormFields.forEach(field => {
+        if (field.displayCondition && !this.isFieldVisible(field)) {
+          const control = this.searchformGroup.get(field.formControlName);
+          if (control && control.value !== '') {
+            control.setValue('', { emitEvent: false });
+            d[field.formControlName] = '';
+          }
+        }
+
+        if (field.valueTransformation && this.isFieldVisible(field)) {
+          const newValue = field.valueTransformation(this.searchformGroup.getRawValue());
+          const control = this.searchformGroup.get(field.formControlName);
+          if (control && control.value !== newValue) {
+            control.setValue(newValue, { emitEvent: false });
+            d[field.formControlName] = newValue;
+          }
+        }
+      });
+
       this.isSearchDisabled = !this.searchformGroup.valid || isEmptyObject(removeNullFields(d));
       ////console.log(isEmptyObject(removeNullFields(d)))
       ////console.log('Disabled',this.isSearchDisabled)
 
     })
+  }
+
+  isFieldVisible(field: any): boolean {
+    if (field.hidden) return false;
+    if (!field.displayCondition) return true;
+
+    return field.displayCondition(this.searchformGroup.getRawValue());
   }
 
   advSearch() {

@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Capacitor } from '@capacitor/core';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -26,6 +27,11 @@ export class PwaInstallPromptComponent implements OnInit, OnDestroy {
   private installPromptDismissed = false;
 
   ngOnInit(): void {
+    // Do not show for native Capacitor apps
+    if (Capacitor.isNativePlatform()) {
+      return;
+    }
+
     // Check if already installed
     if (this.isInstalled()) {
       return;

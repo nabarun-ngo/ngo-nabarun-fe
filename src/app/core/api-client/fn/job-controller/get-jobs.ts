@@ -13,24 +13,25 @@ import { SuccessResponsePagedResultJobDetail } from '../../models/success-respon
 export interface GetJobs$Params {
 
 /**
- * Page index of the failed jobs to return
+ * Page index
  */
   pageIndex: number;
 
 /**
- * Page size of the failed jobs to return
+ * Page size
  */
   pageSize: number;
 
 /**
- * Status of the failed jobs to return
+ * Status of the jobs to return
  */
-  status: 'completed' | 'failed' | 'paused' | 'delayed' | 'paused' | 'active';
+  status: 'completed' | 'failed' | 'paused' | 'delayed' | 'active' | 'waiting' | 'waiting-children';
 
 /**
- * Name of the failed jobs to return
+ * Filter by job ID
  */
-  name?: string;
+  jobId?: string;
+  includeLogs: string;
 }
 
 export function getJobs(http: HttpClient, rootUrl: string, params: GetJobs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponsePagedResultJobDetail>> {
@@ -39,7 +40,8 @@ export function getJobs(http: HttpClient, rootUrl: string, params: GetJobs$Param
     rb.query('pageIndex', params.pageIndex, {});
     rb.query('pageSize', params.pageSize, {});
     rb.query('status', params.status, {});
-    rb.query('name', params.name, {});
+    rb.query('jobId', params.jobId, {});
+    rb.query('includeLogs', params.includeLogs, {});
   }
 
   return http.request(

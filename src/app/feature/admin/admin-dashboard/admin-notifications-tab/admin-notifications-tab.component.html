@@ -1,0 +1,19 @@
+<div class="mb-4 flex flex-wrap justify-end gap-2 relative z-10">
+    <button mat-button color="secondary" (click)="loadData()">
+        <mat-icon>refresh</mat-icon>
+        Refresh
+    </button>
+    <button mat-button color="primary" (click)="sendPushNotification()">
+        <mat-icon>notifications_active</mat-icon>
+        Send Notification
+    </button>
+</div>
+<h1 class="text-center mb-2 text-indigo-500 py-2">Failed Notifications
+</h1>
+<app-accordion-list [accordionList]="getAccordionList()" (onButtonClick)="onClick($event)"
+    (onAccordionOpen)="onAccordionOpen($event)"></app-accordion-list>
+
+<mat-paginator class="mt-4" style="background-color: transparent;" (page)="handlePageEvent($event)"
+    [length]="itemLength$ | async" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" [pageIndex]="pageNumber"
+    aria-label="Select page">
+</mat-paginator>

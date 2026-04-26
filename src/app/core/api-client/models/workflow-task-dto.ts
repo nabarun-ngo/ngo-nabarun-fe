@@ -7,6 +7,7 @@ export interface WorkflowTaskDto {
   assignedToId?: string;
   assignedToName?: string;
   assignments: Array<TaskAssignmentDto>;
+  autoCloseable?: boolean;
   checklist?: Array<string>;
   completedAt?: string;
   completedById?: string;

@@ -11,6 +11,8 @@ import { NotificationModalComponent, SnackComponent } from './component/notifica
 import { environment } from 'src/environments/environment';
 import { ApiModule as ApiClientModule } from './api-client/api.module';
 import { HttpErrorIntercepterService } from './intercepter/http-error-intercepter.service';
+import { PUSH_NOTIFICATION_PROVIDER } from './service/notification/push-notification-provider.interface';
+import { OneSignalProviderService } from './service/notification/onesignal-provider.service';
 import { NgHttpLoaderModule } from 'ng-http-loader';
 import { RouterModule } from '@angular/router';
 import { CommonLayoutComponent } from './layout/common-layout/common-layout.component';
@@ -20,6 +22,7 @@ import { DateDiffPipe } from './pipe/date-diff.pipe';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatNativeDateModule } from '@angular/material/core';
 import { AuthHttpInterceptor, AuthModule } from '@auth0/auth0-angular';
+import { Capacitor } from '@capacitor/core';
 import { BaseModalComponent } from './component/base-modal/base-modal.component';
 import { GenericToastPromptComponent } from './component/toast-prompt/generic-toast-prompt.component';
 import { NotificationPromptComponent } from './component/toast-prompt/notification-prompt/notification-prompt.component';
@@ -30,6 +33,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
+
+const authConfig = Capacitor.isNativePlatform()
+  ? environment.mobile_auth_config
+  : environment.auth_config;
 
 
 @NgModule({
@@ -54,7 +61,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   imports: [
     CommonModule,
     HttpClientModule,
-    AuthModule.forRoot(environment.auth_config),
+    AuthModule.forRoot(authConfig),
     MatDialogModule,
     ApiClientModule.forRoot({
       rootUrl: environment.api_base_url2
@@ -85,6 +92,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
       useClass: AuthHttpInterceptor,
       multi: true
     },
+    {
+      provide: PUSH_NOTIFICATION_PROVIDER,
+      useClass: OneSignalProviderService
+    }
   ]
 })
 export class CoreModule {

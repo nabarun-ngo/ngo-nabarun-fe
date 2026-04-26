@@ -8,16 +8,19 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { Object } from '../../models/object';
 import { SuccessResponseString } from '../../models/success-response-string';
 
 export interface RunScheduledJob$Params {
   name: string;
+      body: Object
 }
 
 export function runScheduledJob(http: HttpClient, rootUrl: string, params: RunScheduledJob$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
   const rb = new RequestBuilder(rootUrl, runScheduledJob.PATH, 'post');
   if (params) {
     rb.path('name', params.name, {});
+    rb.body(params.body, 'application/json');
   }
 
   return http.request(

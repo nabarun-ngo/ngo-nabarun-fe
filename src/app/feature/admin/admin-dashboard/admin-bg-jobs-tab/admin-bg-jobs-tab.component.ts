@@ -7,7 +7,7 @@ import { AccordionCell, AccordionButton } from 'src/app/shared/model/accordion-l
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { Accordion } from 'src/app/shared/utils/accordion';
 import { AdminService } from '../../admin.service';
-import { FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { date } from 'src/app/core/service/utilities.service';
 import { AdminDefaultValue } from '../../admin.const';
 import { SearchSelectModalService } from 'src/app/shared/components/search-select-modal/search-select-modal.service';
@@ -96,7 +96,7 @@ export class AdminBgJobsTabComponent extends Accordion<JobDetail> implements Tab
           { field_name: 'Processing Started', field_value: date(data.processedOn, 'dd-MM-YYYY HH:mm:ss') },
           { field_name: 'Finished At', field_value: date(data.finishedOn, 'dd-MM-YYYY HH:mm:ss') },
           { field_name: 'Execution Time', field_value: duration(data.processedOn, data.finishedOn) },
-          { field_name: 'Progress', field_value: `${data.progress ?? 0}%` },
+          { field_name: 'Progress', field_value: `${data.progress ?? 0}%`, hide_field: data.finishedOn != undefined },
         ],
       },
 
@@ -108,7 +108,7 @@ export class AdminBgJobsTabComponent extends Accordion<JobDetail> implements Tab
         section_html_id: 'bg-job-queue',
         content: [
           { field_name: 'Queued At', field_value: date(data.timestamp, 'dd-MM-YYYY HH:mm:ss') },
-          { field_name: 'Delay', field_value: `${data.delay ?? 0} ms` },
+          { field_name: 'Delay', field_value: `${data.delay ?? 0} ms`, hide_field: data.delay == undefined },
           { field_name: 'Job Options', field_value: pretty(data.opts) },
         ],
       },
@@ -123,7 +123,8 @@ export class AdminBgJobsTabComponent extends Accordion<JobDetail> implements Tab
           { field_name: 'Payload Data', field_value: pretty(data.data) },
           { field_name: 'Return Value', field_value: pretty(data.returnvalue) },
         ],
-      }
+      },
+
     ]
   }
   protected override prepareDefaultButtons(data: JobDetail, options?: { [key: string]: any; }): AccordionButton[] {
@@ -148,14 +149,48 @@ export class AdminBgJobsTabComponent extends Accordion<JobDetail> implements Tab
       });
     }
     else if (event.buttonId == 'remove') {
-      this.adminService.removeJob(this.itemList[event.rowIndex].id!).subscribe({
-        next: () => {
-          this.removeContentRow(event.rowIndex);
-        }
+      this.modalService.openNotificationModal({
+        description: 'Are you sure you want to remove this job?',
+        title: 'Remove Job',
+      }, 'confirmation', 'warning').onAccept$.subscribe(() => {
+        this.adminService.removeJob(this.itemList[event.rowIndex].id!).subscribe({
+          next: () => {
+            this.removeContentRow(event.rowIndex);
+          }
+        });
       });
     }
   }
   protected override onAccordionOpen(event: { rowIndex: number; }): void {
+    this.adminService.getBgJob(this.itemList[event.rowIndex].id!).subscribe((response) => {
+      this.addSectionInAccordion({
+        section_type: 'editable_list',
+        section_name: 'Job Execution Logs',
+        section_form: new FormGroup({
+          jobs: new FormArray(response.logs!.map(m => {
+            return new FormGroup({
+              message: new FormControl(m),
+            })
+          })),
+
+        }),
+        editableList: {
+          formArrayName: 'jobs',
+          itemFields: [
+            {
+              field_html_id: 'message',
+              field_value: '',
+              form_control_name: 'message',
+              editable: false,
+              field_name: 'Message'
+            },
+          ],
+          allowAddRow: false,
+          allowDeleteRow: false,
+        }
+
+      }, event.rowIndex)
+    });
   }
   protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[]; } {
     return {
@@ -173,30 +208,41 @@ export class AdminBgJobsTabComponent extends Accordion<JobDetail> implements Tab
   onSearch($event: SearchEvent): void {
   }
   loadData(): void {
-    this.adminService.getBgJobStatistics().subscribe((response) => {
+    this.adminService.getBgJobStatistics().subscribe((response: QueueStatistics) => {
       this.statistics = response;
     });
-    this.adminService.getBgJobs(this.statusFilter, AdminDefaultValue.pageNumber, AdminDefaultValue.pageSize).subscribe((response) => {
+    this.adminService.getBgJobs(this.statusFilter, AdminDefaultValue.pageNumber, AdminDefaultValue.pageSize, this.jobIdFilter).subscribe((response) => {
       this.setContent(response.content, response.totalSize);
     });
   }
 
-  protected statusFilter: string = 'failed';
-  protected statusMap: Record<string, string> = {
+  clearFilters() {
+    this.statusFilter = undefined;
+    this.jobIdFilter = undefined;
+    this.loadData();
+  }
+
+  public statusFilter: string | undefined = undefined;
+  public jobIdFilter: string | undefined = undefined;
+
+  public statusMap: Record<string, string> = {
     'completed': 'Completed',
     'failed': 'Failed',
     'paused': 'Paused',
     'active': 'Active',
-    'delayed': 'Delayed'
+    'delayed': 'Delayed',
+    'waiting-children': 'Waiting Children',
+    'waiting': 'Waiting'
   }
   protected statusFilterConfig: SearchSelectModalConfig = {
     searchFormFields: [
       {
         formControlName: 'status',
-        validations: [Validators.required],
+        validations: [],
         inputModel: {
           html_id: 'status_F',
           inputType: '',
+          labelName: 'Job Status',
           tagName: 'select',
           placeholder: 'Select Job Status',
           selectList: Object.keys(this.statusMap).map(key => {
@@ -206,14 +252,27 @@ export class AdminBgJobsTabComponent extends Accordion<JobDetail> implements Tab
             } as KeyValue
           })
         }
+      },
+      {
+        formControlName: 'jobId',
+        validations: [],
+        defaultValue: this.jobIdFilter,
+        inputModel: {
+          html_id: 'jobId',
+          inputType: '',
+          labelName: 'Job ID',
+          tagName: 'input',
+          placeholder: 'Enter Job ID',
+        }
       }
     ],
-    title: 'Filter Job Status',
+    title: 'Filter Job',
   }
 
   changeStatus() {
     this.dialogService.open(this.statusFilterConfig, { width: 700 }).subscribe((response) => {
       this.statusFilter = response.value.status;
+      this.jobIdFilter = response.value.jobId;
       this.loadData();
     });
   }

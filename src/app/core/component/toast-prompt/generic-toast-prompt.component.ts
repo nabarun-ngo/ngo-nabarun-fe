@@ -26,10 +26,11 @@ export class GenericToastPromptComponent {
   @Input() description = '';
   @Input() dismissText = 'Not now';
   @Input() actionText = 'Action';
-  @Input() actionColor = '#6366f1';
+  @Input() actionColor = 'var(--primary-500)';
   @Input() bottomOffset = 20;
   @Input() showAction = true;
 
   @Output() onDismiss = new EventEmitter<void>();
   @Output() onAction = new EventEmitter<void>();
 }
+

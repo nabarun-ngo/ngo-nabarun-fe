@@ -87,6 +87,7 @@ export const getProjectSection = (
         section_type: 'key_value',
         section_html_id: 'project_detail',
         section_form: new FormGroup({}),
+        autoSaveId: isCreate ? 'project-create' : `project-edit-${project.id}`,
         content: [
             {
                 field_name: 'Project Code',

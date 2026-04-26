@@ -7,6 +7,7 @@ export interface ErrorResponse {
   info: string;
   messages: Array<string>;
   stackTrace?: string;
+  status?: number;
   timestamp: string;
   traceId: string;
 }
