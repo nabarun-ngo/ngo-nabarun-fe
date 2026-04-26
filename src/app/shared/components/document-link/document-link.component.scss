@@ -9,7 +9,7 @@
 // .section-title {
 //   text-align: center;
 //   font-size: 2rem;
-//   color: #1976d2;
+//   color: var(--primary-600);
 //   margin-bottom: 32px;
 // }
 
@@ -22,7 +22,7 @@
 // }
 
 // .category-title {
-//   color: #1976d2;
+//   color: var(--primary-600);
 //   font-size: 1.4rem;
 //   margin-bottom: 16px;
 //   margin-top: 0;
@@ -81,7 +81,7 @@
 .section-title {
   text-align: center;
   font-size: 2rem;
-  color: #1976d2;
+  color: var(--primary-600);
   margin-bottom: 32px;
 }
 
@@ -94,7 +94,7 @@
 }
 
 .category-title {
-  color: #1976d2;
+  color: var(--primary-600);
   font-size: 1.3rem;
   margin-bottom: 10px;
 }
@@ -156,7 +156,7 @@
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    color: #1976d2;
+    color: var(--primary-600);
     transition: background-color 0.2s;
 
     &:disabled {
