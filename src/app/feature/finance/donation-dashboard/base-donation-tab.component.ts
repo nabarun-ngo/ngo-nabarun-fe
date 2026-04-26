@@ -43,7 +43,8 @@ export abstract class BaseDonationTabComponent extends Accordion<Donation> imple
         }
     }
 
-    ngOnDestroy(): void {
+    override ngOnDestroy(): void {
+        super.ngOnDestroy();
         this.formSubscription?.unsubscribe();
     }
 

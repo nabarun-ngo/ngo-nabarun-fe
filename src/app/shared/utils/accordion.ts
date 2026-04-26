@@ -2,9 +2,9 @@ import { Paginator } from "src/app/shared/utils/paginator";
 import { AccordionButton, AccordionCell, AccordionData, AccordionList, AccordionRow } from "../model/accordion-list.model";
 import { DetailedView, DetailedViewField } from "../model/detailed-view.model";
 import { FormArray, FormControl, FormGroup, ValidatorFn } from "@angular/forms";
-import { BehaviorSubject, from, map, Observable, of, Subject, Subscription, switchMap } from "rxjs";
+import { BehaviorSubject, catchError, forkJoin, from, map, Observable, of, Subject, Subscription, switchMap, takeUntil } from "rxjs";
 import { FileUpload } from "../components/generic/file-upload/file-upload.component";
-import { AfterContentInit, AfterViewInit, Component, ElementRef, inject, Input, OnInit, ViewChild } from "@angular/core";
+import { AfterContentInit, AfterViewInit, Component, ElementRef, inject, Input, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { KeyValue } from "../model/key-value.model";
 import { AlertData } from "../model/alert.model";
 import { FormAutosaveService } from "src/app/core/service/form-autosave.service";
@@ -24,7 +24,12 @@ export type FieldVisibilityRule<NumType = any> = {
 @Component({
   template: 'app-base-accordion',
 })
-export abstract class Accordion<NumType> extends Paginator implements OnInit, AfterContentInit {
+export abstract class Accordion<NumType> extends Paginator implements OnInit, AfterContentInit, OnDestroy {
+
+  // #region Properties & Lifecycle
+  /* ──────────────────────────────────────────────────────────────
+   * Properties & Lifecycle
+   * ────────────────────────────────────────────────────────────── */
 
   @ViewChild('createSection') scrollContainer!: ElementRef;
 
@@ -34,6 +39,9 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
   @Input({ required: true, alias: 'refData' }) set referenceDataInput(data: { [name: string]: KeyValue[]; } | undefined) {
     this.setRefData(data);
   }
+
+  protected destroy$ = new Subject<void>();
+  private visibilitySubscriptions = new Map<string, Subscription>();
 
   @Input({ required: true }) set accordionData(page: AccordionData<NumType>) {
     if (page) {
@@ -60,6 +68,19 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
     this.viewInitialized = true;
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.visibilitySubscriptions.forEach(sub => sub.unsubscribe());
+    this.visibilitySubscriptions.clear();
+  }
+  // #endregion
+
+  // #region List Management
+  /* ──────────────────────────────────────────────────────────────
+   * List Management
+   * ────────────────────────────────────────────────────────────── */
+
   public accordionList: AccordionList = {
     contents: [],
     searchValue: ''
@@ -76,12 +97,11 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
   ];
   private functionButtons: AccordionButton[] = [];
   protected activeButtonId: string | undefined = undefined;
-  protected abstract prepareHighLevelView(data: NumType, options?: { [key: string]: any }): AccordionCell[];
-  protected abstract prepareDetailedView(data: NumType, options?: { [key: string]: any }): DetailedView[];
-  protected abstract prepareDefaultButtons(data: NumType, options?: { [key: string]: any }): AccordionButton[];
-  protected abstract onClick(event: { buttonId: string; rowIndex: number; }): void;
-  protected abstract onAccordionOpen(event: { rowIndex: number }): void;
-  public readonly itemList: NumType[] = [];
+
+  // #region Form Management
+  /* ──────────────────────────────────────────────────────────────
+   * Form Management
+   * ────────────────────────────────────────────────────────────── */
 
   getAccordionList() {
     return this.accordionList;
@@ -204,6 +224,20 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
     });
     this.count = this.accordionList.contents.length;
   }
+  // #endregion
+
+  // #region View Preparation
+  /* ──────────────────────────────────────────────────────────────
+   * View Preparation (Must be implemented by child)
+   * ────────────────────────────────────────────────────────────── */
+
+  protected abstract prepareHighLevelView(data: NumType, options?: { [key: string]: any }): AccordionCell[];
+  protected abstract prepareDetailedView(data: NumType, options?: { [key: string]: any }): DetailedView[];
+  protected abstract prepareDefaultButtons(data: NumType, options?: { [key: string]: any }): AccordionButton[];
+  protected abstract onClick(event: { buttonId: string; rowIndex: number; }): void;
+  protected abstract onAccordionOpen(event: { rowIndex: number }): void;
+  public readonly itemList: NumType[] = [];
+  // #endregion
 
   /**
    * Regenerate the detailed view sections for a row with new options.
@@ -277,6 +311,10 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
       });
     });
   }
+
+  /* ──────────────────────────────────────────────────────────────
+   * Form Helpers
+   * ────────────────────────────────────────────────────────────── */
 
   /**
    * Update validators for specific form controls dynamically.
@@ -353,9 +391,11 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
   }
 
   protected addSectionInAccordion(section_detail: DetailedView, rowIndex: number, create?: boolean, addOnTop?: boolean) {
-    section_detail.content?.forEach(m1 => {
-      section_detail.section_form?.setControl(m1.form_control_name!, new FormControl(m1.field_value, m1.form_input_validation));
-    })
+    if (section_detail.section_form) {
+      section_detail.content?.forEach(m1 => {
+        section_detail.section_form.setControl(m1.form_control_name!, new FormControl(m1.field_value, m1.form_input_validation));
+      });
+    }
     if (create) {
       let indexAddDet = this.accordionList.addContent?.detailed.findIndex(f => f.section_html_id == section_detail.section_html_id)!;
       if (indexAddDet == -1) {
@@ -382,42 +422,28 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
 
 
   protected removeSectionInAccordion(section_id: string, rowIndex: number, create?: boolean) {
-    if (create) {
-      let indexAddDet = this.accordionList.addContent?.detailed.findIndex(f => f.section_html_id == section_id)!;
-      if (indexAddDet != -1) {
-        this.accordionList.addContent?.detailed.splice(indexAddDet, 1);
-      }
-    } else {
-      let indexAddDet = this.accordionList.contents[rowIndex].detailed.findIndex(f => f.section_html_id == section_id);
-      if (indexAddDet != -1) {
-        this.accordionList.contents[rowIndex]?.detailed.splice(indexAddDet, 1);
+    const sections = this.getDetailedViewTarget(rowIndex, create);
+    if (sections) {
+      const index = sections.findIndex(f => f.section_html_id === section_id);
+      if (index !== -1) {
+        sections.splice(index, 1);
       }
     }
   }
 
   protected getSectionInAccordion(section_id: string, rowIndex: number, create?: boolean) {
-    if (create) {
-      let indexAddDet = this.accordionList.addContent?.detailed.findIndex(f => f.section_html_id == section_id)!;
-      return this.accordionList.addContent?.detailed[indexAddDet];
-    } else {
-      let indexAddDet = this.accordionList.contents[rowIndex].detailed.findIndex(f => f.section_html_id == section_id);
-      return this.accordionList.contents[rowIndex]?.detailed[indexAddDet];
-    }
+    const sections = this.getDetailedViewTarget(rowIndex, create);
+    return sections?.find(f => f.section_html_id === section_id);
   }
 
   getSectionForm(sectionId: string, rowIndex: number, create?: boolean) {
-    if (create) {
-      return this.accordionList.addContent?.detailed.find(f => f.section_html_id == sectionId)?.section_form;
-    } else {
-      return this.accordionList.contents[rowIndex]?.detailed.find(f => f.section_html_id == sectionId)?.section_form;
-    }
+    return this.getDetailedViewTarget(rowIndex, create)?.find(f => f.section_html_id === sectionId)?.section_form;
   }
 
   protected getSectionField(sectionId: string, fieldId: string, rowIndex: number, create?: boolean) {
-    if (create) {
-      return this.accordionList.addContent?.detailed.find(f => f.section_html_id == sectionId)?.content?.find(f => f.field_html_id == fieldId)!;
-    }
-    return this.accordionList.contents[rowIndex]?.detailed.find(f => f.section_html_id == sectionId)?.content?.find(f => f.field_html_id == fieldId)!;
+    return this.getDetailedViewTarget(rowIndex, create)
+      ?.find(f => f.section_html_id === sectionId)
+      ?.content?.find(f => f.field_html_id === fieldId);
   }
 
   protected addSectionField(sectionId: string, field_detail: DetailedViewField, rowIndex: number, create?: boolean) {
@@ -444,7 +470,6 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
       }
     }
   }
-
 
   protected removeSectionField(sectionId: string, field_id: string, rowIndex: number, create?: boolean) {
     if (create) {
@@ -542,13 +567,19 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
       }
     }, 100);
   }
+  // #endregion
+
+  // #region Autosave & Persistence
+  /* ──────────────────────────────────────────────────────────────
+   * Autosave & Persistence
+   * ────────────────────────────────────────────────────────────── */
 
   /**
    * Explicitly restore autosave data for a set of sections
    */
   private async restoreAutosave(sections: DetailedView[]) {
     for (const section of sections) {
-      const autoSaveId = section.autoSaveId || (section as any).autosaveId;
+      const autoSaveId = section.autoSaveId;
       if (autoSaveId && section.section_form) {
         try {
           const savedData = await this.autosaveService.getSavedForm(autoSaveId);
@@ -632,69 +663,71 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
   }
 
   hideForm(rowIndex: number, reason: 'user_cancelled' | 'request_completed', create?: boolean, callback?: () => void): void {
-    const sections = create
-      ? this.accordionList.addContent?.detailed
-      : this.accordionList.contents[rowIndex]?.detailed;
+    const sections = this.getDetailedViewTarget(rowIndex, create);
+    if (!sections) return;
 
+    // 1. Define the hide action (clears data and updates UI)
     const performHide = () => {
-      sections?.forEach(async s => {
-        const autoSaveId = s.autoSaveId || (s as any).autosaveId;
-        if (autoSaveId) {
-          await this.autosaveService.clearSavedForm(autoSaveId);
-        }
-      });
+      // Clear data only when hiding
+      const cleanupTasks = sections
+        .filter(s => s.autoSaveId)
+        .map(s => from(this.autosaveService.clearSavedForm(s.autoSaveId!)));
 
-      if (create) {
-        this.accordionList.addContent = undefined;
-      } else {
-        if (reason === 'user_cancelled') {
-          this.regenerateDetailedView(rowIndex);
+      const cleanup$ = cleanupTasks.length > 0 ? forkJoin(cleanupTasks) : of([]);
+
+      cleanup$.subscribe(() => {
+        // Clear subscriptions for these sections
+        sections.forEach(s => {
+          const subId = `${create ? 'create' : rowIndex}-${s.section_html_id}`;
+          this.visibilitySubscriptions.get(subId)?.unsubscribe();
+          this.visibilitySubscriptions.delete(subId);
+        });
+
+        if (create) {
+          this.accordionList.addContent = undefined;
         } else {
-          this.accordionList.contents[rowIndex].detailed.forEach(m => {
-            m.show_form = false;
-          });
+          if (reason === 'user_cancelled') {
+            this.regenerateDetailedView(rowIndex);
+          } else {
+            // Success: update UI and refresh view
+            sections.forEach(m => m.show_form = false);
+            this.regenerateDetailedView(rowIndex);
+          }
+
+          // Restore buttons
+          const row = this.accordionList.contents[rowIndex];
+          if (row.buttons) {
+            row.buttons.splice(0);
+            this.functionButtons.forEach(b => row.buttons?.push(b));
+          }
         }
 
-        this.accordionList.contents[rowIndex].buttons?.splice(0);
-        this.functionButtons.forEach(b => {
-          this.accordionList.contents[rowIndex].buttons?.push(b);
-        })
-      }
-
-      if (callback) {
-        callback();
-      }
+        if (callback) callback();
+      });
     };
 
-    const dbCheckPromises = sections?.map(async s => {
-      if (s.autoSaveId) {
-        try {
-          const data = await this.autosaveService.getSavedForm(s.autoSaveId);
-          return data && (typeof data !== 'object' || Object.keys(data).length > 0);
-        } catch (err) {
-          console.warn('Accordion: Failed to check autosave data during hideForm', s.autoSaveId, err);
-          return false;
-        }
-      }
-      return false;
-    }) || [];
+    // 2. Check for unsaved data (Local + IndexedDB)
+    const dbCheckTasks = sections
+      .filter(s => s.autoSaveId)
+      .map(s => from(this.autosaveService.getSavedForm(s.autoSaveId!)).pipe(
+        map(data => !!data && (typeof data !== 'object' || Object.keys(data).length > 0)),
+        catchError(() => of(false))
+      ));
 
-    from(Promise.all(dbCheckPromises)).subscribe(dbResults => {
+    const dbChecks$ = dbCheckTasks.length > 0 ? forkJoin(dbCheckTasks) : of([]);
+
+    dbChecks$.subscribe(dbResults => {
       const hasDbData = dbResults.some(r => r);
-      const hasLocalData = sections?.some(s =>
-        s.section_form?.dirty ||
-        (s.doc?.docList?.value && s.doc.docList.value.length > 0)
+      const hasLocalData = sections.some(s =>
+        s.section_form?.dirty || (s.doc?.docList?.value && s.doc.docList.value.length > 0)
       );
 
+      // 3. Show confirmation if data exists and user is cancelling
       if (reason === 'user_cancelled' && (hasDbData || hasLocalData)) {
-        const modal = this.ms.openNotificationModal({
+        this.ms.openNotificationModal({
           title: 'Confirm Cancellation',
           description: 'You have entered some data. Are you sure you want to cancel? All unsaved changes will be lost.'
-        }, 'confirmation', 'warning');
-
-        modal.onAccept$.subscribe(() => {
-          performHide();
-        });
+        }, 'confirmation', 'warning').onAccept$.subscribe(() => performHide());
       } else {
         performHide();
       }
@@ -710,11 +743,7 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
   }
 
   getSectionDocuments(sectionId: string, rowIndex: number, create?: boolean) {
-    if (create) {
-      return this.accordionList.addContent?.detailed.find(f => f.section_html_id == sectionId)?.doc?.docList?.value;
-    } else {
-      return this.accordionList.contents[rowIndex]?.detailed.find(f => f.section_html_id == sectionId)?.doc?.docList?.value;
-    }
+    return this.getDetailedViewTarget(rowIndex, create)?.find(f => f.section_html_id === sectionId)?.doc?.docList?.value;
   }
 
   removeButton(buttonId: string, rowIndex: number, create?: boolean) {
@@ -727,8 +756,11 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
     }
   }
 
+  // #endregion
+
+  // #region Dynamic Behaviors
   /* ──────────────────────────────────────────────────────────────
-   * Dynamic Field Visibility
+   * Dynamic Behaviors (Visibility & Actions)
    * ────────────────────────────────────────────────────────────── */
 
   /**
@@ -769,8 +801,13 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
       return undefined;
     }
 
+    const subId = `${create ? 'create' : rowIndex}-${sectionId}`;
+    this.visibilitySubscriptions.get(subId)?.unsubscribe();
+
     // Subscribe to form changes
-    const subscription = form.valueChanges.subscribe(formValue => {
+    const subscription = form.valueChanges.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(formValue => {
       const section = this.getSectionInAccordion(sectionId, rowIndex, create);
 
       if (!section?.content) return;
@@ -779,14 +816,14 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
       rules.forEach(rule => {
         const field = section.content?.find(f => f.form_control_name === rule.fieldName);
         if (field) {
-          // Show field if condition is true, hide if false
           field.hide_field = !rule.condition(formValue);
         }
       });
     });
 
-    // Trigger initial visibility update in next change detection cycle
-    // This prevents ExpressionChangedAfterItHasBeenCheckedError
+    this.visibilitySubscriptions.set(subId, subscription);
+
+    // Initial update
     setTimeout(() => {
       const section = this.getSectionInAccordion(sectionId, rowIndex, create);
       if (section?.content) {
@@ -956,5 +993,22 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
       }, 10);
     }
   }
+  // #endregion
 
-} 
+  // #region Internal Utilities
+  /* ──────────────────────────────────────────────────────────────
+   * Internal Utilities
+   * ────────────────────────────────────────────────────────────── */
+
+  /**
+   * Internal helper to get the appropriate detailed view array based on mode
+   */
+  private getDetailedViewTarget(rowIndex: number, create?: boolean): DetailedView[] | undefined {
+    if (create) {
+      return this.accordionList.addContent?.detailed;
+    }
+    return this.accordionList.contents[rowIndex]?.detailed;
+  }
+  // #endregion
+
+}
