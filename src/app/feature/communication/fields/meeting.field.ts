@@ -235,6 +235,10 @@ export const meetingHeader: any[] = [
         rounded: true
     },
     {
+        value: 'Meeting Type',
+        rounded: true
+    },
+    {
         value: 'Meeting Date',
         rounded: true
     },
@@ -257,6 +261,7 @@ export const getMeetingSection = (
         section_type: 'key_value',
         section_html_id: 'meeting_detail',
         section_form: new FormGroup({}, { validators: timeRangeValidator }),
+        autoSaveId: isCreate ? 'meeting-create' : `meeting-edit-${meeting.id}`,
         content: [
             {
                 field_name: 'Meeting Summary',
@@ -422,6 +427,7 @@ export const getMeetingAttendeeSection = (
         section_name: 'Meeting Attendees',
         section_type: 'editable_table',
         section_html_id: 'meeting_attendee',
+        autoSaveId: isCreate ? 'meeting-attendees-create' : `meeting-attendees-edit-${meeting.id}`,
         section_form: new FormGroup({
             attendees: new FormArray([
                 ...attendees.map(item => new FormGroup({
@@ -510,6 +516,7 @@ export const getMeetingNotesSection = (
         section_name: 'Meeting Agenda',
         section_type: 'editable_table',
         section_html_id: 'meeting_notes',
+        autoSaveId: isCreate ? 'meeting-agenda-create' : `meeting-agenda-edit-${meeting.id}`,
         section_form: new FormGroup({
             agenda: new FormArray([
                 ...agendaItems.map(item => new FormGroup({

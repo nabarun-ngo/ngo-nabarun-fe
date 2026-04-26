@@ -13,6 +13,7 @@ export const getTaskDetailSection = (m: Task, tab: workListTab, refData: { [name
         section_type: 'key_value',
         section_html_id: 'work_detail',
         section_form: new FormGroup({}),
+        autoSaveId: `task-detail-${m.id}`,
         section_alerts: [
             {
                 hide_alert: !m.autoCloseable || tab == 'completed_worklist',
@@ -117,6 +118,7 @@ export const getTaskAdditionalDataSection = (m: Task, fields: FieldAttributeDto[
         hide_section: !isCreate && (!m?.resultData || Object.keys(m?.resultData || {}).length == 0),
         section_form: new FormGroup({}),
         show_form: isCreate,
+        autoSaveId: isCreate ? `task-additional-data-create` : `task-additional-data-edit-${m.id}`,
         content: fields.map(field => ({
             editable: true,
             field_name: field.value,
@@ -143,6 +145,7 @@ export const getTaskCheckListSection = (m: Task, tab: workListTab): DetailedView
         section_name: 'To Do List',
         section_type: 'editable_list',
         section_html_id: 'todos',
+        autoSaveId: `task-checklist-${m.id}`,
         show_form: false,
         section_form: new FormGroup({
             todos: new FormArray(m.checklist?.map(x => new FormGroup({

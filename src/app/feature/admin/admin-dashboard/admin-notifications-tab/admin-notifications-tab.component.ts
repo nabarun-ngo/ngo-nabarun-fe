@@ -142,7 +142,7 @@ export class AdminNotificationsTabComponent extends Accordion<NotificationRespon
   async sendPushNotification() {
     this.adminService.getUsers().subscribe(m => {
       const kv = m.content?.map(m2 => {
-        return { key: m2.userId, displayValue: `${m2.firstName} ${m2.lastName} (${m2.email})` } as KeyValue
+        return { key: m2.id, displayValue: `${m2.firstName} ${m2.lastName} (${m2.email})` } as KeyValue
       })
       let modal = this.searchService.open(this.notificationModal(kv!), { width: 700 });
       modal.subscribe(data => {

@@ -104,13 +104,13 @@ export class NoticeAccordionComponent extends Accordion<Notice> implements After
       this.showEditForm(event.rowIndex, ['notice_detail']);
       this.activeButtonId = event.buttonId;
     } else if (event.buttonId === 'CANCEL') {
-      this.hideForm(event.rowIndex);
+      this.hideForm(event.rowIndex, 'user_cancelled');
     } else if (event.buttonId === 'CONFIRM') {
       if (this.activeButtonId === 'UPDATE_NOTICE') {
         this.performUpdateNotice(event.rowIndex);
       }
     } else if (event.buttonId === 'CANCEL_CREATE') {
-      this.hideForm(0, true);
+      this.hideForm(0, 'user_cancelled', true);
     } else if (event.buttonId === 'CONFIRM_CREATE') {
       this.performCreateNotice();
     }
@@ -158,7 +158,7 @@ export class NoticeAccordionComponent extends Accordion<Notice> implements After
     if (noticeForm?.valid) {
       this.communicationService.createNotice(noticeForm.value).subscribe({
         next: (data) => {
-          this.hideForm(0, true);
+          this.hideForm(0, 'request_completed', true);
           // Refresh the list to show the new notice
           this.fetchNotices(this.pageNumber, this.pageSize);
         },
@@ -177,7 +177,7 @@ export class NoticeAccordionComponent extends Accordion<Notice> implements After
     if (noticeForm?.valid) {
       this.communicationService.updateNotice(notice.id, noticeForm.value).subscribe({
         next: (data) => {
-          this.hideForm(rowIndex);
+          this.hideForm(rowIndex, 'request_completed');
           // Update the row with the new data
           this.updateContentRow(data, rowIndex);
         },

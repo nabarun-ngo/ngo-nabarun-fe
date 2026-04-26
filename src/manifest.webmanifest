@@ -17,7 +17,7 @@
     "business",
     "utilities"
   ],
-  "prefer_related_applications": false,
+  "prefer_related_applications": true,
   "screenshots": [
     {
       "src": "assets/screenshots/desktop-screenshot.png",
@@ -70,6 +70,18 @@
       "src": "assets/icons/icon-192x192.png",
       "type": "image/png",
       "sizes": "192x192",
+      "purpose": "maskable"
+    },
+    {
+      "src": "assets/icons/icon-256x256.png",
+      "type": "image/png",
+      "sizes": "256x256",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-256x256.png",
+      "type": "image/png",
+      "sizes": "256x256",
       "purpose": "maskable"
     },
     {

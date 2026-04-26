@@ -151,14 +151,16 @@ export class MyAccountsTabComponent extends Accordion<Account> implements TabCom
         );
         break;
       case 'TRANSFER':
-        this.addSectionInAccordion(transferAmountSection(), event.rowIndex);
+        let accountTransfer = this.itemList[event.rowIndex];
+        this.addSectionInAccordion(transferAmountSection(accountTransfer), event.rowIndex);
         this.addSectionInAccordion(accountDocumentSection([], true), event.rowIndex);
         this.showEditForm(event.rowIndex, ['transfer_amt', 'document_list']);
         this.initTransferForm(event.rowIndex);
         this.activeButtonId = event.buttonId;
         break;
       case 'MONEY_IN':
-        this.addSectionInAccordion(moneyInSection(), event.rowIndex);
+        let accountMoneyIn = this.itemList[event.rowIndex];
+        this.addSectionInAccordion(moneyInSection(accountMoneyIn), event.rowIndex);
         this.addSectionInAccordion(accountDocumentSection([], true), event.rowIndex);
         this.showEditForm(event.rowIndex, ['money_in_acc', 'document_list']);
         this.activeButtonId = event.buttonId;
@@ -169,15 +171,16 @@ export class MyAccountsTabComponent extends Accordion<Account> implements TabCom
         this.activeButtonId = event.buttonId;
         break;
       case 'CANCEL':
-        this.hideForm(event.rowIndex);
-        if (this.activeButtonId == 'TRANSFER') {
-          this.removeSectionInAccordion('transfer_amt', event.rowIndex);
-          this.removeSectionInAccordion('document_list', event.rowIndex);
-        }
-        if (this.activeButtonId == 'MONEY_IN') {
-          this.removeSectionInAccordion('money_in_acc', event.rowIndex);
-          this.removeSectionInAccordion('document_list', event.rowIndex);
-        }
+        this.hideForm(event.rowIndex, 'user_cancelled', false, () => {
+          if (this.activeButtonId == 'TRANSFER') {
+            this.removeSectionInAccordion('transfer_amt', event.rowIndex);
+            this.removeSectionInAccordion('document_list', event.rowIndex);
+          }
+          if (this.activeButtonId == 'MONEY_IN') {
+            this.removeSectionInAccordion('money_in_acc', event.rowIndex);
+            this.removeSectionInAccordion('document_list', event.rowIndex);
+          }
+        });
         break;
       case 'CONFIRM':
         if (this.activeButtonId == 'TRANSFER') {
@@ -220,7 +223,7 @@ export class MyAccountsTabComponent extends Accordion<Account> implements TabCom
           .performMoneyIn(account, money_in_acc?.value, document_list || [], this.isManageAccountsTab)
           .subscribe((d) => {
             ////console.log(d);
-            this.hideForm(rowIndex);
+            this.hideForm(rowIndex, 'request_completed');
             this.removeSectionInAccordion('money_in_acc', rowIndex);
             this.removeSectionInAccordion('document_list', rowIndex);
             this.loadData();
@@ -246,7 +249,7 @@ export class MyAccountsTabComponent extends Accordion<Account> implements TabCom
       this.accountService
         .updateBankingAndUPIDetail(item.id, bankForm?.value, upiForm?.value)
         .subscribe((d) => {
-          this.hideForm(rowIndex);
+          this.hideForm(rowIndex, 'request_completed');
           this.updateContentRow(d, rowIndex);
         });
     }
@@ -279,7 +282,7 @@ export class MyAccountsTabComponent extends Accordion<Account> implements TabCom
           .performTransfer(account, transfer_form?.value, document_list!, this.isManageAccountsTab)
           .subscribe((d) => {
             ////console.log(d);
-            this.hideForm(rowIndex);
+            this.hideForm(rowIndex, 'request_completed');
             this.removeSectionInAccordion('transfer_amt', rowIndex);
             this.removeSectionInAccordion('document_list', rowIndex);
             this.loadData();

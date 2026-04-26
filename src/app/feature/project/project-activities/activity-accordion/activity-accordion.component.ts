@@ -146,13 +146,13 @@ export class ActivityAccordionComponent extends Accordion<ProjectActivity> imple
         state: { project: this.project, activity: activity }
       });
     } else if (event.buttonId === 'CANCEL') {
-      this.hideForm(event.rowIndex);
+      this.hideForm(event.rowIndex, 'user_cancelled');
     } else if (event.buttonId === 'CONFIRM') {
       if (this.activeButtonId === 'UPDATE_ACTIVITY') {
         this.performUpdateActivity(event.rowIndex);
       }
     } else if (event.buttonId === 'CANCEL_CREATE') {
-      this.hideForm(0, true);
+      this.hideForm(0, 'user_cancelled', true);
     } else if (event.buttonId === 'CONFIRM_CREATE') {
       this.performCreateActivity();
     }
@@ -213,7 +213,7 @@ export class ActivityAccordionComponent extends Accordion<ProjectActivity> imple
         scale: 'ACTIVITY'
       };
       this.projectService.createActivity(this.project.id, removeNullFields(activityData)).subscribe((data) => {
-        this.hideForm(0, true);
+        this.hideForm(0, 'request_completed', true);
         this.addContentRow(data, true);
       });
     }
@@ -226,7 +226,7 @@ export class ActivityAccordionComponent extends Accordion<ProjectActivity> imple
     if (activityForm?.valid) {
       const updatedActivity = compareObjects(activityForm.value, activity);
       this.projectService.updateActivity(activity.id, updatedActivity).subscribe((data) => {
-        this.hideForm(rowIndex);
+        this.hideForm(rowIndex, 'request_completed');
         this.updateContentRow(data, rowIndex);
       });
     }
