@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { UserIdentityService } from '../../service/user-identity.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-footer',
@@ -8,6 +9,7 @@ import { UserIdentityService } from '../../service/user-identity.service';
 })
 export class FooterComponent {
   today: number = Date.now();
+  env: string = environment.name;
   //authenticated : boolean;
   constructor(
     //private userIdentity:UserIdentityService

@@ -53,6 +53,7 @@ import { EditableListSectionComponent } from './components/generic/detailed-view
 import { SafeResourceUrlPipe } from './pipes/safe-resource-url.pipe';
 import { SearchSelectModalComponent } from './components/search-select-modal/search-select-modal.component';
 import { FormAutosaveDirective } from './directives/form-autosave.directive';
+import { CarouselComponent } from './components/generic/carousel/carousel.component';
 
 
 @NgModule({
@@ -81,6 +82,7 @@ import { FormAutosaveDirective } from './directives/form-autosave.directive';
     EditableListSectionComponent,
     SafeResourceUrlPipe,
     SearchSelectModalComponent,
+    CarouselComponent,
   ],
 
   imports: [
@@ -154,7 +156,8 @@ import { FormAutosaveDirective } from './directives/form-autosave.directive';
     OverlayModule,
     DocumentListComponent,
     MatTooltipModule,
-    FormAutosaveDirective
+    FormAutosaveDirective,
+    CarouselComponent
   ],
 
   providers: [{
