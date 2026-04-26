@@ -1,6 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { IndexedDbService } from './indexed-db.service';
 import { debounceTime, Subject, groupBy, mergeMap } from 'rxjs';
+import { FormArray, FormGroup, FormControl } from '@angular/forms';
+import { DetailedView } from 'src/app/shared/model/detailed-view.model';
+import { buildRowValidator } from 'src/app/shared/utils/row-validator.factory';
 
 @Injectable({
   providedIn: 'root'

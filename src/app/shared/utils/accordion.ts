@@ -1,7 +1,7 @@
 import { Paginator } from "src/app/shared/utils/paginator";
 import { AccordionButton, AccordionCell, AccordionData, AccordionList, AccordionRow } from "../model/accordion-list.model";
 import { DetailedView, DetailedViewField } from "../model/detailed-view.model";
-import { FormControl, ValidatorFn } from "@angular/forms";
+import { FormArray, FormControl, FormGroup, ValidatorFn } from "@angular/forms";
 import { BehaviorSubject, from, map, Observable, of, Subject, Subscription, switchMap } from "rxjs";
 import { FileUpload } from "../components/generic/file-upload/file-upload.component";
 import { AfterContentInit, AfterViewInit, Component, ElementRef, inject, Input, OnInit, ViewChild } from "@angular/core";
@@ -9,6 +9,7 @@ import { KeyValue } from "../model/key-value.model";
 import { AlertData } from "../model/alert.model";
 import { FormAutosaveService } from "src/app/core/service/form-autosave.service";
 import { ModalService } from "src/app/core/service/modal.service";
+import { buildRowValidator } from "./row-validator.factory";
 
 
 /**
@@ -378,12 +379,7 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
   private ms = inject(ModalService);
 
 
-  protected clearAutosave(autosaveId: string) {
-    // Autosave is best-effort; failure to clear should not crash the UI.
-    void this.autosaveService.clearSavedForm(autosaveId).catch(err => {
-      console.warn('Accordion: Failed to clear autosave data', autosaveId, err);
-    });
-  }
+
 
   protected removeSectionInAccordion(section_id: string, rowIndex: number, create?: boolean) {
     if (create) {
@@ -482,7 +478,7 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
       buttons: this.prepareDefaultButtons(data!, options),
     } as AccordionRow;
     this.accordionList.addContent = row;
-    return this.accordionList.addContent.detailed.map(m => {
+    const result = this.accordionList.addContent.detailed.map(m => {
       //////console.log(m)
       m.show_form = true;
       if (m.hide_section != true) {
@@ -504,10 +500,16 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
       });
       return m;
     });
+
+    // Explicitly restore autosave data for the newly created form
+    this.restoreAutosave(this.accordionList.addContent.detailed);
+
+    return result;
   }
 
   showEditForm(rowIndex: number, section_ids: string[]) {
-    this.accordionList.contents[rowIndex].detailed.filter(f => section_ids.includes(f.section_html_id!)).map(m => {
+    const sectionsToEdit = this.accordionList.contents[rowIndex].detailed.filter(f => section_ids.includes(f.section_html_id!));
+    sectionsToEdit.map(m => {
       m.show_form = true;
       m.hide_section = false;
       m.content?.map(m => {
@@ -520,18 +522,18 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
       }
       return m;
     });
-    //////console.log(this.accordionList.contents)
     this.functionButtons = [];
     this.accordionList.contents[rowIndex].buttons?.forEach(b => {
       this.functionButtons.push(b)
     });
 
     this.accordionList.contents[rowIndex].buttons?.splice(0);
-    //////console.log(this.accordionList.contents[rowIndex].buttons, this.functionButtons)
     this.actionButtons.forEach(b => {
       this.accordionList.contents[rowIndex].buttons?.push(b);
     })
-    //////console.log(this.accordionList.contents[rowIndex].buttons, this.actionButtons)
+
+    // Explicitly restore autosave data for the sections being edited
+    this.restoreAutosave(sectionsToEdit);
 
     setTimeout(() => {
       const element = document.querySelector(`#accordion-row-${rowIndex}`);
@@ -541,26 +543,118 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
     }, 100);
   }
 
+  /**
+   * Explicitly restore autosave data for a set of sections
+   */
+  private async restoreAutosave(sections: DetailedView[]) {
+    for (const section of sections) {
+      const autoSaveId = section.autoSaveId || (section as any).autosaveId;
+      if (autoSaveId && section.section_form) {
+        try {
+          const savedData = await this.autosaveService.getSavedForm(autoSaveId);
+          if (savedData) {
+            // 1. Reconstruct FormArrays if needed
+            if (section.section_type === 'editable_table' && section.editableTable) {
+              const config = section.editableTable;
+              const formArray = section.section_form.get(config.formArrayName) as FormArray;
+              const savedArray = savedData[config.formArrayName];
+              this.rebuildArrayIfRequired(
+                formArray,
+                savedArray,
+                config.rowValidationRules,
+                config.columns.map(col => ({
+                  name: col.columnDef,
+                  validators: col.validators,
+                  asyncValidators: col.asyncValidators
+                }))
+              );
+            } else if (section.section_type === 'editable_list' && section.editableList) {
+              const config = section.editableList;
+              const formArray = section.section_form.get(config.formArrayName) as FormArray;
+              const savedArray = savedData[config.formArrayName];
+              this.rebuildArrayIfRequired(
+                formArray,
+                savedArray,
+                config.rowValidationRules,
+                config.itemFields.map(field => ({
+                  name: field.form_control_name!,
+                  validators: field.form_input_validation
+                }))
+              );
+            }
+
+            // 2. Patch values
+            // emitEvent: false prevents triggering an immediate save during restore
+            section.section_form.patchValue(savedData, { emitEvent: false });
+          }
+        } catch (err) {
+          console.warn('Accordion: Failed to restore autosave for section', autoSaveId, err);
+        }
+      }
+    }
+  }
+
+  /**
+   * Internal helper to clear and rebuild a FormArray with new FormGroups
+   */
+  private rebuildArrayIfRequired(
+    formArray: FormArray,
+    savedData: any[],
+    rowValidationRules: any[] | undefined,
+    fieldConfigs: { name: string, validators?: any[], asyncValidators?: any[] }[]
+  ) {
+    if (formArray && Array.isArray(savedData)) {
+      // Clear existing controls
+      while (formArray.length > 0) {
+        formArray.removeAt(0);
+      }
+
+      // Rebuild rows from saved data
+      savedData.forEach(rowData => {
+        const rowGroup = new FormGroup({}, {
+          validators: buildRowValidator(rowValidationRules ?? [])
+        });
+
+        fieldConfigs.forEach(cfg => {
+          rowGroup.addControl(
+            cfg.name,
+            new FormControl(
+              rowData[cfg.name] ?? null,
+              cfg.validators ?? [],
+              cfg.asyncValidators ?? []
+            )
+          );
+        });
+
+        formArray.push(rowGroup);
+      });
+    }
+  }
+
   hideForm(rowIndex: number, reason: 'user_cancelled' | 'request_completed', create?: boolean, callback?: () => void): void {
     const sections = create
       ? this.accordionList.addContent?.detailed
       : this.accordionList.contents[rowIndex]?.detailed;
 
     const performHide = () => {
-      sections?.forEach(s => {
-        if (s.autoSaveId) {
-          this.clearAutosave(s.autoSaveId);
+      sections?.forEach(async s => {
+        const autoSaveId = s.autoSaveId || (s as any).autosaveId;
+        if (autoSaveId) {
+          await this.autosaveService.clearSavedForm(autoSaveId);
         }
       });
 
       if (create) {
         this.accordionList.addContent = undefined;
       } else {
-        this.accordionList.contents[rowIndex].detailed.map(m => {
-          m.show_form = false;
-          //EXPERIMENTAL//m.section_form?.reset();
-          return m;
-        });
+        if (reason === 'user_cancelled') {
+          this.regenerateDetailedView(rowIndex);
+        } else {
+          this.accordionList.contents[rowIndex].detailed.forEach(m => {
+            m.show_form = false;
+          });
+        }
+
         this.accordionList.contents[rowIndex].buttons?.splice(0);
         this.functionButtons.forEach(b => {
           this.accordionList.contents[rowIndex].buttons?.push(b);
