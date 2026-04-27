@@ -134,7 +134,6 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
         },
       }, isCreate, this.isAdmin, this.activityId !== undefined),
       expenseEditableTable(data, isCreate),
-      getCommentSection(data?.id, 'EXPENSE', isCreate)
     ];
   }
 
@@ -297,8 +296,11 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
     let item = this.itemList[$event.rowIndex];
     this.expenseService.getExpenseDocuments(item.id!).subscribe((data) => {
       this.addSectionInAccordion(expenseDocumentSection(data), $event.rowIndex);
+      this.addSectionInAccordion(getCommentSection(item.id, 'EXPENSE', false), $event.rowIndex);
+      setTimeout(() => {
+        this.triggerCommentFetch($event.rowIndex);
+      }, 250);
     });
-    this.triggerCommentFetch($event.rowIndex);
   }
 
   selectProject(): void {

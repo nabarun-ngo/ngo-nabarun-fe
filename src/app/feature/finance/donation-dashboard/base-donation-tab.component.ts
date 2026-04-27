@@ -208,7 +208,9 @@ export abstract class BaseDonationTabComponent extends Accordion<Donation> imple
         this.donationService.fetchDocuments(donationId).subscribe(data => {
             this.addSectionInAccordion(donationDocumentSection(data), event.rowIndex);
             this.addSectionInAccordion(getCommentSection(donationId, 'DONATION', false), event.rowIndex);
-            this.triggerCommentFetch(event.rowIndex);
+            setTimeout(() => {
+                this.triggerCommentFetch(event.rowIndex);
+            }, 250);
         });
     }
 

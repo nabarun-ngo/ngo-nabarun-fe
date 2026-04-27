@@ -1,7 +1,7 @@
 <div class="relative group overflow-hidden rounded-2xl">
     <!-- Slides Content -->
     <div class="relative w-full overflow-hidden">
-        <div class="transition-all duration-500 ease-in-out transform px-12 pb-10" *ngIf="items.length > 0">
+        <div class="transition-all duration-500 ease-in-out transform pb-10" *ngIf="items.length > 0">
             <ng-container
                 *ngTemplateOutlet="templateRef; context: { $implicit: items[currentIndex], index: currentIndex }">
             </ng-container>
