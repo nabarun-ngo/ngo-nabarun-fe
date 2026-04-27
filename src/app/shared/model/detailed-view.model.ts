@@ -59,6 +59,9 @@ export interface DetailedView<NumType = any> {
     /** Runtime UI flag (edit/create mode) */
     show_form?: boolean;
 
+    /** Runtime UI flag (collapsed/expanded) */
+    is_collapsed?: boolean;
+
     /* ───────────── Content & Forms ───────────── */
 
     /**
