@@ -37,13 +37,13 @@
 
                                 <!-- Action Buttons (Top Right) -->
                                 <div class="action-btns-absolute">
-                                    <button *ngIf="view.editable !== false && editingCommentId !== comment.id"
-                                        (click)="startEdit(comment)" mat-icon-button color="primary"
-                                        matTooltip="Edit Comment">
+                                    <button *ngIf="currentUserId === comment.authorId" (click)="startEdit(comment)"
+                                        mat-icon-button color="primary" matTooltip="Edit Comment">
                                         <mat-icon>edit</mat-icon>
                                     </button>
-                                    <button *ngIf="view.editable !== false" (click)="deleteComment(comment.id)"
-                                        mat-icon-button color="warn" matTooltip="Delete Comment">
+                                    <button *ngIf="currentUserId === comment.authorId"
+                                        (click)="deleteComment(comment.id)" mat-icon-button color="warn"
+                                        matTooltip="Delete Comment">
                                         <mat-icon>delete_outline</mat-icon>
                                     </button>
                                 </div>
@@ -117,12 +117,11 @@
                                                 </div>
                                                 <!-- Action Buttons (Top Right) -->
                                                 <div class="action-btns-absolute">
-                                                    <button
-                                                        *ngIf="view.editable !== false && editingCommentId !== reply.id"
+                                                    <button *ngIf="currentUserId === reply.authorId"
                                                         (click)="startEdit(reply)" mat-icon-button color="primary">
                                                         <mat-icon>edit</mat-icon>
                                                     </button>
-                                                    <button *ngIf="view.editable !== false"
+                                                    <button *ngIf="currentUserId === reply.authorId"
                                                         (click)="deleteComment(reply.id)" mat-icon-button color="warn">
                                                         <mat-icon>delete_outline</mat-icon>
                                                     </button>

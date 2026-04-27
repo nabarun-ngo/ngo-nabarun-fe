@@ -5,6 +5,7 @@ import { CommentResponseDto } from 'src/app/core/api-client/models/comment-respo
 import { CreateCommentDto } from 'src/app/core/api-client/models/create-comment-dto';
 import { Subject, takeUntil } from 'rxjs';
 import { ModalService } from 'src/app/core/service/modal.service';
+import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 
 @Component({
   selector: 'app-comment-section',
@@ -23,13 +24,17 @@ export class CommentSectionComponent implements OnInit, OnDestroy {
   editingContent: string = '';
   loading: boolean = false;
   private destroy$ = new Subject<void>();
+  currentUserId!: string;
 
   constructor(
     private commentsService: CommentsService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private userIdentityService: UserIdentityService
   ) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    this.currentUserId = (await this.userIdentityService.getUser()).profile_id;
+    console.log("currentUserId", this.currentUserId);
     if (this.view.comments?.onOpen) {
       this.view.comments.onOpen.pipe(takeUntil(this.destroy$)).subscribe(() => {
         this.fetchComments();
