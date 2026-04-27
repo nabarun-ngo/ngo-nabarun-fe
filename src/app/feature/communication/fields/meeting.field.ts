@@ -1,4 +1,5 @@
 import { FormArray, FormControl, FormGroup, Validators, AbstractControl, ValidationErrors } from "@angular/forms";
+import { Subject } from "rxjs";
 import { date } from "src/app/core/service/utilities.service";
 import { DetailedView } from "src/app/shared/model/detailed-view.model";
 import { SearchAndAdvancedSearchModel } from "src/app/shared/model/search-and-advanced-search.model";
@@ -559,6 +560,24 @@ export const getMeetingNotesSection = (
             allowAddRow: true,
             allowDeleteRow: true,
             maxHeight: '400px',
+        }
+    };
+}
+
+export const getMeetingCommentSection = (
+    meeting: Meeting,
+    isCreate: boolean = false
+): DetailedView => {
+    return {
+        section_name: 'Comments',
+        section_type: 'comment',
+        section_html_id: 'meeting_comments',
+        hide_section: isCreate,
+        section_form: new FormGroup({}),
+        comments: {
+            entityType: 'MEETING',
+            entityId: meeting.id,
+            onOpen: new Subject<void>()
         }
     };
 }

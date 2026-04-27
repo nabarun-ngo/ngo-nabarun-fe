@@ -4,7 +4,7 @@ import { AccordionList } from "./accordion-list.model";
 import { Accordion } from "../utils/accordion";
 import { EventEmitter } from "@angular/core";
 import { FileUpload } from "../components/generic/file-upload/file-upload.component";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
 import { AlertData } from "./alert.model";
 import { Doc } from "./document.model";
 import { EditableTableConfig, EditableTableRowRule } from "./editable-table.model";
@@ -48,6 +48,7 @@ export interface DetailedView<NumType = any> {
     | 'custom'
     | 'accordion_list'
     | 'editable_table'
+    | 'comment'
     | 'editable_list';
 
     /* ───────────── Visibility & Mode ───────────── */
@@ -148,6 +149,21 @@ export interface DetailedView<NumType = any> {
      * Exists only when section_type === 'editable_list'.
      */
     editableList?: EditableListConfig;
+
+    /* ───────────── Comments ───────────── */
+    /**
+     * Optional comment section.
+     * Exists only when section_type === 'comment'.
+     */
+    comments?: {
+        readonly entityType: string;
+        readonly entityId: string;
+        /**
+         * Observable that emits when the accordion row is opened.
+         * The component will subscribe to this to fetch comments.
+         */
+        readonly onOpen?: Observable<void>;
+    };
 
 }
 

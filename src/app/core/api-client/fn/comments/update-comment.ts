@@ -8,18 +8,18 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { Object } from '../../models/object';
-import { SuccessResponseString } from '../../models/success-response-string';
+import { SuccessResponseCommentResponseDto } from '../../models/success-response-comment-response-dto';
+import { UpdateCommentDto } from '../../models/update-comment-dto';
 
-export interface RunScheduledJob$Params {
-  name: string;
-      body?: Object
+export interface UpdateComment$Params {
+  id: string;
+      body: UpdateCommentDto
 }
 
-export function runScheduledJob(http: HttpClient, rootUrl: string, params: RunScheduledJob$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
-  const rb = new RequestBuilder(rootUrl, runScheduledJob.PATH, 'post');
+export function updateComment(http: HttpClient, rootUrl: string, params: UpdateComment$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseCommentResponseDto>> {
+  const rb = new RequestBuilder(rootUrl, updateComment.PATH, 'put');
   if (params) {
-    rb.path('name', params.name, {});
+    rb.path('id', params.id, {});
     rb.body(params.body, 'application/json');
   }
 
@@ -28,9 +28,9 @@ export function runScheduledJob(http: HttpClient, rootUrl: string, params: RunSc
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseString>;
+      return r as StrictHttpResponse<SuccessResponseCommentResponseDto>;
     })
   );
 }
 
-runScheduledJob.PATH = '/api/cron/run/{name}';
+updateComment.PATH = '/api/comments/{id}';

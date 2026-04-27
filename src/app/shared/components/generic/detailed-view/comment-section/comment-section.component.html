@@ -1,0 +1,124 @@
+<div class="comment-section-container flex flex-col h-full">
+
+    <!-- Comments List (Scrollable area) -->
+    <div class="comments-scroll-area flex-grow overflow-y-auto px-1">
+        <!-- Loading Spinner -->
+        <div *ngIf="loading" class="flex justify-center py-4">
+            <mat-spinner diameter="24"></mat-spinner>
+        </div>
+
+        <!-- No Comments State -->
+        <div *ngIf="!loading && comments.length === 0" class="no-comments text-center py-6">
+            <mat-icon class="text-gray-200 text-4xl mb-2">forum</mat-icon>
+            <p class="text-gray-400 text-xs font-medium">No comments yet.</p>
+        </div>
+
+        <!-- Comments List -->
+        <div class="comments-list space-y-2 pb-4" *ngIf="!loading && comments.length > 0">
+            <div *ngFor="let comment of comments; trackBy: trackByCommentId" class="comment-item animate-in">
+                <div class="flex space-x-2">
+                    <!-- Avatar -->
+                    <div class="flex-shrink-0 mt-0.5">
+                        <div class="avatar-circle">
+                            {{ comment.authorName ? comment.authorName.charAt(0).toUpperCase() : '?' }}
+                        </div>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="flex-grow">
+                        <div class="comment-bubble p-2 px-3 shadow-sm bg-white border border-gray-100">
+                            <!-- Header -->
+                            <div class="flex justify-between items-start mb-0.5">
+                                <div class="flex flex-col">
+                                    <span class="comment-author font-bold">{{ comment.authorName || 'Unknown User' }}</span>
+                                    <span class="comment-date">{{ comment.createdAt | date:'MMM d, h:mm a' }}</span>
+                                </div>
+                                
+                                <!-- Delete Button (Top Right) -->
+                                <div class="delete-btn-absolute">
+                                    <button *ngIf="view.editable !== false" (click)="deleteComment(comment.id)" mat-icon-button color="warn" matTooltip="Delete Comment">
+                                        <mat-icon>delete_outline</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Content -->
+                            <p class="comment-text whitespace-pre-wrap">{{ comment.content }}</p>
+
+                            <!-- Reply Button (Bottom Right) -->
+                            <div class="reply-btn-absolute">
+                                <button mat-button (click)="setReply(comment)">
+                                    <mat-icon>reply</mat-icon>
+                                    Reply
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Reply Input (Inline) -->
+                        <div *ngIf="replyingTo?.id === comment.id" class="reply-input-inline mt-2 animate-in">
+                            <div class="flex items-center space-x-2 bg-gray-50 p-1 px-2 rounded-lg border border-gray-100">
+                                <mat-form-field appearance="fill" class="flex-grow dense-3 no-subscript bg-transparent">
+                                    <textarea matInput [(ngModel)]="replyContent" placeholder="Write a reply..." rows="1" autoSize></textarea>
+                                </mat-form-field>
+                                <div class="flex">
+                                    <button mat-icon-button color="primary" (click)="addComment(comment.id)" [disabled]="!replyContent.trim()">
+                                        <mat-icon class="text-lg">send</mat-icon>
+                                    </button>
+                                    <button mat-icon-button (click)="cancelReply()" class="text-gray-400">
+                                        <mat-icon class="text-lg">close</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Replies (Nested) -->
+                        <div *ngIf="comment.replies && comment.replies.length > 0" class="replies-container mt-2 ml-4 border-l-2 border-gray-50 pl-3 space-y-1.5">
+                            <div *ngFor="let reply of comment.replies; trackBy: trackByCommentId" class="reply-item">
+                                <div class="flex space-x-2">
+                                    <div class="flex-shrink-0 mt-0.5">
+                                        <div class="avatar-circle small">
+                                            {{ reply.authorName ? reply.authorName.charAt(0).toUpperCase() : '?' }}
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow">
+                                        <div class="comment-bubble reply p-1.5 px-2.5">
+                                            <div class="flex justify-between items-start mb-0.5">
+                                                <div class="flex flex-col">
+                                                    <span class="comment-author font-bold" style="font-size: 12px;">{{ reply.authorName || 'Unknown User' }}</span>
+                                                    <span class="comment-date" style="font-size: 9px;">{{ reply.createdAt | date:'shortTime' }}</span>
+                                                </div>
+                                                <!-- Delete Button (Top Right) -->
+                                                <div class="delete-btn-absolute">
+                                                    <button *ngIf="view.editable !== false" (click)="deleteComment(reply.id)" mat-icon-button color="warn">
+                                                        <mat-icon>delete_outline</mat-icon>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <p class="comment-text" style="font-size: 12px;">{{ reply.content }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Add Comment Input (At the bottom) -->
+    <div class="main-comment-input mt-2 border-t border-gray-100 bg-white sticky bottom-0">
+        <div class="input-wrapper flex items-center space-x-2 rounded-xl p-1 px-2 transition-all">
+            <div class="flex-shrink-0">
+                <mat-icon class="text-gray-400 text-lg">mode_comment</mat-icon>
+            </div>
+            <mat-form-field appearance="fill" class="flex-grow dense-3 no-subscript">
+                <textarea matInput [(ngModel)]="newCommentContent" placeholder="Add a comment..." rows="1"></textarea>
+            </mat-form-field>
+            <button mat-flat-button color="primary" class="send-fab rounded-lg" (click)="addComment()" [disabled]="!newCommentContent.trim()">
+                <mat-icon>send</mat-icon>
+                <span>Post</span>
+            </button>
+        </div>
+    </div>
+</div>

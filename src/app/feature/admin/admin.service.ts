@@ -129,7 +129,6 @@ export class AdminService {
       pageIndex: pageIndex,
       pageSize: pageSize,
       jobId: jobId || undefined,
-      includeLogs: 'Y'
     }).pipe(
       map(d => d.responsePayload)
     )
