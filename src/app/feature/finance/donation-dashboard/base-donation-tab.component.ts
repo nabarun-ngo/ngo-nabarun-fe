@@ -15,6 +15,7 @@ import { ModalService } from 'src/app/core/service/modal.service';
 import { AccordionButton } from 'src/app/shared/model/accordion-list.model';
 import { SCOPE } from 'src/app/core/constant/auth-scope.const';
 import { ProjectSelectionService } from 'src/app/feature/project/service/project-selection.service';
+import { getCommentSection } from 'src/app/shared/utils/common-fields';
 
 @Component({
     template: ''
@@ -206,6 +207,8 @@ export abstract class BaseDonationTabComponent extends Accordion<Donation> imple
         const donationId = this.itemList[event.rowIndex].id;
         this.donationService.fetchDocuments(donationId).subscribe(data => {
             this.addSectionInAccordion(donationDocumentSection(data), event.rowIndex);
+            this.addSectionInAccordion(getCommentSection(donationId, 'DONATION', false), event.rowIndex);
+            this.triggerCommentFetch(event.rowIndex);
         });
     }
 

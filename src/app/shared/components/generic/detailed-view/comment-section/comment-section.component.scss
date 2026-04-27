@@ -7,14 +7,14 @@
 }
 
 .comments-scroll-area {
-    min-height: 150px;
-    max-height: 500px;
+    min-height: 100px;
+    max-height: 400px;
     scrollbar-width: thin;
-    
+
     &::-webkit-scrollbar {
         width: 4px;
     }
-    
+
     &::-webkit-scrollbar-thumb {
         background-color: #e5e7eb;
         border-radius: 10px;
@@ -52,7 +52,7 @@
     &:hover {
         background: #fcfcfc;
         border-color: #e5e7eb;
-        
+
         .delete-btn-absolute {
             opacity: 1;
         }
@@ -63,7 +63,7 @@
         border: none;
         border-radius: 10px !important;
         padding-bottom: 12px !important; // Replies don't have reply button
-        
+
         &:hover {
             background: #f3f4f6;
         }
@@ -76,12 +76,12 @@
     right: 4px;
     opacity: 0.2;
     transition: opacity 0.2s ease;
-    
+
     button {
         width: 24px !important;
         height: 24px !important;
         line-height: 24px !important;
-        
+
         mat-icon {
             font-size: 16px !important;
             width: 16px !important;
@@ -94,20 +94,20 @@
     position: absolute;
     bottom: 4px;
     right: 8px;
-    
+
     button {
         height: 24px !important;
         font-size: 11px !important;
         padding: 0 8px !important;
         color: #9ca3af;
-        
+
         mat-icon {
             font-size: 14px !important;
             width: 14px !important;
             height: 14px !important;
             margin-right: 2px !important;
         }
-        
+
         &:hover {
             color: var(--primary-color, #667eea);
             background: #f3f4f6;
@@ -124,7 +124,7 @@
     transition: all 0.2s ease;
     border: 1px solid #e5e7eb;
     background: #f9fafb;
-    
+
     &:focus-within {
         background: white !important;
         border-color: #d1d5db;
@@ -136,6 +136,7 @@
     ::v-deep .mat-mdc-form-field-subscript-wrapper {
         display: none;
     }
+
     ::v-deep .mat-mdc-form-field-infix {
         padding-top: 8px !important;
         padding-bottom: 8px !important;
@@ -148,7 +149,7 @@
     height: 32px !important;
     font-size: 12px !important;
     padding: 0 12px !important;
-    
+
     mat-icon {
         font-size: 16px !important;
         width: 16px !important;
@@ -161,8 +162,15 @@
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(4px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .replies-container {

@@ -564,21 +564,4 @@ export const getMeetingNotesSection = (
     };
 }
 
-export const getMeetingCommentSection = (
-    meeting: Meeting,
-    isCreate: boolean = false
-): DetailedView => {
-    return {
-        section_name: 'Comments',
-        section_type: 'comment',
-        section_html_id: 'meeting_comments',
-        hide_section: isCreate,
-        section_form: new FormGroup({}),
-        comments: {
-            entityType: 'MEETING',
-            entityId: meeting.id,
-            onOpen: new Subject<void>()
-        }
-    };
-}
 

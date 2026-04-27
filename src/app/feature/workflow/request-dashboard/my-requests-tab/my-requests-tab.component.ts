@@ -21,6 +21,7 @@ import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.i
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { RequestService } from '../../service/request.service';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
+import { getCommentSection } from 'src/app/shared/utils/common-fields';
 
 @Component({
   selector: 'app-my-requests-tab',
@@ -111,7 +112,7 @@ export class MyRequestsTabComponent extends Accordion<WorkflowRequest> implement
     const isDelegated = options && options['forOthers'];
     return [
       getRequestDetailSection(data!, this.getRefData()!, isCreate, isDelegated),
-      getRequestStepsSection(data!, this.getRefData()!, isCreate)
+      getRequestStepsSection(data!, this.getRefData()!, isCreate),
     ];
   }
 
@@ -159,6 +160,8 @@ export class MyRequestsTabComponent extends Accordion<WorkflowRequest> implement
     let item = this.itemList[event.rowIndex];
     this.requestService.getAdditionalFields(item.type!).subscribe(s => {
       this.addSectionInAccordion(getRequestAdditionalDetailSection(item!, s), event.rowIndex)
+      this.addSectionInAccordion(getCommentSection(item?.id, 'REQUEST', false), event.rowIndex);
+      this.triggerCommentFetch(event.rowIndex);
     })
   }
 

@@ -5,7 +5,7 @@ import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { Accordion } from 'src/app/shared/utils/accordion';
 import { AgendaItem, Meeting, MeetingParticipant } from '../../model/meeting.model';
 import { MeetingDefaultValue } from '../../communication.const';
-import { meetingHeader, getMeetingSection, getMeetingAttendeeSection, getMeetingNotesSection, getMeetingCommentSection } from '../../fields/meeting.field';
+import { meetingHeader, getMeetingSection, getMeetingAttendeeSection, getMeetingNotesSection } from '../../fields/meeting.field';
 import { CommunicationService } from '../../service/communication.service';
 import { compareObjects, date, removeNullFields, shareToWhatsApp } from 'src/app/core/service/utilities.service';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
@@ -14,6 +14,7 @@ import { FormGroup, Validators } from '@angular/forms';
 import { filterFormChange } from 'src/app/core/service/form.service';
 import { ModalService } from 'src/app/core/service/modal.service';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
+import { getCommentSection } from 'src/app/shared/utils/common-fields';
 
 @Component({
   selector: 'app-meeting-accordion',
@@ -88,7 +89,7 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
       getMeetingSection(data, this.getRefData() || {}, options && options['create']),
       getMeetingNotesSection(data, this.getRefData() || {}, options && options['create']),
       getMeetingAttendeeSection(data, this.getRefData() || {}, options && options['create'], this.members),
-      getMeetingCommentSection(data, options && options['create'])
+      getCommentSection(data?.id, 'MEETING', options && options['create'])
     ];
   }
 
