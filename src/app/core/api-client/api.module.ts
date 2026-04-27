@@ -20,11 +20,13 @@ import { StaticDocsControllerService } from './services/static-docs-controller.s
 import { PublicControllerService } from './services/public-controller.service';
 import { CallbackControllerService } from './services/callback-controller.service';
 import { HealthControllerService } from './services/health-controller.service';
+import { WebhooksService } from './services/webhooks.service';
 import { ProjectControllerService } from './services/project-controller.service';
 import { CorrespondenceControllerService } from './services/correspondence-controller.service';
+import { NotificationControllerService } from './services/notification-controller.service';
 import { MeetingControllerService } from './services/meeting-controller.service';
 import { CronControllerService } from './services/cron-controller.service';
-import { NotificationControllerService } from './services/notification-controller.service';
+import { CommentsService } from './services/comments.service';
 
 /**
  * Module that provides all services and configuration.
@@ -48,11 +50,13 @@ import { NotificationControllerService } from './services/notification-controlle
     PublicControllerService,
     CallbackControllerService,
     HealthControllerService,
+    WebhooksService,
     ProjectControllerService,
     CorrespondenceControllerService,
+    NotificationControllerService,
     MeetingControllerService,
     CronControllerService,
-    NotificationControllerService,
+    CommentsService,
     ApiConfiguration
   ],
 })

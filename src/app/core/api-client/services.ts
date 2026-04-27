@@ -16,8 +16,10 @@ export { StaticDocsControllerService } from './services/static-docs-controller.s
 export { PublicControllerService } from './services/public-controller.service';
 export { CallbackControllerService } from './services/callback-controller.service';
 export { HealthControllerService } from './services/health-controller.service';
+export { WebhooksService } from './services/webhooks.service';
 export { ProjectControllerService } from './services/project-controller.service';
 export { CorrespondenceControllerService } from './services/correspondence-controller.service';
+export { NotificationControllerService } from './services/notification-controller.service';
 export { MeetingControllerService } from './services/meeting-controller.service';
 export { CronControllerService } from './services/cron-controller.service';
-export { NotificationControllerService } from './services/notification-controller.service';
+export { CommentsService } from './services/comments.service';

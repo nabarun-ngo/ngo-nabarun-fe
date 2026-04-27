@@ -44,6 +44,10 @@ export class DetailedViewComponent {
     return code;
   }
 
+  toggleCollapse(view: DetailedView) {
+    view.is_collapsed = !view.is_collapsed;
+  }
+
 
   // @Output() accordionOpened: EventEmitter<{rowIndex: number;}> = new EventEmitter();
   // @Output() buttonClick: EventEmitter<{buttonId: string;rowIndex: number;}> = new EventEmitter();

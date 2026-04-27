@@ -29,6 +29,7 @@ import { getActivitySection } from 'src/app/feature/project/fields/activity.fiel
 import { ProjectSelectionService, ProjectSelectionResult } from 'src/app/feature/project/service/project-selection.service';
 import { ExpenseService } from '../../service/expense.service';
 import { SearchSelectModalService } from 'src/app/shared/components/search-select-modal/search-select-modal.service';
+import { getCommentSection } from 'src/app/shared/utils/common-fields';
 
 
 @Component({
@@ -133,6 +134,7 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
         },
       }, isCreate, this.isAdmin, this.activityId !== undefined),
       expenseEditableTable(data, isCreate),
+      getCommentSection(data?.id, 'EXPENSE', isCreate)
     ];
   }
 
@@ -296,6 +298,7 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
     this.expenseService.getExpenseDocuments(item.id!).subscribe((data) => {
       this.addSectionInAccordion(expenseDocumentSection(data), $event.rowIndex);
     });
+    this.triggerCommentFetch($event.rowIndex);
   }
 
   selectProject(): void {

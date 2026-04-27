@@ -14,6 +14,7 @@ import { FormGroup, Validators } from '@angular/forms';
 import { filterFormChange } from 'src/app/core/service/form.service';
 import { ModalService } from 'src/app/core/service/modal.service';
 import { UserIdentityService } from 'src/app/core/service/user-identity.service';
+import { getCommentSection } from 'src/app/shared/utils/common-fields';
 
 @Component({
   selector: 'app-meeting-accordion',
@@ -87,7 +88,8 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
     return [
       getMeetingSection(data, this.getRefData() || {}, options && options['create']),
       getMeetingNotesSection(data, this.getRefData() || {}, options && options['create']),
-      getMeetingAttendeeSection(data, this.getRefData() || {}, options && options['create'], this.members)
+      getMeetingAttendeeSection(data, this.getRefData() || {}, options && options['create'], this.members),
+      getCommentSection(data?.id, 'MEETING', options && options['create'])
     ];
   }
 
@@ -157,6 +159,7 @@ export class MeetingAccordionComponent extends Accordion<Meeting> implements Aft
 
 
   protected override onAccordionOpen(event: { rowIndex: number; }): void {
+    this.triggerCommentFetch(event.rowIndex);
   }
 
   override handlePageEvent($event: PageEvent): void {
