@@ -161,7 +161,9 @@ export class MyRequestsTabComponent extends Accordion<WorkflowRequest> implement
     this.requestService.getAdditionalFields(item.type!).subscribe(s => {
       this.addSectionInAccordion(getRequestAdditionalDetailSection(item!, s), event.rowIndex)
       this.addSectionInAccordion(getCommentSection(item?.id, 'REQUEST', false), event.rowIndex);
-      this.triggerCommentFetch(event.rowIndex);
+      setTimeout(() => {
+        this.triggerCommentFetch(event.rowIndex);
+      }, 250);
     })
   }
 

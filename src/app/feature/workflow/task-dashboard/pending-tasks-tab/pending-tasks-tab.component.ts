@@ -94,7 +94,6 @@ export class PendingTasksTabComponent extends Accordion<Task> implements TabComp
     return [
       getTaskDetailSection(m, 'pending_worklist', this.getRefData()!),
       getTaskCheckListSection(m, 'pending_worklist'),
-      getCommentSection(m?.id, 'TASK', options && options['create'])
     ];
   }
 
@@ -180,7 +179,7 @@ export class PendingTasksTabComponent extends Accordion<Task> implements TabComp
   }
 
   protected override async onAccordionOpen(event: { rowIndex: number; }): Promise<void> {
-    this.triggerCommentFetch(event.rowIndex);
+
     const task = this.itemList![event.rowIndex];
     const workflowId = task.workflowId!;
     const request = await firstValueFrom(this.requestService.getRequestDetail(workflowId));
@@ -189,6 +188,10 @@ export class PendingTasksTabComponent extends Accordion<Task> implements TabComp
     this.addSectionInAccordion(getTaskAdditionalDataSection(task!, taskAddnlDetail), event.rowIndex)
     this.addSectionInAccordion(getRequestAdditionalDetailSection(request!, requestAddnlDetail, false, true), event.rowIndex, false, true)
     this.addSectionInAccordion(getRequestDetailSection(request!, this.getRefData()!, false, false, true), event.rowIndex, false, true)
+    this.addSectionInAccordion(getCommentSection(task?.id!, 'TASK', false), event.rowIndex);
+    setTimeout(() => {
+      this.triggerCommentFetch(event.rowIndex);
+    }, 250);
   }
 
   override handlePageEvent($event: PageEvent): void {
