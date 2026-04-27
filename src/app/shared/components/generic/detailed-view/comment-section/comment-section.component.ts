@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { CommentsService } from 'src/app/core/api-client/services/comments.service';
 import { CommentResponseDto } from 'src/app/core/api-client/models/comment-response-dto';
@@ -13,11 +13,14 @@ import { ModalService } from 'src/app/core/service/modal.service';
 })
 export class CommentSectionComponent implements OnInit, OnDestroy {
   @Input() view!: DetailedView;
+  @ViewChild('commentsScrollArea') commentsScrollArea!: ElementRef;
 
   comments: CommentResponseDto[] = [];
   newCommentContent: string = '';
   replyingTo: CommentResponseDto | null = null;
   replyContent: string = '';
+  editingCommentId: string | null = null;
+  editingContent: string = '';
   loading: boolean = false;
   private destroy$ = new Subject<void>();
 
@@ -75,8 +78,9 @@ export class CommentSectionComponent implements OnInit, OnDestroy {
       next: (response) => {
         if (response.responsePayload) {
           if (!parentId) {
-            this.comments.unshift(response.responsePayload);
+            this.comments.push(response.responsePayload);
             this.newCommentContent = '';
+            this.scrollToBottom();
           } else {
             this.fetchComments(); // Refresh to show the new reply in the nested structure
             this.cancelReply();
@@ -87,6 +91,13 @@ export class CommentSectionComponent implements OnInit, OnDestroy {
         console.error('Error adding comment:', err);
       }
     });
+  }
+  scrollToBottom() {
+    console.log('scrolling to bottom', this.commentsScrollArea);
+    if (this.commentsScrollArea) {
+      const el = this.commentsScrollArea.nativeElement;
+      el.scrollTop = el.scrollHeight;
+    }
   }
 
   setReply(comment: CommentResponseDto): void {
@@ -114,6 +125,35 @@ export class CommentSectionComponent implements OnInit, OnDestroy {
           console.error('Error deleting comment:', err);
         }
       });
+    });
+  }
+
+  startEdit(comment: CommentResponseDto): void {
+    this.editingCommentId = comment.id;
+    this.editingContent = comment.content;
+  }
+
+  cancelEdit(): void {
+    this.editingCommentId = null;
+    this.editingContent = '';
+  }
+
+  updateComment(): void {
+    if (!this.editingCommentId || !this.editingContent.trim()) return;
+
+    this.commentsService.updateComment({
+      id: this.editingCommentId,
+      body: { content: this.editingContent }
+    }).subscribe({
+      next: (response) => {
+        if (response.responsePayload) {
+          this.fetchComments();
+          this.cancelEdit();
+        }
+      },
+      error: (err) => {
+        console.error('Error updating comment:', err);
+      }
     });
   }
 
