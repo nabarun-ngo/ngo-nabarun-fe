@@ -132,6 +132,8 @@ export class CronControllerService extends BaseService {
   static readonly RunScheduledJobPath = '/api/cron/run/{name}';
 
   /**
+   * Run a specific cron job manually
+   *
    * **Required Permissions:**
    * - `update:cron`
    * _(Any of these permissions)_
@@ -146,6 +148,8 @@ export class CronControllerService extends BaseService {
   }
 
   /**
+   * Run a specific cron job manually
+   *
    * **Required Permissions:**
    * - `update:cron`
    * _(Any of these permissions)_

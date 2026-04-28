@@ -240,6 +240,26 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
   // #endregion
 
   /**
+   * Helper to notify all comment sections in a row that they should fetch data.
+   * This is typically called from onAccordionOpen implementation.
+   * 
+   * @param rowIndex The index of the row that was opened
+   */
+  protected triggerCommentFetch(rowIndex: number): void {
+    const sections = this.accordionList.contents[rowIndex]?.detailed;
+    if (sections) {
+      sections.forEach(section => {
+        if (section.section_type === 'comment' && section.comments?.onOpen) {
+          const onOpen = section.comments.onOpen as Subject<void>;
+          if (typeof onOpen.next === 'function') {
+            onOpen.next();
+          }
+        }
+      });
+    }
+  }
+
+  /**
    * Regenerate the detailed view sections for a row with new options.
    * This is useful when switching modes (e.g., from view to edit).
    * 

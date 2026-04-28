@@ -54,6 +54,8 @@ import { SafeResourceUrlPipe } from './pipes/safe-resource-url.pipe';
 import { SearchSelectModalComponent } from './components/search-select-modal/search-select-modal.component';
 import { FormAutosaveDirective } from './directives/form-autosave.directive';
 import { CarouselComponent } from './components/generic/carousel/carousel.component';
+import { CommentSectionComponent } from './components/generic/detailed-view/comment-section/comment-section.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 @NgModule({
@@ -83,6 +85,7 @@ import { CarouselComponent } from './components/generic/carousel/carousel.compon
     SafeResourceUrlPipe,
     SearchSelectModalComponent,
     CarouselComponent,
+    CommentSectionComponent,
   ],
 
   imports: [
@@ -112,7 +115,8 @@ import { CarouselComponent } from './components/generic/carousel/carousel.compon
     OverlayModule,
     ScrollingModule,
     MatTooltipModule,
-    FormAutosaveDirective
+    FormAutosaveDirective,
+    MatProgressSpinnerModule
   ],
   exports: [
     ItemTileListComponent,
@@ -157,7 +161,8 @@ import { CarouselComponent } from './components/generic/carousel/carousel.compon
     DocumentListComponent,
     MatTooltipModule,
     FormAutosaveDirective,
-    CarouselComponent
+    CarouselComponent,
+    CommentSectionComponent
   ],
 
   providers: [{

@@ -40,6 +40,11 @@ export abstract class StandardTabbedDashboard<TTab extends string | number, TDat
   #visitedTabs: Set<TTab> = new Set();
 
   /**
+   * Flag to ensure the initial tab load is triggered
+   */
+  #initialLoadTriggered: boolean = false;
+
+  /**
    * Map of tab types to their corresponding components
    * Must be implemented by child classes
    */
@@ -122,17 +127,21 @@ export abstract class StandardTabbedDashboard<TTab extends string | number, TDat
    */
   private handleTabChangeFromUrl(tab: TTab): void {
     const index = this.tabMapping.indexOf(tab);
-    if (index !== -1 && index !== this.tabIndex) {
-      this.tabIndex = index;
-      this.#visitedTabs.add(tab);
+    if (index !== -1) {
+      const isInitialLoad = !this.#initialLoadTriggered;
+      if (index !== this.tabIndex || isInitialLoad) {
+        this.#initialLoadTriggered = true;
+        this.tabIndex = index;
+        this.#visitedTabs.add(tab);
 
-      // Trigger data load and hooks
-      setTimeout(() => {
-        if (!this.initialData) {
-          this.getActiveComponent(tab)?.loadData();
-        }
-        this.onTabChangedHook();
-      });
+        // Trigger data load and hooks
+        setTimeout(() => {
+          if (!this.initialData) {
+            this.getActiveComponent(tab)?.loadData();
+          }
+          this.onTabChangedHook();
+        });
+      }
     }
   }
 

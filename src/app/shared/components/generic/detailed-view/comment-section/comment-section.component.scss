@@ -1,0 +1,226 @@
+.comment-section-container {
+    max-width: 100%;
+    margin: 0 auto;
+    position: relative;
+    background: #fff;
+    border-radius: 8px;
+}
+
+.comments-scroll-area {
+    min-height: 100px;
+    max-height: 400px;
+    scrollbar-width: thin;
+
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: #e5e7eb;
+        border-radius: 10px;
+    }
+}
+
+.avatar-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--gradient-primary, linear-gradient(135deg, #667eea 0%, #764ba2 100%));
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 13px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+    &.small {
+        width: 24px;
+        height: 24px;
+        font-size: 10px;
+    }
+}
+
+.comment-bubble {
+    background: white;
+    border: 1px solid #f3f4f6;
+    border-radius: 12px !important;
+    transition: all 0.2s ease;
+    position: relative;
+    padding-bottom: 32px !important; // Space for the reply button at bottom
+
+    &:hover {
+        background: #fcfcfc;
+        border-color: #e5e7eb;
+
+        .action-btns-absolute {
+            opacity: 1;
+        }
+    }
+
+    &.reply {
+        background: #f9fafb;
+        border: none;
+        border-radius: 10px !important;
+        padding-bottom: 12px !important; // Replies don't have reply button
+
+        &:hover {
+            background: #f3f4f6;
+        }
+    }
+}
+
+.action-btns-absolute {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    opacity: 0.1;
+    transition: opacity 0.2s ease;
+
+    button {
+        width: 24px !important;
+        height: 24px !important;
+        line-height: 24px !important;
+        padding: 0 !important;
+        min-width: unset !important;
+
+        mat-icon {
+            font-size: 14px !important;
+            width: 14px !important;
+            height: 14px !important;
+        }
+    }
+}
+
+.reply-btn-absolute {
+    position: absolute;
+    bottom: 4px;
+    right: 8px;
+
+    button {
+        height: 24px !important;
+        font-size: 11px !important;
+        padding: 0 8px !important;
+        color: #9ca3af;
+
+        mat-icon {
+            font-size: 14px !important;
+            width: 14px !important;
+            height: 14px !important;
+            margin-right: 2px !important;
+        }
+
+        &:hover {
+            color: var(--primary-color, #667eea);
+            background: #f3f4f6;
+        }
+    }
+}
+
+.main-comment-input {
+    z-index: 10;
+    padding-top: 8px !important;
+}
+
+.input-wrapper {
+    transition: all 0.2s ease;
+    border: 1px solid #e5e7eb;
+    background: #f9fafb;
+
+    &:focus-within {
+        background: white !important;
+        border-color: #d1d5db;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+}
+
+.no-subscript {
+    ::v-deep .mat-mdc-form-field-subscript-wrapper {
+        display: none;
+    }
+
+    ::v-deep .mat-mdc-form-field-infix {
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
+        min-height: unset !important;
+        border-top: 0 !important;
+    }
+}
+
+.send-fab {
+    height: 32px !important;
+    font-size: 12px !important;
+    padding: 0 12px !important;
+
+    mat-icon {
+        font-size: 16px !important;
+        width: 16px !important;
+        height: 16px !important;
+    }
+}
+
+.animate-in {
+    animation: fadeIn 0.3s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.replies-container {
+    &::before {
+        left: -12px;
+    }
+}
+
+textarea {
+    resize: none;
+    font-size: 13px !important;
+}
+
+.comment-author {
+    font-size: 13px;
+    color: #374151;
+}
+
+.comment-date {
+    font-size: 10px;
+    color: #9ca3af;
+}
+
+.comment-text {
+    font-size: 13px;
+    color: #4b5563;
+    line-height: 1.4;
+}
+
+.edit-input-area {
+    .mat-mdc-form-field {
+        width: 100%;
+        margin-bottom: 4px;
+    }
+}
+
+.edit-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+
+    button {
+        height: 24px !important;
+        font-size: 11px !important;
+        padding: 0 10px !important;
+        line-height: 24px !important;
+    }
+}

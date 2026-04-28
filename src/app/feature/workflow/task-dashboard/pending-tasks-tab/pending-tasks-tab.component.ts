@@ -14,6 +14,7 @@ import { RequestService } from '../../service/request.service';
 import { getTaskAdditionalDataSection, getTaskCheckListSection, getTaskDetailSection } from '../../fields/tasks.field';
 import { firstValueFrom } from 'rxjs';
 import { ModalService } from 'src/app/core/service/modal.service';
+import { getCommentSection } from 'src/app/shared/utils/common-fields';
 
 
 @Component({
@@ -92,7 +93,7 @@ export class PendingTasksTabComponent extends Accordion<Task> implements TabComp
   protected override prepareDetailedView(m: Task, options?: { [key: string]: any }): DetailedView[] {
     return [
       getTaskDetailSection(m, 'pending_worklist', this.getRefData()!),
-      getTaskCheckListSection(m, 'pending_worklist')
+      getTaskCheckListSection(m, 'pending_worklist'),
     ];
   }
 
@@ -178,6 +179,7 @@ export class PendingTasksTabComponent extends Accordion<Task> implements TabComp
   }
 
   protected override async onAccordionOpen(event: { rowIndex: number; }): Promise<void> {
+
     const task = this.itemList![event.rowIndex];
     const workflowId = task.workflowId!;
     const request = await firstValueFrom(this.requestService.getRequestDetail(workflowId));
@@ -186,6 +188,10 @@ export class PendingTasksTabComponent extends Accordion<Task> implements TabComp
     this.addSectionInAccordion(getTaskAdditionalDataSection(task!, taskAddnlDetail), event.rowIndex)
     this.addSectionInAccordion(getRequestAdditionalDetailSection(request!, requestAddnlDetail, false, true), event.rowIndex, false, true)
     this.addSectionInAccordion(getRequestDetailSection(request!, this.getRefData()!, false, false, true), event.rowIndex, false, true)
+    this.addSectionInAccordion(getCommentSection(task?.id!, 'TASK', false), event.rowIndex);
+    setTimeout(() => {
+      this.triggerCommentFetch(event.rowIndex);
+    }, 250);
   }
 
   override handlePageEvent($event: PageEvent): void {
