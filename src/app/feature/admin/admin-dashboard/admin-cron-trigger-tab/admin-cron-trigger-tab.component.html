@@ -22,7 +22,8 @@
                 <div class="col-span-1 text-center">Action</div>
             </div>
 
-            <div class="border border-gray-100 rounded-b-lg shadow-sm bg-white divide-y divide-gray-50">
+            <div
+                class="border border-gray-100 rounded-b-lg shadow-sm bg-white divide-y divide-gray-50 max-h-[50vh] overflow-y-auto custom-scrollbar">
                 <div *ngFor="let data of jobList"
                     class="grid grid-cols-1 md:grid-cols-12 gap-4 px-4 py-4 items-center hover:bg-indigo-50/20 transition-all duration-200">
 
@@ -36,15 +37,15 @@
                                 {{data.enabled ? 'Active' : 'Paused'}}
                             </span>
                         </div>
-                        <span
-                            class="text-[10px] text-gray-400 font-mono italic truncate max-w-full"
+                        <span class="text-[10px] text-gray-400 font-mono italic truncate max-w-full"
                             [matTooltip]="data.handler">
                             {{data.handler}}
                         </span>
                     </div>
 
                     <!-- Description -->
-                    <div class="col-span-1 md:col-span-5 text-sm text-gray-600 line-clamp-2" [matTooltip]="data.description">
+                    <div class="col-span-1 md:col-span-5 text-sm text-gray-600 line-clamp-2"
+                        [matTooltip]="data.description">
                         {{data.description}}
                     </div>
 
@@ -54,11 +55,16 @@
                         <div class="text-[11px] text-gray-400 font-medium">{{data.nextRun | date: 'HH:mm:ss'}}</div>
                     </div>
 
-                    <!-- Actions (Simplified) -->
+                    <!-- Actions (Minimalist Kebab) -->
                     <div class="col-span-1 md:col-span-1 flex justify-center">
-                        <button mat-icon-button color="primary" matTooltip="Run Job" (click)="triggerDirectly(data.name)">
-                            <mat-icon>play_circle_filled</mat-icon>
-                        </button>
+                        <mat-icon [matMenuTriggerFor]="menu"
+                            class="cursor-pointer text-gray-400 hover:text-indigo-600 transition-all duration-200"
+                            matTooltip="Actions">more_vert</mat-icon>
+                        <mat-menu #menu="matMenu">
+                            <button mat-menu-item (click)="triggerDirectly(data.name)">
+                                <span>Run Job</span>
+                            </button>
+                        </mat-menu>
                     </div>
                 </div>
             </div>

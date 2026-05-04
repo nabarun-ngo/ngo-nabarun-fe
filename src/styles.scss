@@ -964,3 +964,25 @@ h6 {
     align-items: center;
   }
 }
+
+.custom-scrollbar {
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(78, 80, 209, 0.2);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba(78, 80, 209, 0.4);
+    }
+  }
+}
+
