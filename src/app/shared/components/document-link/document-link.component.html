@@ -6,12 +6,12 @@
         <mat-panel-title class="category-title">
           {{ category.name }}
         </mat-panel-title>
-        <mat-panel-description *ngIf="category.description" class="category-description">
-          {{ category.description }}
-        </mat-panel-description>
       </mat-expansion-panel-header>
 
       <ng-template matExpansionPanelContent>
+        <p *ngIf="category.description" class="category-description">
+          {{ category.description }}
+        </p>
         <div *ngIf="category.isLoading" class="loading-container">
           <mat-progress-spinner mode="indeterminate" diameter="40"></mat-progress-spinner>
         </div>

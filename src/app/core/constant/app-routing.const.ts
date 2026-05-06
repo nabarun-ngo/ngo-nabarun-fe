@@ -34,13 +34,6 @@ export const AppRoute = {
     feature: 'dashboard',
     path: 'help',
   },
-  secured_dashboard_help_viewer_page: {
-    id: 'secured_dashboard_help_viewer_page',
-    url: '/secured/dashboard/help/viewer',
-    parent: 'secured',
-    feature: 'dashboard',
-    path: 'help/viewer',
-  },
   secured_donation_dashboard_page: {
     id: 'secured_donation_dashboard_page',
     url: '/secured/finance/donations',
@@ -50,10 +43,10 @@ export const AppRoute = {
   },
   secured_report_dashboard_page: {
     id: 'secured_report_dashboard_page',
-    url: '/secured/dashboard/reports',
+    url: '/secured/reports/dashboard',
     parent: 'secured',
-    feature: 'dashboard',
-    path: 'reports',
+    feature: 'reports',
+    path: 'dashboard',
   },
   secured_donation_bulk_edit_page: {
     id: 'secured_donation_bulk_edit_page',

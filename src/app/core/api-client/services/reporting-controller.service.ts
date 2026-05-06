@@ -23,6 +23,7 @@ import { regenerateReport } from '../fn/reporting-controller/regenerate-report';
 import { RegenerateReport$Params } from '../fn/reporting-controller/regenerate-report';
 import { SuccessResponseArrayKeyValueDto } from '../models/success-response-array-key-value-dto';
 import { SuccessResponsePagedResultReportDetailDto } from '../models/success-response-paged-result-report-detail-dto';
+import { SuccessResponseReportDetailDto } from '../models/success-response-report-detail-dto';
 import { SuccessResponseString } from '../models/success-response-string';
 
 @Injectable({ providedIn: 'root' })
@@ -81,7 +82,7 @@ export class ReportingControllerService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  generateReport$Response(params: GenerateReport$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
+  generateReport$Response(params: GenerateReport$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseReportDetailDto>> {
     return generateReport(this.http, this.rootUrl, params, context);
   }
 
@@ -97,9 +98,9 @@ export class ReportingControllerService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  generateReport(params: GenerateReport$Params, context?: HttpContext): Observable<SuccessResponseString> {
+  generateReport(params: GenerateReport$Params, context?: HttpContext): Observable<SuccessResponseReportDetailDto> {
     return this.generateReport$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseString>): SuccessResponseString => r.body)
+      map((r: StrictHttpResponse<SuccessResponseReportDetailDto>): SuccessResponseReportDetailDto => r.body)
     );
   }
 
@@ -152,7 +153,7 @@ export class ReportingControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  approveReport$Response(params: ApproveReport$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
+  approveReport$Response(params: ApproveReport$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseReportDetailDto>> {
     return approveReport(this.http, this.rootUrl, params, context);
   }
 
@@ -167,9 +168,9 @@ export class ReportingControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  approveReport(params: ApproveReport$Params, context?: HttpContext): Observable<SuccessResponseString> {
+  approveReport(params: ApproveReport$Params, context?: HttpContext): Observable<SuccessResponseReportDetailDto> {
     return this.approveReport$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseString>): SuccessResponseString => r.body)
+      map((r: StrictHttpResponse<SuccessResponseReportDetailDto>): SuccessResponseReportDetailDto => r.body)
     );
   }
 

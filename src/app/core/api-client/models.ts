@@ -131,6 +131,7 @@ export { SuccessResponsePagedResultWorkflowTaskDto } from './models/success-resp
 export { SuccessResponseProjectDetailDto } from './models/success-response-project-detail-dto';
 export { SuccessResponseProjectRefDataDto } from './models/success-response-project-ref-data-dto';
 export { SuccessResponseQueueStatistics } from './models/success-response-queue-statistics';
+export { SuccessResponseReportDetailDto } from './models/success-response-report-detail-dto';
 export { SuccessResponseSendEmailResult } from './models/success-response-send-email-result';
 export { SuccessResponseString } from './models/success-response-string';
 export { SuccessResponseUserDto } from './models/success-response-user-dto';

@@ -8,7 +8,7 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseString } from '../../models/success-response-string';
+import { SuccessResponseReportDetailDto } from '../../models/success-response-report-detail-dto';
 
 export interface ApproveReport$Params {
 
@@ -18,7 +18,7 @@ export interface ApproveReport$Params {
   reportId: string;
 }
 
-export function approveReport(http: HttpClient, rootUrl: string, params: ApproveReport$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
+export function approveReport(http: HttpClient, rootUrl: string, params: ApproveReport$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseReportDetailDto>> {
   const rb = new RequestBuilder(rootUrl, approveReport.PATH, 'post');
   if (params) {
     rb.path('reportId', params.reportId, {});
@@ -29,7 +29,7 @@ export function approveReport(http: HttpClient, rootUrl: string, params: Approve
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseString>;
+      return r as StrictHttpResponse<SuccessResponseReportDetailDto>;
     })
   );
 }

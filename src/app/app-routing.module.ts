@@ -55,6 +55,10 @@ const routes: Routes = [
         path: route_data.secured_meetings_list_page.feature,
         loadChildren: () => import('./feature/communication/communication.module').then(m => m.CommunicationModule),
       },
+      {
+        path: route_data.secured_report_dashboard_page.feature,
+        loadChildren: () => import('./feature/reports/reports.module').then(m => m.ReportsModule),
+      },
     ],
     canActivate: [
       AuthGuardService,
