@@ -62,6 +62,7 @@ export { PagedResultExpenseDetailDto } from './models/paged-result-expense-detai
 export { PagedResultJobDetail } from './models/paged-result-job-detail';
 export { PagedResultNotificationResponseDto } from './models/paged-result-notification-response-dto';
 export { PagedResultProjectDetailDto } from './models/paged-result-project-detail-dto';
+export { PagedResultReportDetailDto } from './models/paged-result-report-detail-dto';
 export { PagedResultSchedulerLogDto } from './models/paged-result-scheduler-log-dto';
 export { PagedResultTransactionDetailDto } from './models/paged-result-transaction-detail-dto';
 export { PagedResultUserDto } from './models/paged-result-user-dto';
@@ -77,6 +78,7 @@ export { QueueHealth } from './models/queue-health';
 export { QueueStatistics } from './models/queue-statistics';
 export { RecordedByDto } from './models/recorded-by-dto';
 export { RegisterFcmTokenDto } from './models/register-fcm-token-dto';
+export { ReportDetailDto } from './models/report-detail-dto';
 export { RoleDto } from './models/role-dto';
 export { RoleHistoryDto } from './models/role-history-dto';
 export { SchedulerLogDto } from './models/scheduler-log-dto';
@@ -119,6 +121,7 @@ export { SuccessResponsePagedResultExpenseDetailDto } from './models/success-res
 export { SuccessResponsePagedResultJobDetail } from './models/success-response-paged-result-job-detail';
 export { SuccessResponsePagedResultNotificationResponseDto } from './models/success-response-paged-result-notification-response-dto';
 export { SuccessResponsePagedResultProjectDetailDto } from './models/success-response-paged-result-project-detail-dto';
+export { SuccessResponsePagedResultReportDetailDto } from './models/success-response-paged-result-report-detail-dto';
 export { SuccessResponsePagedResultSchedulerLogDto } from './models/success-response-paged-result-scheduler-log-dto';
 export { SuccessResponsePagedResultTransactionDetailDto } from './models/success-response-paged-result-transaction-detail-dto';
 export { SuccessResponsePagedResultUserDto } from './models/success-response-paged-result-user-dto';

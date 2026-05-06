@@ -10,7 +10,6 @@ export { WorkflowControllerService } from './services/workflow-controller.servic
 export { DonationControllerService } from './services/donation-controller.service';
 export { AccountControllerService } from './services/account-controller.service';
 export { ExpenseControllerService } from './services/expense-controller.service';
-export { FinanceReportControllerService } from './services/finance-report-controller.service';
 export { DmsControllerService } from './services/dms-controller.service';
 export { StaticDocsControllerService } from './services/static-docs-controller.service';
 export { PublicControllerService } from './services/public-controller.service';
@@ -23,3 +22,4 @@ export { NotificationControllerService } from './services/notification-controlle
 export { MeetingControllerService } from './services/meeting-controller.service';
 export { CronControllerService } from './services/cron-controller.service';
 export { CommentsService } from './services/comments.service';
+export { ReportingControllerService } from './services/reporting-controller.service';

@@ -5,9 +5,11 @@
 export interface CronJobDto {
   description: string;
   enabled: boolean;
+  expression: string;
   handler: string;
   inputData?: {
 };
   name: string;
   nextRun: string;
+  readableExpression: string;
 }
