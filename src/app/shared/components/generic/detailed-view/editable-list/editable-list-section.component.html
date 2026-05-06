@@ -14,10 +14,9 @@
                     <!-- Value Area -->
                     <div class="w-full">
                         <!-- Read mode -->
-                        <span *ngIf="!(field.editable && view.show_form)" class="read-mode-value">
-                            {{ (field.show_display_value ? displayValue(field.ref_data_section,
+                        <span *ngIf="!(field.editable && view.show_form)" class="read-mode-value" [innerHtml]="(field.show_display_value ? displayValue(field.ref_data_section,
                             item.get(field.form_control_name!)?.value) :
-                            item.get(field.form_control_name!)?.value) || '-' }}
+                            item.get(field.form_control_name!)?.value) || '-'">
                         </span>
 
                         <!-- Edit mode -->

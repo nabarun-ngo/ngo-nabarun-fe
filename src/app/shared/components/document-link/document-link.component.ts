@@ -8,15 +8,23 @@ import { DocumentCategory } from './document-link.model';
   styleUrls: ['./document-link.component.scss']
 })
 export class DocumentLinkComponent {
-
   @Input({ required: true })
   categories: DocumentCategory[] = [];
 
   @Input()
-  pageSize: number = 10
+  pageSize: number = 10;
+
+  @Input()
+  expandedByDefault: boolean = false;
 
   @Output()
   documentClicked = new EventEmitter<{ doc: KeyValue, categoryName: string }>();
+
+  @Output()
+  categoryOpened = new EventEmitter<DocumentCategory>();
+
+  @Output()
+  pageChanged = new EventEmitter<{ category: DocumentCategory, page: number }>();
 
   // Track page per category
   public currentPageMap: { [key: string]: number } = {};
@@ -25,18 +33,18 @@ export class DocumentLinkComponent {
     this.documentClicked.emit({ doc, categoryName });
   }
 
-  getPagedDocuments(category: DocumentCategory): KeyValue[] {
-    const page = this.currentPageMap[category.name] || 0;
-    const start = page * this.pageSize;
-    return category.documents.slice(start, start + this.pageSize);
+  onCategoryOpen(category: DocumentCategory) {
+    this.categoryOpened.emit(category);
   }
 
-  onPageChange(categoryName: string, newPage: number) {
-    this.currentPageMap[categoryName] = newPage;
+  onPageChange(category: DocumentCategory, newPage: number) {
+    this.currentPageMap[category.name] = newPage;
+    this.pageChanged.emit({ category, page: newPage });
   }
 
   getTotalPages(category: DocumentCategory): number {
-    return Math.ceil(category.documents.length / this.pageSize);
+    const total = category.totalElements || category.documents.length;
+    return Math.ceil(total / this.pageSize);
   }
 }
 

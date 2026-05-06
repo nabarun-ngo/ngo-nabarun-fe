@@ -1,1 +1,2 @@
-<app-document-link [categories]="policies || []" (documentClicked)="onDocumentClicked($event)"></app-document-link>
+<app-document-link [categories]="policies" [expandedByDefault]="true" (categoryOpened)="onCategoryOpened($event)"
+  (pageChanged)="onPageChanged($event)" (documentClicked)="onDocumentClicked($event)"></app-document-link>

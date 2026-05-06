@@ -20,24 +20,34 @@ export class FinanceReportTabComponent implements TabComponentInterface<KeyValue
 
   loadData(): void {
     this.reportService.listFinanceReports().subscribe(data => {
-      this.financeReports = [];
-      data.forEach(async d => {
-        this.financeReports.push({
-          name: d.displayValue,
-          description: d.description + ' Here is the list of generated reports.',
-          documents: await this.listDocuments(d.key)
-        })
-      })
+      this.financeReports = data.map(d => ({
+        id: d.key,
+        name: d.displayValue,
+        description: d.description + ' Here is the list of generated reports.',
+        documents: [],
+        isLoading: false
+      }));
     });
   }
 
-  protected async listDocuments(key: string): Promise<KeyValue[]> {
-    const data = await firstValueFrom(this.reportService.getReports(key));
-    return data.map(d => ({
-      key: d.id,
-      displayValue: d.fileName,
-      description: d.fileName
-    } as KeyValue));
+  onCategoryOpened(category: DocumentCategory) {
+    if (category.documents.length > 0) return;
+
+    category.isLoading = true;
+    this.reportService.getReports(category.id!).subscribe(data => {
+      category.documents = data.map(d => ({
+        key: d.id,
+        displayValue: d.fileName,
+        description: d.fileName
+      } as KeyValue));
+      category.totalElements = data.length;
+      category.isLoading = false;
+    });
+  }
+
+  onPageChanged(event: { category: DocumentCategory, page: number }) {
+    // Implement server-side pagination here if getReports supports it
+    console.log(`Page changed for ${event.category.name} to ${event.page}`);
   }
 
   protected onDocumentClicked($event: { doc: KeyValue, categoryName: string }) {

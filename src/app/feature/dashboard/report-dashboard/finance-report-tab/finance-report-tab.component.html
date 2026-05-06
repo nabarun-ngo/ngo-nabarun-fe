@@ -1,1 +1,2 @@
-<app-document-link [categories]="financeReports" (documentClicked)="onDocumentClicked($event)"></app-document-link>
+<app-document-link [categories]="financeReports" (categoryOpened)="onCategoryOpened($event)" (pageChanged)="onPageChanged($event)"
+    (documentClicked)="onDocumentClicked($event)"></app-document-link>
