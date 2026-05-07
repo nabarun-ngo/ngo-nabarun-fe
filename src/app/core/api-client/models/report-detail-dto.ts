@@ -51,6 +51,11 @@ export interface ReportDetailDto {
   reportCode: string;
 
   /**
+   * The report name
+   */
+  reportName: string;
+
+  /**
    * The ID of the user who requested the report
    */
   requestedById?: string;

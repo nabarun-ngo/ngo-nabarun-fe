@@ -65,8 +65,8 @@ export class ReportDashboardComponent implements OnInit {
       if (res && res.content) {
         category.documents = res.content.map(d => ({
           key: d.dmsDocumentId,
-          displayValue: `Execution v${d.version} - ${new Date(d.createdAt).toLocaleString()}`,
-          description: `Status: ${d.status}, Created at: ${new Date(d.createdAt).toLocaleString()}`
+          displayValue: '',
+          description: `${d.reportName} - V${d.version} - ${new Date(d.createdAt).toLocaleString()}`
         } as KeyValue));
         category.totalElements = res.totalSize;
       }
@@ -80,7 +80,7 @@ export class ReportDashboardComponent implements OnInit {
       return;
     }
     this.reportService.downloadReports($event.doc.key).subscribe((response) => {
-      saveAs(response, $event.doc.displayValue || 'report');
+      saveAs(response, $event.doc.description || 'report');
     }, error => {
       console.error('Download failed', error);
     });

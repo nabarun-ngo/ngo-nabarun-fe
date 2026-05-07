@@ -22,6 +22,7 @@ export class ReportService {
         reportCode: code,
         pageIndex: index,
         pageSize: size,
+        status: 'APPROVED'
       }
     ).pipe(map(m => m.responsePayload));
   }
