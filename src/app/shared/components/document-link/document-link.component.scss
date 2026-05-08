@@ -87,6 +87,11 @@
   font-size: 1rem;
   transition: color 0.2s;
   flex: 1;
+  cursor: pointer;
+
+  &:visited {
+    color: #388e3c;
+  }
 
   &:hover,
   &:focus {

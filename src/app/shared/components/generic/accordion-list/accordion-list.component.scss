@@ -1,5 +1,5 @@
 /* Modern Accordion Design */
-::ng-deep .mat-accordion {
+:host ::ng-deep .mat-accordion {
   .mat-expansion-panel {
     margin: 0.75rem 0 !important;
     border-radius: 12px !important;
@@ -78,7 +78,7 @@
 }
 
 /* Modern Grid Styling */
-::ng-deep .mat-accordion .grid {
+:host ::ng-deep .mat-accordion .grid {
   .col-span-1 {
     span {
       border-radius: 8px !important;
@@ -95,7 +95,7 @@
 }
 
 /* Header Section Styling */
-::ng-deep .mat-accordion .mat-elevation-z2 {
+:host ::ng-deep .mat-accordion .mat-elevation-z2 {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
   border-radius: 12px !important;
   box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3) !important;
@@ -112,7 +112,7 @@
 
 /* Mobile responsive improvements for accordion */
 @media (max-width: 640px) {
-  ::ng-deep .mat-expansion-panel {
+  :host ::ng-deep .mat-expansion-panel {
     margin: 0.5rem 0 !important;
     border-radius: 8px !important;
 
@@ -136,7 +136,7 @@
   }
 
   /* Stack accordion content on mobile */
-  ::ng-deep .mat-accordion .grid {
+  :host ::ng-deep .mat-accordion .grid {
     grid-template-columns: 1fr !important;
     gap: 0.5rem !important;
 
@@ -154,7 +154,7 @@
   }
 
   /* Mobile-friendly action buttons */
-  ::ng-deep .mat-action-row {
+  :host ::ng-deep .mat-action-row {
     padding: 0.75rem 1rem !important;
 
     .mat-button {
@@ -181,7 +181,7 @@
 
 /* Mobile: stack columns */
 @media (max-width: 640px) {
-  ::ng-deep .mat-accordion .accordion-grid {
+  :host ::ng-deep .mat-accordion .accordion-grid {
     grid-template-columns: 1fr !important;
     gap: 0.5rem !important;
   }
@@ -279,7 +279,7 @@
 }
 
 /* Selected Row Styling */
-::ng-deep .mat-accordion .mat-expansion-panel.row-selected {
+:host ::ng-deep .mat-accordion .mat-expansion-panel.row-selected {
   border-left: 4px solid var(--primary-500) !important;
   background: #eff6ff !important;
 
@@ -289,7 +289,7 @@
 }
 
 /* White Checkbox for Header */
-::ng-deep .white-checkbox {
+:host ::ng-deep .white-checkbox {
   .mat-checkbox-frame {
     border-color: rgba(255, 255, 255, 0.8) !important;
   }
