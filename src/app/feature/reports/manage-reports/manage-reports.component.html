@@ -1,0 +1,11 @@
+<app-page-layout [navigations]="navigations">
+  <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" class="mat-tab-group-mobile-scroll"
+    (selectedTabChange)="tabChanged($event.index)" [(selectedIndex)]="tabIndex">
+    <mat-tab id="draftReports" label="Draft Reports">
+      <app-draft-reports-tab [accordionData]="initialData!" [refData]="refData"></app-draft-reports-tab>
+    </mat-tab>
+    <mat-tab id="approvedReports" label="Approved Reports">
+      <app-approved-reports-tab [accordionData]="initialData!" [refData]="refData"></app-approved-reports-tab>
+    </mat-tab>
+  </mat-tab-group>
+</app-page-layout>

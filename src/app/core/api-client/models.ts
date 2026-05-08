@@ -78,6 +78,7 @@ export { QueueHealth } from './models/queue-health';
 export { QueueStatistics } from './models/queue-statistics';
 export { RecordedByDto } from './models/recorded-by-dto';
 export { RegisterFcmTokenDto } from './models/register-fcm-token-dto';
+export { ReportCategoryDto } from './models/report-category-dto';
 export { ReportDetailDto } from './models/report-detail-dto';
 export { RoleDto } from './models/role-dto';
 export { RoleHistoryDto } from './models/role-history-dto';
@@ -99,6 +100,7 @@ export { SuccessResponseArrayCronJobDto } from './models/success-response-array-
 export { SuccessResponseArrayDocumentDto } from './models/success-response-array-document-dto';
 export { SuccessResponseArrayFieldAttributeDto } from './models/success-response-array-field-attribute-dto';
 export { SuccessResponseArrayKeyValueDto } from './models/success-response-array-key-value-dto';
+export { SuccessResponseArrayReportCategoryDto } from './models/success-response-array-report-category-dto';
 export { SuccessResponseArrayStaticDocumentDto } from './models/success-response-array-static-document-dto';
 export { SuccessResponseArrayString } from './models/success-response-array-string';
 export { SuccessResponseBoolean } from './models/success-response-boolean';

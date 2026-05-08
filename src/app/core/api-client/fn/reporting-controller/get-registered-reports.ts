@@ -8,12 +8,12 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SuccessResponseArrayKeyValueDto } from '../../models/success-response-array-key-value-dto';
+import { SuccessResponseArrayReportCategoryDto } from '../../models/success-response-array-report-category-dto';
 
 export interface GetRegisteredReports$Params {
 }
 
-export function getRegisteredReports(http: HttpClient, rootUrl: string, params?: GetRegisteredReports$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayKeyValueDto>> {
+export function getRegisteredReports(http: HttpClient, rootUrl: string, params?: GetRegisteredReports$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayReportCategoryDto>> {
   const rb = new RequestBuilder(rootUrl, getRegisteredReports.PATH, 'get');
   if (params) {
   }
@@ -23,7 +23,7 @@ export function getRegisteredReports(http: HttpClient, rootUrl: string, params?:
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<SuccessResponseArrayKeyValueDto>;
+      return r as StrictHttpResponse<SuccessResponseArrayReportCategoryDto>;
     })
   );
 }

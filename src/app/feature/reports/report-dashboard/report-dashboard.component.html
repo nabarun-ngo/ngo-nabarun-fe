@@ -1,11 +1,11 @@
 <app-page-layout [navigations]="navigations">
-    <div class="mb-4 flex flex-wrap justify-end gap-2 relative z-10">
+    <!-- <div class="mb-4 flex flex-wrap justify-end gap-2 relative z-10">
         <button mat-button color="secondary">
             <mat-icon>refresh</mat-icon>
             Refresh
         </button>
 
-    </div>
+    </div> -->
     <app-document-link [categories]="reportCategories" (categoryOpened)="onCategoryOpened($event)"
         (pageChanged)="onPageChanged($event)" (documentClicked)="onDocumentClicked($event)"></app-document-link>
 </app-page-layout>

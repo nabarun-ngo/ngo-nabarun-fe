@@ -7,6 +7,9 @@ import { ActivatedRoute } from '@angular/router';
 import { ReportService } from '../report.service';
 import { saveAs } from 'src/app/core/service/utilities.service';
 import { DocumentCategory } from 'src/app/shared/components/document-link/document-link.model';
+import { ReportDefaultValue } from '../report.const';
+import { ReportCategoryDto } from 'src/app/core/api-client/models';
+import { UserIdentityService } from 'src/app/core/service/user-identity.service';
 
 @Component({
   selector: 'app-report-dashboard',
@@ -27,7 +30,8 @@ export class ReportDashboardComponent implements OnInit {
   constructor(
     private sharedDataService: SharedDataService,
     protected route: ActivatedRoute,
-    private reportService: ReportService
+    private reportService: ReportService,
+    private userIdentityService: UserIdentityService
   ) { }
 
   ngOnInit(): void {
@@ -35,19 +39,36 @@ export class ReportDashboardComponent implements OnInit {
     this.loadResolvedData();
   }
 
-  private loadResolvedData(): void {
-    const categories = this.route.snapshot.data['data'] as KeyValue[];
+  private async loadResolvedData(): Promise<void> {
+    const categories = this.route.snapshot.data['data'] as ReportCategoryDto[];
     console.log(categories);
 
     if (categories) {
-      this.reportCategories = categories.map(d => ({
-        id: d.key,
-        name: d.displayValue!,
+      this.reportCategories = (await Promise.all(categories.map(async d => ({
+        id: d.reportCode,
+        name: d.reportName!,
         description: d.description,
         documents: [],
-        isLoading: false
-      }));
+        isLoading: false,
+        ...(await this.canManage(d) ? {
+          actionName: 'Manage',
+          actionLink: AppRoute.secured_manage_reports_page.url,
+          actionQueryParams: { reportCode: d.reportCode },
+        } : {})
+      }))));
     }
+  }
+
+  private async canManage(category: ReportCategoryDto): Promise<boolean> {
+    const user = await this.userIdentityService.getUser();
+
+    if (!user?.user_roles?.length || !category?.manageRoles?.length) {
+      return false;
+    }
+
+    return user.user_roles.some(role =>
+      category.manageRoles?.includes(role)
+    );
   }
 
   onCategoryOpened(category: DocumentCategory) {
@@ -61,12 +82,12 @@ export class ReportDashboardComponent implements OnInit {
 
   private fetchExecutions(category: DocumentCategory, page: number) {
     category.isLoading = true;
-    this.reportService.listReports(category.id!, page, 10).subscribe(res => {
+    this.reportService.listReports(category.id!, 'APPROVED', page, ReportDefaultValue.pageSize).subscribe(res => {
       if (res && res.content) {
         category.documents = res.content.map(d => ({
           key: d.dmsDocumentId,
           displayValue: '',
-          description: `${d.reportName} - V${d.version} - ${new Date(d.createdAt).toLocaleString()}`
+          description: `${d.reportName} - V${d.version}`
         } as KeyValue));
         category.totalElements = res.totalSize;
       }

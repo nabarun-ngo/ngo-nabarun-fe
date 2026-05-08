@@ -21,7 +21,7 @@ import { listReports } from '../fn/reporting-controller/list-reports';
 import { ListReports$Params } from '../fn/reporting-controller/list-reports';
 import { regenerateReport } from '../fn/reporting-controller/regenerate-report';
 import { RegenerateReport$Params } from '../fn/reporting-controller/regenerate-report';
-import { SuccessResponseArrayKeyValueDto } from '../models/success-response-array-key-value-dto';
+import { SuccessResponseArrayReportCategoryDto } from '../models/success-response-array-report-category-dto';
 import { SuccessResponsePagedResultReportDetailDto } from '../models/success-response-paged-result-report-detail-dto';
 import { SuccessResponseReportDetailDto } from '../models/success-response-report-detail-dto';
 import { SuccessResponseString } from '../models/success-response-string';
@@ -46,7 +46,7 @@ export class ReportingControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getRegisteredReports$Response(params?: GetRegisteredReports$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayKeyValueDto>> {
+  getRegisteredReports$Response(params?: GetRegisteredReports$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayReportCategoryDto>> {
     return getRegisteredReports(this.http, this.rootUrl, params, context);
   }
 
@@ -61,9 +61,9 @@ export class ReportingControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getRegisteredReports(params?: GetRegisteredReports$Params, context?: HttpContext): Observable<SuccessResponseArrayKeyValueDto> {
+  getRegisteredReports(params?: GetRegisteredReports$Params, context?: HttpContext): Observable<SuccessResponseArrayReportCategoryDto> {
     return this.getRegisteredReports$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseArrayKeyValueDto>): SuccessResponseArrayKeyValueDto => r.body)
+      map((r: StrictHttpResponse<SuccessResponseArrayReportCategoryDto>): SuccessResponseArrayReportCategoryDto => r.body)
     );
   }
 

@@ -8,4 +8,7 @@ export interface DocumentCategory {
     totalElements?: number;
     isLoading?: boolean;
     isExpanded?: boolean;
+    actionName?: string;
+    actionLink?: string | any[];
+    actionQueryParams?: any;
 }
