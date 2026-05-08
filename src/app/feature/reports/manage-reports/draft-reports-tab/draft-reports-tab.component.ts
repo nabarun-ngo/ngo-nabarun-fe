@@ -3,9 +3,7 @@ import { FormControl, FormGroup, ValidationErrors, Validators } from '@angular/f
 import { AccordionButton } from 'src/app/shared/model/accordion-list.model';
 import { DetailedView } from 'src/app/shared/model/detailed-view.model';
 import { ReportDetailDto } from 'src/app/core/api-client/models/report-detail-dto';
-import { ReportService } from '../../report.service';
 import { ReportAccordionBaseComponent } from '../report-accordion.base';
-import { KeyValue } from 'src/app/shared/model/key-value.model';
 import { ModalService } from 'src/app/core/service/modal.service';
 import { ReportDefaultValue } from '../../report.const';
 import { ReportCategoryDto } from 'src/app/core/api-client/models';
@@ -18,7 +16,6 @@ import { ReportCategoryDto } from 'src/app/core/api-client/models';
 export class DraftReportsTabComponent extends ReportAccordionBaseComponent {
   private categories: ReportCategoryDto[] = [];
   constructor(
-    protected readonly reportService: ReportService,
     protected readonly modalService: ModalService,
   ) {
     super();

@@ -87,7 +87,7 @@ export class ReportDashboardComponent implements OnInit {
         category.documents = res.content.map(d => ({
           key: d.dmsDocumentId,
           displayValue: '',
-          description: `${d.reportName} - V${d.version}`
+          description: `${d.reportName}`
         } as KeyValue));
         category.totalElements = res.totalSize;
       }

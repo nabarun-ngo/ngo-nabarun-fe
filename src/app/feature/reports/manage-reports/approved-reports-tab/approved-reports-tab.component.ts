@@ -3,7 +3,6 @@ import { AccordionButton } from 'src/app/shared/model/accordion-list.model';
 import { ReportDetailDto } from 'src/app/core/api-client/models/report-detail-dto';
 import { ReportAccordionBaseComponent } from '../report-accordion.base';
 import { ReportDefaultValue } from '../../report.const';
-import { ReportService } from '../../report.service';
 import { ModalService } from 'src/app/core/service/modal.service';
 
 @Component({
@@ -13,7 +12,6 @@ import { ModalService } from 'src/app/core/service/modal.service';
 })
 export class ApprovedReportsTabComponent extends ReportAccordionBaseComponent {
   constructor(
-    protected readonly reportService: ReportService,
     protected readonly modalService: ModalService,
   ) {
     super();

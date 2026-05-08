@@ -11,10 +11,16 @@ import { ReportDefaultValue } from '../report.const';
 import { date } from 'src/app/core/service/utilities.service';
 import { ActivatedRoute } from '@angular/router';
 import { inject } from '@angular/core';
+import { ReportService } from '../report.service';
+import { Doc, mapDocDtoToDoc } from 'src/app/shared/model/document.model';
+import { takeUntil } from 'rxjs';
+import { reportDocumentSection } from '../report.field';
+import { getCommentSection } from 'src/app/shared/utils/common-fields';
 
 export abstract class ReportAccordionBaseComponent extends Accordion<ReportDetailDto> implements TabComponentInterface<PagedResultReportDetailDto> {
   protected reportCode!: string;
   private activatedRoute = inject(ActivatedRoute);
+  protected reportService = inject(ReportService);
 
   protected override get paginationConfig(): { pageNumber: number; pageSize: number; pageSizeOptions: number[] } {
     return {
@@ -33,7 +39,6 @@ export abstract class ReportAccordionBaseComponent extends Accordion<ReportDetai
 
     this.setHeaderRow([
       { value: 'Report Name' },
-      { value: 'Report Code' },
       { value: 'Version' },
       { value: 'Created At' },
     ]);
@@ -49,7 +54,6 @@ export abstract class ReportAccordionBaseComponent extends Accordion<ReportDetai
     console.log(data);
     return [
       { value: data.reportName || '-', type: 'text' },
-      { value: data.reportCode || '-', type: 'text' },
       { value: `V${data.version ?? 1}`, type: 'text' },
       { value: data.createdAt ? date(data.createdAt, 'dd-MM-YYYY HH:mm:ss') : '-', type: 'date' },
     ];
@@ -72,12 +76,22 @@ export abstract class ReportAccordionBaseComponent extends Accordion<ReportDetai
           { field_name: 'Updated At', field_value: data.updatedAt ? date(data.updatedAt, 'dd-MM-YYYY HH:mm:ss') : '-' },
           { field_name: 'Parameters', field_value: this.formatParameters(data.parameters) },
         ],
-      },
+      }
     ];
   }
 
-  protected override onAccordionOpen(_event: { rowIndex: number }): void {
-    // no-op
+  protected override onAccordionOpen(event: { rowIndex: number }): void {
+    const data = this.itemList[event.rowIndex];
+    this.reportService.getReport(data.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(docs => {
+        const docList = docs ? docs.map(m => mapDocDtoToDoc(m)) : [];
+        this.addSectionInAccordion(reportDocumentSection(docList), event.rowIndex);
+        this.addSectionInAccordion(getCommentSection(data.id, 'REPORT', false), event.rowIndex);
+        setTimeout(() => {
+          this.triggerCommentFetch(event.rowIndex);
+        }, 250);
+      });
   }
 
   override handlePageEvent($event: PageEvent): void {
