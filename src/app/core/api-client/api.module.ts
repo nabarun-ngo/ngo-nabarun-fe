@@ -14,7 +14,6 @@ import { WorkflowControllerService } from './services/workflow-controller.servic
 import { DonationControllerService } from './services/donation-controller.service';
 import { AccountControllerService } from './services/account-controller.service';
 import { ExpenseControllerService } from './services/expense-controller.service';
-import { FinanceReportControllerService } from './services/finance-report-controller.service';
 import { DmsControllerService } from './services/dms-controller.service';
 import { StaticDocsControllerService } from './services/static-docs-controller.service';
 import { PublicControllerService } from './services/public-controller.service';
@@ -27,6 +26,7 @@ import { NotificationControllerService } from './services/notification-controlle
 import { MeetingControllerService } from './services/meeting-controller.service';
 import { CronControllerService } from './services/cron-controller.service';
 import { CommentsService } from './services/comments.service';
+import { ReportingControllerService } from './services/reporting-controller.service';
 
 /**
  * Module that provides all services and configuration.
@@ -44,7 +44,6 @@ import { CommentsService } from './services/comments.service';
     DonationControllerService,
     AccountControllerService,
     ExpenseControllerService,
-    FinanceReportControllerService,
     DmsControllerService,
     StaticDocsControllerService,
     PublicControllerService,
@@ -57,6 +56,7 @@ import { CommentsService } from './services/comments.service';
     MeetingControllerService,
     CronControllerService,
     CommentsService,
+    ReportingControllerService,
     ApiConfiguration
   ],
 })

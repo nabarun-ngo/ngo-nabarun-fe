@@ -1,4 +1,4 @@
-export interface AuthUser{
+export interface AuthUser {
     active_user: boolean;
     email: string;
     email_verified: boolean;
@@ -7,9 +7,10 @@ export interface AuthUser{
     name: string;
     nickname: string;
     picture: string;
-    sub : string;
+    sub: string;
     user_id: string;
     profile_id: string;
-    profile_updated:boolean;
-   // scopes: string[];
+    profile_updated: boolean;
+    user_roles: string[];
+    // scopes: string[];
 }

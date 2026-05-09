@@ -6,6 +6,20 @@
     margin: var(--space-md) 0;
 }
 
+.table-body {
+    scrollbar-width: thin;
+    max-height: 400px;
+
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: #e5e7eb;
+        border-radius: 10px;
+    }
+}
+
 .table-header {
     background: var(--gradient-primary);
     padding: var(--space-md) var(--space-lg);

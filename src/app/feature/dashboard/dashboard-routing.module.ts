@@ -4,8 +4,6 @@ import { SecuredDashboardComponent } from './secured-dashboard/secured-dashboard
 import { NeedHelpComponent } from './need-help/need-help.component';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { helpResolver } from './dashboard.resolver';
-import { DocumentViewerComponent } from './document-viewer/document-viewer.component';
-import { ReportDashboardComponent } from './report-dashboard/report-dashboard.component';
 
 const route_data = AppRoute;
 
@@ -22,18 +20,7 @@ const routes: Routes = [
       data: helpResolver,
     }
   },
-  {
-    path: route_data.secured_report_dashboard_page.path,
-    component: ReportDashboardComponent,
-    resolve: {
-      //  data: reportDashboardResolver,
-      // ref_data: donationRefDataResolverNew,
-    }
-  },
-  {
-    path: route_data.secured_dashboard_help_viewer_page.path,
-    component: DocumentViewerComponent
-  },
+
 ];
 
 @NgModule({

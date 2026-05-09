@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, DestroyRef, OnInit } from '@angular/core';
+import { AfterViewInit, Component, inject, DestroyRef, OnInit, Directive } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TabComponentInterface } from '../interfaces/tab-component.interface';

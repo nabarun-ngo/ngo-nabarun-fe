@@ -128,7 +128,6 @@ export class PendingTasksTabComponent extends Accordion<Task> implements TabComp
       case 'ACCEPT':
         this.taskService.updateTask(task.workflowId!, task.id!,
           'IN_PROGRESS', 'Accepted Task').subscribe(data => {
-            this.hideForm($event.rowIndex, 'request_completed')
             this.updateContentRow(data, $event.rowIndex);
           })
         this.actionName = $event.buttonId;
@@ -158,12 +157,13 @@ export class PendingTasksTabComponent extends Accordion<Task> implements TabComp
           const additionalData = form_additional_data.value;
           this.taskService.updateTask(task.workflowId!, task.id!,
             status, remarks, additionalData).subscribe(data => {
-              this.hideForm($event.rowIndex, 'request_completed')
-              if (data.completedAt) {
-                this.removeContentRow($event.rowIndex)
-              } else {
-                this.updateContentRow(data, $event.rowIndex);
-              }
+              this.hideForm($event.rowIndex, 'request_completed', false, () => {
+                if (data.completedAt) {
+                  this.removeContentRow($event.rowIndex)
+                } else {
+                  this.updateContentRow(data, $event.rowIndex);
+                }
+              });
             })
         } else {
           form_work_detail?.markAllAsTouched();
