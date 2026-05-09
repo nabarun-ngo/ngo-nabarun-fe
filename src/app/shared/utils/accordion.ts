@@ -21,7 +21,9 @@ export type FieldVisibilityRule<NumType = any> = {
   condition: (formValue: NumType) => boolean;
 };
 
-@Directive()
+@Component({
+  template: ''
+})
 export abstract class Accordion<NumType> extends Paginator implements OnInit, AfterContentInit, OnDestroy {
 
   // #region Properties & Lifecycle

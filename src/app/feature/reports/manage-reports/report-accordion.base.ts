@@ -1,4 +1,4 @@
-import { Directive, inject } from '@angular/core';
+import { Component, Directive, inject } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { AccordionCell } from 'src/app/shared/model/accordion-list.model';
@@ -17,7 +17,9 @@ import { takeUntil } from 'rxjs';
 import { reportDocumentSection } from '../report.field';
 import { getCommentSection } from 'src/app/shared/utils/common-fields';
 
-@Directive()
+@Component({
+  template: ''
+})
 export abstract class ReportAccordionBaseComponent extends Accordion<ReportDetailDto> implements TabComponentInterface<PagedResultReportDetailDto> {
   protected reportCode!: string;
   private activatedRoute = inject(ActivatedRoute);
