@@ -1,7 +1,8 @@
 <div class="comment-section-container flex flex-col h-full">
 
     <!-- Comments List (Scrollable area) -->
-    <div #commentsScrollArea class="comments-scroll-area flex-grow overflow-y-auto px-1">
+    <div #commentsScrollArea class="comments-scroll-area flex-grow overflow-y-auto px-1"
+        [style.max-height]="view.comments?.maxHeight">
         <!-- Loading Spinner -->
         <div *ngIf="loading" class="flex justify-center py-4">
             <mat-spinner diameter="24"></mat-spinner>

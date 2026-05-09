@@ -55,7 +55,7 @@ export abstract class ReportAccordionBaseComponent extends Accordion<ReportDetai
     return [
       { value: data.reportName || '-', type: 'text' },
       { value: `V${data.version ?? 1}`, type: 'text' },
-      { value: data.createdAt ? date(data.createdAt, 'dd-MM-YYYY HH:mm:ss') : '-', type: 'date' },
+      { value: data.createdAt ? date(data.createdAt, 'dd-MM-yyyy HH:mm:ss') : '-', type: 'text' },
     ];
   }
 
