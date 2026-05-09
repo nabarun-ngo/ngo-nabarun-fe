@@ -12,14 +12,25 @@ import { DocumentCategory } from 'src/app/shared/components/document-link/docume
   styleUrls: ['./user-guide-tab.component.scss']
 })
 export class UserGuideTabComponent extends PolicyHubTabComponent {
-  userGuides: DocumentCategory[] = [];
+  // We'll use the 'policies' property from the base class for simplicity 
+  // or rename it to something more generic in the base class later.
+  // For now, let's just reuse the logic.
+
   constructor(
     protected override commonService: DashboardService,
   ) { super(commonService) }
 
 
   override loadData(): void {
-    console.log("Hii2")
-    this.commonService.getUserGuideLink().subscribe((res) => this.userGuides = res.map(m => this.toDocumentCategory(m)));
+    this.commonService.getUserGuideLink().subscribe((res) => {
+      this.allData = res;
+      this.policies = res.map(m => ({
+        id: m.name,
+        name: m.name,
+        documents: [],
+        totalElements: m.documents.length,
+        isLoading: false
+      }));
+    });
   }
 }

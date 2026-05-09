@@ -71,7 +71,10 @@ export const SCOPE = {
 
     // system
     apikey: 'create:api_keys',
-    oauth_token: 'create:oauth_token'
+    oauth_token: 'create:oauth_token',
+
+    // reporting
+    report: 'create:report',
   },
 
   update: {

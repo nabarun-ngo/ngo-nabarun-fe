@@ -43,7 +43,8 @@ export class OneSignalProviderService implements PushNotificationProvider {
     await this.oneSignal.login(userId);
     this.oneSignal.User.addTags({
       user_id: this.uis.loggedInUser?.user_id,
-      name: this.uis.loggedInUser?.name
+      name: this.uis.loggedInUser?.name,
+      roles: (this.uis.loggedInUser?.user_roles || []).join(","),
     });
     this.oneSignal.User.addEmail(this.uis.loggedInUser?.email);
 

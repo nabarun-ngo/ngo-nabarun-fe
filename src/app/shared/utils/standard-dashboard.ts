@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Directive, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Paginator } from './paginator';
 import { PageEvent } from '@angular/material/paginator';

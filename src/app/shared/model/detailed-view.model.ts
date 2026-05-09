@@ -166,6 +166,8 @@ export interface DetailedView<NumType = any> {
          * The component will subscribe to this to fetch comments.
          */
         readonly onOpen?: Observable<void>;
+        /** Max height for the comment area */
+        maxHeight?: string;
     };
 
 }
@@ -229,4 +231,7 @@ export interface EditableListConfig {
 
     /** Generic row validation */
     rowValidationRules?: EditableTableRowRule[];
+
+    /** Max height for the list body to enable scrolling */
+    maxHeight?: string;
 }

@@ -1,7 +1,8 @@
 <div [formGroup]="view.section_form" class="editable-list-container">
 
     <!-- List Body -->
-    <div [formArrayName]="view.editableList!.formArrayName" class="space-y-4">
+    <div [formArrayName]="view.editableList!.formArrayName" class="list-body space-y-4 overflow-y-auto px-1"
+        [style.max-height]="view.editableList!.maxHeight">
         <div *ngFor="let item of listArray.controls; let i = index" [formGroupName]="i" class="list-item"
             [class.bg-red-50]="item.invalid && view.show_form">
 
@@ -14,10 +15,9 @@
                     <!-- Value Area -->
                     <div class="w-full">
                         <!-- Read mode -->
-                        <span *ngIf="!(field.editable && view.show_form)" class="read-mode-value">
-                            {{ (field.show_display_value ? displayValue(field.ref_data_section,
+                        <span *ngIf="!(field.editable && view.show_form)" class="read-mode-value" [innerHtml]="(field.show_display_value ? displayValue(field.ref_data_section,
                             item.get(field.form_control_name!)?.value) :
-                            item.get(field.form_control_name!)?.value) || '-' }}
+                            item.get(field.form_control_name!)?.value) || '-'">
                         </span>
 
                         <!-- Edit mode -->

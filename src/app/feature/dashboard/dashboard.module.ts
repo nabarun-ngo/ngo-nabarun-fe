@@ -4,11 +4,7 @@ import { CommonModule } from '@angular/common';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { SecuredDashboardComponent } from './secured-dashboard/secured-dashboard.component';
 import { NeedHelpComponent } from './need-help/need-help.component';
-import { NoticeBoardComponent } from './notice-board.component';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { DocumentViewerComponent } from './document-viewer/document-viewer.component';
-import { ReportDashboardComponent } from './report-dashboard/report-dashboard.component';
-import { FinanceReportTabComponent } from './report-dashboard/finance-report-tab/finance-report-tab.component';
 import { PolicyHubTabComponent } from './need-help/policy-hub-tab/policy-hub-tab.component';
 import { UserGuideTabComponent } from './need-help/user-guide-tab/user-guide-tab.component';
 
@@ -17,10 +13,6 @@ import { UserGuideTabComponent } from './need-help/user-guide-tab/user-guide-tab
   declarations: [
     SecuredDashboardComponent,
     NeedHelpComponent,
-    NoticeBoardComponent,
-    DocumentViewerComponent,
-    ReportDashboardComponent,
-    FinanceReportTabComponent,
     PolicyHubTabComponent,
     UserGuideTabComponent,
   ],

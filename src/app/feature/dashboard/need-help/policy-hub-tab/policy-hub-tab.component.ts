@@ -13,17 +13,51 @@ import { StaticDocumentDto } from 'src/app/core/api-client/models';
 })
 export class PolicyHubTabComponent implements TabComponentInterface<KeyValue[]> {
   policies: DocumentCategory[] = [];
+  protected allData: StaticDocumentDto[] = [];
 
   constructor(
     protected commonService: DashboardService,
   ) { }
+
   onSearch($event: SearchEvent): void {
   }
+
   loadData(): void {
-    console.log("Hii")
-    this.commonService.getPolicyLink().subscribe((res) =>
-      this.policies = res.map(m => this.toDocumentCategory(m))
-    );
+    this.commonService.getPolicyLink().subscribe((res) => {
+      this.allData = res;
+      // Initially load only headers
+      this.policies = res.map(m => ({
+        id: m.name, // Using name as ID for this example
+        name: m.name,
+        documents: [], // Empty initially
+        totalElements: m.documents.length,
+        isLoading: false
+      }));
+    });
+  }
+
+  onCategoryOpened(category: DocumentCategory) {
+    if (category.documents.length > 0) return; // Already loaded
+
+    category.isLoading = true;
+    
+    // Simulate API delay
+    setTimeout(() => {
+      const data = this.allData.find(d => d.name === category.name);
+      if (data) {
+        category.documents = data.documents.map(doc => ({
+          key: doc.key,
+          displayValue: doc.displayValue,
+          description: doc.description,
+        }));
+      }
+      category.isLoading = false;
+    }, 800);
+  }
+
+  onPageChanged(event: { category: DocumentCategory, page: number }) {
+    console.log(`Page changed for ${event.category.name} to ${event.page}`);
+    // Here you would normally call a paginated API
   }
 
   onDocumentClicked(event: { doc: KeyValue, categoryName: string }) {
@@ -41,18 +75,4 @@ export class PolicyHubTabComponent implements TabComponentInterface<KeyValue[]> 
 
     return url;
   }
-
-
-
-  protected toDocumentCategory(m: StaticDocumentDto): DocumentCategory {
-    return {
-      name: m.name,
-      documents: m.documents.map(doc => ({
-        key: doc.key,
-        displayValue: doc.displayValue,
-        description: doc.description,
-      }))
-    };
-  }
-
 }

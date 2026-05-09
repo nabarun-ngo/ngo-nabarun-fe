@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Directive, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
-  template: 'app-base-paginator',
+  template: ''
 })
 export abstract class Paginator {
 

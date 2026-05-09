@@ -30,8 +30,8 @@
     </div>
 
     <!-- Table Body -->
-    <div [formArrayName]="view.editableTable!.formArrayName" [style.max-height]="view.editableTable!.maxHeight"
-        [class.overflow-y-auto]="view.editableTable!.maxHeight">
+    <div [formArrayName]="view.editableTable!.formArrayName" class="table-body overflow-y-auto px-1"
+        [style.max-height]="view.editableTable!.maxHeight">
         <div *ngFor="let row of tableArray.controls; let i = index" [formGroupName]="i" class="table-row" #tableRow
             [style.grid-template-columns]="gridStyle" [class.bg-red-50]="row.invalid && view.show_form">
 

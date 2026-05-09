@@ -4,7 +4,7 @@ import { DetailedView, DetailedViewField } from "../model/detailed-view.model";
 import { FormArray, FormControl, FormGroup, ValidatorFn } from "@angular/forms";
 import { BehaviorSubject, catchError, forkJoin, from, map, Observable, of, Subject, Subscription, switchMap, takeUntil } from "rxjs";
 import { FileUpload } from "../components/generic/file-upload/file-upload.component";
-import { AfterContentInit, AfterViewInit, Component, ElementRef, inject, Input, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { AfterContentInit, AfterViewInit, Component, Directive, ElementRef, inject, Input, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { KeyValue } from "../model/key-value.model";
 import { AlertData } from "../model/alert.model";
 import { FormAutosaveService } from "src/app/core/service/form-autosave.service";
@@ -22,7 +22,7 @@ export type FieldVisibilityRule<NumType = any> = {
 };
 
 @Component({
-  template: 'app-base-accordion',
+  template: ''
 })
 export abstract class Accordion<NumType> extends Paginator implements OnInit, AfterContentInit, OnDestroy {
 
