@@ -1,3 +1,4 @@
+import { Directive, inject } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { AccordionCell } from 'src/app/shared/model/accordion-list.model';
@@ -10,13 +11,13 @@ import { SearchEvent } from 'src/app/shared/components/search-and-advanced-searc
 import { ReportDefaultValue } from '../report.const';
 import { date } from 'src/app/core/service/utilities.service';
 import { ActivatedRoute } from '@angular/router';
-import { inject } from '@angular/core';
 import { ReportService } from '../report.service';
 import { Doc, mapDocDtoToDoc } from 'src/app/shared/model/document.model';
 import { takeUntil } from 'rxjs';
 import { reportDocumentSection } from '../report.field';
 import { getCommentSection } from 'src/app/shared/utils/common-fields';
 
+@Directive()
 export abstract class ReportAccordionBaseComponent extends Accordion<ReportDetailDto> implements TabComponentInterface<PagedResultReportDetailDto> {
   protected reportCode!: string;
   private activatedRoute = inject(ActivatedRoute);
