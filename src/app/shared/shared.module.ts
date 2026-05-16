@@ -56,6 +56,7 @@ import { FormAutosaveDirective } from './directives/form-autosave.directive';
 import { CarouselComponent } from './components/generic/carousel/carousel.component';
 import { CommentSectionComponent } from './components/generic/detailed-view/comment-section/comment-section.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { DocumentViewerComponent } from './components/document-viewer/document-viewer.component';
 
 
 @NgModule({
@@ -86,6 +87,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     SearchSelectModalComponent,
     CarouselComponent,
     CommentSectionComponent,
+    DocumentViewerComponent,
   ],
 
   imports: [
@@ -162,7 +164,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatTooltipModule,
     FormAutosaveDirective,
     CarouselComponent,
-    CommentSectionComponent
+    CommentSectionComponent,
+    DocumentViewerComponent
   ],
 
   providers: [{
