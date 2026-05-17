@@ -60,7 +60,7 @@ export class MyExpensesTabComponent extends Accordion<Expense> implements TabCom
     protected expenseService: ExpenseService,
     protected modalService: ModalService,
     protected userIdentity: UserIdentityService,
-    protected route: ActivatedRoute,
+    protected override route: ActivatedRoute,
     protected router: Router,
     private projectSelectionService: ProjectSelectionService,
     protected searchSelectModalService: SearchSelectModalService,

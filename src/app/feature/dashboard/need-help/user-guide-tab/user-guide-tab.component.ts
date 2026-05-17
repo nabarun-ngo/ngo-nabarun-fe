@@ -1,11 +1,7 @@
 import { Component } from '@angular/core';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
-import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
-import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
-import { KeyValue } from 'src/app/shared/model/key-value.model';
 import { DashboardService } from '../../services/dashboard.service';
 import { PolicyHubTabComponent } from '../policy-hub-tab/policy-hub-tab.component';
-import { DocumentCategory } from 'src/app/shared/components/document-link/document-link.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({

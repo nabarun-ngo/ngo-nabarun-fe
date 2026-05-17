@@ -1,12 +1,12 @@
 <app-document-link [categories]="policies" [expandedByDefault]="false" [kebabMenuItems]="kebabMenuItems"
   (categoryOpened)="onCategoryOpened($event)" (pageChanged)="onPageChanged($event)"
-  (documentClicked)="onDocumentClicked($event)" (hasResults)="onHasResults($event)">
+  (documentClicked)="onDocumentClicked($event)">
 
   <div noResults>
     <span style="display: block; margin-bottom: 8px; font-size: 1.1em; font-weight: 500; color: #1f2937;">
       Can't find what you're looking for or need additional help?
     </span>
-    <a [routerLink]="[AppRoutes.secured_request_list_page.url]"
+    <a [routerLink]="[AppRoutes.secured_request_list_page.url]" [queryParams]="{ accordionAction: 'create' }"
       style="font-weight: 600; color: var(--primary-600); text-decoration: underline; font-size: 1.13em;">
       Submit a Contact Request
     </a>

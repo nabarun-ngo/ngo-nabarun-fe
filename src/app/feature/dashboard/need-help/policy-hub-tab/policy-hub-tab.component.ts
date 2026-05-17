@@ -34,9 +34,6 @@ export class PolicyHubTabComponent implements TabComponentInterface<KeyValue[]> 
   ];
 
   @Input() isLazy: boolean = true;
-  @Output() tabHasResults = new EventEmitter<boolean>();
-
-  hasResults: boolean = true;
   searchValue: string = '';
   protected AppRoutes = AppRoute;
 
@@ -44,16 +41,12 @@ export class PolicyHubTabComponent implements TabComponentInterface<KeyValue[]> 
     protected commonService: DashboardService,
     protected snackBar: MatSnackBar,
     protected sharedData: SharedDataService,
-  ) { 
+  ) {
     this.sharedData.searchValue.subscribe(val => {
       this.searchValue = val || '';
     });
   }
 
-  onHasResults(has: boolean) {
-    this.hasResults = has;
-    this.tabHasResults.emit(has);
-  }
 
   onSearch($event: SearchEvent): void {
   }

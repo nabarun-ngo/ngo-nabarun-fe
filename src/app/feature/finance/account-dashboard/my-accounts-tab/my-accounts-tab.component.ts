@@ -45,7 +45,7 @@ export class MyAccountsTabComponent extends Accordion<Account> implements TabCom
   }
 
   constructor(
-    protected route: ActivatedRoute,
+    protected override route: ActivatedRoute,
     protected accountService: AccountService,
     protected router: Router,
     protected modalService: ModalService,

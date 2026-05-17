@@ -42,7 +42,7 @@ export class MyRequestsTabComponent extends Accordion<WorkflowRequest> implement
   protected isDelegatedRequest: boolean = false; // Track if creating delegated request
 
   constructor(
-    protected route: ActivatedRoute,
+    protected override route: ActivatedRoute,
     protected requestService: RequestService,
     protected router: Router,
     protected modalService: ModalService,
@@ -198,27 +198,32 @@ export class MyRequestsTabComponent extends Accordion<WorkflowRequest> implement
       });
   }
 
+  override afterFormDisplayHook(data: { isCreate: boolean; rowIndex: number; isFormVisible: boolean; }): void {
+    if (data.isCreate && data.isFormVisible) {
+      const form = this.getSectionForm('request_detail', 0, true);
+      form?.valueChanges.pipe(filterFormChange(form.value)).subscribe((val) => {
+        //console.log(val);
+        if (val.requestType) {
+
+          if (this.isDelegatedRequest) {
+            this.updateFieldVisibility('request_detail', 'initiatedFor', 0, val.requestType !== 'JOIN_REQUEST', true);
+            this.updateFieldValidators('request_detail', 0, {
+              'initiatedFor': val.requestType !== 'JOIN_REQUEST' ? [Validators.required] : [],
+            }, true);
+          }
+
+          this.requestService.getAdditionalFields(val.requestType).subscribe(s => {
+            this.removeSectionInAccordion('request_data', 0, true);
+            this.addSectionInAccordion(getRequestAdditionalDetailSection(undefined, s, true), 0, true)
+          })
+        }
+      });
+    }
+  }
+
   initCreateRequestForm(isDelegated: boolean = false) {
     this.isDelegatedRequest = isDelegated;
     this.showCreateForm();
-    const form = this.getSectionForm('request_detail', 0, true);
-    form?.valueChanges.pipe(filterFormChange(form.value)).subscribe((val) => {
-      //console.log(val);
-      if (val.requestType) {
-
-        if (isDelegated) {
-          this.updateFieldVisibility('request_detail', 'initiatedFor', 0, val.requestType !== 'JOIN_REQUEST', true);
-          this.updateFieldValidators('request_detail', 0, {
-            'initiatedFor': val.requestType !== 'JOIN_REQUEST' ? [Validators.required] : [],
-          }, true);
-        }
-
-        this.requestService.getAdditionalFields(val.requestType).subscribe(s => {
-          this.removeSectionInAccordion('request_data', 0, true);
-          this.addSectionInAccordion(getRequestAdditionalDetailSection(undefined, s, true), 0, true)
-        })
-      }
-    });
     if (isDelegated) {
       this.requestService.getUsers().subscribe(s => {
         const users = s.content?.map(s => {
