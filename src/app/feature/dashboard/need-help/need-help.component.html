@@ -1,15 +1,4 @@
 <app-page-layout [navigations]="navigations">
-  <div style="display: flex; justify-content: center; margin: 24px 0;">
-    <div style="max-width: 600px; text-align: center;">
-      <span style="display: block; margin-bottom: 8px; font-size: 1.1em;">
-        Can't find what you're looking for or need additional help?
-      </span>
-      <a [routerLink]="[AppRoutes.secured_request_list_page.url]"
-        style="font-weight: 600; color: var(--primary-600); text-decoration: underline; font-size: 1.13em;">
-        Submit a Contact Request &rarr;
-      </a>
-    </div>
-  </div>
   
   <div style="max-width: 600px; margin: 0 auto 24px auto;">
     <app-search-and-advanced-search-form [searchInput]="searchInput"></app-search-and-advanced-search-form>

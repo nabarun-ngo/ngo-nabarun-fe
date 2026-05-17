@@ -35,6 +35,9 @@ export class DocumentLinkComponent implements OnInit, OnChanges {
   @Output()
   pageChanged = new EventEmitter<{ category: DocumentCategory, page: number }>();
 
+  @Output()
+  hasResults = new EventEmitter<boolean>();
+
   // Track page per category
   public currentPageMap: { [key: string]: number } = {};
 
@@ -79,6 +82,7 @@ export class DocumentLinkComponent implements OnInit, OnChanges {
       }
       return null;
     }).filter(cat => cat !== null) as DocumentCategory[];
+    this.hasResults.emit(this._filteredCategories.length > 0);
   }
 
   get filteredCategories(): DocumentCategory[] {

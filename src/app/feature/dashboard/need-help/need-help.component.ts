@@ -33,7 +33,7 @@ export class NeedHelpComponent extends StandardTabbedDashboard<helpTabs, KeyValu
   ];
 
   protected searchInput: SearchAndAdvancedSearchModel = {
-    normalSearchPlaceHolder: 'Search documents...',
+    normalSearchPlaceHolder: 'Search what you need help with...',
     advancedSearch: {
       searchFormFields: []
     }
@@ -42,7 +42,9 @@ export class NeedHelpComponent extends StandardTabbedDashboard<helpTabs, KeyValu
   constructor(
     private sharedData: SharedDataService,
     protected override route: ActivatedRoute,
-  ) { super(route) }
+  ) {
+    super(route);
+  }
 
   protected override get tabComponents(): { policy_hub?: TabComponentInterface<KeyValue[]> | undefined; user_guide?: TabComponentInterface<KeyValue[]> | undefined; } {
     return {
@@ -56,7 +58,6 @@ export class NeedHelpComponent extends StandardTabbedDashboard<helpTabs, KeyValu
   protected override onTabChangedHook(): void { }
 
   protected override onAfterViewInitHook(): void {
-    console.log(this.getActiveComponent(this.getCurrentTab()))
     this.getActiveComponent(this.getCurrentTab())?.loadData();
   }
 

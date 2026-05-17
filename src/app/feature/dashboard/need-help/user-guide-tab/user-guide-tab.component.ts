@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
 import { KeyValue } from 'src/app/shared/model/key-value.model';
@@ -20,7 +21,8 @@ export class UserGuideTabComponent extends PolicyHubTabComponent {
   constructor(
     protected override commonService: DashboardService,
     protected override snackBar: MatSnackBar,
-  ) { super(commonService, snackBar) }
+    protected override sharedData: SharedDataService,
+  ) { super(commonService, snackBar, sharedData) }
 
 
   override loadData(): void {

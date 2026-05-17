@@ -1,4 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { SharedDataService } from 'src/app/core/service/shared-data.service';
+import { AppRoute } from 'src/app/core/constant/app-routing.const';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
 import { KeyValue } from 'src/app/shared/model/key-value.model';
@@ -32,11 +34,26 @@ export class PolicyHubTabComponent implements TabComponentInterface<KeyValue[]> 
   ];
 
   @Input() isLazy: boolean = true;
+  @Output() tabHasResults = new EventEmitter<boolean>();
+
+  hasResults: boolean = true;
+  searchValue: string = '';
+  protected AppRoutes = AppRoute;
 
   constructor(
     protected commonService: DashboardService,
     protected snackBar: MatSnackBar,
-  ) { }
+    protected sharedData: SharedDataService,
+  ) { 
+    this.sharedData.searchValue.subscribe(val => {
+      this.searchValue = val || '';
+    });
+  }
+
+  onHasResults(has: boolean) {
+    this.hasResults = has;
+    this.tabHasResults.emit(has);
+  }
 
   onSearch($event: SearchEvent): void {
   }
