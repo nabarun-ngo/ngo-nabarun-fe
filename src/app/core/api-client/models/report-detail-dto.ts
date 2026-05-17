@@ -15,6 +15,16 @@ export interface ReportDetailDto {
   approvedBy?: string;
 
   /**
+   * The ID of the user who approved the report
+   */
+  approvedById?: string;
+
+  /**
+   * The name of the user who approved the report
+   */
+  approvedByName?: string;
+
+  /**
    * The roles that can approve the report
    */
   approvers?: Array<string>;
@@ -59,6 +69,11 @@ export interface ReportDetailDto {
    * The ID of the user who requested the report
    */
   requestedById?: string;
+
+  /**
+   * The name of the user who requested the report
+   */
+  requestedByName?: string;
 
   /**
    * The current status of the report

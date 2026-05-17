@@ -155,6 +155,7 @@ export { UpdateDonationDto } from './models/update-donation-dto';
 export { UpdateEventDto } from './models/update-event-dto';
 export { UpdateExpenseDto } from './models/update-expense-dto';
 export { UpdateProjectDto } from './models/update-project-dto';
+export { UpdateReportDto } from './models/update-report-dto';
 export { UpdateTaskDto } from './models/update-task-dto';
 export { UpiDetailDto } from './models/upi-detail-dto';
 export { UserDto } from './models/user-dto';

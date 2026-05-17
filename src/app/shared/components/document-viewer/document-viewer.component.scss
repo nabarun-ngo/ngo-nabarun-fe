@@ -1,0 +1,17 @@
+:host {
+    display: block;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+iframe {
+    background-color: #fff;
+    transition: opacity 0.3s ease;
+}
+
+.mat-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

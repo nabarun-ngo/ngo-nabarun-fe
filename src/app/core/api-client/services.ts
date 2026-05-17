@@ -11,7 +11,6 @@ export { DonationControllerService } from './services/donation-controller.servic
 export { AccountControllerService } from './services/account-controller.service';
 export { ExpenseControllerService } from './services/expense-controller.service';
 export { DmsControllerService } from './services/dms-controller.service';
-export { StaticDocsControllerService } from './services/static-docs-controller.service';
 export { PublicControllerService } from './services/public-controller.service';
 export { CallbackControllerService } from './services/callback-controller.service';
 export { HealthControllerService } from './services/health-controller.service';
@@ -23,3 +22,4 @@ export { MeetingControllerService } from './services/meeting-controller.service'
 export { CronControllerService } from './services/cron-controller.service';
 export { CommentsService } from './services/comments.service';
 export { ReportingControllerService } from './services/reporting-controller.service';
+export { StaticDocsControllerService } from './services/static-docs-controller.service';

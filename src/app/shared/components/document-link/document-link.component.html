@@ -1,6 +1,6 @@
 <div class="documents-page">
-  <mat-accordion class="category-accordion" multi="true">
-    <mat-expansion-panel *ngFor="let category of categories" [expanded]="category.isExpanded ?? expandedByDefault"
+  <mat-accordion class="category-accordion" multi="true" *ngIf="filteredCategories.length > 0">
+    <mat-expansion-panel *ngFor="let category of filteredCategories" [expanded]="category.isExpanded ?? expandedByDefault"
       (opened)="onCategoryOpen(category)" class="category-panel">
       <mat-expansion-panel-header>
         <mat-panel-title class="category-title" style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
@@ -26,8 +26,27 @@
                 [title]="'Open ' + (doc.description || '')">
                 {{ doc.description || doc.key }}
               </a>
+              <ng-container *ngIf="hasKebab">
+                <button mat-icon-button class="kebab-btn"
+                  [matMenuTriggerFor]="docMenu"
+                  [matMenuTriggerData]="{ doc: doc, categoryName: category.name }"
+                  (click)="$event.stopPropagation()"
+                  aria-label="More options">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+              </ng-container>
             </li>
           </ul>
+
+          <!-- Single shared menu definition — data injected via matMenuTriggerData -->
+          <mat-menu #docMenu="matMenu" class="doc-kebab-menu">
+            <ng-template matMenuContent let-doc="doc" let-categoryName="categoryName">
+              <button mat-menu-item *ngFor="let item of kebabMenuItems"
+                (click)="onKebabItemClick(item, doc, categoryName, $event)">
+                {{ item.name }}
+              </button>
+            </ng-template>
+          </mat-menu>
 
           <div *ngIf="(category.totalElements || category.documents.length) > pageSize" class="pagination-controls">
             <button mat-icon-button [disabled]="(currentPageMap[category.name] || 0) === 0"
@@ -46,4 +65,8 @@
       </ng-template>
     </mat-expansion-panel>
   </mat-accordion>
+
+  <div *ngIf="filteredCategories.length === 0 && searchValue !== ''" class="no-results-panel">
+    <ng-content select="[noResults]"></ng-content>
+  </div>
 </div>

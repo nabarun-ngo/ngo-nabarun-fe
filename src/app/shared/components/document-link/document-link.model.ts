@@ -12,3 +12,10 @@ export interface DocumentCategory {
     actionLink?: string | any[];
     actionQueryParams?: any;
 }
+
+export interface KebabMenuItem {
+    /** Label shown in the dropdown */
+    name: string;
+    /** Called when this menu item is clicked */
+    onClick: (doc: KeyValue, categoryName: string) => void;
+}

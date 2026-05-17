@@ -10,6 +10,7 @@ import { AlertData } from "../model/alert.model";
 import { FormAutosaveService } from "src/app/core/service/form-autosave.service";
 import { ModalService } from "src/app/core/service/modal.service";
 import { buildRowValidator } from "./row-validator.factory";
+import { ActivatedRoute } from "@angular/router";
 
 
 /**
@@ -41,6 +42,7 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
   }
 
   protected destroy$ = new Subject<void>();
+  protected route = inject(ActivatedRoute);
   private visibilitySubscriptions = new Map<string, Subscription>();
 
   @Input({ required: true }) set accordionData(page: AccordionData<NumType>) {
@@ -62,10 +64,12 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
 
 
   abstract onInitHook(): void;
+  afterFormDisplayHook(data: { isCreate: boolean, rowIndex: number, isFormVisible: boolean }): void { }
 
   ngAfterContentInit(): void {
     this.setContent(this.page?.content!, this.page?.totalSize);
     this.viewInitialized = true;
+    this.processUrlActions();
   }
 
   ngOnDestroy(): void {
@@ -512,6 +516,18 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
     }
   }
 
+  protected processUrlActions() {
+    this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe(params => {
+      const action = params['accordionAction'];
+
+      if (action === 'create') {
+        setTimeout(() => {
+          this.showCreateForm();
+        }, 250);
+      }
+    });
+  }
+
   showCreateForm(data?: NumType, options?: { [key: string]: any, create?: boolean }) {
     if (!options) {
       options = {};
@@ -542,6 +558,7 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
       }
       setTimeout(() => {
         document.querySelector("#create")?.scrollIntoView({ behavior: 'smooth' });
+        this.afterFormDisplayHook({ isCreate: true, rowIndex: 0, isFormVisible: true });
       });
       return m;
     });
@@ -584,6 +601,7 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
       const element = document.querySelector(`#accordion-row-${rowIndex}`);
       if (element) {
         element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        this.afterFormDisplayHook({ isCreate: false, rowIndex: rowIndex, isFormVisible: true });
       }
     }, 100);
   }
@@ -723,6 +741,7 @@ export abstract class Accordion<NumType> extends Paginator implements OnInit, Af
         }
 
         if (callback) callback();
+        this.afterFormDisplayHook({ isCreate: create ?? false, rowIndex: rowIndex ?? 0, isFormVisible: false });
       });
     };
 

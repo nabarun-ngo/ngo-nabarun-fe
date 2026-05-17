@@ -127,7 +127,21 @@ export class NotificationBellComponent implements OnInit, OnDestroy {
     // Navigate to action URL if available
     if (notification.actionUrl) {
       this.closeDropdown();
-      this.router.navigateByUrl(notification.actionUrl);
+      let navUrl = notification.actionUrl;
+      console.log('Original action URL:', navUrl);
+      
+      if (navUrl.startsWith('http://') || navUrl.startsWith('https://')) {
+        try {
+          const urlObj = new URL(navUrl);
+          navUrl = urlObj.pathname + urlObj.search + urlObj.hash;
+          console.log('Stripped base URL, resulting path:', navUrl);
+        } catch (e) {
+          console.error('Failed to parse URL to strip base:', e);
+        }
+      }
+      
+      console.log('Navigating to:', navUrl);
+      this.router.navigateByUrl(navUrl);
     }
   }
 

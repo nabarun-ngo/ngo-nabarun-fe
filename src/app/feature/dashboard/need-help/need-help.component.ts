@@ -8,6 +8,7 @@ import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.i
 import { ActivatedRoute } from '@angular/router';
 import { PolicyHubTabComponent } from './policy-hub-tab/policy-hub-tab.component';
 import { UserGuideTabComponent } from './user-guide-tab/user-guide-tab.component';
+import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
 
 type helpTabs = 'policy_hub' | 'user_guide';
 
@@ -31,10 +32,19 @@ export class NeedHelpComponent extends StandardTabbedDashboard<helpTabs, KeyValu
     },
   ];
 
+  protected searchInput: SearchAndAdvancedSearchModel = {
+    normalSearchPlaceHolder: 'Search what you need e.g. How to create expense record...',
+    advancedSearch: {
+      searchFormFields: []
+    }
+  };
+
   constructor(
     private sharedData: SharedDataService,
     protected override route: ActivatedRoute,
-  ) { super(route) }
+  ) {
+    super(route);
+  }
 
   protected override get tabComponents(): { policy_hub?: TabComponentInterface<KeyValue[]> | undefined; user_guide?: TabComponentInterface<KeyValue[]> | undefined; } {
     return {
@@ -48,13 +58,13 @@ export class NeedHelpComponent extends StandardTabbedDashboard<helpTabs, KeyValu
   protected override onTabChangedHook(): void { }
 
   protected override onAfterViewInitHook(): void {
-    console.log(this.getActiveComponent(this.getCurrentTab()))
     this.getActiveComponent(this.getCurrentTab())?.loadData();
   }
 
 
   protected override onInitHook(): void {
     this.sharedData.setPageName('Help & Support');
+    this.sharedData.setSearchValue('');
   }
 
 

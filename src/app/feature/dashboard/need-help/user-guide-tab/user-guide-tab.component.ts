@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
-import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
-import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
-import { KeyValue } from 'src/app/shared/model/key-value.model';
+import { SharedDataService } from 'src/app/core/service/shared-data.service';
 import { DashboardService } from '../../services/dashboard.service';
 import { PolicyHubTabComponent } from '../policy-hub-tab/policy-hub-tab.component';
-import { DocumentCategory } from 'src/app/shared/components/document-link/document-link.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-user-guide-tab',
@@ -18,7 +16,9 @@ export class UserGuideTabComponent extends PolicyHubTabComponent {
 
   constructor(
     protected override commonService: DashboardService,
-  ) { super(commonService) }
+    protected override snackBar: MatSnackBar,
+    protected override sharedData: SharedDataService,
+  ) { super(commonService, snackBar, sharedData) }
 
 
   override loadData(): void {
@@ -27,7 +27,11 @@ export class UserGuideTabComponent extends PolicyHubTabComponent {
       this.policies = res.map(m => ({
         id: m.name,
         name: m.name,
-        documents: [],
+        documents: this.isLazy ? [] : m.documents.map(doc => ({
+          key: doc.key,
+          displayValue: doc.displayValue,
+          description: doc.description,
+        })),
         totalElements: m.documents.length,
         isLoading: false
       }));

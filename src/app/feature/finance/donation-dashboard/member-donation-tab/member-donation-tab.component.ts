@@ -56,7 +56,7 @@ export class MemberDonationTabComponent extends BaseDonationTabComponent {
     protected override modalService: ModalService,
     protected override projectSelectionService: ProjectSelectionService,
     protected router: Router,
-    protected route: ActivatedRoute,
+    protected override route: ActivatedRoute,
     private searchSelectModalService: SearchSelectModalService
   ) {
     super(donationService, identityService, modalService, projectSelectionService);

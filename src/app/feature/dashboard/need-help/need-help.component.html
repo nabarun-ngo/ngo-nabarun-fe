@@ -1,22 +1,16 @@
 <app-page-layout [navigations]="navigations">
-  <div style="display: flex; justify-content: center; margin: 24px 0;">
-    <div style="max-width: 600px; text-align: center;">
-      <span style="display: block; margin-bottom: 8px; font-size: 1.1em;">
-        Can't find what you're looking for or need additional help?
-      </span>
-      <a [routerLink]="[AppRoutes.secured_request_list_page.url]"
-        style="font-weight: 600; color: var(--primary-600); text-decoration: underline; font-size: 1.13em;">
-        Submit a Contact Request &rarr;
-      </a>
-    </div>
+  
+  <div style="max-width: 600px; margin: 0 auto 24px auto;">
+    <app-search-and-advanced-search-form [searchInput]="searchInput"></app-search-and-advanced-search-form>
   </div>
+
   <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" (selectedTabChange)="tabChanged($event.index)"
     [(selectedIndex)]="tabIndex">
     <mat-tab id="userGuide" label="User Guide">
-      <app-user-guide-tab></app-user-guide-tab>
+      <app-user-guide-tab [isLazy]="false"></app-user-guide-tab>
     </mat-tab>
     <mat-tab id="policy" label="Policy Hub">
-      <app-policy-hub-tab></app-policy-hub-tab>
+      <app-policy-hub-tab [isLazy]="false"></app-policy-hub-tab>
     </mat-tab>
   </mat-tab-group>
 </app-page-layout>

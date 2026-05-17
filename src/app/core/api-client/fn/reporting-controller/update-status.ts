@@ -9,19 +9,22 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 import { SuccessResponseReportDetailDto } from '../../models/success-response-report-detail-dto';
+import { UpdateReportDto } from '../../models/update-report-dto';
 
-export interface ApproveReport$Params {
+export interface UpdateStatus$Params {
 
 /**
- * The ID of the report to approve
+ * The ID of the report
  */
   reportId: string;
+      body: UpdateReportDto
 }
 
-export function approveReport(http: HttpClient, rootUrl: string, params: ApproveReport$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseReportDetailDto>> {
-  const rb = new RequestBuilder(rootUrl, approveReport.PATH, 'post');
+export function updateStatus(http: HttpClient, rootUrl: string, params: UpdateStatus$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseReportDetailDto>> {
+  const rb = new RequestBuilder(rootUrl, updateStatus.PATH, 'post');
   if (params) {
     rb.path('reportId', params.reportId, {});
+    rb.body(params.body, 'application/json');
   }
 
   return http.request(
@@ -34,4 +37,4 @@ export function approveReport(http: HttpClient, rootUrl: string, params: Approve
   );
 }
 
-approveReport.PATH = '/api/report/{reportId}/approve';
+updateStatus.PATH = '/api/report/{reportId}/updateStatus';
