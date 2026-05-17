@@ -27,11 +27,11 @@ export class CompletedTasksTabComponent extends PendingTasksTabComponent {
         rounded: true
       },
       {
-        value: 'Task Status',
+        value: 'Task Name',
         rounded: true
       },
       {
-        value: 'Workflow Id',
+        value: 'Task Status',
         rounded: true
       },
       {
@@ -50,13 +50,13 @@ export class CompletedTasksTabComponent extends PendingTasksTabComponent {
       },
       {
         type: 'text',
-        value: item?.status!,
-        showDisplayValue: true,
-        refDataSection: WorkflowConstant.refDataKey.workflowTaskStatuses
+        value: item?.name!,
       },
       {
         type: 'text',
-        value: item?.workflowId!,
+        value: item?.status!,
+        showDisplayValue: true,
+        refDataSection: WorkflowConstant.refDataKey.workflowTaskStatuses
       },
       {
         type: 'text',
