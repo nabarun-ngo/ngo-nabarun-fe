@@ -5,6 +5,7 @@ import { KeyValue } from 'src/app/shared/model/key-value.model';
 import { DashboardService } from '../../services/dashboard.service';
 import { PolicyHubTabComponent } from '../policy-hub-tab/policy-hub-tab.component';
 import { DocumentCategory } from 'src/app/shared/components/document-link/document-link.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-user-guide-tab',
@@ -18,7 +19,8 @@ export class UserGuideTabComponent extends PolicyHubTabComponent {
 
   constructor(
     protected override commonService: DashboardService,
-  ) { super(commonService) }
+    protected override snackBar: MatSnackBar,
+  ) { super(commonService, snackBar) }
 
 
   override loadData(): void {

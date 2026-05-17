@@ -3,8 +3,9 @@ import { SearchEvent } from 'src/app/shared/components/search-and-advanced-searc
 import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
 import { KeyValue } from 'src/app/shared/model/key-value.model';
 import { DashboardService } from '../../services/dashboard.service';
-import { DocumentCategory } from 'src/app/shared/components/document-link/document-link.model';
+import { DocumentCategory, KebabMenuItem } from 'src/app/shared/components/document-link/document-link.model';
 import { StaticDocumentDto } from 'src/app/core/api-client/models';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-policy-hub-tab',
@@ -15,8 +16,24 @@ export class PolicyHubTabComponent implements TabComponentInterface<KeyValue[]> 
   policies: DocumentCategory[] = [];
   protected allData: StaticDocumentDto[] = [];
 
+  kebabMenuItems: KebabMenuItem[] = [
+    {
+      name: 'Copy Link',
+      onClick: (doc: KeyValue, categoryName: string) => {
+        this.copyLink(doc);
+      }
+    },
+    {
+      name: 'Share',
+      onClick: (doc: KeyValue, categoryName: string) => {
+        this.shareToApps(doc);
+      }
+    }
+  ];
+
   constructor(
     protected commonService: DashboardService,
+    protected snackBar: MatSnackBar,
   ) { }
 
   onSearch($event: SearchEvent): void {
@@ -40,7 +57,7 @@ export class PolicyHubTabComponent implements TabComponentInterface<KeyValue[]> 
     if (category.documents.length > 0) return; // Already loaded
 
     category.isLoading = true;
-    
+
     // Simulate API delay
     setTimeout(() => {
       const data = this.allData.find(d => d.name === category.name);
@@ -63,6 +80,40 @@ export class PolicyHubTabComponent implements TabComponentInterface<KeyValue[]> 
   onDocumentClicked(event: { doc: KeyValue, categoryName: string }) {
     const url = this.getEmbedUrl(event.doc.displayValue);
     window.open(url, '_blank');
+  }
+
+  copyLink(doc: KeyValue) {
+    if (doc.displayValue) {
+      const url = this.getEmbedUrl(doc.displayValue);
+      navigator.clipboard.writeText(url).then(() => {
+        this.snackBar.open('Link copied to clipboard', 'Close', { duration: 2000 });
+      }).catch(err => {
+        console.error('Failed to copy link: ', err);
+        this.snackBar.open('Failed to copy link', 'Close', { duration: 2000 });
+      });
+    }
+  }
+
+  shareToApps(doc: KeyValue) {
+    if (doc.displayValue) {
+      const url = this.getEmbedUrl(doc.displayValue);
+      const description = doc.description || doc.key;
+      const text = `Check out this document: ${description}\nLink: ${url}`;
+
+      if (navigator.share) {
+        navigator.share({
+          title: description,
+          text: description,
+          url: url
+        }).catch(err => {
+          console.error('Error sharing:', err);
+        });
+      } else {
+        // Fallback to WhatsApp
+        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
+        window.open(whatsappUrl, '_blank');
+      }
+    }
   }
 
   private getEmbedUrl(url: string | undefined): string {
