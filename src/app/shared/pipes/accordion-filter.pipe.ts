@@ -1,6 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { AccordionRow } from '../model/accordion-list.model';
 import { concatMapTo } from 'rxjs';
+import { fuzzySearch } from '../utils/fuzzy-search';
 
 @Pipe({
   name: 'accordionFilter'
@@ -28,7 +29,7 @@ export class AccordionFilterPipe implements PipeTransform {
         })
       })
       return all_values_in_row.find(s => {
-        return s && s.toString().toLowerCase().includes(searchValue.toLowerCase())
+        return s && fuzzySearch(s.toString(), searchValue)
       })
     })
   }

@@ -33,7 +33,7 @@ export class NeedHelpComponent extends StandardTabbedDashboard<helpTabs, KeyValu
   ];
 
   protected searchInput: SearchAndAdvancedSearchModel = {
-    normalSearchPlaceHolder: 'Search what you need help with...',
+    normalSearchPlaceHolder: 'Search what you need e.g. How to create expense record...',
     advancedSearch: {
       searchFormFields: []
     }

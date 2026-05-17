@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output, OnInit, OnChanges, SimpleChange
 import { KeyValue } from '../../model/key-value.model';
 import { DocumentCategory, KebabMenuItem } from './document-link.model';
 import { SharedDataService } from 'src/app/core/service/shared-data.service';
+import { fuzzySearch } from '../../utils/fuzzy-search';
 
 @Component({
   selector: 'app-document-link',
@@ -64,14 +65,15 @@ export class DocumentLinkComponent implements OnInit, OnChanges {
       this._filteredCategories = this.categories;
       return;
     }
-    const query = this.searchValue.toLowerCase();
+    const query = this.searchValue;
     this._filteredCategories = this.categories.map(category => {
       const filteredDocs = category.documents.filter(doc => 
-        (doc.description && doc.description.toLowerCase().includes(query)) ||
-        (doc.key && doc.key.toLowerCase().includes(query))
+        (doc.description && fuzzySearch(doc.description, query)) ||
+        (doc.key && fuzzySearch(doc.key, query)) ||
+        (doc.displayValue && fuzzySearch(doc.displayValue, query))
       );
 
-      const categoryMatches = category.name.toLowerCase().includes(query);
+      const categoryMatches = fuzzySearch(category.name, query);
 
       if (categoryMatches || filteredDocs.length > 0) {
         return {
