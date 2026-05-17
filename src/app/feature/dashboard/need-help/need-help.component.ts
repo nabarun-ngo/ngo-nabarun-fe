@@ -8,6 +8,7 @@ import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.i
 import { ActivatedRoute } from '@angular/router';
 import { PolicyHubTabComponent } from './policy-hub-tab/policy-hub-tab.component';
 import { UserGuideTabComponent } from './user-guide-tab/user-guide-tab.component';
+import { SearchAndAdvancedSearchModel } from 'src/app/shared/model/search-and-advanced-search.model';
 
 type helpTabs = 'policy_hub' | 'user_guide';
 
@@ -30,6 +31,13 @@ export class NeedHelpComponent extends StandardTabbedDashboard<helpTabs, KeyValu
       routerLink: AppRoute.secured_dashboard_page.url,
     },
   ];
+
+  protected searchInput: SearchAndAdvancedSearchModel = {
+    normalSearchPlaceHolder: 'Search documents...',
+    advancedSearch: {
+      searchFormFields: []
+    }
+  };
 
   constructor(
     private sharedData: SharedDataService,

@@ -1,13 +1,14 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { KeyValue } from '../../model/key-value.model';
 import { DocumentCategory, KebabMenuItem } from './document-link.model';
+import { SharedDataService } from 'src/app/core/service/shared-data.service';
 
 @Component({
   selector: 'app-document-link',
   templateUrl: './document-link.component.html',
   styleUrls: ['./document-link.component.scss']
 })
-export class DocumentLinkComponent {
+export class DocumentLinkComponent implements OnInit, OnChanges {
   @Input({ required: true })
   categories: DocumentCategory[] = [];
 
@@ -36,6 +37,53 @@ export class DocumentLinkComponent {
 
   // Track page per category
   public currentPageMap: { [key: string]: number } = {};
+
+  _filteredCategories: DocumentCategory[] = [];
+  searchValue: string = '';
+
+  constructor(private sharedDataService: SharedDataService) { }
+
+  ngOnInit() {
+    this.sharedDataService.searchValue.subscribe((value) => {
+      this.searchValue = value || '';
+      this.computeFilteredCategories();
+    });
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['categories']) {
+      this.computeFilteredCategories();
+    }
+  }
+
+  computeFilteredCategories() {
+    if (!this.searchValue) {
+      this._filteredCategories = this.categories;
+      return;
+    }
+    const query = this.searchValue.toLowerCase();
+    this._filteredCategories = this.categories.map(category => {
+      const filteredDocs = category.documents.filter(doc => 
+        (doc.description && doc.description.toLowerCase().includes(query)) ||
+        (doc.key && doc.key.toLowerCase().includes(query))
+      );
+
+      const categoryMatches = category.name.toLowerCase().includes(query);
+
+      if (categoryMatches || filteredDocs.length > 0) {
+        return {
+          ...category,
+          documents: filteredDocs.length > 0 ? filteredDocs : category.documents,
+          isExpanded: categoryMatches || filteredDocs.length > 0 ? true : category.isExpanded
+        };
+      }
+      return null;
+    }).filter(cat => cat !== null) as DocumentCategory[];
+  }
+
+  get filteredCategories(): DocumentCategory[] {
+    return this._filteredCategories;
+  }
 
   get hasKebab(): boolean {
     return this.kebabMenuItems.length > 0;

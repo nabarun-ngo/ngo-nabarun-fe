@@ -1,6 +1,6 @@
 <div class="documents-page">
   <mat-accordion class="category-accordion" multi="true">
-    <mat-expansion-panel *ngFor="let category of categories" [expanded]="category.isExpanded ?? expandedByDefault"
+    <mat-expansion-panel *ngFor="let category of filteredCategories" [expanded]="category.isExpanded ?? expandedByDefault"
       (opened)="onCategoryOpen(category)" class="category-panel">
       <mat-expansion-panel-header>
         <mat-panel-title class="category-title" style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
