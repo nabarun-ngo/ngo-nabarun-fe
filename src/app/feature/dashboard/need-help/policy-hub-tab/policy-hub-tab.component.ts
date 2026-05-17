@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { SearchEvent } from 'src/app/shared/components/search-and-advanced-search-form/search-event.model';
 import { TabComponentInterface } from 'src/app/shared/interfaces/tab-component.interface';
 import { KeyValue } from 'src/app/shared/model/key-value.model';
@@ -31,6 +31,8 @@ export class PolicyHubTabComponent implements TabComponentInterface<KeyValue[]> 
     }
   ];
 
+  @Input() isLazy: boolean = true;
+
   constructor(
     protected commonService: DashboardService,
     protected snackBar: MatSnackBar,
@@ -42,11 +44,14 @@ export class PolicyHubTabComponent implements TabComponentInterface<KeyValue[]> 
   loadData(): void {
     this.commonService.getPolicyLink().subscribe((res) => {
       this.allData = res;
-      // Initially load only headers
       this.policies = res.map(m => ({
-        id: m.name, // Using name as ID for this example
+        id: m.name,
         name: m.name,
-        documents: [], // Empty initially
+        documents: this.isLazy ? [] : m.documents.map(doc => ({
+          key: doc.key,
+          displayValue: doc.displayValue,
+          description: doc.description,
+        })),
         totalElements: m.documents.length,
         isLoading: false
       }));
@@ -56,20 +61,14 @@ export class PolicyHubTabComponent implements TabComponentInterface<KeyValue[]> 
   onCategoryOpened(category: DocumentCategory) {
     if (category.documents.length > 0) return; // Already loaded
 
-    category.isLoading = true;
-
-    // Simulate API delay
-    setTimeout(() => {
-      const data = this.allData.find(d => d.name === category.name);
-      if (data) {
-        category.documents = data.documents.map(doc => ({
-          key: doc.key,
-          displayValue: doc.displayValue,
-          description: doc.description,
-        }));
-      }
-      category.isLoading = false;
-    }, 800);
+    const data = this.allData.find(d => d.name === category.name);
+    if (data) {
+      category.documents = data.documents.map(doc => ({
+        key: doc.key,
+        displayValue: doc.displayValue,
+        description: doc.description,
+      }));
+    }
   }
 
   onPageChanged(event: { category: DocumentCategory, page: number }) {

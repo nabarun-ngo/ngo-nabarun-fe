@@ -18,10 +18,10 @@
   <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" (selectedTabChange)="tabChanged($event.index)"
     [(selectedIndex)]="tabIndex">
     <mat-tab id="userGuide" label="User Guide">
-      <app-user-guide-tab></app-user-guide-tab>
+      <app-user-guide-tab [isLazy]="false"></app-user-guide-tab>
     </mat-tab>
     <mat-tab id="policy" label="Policy Hub">
-      <app-policy-hub-tab></app-policy-hub-tab>
+      <app-policy-hub-tab [isLazy]="false"></app-policy-hub-tab>
     </mat-tab>
   </mat-tab-group>
 </app-page-layout>

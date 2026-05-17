@@ -29,7 +29,11 @@ export class UserGuideTabComponent extends PolicyHubTabComponent {
       this.policies = res.map(m => ({
         id: m.name,
         name: m.name,
-        documents: [],
+        documents: this.isLazy ? [] : m.documents.map(doc => ({
+          key: doc.key,
+          displayValue: doc.displayValue,
+          description: doc.description,
+        })),
         totalElements: m.documents.length,
         isLoading: false
       }));
