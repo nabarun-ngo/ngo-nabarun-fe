@@ -78,9 +78,10 @@ export abstract class ReportAccordionBaseComponent extends Accordion<ReportDetai
           { field_name: 'Report Type', field_value: data.reportCode },
           { field_name: 'Status', field_value: data.status },
           { field_name: 'Version', field_value: `${data.version}` },
+          { field_name: 'Approved By', field_value: data.approvedByName ?? '-' },
+          { field_name: 'Approved At', field_value: data.approvedAt ? date(data.approvedAt, 'dd-MM-YYYY HH:mm:ss') : '-' },
           { field_name: 'Created At', field_value: data.createdAt ? date(data.createdAt, 'dd-MM-YYYY HH:mm:ss') : '-' },
           { field_name: 'Updated At', field_value: data.updatedAt ? date(data.updatedAt, 'dd-MM-YYYY HH:mm:ss') : '-' },
-          { field_name: 'Parameters', field_value: this.formatParameters(data.parameters) },
         ],
       }
     ];
@@ -93,13 +94,14 @@ export abstract class ReportAccordionBaseComponent extends Accordion<ReportDetai
       .subscribe(docs => {
         this.reportService.getReportInputs(this.reportCode).subscribe((inputs) => {
           this.addSectionInAccordion(getReportInputDetailSection(data!, inputs, false), event.rowIndex);
+          const docList = docs ? docs.map(m => mapDocDtoToDoc(m)) : [];
+          this.addSectionInAccordion(reportDocumentSection(docList), event.rowIndex);
+          this.addSectionInAccordion(getCommentSection(data.id, 'REPORT', false), event.rowIndex);
+          setTimeout(() => {
+            this.triggerCommentFetch(event.rowIndex);
+          }, 250);
         });
-        const docList = docs ? docs.map(m => mapDocDtoToDoc(m)) : [];
-        this.addSectionInAccordion(reportDocumentSection(docList), event.rowIndex);
-        this.addSectionInAccordion(getCommentSection(data.id, 'REPORT', false), event.rowIndex);
-        setTimeout(() => {
-          this.triggerCommentFetch(event.rowIndex);
-        }, 250);
+
       });
   }
 
