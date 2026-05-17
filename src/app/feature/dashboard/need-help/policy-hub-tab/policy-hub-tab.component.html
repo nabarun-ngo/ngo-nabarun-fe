@@ -1,18 +1,14 @@
 <app-document-link [categories]="policies" [expandedByDefault]="false" [kebabMenuItems]="kebabMenuItems"
   (categoryOpened)="onCategoryOpened($event)" (pageChanged)="onPageChanged($event)"
-  (documentClicked)="onDocumentClicked($event)" (hasResults)="onHasResults($event)"></app-document-link>
-
-<div *ngIf="!hasResults && searchValue !== ''" style="display: flex; justify-content: center; margin: 24px 0;">
-  <mat-card
-    style="max-width: 600px; width: 100%; text-align: center; background-color: white; padding: 24px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);">
-    <mat-card-content>
-      <span style="display: block; margin-bottom: 8px; font-size: 1.1em; font-weight: 500; color: #1f2937;">
-        Can't find what you're looking for or need additional help?
-      </span>
-      <a [routerLink]="[AppRoutes.secured_request_list_page.url]"
-        style="font-weight: 600; color: var(--primary-600); text-decoration: underline; font-size: 1.13em;">
-        Submit a Contact Request
-      </a>
-    </mat-card-content>
-  </mat-card>
-</div>
+  (documentClicked)="onDocumentClicked($event)" (hasResults)="onHasResults($event)">
+  
+  <div noResults>
+    <span style="display: block; margin-bottom: 8px; font-size: 1.1em; font-weight: 500; color: #1f2937;">
+      Can't find what you're looking for or need additional help?
+    </span>
+    <a [routerLink]="[AppRoutes.secured_request_list_page.url]"
+      style="font-weight: 600; color: var(--primary-600); text-decoration: underline; font-size: 1.13em;">
+      Submit a Contact Request
+    </a>
+  </div>
+</app-document-link>

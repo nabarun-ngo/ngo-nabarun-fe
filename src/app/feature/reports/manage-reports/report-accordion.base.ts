@@ -16,6 +16,7 @@ import { Doc, mapDocDtoToDoc } from 'src/app/shared/model/document.model';
 import { takeUntil } from 'rxjs';
 import { reportDocumentSection } from '../report.field';
 import { getCommentSection } from 'src/app/shared/utils/common-fields';
+import { getReportInputDetailSection } from './reports.field';
 
 @Component({
   template: ''
@@ -41,9 +42,10 @@ export abstract class ReportAccordionBaseComponent extends Accordion<ReportDetai
     });
 
     this.setHeaderRow([
-      { value: 'Report Name' },
-      { value: 'Version' },
-      { value: 'Created At' },
+      { value: 'Report Id', type: 'text' },
+      { value: 'Report Name', type: 'text' },
+      { value: 'Version', type: 'text' },
+      { value: 'Created At', type: 'text' },
     ]);
 
 
@@ -56,6 +58,7 @@ export abstract class ReportAccordionBaseComponent extends Accordion<ReportDetai
   protected override prepareHighLevelView(data: ReportDetailDto): AccordionCell[] {
     console.log(data);
     return [
+      { value: data.id || '-', type: 'text' },
       { value: data.reportName || '-', type: 'text' },
       { value: `V${data.version ?? 1}`, type: 'text' },
       { value: data.createdAt ? date(data.createdAt, 'dd-MM-yyyy HH:mm:ss') : '-', type: 'text' },
@@ -88,6 +91,9 @@ export abstract class ReportAccordionBaseComponent extends Accordion<ReportDetai
     this.reportService.getReport(data.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe(docs => {
+        this.reportService.getReportInputs(this.reportCode).subscribe((inputs) => {
+          this.addSectionInAccordion(getReportInputDetailSection(data!, inputs, false), event.rowIndex);
+        });
         const docList = docs ? docs.map(m => mapDocDtoToDoc(m)) : [];
         this.addSectionInAccordion(reportDocumentSection(docList), event.rowIndex);
         this.addSectionInAccordion(getCommentSection(data.id, 'REPORT', false), event.rowIndex);

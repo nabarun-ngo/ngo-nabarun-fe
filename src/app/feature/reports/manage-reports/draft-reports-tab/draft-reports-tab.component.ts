@@ -7,6 +7,8 @@ import { ReportAccordionBaseComponent } from '../report-accordion.base';
 import { ModalService } from 'src/app/core/service/modal.service';
 import { ReportDefaultValue } from '../../report.const';
 import { ReportCategoryDto } from 'src/app/core/api-client/models';
+import { getReportInputDetailSection } from '../reports.field';
+import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-draft-reports-tab',
@@ -14,7 +16,6 @@ import { ReportCategoryDto } from 'src/app/core/api-client/models';
   styleUrls: ['./draft-reports-tab.component.scss'],
 })
 export class DraftReportsTabComponent extends ReportAccordionBaseComponent {
-  private categories: ReportCategoryDto[] = [];
   constructor(
     protected readonly modalService: ModalService,
   ) {
@@ -35,43 +36,6 @@ export class DraftReportsTabComponent extends ReportAccordionBaseComponent {
     const isCreate = !!options?.['create'];
     if (isCreate) {
       return [
-        {
-          section_type: 'key_value',
-          section_name: 'Generate Report',
-          section_html_id: 'create_report',
-          section_form: new FormGroup({}),
-          content: [
-            {
-              field_name: 'Report Type',
-              field_html_id: 'report_type',
-              field_value: '',
-              editable: true,
-              form_control_name: 'reportCode',
-              form_input: {
-                html_id: 'report_type',
-                tagName: 'select',
-                inputType: '',
-                selectList: [],
-                placeholder: 'Select report type',
-              },
-              form_input_validation: [Validators.required],
-            },
-            {
-              field_name: 'Parameters (JSON key-value)',
-              field_html_id: 'parameters',
-              field_value: '{}',
-              editable: true,
-              form_control_name: 'parameters',
-              form_input: {
-                html_id: 'parameters',
-                tagName: 'textarea',
-                inputType: 'text',
-                placeholder: '{"key":"value"}',
-              },
-              form_input_validation: [Validators.required, this.jsonObjectValidator!],
-            },
-          ],
-        },
       ];
     }
     return super.prepareDetailedView(data);
@@ -86,7 +50,7 @@ export class DraftReportsTabComponent extends ReportAccordionBaseComponent {
     }
 
     return [
-      { button_id: 'REMOVE', button_name: 'Remove' },
+      { button_id: 'REMOVE', button_name: 'Delete' },
       { button_id: 'REGENERATE', button_name: 'Regenerate' },
       { button_id: 'APPROVE_PUBLISH', button_name: 'Approve & Publish' },
     ];
@@ -97,10 +61,14 @@ export class DraftReportsTabComponent extends ReportAccordionBaseComponent {
     switch (event.buttonId) {
       case 'REMOVE':
         this.modalService.openNotificationModal(
-          { title: 'Unavailable', description: 'Remove is not implemented in backend yet.' },
-          'notification',
+          { title: 'Confirm delete', description: `Are you sure you want to delete this report?` },
+          'confirmation',
           'warning'
-        );
+        ).onAccept$.pipe(takeUntil(this.destroy$)).subscribe(() => {
+          this.reportService.deleteReport(report.id).subscribe(() => {
+            this.removeContentRow(event.rowIndex);
+          });
+        });
         break;
       case 'REGENERATE':
         this.reportService.regenerateReport(report.id).subscribe(() => {
@@ -108,7 +76,7 @@ export class DraftReportsTabComponent extends ReportAccordionBaseComponent {
         });
         break;
       case 'APPROVE_PUBLISH':
-        this.reportService.approveReport(report.id).subscribe(() => {
+        this.reportService.markApproved(report.id).subscribe(() => {
           this.removeContentRow(event.rowIndex);
         });
         break;
@@ -125,25 +93,21 @@ export class DraftReportsTabComponent extends ReportAccordionBaseComponent {
 
   initCreateReport(): void {
     this.showCreateForm({} as ReportDetailDto);
-    this.reportService.getReportCategories().subscribe((categories) => {
-      this.categories = categories || [];
-      //this.updateFieldOptions('create_report', 0, 'reportCode', this.categories, true);
+    this.reportService.getReportInputs(this.reportCode).subscribe((inputs) => {
+      this.addSectionInAccordion(getReportInputDetailSection({} as ReportDetailDto, inputs, true), 0, true);
     });
   }
 
   private performGenerate(): void {
-    const form = this.getSectionForm('create_report', 0, true);
+    const form = this.getSectionForm('report_data', 0, true);
     form?.markAllAsTouched();
     if (!form?.valid) {
       this.scrollToError(true);
       return;
     }
 
-    const reportCode = form.get('reportCode')?.value as string;
-    const parametersRaw = form.get('parameters')?.value as string;
-    const parameters = JSON.parse(parametersRaw || '{}');
-
-    this.reportService.generateReport(reportCode, parameters).subscribe((created) => {
+    const parameters = form.getRawValue();
+    this.reportService.generateReport(this.reportCode, parameters).subscribe((created) => {
       this.hideForm(0, 'request_completed', true);
       this.addContentRow(created, true);
     });

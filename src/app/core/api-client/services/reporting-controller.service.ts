@@ -11,20 +11,25 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { approveReport } from '../fn/reporting-controller/approve-report';
-import { ApproveReport$Params } from '../fn/reporting-controller/approve-report';
+import { deleteReport } from '../fn/reporting-controller/delete-report';
+import { DeleteReport$Params } from '../fn/reporting-controller/delete-report';
 import { generateReport } from '../fn/reporting-controller/generate-report';
 import { GenerateReport$Params } from '../fn/reporting-controller/generate-report';
 import { getRegisteredReports } from '../fn/reporting-controller/get-registered-reports';
 import { GetRegisteredReports$Params } from '../fn/reporting-controller/get-registered-reports';
+import { getReportInputs } from '../fn/reporting-controller/get-report-inputs';
+import { GetReportInputs$Params } from '../fn/reporting-controller/get-report-inputs';
 import { listReports } from '../fn/reporting-controller/list-reports';
 import { ListReports$Params } from '../fn/reporting-controller/list-reports';
 import { regenerateReport } from '../fn/reporting-controller/regenerate-report';
 import { RegenerateReport$Params } from '../fn/reporting-controller/regenerate-report';
+import { SuccessResponseArrayFieldAttributeDto } from '../models/success-response-array-field-attribute-dto';
 import { SuccessResponseArrayReportCategoryDto } from '../models/success-response-array-report-category-dto';
 import { SuccessResponsePagedResultReportDetailDto } from '../models/success-response-paged-result-report-detail-dto';
 import { SuccessResponseReportDetailDto } from '../models/success-response-report-detail-dto';
 import { SuccessResponseString } from '../models/success-response-string';
+import { updateStatus } from '../fn/reporting-controller/update-status';
+import { UpdateStatus$Params } from '../fn/reporting-controller/update-status';
 
 @Injectable({ providedIn: 'root' })
 export class ReportingControllerService extends BaseService {
@@ -41,6 +46,10 @@ export class ReportingControllerService extends BaseService {
    * GET /reporting/registered-reports
    * Returns the list of all registered report providers.
    *
+   * **Required Permissions:**
+   * - `read:reports`
+   * _(Any of these permissions)_
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `getRegisteredReports()` instead.
    *
@@ -55,6 +64,10 @@ export class ReportingControllerService extends BaseService {
    *
    * GET /reporting/registered-reports
    * Returns the list of all registered report providers.
+   *
+   * **Required Permissions:**
+   * - `read:reports`
+   * _(Any of these permissions)_
    *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `getRegisteredReports$Response()` instead.
@@ -113,6 +126,10 @@ export class ReportingControllerService extends BaseService {
    * GET /report/list/:reportCode
    * Returns a paginated list of report executions for the given report code.
    *
+   * **Required Permissions:**
+   * - `read:reports`
+   * _(Any of these permissions)_
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `listReports()` instead.
    *
@@ -128,6 +145,10 @@ export class ReportingControllerService extends BaseService {
    * GET /report/list/:reportCode
    * Returns a paginated list of report executions for the given report code.
    *
+   * **Required Permissions:**
+   * - `read:reports`
+   * _(Any of these permissions)_
+   *
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `listReports$Response()` instead.
    *
@@ -139,38 +160,73 @@ export class ReportingControllerService extends BaseService {
     );
   }
 
-  /** Path part for operation `approveReport()` */
-  static readonly ApproveReportPath = '/api/report/{reportId}/approve';
+  /** Path part for operation `updateStatus()` */
+  static readonly UpdateStatusPath = '/api/report/{reportId}/updateStatus';
 
   /**
-   * Approve a report.
+   * Update report status.
    *
-   * POST /report/:reportId/approve
-   * Approves a specific report.
+   * POST /report/:reportId/status
+   * Updates status of a specific report.
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `approveReport()` instead.
+   * To access only the response body, use `updateStatus()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
-  approveReport$Response(params: ApproveReport$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseReportDetailDto>> {
-    return approveReport(this.http, this.rootUrl, params, context);
+  updateStatus$Response(params: UpdateStatus$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseReportDetailDto>> {
+    return updateStatus(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * Approve a report.
+   * Update report status.
    *
-   * POST /report/:reportId/approve
-   * Approves a specific report.
+   * POST /report/:reportId/status
+   * Updates status of a specific report.
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `approveReport$Response()` instead.
+   * To access the full response (for headers, for example), `updateStatus$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateStatus(params: UpdateStatus$Params, context?: HttpContext): Observable<SuccessResponseReportDetailDto> {
+    return this.updateStatus$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseReportDetailDto>): SuccessResponseReportDetailDto => r.body)
+    );
+  }
+
+  /** Path part for operation `deleteReport()` */
+  static readonly DeleteReportPath = '/api/report/{reportId}';
+
+  /**
+   * Delete a report.
+   *
+   * DELETE /report/:reportId
+   * Deletes a specific report.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteReport()` instead.
    *
    * This method doesn't expect any request body.
    */
-  approveReport(params: ApproveReport$Params, context?: HttpContext): Observable<SuccessResponseReportDetailDto> {
-    return this.approveReport$Response(params, context).pipe(
-      map((r: StrictHttpResponse<SuccessResponseReportDetailDto>): SuccessResponseReportDetailDto => r.body)
+  deleteReport$Response(params: DeleteReport$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseString>> {
+    return deleteReport(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Delete a report.
+   *
+   * DELETE /report/:reportId
+   * Deletes a specific report.
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deleteReport$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteReport(params: DeleteReport$Params, context?: HttpContext): Observable<SuccessResponseString> {
+    return this.deleteReport$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseString>): SuccessResponseString => r.body)
     );
   }
 
@@ -206,6 +262,39 @@ export class ReportingControllerService extends BaseService {
   regenerateReport(params: RegenerateReport$Params, context?: HttpContext): Observable<SuccessResponseString> {
     return this.regenerateReport$Response(params, context).pipe(
       map((r: StrictHttpResponse<SuccessResponseString>): SuccessResponseString => r.body)
+    );
+  }
+
+  /** Path part for operation `getReportInputs()` */
+  static readonly GetReportInputsPath = '/api/report/static/reportInputs';
+
+  /**
+   * Get additional fields for report.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getReportInputs()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getReportInputs$Response(params: GetReportInputs$Params, context?: HttpContext): Observable<StrictHttpResponse<SuccessResponseArrayFieldAttributeDto>> {
+    return getReportInputs(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get additional fields for report.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getReportInputs$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getReportInputs(params: GetReportInputs$Params, context?: HttpContext): Observable<SuccessResponseArrayFieldAttributeDto> {
+    return this.getReportInputs$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SuccessResponseArrayFieldAttributeDto>): SuccessResponseArrayFieldAttributeDto => r.body)
     );
   }
 

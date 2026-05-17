@@ -4,6 +4,7 @@ import { ReportDetailDto } from 'src/app/core/api-client/models/report-detail-dt
 import { ReportAccordionBaseComponent } from '../report-accordion.base';
 import { ReportDefaultValue } from '../../report.const';
 import { ModalService } from 'src/app/core/service/modal.service';
+import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-approved-reports-tab',
@@ -32,12 +33,17 @@ export class ApprovedReportsTabComponent extends ReportAccordionBaseComponent {
   }
 
   protected override onClick(event: { buttonId: string; rowIndex: number }): void {
+    const report = this.itemList[event.rowIndex];
     if (event.buttonId === 'UNPUBLISH') {
       this.modalService.openNotificationModal(
-        { title: 'Unavailable', description: 'Unpublish is not implemented in backend yet.' },
-        'notification',
+        { title: 'Confirm unpublished', description: `Are you sure you want to unpublish this report?` },
+        'confirmation',
         'warning'
-      );
+      ).onAccept$.pipe(takeUntil(this.destroy$)).subscribe(() => {
+        this.reportService.markDraft(report.id).subscribe(() => {
+          this.removeContentRow(event.rowIndex);
+        });
+      });
     }
   }
 }

@@ -1,5 +1,5 @@
 <div class="documents-page">
-  <mat-accordion class="category-accordion" multi="true">
+  <mat-accordion class="category-accordion" multi="true" *ngIf="filteredCategories.length > 0">
     <mat-expansion-panel *ngFor="let category of filteredCategories" [expanded]="category.isExpanded ?? expandedByDefault"
       (opened)="onCategoryOpen(category)" class="category-panel">
       <mat-expansion-panel-header>
@@ -65,4 +65,8 @@
       </ng-template>
     </mat-expansion-panel>
   </mat-accordion>
+
+  <div *ngIf="filteredCategories.length === 0 && searchValue !== ''" class="no-results-panel">
+    <ng-content select="[noResults]"></ng-content>
+  </div>
 </div>

@@ -35,8 +35,24 @@ export class ReportService {
     }).pipe(map(m => m.responsePayload));
   }
 
-  approveReport(reportId: string) {
-    return this.reportController.approveReport({ reportId }).pipe(map(m => m.responsePayload));
+  markApproved(reportId: string) {
+    return this.reportController.updateStatus({
+      reportId, body: {
+        status: 'APPROVED'
+      }
+    }).pipe(map(m => m.responsePayload));
+  }
+
+  markDraft(reportId: string) {
+    return this.reportController.updateStatus({
+      reportId, body: {
+        status: 'DRAFT'
+      }
+    }).pipe(map(m => m.responsePayload));
+  }
+
+  deleteReport(reportId: string) {
+    return this.reportController.deleteReport({ reportId }).pipe(map(m => m.responsePayload));
   }
 
   regenerateReport(reportId: string) {
@@ -55,5 +71,10 @@ export class ReportService {
       id: docId
     });
   }
+
+  getReportInputs(reportCode: string) {
+    return this.reportController.getReportInputs({ reportCode }).pipe(map(m => m.responsePayload));
+  }
+
 }
 
