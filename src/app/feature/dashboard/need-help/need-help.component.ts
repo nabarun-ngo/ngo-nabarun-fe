@@ -64,6 +64,7 @@ export class NeedHelpComponent extends StandardTabbedDashboard<helpTabs, KeyValu
 
   protected override onInitHook(): void {
     this.sharedData.setPageName('Help & Support');
+    this.sharedData.setSearchValue('');
   }
 
 
