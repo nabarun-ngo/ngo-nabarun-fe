@@ -1,0 +1,32 @@
+{
+  "name": "angular-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "npm@10.9.8",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "dev:public": "turbo run dev --filter=public",
+    "dev:internal": "turbo run dev --filter=internal",
+    "build": "turbo run build",
+    "build:public": "turbo run build --filter=public",
+    "build:internal": "turbo run build --filter=internal",
+    "lint": "turbo run lint",
+    "start": "turbo run start",
+    "changeset": "changeset",
+    "changeset:status": "changeset status",
+    "version-packages": "changeset version && npm install",
+    "release:build": "turbo run build --filter=./packages/*",
+    "release:publish": "changeset publish",
+    "release:ci": "npm run release:build && npm run release:publish",
+    "release": "npm run release:ci"
+  },
+  "devDependencies": {
+    "@angular/cli": "^19.2.0",
+    "@changesets/cli": "^2.31.1",
+    "turbo": "^2.5.4"
+  }
+}

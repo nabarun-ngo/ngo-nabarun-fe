@@ -1,0 +1,39 @@
+{
+  "name": "public",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start:watch": "next dev --turbopack",
+    "build": "next build",
+    "optimize:images": "node scripts/optimize-images.mjs",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.7.2",
+    "@hookform/resolvers": "^5.2.2",
+    "@truto/replace-placeholders": "^1.0.8",
+    "bootstrap": "^5.0.0",
+    "bootstrap-icons": "^1.11.3",
+    "embla-carousel-autoplay": "^8.6.0",
+    "embla-carousel-react": "^8.6.0",
+    "@nabarun-ngo/forms-core": "*",
+    "@nabarun-ngo/forms-react": "*",
+    "next": "^15.5.7",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "react-hook-form": "^7.65.0",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@types/bootstrap": "^5.2.11",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.4",
+    "sharp": "^0.34.3",
+    "typescript": "^5"
+  }
+}

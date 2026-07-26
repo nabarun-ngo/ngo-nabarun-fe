@@ -1,0 +1,890 @@
+{
+  "contact": {
+    "id": "form-contact",
+    "key": "contact",
+    "label": "Send us a message",
+    "description": null,
+    "fields": [
+      {
+        "id": "contact-field-name",
+        "key": "name",
+        "label": "Your Name",
+        "fieldType": "TEXT",
+        "mandatory": true,
+        "fieldOptions": [],
+        "isHidden": false,
+        "isEncrypted": false,
+        "enabled": true,
+        "sortOrder": 1,
+        "condition": null,
+        "dependentOptions": null,
+        "validationRules": [
+          {
+            "key": "format",
+            "pattern": "^[A-Za-z][A-Za-z\\s'.-]{1,79}$",
+            "regexErrMsg": "Enter a valid name (letters only, 2–80 characters)"
+          },
+          {
+            "key": "no-digits",
+            "pattern": "^[^0-9]*$",
+            "regexErrMsg": "Cannot contain numbers"
+          }
+        ]
+      },
+      {
+        "id": "contact-field-inquiryType",
+        "key": "inquiryType",
+        "label": "What is this about?",
+        "fieldType": "SELECT",
+        "mandatory": true,
+        "fieldOptions": [
+          {
+            "key": "general",
+            "label": "General question"
+          },
+          {
+            "key": "partnership",
+            "label": "Partnership / collaboration"
+          },
+          {
+            "key": "media",
+            "label": "Media / press"
+          }
+        ],
+        "isHidden": false,
+        "isEncrypted": false,
+        "enabled": true,
+        "sortOrder": 2,
+        "condition": null,
+        "dependentOptions": null,
+        "validationRules": null
+      },
+      {
+        "id": "contact-field-inquiryTopic",
+        "key": "inquiryTopic",
+        "label": "Topic",
+        "fieldType": "SELECT",
+        "mandatory": true,
+        "fieldOptions": [],
+        "isHidden": false,
+        "isEncrypted": false,
+        "enabled": true,
+        "sortOrder": 3,
+        "condition": {
+          "dependsOnKey": "inquiryType",
+          "operator": "not_equals",
+          "value": ""
+        },
+        "dependentOptions": {
+          "dependsOnKey": "inquiryType",
+          "optionMap": {
+            "general": [
+              {
+                "key": "programs",
+                "label": "Programs & events"
+              },
+              {
+                "key": "donations",
+                "label": "Donations"
+              },
+              {
+                "key": "other",
+                "label": "Something else"
+              }
+            ],
+            "partnership": [
+              {
+                "key": "corporate",
+                "label": "Corporate partnership"
+              },
+              {
+                "key": "ngo",
+                "label": "NGO / community partner"
+              },
+              {
+                "key": "volunteer-group",
+                "label": "Volunteer group"
+              }
+            ],
+            "media": [
+              {
+                "key": "interview",
+                "label": "Interview request"
+              },
+              {
+                "key": "coverage",
+                "label": "Event coverage"
+              },
+              {
+                "key": "assets",
+                "label": "Brand assets / logos"
+              }
+            ]
+          }
+        },
+        "validationRules": null
+      },
+      {
+        "id": "contact-field-email",
+        "key": "email",
+        "label": "Your Email",
+        "fieldType": "EMAIL",
+        "mandatory": true,
+        "fieldOptions": [],
+        "isHidden": false,
+        "isEncrypted": false,
+        "enabled": true,
+        "sortOrder": 4,
+        "condition": null,
+        "dependentOptions": null,
+        "validationRules": [
+          {
+            "key": "format",
+            "pattern": "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
+            "regexErrMsg": "Enter a valid email address"
+          }
+        ]
+      },
+      {
+        "id": "contact-field-organization",
+        "key": "organizationName",
+        "label": "Organization name",
+        "fieldType": "TEXT",
+        "mandatory": true,
+        "fieldOptions": [],
+        "isHidden": false,
+        "isEncrypted": false,
+        "enabled": true,
+        "sortOrder": 5,
+        "condition": {
+          "dependsOnKey": "inquiryType",
+          "operator": "in",
+          "value": [
+            "partnership",
+            "media"
+          ]
+        },
+        "dependentOptions": null,
+        "validationRules": [
+          {
+            "key": "format",
+            "pattern": "^.{2,120}$",
+            "regexErrMsg": "Enter the organization name"
+          },
+          {
+            "key": "no-digits",
+            "pattern": "^[^0-9]*$",
+            "regexErrMsg": "Cannot contain numbers"
+          }
+        ]
+      },
+      {
+        "id": "contact-field-phone",
+        "key": "phone",
+        "label": "Phone",
+        "fieldType": "PHONE",
+        "mandatory": false,
+        "fieldOptions": [],
+        "isHidden": false,
+        "isEncrypted": false,
+        "enabled": true,
+        "sortOrder": 6,
+        "condition": {
+          "dependsOnKey": "inquiryType",
+          "operator": "not_equals",
+          "value": "general"
+        },
+        "dependentOptions": null,
+        "validationRules": [
+          {
+            "key": "format",
+            "pattern": "^\\+[0-9]{10,15}$",
+            "regexErrMsg": "Enter a valid phone number with country code"
+          }
+        ]
+      },
+      {
+        "id": "contact-field-callback",
+        "key": "requestCallback",
+        "label": "Request a phone callback",
+        "fieldType": "BOOLEAN",
+        "mandatory": false,
+        "fieldOptions": [],
+        "isHidden": false,
+        "isEncrypted": false,
+        "enabled": true,
+        "sortOrder": 7,
+        "condition": {
+          "dependsOnKey": "inquiryType",
+          "operator": "equals",
+          "value": "partnership"
+        },
+        "dependentOptions": null,
+        "validationRules": null
+      },
+      {
+        "id": "contact-field-message",
+        "key": "message",
+        "label": "Message",
+        "fieldType": "TEXTAREA",
+        "mandatory": true,
+        "fieldOptions": [],
+        "isHidden": false,
+        "isEncrypted": false,
+        "enabled": true,
+        "sortOrder": 8,
+        "condition": {
+          "dependsOnKey": "inquiryTopic",
+          "operator": "not_equals",
+          "value": ""
+        },
+        "dependentOptions": null,
+        "validationRules": [
+          {
+            "key": "format",
+            "pattern": "^[\\s\\S]{20,2000}$",
+            "regexErrMsg": "Please write at least 20 characters"
+          },
+          {
+            "key": "no-html",
+            "pattern": "^[^<>]*$",
+            "regexErrMsg": "Cannot contain < or > characters"
+          }
+        ]
+      }
+    ]
+  },
+  "membership": {
+    "id": "form-membership",
+    "key": "membership",
+    "label": "Membership application",
+    "description": null,
+    "fields": [
+      {
+        "id": "membership-field-fullName",
+        "key": "fullName",
+        "label": "Full Name",
+        "fieldType": "TEXT",
+        "mandatory": true,
+        "fieldOptions": [],
+        "isHidden": false,
+        "isEncrypted": false,
+        "enabled": true,
+        "sortOrder": 1,
+        "condition": null,
+        "dependentOptions": null,
+        "validationRules": [
+          {
+            "key": "name-format",
+            "pattern": "^[A-Za-z][A-Za-z\\s'.-]{1,79}$",
+            "regexErrMsg": "Enter a valid full name"
+          },
+          {
+            "key": "no-digits",
+            "pattern": "^[^0-9]*$",
+            "regexErrMsg": "Name cannot contain numbers"
+          }
+        ]
+      },
+      {
+        "id": "membership-field-applicationType",
+        "key": "applicationType",
+        "label": "How would you like to participate?",
+        "fieldType": "SELECT",
+        "mandatory": true,
+        "fieldOptions": [
+          {
+            "key": "volunteer",
+            "label": "Volunteer"
+          },
+          {
+            "key": "member",
+            "label": "General member"
+          },
+          {
+            "key": "sponsor",
+            "label": "Sponsor / donor"
+          }
+        ],
+        "isHidden": false,
+        "isEncrypted": false,
+        "enabled": true,
+        "sortOrder": 2,
+        "condition": null,
+        "dependentOptions": null,
+        "validationRules": null
+      },
+      {
+        "id": "membership-field-chapter",
+        "key": "preferredChapter",
+        "label": "Preferred chapter / region",
+        "fieldType": "SELECT",
+        "mandatory": true,
+        "fieldOptions": [],
+        "isHidden": false,
+        "isEncrypted": false,
+        "enabled": true,
+        "sortOrder": 3,
+        "condition": {
+          "dependsOnKey": "applicationType",
+          "operator": "not_equals",
+          "value": ""
+        },
+        "dependentOptions": {
+          "dependsOnKey": "applicationType",
+          "optionMap": {
+            "volunteer": [
+              {
+                "key": "north",
+                "label": "North chapter"
+              },
+              {
+                "key": "central",
+                "label": "Central chapter"
+              },
+              {
+                "key": "south",
+                "label": "South chapter"
+              }
+            ],
+            "member": [
+              {
+                "key": "local",
+                "label": "Local community"
+              },
+              {
+                "key": "online",
+                "label": "Online / remote"
+              }
+            ],
+            "sponsor": [
+              {
+                "key": "annual",
+                "label": "Annual fund"
+              },
+              {
+                "key": "program",
+                "label": "Program-specific"
+              }
+            ]
+          }
+        },
+        "validationRules": null
+      },
+      {
+        "id": "membership-field-email",
+        "key": "email",
+        "label": "Email",
+        "fieldType": "EMAIL",
+        "mandatory": true,
+        "fieldOptions": [],
+        "isHidden": false,
+        "isEncrypted": false,
+        "enabled": true,
+        "sortOrder": 4,
+        "condition": null,
+        "dependentOptions": null,
+        "validationRules": [
+          {
+            "key": "format",
+            "pattern": "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
+            "regexErrMsg": "Enter a valid email address"
+          }
+        ]
+      },
+      {
+        "id": "membership-field-phone",
+        "key": "phone",
+        "label": "Phone",
+        "fieldType": "PHONE",
+        "mandatory": true,
+        "fieldOptions": [],
+        "isHidden": false,
+        "isEncrypted": false,
+        "enabled": true,
+        "sortOrder": 5,
+        "condition": null,
+        "dependentOptions": null,
+        "validationRules": [
+          {
+            "key": "format",
+            "pattern": "^\\+[0-9]{10,15}$",
+            "regexErrMsg": "Enter a valid phone number with country code"
+          }
+        ]
+      },
+      {
+        "id": "membership-field-skills",
+        "key": "volunteerSkills",
+        "label": "Skills you can offer",
+        "fieldType": "MULTISELECT",
+        "mandatory": true,
+        "fieldOptions": [],
+        "isHidden": false,
+        "isEncrypted": false,
+        "enabled": true,
+        "sortOrder": 6,
+        "condition": {
+          "dependsOnKey": "applicationType",
+          "operator": "equals",
+          "value": "volunteer"
+        },
+        "dependentOptions": {
+          "dependsOnKey": "preferredChapter",
+          "optionMap": {
+            "north": [
+              {
+                "key": "teaching",
+                "label": "Teaching / mentoring"
+              },
+              {
+                "key": "events",
+                "label": "Event support"
+              },
+              {
+                "key": "tech",
+                "label": "Technology"
+              }
+            ],
+            "central": [
+              {
+                "key": "outreach",
+                "label": "Community outreach"
+              },
+              {
+                "key": "fundraising",
+                "label": "Fundraising"
+              },
+              {
+                "key": "design",
+                "label": "Design / creative"
+              }
+            ],
+            "south": [
+              {
+                "key": "sports",
+                "label": "Sports programs"
+              },
+              {
+                "key": "health",
+                "label": "Health & wellness"
+              },
+              {
+                "key": "admin",
+                "label": "Administration"
+              }
+            ],
+            "local": [
+              {
+                "key": "general-help",
+                "label": "General help"
+              }
+            ],
+            "online": [
+              {
+                "key": "remote-support",
+                "label": "Remote support"
+              }
+            ],
+            "annual": [],
+            "program": []
+          }
+        },
+        "validationRules": null
+      },
+      {
+        "id": "membership-field-sponsorTier",
+        "key": "sponsorTier",
+        "label": "Sponsorship level",
+        "fieldType": "SELECT",
+        "mandatory": true,
+        "fieldOptions": [
+          {
+            "key": "bronze",
+            "label": "Bronze"
+          },
+          {
+            "key": "silver",
+            "label": "Silver"
+          },
+          {
+            "key": "gold",
+            "label": "Gold"
+          }
+        ],
+        "isHidden": false,
+        "isEncrypted": false,
+        "enabled": true,
+        "sortOrder": 7,
+        "condition": {
+          "dependsOnKey": "applicationType",
+          "operator": "equals",
+          "value": "sponsor"
+        },
+        "dependentOptions": null,
+        "validationRules": null
+      },
+      {
+        "id": "membership-field-message",
+        "key": "message",
+        "label": "Why do you want to volunteer?",
+        "fieldType": "TEXTAREA",
+        "mandatory": true,
+        "fieldOptions": [],
+        "isHidden": false,
+        "isEncrypted": false,
+        "enabled": true,
+        "sortOrder": 8,
+        "condition": {
+          "dependsOnKey": "applicationType",
+          "operator": "equals",
+          "value": "volunteer"
+        },
+        "dependentOptions": null,
+        "validationRules": [
+          {
+            "key": "format",
+            "pattern": "^[\\s\\S]{30,2000}$",
+            "regexErrMsg": "Please share at least 30 characters about your motivation"
+          },
+          {
+            "key": "no-html",
+            "pattern": "^[^<>]*$",
+            "regexErrMsg": "Cannot contain < or > characters"
+          }
+        ]
+      }
+    ]
+  },
+  "drawing-competition-registration": {
+    "id": "form-drawing-competition",
+    "key": "drawing-competition-registration",
+    "label": "Drawing Competition Registration",
+    "description": null,
+    "fields": [
+      {
+        "id": "drawing-field-participantName",
+        "key": "participantName",
+        "label": "Participant Name",
+        "fieldType": "TEXT",
+        "mandatory": true,
+        "fieldOptions": [],
+        "isHidden": false,
+        "isEncrypted": false,
+        "enabled": true,
+        "sortOrder": 1,
+        "condition": null,
+        "dependentOptions": null,
+        "validationRules": [
+          {
+            "key": "format",
+            "pattern": "^[A-Za-z][A-Za-z\\s'.-]{1,79}$",
+            "regexErrMsg": "Enter the participant's full name"
+          },
+          {
+            "key": "no-digits",
+            "pattern": "^[^0-9]*$",
+            "regexErrMsg": "Cannot contain numbers"
+          }
+        ]
+      },
+      {
+        "id": "drawing-field-ageGroup",
+        "key": "ageGroup",
+        "label": "Age group",
+        "fieldType": "SELECT",
+        "mandatory": true,
+        "fieldOptions": [
+          {
+            "key": "under13",
+            "label": "Under 13"
+          },
+          {
+            "key": "teen",
+            "label": "13–17"
+          },
+          {
+            "key": "young-adult",
+            "label": "18–25"
+          }
+        ],
+        "isHidden": false,
+        "isEncrypted": false,
+        "enabled": true,
+        "sortOrder": 2,
+        "condition": null,
+        "dependentOptions": null,
+        "validationRules": null
+      },
+      {
+        "id": "drawing-field-age",
+        "key": "age",
+        "label": "Age",
+        "fieldType": "NUMBER",
+        "mandatory": true,
+        "fieldOptions": [],
+        "isHidden": false,
+        "isEncrypted": false,
+        "enabled": true,
+        "sortOrder": 3,
+        "condition": {
+          "dependsOnKey": "ageGroup",
+          "operator": "not_equals",
+          "value": ""
+        },
+        "dependentOptions": null,
+        "validationRules": [
+          {
+            "key": "format",
+            "pattern": "^[0-9]{1,2}$",
+            "regexErrMsg": "Enter a valid age (1–99)"
+          }
+        ]
+      },
+      {
+        "id": "drawing-field-guardianName",
+        "key": "guardianName",
+        "label": "Parent / Guardian name",
+        "fieldType": "TEXT",
+        "mandatory": true,
+        "fieldOptions": [],
+        "isHidden": false,
+        "isEncrypted": false,
+        "enabled": true,
+        "sortOrder": 4,
+        "condition": {
+          "dependsOnKey": "ageGroup",
+          "operator": "in",
+          "value": [
+            "under13",
+            "teen"
+          ]
+        },
+        "dependentOptions": null,
+        "validationRules": [
+          {
+            "key": "format",
+            "pattern": "^[A-Za-z][A-Za-z\\s'.-]{1,79}$",
+            "regexErrMsg": "Enter the guardian's name"
+          },
+          {
+            "key": "no-digits",
+            "pattern": "^[^0-9]*$",
+            "regexErrMsg": "Cannot contain numbers"
+          }
+        ]
+      },
+      {
+        "id": "drawing-field-artCategory",
+        "key": "artCategory",
+        "label": "Art category",
+        "fieldType": "SELECT",
+        "mandatory": true,
+        "fieldOptions": [
+          {
+            "key": "traditional",
+            "label": "Traditional"
+          },
+          {
+            "key": "digital",
+            "label": "Digital"
+          },
+          {
+            "key": "mixed",
+            "label": "Mixed media"
+          }
+        ],
+        "isHidden": false,
+        "isEncrypted": false,
+        "enabled": true,
+        "sortOrder": 5,
+        "condition": null,
+        "dependentOptions": null,
+        "validationRules": null
+      },
+      {
+        "id": "drawing-field-artTheme",
+        "key": "artTheme",
+        "label": "Theme",
+        "fieldType": "SELECT",
+        "mandatory": true,
+        "fieldOptions": [],
+        "isHidden": false,
+        "isEncrypted": false,
+        "enabled": true,
+        "sortOrder": 6,
+        "condition": {
+          "dependsOnKey": "artCategory",
+          "operator": "not_equals",
+          "value": ""
+        },
+        "dependentOptions": {
+          "dependsOnKey": "artCategory",
+          "optionMap": {
+            "traditional": [
+              {
+                "key": "nature",
+                "label": "Nature & environment"
+              },
+              {
+                "key": "culture",
+                "label": "Culture & heritage"
+              },
+              {
+                "key": "open",
+                "label": "Open theme"
+              }
+            ],
+            "digital": [
+              {
+                "key": "future",
+                "label": "Future cities"
+              },
+              {
+                "key": "character",
+                "label": "Character design"
+              },
+              {
+                "key": "open",
+                "label": "Open theme"
+              }
+            ],
+            "mixed": [
+              {
+                "key": "recycle",
+                "label": "Recycle & reuse"
+              },
+              {
+                "key": "story",
+                "label": "Visual storytelling"
+              },
+              {
+                "key": "open",
+                "label": "Open theme"
+              }
+            ]
+          }
+        },
+        "validationRules": null
+      },
+      {
+        "id": "drawing-field-email",
+        "key": "email",
+        "label": "Parent / Guardian Email",
+        "fieldType": "EMAIL",
+        "mandatory": true,
+        "fieldOptions": [],
+        "isHidden": false,
+        "isEncrypted": false,
+        "enabled": true,
+        "sortOrder": 7,
+        "condition": null,
+        "dependentOptions": null,
+        "validationRules": [
+          {
+            "key": "format",
+            "pattern": "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
+            "regexErrMsg": "Enter a valid email address"
+          }
+        ]
+      },
+      {
+        "id": "drawing-field-phone",
+        "key": "phone",
+        "label": "Contact Phone",
+        "fieldType": "PHONE",
+        "mandatory": true,
+        "fieldOptions": [],
+        "isHidden": false,
+        "isEncrypted": false,
+        "enabled": true,
+        "sortOrder": 8,
+        "condition": null,
+        "dependentOptions": null,
+        "validationRules": [
+          {
+            "key": "format",
+            "pattern": "^\\+[0-9]{10,15}$",
+            "regexErrMsg": "Enter a valid phone number with country code"
+          }
+        ]
+      },
+      {
+        "id": "drawing-field-school",
+        "key": "school",
+        "label": "School Name",
+        "fieldType": "TEXT",
+        "mandatory": true,
+        "fieldOptions": [],
+        "isHidden": false,
+        "isEncrypted": false,
+        "enabled": true,
+        "sortOrder": 9,
+        "condition": {
+          "dependsOnKey": "ageGroup",
+          "operator": "in",
+          "value": [
+            "under13",
+            "teen"
+          ]
+        },
+        "dependentOptions": null,
+        "validationRules": [
+          {
+            "key": "format",
+            "pattern": "^.{2,120}$",
+            "regexErrMsg": "Enter a valid school name"
+          },
+          {
+            "key": "no-digits",
+            "pattern": "^[^0-9]*$",
+            "regexErrMsg": "Cannot contain numbers"
+          }
+        ]
+      },
+      {
+        "id": "drawing-field-previousEntry",
+        "key": "enteredBefore",
+        "label": "Entered this competition before?",
+        "fieldType": "BOOLEAN",
+        "mandatory": false,
+        "fieldOptions": [],
+        "isHidden": false,
+        "isEncrypted": false,
+        "enabled": true,
+        "sortOrder": 10,
+        "condition": null,
+        "dependentOptions": null,
+        "validationRules": null
+      },
+      {
+        "id": "drawing-field-previousYear",
+        "key": "previousYear",
+        "label": "Previous participation year",
+        "fieldType": "SELECT",
+        "mandatory": true,
+        "fieldOptions": [
+          {
+            "key": "2024",
+            "label": "2024"
+          },
+          {
+            "key": "2025",
+            "label": "2025"
+          }
+        ],
+        "isHidden": false,
+        "isEncrypted": false,
+        "enabled": true,
+        "sortOrder": 11,
+        "condition": {
+          "dependsOnKey": "enteredBefore",
+          "operator": "equals",
+          "value": true
+        },
+        "dependentOptions": null,
+        "validationRules": null
+      }
+    ]
+  }
+}

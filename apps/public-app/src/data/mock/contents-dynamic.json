@@ -1,0 +1,182 @@
+{
+  "stats": {
+    "beneficiaryCount": 512,
+    "projectCount": 8
+  },
+  "team": [
+    {
+      "id": "1",
+      "fullName": "Mriganka Shekhar Pal",
+      "picture": "/img/team/member1.jpg",
+      "roleString": "Founder",
+      "email": "m@gmail.com",
+      "bio": "Passionate about creating meaningful impact in communities through dedicated service and commitment.",
+      "socialLinks": {
+        "facebook": "https://www.facebook.com/nabarunNGO?mibextid=ZbWKwL"
+      },
+      "active": true
+    }
+  ],
+  "projects": [
+    {
+      "title": "Child Education",
+      "description": "Helping children from low-income families stay in school through learning support, guidance, and programmes that open pathways to a brighter future.",
+      "goals": [
+        { "name": "School enrolment support", "active": true },
+        { "name": "Scholarship assistance", "active": true },
+        { "name": "After-school learning support", "active": true }
+      ],
+      "beneficiaryCount": 200,
+      "metadata": {
+        "image": "/img/nbrn/pic1.jpg",
+        "icon": "fas fa-graduation-cap",
+        "impactTitle": "Education Impact",
+        "impactLabel": "Children Supported"
+      }
+    },
+    {
+      "title": "Education Material Distribution",
+      "description": "Providing books, notebooks, uniforms, bags, and essential school supplies so no child is held back from learning due to lack of materials.",
+      "goals": [
+        { "name": "Books and notebooks", "active": true },
+        { "name": "School bags and uniforms", "active": true },
+        { "name": "Stationery kits for students", "active": true }
+      ],
+      "beneficiaryCount": 500,
+      "metadata": {
+        "image": "/img/nbrn/pic2.jpg",
+        "icon": "fas fa-book",
+        "impactTitle": "Materials Distributed",
+        "impactLabel": "Kits Provided"
+      }
+    },
+    {
+      "title": "Child Development",
+      "description": "Nurturing the overall growth of children through activities, mentoring, and programmes that build confidence, creativity, and life skills beyond the classroom.",
+      "goals": [
+        { "name": "Skill-building activities", "active": true },
+        { "name": "Mentoring and guidance", "active": true },
+        { "name": "Creative and cultural programmes", "active": true }
+      ],
+      "beneficiaryCount": 150,
+      "metadata": {
+        "image": "/img/nbrn/pic3.jpg",
+        "icon": "fas fa-child",
+        "impactTitle": "Development Impact",
+        "impactLabel": "Children Mentored"
+      }
+    },
+    {
+      "title": "Disaster Relief",
+      "description": "Providing rapid emergency response and recovery support during floods, storms, and other disasters — helping families rebuild with dignity and hope.",
+      "goals": [
+        { "name": "Emergency relief supplies", "active": true },
+        { "name": "Food and essential kits", "active": true },
+        { "name": "Post-disaster recovery support", "active": true }
+      ],
+      "beneficiaryCount": 50,
+      "metadata": {
+        "image": "/img/nbrn/pic4.jpg",
+        "icon": "fas fa-shield-alt",
+        "impactTitle": "Relief Impact",
+        "impactLabel": "Emergency Responses"
+      }
+    },
+    {
+      "title": "Orphan & Old Age Home Support",
+      "description": "Standing beside orphanages and old age homes with essentials, companionship, and year-round support so residents feel cared for and never forgotten.",
+      "goals": [
+        { "name": "Essential supplies for homes", "active": true },
+        { "name": "Festival and seasonal visits", "active": true },
+        { "name": "Ongoing care and companionship", "active": true }
+      ],
+      "beneficiaryCount": 20,
+      "metadata": {
+        "image": "/img/nbrn/pic1.jpg",
+        "icon": "fas fa-home",
+        "impactTitle": "Homes Supported",
+        "impactLabel": "Institutions Reached"
+      }
+    },
+    {
+      "title": "Winter Relief",
+      "description": "Distributing blankets, warm clothing, and winter essentials to children, elders, and families who struggle to stay warm during the coldest months.",
+      "goals": [
+        { "name": "Blanket distribution", "active": true },
+        { "name": "Warm clothing drives", "active": true },
+        { "name": "Winter essentials for families", "active": true }
+      ],
+      "beneficiaryCount": 300,
+      "metadata": {
+        "image": "/img/nbrn/pic2.jpg",
+        "icon": "fas fa-snowflake",
+        "impactTitle": "Winter Relief Impact",
+        "impactLabel": "Families Warmed"
+      }
+    },
+    {
+      "title": "Summer Relief",
+      "description": "Reaching vulnerable communities during harsh summers with cooling essentials, summer clothing, and support for children and elders most at risk from the heat.",
+      "goals": [
+        { "name": "Summer essentials distribution", "active": true },
+        { "name": "Heat relief support for families", "active": true },
+        { "name": "Community outreach during summer", "active": true }
+      ],
+      "beneficiaryCount": 250,
+      "metadata": {
+        "image": "/img/nbrn/pic3.jpg",
+        "icon": "fas fa-sun",
+        "impactTitle": "Summer Relief Impact",
+        "impactLabel": "Families Supported"
+      }
+    },
+    {
+      "title": "Festival Distribution",
+      "description": "Sharing the joy of festivals with orphanages, old age homes, and underprivileged families through food, gifts, clothes, and celebration essentials.",
+      "goals": [
+        { "name": "Festival food and gift distribution", "active": true },
+        { "name": "New clothes for children and elders", "active": true },
+        { "name": "Community celebration support", "active": true }
+      ],
+      "beneficiaryCount": 1000,
+      "metadata": {
+        "image": "/img/nbrn/pic4.jpg",
+        "icon": "fas fa-gift",
+        "impactTitle": "Festival Impact",
+        "impactLabel": "Lives Touched Yearly"
+      }
+    }
+  ],
+  "events": [
+    {
+      "id": "evt-winter-drive",
+      "title": "Winter Relief Drive",
+      "description": "Distribution of blankets and warm clothing to families across Ichapur and Barrackpore.",
+      "date": "2026-12-15",
+      "location": "Ichapur, West Bengal",
+      "projectName": "Seasonal Relief",
+      "active": true
+    },
+    {
+      "id": "evt-health-camp",
+      "title": "Free Health Camp",
+      "description": "Free general health check-ups and medicines for the local community.",
+      "date": "2026-11-02",
+      "location": "Barrackpore, West Bengal",
+      "projectName": "Community Health",
+      "active": true
+    },
+    {
+      "id": "evt-drawing-2026",
+      "title": "Annual Drawing Competition",
+      "description": "Open registration for students ages 6–14.",
+      "date": "2026-08-15",
+      "endDate": "2026-08-15",
+      "location": "Kolkata Community Hall",
+      "projectName": "Child Education",
+      "image": "/img/nbrn/pic3.jpg",
+      "registrationUrl": "/forms/drawing-competition/",
+      "active": true
+    }
+  ]
+}

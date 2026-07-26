@@ -1,0 +1,17 @@
+{
+  "name": "Ichapur Nabarun Welfare Society",
+  "short_name": "Nabarun NGO",
+  "description": "Ichapur Nabarun Welfare Society (also known as Nabarun NGO) is an NGO in West Bengal serving North Suburban Kolkata and nearby communities.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#f97316",
+  "icons": [
+    {
+      "src": "/img/logo.png",
+      "sizes": "547x547",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

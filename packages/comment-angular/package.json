@@ -1,0 +1,39 @@
+{
+  "name": "@nabarun-ngo/comment-angular",
+  "version": "0.1.0",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "peerDependencies": {
+    "@angular/common": "^19.0.0",
+    "@angular/core": "^19.0.0",
+    "@angular/forms": "^19.0.0"
+  },
+  "dependencies": {
+    "@nabarun-ngo/comment-core": "*",
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false,
+  "main": "./dist/fesm2022/nabarun-ngo-comment-angular.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/fesm2022/nabarun-ngo-comment-angular.mjs"
+    }
+  },
+  "scripts": {
+    "build": "ng-packagr -p ng-package.json",
+    "lint": "tsc --noEmit -p tsconfig.lib.json"
+  },
+  "devDependencies": {
+    "@angular/common": "^19.2.0",
+    "@angular/core": "^19.2.0",
+    "@angular/forms": "^19.2.0",
+    "ng-packagr": "^19.2.0",
+    "typescript": "~5.7.2"
+  }
+}

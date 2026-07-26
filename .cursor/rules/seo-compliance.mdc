@@ -1,0 +1,61 @@
+---
+description: SEO compliance standards for Nabarun public site (metadata, sitemap, structured data, performance)
+globs: src/app/**/*.{tsx,ts},src/components/seo/**/*,src/lib/site.ts,src/lib/content/sitemap.ts,src/lib/media.ts,public/content2.json,scripts/optimize-images.mjs
+alwaysApply: false
+---
+
+# SEO Compliance — Nabarun Public Site
+
+Static Next.js export (`output: 'export'`). Every public page must be crawlable HTML with correct metadata.
+
+## Required for every page
+
+- `generateMetadata()` via `buildPageMetadata()` / `buildPageMetadataFromContent()` in `src/lib/site.ts`
+- Unique `title`, `description`, `canonical`, `robots`, Open Graph, and Twitter tags
+- Exactly one `<h1>` (visible or `visually-hidden` on home only)
+- Root layout must **not** set page-level `robots` or home title — only `metadataBase`, icons, verification
+
+## Content-driven SEO (`public/content2.json`)
+
+- Page URLs: `metadata.pages.*.path` (trailing slash, e.g. `/about/`)
+- Per-page OG image: `metadata.pages.*.ogImage` (internal path or absolute URL)
+- Exclude from index: `metadata.pages.*.noindex: true` (also skips sitemap)
+- Sitemap tuning: `metadata.pages.*.sitemap.priority`, `changefreq`, `lastmod`
+- Nav env overrides use `NAV_` prefix (e.g. `NAV_LOGIN`), never bare `HOME`
+
+## Structured data (`src/components/seo/`)
+
+- `OrganizationJsonLd`: use `layout.common.org` for email/phone/social — never hardcode contact info
+- `BreadcrumbJsonLd` on inner pages via `PageBannerShell`
+- `EventJsonLd` on `/events/`
+- Projects are a **single page** at `/projects/` — no per-project slug routes or JSON-LD
+
+## Images & performance
+
+- Use `ContentImage` (WebP via `<picture>` when `.webp` sibling exists)
+- Run `npm run optimize:images` before release (also runs in `prebuild`)
+- Hero/carousel images: unique, descriptive `alt` text in content JSON
+- Static export keeps `images.unoptimized: true`; do not rely on Next.js image optimizer
+
+## Sitemap & robots
+
+- `src/app/sitemap.ts` → `buildContentSitemap()` must include `lastModified`
+- Skip `noindex` pages and respect `NEXT_PUBLIC_NOINDEX=true` on staging
+- Internal links must match `trailingSlash: true` (e.g. `/projects/`, `/about/`)
+
+## Staging vs production
+
+- Production: `NEXT_PUBLIC_SITE_URL=https://ngonabarun.web.app`
+- Staging: `NEXT_PUBLIC_SITE_URL=https://ngonabarun-stage.web.app` + `NEXT_PUBLIC_NOINDEX=true`
+
+## Optional env (set before deploy)
+
+- `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION`
+- `NEXT_PUBLIC_GA_MEASUREMENT_ID`
+
+## Pre-deploy checklist
+
+1. `npm run build` (runs image optimization in prebuild)
+2. Verify `out/sitemap.xml` and `out/robots.txt`
+3. Confirm no `index, follow` on `out/404/index.html`
+4. Submit sitemap in Google Search Console after deploy

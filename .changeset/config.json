@@ -1,0 +1,22 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config@3.1.4/schema.json",
+  "changelog": "@changesets/cli/changelog",
+  "commit": false,
+  "fixed": [
+    [
+      "@nabarun-ngo/forms-core",
+      "@nabarun-ngo/forms-react",
+      "@nabarun-ngo/forms-angular"
+    ],
+    [
+      "@nabarun-ngo/comment-core",
+      "@nabarun-ngo/comment-react",
+      "@nabarun-ngo/comment-angular"
+    ]
+  ],
+  "linked": [],
+  "access": "restricted",
+  "baseBranch": "main",
+  "updateInternalDependencies": "patch",
+  "ignore": ["public", "internal"]
+}

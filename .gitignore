@@ -1,0 +1,71 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+node_modules/
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js (public app)
+apps/public/.next/
+apps/public/out/
+
+# angular (internal app)
+apps/internal/dist/
+apps/internal/.angular/
+
+# legacy root paths (if any)
+/.next/
+/out/
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+!.env.example
+!.env.production
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+.firebase
+.qodo
+.idea
+
+# turbo
+.turbo
+
+apps/public/public/robots.txt
+apps/public/public/sitemap.xml
+apps/public/public/sitemap-0.xml
+
+apps/public/out/robots.txt
+apps/public/out/sitemap.xml
+apps/public/out/sitemap-0.xml
+
+# Generated at build (apps/public/scripts/optimize-images.mjs)
+apps/public/public/**/*.webp
+
+**/node_modules/**
+**/dist/**
+**/.next/**
+**/out/**

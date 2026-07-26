@@ -1,0 +1,29 @@
+:host {
+  display: block;
+}
+
+.mat-mdc-form-field.cf-field {
+  width: 100%;
+  display: block;
+}
+
+.cf-boolean-field {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.cf-boolean-field .mat-mdc-form-field-error {
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.cf-phone-field .cf-phone-country-select {
+  min-width: 5.5rem;
+  max-width: 7.5rem;
+  margin-right: 0.25rem;
+}
+
+.cf-phone-field .cf-phone-prefix {
+  margin-right: 0.25rem;
+  white-space: nowrap;
+}
