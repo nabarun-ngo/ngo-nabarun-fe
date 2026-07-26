@@ -1,10 +1,10 @@
 {
   "$schema": "./content-static.schema.json",
   "vars": {
-    "orgName": "Ichapur Nabarun Welfare Society",
+    "orgName": "Ichapur Nabarun Social Welfare Society",
     "orgShortName": "NABARUN",
     "email": "nabarunbangla18@gmail.com",
-    "phone": "+91 98749 16659",
+    "phone": "+91 9874916659",
     "location": "Ichapur, West Bengal",
     "estd": "2018",
     "registrationNumber": "S0063530",
@@ -13,16 +13,14 @@
     "youtubeUrl": "https://www.youtube.com/@nabarunngo",
     "siteUrl": "https://nabarunngo.web.app",
     "loginUrl": "https://nabarunngo-portal.web.app",
-    "logoUrl": "/img/logo.png",
-    "upiId": "nabarun@upi",
-    "bankAccountName": "Ichapur Nabarun Welfare Society",
-    "bankAccountNumber": "000000000000",
-    "bankIfsc": "SBIN0000000",
-    "bankName": "State Bank of India",
-    "bankBranch": "Ichapur, West Bengal",
+    "logoUrl": "/img/logo.webp",
+    "upiId": "Coming Soon",
+    "bankAccountName": "Coming Soon",
+    "bankAccountNumber": "Coming Soon",
+    "bankIfsc": "Coming Soon",
+    "bankName": "Coming Soon",
+    "bankBranch": "Coming Soon",
     "paymentGatewayUrl": "",
-    "livesTouchedCount": "500+",
-    "projectsCount": "15+",
     "contactLocationLink": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3678.054747711374!2d88.37857547508479!3d22.800435179330115!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f89b00198123bd%3A0xbb43e9b27da0afe!2sIndrapuri%20ichapur!5e0!3m2!1sen!2sin!4v1784321057260!5m2!1sen!2sin",
     "policyPrivacyPolicyUrl": "https://1drv.ms/w/c/c63dad803d4b69ca/IQRWQGCvEtAuTIdPVLdzP_SFAUznac7hitoIPgsy5ukUVWg",
     "policyTermsOfUseUrl": "https://1drv.ms/w/c/c63dad803d4b69ca/IQQM3qc2lXR1Rps9iEPaipNoAQR3lASb4H9KhFoh7BzYB9E",
@@ -32,11 +30,11 @@
   },
   "metadata": {
     "site": {
-      "title": "Nabarun NGO | Ichapur Nabarun Welfare Society - Empowering Communities",
-      "description": "Nabarun (Ichapur Nabarun Welfare Society) is a registered NGO in West Bengal, serving North Kolkata and North Suburban Kolkata since 2018. Child education, disaster relief, seasonal support, and community welfare.",
-      "keywords": "Nabarun, NGO Nabarun, Nabarun NGO, Ichapur Nabarun Welfare Society, Nabarun welfare society, Nabarun West Bengal, Nabarun charity",
+      "title": "Nabarun NGO | Ichapur Nabarun Social Welfare Society - Empowering Communities",
+      "description": "Nabarun (Ichapur Nabarun Social Welfare Society) is a registered NGO in West Bengal, serving North Kolkata and North Suburban Kolkata since 2018. Child education, disaster relief, seasonal support, and community welfare.",
+      "keywords": "Nabarun, NGO Nabarun, Nabarun NGO, Ichapur Nabarun Social Welfare Society, Nabarun welfare society, Nabarun West Bengal, Nabarun charity",
       "brand": "Nabarun",
-      "shortBrand": "NABARUN (INWS)",
+      "shortBrand": "NABARUN (INSWS)",
       "name": "{{vars.orgName}}",
       "alternateName": "Nabarun NGO",
       "location": "Ichapur, Barrackpore, West Bengal, India",
@@ -57,7 +55,7 @@
         "NGO Nabarun",
         "Nabarun NGO",
         "Nabarun Welfare Society",
-        "Ichapur Nabarun Welfare Society",
+        "Ichapur Nabarun Social Welfare Society",
         "Nabarun Ngo",
         "Nabarun Ngo West Bengal",
         "Nabarun Ngo Kolkata",
@@ -65,7 +63,7 @@
         "Nabarun Ngo Ichapur",
         "Nabarun Ngo North Kolkata",
         "Nabarun Ngo North Suburban Kolkata",
-        "INWS"
+        "INSWS"
       ],
       "logo": "{{vars.siteUrl}}{{vars.logoUrl}}",
       "email": "{{vars.email}}",
@@ -99,8 +97,8 @@
       "home": {
         "pageName": "Home",
         "title": "Home",
-        "description": "Nabarun (Ichapur Nabarun Welfare Society) is a registered NGO in West Bengal, serving North Kolkata and North Suburban Kolkata since 2018. Child education, disaster relief, seasonal support, and community welfare.",
-        "keywords": "Nabarun, NGO Nabarun, Nabarun NGO, Ichapur Nabarun Welfare Society, Nabarun welfare society, Nabarun West Bengal, Nabarun charity",
+        "description": "Nabarun (Ichapur Nabarun Social Welfare Society) is a registered NGO in West Bengal, serving North Kolkata and North Suburban Kolkata since 2018. Child education, disaster relief, seasonal support, and community welfare.",
+        "keywords": "Nabarun, NGO Nabarun, Nabarun NGO, Ichapur Nabarun Social Welfare Society, Nabarun welfare society, Nabarun West Bengal, Nabarun charity",
         "path": "/",
         "ogImage": "/img/nbrn/pic1.jpg",
         "sitemap": {
@@ -112,7 +110,7 @@
         "pageName": "About Us",
         "title": "About",
         "description": "About Nabarun — a grassroots NGO founded in 2018, dedicated to child education, disaster relief, and community welfare across North Kolkata and North Suburban Kolkata.",
-        "keywords": "About Nabarun, NGO Nabarun, Nabarun NGO, Ichapur Nabarun Welfare Society, Nabarun welfare society, Nabarun West Bengal",
+        "keywords": "About Nabarun, NGO Nabarun, Nabarun NGO, Ichapur Nabarun Social Welfare Society, Nabarun welfare society, Nabarun West Bengal",
         "path": "/about/",
         "ogImage": "/img/nbrn/pic4.jpg",
         "sitemap": {
@@ -256,19 +254,8 @@
         "drawing-competition": {
           "pageName": "Drawing Competition 2026",
           "title": "Drawing Competition 2026",
-          "description": "Registration for the drawing competition 2026.",
+          "description": "Registration for Nabarun's drawing competition 2026.",
           "path": "/forms/drawing-competition/",
-          "noindex": false,
-          "sitemap": {
-            "priority": 0.6,
-            "changefreq": "monthly"
-          }
-        },
-        "volunteer-survey": {
-          "pageName": "Volunteer Survey",
-          "title": "Volunteer Survey",
-          "description": "Tell us how you'd like to help.",
-          "path": "/forms/volunteer-survey/",
           "noindex": false,
           "sitemap": {
             "priority": 0.6,
@@ -498,16 +485,6 @@
             "inMore": true,
             "parent": "forms",
             "enabled": true
-          },
-          {
-            "id": "volunteer-survey",
-            "label": "Volunteer Survey",
-            "url": "{{metadata.pages.forms.volunteer-survey.path}}",
-            "external": false,
-            "endCta": false,
-            "inMore": true,
-            "parent": "forms",
-            "enabled": true
           }
         ]
       },
@@ -579,18 +556,10 @@
       "forms": {
         "drawing-competition": {
           "title": "Drawing Competition 2026",
-          "description": "registration for the drawing competition 2026.",
-          "formId": "drawing-competition-registration",
-          "recaptchaAction": "drawing-competition",
-          "submitLabel": "Register",
-          "enabled": true
-        },
-        "volunteer-survey": {
-          "title": "Volunteer Survey",
-          "description": "Tell us how you'd like to help.",
+          "description": "Registration for Nabarun's drawing competition 2026.",
           "type": "google",
-          "embedUrl": "https://docs.google.com/forms/d/e/1FAIpQLScExampleExampleExampleExampleExample/viewform?embedded=true",
-          "embedTitle": "Volunteer Survey",
+          "embedUrl": "https://docs.google.com/forms/d/e/1FAIpQLSctd2GyQhntFSyS77gudkchq99FYUamttlRjRE7yGw25sSV_w/viewform?embedded=true",
+          "embedTitle": "Drawing Competition 2026",
           "enabled": true
         }
       },
@@ -723,20 +692,6 @@
           "years": "{{vars.yearsSinceEstd}}",
           "label": "Years of Impact"
         },
-        "stats": [
-          {
-            "icon": "fas fa-users",
-            "value": "{{vars.livesTouchedCount}}",
-            "label": "Lives Touched",
-            "enabled": true
-          },
-          {
-            "icon": "fas fa-hands-helping",
-            "value": "{{vars.projectsCount}}",
-            "label": "Projects",
-            "enabled": true
-          }
-        ],
         "missionPoints": [
           {
             "icon": "fas fa-graduation-cap",
@@ -758,7 +713,7 @@
           }
         ],
         "founderMessage": {
-          "quote": "Nabarun began with a simple belief: no child, no elder, and no family should face hardship alone. From distributing books and school kits to reaching orphanages and old age homes, from winter blankets to summer relief and festival essentials — every programme we run is guided by honesty, urgency, and accountability to the communities we serve across North Kolkata and North Suburban Kolkata.",
+          "quote": "Nabarun is not just an organization; it's a beacon of hope, dedicated to making a positive impact in the world. Together, we strive to tackle pressing issues, uplift communities, and create lasting change.",
           "name": "Mriganka Shekhar Pal",
           "title": "Founder"
         },

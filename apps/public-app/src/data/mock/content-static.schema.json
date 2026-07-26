@@ -4,16 +4,26 @@
   "title": "Public site static content",
   "description": "Schema for src/data/mock/content-static.json. Edit vars for org-wide values; use {{vars.key}} or {{metadata.pages.*}} placeholders elsewhere. Items with enabled: false are hidden. Team members and events belong in contents-dynamic.json; form fields in form-definitions.json.",
   "type": "object",
-  "required": ["vars", "metadata", "layout"],
+  "required": [
+    "vars",
+    "metadata",
+    "layout"
+  ],
   "additionalProperties": false,
   "properties": {
     "$schema": {
       "type": "string",
       "description": "IDE schema hint (optional)."
     },
-    "vars": { "$ref": "#/definitions/contentVars" },
-    "metadata": { "$ref": "#/definitions/contentMetadata" },
-    "layout": { "$ref": "#/definitions/layoutSection" }
+    "vars": {
+      "$ref": "#/definitions/contentVars"
+    },
+    "metadata": {
+      "$ref": "#/definitions/contentMetadata"
+    },
+    "layout": {
+      "$ref": "#/definitions/layoutSection"
+    }
   },
   "definitions": {
     "placeholderString": {
@@ -58,8 +68,6 @@
         "bankName",
         "bankBranch",
         "paymentGatewayUrl",
-        "livesTouchedCount",
-        "projectsCount",
         "contactLocationLink",
         "policyPrivacyPolicyUrl",
         "policyTermsOfUseUrl",
@@ -67,71 +75,174 @@
         "policyCopyrightUrl",
         "policyRulesAndRegulationsUrl"
       ],
-      "additionalProperties": { "$ref": "#/definitions/placeholderString" },
+      "additionalProperties": {
+        "$ref": "#/definitions/placeholderString"
+      },
       "properties": {
-        "orgName": { "type": "string", "description": "Full organization name." },
-        "orgShortName": { "type": "string", "description": "Short brand name (footer, compact UI)." },
-        "email": { "type": "string", "description": "Primary public contact email." },
-        "phone": { "type": "string", "description": "Primary public phone number." },
-        "location": { "type": "string", "description": "Display location (header/footer)." },
-        "estd": { "type": "string", "description": "Founded year; drives computed yearsSinceEstd." },
-        "registrationNumber": { "type": "string", "description": "Society/NGO registration number." },
-        "facebookUrl": { "type": "string" },
-        "instagramUrl": { "type": "string" },
-        "youtubeUrl": { "type": "string" },
-        "founderEmail": { "type": "string" },
-        "siteUrl": { "type": "string", "description": "Production site base URL." },
-        "loginUrl": { "type": "string", "description": "Member/volunteer portal URL." },
-        "logoUrl": { "$ref": "#/definitions/imageSrc", "description": "Site logo path (e.g. /img/logo.png)." },
-        "upiId": { "type": "string", "description": "UPI ID for donations." },
-        "bankAccountName": { "type": "string" },
-        "bankAccountNumber": { "type": "string" },
-        "bankIfsc": { "type": "string" },
-        "bankName": { "type": "string" },
-        "bankBranch": { "type": "string" },
+        "orgName": {
+          "type": "string",
+          "description": "Full organization name."
+        },
+        "orgShortName": {
+          "type": "string",
+          "description": "Short brand name (footer, compact UI)."
+        },
+        "email": {
+          "type": "string",
+          "description": "Primary public contact email."
+        },
+        "phone": {
+          "type": "string",
+          "description": "Primary public phone number."
+        },
+        "location": {
+          "type": "string",
+          "description": "Display location (header/footer)."
+        },
+        "estd": {
+          "type": "string",
+          "description": "Founded year; drives computed yearsSinceEstd."
+        },
+        "registrationNumber": {
+          "type": "string",
+          "description": "Society/NGO registration number."
+        },
+        "facebookUrl": {
+          "type": "string"
+        },
+        "instagramUrl": {
+          "type": "string"
+        },
+        "youtubeUrl": {
+          "type": "string"
+        },
+        "founderEmail": {
+          "type": "string"
+        },
+        "siteUrl": {
+          "type": "string",
+          "description": "Production site base URL."
+        },
+        "loginUrl": {
+          "type": "string",
+          "description": "Member/volunteer portal URL."
+        },
+        "logoUrl": {
+          "$ref": "#/definitions/imageSrc",
+          "description": "Site logo path (e.g. /img/logo.png)."
+        },
+        "upiId": {
+          "type": "string",
+          "description": "UPI ID for donations."
+        },
+        "bankAccountName": {
+          "type": "string"
+        },
+        "bankAccountNumber": {
+          "type": "string"
+        },
+        "bankIfsc": {
+          "type": "string"
+        },
+        "bankName": {
+          "type": "string"
+        },
+        "bankBranch": {
+          "type": "string"
+        },
         "paymentGatewayUrl": {
           "type": "string",
           "description": "Online checkout URL. Empty string falls back to NEXT_PUBLIC_PAYMENT_GATEWAY_URL.",
           "default": ""
         },
-        "livesTouchedCount": { "type": "string", "description": "About page stat (e.g. 500+)." },
-        "projectsCount": { "type": "string", "description": "About page stat (e.g. 15+)." },
+        "livesTouchedCount": {
+          "type": "string",
+          "description": "About page stat (e.g. 500+)."
+        },
+        "projectsCount": {
+          "type": "string",
+          "description": "About page stat (e.g. 15+)."
+        },
         "contactLocationLink": {
           "type": "string",
           "description": "Google Maps embed URL for contact page iframe."
         },
-        "policyPrivacyPolicyUrl": { "type": "string" },
-        "policyTermsOfUseUrl": { "type": "string" },
-        "policyDisclaimerUrl": { "type": "string" },
-        "policyCopyrightUrl": { "type": "string" },
-        "policyRulesAndRegulationsUrl": { "type": "string" }
+        "policyPrivacyPolicyUrl": {
+          "type": "string"
+        },
+        "policyTermsOfUseUrl": {
+          "type": "string"
+        },
+        "policyDisclaimerUrl": {
+          "type": "string"
+        },
+        "policyCopyrightUrl": {
+          "type": "string"
+        },
+        "policyRulesAndRegulationsUrl": {
+          "type": "string"
+        }
       }
     },
     "pageSeo": {
       "type": "object",
-      "required": ["pageName", "title", "description", "path"],
+      "required": [
+        "pageName",
+        "title",
+        "description",
+        "path"
+      ],
       "additionalProperties": false,
       "properties": {
-        "pageName": { "type": "string", "description": "Breadcrumb and page banner label." },
-        "title": { "type": "string", "description": "Browser tab / SEO title." },
-        "description": { "type": "string", "description": "Meta description." },
-        "keywords": { "type": "string" },
-        "path": { "$ref": "#/definitions/pagePath" },
+        "pageName": {
+          "type": "string",
+          "description": "Breadcrumb and page banner label."
+        },
+        "title": {
+          "type": "string",
+          "description": "Browser tab / SEO title."
+        },
+        "description": {
+          "type": "string",
+          "description": "Meta description."
+        },
+        "keywords": {
+          "type": "string"
+        },
+        "path": {
+          "$ref": "#/definitions/pagePath"
+        },
         "noindex": {
           "type": "boolean",
           "description": "When true, excluded from sitemap and set to noindex."
         },
-        "ogImage": { "$ref": "#/definitions/imageSrc" },
+        "ogImage": {
+          "$ref": "#/definitions/imageSrc"
+        },
         "sitemap": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "priority": { "type": "number", "minimum": 0, "maximum": 1 },
+            "priority": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
             "changefreq": {
               "type": "string",
-              "enum": ["always", "hourly", "daily", "weekly", "monthly", "yearly", "never"]
+              "enum": [
+                "always",
+                "hourly",
+                "daily",
+                "weekly",
+                "monthly",
+                "yearly",
+                "never"
+              ]
             },
-            "lastmod": { "type": "string" }
+            "lastmod": {
+              "type": "string"
+            }
           }
         }
       }
@@ -153,70 +264,168 @@
       ],
       "additionalProperties": false,
       "properties": {
-        "title": { "type": "string" },
-        "description": { "type": "string" },
-        "keywords": { "type": "string" },
-        "brand": { "type": "string" },
-        "shortBrand": { "type": "string" },
-        "name": { "$ref": "#/definitions/placeholderString" },
-        "alternateName": { "type": "string" },
-        "location": { "type": "string" },
-        "areaServed": { "type": "string" },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "keywords": {
+          "type": "string"
+        },
+        "brand": {
+          "type": "string"
+        },
+        "shortBrand": {
+          "type": "string"
+        },
+        "name": {
+          "$ref": "#/definitions/placeholderString"
+        },
+        "alternateName": {
+          "type": "string"
+        },
+        "location": {
+          "type": "string"
+        },
+        "areaServed": {
+          "type": "string"
+        },
         "openGraph": {
           "type": "object",
-          "required": ["url", "siteName", "image"],
+          "required": [
+            "url",
+            "siteName",
+            "image"
+          ],
           "additionalProperties": false,
           "properties": {
-            "url": { "$ref": "#/definitions/placeholderString" },
-            "siteName": { "$ref": "#/definitions/placeholderString" },
-            "image": { "$ref": "#/definitions/placeholderString" }
+            "url": {
+              "$ref": "#/definitions/placeholderString"
+            },
+            "siteName": {
+              "$ref": "#/definitions/placeholderString"
+            },
+            "image": {
+              "$ref": "#/definitions/placeholderString"
+            }
           }
         },
-        "locale": { "type": "string", "pattern": "^[a-z]{2}_[A-Z]{2}$" },
+        "locale": {
+          "type": "string",
+          "pattern": "^[a-z]{2}_[A-Z]{2}$"
+        },
         "twitter": {
           "type": "object",
-          "required": ["card"],
+          "required": [
+            "card"
+          ],
           "additionalProperties": false,
           "properties": {
-            "card": { "type": "string", "enum": ["summary", "summary_large_image", "app", "player"] }
+            "card": {
+              "type": "string",
+              "enum": [
+                "summary",
+                "summary_large_image",
+                "app",
+                "player"
+              ]
+            }
           }
         }
       }
     },
     "organizationMetadata": {
       "type": "object",
-      "required": ["alternateNames", "email", "telephone", "address", "knowsAbout"],
+      "required": [
+        "alternateNames",
+        "email",
+        "telephone",
+        "address",
+        "knowsAbout"
+      ],
       "additionalProperties": false,
       "properties": {
-        "alternateNames": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
-        "logo": { "$ref": "#/definitions/placeholderString" },
-        "email": { "$ref": "#/definitions/placeholderString" },
-        "telephone": { "$ref": "#/definitions/placeholderString" },
-        "foundingDate": { "$ref": "#/definitions/placeholderString" },
-        "registrationNumber": { "$ref": "#/definitions/placeholderString" },
+        "alternateNames": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "logo": {
+          "$ref": "#/definitions/placeholderString"
+        },
+        "email": {
+          "$ref": "#/definitions/placeholderString"
+        },
+        "telephone": {
+          "$ref": "#/definitions/placeholderString"
+        },
+        "foundingDate": {
+          "$ref": "#/definitions/placeholderString"
+        },
+        "registrationNumber": {
+          "$ref": "#/definitions/placeholderString"
+        },
         "address": {
           "type": "object",
-          "required": ["streetAddress", "addressLocality", "addressRegion", "addressCountry"],
+          "required": [
+            "streetAddress",
+            "addressLocality",
+            "addressRegion",
+            "addressCountry"
+          ],
           "additionalProperties": false,
           "properties": {
-            "streetAddress": { "type": "string" },
-            "addressLocality": { "type": "string" },
-            "addressRegion": { "type": "string" },
-            "addressCountry": { "type": "string", "minLength": 2, "maxLength": 2 }
+            "streetAddress": {
+              "type": "string"
+            },
+            "addressLocality": {
+              "type": "string"
+            },
+            "addressRegion": {
+              "type": "string"
+            },
+            "addressCountry": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 2
+            }
           }
         },
-        "knowsAbout": { "type": "array", "items": { "type": "string" } },
-        "sameAs": { "type": "array", "items": { "$ref": "#/definitions/placeholderString" } }
+        "knowsAbout": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sameAs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/placeholderString"
+          }
+        }
       }
     },
     "contentMetadata": {
       "type": "object",
-      "required": ["site", "organization", "pages"],
+      "required": [
+        "site",
+        "organization",
+        "pages"
+      ],
       "additionalProperties": false,
       "properties": {
-        "site": { "$ref": "#/definitions/siteMetadata" },
-        "organization": { "$ref": "#/definitions/organizationMetadata" },
-        "pages": { "$ref": "#/definitions/metadataPages" }
+        "site": {
+          "$ref": "#/definitions/siteMetadata"
+        },
+        "organization": {
+          "$ref": "#/definitions/organizationMetadata"
+        },
+        "pages": {
+          "$ref": "#/definitions/metadataPages"
+        }
       }
     },
     "metadataPages": {
@@ -236,50 +445,94 @@
       ],
       "additionalProperties": false,
       "properties": {
-        "home": { "$ref": "#/definitions/pageSeo" },
-        "about": { "$ref": "#/definitions/pageSeo" },
-        "projects": { "$ref": "#/definitions/pageSeo" },
-        "team": { "$ref": "#/definitions/pageSeo" },
-        "donate": { "$ref": "#/definitions/pageSeo" },
-        "contact": { "$ref": "#/definitions/pageSeo" },
-        "membership": { "$ref": "#/definitions/pageSeo" },
-        "gallery": { "$ref": "#/definitions/pageSeo" },
-        "events": { "$ref": "#/definitions/pageSeo" },
+        "home": {
+          "$ref": "#/definitions/pageSeo"
+        },
+        "about": {
+          "$ref": "#/definitions/pageSeo"
+        },
+        "projects": {
+          "$ref": "#/definitions/pageSeo"
+        },
+        "team": {
+          "$ref": "#/definitions/pageSeo"
+        },
+        "donate": {
+          "$ref": "#/definitions/pageSeo"
+        },
+        "contact": {
+          "$ref": "#/definitions/pageSeo"
+        },
+        "membership": {
+          "$ref": "#/definitions/pageSeo"
+        },
+        "gallery": {
+          "$ref": "#/definitions/pageSeo"
+        },
+        "events": {
+          "$ref": "#/definitions/pageSeo"
+        },
         "policies": {
           "type": "object",
           "description": "Policy page SEO entries keyed by slug (e.g. privacy-policy).",
-          "additionalProperties": { "$ref": "#/definitions/pageSeo" }
+          "additionalProperties": {
+            "$ref": "#/definitions/pageSeo"
+          }
         },
         "forms": {
           "type": "object",
           "description": "Custom form page SEO entries keyed by slug.",
-          "additionalProperties": { "$ref": "#/definitions/pageSeo" }
+          "additionalProperties": {
+            "$ref": "#/definitions/pageSeo"
+          }
         }
       }
     },
     "followLink": {
       "type": "object",
-      "required": ["icon", "url"],
+      "required": [
+        "icon",
+        "url"
+      ],
       "additionalProperties": false,
       "properties": {
-        "icon": { "type": "string", "description": "Font Awesome brand class (e.g. fab fa-facebook-f)." },
-        "url": { "$ref": "#/definitions/placeholderString" },
-        "enabled": { "$ref": "#/definitions/enabledFlag" }
+        "icon": {
+          "type": "string",
+          "description": "Font Awesome brand class (e.g. fab fa-facebook-f)."
+        },
+        "url": {
+          "$ref": "#/definitions/placeholderString"
+        },
+        "enabled": {
+          "$ref": "#/definitions/enabledFlag"
+        }
       }
     },
     "navLinkItem": {
       "type": "object",
-      "required": ["id", "label", "external"],
+      "required": [
+        "id",
+        "label",
+        "external"
+      ],
       "additionalProperties": false,
       "properties": {
         "id": {
           "type": "string",
           "description": "Unique nav id. Env override: NAV_{ID_UPPERCASE_WITH_UNDERSCORES}."
         },
-        "label": { "type": "string" },
-        "url": { "$ref": "#/definitions/placeholderString" },
-        "external": { "type": "boolean" },
-        "enabled": { "$ref": "#/definitions/enabledFlag" },
+        "label": {
+          "type": "string"
+        },
+        "url": {
+          "$ref": "#/definitions/placeholderString"
+        },
+        "external": {
+          "type": "boolean"
+        },
+        "enabled": {
+          "$ref": "#/definitions/enabledFlag"
+        },
         "endCta": {
           "type": "boolean",
           "description": "When true, renders as highlighted end button (e.g. Donate)."
@@ -289,45 +542,89 @@
           "description": "When true, link appears under the More dropdown."
         },
         "parent": {
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Parent nav link id for nested More menu items."
         }
       }
     },
     "linkItem": {
       "type": "object",
-      "required": ["label", "url"],
+      "required": [
+        "label",
+        "url"
+      ],
       "additionalProperties": false,
       "properties": {
-        "label": { "type": "string" },
-        "url": { "$ref": "#/definitions/placeholderString" },
-        "enabled": { "$ref": "#/definitions/enabledFlag" }
+        "label": {
+          "type": "string"
+        },
+        "url": {
+          "$ref": "#/definitions/placeholderString"
+        },
+        "enabled": {
+          "$ref": "#/definitions/enabledFlag"
+        }
       }
     },
     "sectionCtaButton": {
       "type": "object",
-      "required": ["label", "url"],
+      "required": [
+        "label",
+        "url"
+      ],
       "additionalProperties": false,
       "properties": {
-        "label": { "type": "string" },
-        "url": { "$ref": "#/definitions/placeholderString" },
-        "icon": { "type": "string", "description": "Font Awesome class (e.g. fas fa-donate)." },
-        "primary": { "type": "boolean" },
-        "variant": { "type": "string", "enum": ["primary", "secondary", "outline", "light"] },
-        "external": { "type": "boolean" },
-        "enabled": { "$ref": "#/definitions/enabledFlag" }
+        "label": {
+          "type": "string"
+        },
+        "url": {
+          "$ref": "#/definitions/placeholderString"
+        },
+        "icon": {
+          "type": "string",
+          "description": "Font Awesome class (e.g. fas fa-donate)."
+        },
+        "primary": {
+          "type": "boolean"
+        },
+        "variant": {
+          "type": "string",
+          "enum": [
+            "primary",
+            "secondary",
+            "outline",
+            "light"
+          ]
+        },
+        "external": {
+          "type": "boolean"
+        },
+        "enabled": {
+          "$ref": "#/definitions/enabledFlag"
+        }
       }
     },
     "sectionCta": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "enabled": { "$ref": "#/definitions/enabledFlag" },
-        "title": { "type": "string" },
-        "description": { "type": "string" },
+        "enabled": {
+          "$ref": "#/definitions/enabledFlag"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
         "buttons": {
           "type": "array",
-          "items": { "$ref": "#/definitions/sectionCtaButton" }
+          "items": {
+            "$ref": "#/definitions/sectionCtaButton"
+          }
         }
       }
     },
@@ -335,66 +632,131 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "teaser": { "$ref": "#/definitions/sectionCta" },
-        "page": { "$ref": "#/definitions/sectionCta" },
-        "default": { "$ref": "#/definitions/sectionCta" }
+        "teaser": {
+          "$ref": "#/definitions/sectionCta"
+        },
+        "page": {
+          "$ref": "#/definitions/sectionCta"
+        },
+        "default": {
+          "$ref": "#/definitions/sectionCta"
+        }
       }
     },
     "internalScrollConfig": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "enabled": { "$ref": "#/definitions/enabledFlag" },
-        "maxHeight": { "type": "string", "description": "CSS max-height (e.g. min(85vh, 56rem))." },
-        "maxHeightMobile": { "type": "string" }
+        "enabled": {
+          "$ref": "#/definitions/enabledFlag"
+        },
+        "maxHeight": {
+          "type": "string",
+          "description": "CSS max-height (e.g. min(85vh, 56rem))."
+        },
+        "maxHeightMobile": {
+          "type": "string"
+        }
       }
     },
     "homeSectionConfig": {
       "type": "object",
-      "required": ["enabled"],
+      "required": [
+        "enabled"
+      ],
       "additionalProperties": false,
       "properties": {
-        "enabled": { "type": "boolean" },
-        "mode": { "type": "string", "enum": ["teaser", "full"] },
-        "internalScroll": {
-          "oneOf": [
-            { "type": "boolean" },
-            { "$ref": "#/definitions/internalScrollConfig" }
+        "enabled": {
+          "type": "boolean"
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "teaser",
+            "full"
           ]
         },
-        "cta": { "$ref": "#/definitions/sectionCta" }
+        "internalScroll": {
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "$ref": "#/definitions/internalScrollConfig"
+            }
+          ]
+        },
+        "cta": {
+          "$ref": "#/definitions/sectionCta"
+        }
       }
     },
     "carouselItem": {
       "type": "object",
-      "required": ["image", "alt", "title", "quote"],
+      "required": [
+        "image",
+        "alt",
+        "title",
+        "quote"
+      ],
       "additionalProperties": false,
       "properties": {
-        "image": { "$ref": "#/definitions/imageSrc" },
-        "alt": { "type": "string", "description": "Accessible image description." },
-        "title": { "type": "string" },
+        "image": {
+          "$ref": "#/definitions/imageSrc"
+        },
+        "alt": {
+          "type": "string",
+          "description": "Accessible image description."
+        },
+        "title": {
+          "type": "string"
+        },
         "quote": {
           "type": "object",
-          "required": ["text", "author"],
+          "required": [
+            "text",
+            "author"
+          ],
           "additionalProperties": false,
           "properties": {
-            "text": { "type": "string" },
-            "author": { "type": "string" }
+            "text": {
+              "type": "string"
+            },
+            "author": {
+              "type": "string"
+            }
           }
         },
-        "enabled": { "$ref": "#/definitions/enabledFlag" },
+        "enabled": {
+          "$ref": "#/definitions/enabledFlag"
+        },
         "buttons": {
           "type": "array",
           "items": {
             "type": "object",
-            "required": ["label", "url", "icon", "primary"],
+            "required": [
+              "label",
+              "url",
+              "icon",
+              "primary"
+            ],
             "additionalProperties": false,
             "properties": {
-              "label": { "type": "string" },
-              "url": { "$ref": "#/definitions/placeholderString" },
-              "icon": { "type": "string" },
-              "primary": { "type": "boolean" },
-              "enabled": { "$ref": "#/definitions/enabledFlag" }
+              "label": {
+                "type": "string"
+              },
+              "url": {
+                "$ref": "#/definitions/placeholderString"
+              },
+              "icon": {
+                "type": "string"
+              },
+              "primary": {
+                "type": "boolean"
+              },
+              "enabled": {
+                "$ref": "#/definitions/enabledFlag"
+              }
             }
           }
         }
@@ -402,118 +764,222 @@
     },
     "statItem": {
       "type": "object",
-      "required": ["icon", "value", "label"],
+      "required": [
+        "icon",
+        "value",
+        "label"
+      ],
       "additionalProperties": false,
       "properties": {
-        "icon": { "type": "string" },
-        "value": { "$ref": "#/definitions/placeholderString" },
-        "label": { "type": "string" },
-        "enabled": { "$ref": "#/definitions/enabledFlag" }
+        "icon": {
+          "type": "string"
+        },
+        "value": {
+          "$ref": "#/definitions/placeholderString"
+        },
+        "label": {
+          "type": "string"
+        },
+        "enabled": {
+          "$ref": "#/definitions/enabledFlag"
+        }
       }
     },
     "missionPoint": {
       "type": "object",
-      "required": ["icon", "title", "description"],
+      "required": [
+        "icon",
+        "title",
+        "description"
+      ],
       "additionalProperties": false,
       "properties": {
-        "icon": { "type": "string" },
-        "title": { "type": "string" },
-        "description": { "type": "string" },
-        "enabled": { "$ref": "#/definitions/enabledFlag" }
+        "icon": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "enabled": {
+          "$ref": "#/definitions/enabledFlag"
+        }
       }
     },
     "aboutDetailSection": {
       "type": "object",
-      "required": ["paragraphs", "mission", "vision"],
+      "required": [
+        "paragraphs",
+        "mission",
+        "vision"
+      ],
       "additionalProperties": false,
       "properties": {
-        "enabled": { "$ref": "#/definitions/enabledFlag" },
+        "enabled": {
+          "$ref": "#/definitions/enabledFlag"
+        },
         "paragraphs": {
           "type": "array",
-          "items": { "$ref": "#/definitions/placeholderString" },
+          "items": {
+            "$ref": "#/definitions/placeholderString"
+          },
           "minItems": 1
         },
         "mission": {
           "type": "object",
-          "required": ["title", "description"],
+          "required": [
+            "title",
+            "description"
+          ],
           "additionalProperties": false,
           "properties": {
-            "title": { "type": "string" },
-            "description": { "type": "string" }
+            "title": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            }
           }
         },
         "vision": {
           "type": "object",
-          "required": ["title", "description"],
+          "required": [
+            "title",
+            "description"
+          ],
           "additionalProperties": false,
           "properties": {
-            "title": { "type": "string" },
-            "description": { "type": "string" }
+            "title": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            }
           }
         }
       }
     },
     "serviceFeature": {
       "type": "object",
-      "required": ["text"],
+      "required": [
+        "text"
+      ],
       "additionalProperties": false,
       "properties": {
-        "text": { "type": "string" },
-        "enabled": { "$ref": "#/definitions/enabledFlag" }
+        "text": {
+          "type": "string"
+        },
+        "enabled": {
+          "$ref": "#/definitions/enabledFlag"
+        }
       }
     },
     "serviceItem": {
       "type": "object",
-      "required": ["icon", "title", "description", "features", "button", "overlay"],
+      "required": [
+        "icon",
+        "title",
+        "description",
+        "features",
+        "button",
+        "overlay"
+      ],
       "additionalProperties": false,
       "properties": {
-        "icon": { "type": "string" },
-        "title": { "type": "string" },
-        "description": { "type": "string" },
+        "icon": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
         "features": {
           "type": "array",
-          "items": { "$ref": "#/definitions/serviceFeature" }
+          "items": {
+            "$ref": "#/definitions/serviceFeature"
+          }
         },
         "button": {
           "type": "object",
-          "required": ["label", "url"],
+          "required": [
+            "label",
+            "url"
+          ],
           "additionalProperties": false,
           "properties": {
-            "label": { "type": "string" },
-            "url": { "$ref": "#/definitions/placeholderString" }
+            "label": {
+              "type": "string"
+            },
+            "url": {
+              "$ref": "#/definitions/placeholderString"
+            }
           }
         },
         "overlay": {
           "type": "object",
-          "required": ["title", "stat"],
+          "required": [
+            "title",
+            "stat"
+          ],
           "additionalProperties": false,
           "properties": {
-            "title": { "type": "string" },
+            "title": {
+              "type": "string"
+            },
             "stat": {
               "type": "object",
-              "required": ["value", "label"],
+              "required": [
+                "value",
+                "label"
+              ],
               "additionalProperties": false,
               "properties": {
-                "value": { "type": "string" },
-                "label": { "type": "string" }
+                "value": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string"
+                }
               }
             }
           }
         },
-        "image": { "$ref": "#/definitions/imageSrc" },
-        "enabled": { "$ref": "#/definitions/enabledFlag" }
+        "image": {
+          "$ref": "#/definitions/imageSrc"
+        },
+        "enabled": {
+          "$ref": "#/definitions/enabledFlag"
+        }
       }
     },
     "galleryItem": {
       "type": "object",
-      "required": ["id", "title", "image"],
+      "required": [
+        "id",
+        "title",
+        "image"
+      ],
       "additionalProperties": false,
       "properties": {
-        "id": { "type": "string" },
-        "title": { "type": "string" },
-        "image": { "$ref": "#/definitions/imageSrc" },
-        "category": { "type": "string" },
-        "enabled": { "$ref": "#/definitions/enabledFlag" }
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "image": {
+          "$ref": "#/definitions/imageSrc"
+        },
+        "category": {
+          "type": "string"
+        },
+        "enabled": {
+          "$ref": "#/definitions/enabledFlag"
+        }
       }
     },
     "formConfig": {
@@ -522,15 +988,23 @@
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["custom", "google", "microsoft"],
+          "enum": [
+            "custom",
+            "google",
+            "microsoft"
+          ],
           "description": "Form provider/renderer; defaults to 'custom' when omitted."
         },
         "formId": {
           "type": "string",
           "description": "Must match a key in form-definitions.json (native 'custom' forms only)."
         },
-        "recaptchaAction": { "type": "string" },
-        "submitLabel": { "type": "string" },
+        "recaptchaAction": {
+          "type": "string"
+        },
+        "submitLabel": {
+          "type": "string"
+        },
         "embedUrl": {
           "type": "string",
           "description": "Published embed URL for external ('google'/'microsoft') forms."
@@ -548,12 +1022,31 @@
         {
           "if": {
             "not": {
-              "properties": { "type": { "enum": ["google", "microsoft"] } },
-              "required": ["type"]
+              "properties": {
+                "type": {
+                  "enum": [
+                    "google",
+                    "microsoft"
+                  ]
+                }
+              },
+              "required": [
+                "type"
+              ]
             }
           },
-          "then": { "required": ["formId", "recaptchaAction", "submitLabel"] },
-          "else": { "required": ["embedUrl"] }
+          "then": {
+            "required": [
+              "formId",
+              "recaptchaAction",
+              "submitLabel"
+            ]
+          },
+          "else": {
+            "required": [
+              "embedUrl"
+            ]
+          }
         }
       ]
     },
@@ -561,19 +1054,31 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "title": { "type": "string" },
-        "description": { "type": "string" },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
         "type": {
           "type": "string",
-          "enum": ["custom", "google", "microsoft"],
+          "enum": [
+            "custom",
+            "google",
+            "microsoft"
+          ],
           "description": "Form provider/renderer; defaults to 'custom' when omitted."
         },
         "formId": {
           "type": "string",
           "description": "Must match a key in form-definitions.json (native 'custom' forms only)."
         },
-        "recaptchaAction": { "type": "string" },
-        "submitLabel": { "type": "string" },
+        "recaptchaAction": {
+          "type": "string"
+        },
+        "submitLabel": {
+          "type": "string"
+        },
         "embedUrl": {
           "type": "string",
           "description": "Published embed URL for external ('google'/'microsoft') forms."
@@ -586,169 +1091,334 @@
           "type": "string",
           "description": "Optional CSS height for the external form iframe (e.g. '1200px')."
         },
-        "enabled": { "$ref": "#/definitions/enabledFlag" }
+        "enabled": {
+          "$ref": "#/definitions/enabledFlag"
+        }
       },
       "allOf": [
-        { "required": ["title", "description"] },
+        {
+          "required": [
+            "title",
+            "description"
+          ]
+        },
         {
           "if": {
             "not": {
-              "properties": { "type": { "enum": ["google", "microsoft"] } },
-              "required": ["type"]
+              "properties": {
+                "type": {
+                  "enum": [
+                    "google",
+                    "microsoft"
+                  ]
+                }
+              },
+              "required": [
+                "type"
+              ]
             }
           },
-          "then": { "required": ["formId", "recaptchaAction", "submitLabel"] },
-          "else": { "required": ["embedUrl"] }
+          "then": {
+            "required": [
+              "formId",
+              "recaptchaAction",
+              "submitLabel"
+            ]
+          },
+          "else": {
+            "required": [
+              "embedUrl"
+            ]
+          }
         }
       ]
     },
     "policyItem": {
       "type": "object",
-      "required": ["title", "description", "url"],
+      "required": [
+        "title",
+        "description",
+        "url"
+      ],
       "additionalProperties": false,
       "properties": {
-        "title": { "type": "string" },
-        "description": { "type": "string" },
-        "url": { "$ref": "#/definitions/placeholderString" },
-        "enabled": { "$ref": "#/definitions/enabledFlag" }
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "url": {
+          "$ref": "#/definitions/placeholderString"
+        },
+        "enabled": {
+          "$ref": "#/definitions/enabledFlag"
+        }
       }
     },
     "donateImpactStat": {
       "type": "object",
-      "required": ["amount", "description"],
+      "required": [
+        "amount",
+        "description"
+      ],
       "additionalProperties": false,
       "properties": {
-        "amount": { "type": "string" },
-        "description": { "type": "string" },
-        "enabled": { "$ref": "#/definitions/enabledFlag" }
+        "amount": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "enabled": {
+          "$ref": "#/definitions/enabledFlag"
+        }
       }
     },
     "trustIndicator": {
       "type": "object",
-      "required": ["title", "description"],
+      "required": [
+        "title",
+        "description"
+      ],
       "additionalProperties": false,
       "properties": {
-        "title": { "type": "string" },
-        "description": { "type": "string" },
-        "enabled": { "$ref": "#/definitions/enabledFlag" }
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "enabled": {
+          "$ref": "#/definitions/enabledFlag"
+        }
       }
     },
     "bankAccount": {
       "type": "object",
-      "required": ["label", "accountName", "bankName", "accountNumber", "ifsc", "branch"],
+      "required": [
+        "label",
+        "accountName",
+        "bankName",
+        "accountNumber",
+        "ifsc",
+        "branch"
+      ],
       "additionalProperties": false,
       "properties": {
-        "label": { "type": "string" },
-        "accountName": { "$ref": "#/definitions/placeholderString" },
-        "bankName": { "$ref": "#/definitions/placeholderString" },
-        "accountNumber": { "$ref": "#/definitions/placeholderString" },
-        "ifsc": { "$ref": "#/definitions/placeholderString" },
-        "branch": { "$ref": "#/definitions/placeholderString" },
-        "accountType": { "type": "string" },
-        "enabled": { "$ref": "#/definitions/enabledFlag" }
+        "label": {
+          "type": "string"
+        },
+        "accountName": {
+          "$ref": "#/definitions/placeholderString"
+        },
+        "bankName": {
+          "$ref": "#/definitions/placeholderString"
+        },
+        "accountNumber": {
+          "$ref": "#/definitions/placeholderString"
+        },
+        "ifsc": {
+          "$ref": "#/definitions/placeholderString"
+        },
+        "branch": {
+          "$ref": "#/definitions/placeholderString"
+        },
+        "accountType": {
+          "type": "string"
+        },
+        "enabled": {
+          "$ref": "#/definitions/enabledFlag"
+        }
       }
     },
     "upiAccount": {
       "type": "object",
-      "required": ["label", "id"],
+      "required": [
+        "label",
+        "id"
+      ],
       "additionalProperties": false,
       "properties": {
-        "label": { "type": "string" },
-        "id": { "$ref": "#/definitions/placeholderString" },
-        "qrImage": { "$ref": "#/definitions/imageSrc" },
-        "note": { "type": "string" },
-        "enabled": { "$ref": "#/definitions/enabledFlag" }
+        "label": {
+          "type": "string"
+        },
+        "id": {
+          "$ref": "#/definitions/placeholderString"
+        },
+        "qrImage": {
+          "$ref": "#/definitions/imageSrc"
+        },
+        "note": {
+          "type": "string"
+        },
+        "enabled": {
+          "$ref": "#/definitions/enabledFlag"
+        }
       }
     },
     "textStep": {
       "type": "object",
-      "required": ["text"],
+      "required": [
+        "text"
+      ],
       "additionalProperties": false,
       "properties": {
-        "text": { "$ref": "#/definitions/placeholderString" },
-        "enabled": { "$ref": "#/definitions/enabledFlag" }
+        "text": {
+          "$ref": "#/definitions/placeholderString"
+        },
+        "enabled": {
+          "$ref": "#/definitions/enabledFlag"
+        }
       }
     },
     "navbarSection": {
       "type": "object",
-      "required": ["brand", "moreLabel", "navLinks"],
+      "required": [
+        "brand",
+        "moreLabel",
+        "navLinks"
+      ],
       "additionalProperties": false,
       "properties": {
         "brand": {
           "type": "object",
-          "required": ["name", "logo"],
+          "required": [
+            "name",
+            "logo"
+          ],
           "additionalProperties": false,
           "properties": {
-            "name": { "$ref": "#/definitions/placeholderString" },
-            "logo": { "$ref": "#/definitions/placeholderString" },
-            "established": { "type": ["string", "null"] },
-            "registrationNumber": { "type": "string" }
+            "name": {
+              "$ref": "#/definitions/placeholderString"
+            },
+            "logo": {
+              "$ref": "#/definitions/placeholderString"
+            },
+            "established": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "registrationNumber": {
+              "type": "string"
+            }
           }
         },
-        "moreLabel": { "type": "string" },
+        "moreLabel": {
+          "type": "string"
+        },
         "navLinks": {
           "type": "array",
-          "items": { "$ref": "#/definitions/navLinkItem" },
+          "items": {
+            "$ref": "#/definitions/navLinkItem"
+          },
           "minItems": 1
         }
       }
     },
     "footerSection": {
       "type": "object",
-      "required": ["brand", "social", "quickLinks", "getInTouch", "newsletter", "bottom"],
+      "required": [
+        "brand",
+        "social",
+        "quickLinks",
+        "getInTouch",
+        "newsletter",
+        "bottom"
+      ],
       "additionalProperties": false,
       "properties": {
         "brand": {
           "type": "object",
-          "required": ["name", "description"],
+          "required": [
+            "name",
+            "description"
+          ],
           "additionalProperties": false,
           "properties": {
-            "name": { "$ref": "#/definitions/placeholderString" },
-            "description": { "type": "string" }
+            "name": {
+              "$ref": "#/definitions/placeholderString"
+            },
+            "description": {
+              "type": "string"
+            }
           }
         },
         "social": {
           "type": "object",
-          "required": ["title"],
+          "required": [
+            "title"
+          ],
           "additionalProperties": false,
           "properties": {
-            "title": { "type": "string" }
+            "title": {
+              "type": "string"
+            }
           }
         },
         "quickLinks": {
           "type": "object",
-          "required": ["title", "links"],
+          "required": [
+            "title",
+            "links"
+          ],
           "additionalProperties": false,
           "properties": {
-            "title": { "type": "string" },
+            "title": {
+              "type": "string"
+            },
             "links": {
               "type": "array",
-              "items": { "$ref": "#/definitions/linkItem" }
+              "items": {
+                "$ref": "#/definitions/linkItem"
+              }
             }
           }
         },
         "getInTouch": {
           "type": "object",
-          "required": ["title"],
+          "required": [
+            "title"
+          ],
           "additionalProperties": false,
           "properties": {
-            "title": { "type": "string" }
+            "title": {
+              "type": "string"
+            }
           }
         },
         "newsletter": {
           "type": "object",
-          "required": ["title", "description", "placeholder", "button"],
+          "required": [
+            "title",
+            "description",
+            "placeholder",
+            "button"
+          ],
           "additionalProperties": false,
           "properties": {
-            "title": { "type": "string" },
-            "description": { "type": "string" },
-            "placeholder": { "type": "string" },
-            "button": { "type": "string" }
+            "title": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "placeholder": {
+              "type": "string"
+            },
+            "button": {
+              "type": "string"
+            }
           }
         },
         "bottom": {
           "type": "object",
-          "required": ["copyright", "legal"],
+          "required": [
+            "copyright",
+            "legal"
+          ],
           "additionalProperties": false,
           "properties": {
             "copyright": {
@@ -757,7 +1427,9 @@
             },
             "legal": {
               "type": "array",
-              "items": { "$ref": "#/definitions/linkItem" }
+              "items": {
+                "$ref": "#/definitions/linkItem"
+              }
             }
           }
         }
@@ -765,75 +1437,137 @@
     },
     "commonSection": {
       "type": "object",
-      "required": ["backToTop", "breadcrumb", "org", "navbar", "footer"],
+      "required": [
+        "backToTop",
+        "breadcrumb",
+        "org",
+        "navbar",
+        "footer"
+      ],
       "additionalProperties": false,
       "properties": {
         "backToTop": {
           "type": "object",
-          "required": ["ariaLabel"],
+          "required": [
+            "ariaLabel"
+          ],
           "additionalProperties": false,
           "properties": {
-            "enabled": { "$ref": "#/definitions/enabledFlag" },
-            "ariaLabel": { "type": "string" },
-            "scrollThreshold": { "type": "number", "minimum": 0 }
+            "enabled": {
+              "$ref": "#/definitions/enabledFlag"
+            },
+            "ariaLabel": {
+              "type": "string"
+            },
+            "scrollThreshold": {
+              "type": "number",
+              "minimum": 0
+            }
           }
         },
         "breadcrumb": {
           "type": "object",
-          "required": ["home"],
+          "required": [
+            "home"
+          ],
           "additionalProperties": false,
           "properties": {
-            "home": { "type": "string" }
+            "home": {
+              "type": "string"
+            }
           }
         },
         "org": {
           "type": "object",
-          "required": ["followLinks", "location", "email", "phone"],
+          "required": [
+            "followLinks",
+            "location",
+            "email",
+            "phone"
+          ],
           "additionalProperties": false,
           "properties": {
-            "followUs": { "type": "string" },
+            "followUs": {
+              "type": "string"
+            },
             "followLinks": {
               "type": "array",
-              "items": { "$ref": "#/definitions/followLink" }
+              "items": {
+                "$ref": "#/definitions/followLink"
+              }
             },
-            "location": { "$ref": "#/definitions/placeholderString" },
-            "email": { "$ref": "#/definitions/placeholderString" },
-            "phone": { "$ref": "#/definitions/placeholderString" }
+            "location": {
+              "$ref": "#/definitions/placeholderString"
+            },
+            "email": {
+              "$ref": "#/definitions/placeholderString"
+            },
+            "phone": {
+              "$ref": "#/definitions/placeholderString"
+            }
           }
         },
-        "navbar": { "$ref": "#/definitions/navbarSection" },
-        "footer": { "$ref": "#/definitions/footerSection" }
+        "navbar": {
+          "$ref": "#/definitions/navbarSection"
+        },
+        "footer": {
+          "$ref": "#/definitions/footerSection"
+        }
       }
     },
     "homePage": {
       "type": "object",
-      "required": ["carousel", "sections"],
+      "required": [
+        "carousel",
+        "sections"
+      ],
       "additionalProperties": false,
       "properties": {
         "carousel": {
           "type": "array",
-          "items": { "$ref": "#/definitions/carouselItem" }
+          "items": {
+            "$ref": "#/definitions/carouselItem"
+          }
         },
         "heroStats": {
           "type": "object",
           "description": "Labels for hero impact stats; numeric values from GET …/contents/dynamic.",
-          "required": ["beneficiaryLabel", "projectLabel"],
+          "required": [
+            "beneficiaryLabel",
+            "projectLabel"
+          ],
           "additionalProperties": false,
           "properties": {
-            "beneficiaryLabel": { "type": "string" },
-            "projectLabel": { "type": "string" }
+            "beneficiaryLabel": {
+              "type": "string"
+            },
+            "projectLabel": {
+              "type": "string"
+            }
           }
         },
         "sections": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "about": { "$ref": "#/definitions/homeSectionConfig" },
-            "projects": { "$ref": "#/definitions/homeSectionConfig" },
-            "donate": { "$ref": "#/definitions/homeSectionConfig" },
-            "team": { "$ref": "#/definitions/homeSectionConfig" },
-            "membership": { "$ref": "#/definitions/homeSectionConfig" },
-            "contact": { "$ref": "#/definitions/homeSectionConfig" }
+            "about": {
+              "$ref": "#/definitions/homeSectionConfig"
+            },
+            "projects": {
+              "$ref": "#/definitions/homeSectionConfig"
+            },
+            "donate": {
+              "$ref": "#/definitions/homeSectionConfig"
+            },
+            "team": {
+              "$ref": "#/definitions/homeSectionConfig"
+            },
+            "membership": {
+              "$ref": "#/definitions/homeSectionConfig"
+            },
+            "contact": {
+              "$ref": "#/definitions/homeSectionConfig"
+            }
           }
         }
       }
@@ -845,145 +1579,271 @@
         "title",
         "description",
         "experience",
-        "stats",
         "missionPoints",
         "founderMessage"
       ],
       "additionalProperties": false,
       "properties": {
-        "sectionTitle": { "type": "string" },
-        "title": { "type": "string" },
-        "description": { "type": "string" },
+        "sectionTitle": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
         "experience": {
           "type": "object",
-          "required": ["years", "label"],
+          "required": [
+            "years",
+            "label"
+          ],
           "additionalProperties": false,
           "properties": {
-            "years": { "$ref": "#/definitions/placeholderString" },
-            "label": { "type": "string" }
+            "years": {
+              "$ref": "#/definitions/placeholderString"
+            },
+            "label": {
+              "type": "string"
+            }
           }
         },
         "stats": {
           "type": "array",
-          "items": { "$ref": "#/definitions/statItem" }
+          "items": {
+            "$ref": "#/definitions/statItem"
+          }
         },
         "missionPoints": {
           "type": "array",
-          "items": { "$ref": "#/definitions/missionPoint" }
+          "items": {
+            "$ref": "#/definitions/missionPoint"
+          }
         },
         "founderMessage": {
           "type": "object",
-          "required": ["quote", "name", "title"],
+          "required": [
+            "quote",
+            "name",
+            "title"
+          ],
           "additionalProperties": false,
           "properties": {
-            "quote": { "type": "string" },
-            "name": { "type": "string" },
-            "title": { "type": "string" }
+            "quote": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            }
           }
         },
-        "detail": { "$ref": "#/definitions/aboutDetailSection" },
-        "cta": { "$ref": "#/definitions/sectionCta" },
-        "ctaVariants": { "$ref": "#/definitions/sectionCtaVariants" }
+        "detail": {
+          "$ref": "#/definitions/aboutDetailSection"
+        },
+        "cta": {
+          "$ref": "#/definitions/sectionCta"
+        },
+        "ctaVariants": {
+          "$ref": "#/definitions/sectionCtaVariants"
+        }
       }
     },
     "projectsSection": {
       "type": "object",
-      "required": ["sectionTitle", "title", "description", "learnMoreButton"],
+      "required": [
+        "sectionTitle",
+        "title",
+        "description",
+        "learnMoreButton"
+      ],
       "additionalProperties": false,
       "properties": {
-        "sectionTitle": { "type": "string" },
-        "title": { "type": "string" },
-        "description": { "type": "string" },
+        "sectionTitle": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
         "learnMoreButton": {
           "type": "object",
-          "required": ["label", "url"],
+          "required": [
+            "label",
+            "url"
+          ],
           "additionalProperties": false,
           "properties": {
-            "label": { "type": "string" },
-            "url": { "$ref": "#/definitions/placeholderString" }
+            "label": {
+              "type": "string"
+            },
+            "url": {
+              "$ref": "#/definitions/placeholderString"
+            }
           }
         },
-        "cta": { "$ref": "#/definitions/sectionCta" },
-        "ctaVariants": { "$ref": "#/definitions/sectionCtaVariants" }
+        "cta": {
+          "$ref": "#/definitions/sectionCta"
+        },
+        "ctaVariants": {
+          "$ref": "#/definitions/sectionCtaVariants"
+        }
       }
     },
     "teamSection": {
       "type": "object",
-      "required": ["sectionTitle", "title", "description", "member"],
+      "required": [
+        "sectionTitle",
+        "title",
+        "description",
+        "member"
+      ],
       "additionalProperties": false,
       "properties": {
-        "sectionTitle": { "type": "string" },
-        "title": { "type": "string" },
-        "description": { "type": "string" },
+        "sectionTitle": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
         "member": {
           "type": "object",
-          "required": ["bio", "contact"],
+          "required": [
+            "bio",
+            "contact"
+          ],
           "additionalProperties": false,
           "properties": {
-            "bio": { "type": "string", "description": "Default bio fallback for team cards." },
-            "contact": { "type": "string", "description": "Default contact button label." }
+            "bio": {
+              "type": "string",
+              "description": "Default bio fallback for team cards."
+            },
+            "contact": {
+              "type": "string",
+              "description": "Default contact button label."
+            }
           }
         },
-        "cta": { "$ref": "#/definitions/sectionCta" },
-        "ctaVariants": { "$ref": "#/definitions/sectionCtaVariants" }
+        "cta": {
+          "$ref": "#/definitions/sectionCta"
+        },
+        "ctaVariants": {
+          "$ref": "#/definitions/sectionCtaVariants"
+        }
       }
     },
     "donateSection": {
       "type": "object",
-      "required": ["sectionTitle", "title", "description", "impact", "trust", "paymentMethods"],
+      "required": [
+        "sectionTitle",
+        "title",
+        "description",
+        "impact",
+        "trust",
+        "paymentMethods"
+      ],
       "additionalProperties": false,
       "properties": {
-        "sectionTitle": { "type": "string" },
-        "title": { "type": "string" },
-        "description": { "type": "string" },
+        "sectionTitle": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
         "impact": {
           "type": "object",
-          "required": ["title", "description", "stats"],
+          "required": [
+            "title",
+            "description",
+            "stats"
+          ],
           "additionalProperties": false,
           "properties": {
-            "title": { "type": "string" },
-            "description": { "type": "string" },
+            "title": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
             "stats": {
               "type": "array",
-              "items": { "$ref": "#/definitions/donateImpactStat" }
+              "items": {
+                "$ref": "#/definitions/donateImpactStat"
+              }
             }
           }
         },
         "trust": {
           "type": "object",
-          "required": ["indicators"],
+          "required": [
+            "indicators"
+          ],
           "additionalProperties": false,
           "properties": {
             "indicators": {
               "type": "array",
-              "items": { "$ref": "#/definitions/trustIndicator" }
+              "items": {
+                "$ref": "#/definitions/trustIndicator"
+              }
             }
           }
         },
         "paymentMethods": {
           "type": "object",
-          "required": ["title", "description", "bank", "upi", "afterDonation"],
+          "required": [
+            "title",
+            "description",
+            "bank",
+            "upi",
+            "afterDonation"
+          ],
           "additionalProperties": false,
           "properties": {
-            "title": { "type": "string" },
-            "description": { "type": "string" },
+            "title": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
             "bank": {
               "type": "array",
-              "items": { "$ref": "#/definitions/bankAccount" }
+              "items": {
+                "$ref": "#/definitions/bankAccount"
+              }
             },
             "upi": {
               "type": "array",
-              "items": { "$ref": "#/definitions/upiAccount" }
+              "items": {
+                "$ref": "#/definitions/upiAccount"
+              }
             },
             "afterDonation": {
               "type": "object",
-              "required": ["title", "steps"],
+              "required": [
+                "title",
+                "steps"
+              ],
               "additionalProperties": false,
               "properties": {
-                "title": { "type": "string" },
+                "title": {
+                  "type": "string"
+                },
                 "steps": {
                   "type": "array",
-                  "items": { "$ref": "#/definitions/textStep" }
+                  "items": {
+                    "$ref": "#/definitions/textStep"
+                  }
                 }
               }
             }
@@ -991,85 +1851,172 @@
         },
         "gatewayCta": {
           "type": "object",
-          "required": ["enabled", "label", "url"],
+          "required": [
+            "enabled",
+            "label",
+            "url"
+          ],
           "additionalProperties": false,
           "properties": {
-            "enabled": { "type": "boolean" },
-            "label": { "type": "string" },
-            "url": { "$ref": "#/definitions/placeholderString" },
-            "icon": { "type": "string" },
-            "external": { "type": "boolean" }
+            "enabled": {
+              "type": "boolean"
+            },
+            "label": {
+              "type": "string"
+            },
+            "url": {
+              "$ref": "#/definitions/placeholderString"
+            },
+            "icon": {
+              "type": "string"
+            },
+            "external": {
+              "type": "boolean"
+            }
           }
         },
-        "cta": { "$ref": "#/definitions/sectionCta" },
-        "ctaVariants": { "$ref": "#/definitions/sectionCtaVariants" }
+        "cta": {
+          "$ref": "#/definitions/sectionCta"
+        },
+        "ctaVariants": {
+          "$ref": "#/definitions/sectionCtaVariants"
+        }
       }
     },
     "contactSection": {
       "type": "object",
-      "required": ["sectionTitle", "title", "locationLink", "locationMapTitle", "form"],
+      "required": [
+        "sectionTitle",
+        "title",
+        "locationLink",
+        "locationMapTitle",
+        "form"
+      ],
       "additionalProperties": false,
       "properties": {
-        "sectionTitle": { "type": "string" },
-        "title": { "type": "string" },
-        "locationLink": { "$ref": "#/definitions/placeholderString" },
-        "locationMapTitle": { "type": "string" },
-        "form": { "$ref": "#/definitions/formConfig" },
-        "ctaVariants": { "$ref": "#/definitions/sectionCtaVariants" }
+        "sectionTitle": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "locationLink": {
+          "$ref": "#/definitions/placeholderString"
+        },
+        "locationMapTitle": {
+          "type": "string"
+        },
+        "form": {
+          "$ref": "#/definitions/formConfig"
+        },
+        "ctaVariants": {
+          "$ref": "#/definitions/sectionCtaVariants"
+        }
       }
     },
     "membershipSection": {
       "type": "object",
-      "required": ["sectionTitle", "title", "form"],
+      "required": [
+        "sectionTitle",
+        "title",
+        "form"
+      ],
       "additionalProperties": false,
       "properties": {
-        "sectionTitle": { "type": "string" },
-        "title": { "type": "string" },
+        "sectionTitle": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
         "disclaimer": {
           "type": "object",
-          "required": ["message", "rulesLink"],
+          "required": [
+            "message",
+            "rulesLink"
+          ],
           "additionalProperties": false,
           "properties": {
-            "message": { "type": "string" },
+            "message": {
+              "type": "string"
+            },
             "rulesLink": {
               "type": "object",
-              "required": ["label", "url"],
+              "required": [
+                "label",
+                "url"
+              ],
               "additionalProperties": false,
               "properties": {
-                "label": { "type": "string" },
-                "url": { "$ref": "#/definitions/placeholderString" }
+                "label": {
+                  "type": "string"
+                },
+                "url": {
+                  "$ref": "#/definitions/placeholderString"
+                }
               }
             }
           }
         },
-        "form": { "$ref": "#/definitions/formConfig" },
-        "ctaVariants": { "$ref": "#/definitions/sectionCtaVariants" }
+        "form": {
+          "$ref": "#/definitions/formConfig"
+        },
+        "ctaVariants": {
+          "$ref": "#/definitions/sectionCtaVariants"
+        }
       }
     },
     "gallerySection": {
       "type": "object",
-      "required": ["sectionTitle", "title", "description", "items"],
+      "required": [
+        "sectionTitle",
+        "title",
+        "description",
+        "items"
+      ],
       "additionalProperties": false,
       "properties": {
-        "sectionTitle": { "type": "string" },
-        "title": { "type": "string" },
-        "description": { "type": "string" },
+        "sectionTitle": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
         "items": {
           "type": "array",
-          "items": { "$ref": "#/definitions/galleryItem" }
+          "items": {
+            "$ref": "#/definitions/galleryItem"
+          }
         }
       }
     },
     "eventsSection": {
       "type": "object",
-      "required": ["sectionTitle", "title", "description"],
+      "required": [
+        "sectionTitle",
+        "title",
+        "description"
+      ],
       "additionalProperties": false,
       "properties": {
-        "sectionTitle": { "type": "string" },
-        "title": { "type": "string" },
-        "description": { "type": "string" },
-        "eyebrowIcon": { "type": "string" },
-        "emptyMessage": { "type": "string" }
+        "sectionTitle": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "eyebrowIcon": {
+          "type": "string"
+        },
+        "emptyMessage": {
+          "type": "string"
+        }
       }
     },
     "pagesSection": {
@@ -1089,34 +2036,63 @@
       ],
       "additionalProperties": false,
       "properties": {
-        "home": { "$ref": "#/definitions/homePage" },
-        "about": { "$ref": "#/definitions/aboutSection" },
-        "projects": { "$ref": "#/definitions/projectsSection" },
-        "team": { "$ref": "#/definitions/teamSection" },
-        "donate": { "$ref": "#/definitions/donateSection" },
-        "contact": { "$ref": "#/definitions/contactSection" },
-        "membership": { "$ref": "#/definitions/membershipSection" },
-        "gallery": { "$ref": "#/definitions/gallerySection" },
-        "events": { "$ref": "#/definitions/eventsSection" },
+        "home": {
+          "$ref": "#/definitions/homePage"
+        },
+        "about": {
+          "$ref": "#/definitions/aboutSection"
+        },
+        "projects": {
+          "$ref": "#/definitions/projectsSection"
+        },
+        "team": {
+          "$ref": "#/definitions/teamSection"
+        },
+        "donate": {
+          "$ref": "#/definitions/donateSection"
+        },
+        "contact": {
+          "$ref": "#/definitions/contactSection"
+        },
+        "membership": {
+          "$ref": "#/definitions/membershipSection"
+        },
+        "gallery": {
+          "$ref": "#/definitions/gallerySection"
+        },
+        "events": {
+          "$ref": "#/definitions/eventsSection"
+        },
         "policies": {
           "type": "object",
           "description": "External policy document links keyed by slug.",
-          "additionalProperties": { "$ref": "#/definitions/policyItem" }
+          "additionalProperties": {
+            "$ref": "#/definitions/policyItem"
+          }
         },
         "forms": {
           "type": "object",
           "description": "Custom form page config keyed by slug.",
-          "additionalProperties": { "$ref": "#/definitions/formPageItem" }
+          "additionalProperties": {
+            "$ref": "#/definitions/formPageItem"
+          }
         }
       }
     },
     "layoutSection": {
       "type": "object",
-      "required": ["common", "pages"],
+      "required": [
+        "common",
+        "pages"
+      ],
       "additionalProperties": false,
       "properties": {
-        "common": { "$ref": "#/definitions/commonSection" },
-        "pages": { "$ref": "#/definitions/pagesSection" }
+        "common": {
+          "$ref": "#/definitions/commonSection"
+        },
+        "pages": {
+          "$ref": "#/definitions/pagesSection"
+        }
       }
     }
   }
