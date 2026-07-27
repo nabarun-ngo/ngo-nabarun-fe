@@ -7,7 +7,7 @@
     "fields": [
       {
         "id": "contact-field-name",
-        "key": "name",
+        "key": "fullName",
         "label": "Your Name",
         "fieldType": "TEXT",
         "mandatory": true,
@@ -32,99 +32,6 @@
         ]
       },
       {
-        "id": "contact-field-inquiryType",
-        "key": "inquiryType",
-        "label": "What is this about?",
-        "fieldType": "SELECT",
-        "mandatory": true,
-        "fieldOptions": [
-          {
-            "key": "general",
-            "label": "General question"
-          },
-          {
-            "key": "partnership",
-            "label": "Partnership / collaboration"
-          },
-          {
-            "key": "media",
-            "label": "Media / press"
-          }
-        ],
-        "isHidden": false,
-        "isEncrypted": false,
-        "enabled": true,
-        "sortOrder": 2,
-        "condition": null,
-        "dependentOptions": null,
-        "validationRules": null
-      },
-      {
-        "id": "contact-field-inquiryTopic",
-        "key": "inquiryTopic",
-        "label": "Topic",
-        "fieldType": "SELECT",
-        "mandatory": true,
-        "fieldOptions": [],
-        "isHidden": false,
-        "isEncrypted": false,
-        "enabled": true,
-        "sortOrder": 3,
-        "condition": {
-          "dependsOnKey": "inquiryType",
-          "operator": "not_equals",
-          "value": ""
-        },
-        "dependentOptions": {
-          "dependsOnKey": "inquiryType",
-          "optionMap": {
-            "general": [
-              {
-                "key": "programs",
-                "label": "Programs & events"
-              },
-              {
-                "key": "donations",
-                "label": "Donations"
-              },
-              {
-                "key": "other",
-                "label": "Something else"
-              }
-            ],
-            "partnership": [
-              {
-                "key": "corporate",
-                "label": "Corporate partnership"
-              },
-              {
-                "key": "ngo",
-                "label": "NGO / community partner"
-              },
-              {
-                "key": "volunteer-group",
-                "label": "Volunteer group"
-              }
-            ],
-            "media": [
-              {
-                "key": "interview",
-                "label": "Interview request"
-              },
-              {
-                "key": "coverage",
-                "label": "Event coverage"
-              },
-              {
-                "key": "assets",
-                "label": "Brand assets / logos"
-              }
-            ]
-          }
-        },
-        "validationRules": null
-      },
-      {
         "id": "contact-field-email",
         "key": "email",
         "label": "Your Email",
@@ -134,7 +41,7 @@
         "isHidden": false,
         "isEncrypted": false,
         "enabled": true,
-        "sortOrder": 4,
+        "sortOrder": 2,
         "condition": null,
         "dependentOptions": null,
         "validationRules": [
@@ -146,54 +53,17 @@
         ]
       },
       {
-        "id": "contact-field-organization",
-        "key": "organizationName",
-        "label": "Organization name",
-        "fieldType": "TEXT",
+        "id": "contact-field-phone",
+        "key": "fullPhoneNumber",
+        "label": "Phone",
+        "fieldType": "PHONE",
         "mandatory": true,
         "fieldOptions": [],
         "isHidden": false,
         "isEncrypted": false,
         "enabled": true,
-        "sortOrder": 5,
-        "condition": {
-          "dependsOnKey": "inquiryType",
-          "operator": "in",
-          "value": [
-            "partnership",
-            "media"
-          ]
-        },
-        "dependentOptions": null,
-        "validationRules": [
-          {
-            "key": "format",
-            "pattern": "^.{2,120}$",
-            "regexErrMsg": "Enter the organization name"
-          },
-          {
-            "key": "no-digits",
-            "pattern": "^[^0-9]*$",
-            "regexErrMsg": "Cannot contain numbers"
-          }
-        ]
-      },
-      {
-        "id": "contact-field-phone",
-        "key": "phone",
-        "label": "Phone",
-        "fieldType": "PHONE",
-        "mandatory": false,
-        "fieldOptions": [],
-        "isHidden": false,
-        "isEncrypted": false,
-        "enabled": true,
-        "sortOrder": 6,
-        "condition": {
-          "dependsOnKey": "inquiryType",
-          "operator": "not_equals",
-          "value": "general"
-        },
+        "sortOrder": 3,
+        "condition": null,
         "dependentOptions": null,
         "validationRules": [
           {
@@ -204,23 +74,19 @@
         ]
       },
       {
-        "id": "contact-field-callback",
-        "key": "requestCallback",
-        "label": "Request a phone callback",
-        "fieldType": "BOOLEAN",
-        "mandatory": false,
+        "id": "contact-field-subject",
+        "key": "subject",
+        "label": "Subject",
+        "fieldType": "TEXT",
+        "mandatory": true,
         "fieldOptions": [],
         "isHidden": false,
         "isEncrypted": false,
         "enabled": true,
-        "sortOrder": 7,
-        "condition": {
-          "dependsOnKey": "inquiryType",
-          "operator": "equals",
-          "value": "partnership"
-        },
+        "sortOrder": 4,
+        "condition": null,
         "dependentOptions": null,
-        "validationRules": null
+        "validationRules": []
       },
       {
         "id": "contact-field-message",
@@ -233,11 +99,7 @@
         "isEncrypted": false,
         "enabled": true,
         "sortOrder": 8,
-        "condition": {
-          "dependsOnKey": "inquiryTopic",
-          "operator": "not_equals",
-          "value": ""
-        },
+        "condition": null,
         "dependentOptions": null,
         "validationRules": [
           {
@@ -261,9 +123,9 @@
     "description": null,
     "fields": [
       {
-        "id": "membership-field-fullName",
-        "key": "fullName",
-        "label": "Full Name",
+        "id": "membership-field-firstName",
+        "key": "firstName",
+        "label": "First Name",
         "fieldType": "TEXT",
         "mandatory": true,
         "fieldOptions": [],
@@ -277,111 +139,52 @@
           {
             "key": "name-format",
             "pattern": "^[A-Za-z][A-Za-z\\s'.-]{1,79}$",
-            "regexErrMsg": "Enter a valid full name"
+            "regexErrMsg": "Enter a valid First Name"
           },
           {
             "key": "no-digits",
             "pattern": "^[^0-9]*$",
-            "regexErrMsg": "Name cannot contain numbers"
+            "regexErrMsg": "First Name cannot contain numbers"
           }
         ]
       },
       {
-        "id": "membership-field-applicationType",
-        "key": "applicationType",
-        "label": "How would you like to participate?",
-        "fieldType": "SELECT",
+        "id": "membership-field-lastName",
+        "key": "lastName",
+        "label": "Last Name",
+        "fieldType": "TEXT",
         "mandatory": true,
-        "fieldOptions": [
-          {
-            "key": "volunteer",
-            "label": "Volunteer"
-          },
-          {
-            "key": "member",
-            "label": "General member"
-          },
-          {
-            "key": "sponsor",
-            "label": "Sponsor / donor"
-          }
-        ],
+        "fieldOptions": [],
         "isHidden": false,
         "isEncrypted": false,
         "enabled": true,
         "sortOrder": 2,
         "condition": null,
         "dependentOptions": null,
-        "validationRules": null
-      },
-      {
-        "id": "membership-field-chapter",
-        "key": "preferredChapter",
-        "label": "Preferred chapter / region",
-        "fieldType": "SELECT",
-        "mandatory": true,
-        "fieldOptions": [],
-        "isHidden": false,
-        "isEncrypted": false,
-        "enabled": true,
-        "sortOrder": 3,
-        "condition": {
-          "dependsOnKey": "applicationType",
-          "operator": "not_equals",
-          "value": ""
-        },
-        "dependentOptions": {
-          "dependsOnKey": "applicationType",
-          "optionMap": {
-            "volunteer": [
-              {
-                "key": "north",
-                "label": "North chapter"
-              },
-              {
-                "key": "central",
-                "label": "Central chapter"
-              },
-              {
-                "key": "south",
-                "label": "South chapter"
-              }
-            ],
-            "member": [
-              {
-                "key": "local",
-                "label": "Local community"
-              },
-              {
-                "key": "online",
-                "label": "Online / remote"
-              }
-            ],
-            "sponsor": [
-              {
-                "key": "annual",
-                "label": "Annual fund"
-              },
-              {
-                "key": "program",
-                "label": "Program-specific"
-              }
-            ]
+        "validationRules": [
+          {
+            "key": "name-format",
+            "pattern": "^[A-Za-z][A-Za-z\\s'.-]{1,79}$",
+            "regexErrMsg": "Enter a valid Last Name"
+          },
+          {
+            "key": "no-digits",
+            "pattern": "^[^0-9]*$",
+            "regexErrMsg": "Last Name cannot contain numbers"
           }
-        },
-        "validationRules": null
+        ]
       },
-      {
-        "id": "membership-field-email",
+        {
+        "id": "contact-field-email",
         "key": "email",
-        "label": "Email",
+        "label": "Your Email",
         "fieldType": "EMAIL",
         "mandatory": true,
         "fieldOptions": [],
         "isHidden": false,
         "isEncrypted": false,
         "enabled": true,
-        "sortOrder": 4,
+        "sortOrder": 3,
         "condition": null,
         "dependentOptions": null,
         "validationRules": [
@@ -393,8 +196,8 @@
         ]
       },
       {
-        "id": "membership-field-phone",
-        "key": "phone",
+        "id": "contact-field-phone",
+        "key": "fullPhoneNumber",
         "label": "Phone",
         "fieldType": "PHONE",
         "mandatory": true,
@@ -402,7 +205,7 @@
         "isHidden": false,
         "isEncrypted": false,
         "enabled": true,
-        "sortOrder": 5,
+        "sortOrder": 4,
         "condition": null,
         "dependentOptions": null,
         "validationRules": [
@@ -413,145 +216,38 @@
           }
         ]
       },
+     {
+        "id": "membership-field-hometown",
+        "key": "hometown",
+        "label": "Hometown",
+        "fieldType": "TEXT",
+        "mandatory": true,
+        "fieldOptions": [],
+        "isHidden": false,
+        "isEncrypted": false,
+        "enabled": true,
+        "sortOrder": 5,
+        "condition": null,
+        "dependentOptions": null,
+        "validationRules": [
+          
+        ]
+      },
       {
-        "id": "membership-field-skills",
-        "key": "volunteerSkills",
-        "label": "Skills you can offer",
-        "fieldType": "MULTISELECT",
+        "id": "membership-field-howDoUKnowAboutUs",
+        "key": "howDoUKnowAboutUs",
+        "label": "How do you know about us?",
+        "fieldType": "TEXT",
         "mandatory": true,
         "fieldOptions": [],
         "isHidden": false,
         "isEncrypted": false,
         "enabled": true,
         "sortOrder": 6,
-        "condition": {
-          "dependsOnKey": "applicationType",
-          "operator": "equals",
-          "value": "volunteer"
-        },
-        "dependentOptions": {
-          "dependsOnKey": "preferredChapter",
-          "optionMap": {
-            "north": [
-              {
-                "key": "teaching",
-                "label": "Teaching / mentoring"
-              },
-              {
-                "key": "events",
-                "label": "Event support"
-              },
-              {
-                "key": "tech",
-                "label": "Technology"
-              }
-            ],
-            "central": [
-              {
-                "key": "outreach",
-                "label": "Community outreach"
-              },
-              {
-                "key": "fundraising",
-                "label": "Fundraising"
-              },
-              {
-                "key": "design",
-                "label": "Design / creative"
-              }
-            ],
-            "south": [
-              {
-                "key": "sports",
-                "label": "Sports programs"
-              },
-              {
-                "key": "health",
-                "label": "Health & wellness"
-              },
-              {
-                "key": "admin",
-                "label": "Administration"
-              }
-            ],
-            "local": [
-              {
-                "key": "general-help",
-                "label": "General help"
-              }
-            ],
-            "online": [
-              {
-                "key": "remote-support",
-                "label": "Remote support"
-              }
-            ],
-            "annual": [],
-            "program": []
-          }
-        },
-        "validationRules": null
-      },
-      {
-        "id": "membership-field-sponsorTier",
-        "key": "sponsorTier",
-        "label": "Sponsorship level",
-        "fieldType": "SELECT",
-        "mandatory": true,
-        "fieldOptions": [
-          {
-            "key": "bronze",
-            "label": "Bronze"
-          },
-          {
-            "key": "silver",
-            "label": "Silver"
-          },
-          {
-            "key": "gold",
-            "label": "Gold"
-          }
-        ],
-        "isHidden": false,
-        "isEncrypted": false,
-        "enabled": true,
-        "sortOrder": 7,
-        "condition": {
-          "dependsOnKey": "applicationType",
-          "operator": "equals",
-          "value": "sponsor"
-        },
-        "dependentOptions": null,
-        "validationRules": null
-      },
-      {
-        "id": "membership-field-message",
-        "key": "message",
-        "label": "Why do you want to volunteer?",
-        "fieldType": "TEXTAREA",
-        "mandatory": true,
-        "fieldOptions": [],
-        "isHidden": false,
-        "isEncrypted": false,
-        "enabled": true,
-        "sortOrder": 8,
-        "condition": {
-          "dependsOnKey": "applicationType",
-          "operator": "equals",
-          "value": "volunteer"
-        },
+        "condition": null,
         "dependentOptions": null,
         "validationRules": [
-          {
-            "key": "format",
-            "pattern": "^[\\s\\S]{30,2000}$",
-            "regexErrMsg": "Please share at least 30 characters about your motivation"
-          },
-          {
-            "key": "no-html",
-            "pattern": "^[^<>]*$",
-            "regexErrMsg": "Cannot contain < or > characters"
-          }
+          
         ]
       }
     ]

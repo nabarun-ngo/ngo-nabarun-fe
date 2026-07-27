@@ -1,4 +1,4 @@
-import { API_BASE_URL, API_KEY, USE_MOCK_API } from '@/lib/config/env'
+import { API_BASE_URL, API_KEY } from '@/lib/config/env'
 import type { SuccessResponse } from '@/lib/types'
 
 function resolveApiUrl(endpoint: string): string {
@@ -62,22 +62,13 @@ export async function apiPost<TBody extends object, TPayload = unknown>(
   body: TBody,
   recaptchaToken: string
 ): Promise<SuccessResponse<TPayload>> {
-  if (USE_MOCK_API) {
-    await new Promise((resolve) => setTimeout(resolve, 500))
-    return {
-      info: 'OK',
-      timestamp: new Date().toISOString(),
-      message: 'Submitted successfully.',
-    }
-  }
-
   const res = await fetch(resolveApiUrl(endpoint), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'g-recaptcha-response': recaptchaToken,
     },
-    body: JSON.stringify({ ...body, recaptchaToken }),
+    body: JSON.stringify({ ...body }),
   })
 
   if (!res.ok) {

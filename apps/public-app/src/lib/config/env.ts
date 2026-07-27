@@ -16,7 +16,7 @@ function toBool(value: string | undefined, fallback: boolean): boolean {
 }
 
 export const USE_MOCK_API = toBool(process.env.NEXT_PUBLIC_USE_MOCK_API, true)
-
+export const USE_LEGACY_API = toBool(process.env.NEXT_PUBLIC_USE_LEGACY_API, false)
 export const API_BASE_URL = (process.env.NEXT_PUBLIC_API_BASE_URL ?? '').replace(/\/$/, '')
 export const API_KEY = process.env.API_KEY ?? ''
 export const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_SITE_KEY ?? ''

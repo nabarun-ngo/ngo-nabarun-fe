@@ -6,6 +6,7 @@ import {
   SUBMIT_JOIN,
   submitDynamicFormPath,
 } from './paths'
+import { USE_LEGACY_API } from '../config/env'
 
 /** Preserved for dynamic forms API wiring. */
 export type ContactFormData = Record<string, unknown>
@@ -16,7 +17,18 @@ export function submitContact(
   data: ContactFormData,
   recaptchaToken: string
 ): Promise<SuccessResponse> {
+  if (USE_LEGACY_API) {
+    return apiPost('/api/public/contact', {
+      fullName: data.fullName,
+      email: data.email,
+      dialCode: String(data.fullPhoneNumber).substring(0, 3),
+      contactNumber: String(data.fullPhoneNumber).substring(3),
+      subject: data.subject,
+      message: data.message,
+    }, recaptchaToken)
+  }
   return apiPost(SUBMIT_CONTACT, data, recaptchaToken)
+
 }
 
 export function submitDonation(
@@ -30,6 +42,18 @@ export function submitMembership(
   data: JoinFormData,
   recaptchaToken: string
 ): Promise<SuccessResponse> {
+  if (USE_LEGACY_API) {
+    return apiPost('/api/public/join', {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      dialCode: String(data.fullPhoneNumber).substring(0, 3),
+      contactNumber: String(data.fullPhoneNumber).substring(3),
+      hometown: data.hometown,
+      howDoUKnowAboutUs: data.howDoUKnowAboutUs,
+      acceptance: true
+    }, recaptchaToken)
+  }
   return apiPost(SUBMIT_JOIN, data, recaptchaToken)
 }
 
