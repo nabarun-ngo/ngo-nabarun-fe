@@ -15,8 +15,23 @@ permissions:
   packages: write
 
 jobs:
-  release:
+  build:
+   name: Build
+   uses: nabarun-ngo/ngo-nabarun-templates/.github/workflows/Build-Test.yml@main
+   with:
+      platform: "node"
+      command: "npm install && npm run build"
+      
+  create_release:
+    needs: build
+    name: Create Tag and Release
+    uses: nabarun-ngo/ngo-nabarun-templates/.github/workflows/Create-Tag-Release.yml@main
+    with:
+     source_branch: ${{ github.base_ref }}
+     
+  publish_packages:
     name: Version and publish packages
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
