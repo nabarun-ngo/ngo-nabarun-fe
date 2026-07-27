@@ -4,10 +4,12 @@
   "commit": false,
   "fixed": [
     [
+      "@nabarun-ngo/forms-core",
       "@nabarun-ngo/forms-react",
       "@nabarun-ngo/forms-angular"
     ],
     [
+      "@nabarun-ngo/comment-core",
       "@nabarun-ngo/comment-react",
       "@nabarun-ngo/comment-angular"
     ]
@@ -18,8 +20,6 @@
   "updateInternalDependencies": "patch",
   "ignore": [
     "@nabarun-ngo/public-site",
-    "@nabarun-ngo/internal-app",
-    "@nabarun-ngo/comment-core",
-    "@nabarun-ngo/forms-core"
+    "@nabarun-ngo/internal-app"
   ]
 }
