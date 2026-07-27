@@ -556,11 +556,12 @@
       "forms": {
         "drawing-competition": {
           "title": "Drawing Competition 2026",
-          "description": "Registration for Nabarun's drawing competition 2026.",
+          "description": "Registration form for Nabarun's drawing competition 2026.",
           "type": "google",
-          "embedUrl": "https://docs.google.com/forms/d/e/1FAIpQLSctd2GyQhntFSyS77gudkchq99FYUamttlRjRE7yGw25sSV_w/viewform?embedded=true",
+          "embedUrl": "https://docs.google.com/forms/d/e/1FAIpQLSe9UurJkemnvBPl1pj7px32HfZe65PIvREWOFnA1rSXfb8rAw/viewform?embedded=true",
           "embedTitle": "Drawing Competition 2026",
-          "enabled": true
+          "enabled": true,
+          "embedHeight": "1050px"
         }
       },
       "policies": {

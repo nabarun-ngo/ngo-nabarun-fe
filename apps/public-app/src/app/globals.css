@@ -169,7 +169,7 @@ h1, h2, h3, .display-4, .display-5, .display-6 {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 11rem;
+  max-width: 100%;
 }
 
 .navbar-brand-meta {
@@ -223,7 +223,7 @@ h1, h2, h3, .display-4, .display-5, .display-6 {
   }
 
   .navbar-brand-subtitle {
-    max-width: 14rem;
+    max-width: 100%;
   }
 
   .navbar-brand-meta {
@@ -248,7 +248,7 @@ h1, h2, h3, .display-4, .display-5, .display-6 {
   }
 
   .navbar-brand-subtitle {
-    max-width: 16rem;
+    max-width: 100%;
   }
 }
 
@@ -439,7 +439,7 @@ h1, h2, h3, .display-4, .display-5, .display-6 {
   }
 
   .navbar-brand-subtitle {
-    max-width: 9.5rem;
+    max-width: 100%;
     font-size: 0.65rem;
   }
 }
