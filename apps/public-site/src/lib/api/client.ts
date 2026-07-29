@@ -60,13 +60,15 @@ export async function apiGet<T>(endpoint: string): Promise<T> {
 export async function apiPost<TBody extends object, TPayload = unknown>(
   endpoint: string,
   body: TBody,
-  recaptchaToken: string
+  recaptchaToken: string,
+  recaptchaAction: string
 ): Promise<SuccessResponse<TPayload>> {
   const res = await fetch(resolveApiUrl(endpoint), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'g-recaptcha-response': recaptchaToken,
+      'x-recaptcha-token': recaptchaToken,
+      'x-recaptcha-action': recaptchaAction,
     },
     body: JSON.stringify({ ...body }),
   })

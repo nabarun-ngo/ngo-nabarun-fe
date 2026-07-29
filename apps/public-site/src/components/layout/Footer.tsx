@@ -28,8 +28,9 @@ export default function Footer({ content, basicInfo }: FooterProps) {
     }
     setSubmitting(true)
     try {
-      const token = await execute('newsletter')
-      const result = await subscribeNewsletter(email, token)
+      const action = 'subscribe_newsletter'
+      const token = await execute(action)
+      const result = await subscribeNewsletter(email, token, action)
       showNotification(result.message || `${content.newsletter.title} — subscribed!`, 'success')
       setEmail('')
     } catch {

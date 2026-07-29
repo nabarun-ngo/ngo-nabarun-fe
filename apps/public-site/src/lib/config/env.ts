@@ -19,5 +19,6 @@ export const USE_MOCK_API = toBool(process.env.NEXT_PUBLIC_USE_MOCK_API, true)
 export const USE_LEGACY_API = toBool(process.env.NEXT_PUBLIC_USE_LEGACY_API, false)
 export const API_BASE_URL = (process.env.NEXT_PUBLIC_API_BASE_URL ?? '').replace(/\/$/, '')
 export const API_KEY = process.env.API_KEY ?? ''
+export const MOCK_RECAPTCHA = process.env.NEXT_PUBLIC_MOCK_RECAPTCHA ?? false
 export const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_SITE_KEY ?? ''
 export const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim()

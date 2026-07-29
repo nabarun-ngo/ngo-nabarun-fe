@@ -15,8 +15,10 @@ export type JoinFormData = Record<string, unknown>
 
 export function submitContact(
   data: ContactFormData,
-  recaptchaToken: string
+  recaptchaToken: string,
+  recaptchaAction: string
 ): Promise<SuccessResponse> {
+  
   if (USE_LEGACY_API) {
     return apiPost('/api/public/contact', {
       fullName: data.fullName,
@@ -25,22 +27,24 @@ export function submitContact(
       contactNumber: String(data.fullPhoneNumber).substring(3),
       subject: data.subject,
       message: data.message,
-    }, recaptchaToken)
+    }, recaptchaToken, recaptchaAction)
   }
-  return apiPost(SUBMIT_CONTACT, data, recaptchaToken)
+  return apiPost(SUBMIT_CONTACT, data, recaptchaToken, recaptchaAction)
 
 }
 
 export function submitDonation(
   data: DonationFormData,
-  recaptchaToken: string
+  recaptchaToken: string,
+  recaptchaAction: string
 ): Promise<SuccessResponse> {
-  return apiPost('/donate', data, recaptchaToken)
+  return apiPost('/donate', data, recaptchaToken, recaptchaAction)
 }
 
 export function submitMembership(
   data: JoinFormData,
-  recaptchaToken: string
+  recaptchaToken: string,
+  recaptchaAction: string
 ): Promise<SuccessResponse> {
   if (USE_LEGACY_API) {
     return apiPost('/api/public/join', {
@@ -52,24 +56,26 @@ export function submitMembership(
       hometown: data.hometown,
       howDoUKnowAboutUs: data.howDoUKnowAboutUs,
       acceptance: true
-    }, recaptchaToken)
+    }, recaptchaToken, recaptchaAction)
   }
-  return apiPost(SUBMIT_JOIN, data, recaptchaToken)
+  return apiPost(SUBMIT_JOIN, data, recaptchaToken, recaptchaAction)
 }
 
 export function submitDynamicForm(
   formId: string,
   data: Record<string, unknown>,
-  recaptchaToken: string
+  recaptchaToken: string,
+  recaptchaAction: string
 ): Promise<SuccessResponse> {
-  if (formId === 'contact') return submitContact(data, recaptchaToken)
-  if (formId === 'membership') return submitMembership(data, recaptchaToken)
-  return apiPost(submitDynamicFormPath(formId), data, recaptchaToken)
+  if (formId === 'contact') return submitContact(data, recaptchaToken, recaptchaAction)
+  if (formId === 'membership') return submitMembership(data, recaptchaToken, recaptchaAction)
+  return apiPost(submitDynamicFormPath(formId), data, recaptchaToken, recaptchaAction)
 }
 
 export function subscribeNewsletter(
   email: string,
-  recaptchaToken: string
+  recaptchaToken: string,
+  recaptchaAction: string
 ): Promise<SuccessResponse> {
-  return apiPost(NEWSLETTER, { email }, recaptchaToken)
+  return apiPost(NEWSLETTER, { email }, recaptchaToken, recaptchaAction)
 }

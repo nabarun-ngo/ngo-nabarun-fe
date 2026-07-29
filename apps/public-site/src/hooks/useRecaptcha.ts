@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback } from 'react'
-import { RECAPTCHA_SITE_KEY, USE_MOCK_API } from '@/lib/config/env'
+import { MOCK_RECAPTCHA, RECAPTCHA_SITE_KEY, USE_MOCK_API } from '@/lib/config/env'
 
 declare global {
   interface Window {
@@ -39,8 +39,13 @@ function loadRecaptchaScript(): Promise<void> {
  */
 export function useRecaptcha() {
   const execute = useCallback(async (action: string): Promise<string> => {
-    if (USE_MOCK_API || !RECAPTCHA_SITE_KEY || typeof window === 'undefined') {
+    if (MOCK_RECAPTCHA || typeof window === 'undefined') {
       return 'mock-recaptcha-token'
+    }
+
+    if (!RECAPTCHA_SITE_KEY || RECAPTCHA_SITE_KEY === '') {
+      console.error('reCAPTCHA site key not found')
+      throw new Error('reCAPTCHA site key not found')
     }
 
     await loadRecaptchaScript()

@@ -15,7 +15,6 @@
     "build:public": "turbo run build --filter=public-site",
     "build:internal": "turbo run build --filter=internal-app",
     "lint": "turbo run lint",
-    "start": "turbo run start",
     "changeset": "changeset",
     "changeset:status": "changeset status",
     "version-packages": "changeset version && npm install",

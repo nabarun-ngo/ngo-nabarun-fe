@@ -982,6 +982,7 @@
         "locationLink": "{{vars.contactLocationLink}}",
         "locationMapTitle": "Nabarun NGO location map",
         "form": {
+          "type": "custom",
           "formId": "contact",
           "recaptchaAction": "submit_contact",
           "submitLabel": "Send Message"
@@ -1014,8 +1015,9 @@
           }
         },
         "form": {
+          "type": "custom",
           "formId": "membership",
-          "recaptchaAction": "submit_join",
+          "recaptchaAction": "submit_membership",
           "submitLabel": "Submit Application"
         },
         "ctaVariants": {

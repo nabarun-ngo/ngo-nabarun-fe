@@ -1037,6 +1037,7 @@
           },
           "then": {
             "required": [
+              "type",
               "formId",
               "recaptchaAction",
               "submitLabel"
