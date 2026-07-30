@@ -5,15 +5,193 @@
   },
   "team": [
     {
-      "id": "1",
-      "fullName": "Mriganka Shekhar Pal",
-      "picture": "/img/team/member1.jpg",
+      "id": "c965cce7-f616-4158-bdf0-e14f601ac349",
+      "fullName": "Ankita Mondal",
+      "picture": "https://firebasestorage.googleapis.com/v0/b/ngonabarun.firebasestorage.app/o/PROFILE_PICTURES%2F7e9f7941-7a6e-4cd5-8d73-5093c04e4b20.jpg?alt=media&token=7c5a3b9f-2895-4f38-9689-42a94baae820",
+      "roleString": "Treasurer",
+      "email": "mondalankita185@gmail.com",
+      "bio": "Ensuring transparent and effective financial management to sustain our impactful initiatives.",
+      "socialLinks": {},
+      "active": true
+    },
+    {
+      "id": "63922ccf6aa01f79c38154b3",
+      "fullName": "Arpita Das",
+      "picture": "https://ui-avatars.com/api/?name=Arpita+Das&background=random",
+      "roleString": "Member",
+      "email": "arpitadas0817@gmail.com",
+      "bio": "Dedicated to community service and actively participating in Nabarun's charitable drives.",
+      "socialLinks": {},
+      "active": true
+    },
+    {
+      "id": "097283af-3871-44e3-b65e-f1e1cadc07d0",
+      "fullName": "Arshika Ganguly",
+      "picture": "https://i0.wp.com/cdn.auth0.com/avatars/ag.png?ssl=1",
+      "roleString": "Secretary",
+      "email": "arshikaganguly8@gmail.com",
+      "bio": "Coordinating operations and community outreach to keep our mission moving forward.",
+      "socialLinks": {},
+      "active": true
+    },
+    {
+      "id": "65eb1beac09dfc1e75633b01",
+      "fullName": "Avirup Kar",
+      "picture": "https://firebasestorage.googleapis.com/v0/b/ngonabarun.firebasestorage.app/o/PROFILE_PICTURES%2F56e8788a-5260-4227-aa5c-8d0120fdbe25.jpeg?alt=media&token=9ff630f8-f41e-4ece-ad28-eb9b05601f0f",
+      "roleString": "Member",
+      "email": "avirupkar16@gmail.com",
+      "bio": "Passionate about giving back to society, believing that charity truly begins at home.",
+      "socialLinks": {},
+      "active": true
+    },
+    {
+      "id": "7c2783c7-53f3-4428-b53a-778542db265e",
+      "fullName": "Bishal Shaw",
+      "picture": "https://ui-avatars.com/api/?name=Bishal+Shaw&background=random",
+      "roleString": "Member",
+      "email": "rsoliveboard1992@gmail.com",
+      "bio": "Committed to supporting those in need through volunteer work and local community engagement.",
+      "socialLinks": {},
+      "active": true
+    },
+    {
+      "id": "337a4ffe-6b5c-4c30-81f0-2fffcf2d99e8",
+      "fullName": "Kunal Mudaliar",
+      "picture": "https://firebasestorage.googleapis.com/v0/b/ngonabarun.firebasestorage.app/o/PROFILE_PICTURES%2Fe0d3d3bd-0a36-49bd-ac0d-5882e5a487fb.jpg?alt=media&token=5aa6ff4d-0ff1-446d-ac14-724acc924f3f",
+      "roleString": "Member",
+      "email": "kunal009mudaliar@gmail.com",
+      "bio": "Bringing a positive, fun-loving energy to community service and youth engagement.",
+      "socialLinks": {},
+      "active": true
+    },
+    {
+      "id": "b919170f-2fc9-44b9-a783-4343215e31e9",
+      "fullName": "Mriganka Sekhar Pal",
+      "picture": "https://i0.wp.com/cdn.auth0.com/avatars/mp.png?ssl=1",
       "roleString": "Founder",
-      "email": "m@gmail.com",
-      "bio": "Passionate about creating meaningful impact in communities through dedicated service and commitment.",
-      "socialLinks": {
-        "facebook": "https://www.facebook.com/nabarunNGO?mibextid=ZbWKwL"
-      },
+      "email": "sekharpal77@gmail.com",
+      "bio": "Leading the vision of Nabarun to create lasting, positive change in underprivileged communities.",
+      "socialLinks": {},
+      "active": true
+    },
+    {
+      "id": "c4061e1f-86a2-4257-89c4-c1e4f5772dcc",
+      "fullName": "Niladri Das",
+      "picture": "https://firebasestorage.googleapis.com/v0/b/ngonabarun.firebasestorage.app/o/uploads%2F43cee1aa-90c1-48d3-8da2-b2167307238d-profile_pic.png?alt=media&token=7d492171-aea3-43bd-a19e-01b39138bccf",
+      "roleString": "Assistant Secretary",
+      "email": "niladridas999@gmail.com",
+      "bio": "Assisting in strategic planning and operations, treating life as a limitless ride for a good cause.",
+      "socialLinks": {},
+      "active": true
+    },
+    {
+      "id": "6596773e63989379b8416efd",
+      "fullName": "Ratri  Mitra",
+      "picture": "https://i0.wp.com/cdn.auth0.com/avatars/rm.png?ssl=1",
+      "roleString": "Member",
+      "email": "ratrimitra95@gmail.com",
+      "bio": "Inspired by family to serve the community and actively contribute to Nabarun's relief efforts.",
+      "socialLinks": {},
+      "active": true
+    },
+    {
+      "id": "65f1a6489cc9983aca2e2fa9",
+      "fullName": "Riju Naha",
+      "picture": "https://i0.wp.com/cdn.auth0.com/avatars/rn.png?ssl=1",
+      "roleString": "Member",
+      "email": "riju.naha2003@gmail.com",
+      "bio": "A dedicated volunteer bringing compassion and friendship to every community initiative.",
+      "socialLinks": {},
+      "active": true
+    },
+    {
+      "id": "d71b094d-ee92-4e84-8639-a0b8e2c9d7df",
+      "fullName": "Rupesh Pal",
+      "picture": "https://ui-avatars.com/api/?name=Rupesh+Pal&background=random",
+      "roleString": "Member",
+      "email": "Palrupesh6@gmail.com",
+      "bio": "Working tirelessly on the ground to ensure relief materials reach the most vulnerable.",
+      "socialLinks": {},
+      "active": true
+    },
+    {
+      "id": "7660274a-ad97-4aa1-8fbe-07d7955eb893",
+      "fullName": "Sayan Sen",
+      "picture": "https://s.gravatar.com/avatar/fea0c000230f48df555c48567dc50550?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fss.png",
+      "roleString": "Member",
+      "email": "sayansen638@gmail.com",
+      "bio": "Focused on youth empowerment and supporting educational initiatives for local children.",
+      "socialLinks": {},
+      "active": true
+    },
+    {
+      "id": "1109f9e2-0264-4ec1-aa74-647aac9ea60e",
+      "fullName": "Soumyajit Das",
+      "picture": "https://ui-avatars.com/api/?name=Soumyajit+Das&background=random",
+      "roleString": "Member",
+      "email": "soumoswimswell@gmail.com",
+      "bio": "Trying to be a part of the good change by actively volunteering in all our major campaigns.",
+      "socialLinks": {},
+      "active": true
+    },
+    {
+      "id": "2646b152-56bd-4ace-af61-191779bdbaba",
+      "fullName": "Souvik Dutta",
+      "picture": "https://firebasestorage.googleapis.com/v0/b/ngonabarun.firebasestorage.app/o/PROFILE_PICTURES%2Fc0cfe6d8-69c9-46fe-89f1-7dd77828a872.jpg?alt=media&token=83bb77c0-a1a3-4bff-a6c1-ee9add52ce52",
+      "roleString": "Member",
+      "email": "duttasouvikprantik@gmail.com",
+      "bio": "In pursuit of a purpose in life, dedicating time to help others find theirs through service.",
+      "socialLinks": {},
+      "active": true
+    },
+    {
+      "id": "6b349654-0960-4d7b-8193-ed7f91ba0f50",
+      "fullName": "Souvik Sarkar",
+      "picture": "https://firebasestorage.googleapis.com/v0/b/ngonabarun.firebasestorage.app/o/uploads%2Fe187da94-2b9f-4408-9119-7b2c1498382c-profile_pic.png?alt=media&token=98b767ed-570e-4286-8a14-1a569afc88b2",
+      "roleString": "Vice President",
+      "email": "souviksarrkar362@gmail.com",
+      "bio": "Driving operational excellence and supporting the President in expanding our charitable footprint.",
+      "socialLinks": {},
+      "active": true
+    },
+    {
+      "id": "7c349613-12b1-431b-96e2-651d2024a15e",
+      "fullName": "Spandan  Banerjee",
+      "picture": "https://ui-avatars.com/api/?name=Spandan+Banerjee&background=random",
+      "roleString": "Member",
+      "email": "spandanbanerjee1999@gmail.com",
+      "bio": "A compassionate member always ready to lend a helping hand in community development.",
+      "socialLinks": {},
+      "active": true
+    },
+    {
+      "id": "65eafee313154867b7b69f51",
+      "fullName": "Sweety Sen",
+      "picture": "https://i0.wp.com/cdn.auth0.com/avatars/ss.png?ssl=1",
+      "roleString": "Member",
+      "email": "barshasen454@gmail.com",
+      "bio": "Actively participating in community drives and working closely with leadership to spread awareness.",
+      "socialLinks": {},
+      "active": true
+    },
+    {
+      "id": "78bdb704-ed3e-4e0e-ab58-eaf9aff90308",
+      "fullName": "Tamanuj Mukherjee",
+      "picture": "https://firebasestorage.googleapis.com/v0/b/ngonabarun.firebasestorage.app/o/PROFILE_PICTURES%2F34c321a4-2f54-4d41-b2bd-ecfd68118cd4.jpg?alt=media&token=2ae43371-de99-4160-b8b2-3ca60c63c33f",
+      "roleString": "President",
+      "email": "tamanujmukherjee@gmail.com",
+      "bio": "Striving to be the change I wish to see in this world, leading Nabarun with compassion.",
+      "socialLinks": {},
+      "active": true
+    },
+    {
+      "id": "35207ecc-92af-4c27-b010-a528e96d83ce",
+      "fullName": "Uddalok Ghosh",
+      "picture": "https://i0.wp.com/cdn.auth0.com/avatars/ug.png?ssl=1",
+      "roleString": "Member",
+      "email": "uddalok.ghosh041199@gmail.com",
+      "bio": "A passionate volunteer dedicated to educational support and community empowerment.",
+      "socialLinks": {},
       "active": true
     }
   ],
@@ -22,9 +200,18 @@
       "title": "Child Education",
       "description": "Helping children from low-income families stay in school through learning support, guidance, and programmes that open pathways to a brighter future.",
       "goals": [
-        { "name": "School enrolment support", "active": true },
-        { "name": "Scholarship assistance", "active": true },
-        { "name": "After-school learning support", "active": true }
+        {
+          "name": "School enrolment support",
+          "active": true
+        },
+        {
+          "name": "Scholarship assistance",
+          "active": true
+        },
+        {
+          "name": "After-school learning support",
+          "active": true
+        }
       ],
       "beneficiaryCount": 200,
       "metadata": {
@@ -53,7 +240,7 @@
           "date": "2026-09-05",
           "location": "Ichapur, West Bengal",
           "projectName": "Child Education",
-          "active": true
+          "active": false
         }
       ]
     },
@@ -61,9 +248,18 @@
       "title": "Education Material Distribution",
       "description": "Providing books, notebooks, uniforms, bags, and essential school supplies so no child is held back from learning due to lack of materials.",
       "goals": [
-        { "name": "Books and notebooks", "active": true },
-        { "name": "School bags and uniforms", "active": true },
-        { "name": "Stationery kits for students", "active": true }
+        {
+          "name": "Books and notebooks",
+          "active": true
+        },
+        {
+          "name": "School bags and uniforms",
+          "active": true
+        },
+        {
+          "name": "Stationery kits for students",
+          "active": true
+        }
       ],
       "beneficiaryCount": 500,
       "metadata": {
@@ -77,9 +273,18 @@
       "title": "Child Development",
       "description": "Nurturing the overall growth of children through activities, mentoring, and programmes that build confidence, creativity, and life skills beyond the classroom.",
       "goals": [
-        { "name": "Skill-building activities", "active": true },
-        { "name": "Mentoring and guidance", "active": true },
-        { "name": "Creative and cultural programmes", "active": true }
+        {
+          "name": "Skill-building activities",
+          "active": true
+        },
+        {
+          "name": "Mentoring and guidance",
+          "active": true
+        },
+        {
+          "name": "Creative and cultural programmes",
+          "active": true
+        }
       ],
       "beneficiaryCount": 150,
       "metadata": {
@@ -93,9 +298,18 @@
       "title": "Disaster Relief",
       "description": "Providing rapid emergency response and recovery support during floods, storms, and other disasters — helping families rebuild with dignity and hope.",
       "goals": [
-        { "name": "Emergency relief supplies", "active": true },
-        { "name": "Food and essential kits", "active": true },
-        { "name": "Post-disaster recovery support", "active": true }
+        {
+          "name": "Emergency relief supplies",
+          "active": true
+        },
+        {
+          "name": "Food and essential kits",
+          "active": true
+        },
+        {
+          "name": "Post-disaster recovery support",
+          "active": true
+        }
       ],
       "beneficiaryCount": 50,
       "metadata": {
@@ -109,9 +323,18 @@
       "title": "Orphan & Old Age Home Support",
       "description": "Standing beside orphanages and old age homes with essentials, companionship, and year-round support so residents feel cared for and never forgotten.",
       "goals": [
-        { "name": "Essential supplies for homes", "active": true },
-        { "name": "Festival and seasonal visits", "active": true },
-        { "name": "Ongoing care and companionship", "active": true }
+        {
+          "name": "Essential supplies for homes",
+          "active": true
+        },
+        {
+          "name": "Festival and seasonal visits",
+          "active": true
+        },
+        {
+          "name": "Ongoing care and companionship",
+          "active": true
+        }
       ],
       "beneficiaryCount": 20,
       "metadata": {
@@ -125,9 +348,18 @@
       "title": "Winter Relief",
       "description": "Distributing blankets, warm clothing, and winter essentials to children, elders, and families who struggle to stay warm during the coldest months.",
       "goals": [
-        { "name": "Blanket distribution", "active": true },
-        { "name": "Warm clothing drives", "active": true },
-        { "name": "Winter essentials for families", "active": true }
+        {
+          "name": "Blanket distribution",
+          "active": true
+        },
+        {
+          "name": "Warm clothing drives",
+          "active": true
+        },
+        {
+          "name": "Winter essentials for families",
+          "active": true
+        }
       ],
       "beneficiaryCount": 300,
       "metadata": {
@@ -152,9 +384,18 @@
       "title": "Summer Relief",
       "description": "Reaching vulnerable communities during harsh summers with cooling essentials, summer clothing, and support for children and elders most at risk from the heat.",
       "goals": [
-        { "name": "Summer essentials distribution", "active": true },
-        { "name": "Heat relief support for families", "active": true },
-        { "name": "Community outreach during summer", "active": true }
+        {
+          "name": "Summer essentials distribution",
+          "active": true
+        },
+        {
+          "name": "Heat relief support for families",
+          "active": true
+        },
+        {
+          "name": "Community outreach during summer",
+          "active": true
+        }
       ],
       "beneficiaryCount": 250,
       "metadata": {
@@ -168,9 +409,18 @@
       "title": "Festival Distribution",
       "description": "Sharing the joy of festivals with orphanages, old age homes, and underprivileged families through food, gifts, clothes, and celebration essentials.",
       "goals": [
-        { "name": "Festival food and gift distribution", "active": true },
-        { "name": "New clothes for children and elders", "active": true },
-        { "name": "Community celebration support", "active": true }
+        {
+          "name": "Festival food and gift distribution",
+          "active": true
+        },
+        {
+          "name": "New clothes for children and elders",
+          "active": true
+        },
+        {
+          "name": "Community celebration support",
+          "active": true
+        }
       ],
       "beneficiaryCount": 1000,
       "metadata": {
