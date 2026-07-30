@@ -30,12 +30,13 @@
   },
   "metadata": {
     "site": {
-      "title": "Nabarun NGO | Ichapur Nabarun Social Welfare Society - Empowering Communities",
+      "title": "Nabarun NGO — Ichapur Nabarun Social Welfare Society",
       "description": "Nabarun (Ichapur Nabarun Social Welfare Society) is a registered NGO in West Bengal, serving North Kolkata and North Suburban Kolkata since 2018. Child education, disaster relief, seasonal support, and community welfare.",
       "keywords": "Nabarun, NGO Nabarun, Nabarun NGO, Ichapur Nabarun Social Welfare Society, Nabarun welfare society, Nabarun West Bengal, Nabarun charity",
       "brand": "Nabarun",
-      "shortBrand": "NABARUN (INSWS)",
+      "shortBrand": "Nabarun NGO",
       "name": "{{vars.orgName}}",
+      "searchName": "Ichapur Nabarun Social Welfare Society",
       "alternateName": "Nabarun NGO",
       "location": "Ichapur, Barrackpore, West Bengal, India",
       "areaServed": "North Kolkata, North Suburban Kolkata, West Bengal",
@@ -97,7 +98,7 @@
       "home": {
         "pageName": "Home",
         "title": "Home",
-        "description": "Nabarun (Ichapur Nabarun Social Welfare Society) is a registered NGO in West Bengal, serving North Kolkata and North Suburban Kolkata since 2018. Child education, disaster relief, seasonal support, and community welfare.",
+        "description": "Nabarun NGO (Ichapur Nabarun Social Welfare Society) — child education, disaster relief and community welfare in West Bengal since 2018.",
         "keywords": "Nabarun, NGO Nabarun, Nabarun NGO, Ichapur Nabarun Social Welfare Society, Nabarun welfare society, Nabarun West Bengal, Nabarun charity",
         "path": "/",
         "ogImage": "/img/nbrn/pic1.jpg",
@@ -131,8 +132,8 @@
         }
       },
       "team": {
-        "pageName": "Our Team",
-        "title": "Team",
+        "pageName": "Team Members",
+        "title": "Team Members",
         "description": "Meet the passionate team behind Nabarun NGO, working for child education, disaster relief, and community upliftment in West Bengal.",
         "keywords": "Nabarun team, Nabarun NGO team, Nabarun welfare society team",
         "path": "/team/",
@@ -164,8 +165,8 @@
         }
       },
       "membership": {
-        "pageName": "Membership",
-        "title": "Membership",
+        "pageName": "Become a Member",
+        "title": "Become a Member",
         "description": "Join Nabarun as a member or volunteer. Support child education, disaster relief, and community welfare across North Kolkata and North Suburban Kolkata.",
         "keywords": "Nabarun membership, Nabarun NGO member, join Nabarun",
         "path": "/membership/",
@@ -175,8 +176,8 @@
         }
       },
       "gallery": {
-        "pageName": "Gallery",
-        "title": "Gallery",
+        "pageName": "Photo Gallery",
+        "title": "Photo Gallery",
         "description": "Photos from Nabarun's education drives, disaster relief, seasonal support, and festival distribution programmes across North Kolkata and North Suburban Kolkata.",
         "keywords": "Nabarun gallery, Nabarun NGO photos",
         "path": "/gallery/",
@@ -187,8 +188,8 @@
         }
       },
       "events": {
-        "pageName": "Events",
-        "title": "Events",
+        "pageName": "Upcoming Events",
+        "title": "Upcoming Events",
         "description": "Upcoming and past events by Nabarun NGO — education drives, disaster relief, seasonal support, and festival distribution programmes in West Bengal.",
         "keywords": "Nabarun events, Nabarun NGO events",
         "path": "/events/",
@@ -319,7 +320,7 @@
           },
           {
             "id": "about",
-            "label": "About",
+            "label": "About Us",
             "url": "{{metadata.pages.about.path}}",
             "external": false,
             "endCta": false,
@@ -328,28 +329,47 @@
             "enabled": true
           },
           {
+            "id": "our-work",
+            "label": "Our Work",
+            "external": false,
+            "endCta": false,
+            "inMore": false,
+            "parent": null,
+            "enabled": true
+          },
+          {
             "id": "projects",
-            "label": "Projects",
+            "label": "Our Projects",
             "url": "{{metadata.pages.projects.path}}",
             "external": false,
             "endCta": false,
             "inMore": false,
-            "parent": null,
+            "parent": "our-work",
             "enabled": true
           },
           {
             "id": "events",
-            "label": "Events",
+            "label": "Upcoming Events",
             "url": "{{metadata.pages.events.path}}",
             "external": false,
             "endCta": false,
             "inMore": false,
-            "parent": null
+            "parent": "our-work",
+            "enabled": true
           },
           {
-            "id": "membership",
-            "label": "Membership",
-            "url": "{{metadata.pages.membership.path}}",
+            "id": "gallery",
+            "label": "Photo Gallery",
+            "url": "{{metadata.pages.gallery.path}}",
+            "external": false,
+            "endCta": false,
+            "inMore": false,
+            "parent": "our-work",
+            "enabled": true
+          },
+          {
+            "id": "our-team",
+            "label": "Our Team",
             "external": false,
             "endCta": false,
             "inMore": false,
@@ -357,8 +377,28 @@
             "enabled": true
           },
           {
+            "id": "team",
+            "label": "Team Members",
+            "url": "{{metadata.pages.team.path}}",
+            "external": false,
+            "endCta": false,
+            "inMore": false,
+            "parent": "our-team",
+            "enabled": true
+          },
+          {
+            "id": "membership",
+            "label": "Become a Member",
+            "url": "{{metadata.pages.membership.path}}",
+            "external": false,
+            "endCta": false,
+            "inMore": false,
+            "parent": "our-team",
+            "enabled": true
+          },
+          {
             "id": "contact",
-            "label": "Contact",
+            "label": "Contact Us",
             "url": "{{metadata.pages.contact.path}}",
             "external": false,
             "endCta": false,
@@ -383,26 +423,6 @@
             "external": false,
             "endCta": true,
             "inMore": false,
-            "parent": null,
-            "enabled": true
-          },
-          {
-            "id": "gallery",
-            "label": "Gallery",
-            "url": "{{metadata.pages.gallery.path}}",
-            "external": false,
-            "endCta": false,
-            "inMore": true,
-            "parent": null,
-            "enabled": true
-          },
-          {
-            "id": "team",
-            "label": "Team",
-            "url": "{{metadata.pages.team.path}}",
-            "external": false,
-            "endCta": false,
-            "inMore": true,
             "parent": null,
             "enabled": true
           },
@@ -515,7 +535,7 @@
               "enabled": true
             },
             {
-              "label": "Membership",
+              "label": "Become a Member",
               "url": "{{metadata.pages.membership.path}}",
               "enabled": true
             },
@@ -789,6 +809,14 @@
           "label": "Know More",
           "url": "{{metadata.pages.contact.path}}"
         },
+        "detail": {
+          "goalsTitle": "What We Focus On",
+          "impactTitle": "Impact So Far",
+          "eventsTitle": "Events Under This Project",
+          "eventsDescription": "Drives and programmes we run as part of this project.",
+          "eventsEmptyMessage": "No events scheduled for this project right now. Please check back soon.",
+          "backLabel": "View All Projects"
+        },
         "cta": {
           "title": "Ready to Make a Difference?",
           "description": "Your support helps us reach more children, families, and institutions across North Kolkata and North Suburban Kolkata. Donate or volunteer — every act of kindness counts.",
@@ -832,7 +860,7 @@
         }
       },
       "team": {
-        "sectionTitle": "Our Team",
+        "sectionTitle": "Team Members",
         "title": "The People Behind the Mission",
         "description": "Volunteers and community leaders working to bring education, relief, and care to families across North Kolkata and North Suburban Kolkata.",
         "member": {

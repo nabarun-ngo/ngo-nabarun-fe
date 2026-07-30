@@ -9,6 +9,7 @@ import {
 } from '@/lib/content/dynamicContent'
 import { resolveNavbarSection } from '@/lib/content/resolveNavLinks'
 import { resolveVars } from '@/lib/content/resolveVars'
+import { toSlug } from '@/lib/content/slug'
 import type {
   CarouselItem,
   ContentData,
@@ -16,6 +17,7 @@ import type {
   EventItem,
   GalleryItem,
   HeroStatsDisplay,
+  ProjectDetail,
   ServiceItem,
   TeamMember,
 } from '@/lib/types'
@@ -94,7 +96,26 @@ export const fetchFormDefinition = cache(loadFormDefinition)
 export async function getProjects(): Promise<ServiceItem[]> {
   const [content, dynamic] = await Promise.all([fetchStaticContent(), fetchDynamicContent()])
   const learnMore = content.layout.pages.projects.learnMoreButton
-  return mapDynamicProjectsToServiceItems(dynamic.projects, learnMore)
+  return mapDynamicProjectsToServiceItems(
+    dynamic.projects,
+    learnMore,
+    content.metadata.pages.projects.path
+  )
+}
+
+/** Projects keyed by slug for the `/projects/{slug}/` routes, each with its own events. */
+export async function getProjectDetails(): Promise<ProjectDetail[]> {
+  const { projects } = await fetchDynamicContent()
+  return (projects ?? []).map((project) => ({
+    ...project,
+    slug: toSlug(project.title),
+    events: activeOnly(project.events),
+  }))
+}
+
+export async function getProjectBySlug(slug: string): Promise<ProjectDetail | undefined> {
+  const projects = await getProjectDetails()
+  return projects.find((project) => project.slug === slug)
 }
 
 export async function getTeam(): Promise<TeamMember[]> {

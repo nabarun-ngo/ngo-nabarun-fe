@@ -29,8 +29,14 @@ export async function generateMetadata() {
     ...getRootLayoutMetadata(),
     manifest: '/site.webmanifest',
     icons: {
-      icon: '/favicon.ico',
-      apple: '/img/logo.png',
+      icon: [
+        { url: '/favicon.ico', sizes: '32x32' },
+        { url: '/favicon-96x96.png', type: 'image/png', sizes: '96x96' },
+        { url: '/icon-192.png', type: 'image/png', sizes: '192x192' },
+        { url: '/icon-512.png', type: 'image/png', sizes: '512x512' },
+      ],
+      shortcut: '/favicon-96x96.png',
+      apple: { url: '/apple-touch-icon.png', type: 'image/png', sizes: '180x180' },
     },
   }
 }

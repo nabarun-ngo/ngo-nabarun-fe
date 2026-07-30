@@ -1,4 +1,4 @@
-import { getSiteConstants, SITE_URL } from '@/lib/site'
+import { getSiteConstants, ORGANIZATION_ID, SITE_URL } from '@/lib/site'
 import { toAbsoluteImageUrl } from '@/lib/media'
 import type { OrganizationMetadata, SiteMetadata } from '@/lib/types'
 
@@ -15,10 +15,12 @@ export default function OrganizationJsonLd({ site, organization }: OrganizationJ
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'NGO',
+    '@id': ORGANIZATION_ID,
     name: SITE_NAME,
     alternateName: organization.alternateNames,
     url: SITE_URL,
     logo,
+    image: logo,
     description: SITE_DESCRIPTION,
     email: organization.email,
     telephone: organization.telephone,

@@ -30,6 +30,16 @@ Static Next.js export (`output: 'export'`). Every public page must be crawlable 
 - `EventJsonLd` on `/events/`
 - Projects are a **single page** at `/projects/` — no per-project slug routes or JSON-LD
 
+## Site name & favicon (Google search result identity)
+
+- `WebSiteJsonLd` `name` comes from `metadata.site.searchName` (falls back to `alternateName`, then `brand`) — this is the name Google prints as the site name
+- The legal name (`metadata.site.name`) goes in `alternateName`, never in `name`
+- `WebSite.publisher` and the `NGO` node share `@id`s from `src/lib/site.ts` — keep them linked
+- Home page (`path: '/'`) title is the full legal name, with no `- Home` suffix; inner pages stay `{shortBrand} - {page}`
+- Social profiles must appear in both the `NGO` `sameAs` array and as `rel="me"` footer links
+- Favicons must be square and a multiple of 48px; regenerate with `npm run generate:icons` after a logo change
+- Never point `apple-touch-icon` at `img/logo.png` (non-square, so Google rejects it)
+
 ## Images & performance
 
 - Use `ContentImage` (WebP via `<picture>` when `.webp` sibling exists)
@@ -45,8 +55,8 @@ Static Next.js export (`output: 'export'`). Every public page must be crawlable 
 
 ## Staging vs production
 
-- Production: `NEXT_PUBLIC_SITE_URL=https://ngonabarun.web.app`
-- Staging: `NEXT_PUBLIC_SITE_URL=https://ngonabarun-stage.web.app` + `NEXT_PUBLIC_NOINDEX=true`
+- Production: `NEXT_PUBLIC_SITE_URL=https://nabarunngo.web.app` (must match `vars.siteUrl` in content)
+- Staging: `NEXT_PUBLIC_SITE_URL=https://nabarunngo-stage.web.app` + `NEXT_PUBLIC_NOINDEX=true`
 
 ## Optional env (set before deploy)
 

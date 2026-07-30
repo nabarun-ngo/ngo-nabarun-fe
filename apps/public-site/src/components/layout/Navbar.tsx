@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { BasicInfo, NavLinkItem, NavbarSection } from '@/lib/types'
 import { enabledOnly } from '@/lib/content/enabled'
+import { mailtoHref, mapsHref, socialNetworkName, telHref } from '@/lib/contact'
 import ContentImage from '@/components/ui/ContentImage'
 import { useSiteHeaderOffset } from '@/hooks/useSiteHeaderOffset'
 
@@ -33,8 +34,11 @@ function Brand({ brand, siteBrand }: { brand: NavbarSection['brand']; siteBrand:
       <span className="navbar-brand-text">
         <span className="navbar-brand-title">{title}</span>
         <span className="navbar-brand-subtitle">{brand.name}</span>
+        {/* Shown below lg (nav links are collapsed, so there is room) and again
+            at xl. Hidden in the 992–1199px band, where the subtitle is dropped
+            too so the inline nav links have space. */}
         {meta && (
-          <span className="navbar-brand-meta d-none d-xl-block">{meta}</span>
+          <span className="navbar-brand-meta d-block d-lg-none d-xl-block">{meta}</span>
         )}
       </span>
     </a>
@@ -43,18 +47,21 @@ function Brand({ brand, siteBrand }: { brand: NavbarSection['brand']; siteBrand:
 
 function partitionNavLinks(navLinks: NavLinkItem[]) {
   const active = enabledOnly(navLinks)
-  const mainLinks = active.filter((link) => !link.endCta && !link.inMore)
-  const endCtaLinks = active.filter((link) => link.endCta)
-  const moreLinks = active.filter((link) => link.inMore)
-  const moreRoots = moreLinks.filter((link) => !link.parent)
   const childrenByParent = new Map<string, NavLinkItem[]>()
 
-  for (const link of moreLinks) {
+  for (const link of active) {
     if (!link.parent) continue
     const siblings = childrenByParent.get(link.parent) ?? []
     siblings.push(link)
     childrenByParent.set(link.parent, siblings)
   }
+
+  // Children render inside their parent, so only roots are placed directly.
+  const roots = active.filter((link) => !link.parent)
+  const mainLinks = roots.filter((link) => !link.endCta && !link.inMore)
+  const endCtaLinks = roots.filter((link) => link.endCta)
+  const moreLinks = active.filter((link) => link.inMore)
+  const moreRoots = moreLinks.filter((link) => !link.parent)
 
   return { mainLinks, endCtaLinks, moreRoots, childrenByParent, moreLinks }
 }
@@ -85,6 +92,7 @@ export default function Navbar({ content, basicInfo, siteBrand }: NavbarProps) {
   useSiteHeaderOffset()
   const [menuOpen, setMenuOpen] = useState(false)
   const [moreOpen, setMoreOpen] = useState(false)
+  const [openNavGroup, setOpenNavGroup] = useState<string | null>(null)
 
   const { mainLinks, endCtaLinks, moreRoots, childrenByParent, moreLinks } = useMemo(
     () => partitionNavLinks(content.navLinks),
@@ -105,6 +113,7 @@ export default function Navbar({ content, basicInfo, siteBrand }: NavbarProps) {
       if (mq.matches) {
         setMenuOpen(false)
         setMoreOpen(false)
+        setOpenNavGroup(null)
       }
     }
 
@@ -116,6 +125,7 @@ export default function Navbar({ content, basicInfo, siteBrand }: NavbarProps) {
   const closeNavPanels = useCallback(() => {
     setMenuOpen(false)
     setMoreOpen(false)
+    setOpenNavGroup(null)
   }, [])
 
   const toggleMenu = useCallback(() => {
@@ -125,6 +135,11 @@ export default function Navbar({ content, basicInfo, siteBrand }: NavbarProps) {
   const toggleMore = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault()
     setMoreOpen((open) => !open)
+  }, [])
+
+  const toggleNavGroup = useCallback((groupId: string, e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault()
+    setOpenNavGroup((open) => (open === groupId ? null : groupId))
   }, [])
 
   const toggleGroup = useCallback((groupId: string, e: React.MouseEvent<HTMLButtonElement>) => {
@@ -141,18 +156,36 @@ export default function Navbar({ content, basicInfo, siteBrand }: NavbarProps) {
     <div className="container-fluid fixed-top px-0" id="navbar">
       <div className="top-bar text-white-50 row gx-0 align-items-center d-none d-lg-flex">
         <div className="col-lg-8 px-5 text-start">
-          <small>
-            <i className="fa fa-map-marker-alt me-2"></i>
-            {basicInfo.location}
-          </small>
-          <small className="ms-4">
-            <i className="fa fa-envelope me-2"></i>
-            {basicInfo.email}
-          </small>
-          <small className="ms-4">
-            <i className="fa fa-phone-alt me-2"></i>
-            {basicInfo.phone}
-          </small>
+          {basicInfo.location && (
+            <small>
+              <a
+                className="top-bar-link"
+                href={mapsHref(basicInfo.location)}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${basicInfo.location} on Google Maps`}
+              >
+                <i className="fa fa-map-marker-alt me-2"></i>
+                {basicInfo.location}
+              </a>
+            </small>
+          )}
+          {basicInfo.email && (
+            <small className="ms-4">
+              <a className="top-bar-link" href={mailtoHref(basicInfo.email)}>
+                <i className="fa fa-envelope me-2"></i>
+                {basicInfo.email}
+              </a>
+            </small>
+          )}
+          {basicInfo.phone && (
+            <small className="ms-4">
+              <a className="top-bar-link" href={telHref(basicInfo.phone)}>
+                <i className="fa fa-phone-alt me-2"></i>
+                {basicInfo.phone}
+              </a>
+            </small>
+          )}
         </div>
         <div className="col-lg-4 px-5 text-end">
           {followUsLabel && <small>{followUsLabel}</small>}
@@ -162,8 +195,8 @@ export default function Navbar({ content, basicInfo, siteBrand }: NavbarProps) {
               className="text-white ms-2"
               href={follow.url}
               target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Follow us on social media"
+              rel="me noopener noreferrer"
+              aria-label={`${siteBrand} on ${socialNetworkName(follow.url)}`}
             >
               <i className={follow.icon}></i>
             </a>
@@ -187,15 +220,49 @@ export default function Navbar({ content, basicInfo, siteBrand }: NavbarProps) {
 
         <div className={`collapse navbar-collapse${menuOpen ? ' show' : ''}`} id="navbarCollapse">
           <ul className="navbar-nav ms-auto align-items-lg-center py-3 py-lg-0">
-            {mainLinks.map((link) => (
-              <li key={link.id} className="nav-item">
-                <NavAnchor
-                  link={link}
-                  className="nav-link"
-                  onClick={closeNavPanels}
-                />
-              </li>
-            ))}
+            {mainLinks.map((link) => {
+              const children = childrenByParent.get(link.id) ?? []
+
+              if (children.length === 0) {
+                return (
+                  <li key={link.id} className="nav-item">
+                    <NavAnchor
+                      link={link}
+                      className="nav-link"
+                      onClick={closeNavPanels}
+                    />
+                  </li>
+                )
+              }
+
+              const isOpen = openNavGroup === link.id
+              return (
+                <li key={link.id} className={`nav-item dropdown${isOpen ? ' show' : ''}`}>
+                  <a
+                    className="nav-link dropdown-toggle"
+                    href="#"
+                    role="button"
+                    aria-expanded={isOpen}
+                    onClick={(e) => toggleNavGroup(link.id, e)}
+                  >
+                    {link.label}
+                  </a>
+                  {/* Always in the DOM: desktop reveals it on hover via CSS, and the
+                      child links stay crawlable. `show` only drives the mobile panel. */}
+                  <ul className={`dropdown-menu m-0${isOpen ? ' show' : ''}`}>
+                    {children.map((child) => (
+                      <li key={child.id}>
+                        <NavAnchor
+                          link={child}
+                          className="dropdown-item"
+                          onClick={closeNavPanels}
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              )
+            })}
             {endCtaLinks.map((link) => (
               <li key={link.id} className="nav-item d-lg-none">
                 <NavAnchor

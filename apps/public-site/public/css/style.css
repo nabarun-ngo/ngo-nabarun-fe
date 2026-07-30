@@ -338,6 +338,22 @@ li {
     transform: translateY(-2px);
 }
 
+/* Contact links are inline text, so opt out of the circular social-icon styling. */
+.top-bar .top-bar-link {
+    padding: 0;
+    margin: 0;
+    border-radius: 0;
+    color: inherit;
+    text-decoration: none;
+}
+
+.top-bar .top-bar-link:hover {
+    background: transparent;
+    transform: none;
+    color: #fff;
+    text-decoration: underline;
+}
+
 .navbar {
     padding: 15px 0;
     transition: var(--transition-normal);
@@ -508,7 +524,10 @@ li {
         opacity: 0;
     }
     
-    .navbar .nav-item:hover .dropdown-menu {
+    /* focus-within and .show keep the menu reachable by keyboard, not just hover. */
+    .navbar .nav-item:hover .dropdown-menu,
+    .navbar .nav-item:focus-within .dropdown-menu,
+    .navbar .nav-item .dropdown-menu.show {
         transform: translateY(0);
         visibility: visible;
         opacity: 1;
@@ -872,6 +891,8 @@ li {
 .icon-wrapper {
     width: 50px;
     height: 50px;
+    /* Flex child of .mission-point; without this the width shrinks and the circle turns oval. */
+    flex: 0 0 50px;
     border-radius: 50%;
     background: var(--light-gray);
     display: flex;
@@ -1046,6 +1067,26 @@ li {
 .service-card:hover {
     transform: translateY(-10px);
     box-shadow: var(--shadow-lg);
+    border-color: var(--primary);
+}
+
+/* The whole project card is one link to its detail page. */
+a.service-card {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
+
+a.service-card:focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: 3px;
+}
+
+/* The inner "Know More" is a span, so mirror the button hover from the card. */
+a.service-card:hover .btn-outline-primary,
+a.service-card:focus-visible .btn-outline-primary {
+    color: #fff;
+    background-color: var(--primary);
     border-color: var(--primary);
 }
 

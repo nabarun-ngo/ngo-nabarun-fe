@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { BasicInfo, FooterSection } from '@/lib/types'
 import { enabledOnly } from '@/lib/content/enabled'
+import { mailtoHref, mapsHref, socialNetworkName, telHref } from '@/lib/contact'
 import { useRecaptcha } from '@/hooks/useRecaptcha'
 import { useNotification } from '@/hooks/useCommonUI'
 import { subscribeNewsletter } from '@/lib/api/submit'
@@ -12,6 +13,7 @@ interface FooterProps {
   content: FooterSection
   basicInfo: BasicInfo
 }
+
 
 export default function Footer({ content, basicInfo }: FooterProps) {
   const [email, setEmail] = useState('')
@@ -71,8 +73,10 @@ export default function Footer({ content, basicInfo }: FooterProps) {
                         className="social-icon"
                         href={follow.url}
                         target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="Follow us on social media"
+                        // rel="me" marks these as the organisation's own profiles,
+                        // matching the sameAs entries in the NGO JSON-LD.
+                        rel="me noopener noreferrer"
+                        aria-label={`${content.brand.name} on ${socialNetworkName(follow.url)}`}
                       >
                         <i className={follow.icon}></i>
                       </a>
@@ -110,7 +114,14 @@ export default function Footer({ content, basicInfo }: FooterProps) {
                       <i className="fas fa-map-marker-alt"></i>
                     </div>
                     <div className="contact-text">
-                      <span>{basicInfo.location}</span>
+                      <a
+                        href={mapsHref(basicInfo.location)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`${basicInfo.location} on Google Maps`}
+                      >
+                        {basicInfo.location}
+                      </a>
                     </div>
                   </div>
 
@@ -120,7 +131,7 @@ export default function Footer({ content, basicInfo }: FooterProps) {
                         <i className="fas fa-phone-alt"></i>
                       </div>
                       <div className="contact-text">
-                        <a href={`tel:${basicInfo.phone}`}>{basicInfo.phone}</a>
+                        <a href={telHref(basicInfo.phone)}>{basicInfo.phone}</a>
                       </div>
                     </div>
                   )}
@@ -130,7 +141,7 @@ export default function Footer({ content, basicInfo }: FooterProps) {
                       <i className="fas fa-envelope"></i>
                     </div>
                     <div className="contact-text">
-                      <a href={`mailto:${basicInfo.email}`}>{basicInfo.email}</a>
+                      <a href={mailtoHref(basicInfo.email)}>{basicInfo.email}</a>
                     </div>
                   </div>
                 </div>

@@ -6,6 +6,7 @@
     "start": "next dev --turbopack",
     "build": "next build",
     "optimize:images": "node scripts/optimize-images.mjs",
+    "generate:icons": "node scripts/generate-icons.mjs",
     "lint": "eslint"
   },
   "dependencies": {

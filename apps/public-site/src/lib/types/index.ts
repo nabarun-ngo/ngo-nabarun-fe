@@ -161,6 +161,11 @@ export interface SiteMetadata {
   brand: string;
   shortBrand: string;
   name: string;
+  /**
+   * Name Google should show as the site name in search results (WebSite JSON-LD
+   * `name`). Falls back to `alternateName`, then `brand`.
+   */
+  searchName?: string;
   /** WebSite JSON-LD alternate name. */
   alternateName?: string;
   location: string;
@@ -416,6 +421,17 @@ export interface ServicesSection extends SectionWithCta {
   /** Project cards are loaded from dynamic content; static may omit or leave empty. */
   serviceItems?: ServiceItem[];
   learnMoreButton: LearnMoreButton;
+  /** Copy for the `/projects/{slug}/` detail pages. */
+  detail?: ProjectDetailLabels;
+}
+
+export interface ProjectDetailLabels {
+  goalsTitle?: string;
+  impactTitle?: string;
+  eventsTitle?: string;
+  eventsDescription?: string;
+  eventsEmptyMessage?: string;
+  backLabel?: string;
 }
 
 export interface ServiceItem {
@@ -423,6 +439,8 @@ export interface ServiceItem {
   title: string;
   description: string;
   enabled?: boolean;
+  /** Set for API-backed projects; keys the card and its `/projects/{slug}/` link. */
+  slug?: string;
   features: Array<{
     text: string;
     enabled?: boolean;
@@ -725,6 +743,14 @@ export interface DynamicProject {
   goals?: DynamicProjectGoal[];
   beneficiaryCount: number;
   metadata?: DynamicProjectMetadata;
+  /** Events belonging to this project, supplied alongside it by the API. */
+  events?: EventItem[];
+}
+
+/** A project resolved for its own `/projects/{slug}/` page. */
+export interface ProjectDetail extends DynamicProject {
+  slug: string;
+  events: EventItem[];
 }
 
 export interface EventItem {

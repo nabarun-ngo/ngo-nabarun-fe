@@ -32,7 +32,30 @@
         "icon": "fas fa-graduation-cap",
         "impactTitle": "Education Impact",
         "impactLabel": "Children Supported"
-      }
+      },
+      "events": [
+        {
+          "id": "evt-drawing-2026",
+          "title": "Annual Drawing Competition",
+          "description": "Open registration for students ages 6–14.",
+          "date": "2026-08-15",
+          "endDate": "2026-08-15",
+          "location": "Kolkata Community Hall",
+          "projectName": "Child Education",
+          "image": "/img/nbrn/pic3.jpg",
+          "registrationUrl": "/forms/drawing-competition/",
+          "active": true
+        },
+        {
+          "id": "evt-scholarship-drive",
+          "title": "Scholarship Awareness Drive",
+          "description": "Helping families apply for school scholarships and enrolment assistance.",
+          "date": "2026-09-05",
+          "location": "Ichapur, West Bengal",
+          "projectName": "Child Education",
+          "active": true
+        }
+      ]
     },
     {
       "title": "Education Material Distribution",
@@ -112,7 +135,18 @@
         "icon": "fas fa-snowflake",
         "impactTitle": "Winter Relief Impact",
         "impactLabel": "Families Warmed"
-      }
+      },
+      "events": [
+        {
+          "id": "evt-winter-drive",
+          "title": "Winter Relief Drive",
+          "description": "Distribution of blankets and warm clothing to families across Ichapur and Barrackpore.",
+          "date": "2026-12-15",
+          "location": "Ichapur, West Bengal",
+          "projectName": "Winter Relief",
+          "active": true
+        }
+      ]
     },
     {
       "title": "Summer Relief",
@@ -144,7 +178,20 @@
         "icon": "fas fa-gift",
         "impactTitle": "Festival Impact",
         "impactLabel": "Lives Touched Yearly"
-      }
+      },
+      "events": [
+        {
+          "id": "evt-durga-puja-distribution",
+          "title": "Durga Puja Clothes Distribution",
+          "description": "New clothes and festive meals for children at partner orphanages and old age homes.",
+          "date": "2026-10-18",
+          "endDate": "2026-10-20",
+          "location": "Barrackpore, West Bengal",
+          "projectName": "Festival Distribution",
+          "image": "/img/nbrn/pic4.jpg",
+          "active": true
+        }
+      ]
     }
   ],
   "events": [

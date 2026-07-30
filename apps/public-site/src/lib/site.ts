@@ -12,9 +12,17 @@ if (!SITE_URL_ENV) {
 export const SITE_URL = SITE_URL_ENV.replace(/\/$/, '')
 export const IS_NOINDEX = process.env.NEXT_PUBLIC_NOINDEX === 'true'
 
+/** Stable JSON-LD node ids so WebSite and Organization can reference each other. */
+export const WEBSITE_ID = `${SITE_URL}/#website`
+export const ORGANIZATION_ID = `${SITE_URL}/#organization`
+
+/** Intrinsic size of `public/img/logo.*` (kept in sync by scripts/generate-icons.mjs). */
+const LOGO_DIMENSIONS = { width: 1305, height: 877 }
+
 export function getSiteConstants(site: SiteMetadata) {
   return {
     SITE_NAME: site.name,
+    SITE_SEARCH_NAME: site.searchName ?? site.alternateName ?? site.brand,
     SITE_BRAND: site.brand,
     SITE_SHORT_BRAND: site.shortBrand,
     SITE_TITLE: site.title,
@@ -45,8 +53,8 @@ export function buildPageMetadata({
   ogImageAlt?: string
   site?: SiteMetadata
 }): Metadata {
-  const shortBrand = site?.shortBrand ?? 'INWS (NabarunNGO)'
-  const siteName = site?.name ?? 'Ichapur Nabarun Welfare Society'
+  const shortBrand = site?.shortBrand ?? 'Nabarun NGO'
+  const siteName = site?.name ?? 'Ichapur Nabarun Social Welfare Society'
   const defaultKeywords = site?.keywords
   const defaultOgImage = site
     ? toAbsoluteImageUrl(site.openGraph.image, SITE_URL)
@@ -54,10 +62,13 @@ export function buildPageMetadata({
   const ogImage = ogImageOverride
     ? toAbsoluteImageUrl(ogImageOverride, SITE_URL)
     : defaultOgImage
-  const isLogoImage = ogImage.includes('/logo.png')
+  const isLogoImage = /\/logo\.(png|jpe?g|webp|svg)$/i.test(ogImage)
 
   const canonicalPath = path.startsWith('/') ? path : `/${path}`
-  const fullTitle = `${shortBrand} - ${page}`
+  // Google already prints the legal name as the site name above the home page
+  // result, so the title carries the searchable brand instead of repeating it.
+  const fullTitle =
+    canonicalPath === '/' ? (site?.title ?? siteName) : `${shortBrand} - ${page}`
   const isNoIndex = noindex ?? IS_NOINDEX
 
   return {
@@ -78,8 +89,8 @@ export function buildPageMetadata({
       images: [
         {
           url: ogImage,
-          width: isLogoImage ? 547 : 1200,
-          height: isLogoImage ? 547 : 630,
+          width: isLogoImage ? LOGO_DIMENSIONS.width : 1200,
+          height: isLogoImage ? LOGO_DIMENSIONS.height : 630,
           alt: ogImageAlt ?? (isLogoImage ? `${siteName} logo` : `${siteName} — ${page}`),
         },
       ],
@@ -152,14 +163,3 @@ export function getNotFoundMetadata(site: SiteMetadata): Metadata {
     robots: { index: false, follow: false },
   }
 }
-
-export const SITE_SHORT_BRAND = 'INWS (NabarunNGO)'
-export const SITE_TITLE =
-  'Nabarun NGO | Ichapur Nabarun Welfare Society - Empowering Communities'
-export const SITE_DESCRIPTION =
-  'Nabarun (Ichapur Nabarun Welfare Society) is an NGO in West Bengal founded in 2018. NGO Nabarun serves Ichapur, Barrackpore and nearby communities through education, healthcare, disaster relief, and welfare programs.'
-export const SITE_KEYWORDS =
-  'Nabarun, NGO Nabarun, Nabarun NGO, Ichapur Nabarun Welfare Society, Nabarun welfare society, Nabarun Ichapur, Nabarun Barrackpore, Nabarun West Bengal, Nabarun charity'
-export const SITE_LOCATION = 'Ichapur, Barrackpore, West Bengal, India'
-export const SITE_AREA_SERVED = 'Ichapur, Barrackpore, North 24 Parganas, West Bengal'
-export const OG_IMAGE = `${SITE_URL}/img/logo.png`

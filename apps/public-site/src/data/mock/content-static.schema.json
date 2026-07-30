@@ -282,6 +282,9 @@
         "name": {
           "$ref": "#/definitions/placeholderString"
         },
+        "searchName": {
+          "type": "string"
+        },
         "alternateName": {
           "type": "string"
         },
@@ -546,7 +549,7 @@
             "string",
             "null"
           ],
-          "description": "Parent nav link id for nested More menu items."
+          "description": "Parent nav link id. Nests the link under that parent, either as a top-level hover dropdown or inside the More menu."
         }
       }
     },
@@ -1685,6 +1688,37 @@
             },
             "url": {
               "$ref": "#/definitions/placeholderString"
+            }
+          }
+        },
+        "detail": {
+          "type": "object",
+          "description": "Copy for the /projects/{slug}/ detail pages. Every label is optional; omitted ones fall back to a built-in default.",
+          "additionalProperties": false,
+          "properties": {
+            "goalsTitle": {
+              "type": "string",
+              "description": "Heading above the project's goals. Defaults to \"What We Focus On\"."
+            },
+            "impactTitle": {
+              "type": "string",
+              "description": "Label above the beneficiary count. Falls back to the project's own impactTitle, then \"Impact So Far\"."
+            },
+            "eventsTitle": {
+              "type": "string",
+              "description": "Eyebrow for the project's events section. Defaults to \"Events\"."
+            },
+            "eventsDescription": {
+              "type": "string",
+              "description": "Supporting copy under the events heading. Omitted means no copy is shown."
+            },
+            "eventsEmptyMessage": {
+              "type": "string",
+              "description": "Shown when the project has no events."
+            },
+            "backLabel": {
+              "type": "string",
+              "description": "Link back to the projects listing. Defaults to \"View All Projects\"."
             }
           }
         },

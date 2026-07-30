@@ -3,6 +3,7 @@ import type {
   LearnMoreButton,
   ServiceItem,
 } from '@/lib/types'
+import { projectDetailPath, toSlug } from '@/lib/content/slug'
 
 /** Client-side impact count display (e.g. 200+). */
 export function formatImpactCount(count: number): string {
@@ -14,8 +15,10 @@ export function formatImpactCount(count: number): string {
 
 export function mapDynamicProjectToServiceItem(
   project: DynamicProject,
-  learnMore: LearnMoreButton
+  learnMore: LearnMoreButton,
+  projectsBasePath: string
 ): ServiceItem {
+  const slug = toSlug(project.title)
   const metadata = project.metadata ?? {}
   const icon = metadata.icon ?? 'fas fa-hands-helping'
   const impactTitle = metadata.impactTitle ?? project.title
@@ -33,10 +36,11 @@ export function mapDynamicProjectToServiceItem(
     title: project.title,
     description: project.description,
     enabled: true,
+    slug,
     features,
     button: {
       label: learnMore.label,
-      url: learnMore.url,
+      url: projectDetailPath(projectsBasePath, slug),
     },
     overlay: {
       title: impactTitle,
@@ -51,7 +55,10 @@ export function mapDynamicProjectToServiceItem(
 
 export function mapDynamicProjectsToServiceItems(
   projects: DynamicProject[] | undefined,
-  learnMore: LearnMoreButton
+  learnMore: LearnMoreButton,
+  projectsBasePath: string
 ): ServiceItem[] {
-  return (projects ?? []).map((project) => mapDynamicProjectToServiceItem(project, learnMore))
+  return (projects ?? []).map((project) =>
+    mapDynamicProjectToServiceItem(project, learnMore, projectsBasePath)
+  )
 }

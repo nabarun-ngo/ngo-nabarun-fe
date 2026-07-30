@@ -24,6 +24,11 @@
 
 body {
   font-family: var(--nabarun-font-body);
+  /* Scroll-reveal animations park elements 50px to the side before they slide in,
+     which spills past the container's whitespace at every breakpoint boundary.
+     `clip` contains it without turning the body into a scroll container, which
+     `hidden` would do — that breaks smooth anchor scrolling and sticky children. */
+  overflow-x: clip;
 }
 
 h1, h2, h3, .display-4, .display-5, .display-6 {
@@ -33,6 +38,17 @@ h1, h2, h3, .display-4, .display-5, .display-6 {
 /* Anchor sections clear the fixed navbar when using in-page hash links */
 .scroll-margin {
   scroll-margin-top: 120px;
+}
+
+/* A `g-5` row pulls itself out by -24px a side, but `.container` only pads 12px.
+   Above 576px the container's max-width leaves whitespace to absorb that; below
+   it the container is full width, so the surplus becomes a horizontal scrollbar.
+   Columns are all stacked at this width, so narrowing the gutter is invisible. */
+@media (max-width: 575.98px) {
+  .container > .row.g-5,
+  .container-fluid > .row.g-5 {
+    --bs-gutter-x: 1.5rem;
+  }
 }
 
 /* Centered section/page intro blocks (eyebrow + title + lead description). */
@@ -180,6 +196,9 @@ h1, h2, h3, .display-4, .display-5, .display-6 {
   color: rgba(255, 255, 255, 0.6);
   line-height: 1.2;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 /* Desktop nav: prevent link wrapping, balanced spacing */
@@ -442,6 +461,10 @@ h1, h2, h3, .display-4, .display-5, .display-6 {
     max-width: 100%;
     font-size: 0.65rem;
   }
+
+  .navbar-brand-meta {
+    font-size: 0.6rem;
+  }
 }
 
 /* Home embed: scrollable card panels for Projects & Team sections */
@@ -639,26 +662,35 @@ h1, h2, h3, .display-4, .display-5, .display-6 {
   transform: translateY(0);
 }
 
-.animate-on-scroll-left {
-  opacity: 0;
-  transform: translateX(-50px);
-  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.animate-on-scroll-left.animate-in {
-  opacity: 1;
-  transform: translateX(0);
-}
-
+.animate-on-scroll-left,
 .animate-on-scroll-right {
   opacity: 0;
-  transform: translateX(50px);
+  transform: translateY(50px);
   transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.animate-on-scroll-left.animate-in,
 .animate-on-scroll-right.animate-in {
   opacity: 1;
-  transform: translateX(0);
+  transform: translateY(0);
+}
+
+/* Slide in sideways only where the columns actually sit side by side. Below lg
+   they are full width, so translateX would park them outside the viewport and
+   give the page a horizontal scrollbar. */
+@media (min-width: 992px) {
+  .animate-on-scroll-left {
+    transform: translateX(-50px);
+  }
+
+  .animate-on-scroll-right {
+    transform: translateX(50px);
+  }
+
+  .animate-on-scroll-left.animate-in,
+  .animate-on-scroll-right.animate-in {
+    transform: translateX(0);
+  }
 }
 
 /* Staggered animations */

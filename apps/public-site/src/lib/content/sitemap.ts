@@ -1,6 +1,8 @@
 import 'server-only'
 import type { MetadataRoute } from 'next'
 import { fetchStaticContent } from '@/lib/config/content'
+import { getProjectDetails } from '@/lib/api/content.server'
+import { projectDetailPath } from '@/lib/content/slug'
 import { SITE_URL } from '@/lib/site'
 import type { PageSeo } from '@/lib/types'
 
@@ -86,6 +88,17 @@ export async function buildContentSitemap(): Promise<MetadataRoute.Sitemap> {
 
   for (const seo of Object.values(pages.forms ?? {})) {
     pushSeoEntry(entries, seo)
+  }
+
+  // Project detail pages are generated from the API, so they have no static SEO entry.
+  if (!pages.projects.noindex) {
+    const projectsMeta = getSitemapMeta(pages.projects)
+    for (const project of await getProjectDetails()) {
+      entries.push({
+        url: absoluteUrl(projectDetailPath(pages.projects.path, project.slug)),
+        ...projectsMeta,
+      })
+    }
   }
 
   return entries

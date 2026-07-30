@@ -11,7 +11,7 @@ import Contact from '@/components/sections/Contact'
 import FormBlock from '@/components/forms/FormBlock'
 import { fetchStaticContent } from '@/lib/config/content'
 import { getCarousel, getHeroStats, getProjects, getTeam } from '@/lib/api/content.server'
-import { buildPageMetadataFromContent } from '@/lib/site'
+import { buildPageMetadataFromContent, getSiteConstants } from '@/lib/site'
 
 export async function generateMetadata(): Promise<Metadata> {
   const content = await fetchStaticContent()
@@ -23,6 +23,8 @@ export default async function Home() {
   const { layout } = content
   const { common, pages } = layout
   const sections = pages.home.sections
+  const site = content.metadata.site
+  const { SITE_SEARCH_NAME: searchName } = getSiteConstants(site)
 
   const [carousel, projects, team, heroStats] = await Promise.all([
     getCarousel(),
@@ -39,7 +41,7 @@ export default async function Home() {
       <Navbar content={common.navbar} basicInfo={common.org} siteBrand={content.metadata.site.brand} />
       <main>
         <h1 className="visually-hidden">
-          Nabarun NGO — Ichapur Nabarun Welfare Society, West Bengal
+          {searchName} — {site.name}, {site.location}
         </h1>
 
         <Carousel2 items={carousel} />
@@ -47,7 +49,7 @@ export default async function Home() {
           <About
             content={pages.about}
             heroStats={heroStats}
-            showDetail={false}
+            showDetail={sections.about?.mode === 'full'}
             teaserOnly={sections.about?.mode === 'teaser'}
             ctaVariant={sections.about?.mode === 'teaser' ? 'teaser' : 'default'}
             ctaOverride={sections.about?.cta}
