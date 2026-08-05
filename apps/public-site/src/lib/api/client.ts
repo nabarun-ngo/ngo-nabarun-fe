@@ -1,4 +1,4 @@
-import { API_BASE_URL, API_KEY } from '@/lib/config/env'
+import { API_BASE_URL, API_KEY, USE_LEGACY_API } from '@/lib/config/env'
 import type { SuccessResponse } from '@/lib/types'
 
 function resolveApiUrl(endpoint: string): string {
@@ -21,6 +21,10 @@ function isSuccessResponse<T>(json: unknown): json is SuccessResponse<T> {
 }
 
 function unwrapResponsePayload<T>(json: unknown, endpoint: string): T {
+  if (USE_LEGACY_API) {
+    return (json as any).responsePayload !== undefined ? (json as any).responsePayload : (json as T);
+  }
+
   if (!isSuccessResponse<T>(json)) {
     throw new Error(`Invalid API response for ${endpoint}: expected SuccessResponse envelope`)
   }
@@ -78,6 +82,17 @@ export async function apiPost<TBody extends object, TPayload = unknown>(
   }
 
   const json = await res.json()
+  
+  if (USE_LEGACY_API) {
+    return {
+      info: 'Legacy API Response',
+      message: json.message || 'Submitted successfully',
+      timestamp: Date.now(),
+      responsePayload: json,
+      ...json
+    } as SuccessResponse<TPayload>
+  }
+
   if (!isSuccessResponse<TPayload>(json)) {
     throw new Error(`Invalid API response for ${endpoint}: expected SuccessResponse envelope`)
   }
