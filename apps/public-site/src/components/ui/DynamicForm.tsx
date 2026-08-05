@@ -43,7 +43,7 @@ export default function DynamicForm({ form, definition, hideHeading = false }: D
           showNotification(result.message || 'Submitted successfully. Thank you!', 'success')
         } catch {
           showNotification('Submission failed. Please try again.', 'error')
-          throw new Error('submit failed')
+          throw;
         }
       }}
     />
