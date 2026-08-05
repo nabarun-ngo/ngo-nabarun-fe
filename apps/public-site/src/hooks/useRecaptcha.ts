@@ -1,13 +1,17 @@
 'use client'
 
 import { useCallback } from 'react'
-import { MOCK_RECAPTCHA, RECAPTCHA_SITE_KEY, USE_MOCK_API } from '@/lib/config/env'
+import { MOCK_RECAPTCHA, RECAPTCHA_SITE_KEY, RECAPTCHA_ENTERPRISE, USE_MOCK_API } from '@/lib/config/env'
 
 declare global {
   interface Window {
     grecaptcha?: {
       ready: (cb: () => void) => void
       execute: (siteKey: string, opts: { action: string }) => Promise<string>
+      enterprise?: {
+        ready: (cb: () => void) => void
+        execute: (siteKey: string, opts: { action: string }) => Promise<string>
+      }
     }
   }
 }
@@ -21,7 +25,11 @@ function loadRecaptchaScript(): Promise<void> {
 
   scriptPromise = new Promise<void>((resolve, reject) => {
     const script = document.createElement('script')
-    script.src = `https://www.google.com/recaptcha/enterprise.js?render=${RECAPTCHA_SITE_KEY}`
+    const scriptUrl = RECAPTCHA_ENTERPRISE 
+      ? `https://www.google.com/recaptcha/enterprise.js?render=${RECAPTCHA_SITE_KEY}`
+      : `https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`
+    
+    script.src = scriptUrl
     script.async = true
     script.defer = true
     script.onload = () => resolve()
@@ -51,13 +59,14 @@ export function useRecaptcha() {
     await loadRecaptchaScript()
 
     return new Promise<string>((resolve, reject) => {
-      if (!window.grecaptcha) {
+      const captcha = window.grecaptcha?.enterprise || window.grecaptcha;
+      if (!captcha || typeof captcha.ready !== 'function') {
         reject(new Error('reCAPTCHA not available'))
         return
       }
-      window.grecaptcha.ready(() => {
-        window
-          .grecaptcha!.execute(RECAPTCHA_SITE_KEY, { action })
+      captcha.ready(() => {
+        captcha
+          .execute(RECAPTCHA_SITE_KEY, { action })
           .then(resolve)
           .catch(reject)
       })
