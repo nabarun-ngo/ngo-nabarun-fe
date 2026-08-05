@@ -41,9 +41,10 @@ export default function DynamicForm({ form, definition, hideHeading = false }: D
           const payload = serializeFormSubmitValues(definition, values)
           const result = await submitDynamicForm(form.formId ?? definition.key, payload, token, form.recaptchaAction ?? '')
           showNotification(result.message || 'Submitted successfully. Thank you!', 'success')
-        } catch {
+        } catch(err) {
+          console.error('Submission failed. Please try again.', err)
           showNotification('Submission failed. Please try again.', 'error')
-          throw;
+          throw err;
         }
       }}
     />
