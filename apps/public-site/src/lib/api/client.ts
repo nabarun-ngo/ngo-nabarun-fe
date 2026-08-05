@@ -22,7 +22,10 @@ function isSuccessResponse<T>(json: unknown): json is SuccessResponse<T> {
 
 function unwrapResponsePayload<T>(json: unknown, endpoint: string): T {
   if (USE_LEGACY_API) {
-    return (json as any).responsePayload !== undefined ? (json as any).responsePayload : (json as T);
+    if (json != null && typeof json === 'object' && 'responsePayload' in json) {
+      return (json as { responsePayload: T }).responsePayload;
+    }
+    return json as T;
   }
 
   if (!isSuccessResponse<T>(json)) {
