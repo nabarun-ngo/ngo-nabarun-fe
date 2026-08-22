@@ -16,7 +16,7 @@ export function serializeFormSubmitValues(
     if (!field) continue;
 
     if (raw === null || raw === undefined) continue;
-    if (raw === '' && field.fieldType !== 'boolean') continue;
+    if (raw === '' && field.fieldType !== 'boolean' && field.fieldType !== 'toggle') continue;
     if (field.fieldType === 'phone' && isPhoneValueEmpty(raw)) continue;
 
     switch (field.fieldType) {
@@ -24,10 +24,14 @@ export function serializeFormSubmitValues(
         payload[key] = typeof raw === 'number' ? raw : Number(raw);
         break;
       case 'boolean':
+      case 'toggle':
         payload[key] = Boolean(raw);
         break;
       case 'multiselect':
         payload[key] = Array.isArray(raw) ? raw : [];
+        break;
+      case 'date_range':
+        payload[key] = raw;
         break;
       default:
         payload[key] = raw;

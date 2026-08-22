@@ -5,15 +5,16 @@
     "dist"
   ],
   "publishConfig": {
-    "access": "restricted"
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
   "peerDependencies": {
-    "@angular/animations": "^19.0.0",
-    "@angular/cdk": "^19.0.0",
-    "@angular/common": "^19.0.0",
-    "@angular/core": "^19.0.0",
-    "@angular/forms": "^19.0.0",
-    "@angular/material": "^19.0.0"
+    "@angular/animations": "^19.0.0 || ^20.0.0 || ^21.0.0",
+    "@angular/cdk": "^19.0.0 || ^20.0.0 || ^21.0.0",
+    "@angular/common": "^19.0.0 || ^20.0.0 || ^21.0.0",
+    "@angular/core": "^19.0.0 || ^20.0.0 || ^21.0.0",
+    "@angular/forms": "^19.0.0 || ^20.0.0 || ^21.0.0",
+    "@angular/material": "^19.0.0 || ^20.0.0 || ^21.0.0"
   },
   "dependencies": {
     "@nabarun-ngo/forms-core": "*",
@@ -21,10 +22,10 @@
   },
   "sideEffects": false,
   "main": "./dist/fesm2022/nabarun-ngo-forms-angular.mjs",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/types/nabarun-ngo-forms-angular.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/types/nabarun-ngo-forms-angular.d.ts",
       "default": "./dist/fesm2022/nabarun-ngo-forms-angular.mjs"
     }
   },
@@ -33,13 +34,15 @@
     "lint": "tsc --noEmit -p tsconfig.lib.json"
   },
   "devDependencies": {
-    "@angular/animations": "^19.2.0",
-    "@angular/cdk": "^19.2.0",
-    "@angular/common": "^19.2.0",
-    "@angular/core": "^19.2.0",
-    "@angular/forms": "^19.2.0",
-    "@angular/material": "^19.2.0",
-    "ng-packagr": "^19.2.0",
-    "typescript": "~5.7.2"
+    "@angular/animations": "^21.2.19",
+    "@angular/cdk": "^21.2.14",
+    "@angular/common": "^21.2.19",
+    "@angular/compiler": "^21.2.19",
+    "@angular/compiler-cli": "^21.2.19",
+    "@angular/core": "^21.2.19",
+    "@angular/forms": "^21.2.19",
+    "@angular/material": "^21.2.14",
+    "ng-packagr": "^21.2.0",
+    "typescript": "~5.9.3"
   }
 }

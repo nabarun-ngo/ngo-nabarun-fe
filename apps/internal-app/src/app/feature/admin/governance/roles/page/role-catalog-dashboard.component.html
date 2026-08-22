@@ -1,0 +1,11 @@
+<div class="admin-list-shell">
+  <section class="admin-list-shell__content">
+    <app-nav-back [fallbackLink]="adminBackLink" fallbackLabel="Admin"></app-nav-back>
+    <na-list-dashboard
+      [config]="config"
+      [refData]="refData"
+      [routeContext]="routeContext"
+      (notification)="onNotification($event)">
+    </na-list-dashboard>
+  </section>
+</div>

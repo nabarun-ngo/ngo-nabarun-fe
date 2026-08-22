@@ -1,5 +1,6 @@
 'use client';
 
+import { isDateRangeValue, mergeDateRangePart } from '@nabarun-ngo/forms-core';
 import { createUnstyledComponents } from '../unstyled.js';
 import { renderPhoneFieldControl } from '../phone-field.js';
 import type { CustomFormClassNames, CustomFormComponents } from '../types.js';
@@ -138,5 +139,40 @@ export function createPublicBootstrapFormComponents(): CustomFormComponents {
         aria-invalid={p.error ? true : undefined}
       />
     ),
+    date_range: (p) => {
+      const range = isDateRangeValue(p.value) ? p.value : {};
+      return (
+        <div className="d-flex gap-2" data-cf-type="date_range">
+          <input
+            id={`${p.id}-start`}
+            name={`${p.name}-start`}
+            type="date"
+            className={`form-control${p.error ? ' is-invalid' : ''}`}
+            value={range.startDate ?? ''}
+            onChange={(e) =>
+              p.onChange(mergeDateRangePart(range, { startDate: e.target.value || undefined }))
+            }
+            onBlur={p.onBlur}
+            disabled={p.disabled}
+            aria-invalid={p.error ? true : undefined}
+            aria-label="Start date"
+          />
+          <input
+            id={`${p.id}-end`}
+            name={`${p.name}-end`}
+            type="date"
+            className={`form-control${p.error ? ' is-invalid' : ''}`}
+            value={range.endDate ?? ''}
+            onChange={(e) =>
+              p.onChange(mergeDateRangePart(range, { endDate: e.target.value || undefined }))
+            }
+            onBlur={p.onBlur}
+            disabled={p.disabled}
+            aria-invalid={p.error ? true : undefined}
+            aria-label="End date"
+          />
+        </div>
+      );
+    },
   };
 }

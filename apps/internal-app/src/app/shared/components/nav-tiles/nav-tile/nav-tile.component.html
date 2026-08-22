@@ -1,0 +1,24 @@
+<a
+  [routerLink]="tile.link"
+  [queryParams]="tile.queryParams ?? null"
+  [attr.id]="tile.id"
+  [ngClass]="linkClasses">
+
+  <div [ngClass]="iconWrapClasses">
+    <app-nav-tile-icon [icon]="tile.icon"></app-nav-tile-icon>
+  </div>
+
+  <ng-container [ngSwitch]="variant">
+    <ng-container *ngSwitchCase="'hub'">
+      <span class="finance-hub__name" [attr.title]="tile.label">{{ tile.label }}</span>
+      <span *ngIf="tile.description" class="finance-hub__desc" [attr.title]="tile.description">
+        {{ tile.description }}
+      </span>
+    </ng-container>
+
+    <ng-container *ngSwitchDefault>
+      <span class="qa-tile__name" [attr.title]="tile.label">{{ tile.label }}</span>
+      <span *ngIf="tile.metric?.showBadge" class="qa-tile__badge"></span>
+    </ng-container>
+  </ng-container>
+</a>

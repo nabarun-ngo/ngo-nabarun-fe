@@ -5,12 +5,13 @@
     "dist"
   ],
   "publishConfig": {
-    "access": "restricted"
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
   "peerDependencies": {
-    "@angular/common": "^19.0.0",
-    "@angular/core": "^19.0.0",
-    "@angular/forms": "^19.0.0"
+    "@angular/common": "^19.0.0 || ^20.0.0 || ^21.0.0",
+    "@angular/core": "^19.0.0 || ^20.0.0 || ^21.0.0",
+    "@angular/forms": "^19.0.0 || ^20.0.0 || ^21.0.0"
   },
   "dependencies": {
     "@nabarun-ngo/comment-core": "*",
@@ -18,10 +19,10 @@
   },
   "sideEffects": false,
   "main": "./dist/fesm2022/nabarun-ngo-comment-angular.mjs",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/types/nabarun-ngo-comment-angular.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/types/nabarun-ngo-comment-angular.d.ts",
       "default": "./dist/fesm2022/nabarun-ngo-comment-angular.mjs"
     }
   },
@@ -30,10 +31,12 @@
     "lint": "tsc --noEmit -p tsconfig.lib.json"
   },
   "devDependencies": {
-    "@angular/common": "^19.2.0",
-    "@angular/core": "^19.2.0",
-    "@angular/forms": "^19.2.0",
-    "ng-packagr": "^19.2.0",
-    "typescript": "~5.7.2"
+    "@angular/common": "^21.2.19",
+    "@angular/compiler": "^21.2.19",
+    "@angular/compiler-cli": "^21.2.19",
+    "@angular/core": "^21.2.19",
+    "@angular/forms": "^21.2.19",
+    "ng-packagr": "^21.2.0",
+    "typescript": "~5.9.3"
   }
 }

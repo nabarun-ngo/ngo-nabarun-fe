@@ -1,0 +1,65 @@
+<div class="member-detail-hero" *ngIf="showHero">
+  <div class="member-detail-hero__card">
+    <div class="member-detail-hero__avatar-col" *ngIf="showAvatar">
+      <button
+        type="button"
+        class="member-detail-hero__avatar-btn"
+        [class.member-detail-hero__avatar-btn--previewable]="canPreview"
+        [attr.aria-label]="canPreview ? 'View profile photo' : alt"
+        [disabled]="!canPreview"
+        (click)="onAvatarClick()">
+        <img
+          *ngIf="avatarUrl"
+          class="member-detail-hero__avatar"
+          [src]="avatarUrl"
+          [alt]="alt"
+          loading="lazy">
+        <span
+          *ngIf="!avatarUrl && avatarInitials"
+          class="member-detail-hero__avatar member-detail-hero__avatar--initials"
+          aria-hidden="true">{{ avatarInitials }}</span>
+      </button>
+    </div>
+
+    <div class="member-detail-hero__meta">
+      <div class="member-detail-hero__row" *ngIf="statusBadge">
+        <span class="member-detail-hero__label">Status</span>
+        <span class="member-detail-hero__badge" [ngClass]="statusBadgeClass">
+          {{ statusBadge.label }}
+        </span>
+      </div>
+
+      <div class="member-detail-hero__row" *ngIf="roleLabels.length">
+        <span class="member-detail-hero__label">Roles</span>
+        <div class="member-detail-hero__chips">
+          <span
+            *ngFor="let role of roleLabels; trackBy: trackRole"
+            class="member-detail-hero__chip">{{ role }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  *ngIf="previewOpen && avatarUrl"
+  class="member-detail-hero__preview"
+  role="dialog"
+  aria-modal="true"
+  [attr.aria-label]="alt + ' preview'"
+  (click)="onPreviewBackdropClick($event)">
+  <button
+    type="button"
+    class="member-detail-hero__preview-close"
+    (click)="closePreview()"
+    aria-label="Close preview">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+  </button>
+  <img
+    class="member-detail-hero__preview-image"
+    [src]="avatarUrl"
+    [alt]="alt">
+</div>

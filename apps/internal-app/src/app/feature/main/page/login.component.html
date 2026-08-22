@@ -1,0 +1,127 @@
+<section class="login-screen">
+  <div class="login-screen__bg" aria-hidden="true">
+    <span class="login-screen__orb login-screen__orb--1"></span>
+    <span class="login-screen__orb login-screen__orb--2"></span>
+    <span class="login-screen__orb login-screen__orb--3"></span>
+  </div>
+
+  <div class="login-card">
+    <header class="login-header">
+      <div class="login-header__pattern" aria-hidden="true"></div>
+      <div class="login-header__logo">
+        <img src="/assets/logo.png" loading="lazy" alt="Nabarun Logo">
+      </div>
+      <p class="login-header__brand">Nabarun NGO</p>
+      <p class="login-header__tagline">Compassion in Action, Community at Heart</p>
+      <svg class="login-header__wave" viewBox="0 0 400 32" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0,16 C80,32 160,0 240,16 C320,32 360,8 400,16 L400,32 L0,32 Z" fill="currentColor" />
+      </svg>
+    </header>
+
+    <div class="login-body">
+      <div class="login-body__center">
+        <div class="login-intro">
+          <h1 class="login-body__title">Welcome back</h1>
+          <p class="login-body__subtitle">Sign in to access your account.</p>
+        </div>
+
+      @if (isCodeError) {
+        <div class="login-alert login-alert--error" role="alert">
+          <svg class="login-alert__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+          </svg>
+          <div [innerHtml]="(codeErrorDescription | htmlSanitizer)"></div>
+        </div>
+      }
+
+      @if (!isAuthenticated) {
+        <div class="login-actions">
+          <button id="otp" type="button" class="login-btn login-btn--primary" (click)="loginWithoutPassword()">
+            <span class="login-btn__badge">Recommended</span>
+            <span class="login-btn__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+            </span>
+            <span class="login-btn__text">
+              <span class="login-btn__label">Continue with OTP</span>
+              <span class="login-btn__hint">Magic link to your email</span>
+            </span>
+            <svg class="login-btn__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+
+          <div class="login-divider" role="separator">
+            <span>or</span>
+          </div>
+
+          <button id="password" type="button" class="login-btn login-btn--secondary" (click)="loginWithPassword()">
+            <span class="login-btn__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </span>
+            <span class="login-btn__text">
+              <span class="login-btn__label">Continue with Password</span>
+              <span class="login-btn__hint">Username &amp; password sign in</span>
+            </span>
+            <svg class="login-btn__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      }
+
+      @if (showInstallButton) {
+        <div class="login-install">
+          <p class="login-install__label">Get the app experience</p>
+          <button type="button" class="login-install__btn" (click)="installPWA()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            <span>{{ isIOS ? 'How to Install' : 'Install App' }}</span>
+          </button>
+
+          @if (showIOSInstructions) {
+            <div class="login-install__steps">
+              <p>
+                1. Tap the <strong>Share</strong> icon
+                <svg class="login-install__inline-icon" viewBox="0 0 50 50" fill="currentColor" aria-hidden="true">
+                  <path d="M30.3 13.7L25 8.4l-5.3 5.3-1.4-1.4L25 5.6l6.7 6.7z" />
+                  <path d="M24 7h2v21h-2z" />
+                  <path
+                    d="M35 40H15c-1.7 0-3-1.3-3-3V19c0-1.7 1.3-3 3-3h7v2h-7c-.6 0-1 .4-1 1v18c0 .6.4 1 1 1h20c.6 0 1-.4 1-1V19c0-.6-.4-1-1-1h-7v-2h7c1.7 0 3 1.3 3 3v18c0 1.7-1.3 3-3 3z" />
+                </svg>
+              </p>
+              <p>
+                2. Select <strong>Add to Home Screen</strong>
+                <svg class="login-install__inline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  aria-hidden="true">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="12" y1="8" x2="12" y2="16"></line>
+                  <line x1="8" y1="12" x2="16" y2="12"></line>
+                </svg>
+              </p>
+            </div>
+          }
+        </div>
+      }
+      </div>
+
+      <footer class="login-footer">
+        <p>
+          By continuing, you agree to our
+          <a href="https://ngonabarun.web.app/policy/privacy-policy" target="_blank" rel="noopener noreferrer">
+            Privacy Policy
+          </a>
+        </p>
+        <span class="login-footer__env">{{ env }}</span>
+      </footer>
+    </div>
+  </div>
+</section>

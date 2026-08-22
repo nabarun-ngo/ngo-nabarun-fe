@@ -1,6 +1,13 @@
-import { bootstrapApplication } from '@angular/platform-browser';
-import { appConfig } from './app/app.config';
-import { AppComponent } from './app/app.component';
+import { provideZoneChangeDetection } from "@angular/core";
+import { platformBrowser } from '@angular/platform-browser';
 
-bootstrapApplication(AppComponent, appConfig)
-  .catch((err) => console.error(err));
+import { AppModule } from './app/app.module';
+import { hideAppSplash } from './app/splash-screen';
+
+
+platformBrowser().bootstrapModule(AppModule, { applicationProviders: [provideZoneChangeDetection()], })
+  .then(() => hideAppSplash())
+  .catch(err => {
+    hideAppSplash();
+    console.error(err);
+  });

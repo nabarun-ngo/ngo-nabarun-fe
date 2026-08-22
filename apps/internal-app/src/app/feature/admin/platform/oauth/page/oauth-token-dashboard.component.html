@@ -1,0 +1,35 @@
+<div class="admin-list-shell">
+  <section class="admin-list-shell__content">
+    <app-nav-back [fallbackLink]="adminBackLink" fallbackLabel="Admin"></app-nav-back>
+
+    <aside
+      *ngIf="authorizationStatus"
+      class="authorization-status"
+      [class.authorization-status--success]="authorizationStatus === 'success'"
+      [class.authorization-status--timeout]="authorizationStatus === 'timeout'"
+      aria-live="polite">
+      <span class="authorization-status__indicator" aria-hidden="true"></span>
+      <div>
+        <strong *ngIf="authorizationStatus === 'waiting'">Waiting for authorization</strong>
+        <strong *ngIf="authorizationStatus === 'success'">Account authorized</strong>
+        <strong *ngIf="authorizationStatus === 'timeout'">Authorization check timed out</strong>
+        <p *ngIf="authorizationStatus === 'waiting'">
+          Complete the provider flow in the new tab. Next check in {{ nextCheckSeconds }}s;
+          monitoring stops in {{ remainingSeconds }}s.
+        </p>
+        <p *ngIf="authorizationStatus === 'success'">The connection list has been refreshed.</p>
+        <p *ngIf="authorizationStatus === 'timeout'">
+          Refresh the list after completing authorization, or start again.
+        </p>
+      </div>
+    </aside>
+
+    <na-list-dashboard
+      *ngIf="config as listConfig"
+      [config]="listConfig"
+      [refData]="refData"
+      (createComplete)="onAuthorizationStarted($event)"
+      (notification)="onNotification($event)">
+    </na-list-dashboard>
+  </section>
+</div>

@@ -3,6 +3,19 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "env": ["NG_APP_*", "NEXT_PUBLIC_*", "API_KEY", "NAV_*"],
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**",
+        "out/**",
+        "dist/**"
+      ]
+    },
+    "build:stage": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "env": ["NG_APP_*", "NEXT_PUBLIC_*", "API_KEY", "NAV_*"],
       "outputs": [
         ".next/**",
         "!.next/cache/**",
@@ -16,13 +29,13 @@
       "persistent": true
     },
     "lint": {},
+    "test": {
+      "dependsOn": ["^build"]
+    },
     "start": {
       "dependsOn": ["build"],
       "cache": false,
       "persistent": true
-    },
-    "optimize:images": {
-      "outputs": []
     }
   }
 }

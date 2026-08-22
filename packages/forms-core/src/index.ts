@@ -33,6 +33,7 @@ export {
   groupFieldsByStep,
   validateForm,
   applyDependentValueEffects,
+  resolveFieldOptions,
 } from './engine/form-engine.js';
 export { FormEngine } from './engine/form-engine-class.js';
 export { normalizeFieldType } from './adapters/normalize-field-type.js';
@@ -41,4 +42,29 @@ export {
   serializeFormSubmitValues,
   serializePublicFormSubmitValues,
 } from './serialize-form-submit-values.js';
+export {
+  formatIsoDate,
+  parseIsoDate,
+  isDateRangeEmpty,
+  isDateRangeValue,
+  mergeDateRangePart,
+  emptyDateRangeValue,
+} from './engine/date-range.js';
+export {
+  resolveEffectiveDateBounds,
+  isIsoDateWithinBounds,
+  isDateRangeWithinBounds,
+  isDateWithinBounds,
+  createDatePickerFilter,
+  dateConstraintErrorMessage,
+  hasDateConstraints,
+} from './engine/date-constraints.js';
+export type { ResolvedDateBounds } from './engine/date-constraints.js';
+export type { DateRangeValue, DateFieldConstraints, DateBoundRef, FieldOptionsResolver, FieldHintResolver } from './models/types.js';
+export {
+  baseField,
+  toFieldOptions,
+  dateConstraintsTodayMax,
+} from './builders/field-builders.js';
+export type { KeyValueLike } from './builders/field-builders.js';
 export { DEMO_FORM_DEFINITION } from './fixtures/demo-form-definition.js';

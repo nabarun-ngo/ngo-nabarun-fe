@@ -9,7 +9,10 @@ const LEGACY_TYPE_MAP: Record<string, CustomFieldType> = {
   NUMBER: 'number',
   CHECKBOX: 'boolean',
   BOOLEAN: 'boolean',
+  TOGGLE: 'toggle',
+  AUTOCOMPLETE: 'autocomplete',
   DATE: 'date',
+  DATE_RANGE: 'date_range',
   SELECT: 'select',
   MULTISELECT: 'multiselect',
 };

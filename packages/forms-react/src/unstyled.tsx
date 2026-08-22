@@ -1,6 +1,11 @@
-import type { CustomFieldType } from '@nabarun-ngo/forms-core';
+import type { CustomFieldType, DateRangeValue } from '@nabarun-ngo/forms-core';
+import { isDateRangeValue, mergeDateRangePart } from '@nabarun-ngo/forms-core';
 import type { CustomFormClassNames, CustomFormComponents, FieldRenderProps } from './types.js';
 import { renderPhoneFieldControl } from './phone-field.js';
+
+function dateRangeValue(value: FieldRenderProps['value']): DateRangeValue {
+  return isDateRangeValue(value) ? value : {};
+}
 
 function inputTypeForField(fieldType: CustomFieldType): string {
   switch (fieldType) {
@@ -12,6 +17,8 @@ function inputTypeForField(fieldType: CustomFieldType): string {
       return 'number';
     case 'date':
       return 'date';
+    case 'password':
+      return 'password';
     default:
       return 'text';
   }
@@ -22,6 +29,7 @@ function stringValue(value: FieldRenderProps['value']): string {
   if (typeof value === 'boolean') return value ? 'true' : '';
   if (typeof value === 'number') return String(value);
   if (Array.isArray(value)) return value.join(',');
+  if (isDateRangeValue(value)) return '';
   return value;
 }
 
@@ -110,6 +118,41 @@ export function createUnstyledComponents(
         data-cf-type="date"
       />
     ),
+    date_range: (p) => {
+      const range = dateRangeValue(p.value);
+      return (
+        <div className={classNames?.phoneGroup} data-cf-type="date_range">
+          <input
+            id={`${p.id}-start`}
+            name={`${p.name}-start`}
+            type="date"
+            className={controlClass}
+            value={range.startDate ?? ''}
+            onChange={(e) =>
+              p.onChange(mergeDateRangePart(range, { startDate: e.target.value || undefined }))
+            }
+            onBlur={p.onBlur}
+            disabled={p.disabled}
+            aria-invalid={p.error ? true : undefined}
+            aria-label="Start date"
+          />
+          <input
+            id={`${p.id}-end`}
+            name={`${p.name}-end`}
+            type="date"
+            className={controlClass}
+            value={range.endDate ?? ''}
+            onChange={(e) =>
+              p.onChange(mergeDateRangePart(range, { endDate: e.target.value || undefined }))
+            }
+            onBlur={p.onBlur}
+            disabled={p.disabled}
+            aria-invalid={p.error ? true : undefined}
+            aria-label="End date"
+          />
+        </div>
+      );
+    },
     boolean: (p) => (
       <input
         id={p.id}

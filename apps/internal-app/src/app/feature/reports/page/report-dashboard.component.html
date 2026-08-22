@@ -1,0 +1,15 @@
+<div class="report-shell">
+  <section class="report-shell__content">
+    <app-nav-back
+      [fallbackLink]="backLink"
+      [fallbackLabel]="backLabel">
+    </app-nav-back>
+
+    <na-list-dashboard
+      [config]="config"
+      [refData]="refData"
+      [routeContext]="routeContext"
+      (notification)="onNotification($event)">
+    </na-list-dashboard>
+  </section>
+</div>

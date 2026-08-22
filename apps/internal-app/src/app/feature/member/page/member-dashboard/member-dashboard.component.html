@@ -1,0 +1,28 @@
+<div class="member-shell">
+  <section class="member-shell__content">
+    <app-nav-back
+      [fallbackLink]="dashboardLink"
+      fallbackLabel="Dashboard">
+    </app-nav-back>
+
+    <na-list-dashboard
+      [config]="config"
+      [refData]="refData"
+      [routeContext]="routeContext"
+      [formEngineOptions]="phoneEngineOptions"
+      (notification)="onNotification($event)"
+      (rowUpdate)="onMemberUpdated()"
+      (saveError)="onSaveError($event)">
+      <ng-template listDetailHero let-member>
+        <app-member-detail-hero
+          *ngIf="member"
+          [avatarUrl]="heroAvatarUrl(member)"
+          [avatarInitials]="heroInitials(member)"
+          [statusBadge]="heroStatusBadge(member)"
+          [roleLabels]="heroRoleLabels(member)"
+          [alt]="member.fullName || member.email">
+        </app-member-detail-hero>
+      </ng-template>
+    </na-list-dashboard>
+  </section>
+</div>

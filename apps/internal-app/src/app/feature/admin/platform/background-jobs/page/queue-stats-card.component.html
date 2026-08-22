@@ -1,0 +1,89 @@
+<section class="queue-card" [class.queue-card--open]="expanded">
+  <button
+    type="button"
+    class="queue-card__header"
+    [attr.aria-expanded]="expanded"
+    (click)="toggle()">
+    <span class="queue-card__title">Queue overview</span>
+
+    <span class="queue-card__health" [attr.data-tone]="healthTone">{{ healthLabel }}</span>
+    <span class="queue-card__health" data-tone="warning" *ngIf="overview?.paused">Paused</span>
+
+    <span class="queue-card__trailing">
+      <span class="queue-card__summary" *ngIf="!expanded">
+        <span class="queue-card__summary-item" *ngFor="let metric of summaryMetrics">
+          <i class="queue-card__dot" [attr.data-tone]="metric.tone"></i>
+          {{ metric.label }} <b>{{ metric.value }}</b>
+        </span>
+      </span>
+
+      <mat-icon class="queue-card__chevron">expand_less</mat-icon>
+    </span>
+  </button>
+
+  <div class="queue-card__body" *ngIf="expanded" [attr.aria-busy]="loading">
+    <p class="queue-card__state" *ngIf="loading && !overview">Loading queue statistics…</p>
+    <p class="queue-card__state" *ngIf="!loading && !overview">Queue statistics are unavailable.</p>
+
+    <ng-container *ngIf="overview as stats">
+      <div class="queue-card__metrics">
+        <span
+          class="queue-card__metric"
+          *ngFor="let metric of metrics"
+          [attr.data-tone]="metric.tone"
+          [class.queue-card__metric--attention]="metric.attention">
+          <i class="queue-card__dot" [attr.data-tone]="metric.tone"></i>
+          <b class="queue-card__metric-value">{{ metric.value }}</b>
+          <span class="queue-card__metric-label">{{ metric.label }}</span>
+        </span>
+      </div>
+
+      <div class="queue-card__facts">
+        <span class="queue-card__fact" *ngFor="let fact of facts">
+          <span class="queue-card__fact-label">{{ fact.label }}</span>
+          <span class="queue-card__fact-value">{{ fact.value }}</span>
+        </span>
+      </div>
+
+      <p class="queue-card__issue" *ngFor="let issue of stats.issues">
+        <mat-icon>error_outline</mat-icon>
+        {{ issue }}
+      </p>
+    </ng-container>
+
+    <div class="queue-card__actions">
+      <button
+        type="button"
+        class="app-btn app-btn--secondary queue-card__btn"
+        [disabled]="loading"
+        (click)="refresh.emit()">
+        <mat-icon [class.queue-card__btn-icon--spin]="loading">refresh</mat-icon>
+        Refresh
+      </button>
+      <button
+        *ngIf="canManageQueue"
+        type="button"
+        class="app-btn app-btn--secondary queue-card__btn"
+        (click)="pause.emit()">
+        <mat-icon>pause</mat-icon>
+        Pause
+      </button>
+      <button
+        *ngIf="canManageQueue"
+        type="button"
+        class="app-btn app-btn--secondary queue-card__btn"
+        (click)="resume.emit()">
+        <mat-icon>play_arrow</mat-icon>
+        Resume
+      </button>
+      <button
+        *ngIf="canClean"
+        type="button"
+        class="app-btn app-btn--secondary queue-card__btn queue-card__btn--danger"
+        (click)="clearOldJobs.emit()">
+        <mat-icon>delete_sweep</mat-icon>
+        Clear old jobs
+      </button>
+    </div>
+  </div>
+</section>

@@ -5,6 +5,7 @@ import type {
   FormValidationResult,
   FormValues,
   ResolvedField,
+  FieldOption,
 } from '../models/types.js';
 import { getDependentOptions } from './dependent-options.js';
 import { isEmptyValue } from './defaults.js';
@@ -17,20 +18,41 @@ import {
   matchesValidationPattern,
   validationErrorMessageForValue,
 } from './validation-pattern.js';
+import {
+  dateConstraintErrorMessage,
+  isDateRangeWithinBounds,
+  isIsoDateWithinBounds,
+  resolveEffectiveDateBounds,
+} from './date-constraints.js';
 import type { FormEngineOptions } from '../models/types.js';
+
+export function resolveFieldOptions(
+  def: FormFieldDefinition,
+  values: FormValues,
+): FieldOption[] {
+  const { fieldOptions } = def;
+  return typeof fieldOptions === 'function' ? fieldOptions(values) : fieldOptions;
+}
 
 function resolveAvailableOptions(
   def: FormFieldDefinition,
   defByKey: Map<string, FormFieldDefinition>,
   values: FormValues,
 ): ResolvedField['availableOptions'] {
-  if (def.fieldType !== 'select' && def.fieldType !== 'multiselect') return [];
+  if (def.fieldType === 'autocomplete') {
+    return resolveFieldOptions(def, values);
+  }
+
+  if (def.fieldType !== 'select' && def.fieldType !== 'multiselect') {
+    return [];
+  }
+
   if (def.dependentOptions) {
     const parentKey = def.dependentOptions.dependsOnKey;
     const parentValue = getParentStringValue(values, parentKey);
     return getDependentOptions(def.dependentOptions, parentValue);
   }
-  return def.fieldOptions;
+  return resolveFieldOptions(def, values);
 }
 
 export function resolveFieldState(
@@ -158,6 +180,24 @@ export function validateForm(
         validationRules,
         options,
       );
+      continue;
+    }
+
+    const dateConstraints = field.definition.dateConstraints;
+    if (
+      !isEmptyValue(fieldType, value, options) &&
+      dateConstraints &&
+      (fieldType === 'date' || fieldType === 'date_range')
+    ) {
+      const bounds = resolveEffectiveDateBounds(dateConstraints, values);
+      const withinBounds =
+        fieldType === 'date'
+          ? isIsoDateWithinBounds(typeof value === 'string' ? value : undefined, bounds)
+          : isDateRangeWithinBounds(value, bounds);
+      if (!withinBounds) {
+        validationViolations.push(key);
+        fieldErrors[key] = dateConstraintErrorMessage(label, bounds, dateConstraints);
+      }
     }
   }
 
@@ -185,26 +225,34 @@ export function applyDependentValueEffects(
 
   for (const field of resolved) {
     const def = field.definition;
-    if (
+    const dependsOnChangedKey =
       def.dependentOptions?.dependsOnKey === changedKey ||
-      def.condition?.dependsOnKey === changedKey
-    ) {
-      if (!field.visible) {
+      def.condition?.dependsOnKey === changedKey;
+    if (!dependsOnChangedKey) {
+      continue;
+    }
+
+    if (!field.visible) {
+      // Only clear values for dependent-option fields that became invalid.
+      // Condition-only visibility hides fields (e.g. amount when status is PAID)
+      // but their values must be preserved for submit.
+      if (def.dependentOptions?.dependsOnKey === changedKey) {
         next[def.key] = getDefaultForClear(def.fieldType);
-        continue;
       }
-      if (def.fieldType === 'select' || def.fieldType === 'multiselect') {
-        const availableKeys = new Set(field.availableOptions.map((o) => o.key));
-        const current = next[def.key];
-        if (
-          def.dependentOptions &&
-          availableKeys.size === 0 &&
-          !isEmptyValue(def.fieldType, current, engineOptions)
-        ) {
-          next[def.key] = getDefaultForClear(def.fieldType);
-        } else if (!valueAllowedForOptions(def, current, availableKeys)) {
-          next[def.key] = getDefaultForClear(def.fieldType);
-        }
+      continue;
+    }
+
+    if (def.fieldType === 'select' || def.fieldType === 'multiselect') {
+      const availableKeys = new Set(field.availableOptions.map((o) => o.key));
+      const current = next[def.key];
+      if (
+        def.dependentOptions &&
+        availableKeys.size === 0 &&
+        !isEmptyValue(def.fieldType, current, engineOptions)
+      ) {
+        next[def.key] = getDefaultForClear(def.fieldType);
+      } else if (!valueAllowedForOptions(def, current, availableKeys)) {
+        next[def.key] = getDefaultForClear(def.fieldType);
       }
     }
   }
@@ -215,6 +263,7 @@ export function applyDependentValueEffects(
 function getDefaultForClear(fieldType: FormFieldDefinition['fieldType']): FormValues[string] {
   switch (fieldType) {
     case 'boolean':
+    case 'toggle':
       return false;
     case 'multiselect':
       return [];

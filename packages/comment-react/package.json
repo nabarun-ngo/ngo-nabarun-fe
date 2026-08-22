@@ -8,7 +8,8 @@
     "dist"
   ],
   "publishConfig": {
-    "access": "restricted"
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
   "exports": {
     ".": {
@@ -32,6 +33,6 @@
     "@types/react-dom": "^19",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "typescript": "^5.7.2"
+    "typescript": "^5.9.3"
   }
 }

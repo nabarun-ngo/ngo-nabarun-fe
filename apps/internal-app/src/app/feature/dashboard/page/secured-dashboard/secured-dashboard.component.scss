@@ -1,0 +1,215 @@
+/* ── Dashboard canvas (mobile app grey — tiles read as elevated cards) ─ */
+.dash-root {
+  padding: 14px 8px 24px;
+  background: linear-gradient(180deg, #dfe6ef 0%, #e8edf3 45%, #eef2f7 100%);
+  min-height: 100%;
+
+  @media (max-width: 767px) {
+    padding-bottom: 32px;
+  }
+
+  @media (min-width: 768px) {
+    padding: 0;
+    max-width: none;
+    margin: 0;
+    background: transparent;
+  }
+}
+
+/* ── Plain greeting ─────────────────────────────────────────────── */
+.dash-greeting {
+  margin: 0 0 14px;
+  padding: 0;
+  text-align: center;
+}
+
+.dash-greeting__sub {
+  font-size: .75rem;
+  color: var(--secondary-500);
+  margin: 0 0 2px;
+  letter-spacing: .01em;
+}
+
+.dash-greeting__name {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--secondary-900);
+  margin: 0;
+  font-family: var(--nabarun-font-heading);
+  line-height: 1.25;
+}
+
+.dash-icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #f8fafc;
+  border: 1px solid var(--secondary-200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--secondary-600);
+  text-decoration: none;
+  transition: all .2s ease;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+
+  svg { width: 15px; height: 15px; }
+
+  &:hover {
+    background: var(--primary-50);
+    border-color: var(--primary-300);
+    color: var(--primary-600);
+    transform: scale(1.06);
+  }
+
+  &--sm {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+
+    svg { width: 14px; height: 14px; }
+  }
+}
+
+/* ── Grouped section surfaces (iOS-style cards) ─────────────────── */
+.dash-surface {
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1px solid rgba(148, 163, 184, 0.26);
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 8px 22px rgba(15, 23, 42, 0.08);
+  padding: 14px 8px 16px;
+  margin-bottom: 16px;
+
+  @media (min-width: 768px) {
+    padding: 16px 16px 18px;
+    border-radius: 22px;
+  }
+}
+
+.dash-surface__body {
+  background: #e8edf3;
+  border-radius: 14px;
+  padding: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+
+  @media (min-width: 768px) {
+    padding: 12px;
+    border-radius: 16px;
+  }
+}
+
+.dash-section-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 2px 10px;
+
+  &--inset {
+    margin: 0 0 12px;
+    padding: 0 2px;
+  }
+
+  &--with-action {
+    gap: 8px;
+  }
+
+  &__title {
+    font-size: .85rem;
+    font-weight: 700;
+    color: var(--secondary-800);
+    letter-spacing: .02em;
+    text-transform: uppercase;
+  }
+}
+
+.dash-kpi-section {
+  margin-bottom: 16px;
+}
+
+.dash-qa-section {
+  margin-bottom: 28px;
+
+  @media (max-width: 767px) {
+    margin-bottom: 36px;
+  }
+
+  @media (min-width: 768px) {
+    margin-bottom: 40px;
+  }
+}
+
+/* ── Quick access search ─────────────────────────────────────────── */
+.qa-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  padding: 0 2px;
+  position: relative;
+}
+
+.qa-search__icon {
+  position: absolute;
+  left: 12px;
+  width: 16px;
+  height: 16px;
+  color: var(--secondary-400);
+  pointer-events: none;
+}
+
+.qa-search__input {
+  width: 100%;
+  height: 38px;
+  padding: 0 36px;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  background: #ffffff;
+  color: var(--secondary-800);
+  font-size: 0.82rem;
+  font-family: var(--nabarun-font-body);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+
+  &::placeholder {
+    color: var(--secondary-400);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--primary-300);
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.12);
+  }
+
+  &::-webkit-search-cancel-button {
+    display: none;
+  }
+}
+
+.qa-search__clear {
+  position: absolute;
+  right: 6px;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--secondary-500);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  &:hover {
+    background: rgba(148, 163, 184, 0.15);
+    color: var(--secondary-700);
+  }
+}

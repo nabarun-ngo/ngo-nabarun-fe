@@ -1,0 +1,16 @@
+<div class="project-hub">
+  <section class="project-hub__surface dash-surface">
+    <div class="dash-section-hdr dash-section-hdr--inset">
+      <span class="dash-section-hdr__title">Projects</span>
+    </div>
+
+    <div class="dash-surface__body">
+      <app-nav-tile-grid
+        [tiles]="navTiles"
+        variant="hub"
+        layout="hub"
+        emptyMessage="No project modules are available for your account.">
+      </app-nav-tile-grid>
+    </div>
+  </section>
+</div>

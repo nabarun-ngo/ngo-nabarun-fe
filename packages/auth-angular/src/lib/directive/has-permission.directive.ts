@@ -1,0 +1,59 @@
+import {
+  Directive,
+  inject,
+  Input,
+  OnChanges,
+  TemplateRef,
+  ViewContainerRef,
+} from '@angular/core';
+import { RbacContext } from '@nabarun-ngo/auth-core';
+import { AuthorizationService } from '../services/authorization.service';
+
+/**
+ * Structural directive — shows content only when the user has the required permission(s).
+ *
+ * @example
+ * <div *hasPermission="'read:users'">...</div>
+ * <div *hasPermission="['update:project']; context: projectCtx; requireAll: true">...</div>
+ */
+@Directive({
+  selector: '[hasPermission]',
+  standalone: true,
+})
+export class HasPermissionDirective implements OnChanges {
+  private readonly templateRef = inject(TemplateRef<unknown>);
+  private readonly viewContainer = inject(ViewContainerRef);
+  private readonly authorization = inject(AuthorizationService);
+
+  @Input() hasPermission!: string | string[];
+  @Input() hasPermissionContext?: RbacContext;
+  @Input() hasPermissionRequireAll = false;
+
+  ngOnChanges(): void {
+    const permissions = Array.isArray(this.hasPermission)
+      ? this.hasPermission
+      : [this.hasPermission];
+
+    if (!permissions.length || !permissions[0]) {
+      this.viewContainer.clear();
+      return;
+    }
+
+    const check = (p: string) =>
+      this.hasPermissionContext
+        ? this.authorization.effectivePermissions(this.hasPermissionContext).includes(p)
+        : this.authorization.effectivePermissions().includes(p);
+
+    const visible = this.hasPermissionRequireAll
+      ? permissions.every(check)
+      : permissions.some(check);
+
+    if (visible) {
+      if (this.viewContainer.length === 0) {
+        this.viewContainer.createEmbeddedView(this.templateRef);
+      }
+    } else {
+      this.viewContainer.clear();
+    }
+  }
+}

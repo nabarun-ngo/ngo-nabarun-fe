@@ -6,9 +6,9 @@ npm workspaces + [Turborepo](https://turbo.build/) for the NGO Nabarun web apps.
 
 | Path | Package | Stack |
 |------|---------|--------|
-| [`apps/public`](apps/public) | `public` | Next.js 15 (static export) |
-| [`apps/internal`](apps/internal) | `internal` | Angular 19 (portal shell) |
-| [`packages/`](packages) | — | Shared libraries (add later) |
+| [`apps/public-site`](apps/public-site) | `@nabarun-ngo/public-site` | Next.js 15 (static export) |
+| [`apps/internal-app`](apps/internal-app) | `@nabarun-ngo/internal-app` | Angular (portal shell) |
+| [`packages/`](packages) | `@nabarun-ngo/*` | Shared libraries |
 
 ## Prerequisites
 
@@ -25,29 +25,29 @@ npm install
 
 | Script | Description |
 |--------|-------------|
-| `npm run dev` | Start **both** apps (Next :3000, Angular :4200) |
-| `npm run dev:public` | Next.js dev server only |
-| `npm run dev:internal` | Angular dev server only |
-| `npm run build` | Production build for all apps |
-| `npm run build:public` | Static export → `apps/public/out` |
-| `npm run build:internal` | Angular build → `apps/internal/dist/internal/browser` |
-| `npm run lint` | Lint all workspace packages |
-| `npm run changeset` | Record a semver bump + changelog entry for a package |
-| `npm run changeset:status` | Show pending changesets and packages to be released |
-| `npm run version-packages` | Apply changesets (bump versions, update changelogs) |
-| `npm run release:build` | Build all packages under `packages/` |
-| `npm run release:publish` | Publish versioned packages to npm |
-| `npm run release` | Build and publish (same as `release:ci`) |
+| `npm run build` | Build all workspace packages and apps |
+| `npm run lint` | Lint all workspaces that define `lint` |
+| `npm run test` | Test all workspaces that define `test` |
+| `npm run watch:packages` | Rebuild `packages/*` on change |
+| `npm run changeset` | Record a semver bump + changelog entry |
+| `npm run changeset:status` | Show pending changesets |
+| `npm run version-packages` | Apply changesets (bump versions, changelogs) |
+| `npm run release` | Build `packages/*` and publish |
 
-Filter with Turbo directly:
+### Apps (run in the app folder or via workspace)
 
 ```bash
-npx turbo run dev --filter=public
+npm run dev -w @nabarun-ngo/public-site
+npm run build -w @nabarun-ngo/public-site
+
+npm run dev -w @nabarun-ngo/internal-app
+npm run build -w @nabarun-ngo/internal-app
+npm run build:stage -w @nabarun-ngo/internal-app
 ```
 
 ## Environment (public site)
 
-Copy [`apps/public/.env.example`](apps/public/.env.example) to `apps/public/.env.local` and set values for local builds.
+Copy [`apps/public-site/.env.example`](apps/public-site/.env.example) to `apps/public-site/.env` and set values for local builds.
 
 ## Adding shared packages
 
@@ -71,8 +71,7 @@ This repo uses [Changesets](https://github.com/changesets/changesets) to version
 
    ```bash
    npm run version-packages   # bumps package.json + CHANGELOG.md
-   npm run release:build      # build packages
-   npm run release:publish    # publish to npm (requires auth)
+   npm run release            # build packages/ then publish (requires auth)
    ```
 
    Commit the version/changelog updates (for example `chore: version packages`).
@@ -91,6 +90,8 @@ Dependent packages that use workspace `"*"` ranges get a patch bump automaticall
 |-------|----------|
 | Forms | `@nabarun-ngo/forms-core`, `@nabarun-ngo/forms-react`, `@nabarun-ngo/forms-angular` |
 | Comments | `@nabarun-ngo/comment-core`, `@nabarun-ngo/comment-react`, `@nabarun-ngo/comment-angular` |
+| List dashboard | `@nabarun-ngo/list-dashboard-core`, `@nabarun-ngo/list-dashboard-angular` |
+| Auth | `@nabarun-ngo/auth-core`, `@nabarun-ngo/auth-angular` |
 
 A changeset for any member bumps the whole group (the highest semver among selected bumps wins).
 
@@ -106,7 +107,7 @@ GitHub Actions automates versioning and publishing on push to `main`:
 **Setup (one-time):**
 
 1. Add repository secret **`NPM_TOKEN`** with an npm automation token that can publish `@nabarun-ngo/*` packages.
-2. Ensure root [`.npmrc`](.npmrc) points `@nabarun-ngo` at GitHub Packages (already configured).
+2. Ensure you are logged in to npmjs with publish rights for `@nabarun-ngo` (`npm login`). Root [`.npmrc`](.npmrc) points the scope at `registry.npmjs.org`.
 3. Merge PRs with changesets as usual — the release workflow opens a follow-up PR that bumps versions and changelogs.
 4. Merge the **Version Packages** PR — packages are built and published automatically.
 
@@ -114,6 +115,7 @@ Local releases (`npm run release`, etc.) still work if you prefer manual control
 
 ### Publishing notes
 
-- Libraries under `packages/` are configured for restricted GitHub Packages publish (`publishConfig.access: restricted`).
-- Scoped packages use `"access": "restricted"` in the changesets config; use `"access": "public"` for public npm packages.
-- Configure npm auth before publish (`npm login` or `NPM_TOKEN` in CI / local shell).
+- Libraries under `packages/` publish as **public** packages to npmjs (`publishConfig.access: public` + `registry.npmjs.org`).
+- Anyone can install without a token: `npm install @nabarun-ngo/auth-angular`.
+- Apps (`public-site`, `internal-app`) stay private and are ignored by Changesets.
+- For CI publish, use an npm automation token (`NPM_TOKEN`) with write access to the `@nabarun-ngo` org.

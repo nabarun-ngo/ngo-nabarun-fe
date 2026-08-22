@@ -1,0 +1,16 @@
+.admin-list-shell {
+  padding: 14px 8px 24px;
+  min-height: 100%;
+  background: var(--mobile-page-gradient);
+}
+.admin-list-shell__content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+@media (min-width: 768px) {
+  .admin-list-shell {
+    padding: 0;
+    background: transparent;
+  }
+}

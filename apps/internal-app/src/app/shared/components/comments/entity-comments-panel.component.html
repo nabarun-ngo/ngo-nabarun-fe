@@ -1,0 +1,187 @@
+<section class="entity-comments" [attr.aria-label]="title">
+  <header class="entity-comments__header">
+    <h3 class="entity-comments__title">{{ title }}</h3>
+    <span class="entity-comments__count" *ngIf="!loading">{{ comments.length }}</span>
+  </header>
+
+  <div
+    #commentsScrollArea
+    class="entity-comments__scroll"
+    [style.max-height]="maxHeight">
+    <div *ngIf="loading" class="entity-comments__state" role="status">
+      <mat-spinner diameter="24"></mat-spinner>
+      <span>Loading comments…</span>
+    </div>
+
+    <div *ngIf="!loading && comments.length === 0" class="entity-comments__state entity-comments__state--empty">
+      <mat-icon>forum</mat-icon>
+      <p>No comments yet.</p>
+    </div>
+
+    <div *ngIf="!loading && comments.length > 0" class="entity-comments__list">
+      <article
+        *ngFor="let comment of comments; trackBy: trackByCommentId"
+        class="entity-comments__item">
+        <div class="entity-comments__avatar" aria-hidden="true">
+          {{ comment.authorName ? comment.authorName.charAt(0).toUpperCase() : '?' }}
+        </div>
+
+        <div class="entity-comments__body">
+          <div class="entity-comments__bubble">
+            <div class="entity-comments__meta">
+              <div class="entity-comments__author-block">
+                <span class="entity-comments__author">{{ comment.authorName || 'Unknown user' }}</span>
+                <time class="entity-comments__date">{{ comment.createdAt | date:'MMM d, h:mm a' }}</time>
+              </div>
+              <div class="entity-comments__actions" *ngIf="isOwnComment(comment)">
+                <button
+                  type="button"
+                  class="entity-comments__icon-btn"
+                  (click)="startEdit(comment)"
+                  aria-label="Edit comment">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button
+                  type="button"
+                  class="entity-comments__icon-btn entity-comments__icon-btn--danger"
+                  (click)="deleteComment(comment.id)"
+                  aria-label="Delete comment">
+                  <mat-icon>delete_outline</mat-icon>
+                </button>
+              </div>
+            </div>
+
+            <ng-container *ngIf="editingCommentId !== comment.id; else editCommentTpl">
+              <p class="entity-comments__text">
+                <cm-comment-content
+                  [content]="comment.content"
+                  [mentions]="comment.mentions">
+                </cm-comment-content>
+              </p>
+              <button
+                type="button"
+                class="entity-comments__reply-btn"
+                (click)="setReply(comment)">
+                <mat-icon>reply</mat-icon>
+                Reply
+              </button>
+            </ng-container>
+
+            <ng-template #editCommentTpl>
+              <div class="entity-comments__editor">
+                <cm-mention-comment-editor [(ngModel)]="editingEditor" [rows]="2"></cm-mention-comment-editor>
+                <div class="entity-comments__editor-actions">
+                  <button type="button" class="app-btn app-btn--ghost" (click)="cancelEdit()">Cancel</button>
+                  <button
+                    type="button"
+                    class="app-btn app-btn--primary"
+                    (click)="updateComment()"
+                    [disabled]="!editingEditor.content.trim()">
+                    Save
+                  </button>
+                </div>
+              </div>
+            </ng-template>
+          </div>
+
+          <div *ngIf="replyingTo?.id === comment.id" class="entity-comments__reply-box">
+            <cm-mention-comment-editor
+              class="entity-comments__reply-editor"
+              [(ngModel)]="replyEditor"
+              [rows]="2"
+              placeholder="Write a reply…">
+            </cm-mention-comment-editor>
+            <div class="entity-comments__editor-actions">
+              <button type="button" class="app-btn app-btn--ghost" (click)="cancelReply()">Cancel</button>
+              <button
+                type="button"
+                class="app-btn app-btn--primary"
+                (click)="addComment(comment.id)"
+                [disabled]="!replyEditor.content.trim()">
+                Reply
+              </button>
+            </div>
+          </div>
+
+          <div *ngIf="comment.replies.length" class="entity-comments__replies">
+            <article
+              *ngFor="let reply of comment.replies; trackBy: trackByCommentId"
+              class="entity-comments__item entity-comments__item--reply">
+              <div class="entity-comments__avatar entity-comments__avatar--small" aria-hidden="true">
+                {{ reply.authorName ? reply.authorName.charAt(0).toUpperCase() : '?' }}
+              </div>
+              <div class="entity-comments__body">
+                <div class="entity-comments__bubble entity-comments__bubble--reply">
+                  <div class="entity-comments__meta">
+                    <div class="entity-comments__author-block">
+                      <span class="entity-comments__author">{{ reply.authorName || 'Unknown user' }}</span>
+                      <time class="entity-comments__date">{{ reply.createdAt | date:'MMM d, h:mm a' }}</time>
+                    </div>
+                    <div class="entity-comments__actions" *ngIf="isOwnComment(reply)">
+                      <button
+                        type="button"
+                        class="entity-comments__icon-btn"
+                        (click)="startEdit(reply)"
+                        aria-label="Edit reply">
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                      <button
+                        type="button"
+                        class="entity-comments__icon-btn entity-comments__icon-btn--danger"
+                        (click)="deleteComment(reply.id)"
+                        aria-label="Delete reply">
+                        <mat-icon>delete_outline</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+
+                  <ng-container *ngIf="editingCommentId !== reply.id; else editReplyTpl">
+                    <p class="entity-comments__text">
+                      <cm-comment-content
+                        [content]="reply.content"
+                        [mentions]="reply.mentions">
+                      </cm-comment-content>
+                    </p>
+                  </ng-container>
+
+                  <ng-template #editReplyTpl>
+                    <div class="entity-comments__editor">
+                      <cm-mention-comment-editor [(ngModel)]="editingEditor" [rows]="2"></cm-mention-comment-editor>
+                      <div class="entity-comments__editor-actions">
+                        <button type="button" class="app-btn app-btn--ghost" (click)="cancelEdit()">Cancel</button>
+                        <button
+                          type="button"
+                          class="app-btn app-btn--primary"
+                          (click)="updateComment()"
+                          [disabled]="!editingEditor.content.trim()">
+                          Save
+                        </button>
+                      </div>
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <div class="entity-comments__composer">
+    <cm-mention-comment-editor
+      class="entity-comments__composer-editor"
+      [(ngModel)]="newCommentEditor"
+      [rows]="2"
+      placeholder="Write a comment…">
+    </cm-mention-comment-editor>
+    <button
+      type="button"
+      class="app-btn app-btn--primary"
+      (click)="addComment()"
+      [disabled]="!newCommentEditor.content.trim()">
+      <mat-icon>send</mat-icon>
+      Post
+    </button>
+  </div>
+</section>

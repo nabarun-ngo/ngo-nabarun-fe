@@ -1,0 +1,23 @@
+<div class="admin-hub">
+  <ng-container *ngFor="let section of sections">
+    <section class="admin-hub__surface dash-surface" *ngIf="visibleTiles(section.tiles).length">
+      <div class="dash-section-hdr dash-section-hdr--inset">
+        <span class="dash-section-hdr__title">{{ section.title }}</span>
+      </div>
+      <div class="dash-surface__body">
+        <app-nav-tile-grid
+          [tiles]="section.tiles"
+          variant="hub"
+          layout="hub"
+          emptyMessage="No modules available for your account.">
+        </app-nav-tile-grid>
+      </div>
+    </section>
+  </ng-container>
+
+  <section class="admin-hub__surface dash-surface" *ngIf="!sections.some(s => visibleTiles(s.tiles).length)">
+    <div class="dash-surface__body admin-hub__empty">
+      No admin modules are available for your account.
+    </div>
+  </section>
+</div>

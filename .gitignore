@@ -13,13 +13,13 @@ node_modules/
 # testing
 /coverage
 
-# next.js (public app)
-apps/public/.next/
-apps/public/out/
+# next.js (public-site)
+apps/public-site/.next/
+apps/public-site/out/
 
-# angular (internal app)
-apps/internal/dist/
-apps/internal/.angular/
+# angular (internal-app)
+apps/internal-app/dist/
+apps/internal-app/.angular/
 
 # legacy root paths (if any)
 /.next/
@@ -54,18 +54,21 @@ next-env.d.ts
 # turbo
 .turbo
 
-apps/public/public/robots.txt
-apps/public/public/sitemap.xml
-apps/public/public/sitemap-0.xml
+apps/public-site/public/robots.txt
+apps/public-site/public/sitemap.xml
+apps/public-site/public/sitemap-0.xml
 
-apps/public/out/robots.txt
-apps/public/out/sitemap.xml
-apps/public/out/sitemap-0.xml
+apps/public-site/out/robots.txt
+apps/public-site/out/sitemap.xml
+apps/public-site/out/sitemap-0.xml
 
-# Generated at build (apps/public/scripts/optimize-images.mjs)
-apps/public/public/**/*.webp
+# Generated public-site assets: see apps/public-site/.gitignore
 
 **/node_modules/**
 **/dist/**
 **/.next/**
 **/out/**
+**/.angular/**
+
+# Cursor hook runtime (workspace hooks live at integrated/.cursor/hooks; never commit state)
+.cursor/hooks/

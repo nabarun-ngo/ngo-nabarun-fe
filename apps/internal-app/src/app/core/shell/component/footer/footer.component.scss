@@ -1,0 +1,49 @@
+/* Footer is hidden on mobile — the bottom tab bar replaces it (see secured-layout). */
+
+.app-footer {
+  background: var(--gradient-primary);
+  color: #ffffff;
+  padding: 14px 16px;
+}
+
+.app-footer__inner {
+  max-width: 72rem;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.app-footer__brand {
+  font-weight: 700;
+  font-size: 1.125rem;
+  line-height: 1.2;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+
+.app-footer__copy {
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.app-footer__env {
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  pointer-events: none;
+}
+
+@media (min-width: 768px) {
+  .app-footer {
+    padding: 16px 40px;
+  }
+
+  .app-footer__brand {
+    font-size: 1.25rem;
+  }
+}

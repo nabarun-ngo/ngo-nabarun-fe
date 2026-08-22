@@ -1,0 +1,97 @@
+<div
+  class="notification-modal"
+  [class.notification-modal--error]="details.type === 'error'"
+  [class.notification-modal--warning]="details.type === 'warning'"
+  [class.notification-modal--success]="details.type === 'success'"
+  [class.notification-modal--info]="details.type === 'info'"
+  role="alertdialog"
+  [attr.aria-labelledby]="'notification-modal-title'"
+  [attr.aria-describedby]="'notification-modal-description'">
+  <div class="notification-modal__handle" aria-hidden="true"></div>
+
+  <div class="notification-modal__icon" aria-hidden="true">
+    @if (details.type === 'error') {
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M12 9v2m0 4h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+      </svg>
+    } @else if (details.type === 'warning') {
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M12 9v2m0 4h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+      </svg>
+    } @else if (details.type === 'success') {
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4"/>
+        <circle cx="12" cy="12" r="9"/>
+      </svg>
+    } @else {
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="9"/>
+        <path stroke-linecap="round" d="M12 8v4m0 4h.01"/>
+      </svg>
+    }
+  </div>
+
+  <h2 class="notification-modal__title" id="notification-modal-title">{{ details.title }}</h2>
+  <p class="notification-modal__description" id="notification-modal-description" [innerHTML]="details.description"></p>
+
+  @if (details.moreDetails != null) {
+    <details class="notification-modal__more">
+      <summary>More details</summary>
+      <p class="notification-modal__more-text">{{ details.moreDetails }}</p>
+    </details>
+  }
+
+  @if (copyableRefIds.length) {
+    <div class="notification-modal__refs">
+      <div class="notification-modal__refs-header">
+        <span class="notification-modal__refs-label">{{ copyableRefsLabel }}</span>
+        @if (copyableRefIds.length > 1) {
+          <button type="button" class="notification-modal__copy-all" (click)="copyAllRefIds()">
+            Copy all
+          </button>
+        }
+      </div>
+      <ul class="notification-modal__ref-list">
+        @for (refId of copyableRefIds; track refId) {
+          <li class="notification-modal__ref-item">
+            <code class="notification-modal__ref-id">{{ refId }}</code>
+            <button
+              type="button"
+              class="notification-modal__copy-btn"
+              [class.notification-modal__copy-btn--copied]="copiedRefId === refId"
+              (click)="copyRefId(refId)"
+              [attr.aria-label]="'Copy ' + refId">
+              @if (copiedRefId === refId) {
+                <span>Copied</span>
+              } @else {
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <rect x="9" y="9" width="13" height="13" rx="2"/>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                </svg>
+              }
+            </button>
+          </li>
+        }
+      </ul>
+    </div>
+  }
+
+  <div class="notification-modal__actions">
+    @if (details.mode === 'notification') {
+      <button type="button" class="app-btn app-btn--primary app-btn--block" (click)="onAccept()">
+        {{ details.buttons.okay }}
+      </button>
+    }
+
+    @if (details.mode === 'confirmation') {
+      <button type="button" class="app-btn app-btn--primary app-btn--block" (click)="onAccept()">
+        {{ details.buttons.accept }}
+      </button>
+      <button type="button" class="app-btn app-btn--ghost app-btn--block" (click)="onDecline()">
+        {{ details.buttons.decline }}
+      </button>
+    }
+  </div>
+</div>

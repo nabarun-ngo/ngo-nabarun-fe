@@ -78,6 +78,87 @@ import { MENTION_USER_SEARCH, type MentionUserSearchFn } from './tokens';
       }
     </div>
   `,
+  styles: [`
+    :host {
+      display: block;
+      min-width: 0;
+    }
+
+    .cm-mention-editor {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    textarea {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 8px 10px;
+      border: 1px solid var(--cm-editor-border, #d1d5db);
+      border-radius: var(--cm-editor-radius, 10px);
+      background: var(--cm-editor-bg, #fff);
+      color: inherit;
+      font: inherit;
+      font-size: var(--cm-editor-font-size, 0.85rem);
+      line-height: 1.45;
+      resize: vertical;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    textarea::placeholder {
+      color: var(--cm-editor-placeholder, #9ca3af);
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: var(--cm-editor-focus, #f97316);
+      box-shadow: 0 0 0 3px var(--cm-editor-focus-ring, rgba(249, 115, 22, 0.16));
+    }
+
+    textarea:disabled {
+      background: var(--cm-editor-disabled-bg, #f9fafb);
+      cursor: not-allowed;
+    }
+
+    .cm-mention-list {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      z-index: 30;
+      margin: 0;
+      padding: 4px;
+      list-style: none;
+      max-height: 200px;
+      overflow-y: auto;
+      background: #fff;
+      border: 1px solid var(--cm-editor-border, #d1d5db);
+      border-radius: 10px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.14);
+    }
+
+    .cm-mention-list li {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      padding: 6px 8px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    .cm-mention-list li:hover,
+    .cm-mention-list li.active {
+      background: var(--cm-mention-active-bg, #fff7ed);
+    }
+
+    .cm-mention-list li span {
+      color: #6b7280;
+      font-size: 0.7rem;
+    }
+  `],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MentionCommentEditorComponent implements ControlValueAccessor {
@@ -108,7 +189,7 @@ export class MentionCommentEditorComponent implements ControlValueAccessor {
 
   constructor(
     private readonly cdr: ChangeDetectorRef,
-    @Optional() @Inject(MENTION_USER_SEARCH) private readonly injectedSearch?: MentionUserSearchFn,
+  @Optional() @Inject(MENTION_USER_SEARCH) private readonly injectedSearch?: MentionUserSearchFn,
   ) {}
 
   private resolveSearch(): MentionUserSearchFn | undefined {

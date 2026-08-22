@@ -40,3 +40,9 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+/.env.local
+
+# Generated (see scripts/clean-generated.mjs / generate-assets.mjs / generate-env.mjs / sync:api)
+/src/environments/env.generated.ts
+/src/assets/splash/
+/src/assets/icons/

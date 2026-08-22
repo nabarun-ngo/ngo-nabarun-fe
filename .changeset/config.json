@@ -12,10 +12,18 @@
       "@nabarun-ngo/comment-core",
       "@nabarun-ngo/comment-react",
       "@nabarun-ngo/comment-angular"
+    ],
+    [
+      "@nabarun-ngo/list-dashboard-core",
+      "@nabarun-ngo/list-dashboard-angular"
+    ],
+    [
+      "@nabarun-ngo/auth-core",
+      "@nabarun-ngo/auth-angular"
     ]
   ],
   "linked": [],
-  "access": "restricted",
+  "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
   "ignore": [

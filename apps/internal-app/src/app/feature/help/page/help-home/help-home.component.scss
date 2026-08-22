@@ -1,0 +1,108 @@
+@use '../../../../../styles/mobile-page-shell' as shell;
+@use '../../styles/help-surfaces' as help;
+
+@include shell.mobile-page-shell('help-shell');
+@include help.help-surfaces;
+
+.help-shell {
+  min-height: 100%;
+  position: relative;
+}
+
+.help-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  margin-bottom: 10px;
+  padding: 0 12px;
+  min-height: 40px;
+  background: #ffffff;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  border-radius: 12px;
+
+  @media (max-width: 480px) {
+    padding: 0 8px;
+    min-height: 36px;
+  }
+}
+
+.help-search__icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: var(--secondary-400);
+}
+
+.help-search__input {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  font-size: 0.78rem;
+  color: var(--secondary-800);
+  outline: none;
+
+  &::placeholder {
+    color: var(--secondary-400);
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.72rem;
+  }
+}
+
+.help-chips {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  padding: 0 0 12px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (max-width: 480px) {
+    gap: 6px;
+    padding-bottom: 10px;
+  }
+}
+
+.help-chips__chip {
+  flex: 0 0 auto;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: #ffffff;
+  color: var(--secondary-600);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.18s ease;
+
+  &:hover {
+    border-color: var(--primary-200);
+    color: var(--primary-700);
+    background: var(--primary-50);
+  }
+
+  &--active {
+    background: var(--primary-500);
+    border-color: var(--primary-500);
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.28);
+  }
+
+  @media (max-width: 480px) {
+    padding: 6px 10px;
+    font-size: 0.68rem;
+  }
+}

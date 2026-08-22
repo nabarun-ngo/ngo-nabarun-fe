@@ -1,0 +1,47 @@
+---
+description: Never connect to or modify external third-party services (Auth0, OneSignal, backend APIs, analytics) during development or verification
+alwaysApply: true
+---
+
+# Do Not Connect to External Services
+
+Never make live calls to, authenticate against, or modify configuration in any
+third-party service this repo integrates with. This applies to development,
+debugging, and verification alike.
+
+## Services covered
+
+Auth0 (`@auth0/auth0-angular`, tenant config, callback URLs, allowed origins),
+OneSignal (`onesignal-ngx`, `OneSignalSDKWorker.js`, push registration), the
+Nabarun backend APIs (`api_base_url`, `api_base_url2`), Google reCAPTCHA,
+Google Analytics, and Firebase.
+
+This list is not exhaustive. If something reaches the network and is not a
+package registry, treat it as covered.
+
+## What is not allowed
+
+- Logging in, requesting tokens, or triggering an auth redirect to reach a page
+- Registering for push notifications or hitting a OneSignal endpoint
+- Calling backend endpoints, including to "just check" a response shape
+- Editing tenant settings, allowed origins, callback URLs, API keys or secrets
+- Adding real credentials to `src/environments/*.ts` or any committed file
+
+## What to do instead
+
+Verify at the build, type and DOM level: `ng build`, `tsc --noEmit`, unit tests,
+and inspecting rendered markup on unauthenticated routes.
+
+When a check genuinely requires a live service, stop and report it rather than
+connecting. State plainly what could not be verified and hand it back as a
+manual step.
+
+```
+❌ Log in through Auth0 to screenshot the dashboard route
+✅ Confirm the route compiles and its guard redirects when unauthenticated,
+   then list the authenticated routes as needing manual review
+```
+
+A 401, 403 or CORS error from one of these services during local work is
+expected. Treat it as environment configuration, not a bug to fix by changing
+the service.

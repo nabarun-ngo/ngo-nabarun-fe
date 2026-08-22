@@ -1,0 +1,90 @@
+@use '../../../../../styles/mobile-page-shell' as shell;
+@use '../../styles/help-surfaces' as help;
+
+@include shell.mobile-page-shell('help-article-shell');
+@include help.help-surfaces;
+
+.help-article-shell {
+  min-height: 100%;
+  position: relative;
+}
+
+.help-hero {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 12px;
+  padding: 14px 14px 12px;
+  border-radius: 16px;
+  color: #fff;
+  background: linear-gradient(145deg, #f97316 0%, #c2410c 100%);
+  box-shadow:
+    0 6px 18px rgba(15, 23, 42, 0.14),
+    0 1px 4px rgba(15, 23, 42, 0.06);
+}
+
+.help-hero__glow {
+  position: absolute;
+  top: -28px;
+  right: -20px;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  pointer-events: none;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -48px;
+    left: -64px;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+  }
+}
+
+.help-hero__badge {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(4px);
+}
+
+.help-hero__title {
+  position: relative;
+  z-index: 1;
+  margin: 8px 0 0;
+  font-size: clamp(1.1rem, 4.5vw, 1.3rem);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: #fff;
+}
+
+.help-hero__summary {
+  position: relative;
+  z-index: 1;
+  margin: 6px 0 0;
+  font-size: 0.76rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.help-hero__meta {
+  position: relative;
+  z-index: 1;
+  margin: 8px 0 0;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.78);
+}

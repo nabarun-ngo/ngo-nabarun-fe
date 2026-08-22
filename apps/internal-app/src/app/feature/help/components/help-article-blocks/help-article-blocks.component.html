@@ -1,0 +1,53 @@
+<div class="help-blocks" *ngIf="blocks.length">
+  <ng-container *ngFor="let block of blocks">
+    <h2 *ngIf="block.type === 'heading' && (block.level ?? 2) === 2" class="help-blocks__h2">
+      {{ block.text }}
+    </h2>
+    <h3 *ngIf="block.type === 'heading' && block.level === 3" class="help-blocks__h3">
+      {{ block.text }}
+    </h3>
+
+    <p *ngIf="block.type === 'paragraph'" class="help-blocks__p">{{ block.text }}</p>
+
+    <aside
+      *ngIf="block.type === 'callout'"
+      class="help-blocks__callout"
+      [attr.data-tone]="block.tone || 'tip'">
+      {{ block.text }}
+    </aside>
+
+    <ol *ngIf="block.type === 'steps'" class="help-blocks__steps">
+      <li *ngFor="let item of block.items">{{ item }}</li>
+    </ol>
+
+    <ul *ngIf="block.type === 'bullets'" class="help-blocks__bullets">
+      <li *ngFor="let item of block.items">{{ item }}</li>
+    </ul>
+
+    <a
+      *ngIf="block.type === 'video'"
+      class="help-blocks__action help-blocks__action--video"
+      [href]="block.url"
+      target="_blank"
+      rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="9"></circle>
+        <polygon points="10 8.5 16 12 10 15.5"></polygon>
+      </svg>
+      <span>{{ block.title || 'Watch the video' }}</span>
+    </a>
+
+    <a
+      *ngIf="block.type === 'link'"
+      class="help-blocks__action"
+      [href]="block.url"
+      [attr.target]="block.external !== false ? '_blank' : null"
+      [attr.rel]="block.external !== false ? 'noopener noreferrer' : null">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1"></path>
+        <path d="M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1"></path>
+      </svg>
+      <span>{{ block.label }}</span>
+    </a>
+  </ng-container>
+</div>

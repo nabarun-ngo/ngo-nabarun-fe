@@ -1,0 +1,132 @@
+<div class="help-shell">
+  <section class="help-shell__content">
+    <app-nav-back
+      [fallbackLink]="dashboardBackLink"
+      fallbackLabel="Dashboard">
+    </app-nav-back>
+
+    <div class="help-search">
+      <svg
+        class="help-search__icon"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        aria-hidden="true">
+        <circle cx="11" cy="11" r="7"></circle>
+        <line x1="16.5" y1="16.5" x2="21" y2="21"></line>
+      </svg>
+      <input
+        class="help-search__input"
+        type="search"
+        [(ngModel)]="searchText"
+        placeholder="Search help articles"
+        aria-label="Search help articles"
+        autocomplete="off" />
+    </div>
+
+    <div class="help-chips" *ngIf="categories.length">
+      <button
+        type="button"
+        class="help-chips__chip"
+        [class.help-chips__chip--active]="selectedCategoryKey === 'all'"
+        (click)="selectCategory('all')">
+        All
+      </button>
+      <button
+        type="button"
+        class="help-chips__chip"
+        *ngFor="let cat of categories"
+        [class.help-chips__chip--active]="selectedCategoryKey === cat.key"
+        (click)="selectCategory(cat.key)">
+        {{ cat.title }}
+      </button>
+    </div>
+
+    <section class="dash-surface" *ngIf="featuredArticles.length && !hasSearch">
+      <div class="dash-section-hdr">
+        <span class="dash-section-hdr__title">Featured</span>
+      </div>
+
+      <div class="dash-surface__body">
+        <button
+          type="button"
+          class="help-row"
+          *ngFor="let article of featuredArticles"
+          (click)="openArticle(article.slug)">
+          <span class="help-row__icon help-row__icon--orange" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <polygon points="12 3 14.6 9 21 9.6 16.2 13.9 17.6 20.2 12 17 6.4 20.2 7.8 13.9 3 9.6 9.4 9"></polygon>
+            </svg>
+          </span>
+          <span class="help-row__content">
+            <span class="help-row__title">{{ article.title }}</span>
+            <span class="help-row__subtitle" *ngIf="article.summary">{{ article.summary }}</span>
+            <span class="help-row__meta">
+              <span class="help-row__badge">{{ categoryTitle(article.categoryKey) }}</span>
+              <span class="help-row__time" *ngIf="article.estimatedMinutes">
+                {{ article.estimatedMinutes }} min read
+              </span>
+            </span>
+          </span>
+          <svg
+            class="help-row__chevron"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            aria-hidden="true">
+            <polyline points="9 6 15 12 9 18"></polyline>
+          </svg>
+        </button>
+      </div>
+    </section>
+
+    <section class="dash-surface">
+      <div class="dash-section-hdr">
+        <span class="dash-section-hdr__title">Articles</span>
+        <span class="dash-section-hdr__count">{{ filteredArticles.length }}</span>
+      </div>
+
+      <div class="dash-surface__body">
+        <p class="help-empty" *ngIf="!filteredArticles.length">
+          No articles match your search.
+        </p>
+
+        <button
+          type="button"
+          class="help-row"
+          *ngFor="let article of filteredArticles"
+          (click)="openArticle(article.slug)">
+          <span class="help-row__icon help-row__icon--blue" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <path d="M6 3h8l4 4v14H6z"></path>
+              <line x1="9" y1="12" x2="15" y2="12"></line>
+              <line x1="9" y1="16" x2="13" y2="16"></line>
+            </svg>
+          </span>
+          <span class="help-row__content">
+            <span class="help-row__title">{{ article.title }}</span>
+            <span class="help-row__subtitle" *ngIf="article.summary">{{ article.summary }}</span>
+            <span class="help-row__meta">
+              <span class="help-row__badge">{{ categoryTitle(article.categoryKey) }}</span>
+              <span class="help-row__time" *ngIf="article.estimatedMinutes">
+                {{ article.estimatedMinutes }} min read
+              </span>
+            </span>
+          </span>
+          <svg
+            class="help-row__chevron"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            aria-hidden="true">
+            <polyline points="9 6 15 12 9 18"></polyline>
+          </svg>
+        </button>
+      </div>
+    </section>
+  </section>
+</div>

@@ -1,0 +1,176 @@
+/// Shared Help surfaces — mirrors the finance hub / list dashboard chrome
+/// (white rounded surface, inset body, uppercase section header, tappable rows).
+@mixin help-surfaces() {
+  .dash-surface {
+    background: #ffffff;
+    border-radius: 20px;
+    border: 1px solid rgba(148, 163, 184, 0.26);
+    box-shadow:
+      0 1px 2px rgba(15, 23, 42, 0.04),
+      0 8px 22px rgba(15, 23, 42, 0.08);
+    padding: 14px 8px 16px;
+    margin-bottom: 16px;
+
+    @media (min-width: 768px) {
+      padding: 16px 16px 18px;
+      border-radius: 22px;
+    }
+  }
+
+  .dash-surface__body {
+    background: #e8edf3;
+    border-radius: 14px;
+    padding: 10px;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+
+    @media (min-width: 768px) {
+      padding: 12px;
+      border-radius: 16px;
+    }
+  }
+
+  .dash-section-hdr {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin: 0 0 12px;
+    padding: 0 2px;
+
+    &__title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--secondary-800);
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    &__count {
+      font-size: 0.62rem;
+      font-weight: 700;
+      line-height: 1;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: var(--primary-100);
+      color: var(--primary-700);
+    }
+  }
+
+  .help-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    width: 100%;
+    text-align: left;
+    padding: 10px;
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 14px;
+    background: #ffffff;
+    cursor: pointer;
+    transition: all 0.18s ease;
+
+    & + & {
+      margin-top: 8px;
+    }
+
+    &:hover {
+      border-color: var(--primary-200);
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
+    }
+
+    &:active {
+      background: var(--primary-50);
+    }
+  }
+
+  .help-row__icon {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 0 0 1px rgba(249, 115, 22, 0.1);
+
+    svg {
+      width: 16px;
+      height: 16px;
+      display: block;
+    }
+
+    &--orange {
+      background: #ffedd5;
+      color: #c2410c;
+    }
+
+    &--blue {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+  }
+
+  .help-row__content {
+    flex: 1;
+    min-width: 0;
+    display: block;
+  }
+
+  .help-row__title {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--secondary-900);
+  }
+
+  .help-row__subtitle {
+    display: block;
+    margin-top: 2px;
+    font-size: 0.68rem;
+    line-height: 1.35;
+    color: var(--secondary-500);
+  }
+
+  .help-row__meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 6px;
+  }
+
+  .help-row__badge {
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    padding: 4px 8px;
+    line-height: 1;
+    background: var(--secondary-100);
+    color: var(--secondary-600);
+  }
+
+  .help-row__time {
+    font-size: 0.62rem;
+    color: var(--secondary-500);
+  }
+
+  .help-row__chevron {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    margin-top: 11px;
+    color: var(--secondary-400);
+  }
+
+  .help-empty {
+    margin: 0;
+    padding: 18px 10px;
+    text-align: center;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--secondary-500);
+  }
+}

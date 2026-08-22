@@ -1,0 +1,23 @@
+<div class="expense-shell">
+  <section class="expense-shell__content">
+    <app-nav-back
+      [fallbackLink]="financeBackLink"
+      fallbackLabel="Finance">
+    </app-nav-back>
+
+    <na-list-dashboard
+      [config]="config"
+      [refData]="refData"
+      [routeContext]="routeContext"
+      [formContext]="{
+        dashboardId: 'finance-expense',
+        refData: refData,
+        data: routeContext
+      }"
+      [forEventId]="forEventId"
+      [documentUploadHint]="documentHint"
+      [hooks]="{ onEntityUpdated: onEntityUpdated }"
+      (notification)="onNotification($event)">
+    </na-list-dashboard>
+  </section>
+</div>

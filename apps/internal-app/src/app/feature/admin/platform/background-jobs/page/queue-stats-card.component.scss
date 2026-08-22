@@ -1,0 +1,314 @@
+@use 'sass:list';
+
+// Local palette: the list-dashboard --uld-* tokens are scoped to that package
+// and are not available to this app's global styles.
+$danger-bg: #fee2e2;
+$danger-fg: #b91c1c;
+
+// Tone palette shared by the status dots and the metric pills.
+$tones: (
+  waiting: (#f1f5f9, #64748b),
+  active: (#dbeafe, #1d4ed8),
+  delayed: (#e0e7ff, #4338ca),
+  completed: (#dcfce7, #15803d),
+  failed: ($danger-bg, $danger-fg),
+  total: (#f1f5f9, #334155),
+);
+
+$health-tones: (
+  success: (#dcfce7, #15803d),
+  warning: (#fef3c7, #b45309),
+  danger: ($danger-bg, $danger-fg),
+);
+
+.queue-card {
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  overflow: hidden;
+  transition: box-shadow 0.18s ease, border-color 0.18s ease;
+
+  &--open {
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+  }
+}
+
+/* Header */
+
+.queue-card__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 12px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background: rgba(148, 163, 184, 0.07);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--primary-500);
+    outline-offset: -2px;
+  }
+}
+
+.queue-card__title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--secondary-800);
+  white-space: nowrap;
+}
+
+.queue-card__health {
+  flex: 0 0 auto;
+  padding: 1px 7px;
+  border-radius: 999px;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: #f1f5f9;
+  color: #475569;
+
+  @each $tone, $colors in $health-tones {
+    &[data-tone='#{$tone}'] {
+      background: list.nth($colors, 1);
+      color: list.nth($colors, 2);
+    }
+  }
+}
+
+.queue-card__trailing {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+  min-width: 0;
+}
+
+.queue-card__summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.72rem;
+  color: var(--secondary-500);
+  overflow: hidden;
+}
+
+.queue-card__summary-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+
+  b {
+    font-weight: 700;
+    color: var(--secondary-800);
+  }
+}
+
+.queue-card__chevron {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+  line-height: 18px;
+  color: var(--secondary-400);
+  transform: rotate(180deg);
+  transition: transform 0.2s ease;
+
+  .queue-card--open & {
+    transform: rotate(0deg);
+  }
+}
+
+/* Body */
+
+.queue-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 9px 12px 11px;
+  border-top: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.queue-card__state {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--secondary-500);
+}
+
+/* Metric pills */
+
+.queue-card__dot {
+  flex: 0 0 auto;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--secondary-300);
+}
+
+.queue-card__metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.queue-card__metric {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 4px 10px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 999px;
+  background: var(--secondary-50, #f8fafc);
+  line-height: 1.2;
+
+  .queue-card__dot {
+    align-self: center;
+  }
+}
+
+.queue-card__metric-value {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--secondary-800);
+  font-variant-numeric: tabular-nums;
+}
+
+.queue-card__metric-label {
+  font-size: 0.6875rem;
+  color: var(--secondary-500);
+}
+
+@each $tone, $colors in $tones {
+  .queue-card__dot[data-tone='#{$tone}'] {
+    background: list.nth($colors, 2);
+  }
+
+  .queue-card__metric[data-tone='#{$tone}'].queue-card__metric--attention {
+    border-color: rgba(list.nth($colors, 2), 0.3);
+    background: list.nth($colors, 1);
+
+    .queue-card__metric-value,
+    .queue-card__metric-label {
+      color: list.nth($colors, 2);
+    }
+  }
+}
+
+/* Performance facts */
+
+.queue-card__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 18px;
+  font-size: 0.72rem;
+}
+
+.queue-card__fact {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.queue-card__fact-label {
+  color: var(--secondary-500);
+}
+
+.queue-card__fact-value {
+  font-weight: 700;
+  color: var(--secondary-800);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Issues */
+
+.queue-card__issue {
+  display: flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: $danger-bg;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: $danger-fg;
+
+  mat-icon {
+    width: 14px;
+    height: 14px;
+    font-size: 14px;
+    line-height: 14px;
+  }
+}
+
+/* Actions */
+
+.queue-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 1px;
+}
+
+.queue-card__btn {
+  gap: 5px;
+  min-height: 28px;
+  padding: 3px 10px;
+  border-radius: 8px;
+  font-size: 0.72rem;
+
+  mat-icon {
+    width: 15px;
+    height: 15px;
+    font-size: 15px;
+    line-height: 15px;
+  }
+
+  &--danger {
+    color: $danger-fg;
+
+    &:hover:not(:disabled) {
+      border-color: rgba(185, 28, 28, 0.35);
+      background: $danger-bg;
+    }
+  }
+}
+
+.queue-card__btn-icon--spin {
+  animation: queue-card-spin 0.9s linear infinite;
+}
+
+@keyframes queue-card-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .queue-card__chevron,
+  .queue-card__btn-icon--spin {
+    transition: none;
+    animation: none;
+  }
+}
+
+@media (max-width: 599px) {
+  .queue-card__summary-item:not(:first-child) {
+    display: none;
+  }
+
+  .queue-card__metrics {
+    gap: 5px;
+  }
+}

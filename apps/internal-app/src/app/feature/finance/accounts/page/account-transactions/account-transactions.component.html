@@ -1,0 +1,30 @@
+<div class="account-txn-shell">
+  <section class="account-txn-shell__content">
+    <app-nav-back
+      [fallbackLink]="accountsBackLink"
+      fallbackLabel="Accounts">
+    </app-nav-back>
+
+    <app-account-summary-card
+      *ngIf="account"
+      [account]="account"
+      [refData]="refData">
+    </app-account-summary-card>
+
+    <div class="account-txn-shell__list-section">
+      <h2 class="account-txn-shell__list-heading">Transactions</h2>
+
+      <na-list-dashboard
+        [config]="config"
+        [refData]="refData"
+        [routeContext]="routeContext"
+        [formContext]="{
+          dashboardId: 'finance.account-transactions',
+          refData: refData,
+          data: routeContext
+        }"
+        (notification)="onNotification($event)">
+      </na-list-dashboard>
+    </div>
+  </section>
+</div>

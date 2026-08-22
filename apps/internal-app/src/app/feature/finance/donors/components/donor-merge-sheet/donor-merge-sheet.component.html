@@ -1,0 +1,35 @@
+<app-mobile-form-sheet
+  [open]="open"
+  title="Merge guest donors"
+  hint="Choose which donor record to keep. The other record will be merged into it and removed from the list."
+  [saving]="saving"
+  saveLabel="Merge donors"
+  (dismissed)="onDismissed()"
+  (save)="onConfirm()">
+  <div class="donor-merge-sheet__options">
+    <label
+      *ngFor="let donor of donors"
+      class="donor-merge-sheet__option"
+      [class.donor-merge-sheet__option--selected]="targetDonorId === donor.id">
+      <input
+        type="radio"
+        name="mergeTarget"
+        [value]="donor.id"
+        [ngModel]="targetDonorId"
+        (ngModelChange)="onTargetDonorChange($event)" />
+      <div class="donor-merge-sheet__option-body">
+        <strong>{{ donor.fullName ?? donor.id }}</strong>
+        <span>{{ donor.email || formatPhone(donor) }}</span>
+        <span class="donor-merge-sheet__option-meta">{{ donor.id }}</span>
+      </div>
+    </label>
+  </div>
+
+  <div class="donor-merge-sheet__summary" *ngIf="sourceDonor && targetDonor">
+    <p>
+      <strong>{{ sourceDonor.fullName ?? sourceDonor.id }}</strong>
+      will be merged into
+      <strong>{{ targetDonor.fullName ?? targetDonor.id }}</strong>.
+    </p>
+  </div>
+</app-mobile-form-sheet>

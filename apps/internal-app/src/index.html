@@ -1,15 +1,205 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
-  <title>Internal</title>
+  <title>Nabarun NGO</title>
   <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
+
+  <!-- PWA Meta Tags -->
+  <meta name="description" content="Nabarun NGO Management System">
+  <meta name="theme-color" content="#f97316">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Nabarun">
+
+  <!-- Icons for iOS -->
+  <link rel="apple-touch-icon" href="assets/icons/icon-192x192.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="assets/icons/icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="96x96" href="assets/icons/icon-96x96.png">
+  <link rel="apple-touch-icon" sizes="128x128" href="assets/icons/icon-128x128.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="assets/icons/icon-192x192.png">
+  <link rel="apple-touch-icon" sizes="512x512" href="assets/icons/icon-512x512.png">
+
+  <!-- iOS PWA launch splash screens -->
+  <link rel="apple-touch-startup-image" href="assets/splash/apple-splash-2048-2732.png"
+    media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+  <link rel="apple-touch-startup-image" href="assets/splash/apple-splash-1668-2388.png"
+    media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+  <link rel="apple-touch-startup-image" href="assets/splash/apple-splash-1290-2796.png"
+    media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+  <link rel="apple-touch-startup-image" href="assets/splash/apple-splash-1284-2778.png"
+    media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+  <link rel="apple-touch-startup-image" href="assets/splash/apple-splash-1179-2556.png"
+    media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+  <link rel="apple-touch-startup-image" href="assets/splash/apple-splash-1170-2532.png"
+    media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+  <link rel="apple-touch-startup-image" href="assets/splash/apple-splash-1125-2436.png"
+    media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+  <link rel="apple-touch-startup-image" href="assets/splash/apple-splash-750-1334.png"
+    media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+
+  <!-- Standard Icons -->
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/icons/icon-512x512.png">
+
+  <!-- Manifest -->
+  <link rel="manifest" href="manifest.webmanifest">
+
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link rel="preconnect" href="https://www.gstatic.com">
+
+  <!-- Fonts. Inter is the body face the stylesheet asks for; Roboto stays for
+       Angular Material's own typography. -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap"
+    rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
+  <script src="https://unpkg.com/@popperjs/core@2"></script>
+  <script src='https://www.google.com/recaptcha/api.js'></script>
+
+  <!-- Hide in-app boot splash on normal web; PWA-only (see splash-screen.ts). -->
+  <script>
+    (function () {
+      var standalone = window.matchMedia('(display-mode: standalone)').matches
+        || (window.navigator && window.navigator.standalone === true);
+      if (!standalone) {
+        document.documentElement.classList.add('no-app-splash');
+      }
+    })();
+  </script>
+
+  <style>
+    html.no-app-splash #app-splash {
+      display: none !important;
+    }
+
+    #app-splash {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(145deg, #ea580c 0%, #f97316 45%, #fb923c 100%);
+      transition: opacity 0.35s ease, visibility 0.35s ease;
+    }
+
+    #app-splash::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0.1;
+      background-image: radial-gradient(circle at 1px 1px, #fff 1px, transparent 0);
+      background-size: 20px 20px;
+      pointer-events: none;
+    }
+
+    #app-splash.app-splash--hide {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .app-splash__inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 1.5rem;
+      padding-top: calc(1.5rem + env(safe-area-inset-top));
+      padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
+    }
+
+    .app-splash__logo {
+      width: 5rem;
+      height: 5rem;
+      display: grid;
+      place-items: center;
+      border-radius: 1.125rem;
+      background: #fff;
+      box-shadow:
+        0 0 0 3px rgb(255 255 255 / 0.35),
+        0 10px 28px rgb(0 0 0 / 0.22);
+    }
+
+    .app-splash__logo img {
+      width: 3.375rem;
+      height: auto;
+    }
+
+    .app-splash__brand {
+      margin: 1rem 0 0;
+      font-family: Inter, 'Segoe UI', Arial, sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #fff;
+      text-shadow: 0 1px 4px rgb(0 0 0 / 0.15);
+    }
+
+    .app-splash__tagline {
+      margin: 0.35rem 0 0;
+      max-width: 16rem;
+      font-family: Inter, 'Segoe UI', Arial, sans-serif;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      line-height: 1.35;
+      color: rgb(255 255 255 / 0.9);
+      text-shadow: 0 1px 3px rgb(0 0 0 / 0.12);
+    }
+
+    .app-splash__loader {
+      width: 1.75rem;
+      height: 1.75rem;
+      margin-top: 1.5rem;
+      border: 2px solid rgb(255 255 255 / 0.35);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: app-splash-spin 0.8s linear infinite;
+    }
+
+    @keyframes app-splash-spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #app-splash {
+        transition: none;
+      }
+
+      .app-splash__loader {
+        animation: none;
+        opacity: 0.7;
+      }
+    }
+  </style>
 </head>
-<body>
+
+<body class="mat-typography">
+  <div id="app-splash" role="status" aria-live="polite" aria-label="Loading Nabarun NGO">
+    <div class="app-splash__inner">
+      <div class="app-splash__logo">
+        <img src="assets/logo.png" alt="" width="54" height="54">
+      </div>
+      <p class="app-splash__brand">Nabarun Ngo</p>
+      <p class="app-splash__tagline">Compassion in Action, Community at Heart</p>
+      <div class="app-splash__loader" aria-hidden="true"></div>
+    </div>
+  </div>
   <app-root></app-root>
 </body>
+
 </html>

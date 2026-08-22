@@ -3,19 +3,38 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    /* rootDir is the monorepo root so that path-alias targets in packages/ are accepted. */
+    "rootDir": "../..",
+    /* ~170 imports use the 'src/...' prefix; paths replaces deprecated baseUrl (TS 6). */
+    "paths": {
+      "src/*": ["./src/*"],
+      "@nabarun-ngo/auth-core": ["../../packages/auth-core/src/index.ts"],
+      "@nabarun-ngo/auth-angular": ["../../packages/auth-angular/src/public-api.ts"],
+      "@nabarun-ngo/forms-angular": ["../../packages/forms-angular/src/public-api.ts"],
+      "@nabarun-ngo/list-dashboard-core": ["../../packages/list-dashboard-core/src/index.ts"],
+      "@nabarun-ngo/list-dashboard-angular": ["../../packages/list-dashboard-angular/src/public-api.ts"]
+    },
+    "outDir": "./dist/out-tsc",
+    "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "skipLibCheck": true,
-    "isolatedModules": true,
-    "esModuleInterop": true,
+    "sourceMap": true,
+    "declaration": false,
     "experimentalDecorators": true,
     "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
-    "module": "ES2022"
+    "module": "ES2022",
+    "useDefineForClassFields": false,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "incremental": true,
+    "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

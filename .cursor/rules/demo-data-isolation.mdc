@@ -1,0 +1,60 @@
+---
+description: Keep production files free of demo/mock data; isolate demo seeds under src/demo + provider swap
+alwaysApply: true
+---
+
+# Demo Data Isolation
+
+All files under `src/app/feature` outside the provider swap must be
+**production-ready**. Demo/mock seed data lives under `src/demo/`, wired at
+**provider level** — never in pages, config factories, or domain models.
+
+## Allowed demo locations
+
+| Layer | Path | Responsibility |
+|-------|------|----------------|
+| Demo seeds / fixtures | `src/demo/<domain>/<entity>/*-demo.fixtures.ts` (or `*.demo-data.ts`) | Pools, ref data, `DEMO_*` |
+| Demo source | `src/demo/<domain>/<entity>/*-demo.data-source.ts` | Implements the port with demo data |
+| Provider swap | `src/app/feature/.../data/*.providers.ts` | **Only** place that reads `MOCK_DATA` |
+
+Mirror feature domain/entity paths under `src/demo/` (sibling of `src/app/`).
+
+## Production files — never import demo
+
+These must **not** import demo fixtures/sources, define `DEMO_*` constants, or
+branch on `MOCK_DATA`:
+
+- `page/`
+- `config/`
+- `domain/`
+- `data/*-api.data-source.ts`, `data/*-data.mapper.ts`
+
+Inject behavior through the **port** (`XDataSource`) instead.
+
+Providers may import from `src/demo/...` solely for the `MOCK_DATA` swap.
+
+## Provider pattern (single swap point)
+
+```typescript
+// data/<entity>.providers.ts — ONLY file that reads MOCK_DATA
+import { EntityDemoDataSource } from 'src/demo/<domain>/<entity>/<entity>-demo.data-source';
+
+export function provideEntityInfrastructure(): Provider[] {
+  if (MOCK_DATA) {
+    return [EntityDemoDataSource, { provide: EntityDataSource, useExisting: EntityDemoDataSource }];
+  }
+  return [EntityApiDataSource, { provide: EntityDataSource, useExisting: EntityApiDataSource }];
+}
+```
+
+## Not demo data (allowed in production)
+
+Production **fallbacks** for missing backend reference data are acceptable —
+defensive defaults, not seed records.
+
+## Scan checklist
+
+```bash
+rg "from ['\"]src/demo|DEMO_|MOCK_DATA" src/app/feature/<entity>/ \
+  --glob '!**/*.providers.ts'
+```

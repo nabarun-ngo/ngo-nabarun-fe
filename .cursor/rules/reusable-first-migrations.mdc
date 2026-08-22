@@ -1,0 +1,48 @@
+---
+description: Build feature consumers through the unified List Dashboard with a strict four-folder layout
+alwaysApply: true
+---
+
+# List-Dashboard-First Feature Development
+
+For configurable list/detail/form features, use `@nabarun-ngo/list-dashboard-core`
+and `@nabarun-ngo/list-dashboard-angular`. Do not import or recreate Experience
+Framework packages (`@nabarun-ngo/experience-*` were removed).
+
+## Reference implementation
+
+Signed-off pilot to copy: `apps/internal-app/src/app/feature/finance/donation/`  
+Pilot docs: `apps/internal-app/docs/README.md`
+
+## Mandatory consumer structure
+
+Exactly four folders — no others:
+
+```text
+feature/<domain>/<entity>/
+├── config/    # <entity>.config.ts (only public factory) + forms/rules/view
+├── data/      # port, providers, api/demo, DTO→domain mapper
+├── domain/    # pure models
+└── page/      # thin route host binding na-list-dashboard
+```
+
+Forbidden folders: `experience/`, `forms/`, `preparation/`, `operations/`,
+`mappers/`, `services/`, `application/`, `presentation/`, `pages/`.
+
+## Boundaries
+
+- Page binds `[config]` to `<na-list-dashboard>` only.
+- Domain I/O, mapping, preparation, actions, and operations live in `config/`.
+- `data/` maps API DTOs → domain only — never `ListRowItem`.
+- UI row/detail shaping lives in `config/<entity>.view.ts`.
+- Nested collections use `type: 'item_list'` sections — never forRoot widgets.
+- `forRoot` registers only DocumentList + FileUpload.
+- Shared packages must never branch on an entity name or import feature code.
+- Create deep links must run `createOpen` preparation before opening the sheet.
+- Condition-hidden field values must not be submitted.
+
+## Forbidden legacy
+
+Do not create entity dashboard/list/detail adapter classes, direct
+`FilteredListDashboardController` wiring in pages, or custom sheets that
+duplicate the generic list-dashboard host.

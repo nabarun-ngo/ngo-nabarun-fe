@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Inject,
@@ -9,10 +10,24 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import type { FormDefinition, FormEngineOptions, FormValues } from '@nabarun-ngo/forms-core';
+import type { FormDefinition, FormEngineOptions, FormStep, FormValues } from '@nabarun-ngo/forms-core';
+import { isDateRangeValue } from '@nabarun-ngo/forms-core';
 import { CfFieldComponent } from './cf-field.component';
 import { FormEngineService } from './form-engine.service';
 import { CF_FORM_CLASS_NAMES, type CfFormClassNames } from './tokens';
+
+function isSameFormValue(current: unknown, next: unknown): boolean {
+  if (current === next) {
+    return true;
+  }
+  if (isDateRangeValue(current) && isDateRangeValue(next)) {
+    return current.startDate === next.startDate && current.endDate === next.endDate;
+  }
+  if (Array.isArray(current) && Array.isArray(next)) {
+    return current.length === next.length && current.every((item, index) => item === next[index]);
+  }
+  return false;
+}
 
 @Component({
   selector: 'cf-form',
@@ -36,7 +51,7 @@ import { CF_FORM_CLASS_NAMES, type CfFormClassNames } from './tokens';
       }
 
       @for (step of steps; track step.stepId) {
-        <div [attr.data-cf-step]="step.stepId || null">
+        <div class="cf-form-step" [attr.data-cf-step]="step.stepId || null">
           @if (step.stepName) {
             <h3 class="mat-title-medium cf-form-step-title">{{ step.stepName }}</h3>
           }
@@ -44,9 +59,10 @@ import { CF_FORM_CLASS_NAMES, type CfFormClassNames } from './tokens';
             <cf-field
               [field]="field"
               [fieldId]="idPrefix + '-' + field.definition.key"
-              [value]="values[field.definition.key] ?? null"
+              [value]="formValuesSnapshot[field.definition.key] ?? null"
+              [formValues]="formValuesSnapshot"
               [error]="fieldErrors[field.definition.key]"
-              [classNames]="classNames"
+              [classNames]="classNames ?? undefined"
               [engineOptions]="engineOptions"
               (valueChange)="setValue(field.definition.key, $event)"
             />
@@ -79,50 +95,186 @@ export class CfFormComponent implements OnChanges {
   @Input() showSubmit = true;
 
   @Output() submitted = new EventEmitter<FormValues>();
+  @Output() valuesChange = new EventEmitter<FormValues>();
 
   submitting = false;
-  values: FormValues = {};
-  fieldErrors: Record<string, string> = {};
-  steps: ReturnType<FormEngineService['getSteps']> = [];
+  private engineReady = false;
+  /** Stable reference for child fields — updated only when engine values change. */
+  formValuesSnapshot: FormValues = {};
 
   constructor(
     private readonly engine: FormEngineService,
     @Optional() @Inject(CF_FORM_CLASS_NAMES) public classNames: CfFormClassNames | null,
+    private readonly cdr: ChangeDetectorRef,
   ) {
     this.classNames = this.classNames ?? {};
   }
 
+  /** Live visible steps — always read from the engine (conditional fields). */
+  get steps(): FormStep[] {
+    return this.engineReady ? this.engine.getSteps() : [];
+  }
+
+  /** Live field values — includes conditionally hidden fields. */
+  get values(): FormValues {
+    return this.engineReady ? this.engine.getValues() : {};
+  }
+
+  /** Live validation errors from the engine. */
+  get fieldErrors(): Record<string, string> {
+    return this.engineReady ? this.engine.getFieldErrors() : {};
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.definition && (changes['definition'] || changes['initialValues'] || changes['engineOptions'])) {
-      this.engine.init(this.definition, this.initialValues, this.engineOptions);
-      this.refresh();
+    if (!this.definition) {
+      return;
+    }
+
+    const definitionChanged = !!changes['definition'];
+    const initialValuesChanged = !!changes['initialValues'];
+    const engineOptionsChanged = !!changes['engineOptions'];
+
+    // Same values must not skip a concurrent definition change (stepper step swaps).
+    if (
+      initialValuesChanged
+      && !changes['initialValues'].firstChange
+      && !definitionChanged
+      && !engineOptionsChanged
+    ) {
+      const previous = changes['initialValues'].previousValue as FormValues | undefined;
+      if (this.engineReady && previous && this.hasSameFormValues(previous, this.initialValues ?? {})) {
+        return;
+      }
+    }
+
+    if (initialValuesChanged || engineOptionsChanged) {
+      this.initEngine(this.initialValues);
+      return;
+    }
+
+    if (definitionChanged) {
+      const previous = changes['definition'].previousValue as FormDefinition | undefined;
+      const preserveValues = this.engineReady && previous && this.hasSameDefinitionStructure(previous, this.definition);
+      if (preserveValues) {
+        this.engine.updateDefinition(this.definition);
+        this.cdr.markForCheck();
+        return;
+      }
+      this.initEngine(this.engineReady ? this.engine.getValues() : this.initialValues);
     }
   }
 
+  setValuesSilent(partial: FormValues): void {
+    if (!this.engineReady) {
+      return;
+    }
+    this.engine.setValues(partial);
+    this.refreshFormValuesSnapshot();
+    this.cdr.markForCheck();
+  }
+
   setValue(key: string, value: FormValues[string]): void {
+    const current = this.engine.getValues()[key];
+    if (isSameFormValue(current, value)) {
+      return;
+    }
     this.engine.setValue(key, value);
-    this.refresh();
+    this.refreshFormValuesSnapshot();
+    this.valuesChange.emit(this.formValuesSnapshot);
+    this.cdr.markForCheck();
+  }
+
+  setFieldError(key: string, message: string): void {
+    if (!this.engineReady) {
+      return;
+    }
+    this.engine.setFieldError(key, message);
+    this.cdr.markForCheck();
+  }
+
+  clearFieldError(key: string): void {
+    if (!this.engineReady) {
+      return;
+    }
+    this.engine.clearFieldError(key);
+    this.cdr.markForCheck();
   }
 
   async onSubmit(event: Event): Promise<void> {
     event.preventDefault();
     const result = this.engine.validate();
-    this.fieldErrors = result.fieldErrors;
-    if (!result.valid) return;
+    if (!result.valid) {
+      this.cdr.detectChanges();
+      return;
+    }
 
     this.submitting = true;
     try {
       this.submitted.emit(this.engine.getSubmitValues());
       this.engine.reset();
-      this.refresh();
+      this.cdr.markForCheck();
     } finally {
       this.submitting = false;
     }
   }
 
-  private refresh(): void {
-    this.values = this.engine.getValues();
-    this.steps = this.engine.getSteps();
-    this.fieldErrors = this.engine.getFieldErrors();
+  /** Visible field values — for embedded/filter forms without using submit. */
+  getVisibleValues(): FormValues {
+    return this.engine.getSubmitValues();
+  }
+
+  /** All field values held by the engine (includes conditionally hidden fields). */
+  getValues(): FormValues {
+    return this.engine.getValues();
+  }
+
+  /** Keys hidden by an unmet condition — drop these before submitting. */
+  getConditionHiddenKeys(): string[] {
+    return this.engineReady ? this.engine.getConditionHiddenKeys() : [];
+  }
+
+  /** Run validation and refresh field errors (for embedded save actions). */
+  validateForm(): boolean {
+    const result = this.engine.validate();
+    this.cdr.detectChanges();
+    return result.valid;
+  }
+
+  /** Reset the form engine and re-render fields. */
+  resetForm(initialValues?: FormValues): void {
+    this.engine.reset(initialValues);
+    this.refreshFormValuesSnapshot();
+    this.cdr.markForCheck();
+  }
+
+  private initEngine(initialValues?: FormValues): void {
+    this.engine.init(this.definition, initialValues, this.engineOptions);
+    this.engineReady = true;
+    this.refreshFormValuesSnapshot();
+    this.cdr.markForCheck();
+  }
+
+  private refreshFormValuesSnapshot(): void {
+    this.formValuesSnapshot = this.engineReady ? this.engine.getValues() : {};
+  }
+
+  private hasSameDefinitionStructure(previous: FormDefinition, next: FormDefinition): boolean {
+    if (previous.fields.length !== next.fields.length) {
+      return false;
+    }
+    return previous.fields.every((field, index) => {
+      const other = next.fields[index];
+      return field.key === other.key && field.fieldType === other.fieldType;
+    });
+  }
+
+  private hasSameFormValues(previous: FormValues, next: FormValues): boolean {
+    const keys = new Set([...Object.keys(previous), ...Object.keys(next)]);
+    for (const key of keys) {
+      if (!isSameFormValue(previous[key], next[key])) {
+        return false;
+      }
+    }
+    return true;
   }
 }

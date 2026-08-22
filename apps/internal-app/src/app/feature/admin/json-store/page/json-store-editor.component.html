@@ -1,0 +1,295 @@
+<app-admin-console-shell pageTitle="JSON Store">
+  <div class="js-editor" *ngIf="permissions.canRead; else noAccess">
+    <header class="js-editor__header">
+      <div>
+        <h1 class="js-editor__title">JSON Store</h1>
+        <p class="js-editor__subtitle">Lookups, catalogs, templates, and site content</p>
+      </div>
+      <div class="js-editor__perms">
+        <span class="badge" *ngIf="permissions.canCreate">create</span>
+        <span class="badge" *ngIf="permissions.canUpdate">update</span>
+        <span class="badge" *ngIf="permissions.canDelete">delete</span>
+        <span class="badge" *ngIf="!permissions.canUpdate">read only</span>
+      </div>
+    </header>
+
+    <div class="js-editor__panes" [class.js-editor__panes--loading]="loading">
+      <!-- Namespace tree -->
+      <aside class="pane pane--ns">
+        <label class="search">
+          <input
+            type="search"
+            [(ngModel)]="namespaceFilter"
+            placeholder="Filter namespaces…" />
+        </label>
+        <ng-container *ngFor="let group of groups">
+          <div class="pane__group" *ngIf="nodesByGroup(group).length">
+            <div class="pane__group-title">{{ groupLabels[group] }}</div>
+            <button
+              type="button"
+              class="ns-node"
+              *ngFor="let node of nodesByGroup(group); trackBy: trackByNs"
+              [class.ns-node--active]="node.namespace === selectedNamespace"
+              (click)="selectNamespace(node.namespace)">
+              <span class="ns-node__name">{{ node.namespace }}</span>
+              <span class="ns-node__meta">
+                <span class="badge badge--ghost" *ngIf="node.hasSchema">schema</span>
+                <span class="count">{{ node.count }}</span>
+              </span>
+            </button>
+          </div>
+        </ng-container>
+      </aside>
+
+      <!-- Document list -->
+      <aside class="pane pane--docs">
+        <div class="pane__head">
+          <span class="pane__title">
+            {{ docsInNamespace.length }} document<span *ngIf="docsInNamespace.length !== 1">s</span>
+          </span>
+          <button
+            type="button"
+            class="btn btn--primary"
+            *ngIf="permissions.canCreate"
+            (click)="openCreate()"
+            title="Create document">+</button>
+        </div>
+        <label class="search">
+          <input
+            type="search"
+            [(ngModel)]="keyFilter"
+            placeholder="Search key…"
+            [disabled]="!selectedNamespace" />
+        </label>
+        <div class="keylist" *ngIf="selectedNamespace; else pickNs">
+          <button
+            type="button"
+            class="keyrow"
+            *ngFor="let doc of docsInNamespace; trackBy: trackByDoc"
+            [class.keyrow--active]="doc.id === selected?.id"
+            (click)="selectDocument(doc)">
+            <div class="keyrow__key">{{ doc.key }}</div>
+            <div class="keyrow__meta">Updated {{ doc.updatedAt | date:'mediumDate' }}</div>
+            <div class="keyrow__badges" *ngIf="doc.id === selected?.id && dirty">
+              <span class="badge badge--warn">unsaved</span>
+            </div>
+          </button>
+          <p class="empty-inline" *ngIf="!docsInNamespace.length">
+            No documents in this namespace.
+            <button type="button" class="btn btn--primary" *ngIf="permissions.canCreate" (click)="openCreate()">
+              Create the first document
+            </button>
+          </p>
+        </div>
+        <ng-template #pickNs>
+          <p class="empty-inline">Pick a namespace.</p>
+        </ng-template>
+      </aside>
+
+      <!-- Editor -->
+      <section class="pane pane--editor">
+        <ng-container *ngIf="selected; else emptyEditor">
+          <div
+            class="banner banner--managed"
+            *ngIf="managedMeta.group === 'managed'">
+            This namespace is managed elsewhere.
+            <a *ngIf="managedMeta.managedLink" [routerLink]="managedMeta.managedLink">
+              Open dedicated console
+            </a>
+            <span *ngIf="managedMeta.consumerHint"> — {{ managedMeta.consumerHint }}</span>
+          </div>
+
+          <div class="editor">
+            <div class="editor__bar">
+              <span class="editor__crumb">{{ selected.namespace }} / {{ selected.key }}</span>
+              <span class="badge badge--warn" *ngIf="dirty">unsaved</span>
+              <span class="badge" *ngIf="schemaResolve?.match === 'none'">no schema</span>
+              <span class="badge badge--ok" *ngIf="schemaResolve?.match === 'exact'">schema:key</span>
+              <span class="badge badge--ok" *ngIf="schemaResolve?.match === 'namespace'">schema</span>
+              <span class="editor__spacer"></span>
+              <button type="button" class="btn" (click)="formatDraft()" [disabled]="!validation.parseOk">Format</button>
+              <button type="button" class="btn" (click)="setTab('diff')" [disabled]="!dirty">Diff</button>
+              <button type="button" class="btn" (click)="revertDraft()" [disabled]="!dirty || !permissions.canUpdate">Revert</button>
+              <button
+                type="button"
+                class="btn btn--danger"
+                *ngIf="permissions.canDelete"
+                (click)="deleteSelected()">Delete</button>
+              <button
+                type="button"
+                class="btn btn--primary"
+                *ngIf="permissions.canUpdate"
+                (click)="save()"
+                [disabled]="!validation.canSave || saving">
+                {{ saving ? 'Saving…' : 'Save' }}
+              </button>
+            </div>
+
+            <div class="editor__tabs">
+              <button type="button" class="tab" [class.tab--active]="activeTab === 'json'" (click)="setTab('json')">JSON</button>
+              <button type="button" class="tab" [class.tab--active]="activeTab === 'tree'" (click)="setTab('tree')">Tree</button>
+              <button type="button" class="tab" [class.tab--active]="activeTab === 'diff'" (click)="setTab('diff')">Diff</button>
+              <button type="button" class="tab" [class.tab--active]="activeTab === 'info'" (click)="setTab('info')">Info</button>
+            </div>
+
+            <div class="editor__body" *ngIf="activeTab === 'json'">
+              <div class="code">
+                <div class="code__gutter">
+                  <div
+                    *ngFor="let n of gutterLines"
+                    class="code__line-no"
+                    [class.code__line-no--err]="errorLineSet.has(n)">{{ n }}</div>
+                </div>
+                <textarea
+                  class="code__textarea"
+                  [ngModel]="draftText"
+                  (ngModelChange)="onDraftInput($event)"
+                  [disabled]="!permissions.canUpdate"
+                  spellcheck="false"
+                  rows="24"></textarea>
+              </div>
+            </div>
+
+            <div class="editor__body" *ngIf="activeTab === 'tree'">
+              <div class="tree" *ngIf="validation.parseOk; else treeBroken">
+                <ng-container *ngTemplateOutlet="treeTpl; context: { $implicit: treeRoots }"></ng-container>
+              </div>
+              <ng-template #treeBroken>
+                <p class="callout callout--err">Fix JSON syntax to use the tree view.</p>
+              </ng-template>
+            </div>
+
+            <div class="editor__body" *ngIf="activeTab === 'diff'">
+              <div class="diff">
+                <div class="diff__col">
+                  <div class="diff__head">Saved</div>
+                  <pre class="diff__body">{{ savedText }}</pre>
+                </div>
+                <div class="diff__col">
+                  <div class="diff__head">Draft</div>
+                  <pre class="diff__body">{{ draftText }}</pre>
+                </div>
+              </div>
+            </div>
+
+            <div class="editor__body editor__body--info" *ngIf="activeTab === 'info'">
+              <dl class="kv">
+                <dt>Id</dt><dd>{{ selected.id }}</dd>
+                <dt>Namespace</dt><dd>{{ selected.namespace }}</dd>
+                <dt>Key</dt><dd>{{ selected.key }}</dd>
+                <dt>Created</dt><dd>{{ selected.createdAt | date:'medium' }}</dd>
+                <dt>Updated</dt><dd>{{ selected.updatedAt | date:'medium' }}</dd>
+                <dt>Schema match</dt><dd>{{ schemaResolve?.match ?? '—' }}</dd>
+              </dl>
+            </div>
+
+            <div class="editor__foot">
+              <span *ngIf="validation.parseOk">Valid JSON</span>
+              <span class="foot--err" *ngIf="!validation.parseOk">{{ validation.parseError }}</span>
+              <span *ngIf="validation.parseOk && schemaResolve?.jsonSchema && validation.schemaOk">Schema OK</span>
+              <span class="foot--err" *ngIf="validation.parseOk && !validation.schemaOk">
+                {{ validation.schemaIssues.length }} schema problem(s)
+              </span>
+              <span *ngIf="dirty">· dirty</span>
+            </div>
+          </div>
+
+          <div class="callout callout--err" *ngIf="!validation.parseOk">
+            <strong>Cannot save — JSON is not parseable</strong>
+            <div>{{ validation.parseError }}</div>
+          </div>
+
+          <div class="callout callout--err" *ngIf="validation.parseOk && !validation.schemaOk">
+            <strong>Schema validation failed — Save is blocked</strong>
+            <ul>
+              <li *ngFor="let issue of validation.schemaIssues">
+                <code>{{ issue.path }}</code>: {{ issue.message }}
+                <span *ngIf="issue.line"> (line {{ issue.line }})</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="callout callout--err" *ngIf="serverIssues.length">
+            <strong>Rejected by server schema — nothing was saved</strong>
+            <ul>
+              <li *ngFor="let issue of serverIssues">
+                <code>{{ issue.path }}</code>: {{ issue.message }}
+                <span *ngIf="issue.line"> (line {{ issue.line }})</span>
+              </li>
+            </ul>
+          </div>
+        </ng-container>
+
+        <ng-template #emptyEditor>
+          <div class="empty">
+            <p>Pick a namespace, then a key.</p>
+            <p class="muted" *ngIf="selectedNamespace">Namespace: <code>{{ selectedNamespace }}</code></p>
+          </div>
+        </ng-template>
+      </section>
+    </div>
+  </div>
+
+  <ng-template #noAccess>
+    <p class="empty">You need <code>read:json_documents</code> to open the JSON Store.</p>
+  </ng-template>
+</app-admin-console-shell>
+
+<!-- Create dialog -->
+<div class="modal-backdrop" *ngIf="showCreate" (click)="closeCreate()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal__head">New JSON document</div>
+    <div class="modal__body">
+      <label class="field">
+        <span>Namespace *</span>
+        <input type="text" [(ngModel)]="createNamespace" list="js-ns-list" />
+        <datalist id="js-ns-list">
+          <option *ngFor="let n of namespaceNodes" [value]="n.namespace"></option>
+        </datalist>
+      </label>
+      <label class="field">
+        <span>Key *</span>
+        <input type="text" [(ngModel)]="createKey" placeholder="slug-style-key" />
+      </label>
+      <div class="field">
+        <span>Start from</span>
+        <div class="radios">
+          <label><input type="radio" name="cm" [(ngModel)]="createMode" value="skeleton" /> Schema skeleton</label>
+          <label><input type="radio" name="cm" [(ngModel)]="createMode" value="empty" /> Empty object</label>
+        </div>
+      </div>
+    </div>
+    <div class="modal__foot">
+      <button type="button" class="btn" (click)="closeCreate()">Cancel</button>
+      <button type="button" class="btn btn--primary" (click)="submitCreate()">Create &amp; open</button>
+    </div>
+  </div>
+</div>
+
+<ng-template #treeTpl let-nodes>
+  <ul class="tree__list">
+    <li *ngFor="let node of nodes">
+      <div class="tree__row">
+        <button
+          type="button"
+          class="tree__toggle"
+          *ngIf="node.kind !== 'leaf'"
+          (click)="toggleTree(node.path)">
+          {{ isTreeExpanded(node.path) ? '▾' : '▸' }}
+        </button>
+        <span class="tree__spacer" *ngIf="node.kind === 'leaf'"></span>
+        <span class="tree__name">{{ node.name }}</span>
+        <span class="badge badge--ghost" *ngIf="node.kind !== 'leaf'">{{ node.kind }}</span>
+        <input
+          *ngIf="node.kind === 'leaf' && permissions.canUpdate"
+          class="tree__input"
+          [ngModel]="'' + node.value"
+          (ngModelChange)="updateTreeLeaf(node.path, $event)" />
+        <span *ngIf="node.kind === 'leaf' && !permissions.canUpdate" class="tree__leaf">{{ node.value | json }}</span>
+      </div>
+      <ng-container *ngIf="node.kind !== 'leaf' && isTreeExpanded(node.path)">
+        <ng-container *ngTemplateOutlet="treeTpl; context: { $implicit: node.children }"></ng-container>
+      </ng-container>
+    </li>
+  </ul>
+</ng-template>

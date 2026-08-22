@@ -1,4 +1,4 @@
-import type { FormDefinition, FormFieldDefinition, FieldValidationRule } from '../models/types.js';
+import type { FormDefinition, FormFieldDefinition, FieldValidationRule, DateBoundRef } from '../models/types.js';
 import { normalizeFieldType } from './normalize-field-type.js';
 
 function asObject(value: unknown): Record<string, unknown> | null {
@@ -21,16 +21,20 @@ function mapField(raw: unknown): FormFieldDefinition {
     id: String(f.id ?? f.key ?? ''),
     key: String(f.key ?? ''),
     label: String(f.label ?? f.key ?? ''),
+    placeholder: f.placeholder != null ? String(f.placeholder) : null,
+    hint: typeof f.hint === 'string' ? f.hint : null,
     fieldType: normalizeFieldType(String(f.fieldType ?? 'text')),
     mandatory: Boolean(f.mandatory),
     fieldOptions: Array.isArray(f.fieldOptions) ? f.fieldOptions.map(mapFieldOption) : [],
     isHidden: Boolean(f.isHidden),
     isEncrypted: Boolean(f.isEncrypted),
     enabled: f.enabled !== false,
+    readOnly: Boolean(f.readOnly),
     sortOrder: typeof f.sortOrder === 'number' ? f.sortOrder : 0,
     condition: f.condition ? mapCondition(f.condition) : null,
     dependentOptions: f.dependentOptions ? mapDependentOptions(f.dependentOptions) : null,
     validationRules: f.validationRules ? mapValidationRules(f.validationRules) : null,
+    dateConstraints: f.dateConstraints ? mapDateConstraints(f.dateConstraints) : null,
     viewPermissions: Array.isArray(f.viewPermissions)
       ? f.viewPermissions.map(String)
       : undefined,
@@ -42,6 +46,9 @@ function mapField(raw: unknown): FormFieldDefinition {
 function mapCondition(raw: unknown): FormFieldDefinition['condition'] {
   const c = asObject(raw);
   if (!c) return null;
+  // A condition without a parent key can never be satisfied, which would hide
+  // the field forever; treat it as "no condition" instead.
+  if (!String(c.dependsOnKey ?? '').trim()) return null;
   return {
     dependsOnKey: String(c.dependsOnKey ?? ''),
     operator: String(c.operator ?? 'equals') as FormFieldDefinition['condition'] extends infer T
@@ -56,6 +63,9 @@ function mapCondition(raw: unknown): FormFieldDefinition['condition'] {
 function mapDependentOptions(raw: unknown): FormFieldDefinition['dependentOptions'] {
   const d = asObject(raw);
   if (!d) return null;
+  // Without a parent key the option map can never resolve, leaving the field
+  // with no options at all; fall back to the field's own options.
+  if (!String(d.dependsOnKey ?? '').trim()) return null;
   const optionMap: Record<string, { key: string; label: string }[]> = {};
   const rawMap = asObject(d.optionMap) ?? {};
   for (const [parentKey, opts] of Object.entries(rawMap)) {
@@ -86,6 +96,45 @@ function mapValidationRules(raw: unknown): FormFieldDefinition['validationRules'
     return rules.length ? rules : null;
   }
   return mapValidationRule(raw);
+}
+
+function mapDateBoundRef(raw: unknown): DateBoundRef | undefined {
+  const ref = asObject(raw);
+  if (!ref?.kind) {
+    return undefined;
+  }
+
+  switch (String(ref.kind)) {
+    case 'literal':
+      return { kind: 'literal', value: String(ref.value ?? '') };
+    case 'today':
+      return { kind: 'today' };
+    case 'field':
+      return { kind: 'field', key: String(ref.key ?? '') };
+    case 'rangePart':
+      return {
+        kind: 'rangePart',
+        part: ref.part === 'endDate' ? 'endDate' : 'startDate',
+      };
+    default:
+      return undefined;
+  }
+}
+
+function mapDateConstraints(raw: unknown): FormFieldDefinition['dateConstraints'] {
+  const constraints = asObject(raw);
+  if (!constraints) return null;
+
+  return {
+    min: mapDateBoundRef(constraints.min),
+    max: mapDateBoundRef(constraints.max),
+    endMin: mapDateBoundRef(constraints.endMin),
+    endMax: mapDateBoundRef(constraints.endMax),
+    disableWeekends: constraints.disableWeekends === true,
+    disabledWeekdays: Array.isArray(constraints.disabledWeekdays)
+      ? constraints.disabledWeekdays.map(day => Number(day)).filter(day => Number.isInteger(day))
+      : undefined,
+  };
 }
 
 export function fromPublicFormDefinition(dto: unknown): FormDefinition {

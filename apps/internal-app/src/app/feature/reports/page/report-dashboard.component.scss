@@ -1,0 +1,16 @@
+.report-shell {
+  padding: 14px 8px 24px;
+  min-height: 100%;
+  background: var(--mobile-page-gradient);
+}
+.report-shell__content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+@media (min-width: 768px) {
+  .report-shell {
+    padding: 0;
+    background: transparent;
+  }
+}

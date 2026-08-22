@@ -1,0 +1,33 @@
+<div class="donation-shell">
+  <section class="donation-shell__content">
+    <app-nav-back
+      [fallbackLink]="financeBackLink"
+      fallbackLabel="Finance">
+    </app-nav-back>
+
+    <na-list-dashboard
+      [config]="config"
+      [refData]="refData"
+      [routeContext]="routeContext"
+      [formContext]="{
+        dashboardId: 'donation-list',
+        refData: refData,
+        data: routeContext
+      }"
+      [forEventId]="forEventId"
+      [documentUploadHint]="documentHint"
+      (notification)="onNotification($event)">
+
+      <ng-template listOverlay>
+        <app-list-detail-sheet
+          [open]="donorDetailOpen"
+          mode="view"
+          [title]="donorDetailTitle"
+          [sections]="donorDetailSections"
+          [loading]="donorDetailLoading"
+          (closed)="closeDonor()">
+        </app-list-detail-sheet>
+      </ng-template>
+    </na-list-dashboard>
+  </section>
+</div>

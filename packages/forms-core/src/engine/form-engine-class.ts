@@ -19,11 +19,15 @@ export class FormEngine {
   private fieldErrors: Record<string, string> = {};
 
   constructor(
-    readonly definition: FormDefinition,
+    private definition: FormDefinition,
     initialValues: FormValues = {},
     private readonly options: FormEngineOptions = {},
   ) {
     this.values = this.buildInitialValues(initialValues);
+  }
+
+  updateDefinition(definition: FormDefinition): void {
+    this.definition = definition;
   }
 
   getValues(): FormValues {
@@ -34,6 +38,19 @@ export class FormEngine {
     this.values = { ...this.values, [key]: value };
     this.values = applyDependentValueEffects(this.definition, this.values, key, this.options);
     delete this.fieldErrors[key];
+  }
+
+  setFieldError(key: string, message: string): void {
+    this.fieldErrors = { ...this.fieldErrors, [key]: message };
+  }
+
+  clearFieldError(key: string): void {
+    if (!(key in this.fieldErrors)) {
+      return;
+    }
+    const next = { ...this.fieldErrors };
+    delete next[key];
+    this.fieldErrors = next;
   }
 
   setValues(partial: FormValues): void {
@@ -53,6 +70,13 @@ export class FormEngine {
 
   getVisibleFields(): ResolvedField[] {
     return this.getResolvedFields().filter((f) => f.visible);
+  }
+
+  /** Keys of fields hidden by an unmet condition — never part of a submit payload. */
+  getConditionHiddenKeys(): string[] {
+    return this.getResolvedFields()
+      .filter((f) => !f.visible && f.definition.condition != null)
+      .map((f) => f.definition.key);
   }
 
   getSteps(): FormStep[] {
@@ -75,13 +99,14 @@ export class FormEngine {
   }
 
   private buildInitialValues(overrides: FormValues): FormValues {
-    let values: FormValues = {};
+    // Keep values from prior steps (e.g. stepper) even when those fields are not
+    // declared on the current step definition — needed for dependentOptions/conditions.
+    let values: FormValues = { ...overrides };
     for (const field of this.definition.fields) {
       if (field.isEncrypted && this.options.ignoreEncryptedValues) continue;
-      values[field.key] =
-        overrides[field.key] !== undefined
-          ? overrides[field.key]
-          : getDefaultValueForFieldType(field.fieldType);
+      if (values[field.key] === undefined) {
+        values[field.key] = getDefaultValueForFieldType(field.fieldType);
+      }
     }
     for (const field of this.definition.fields) {
       values = applyDependentValueEffects(this.definition, values, field.key, this.options);

@@ -32,12 +32,32 @@ export class FormEngineService {
     this.requireEngine().setValue(key, value);
   }
 
+  setValues(values: FormValues): void {
+    this.requireEngine().setValues(values);
+  }
+
+  updateDefinition(definition: FormDefinition): void {
+    this.requireEngine().updateDefinition(definition);
+  }
+
+  setFieldError(key: string, message: string): void {
+    this.requireEngine().setFieldError(key, message);
+  }
+
+  clearFieldError(key: string): void {
+    this.requireEngine().clearFieldError(key);
+  }
+
   getResolvedFields(): ResolvedField[] {
     return this.requireEngine().getResolvedFields();
   }
 
   getVisibleFields(): ResolvedField[] {
     return this.requireEngine().getVisibleFields();
+  }
+
+  getConditionHiddenKeys(): string[] {
+    return this.requireEngine().getConditionHiddenKeys();
   }
 
   getSteps(): FormStep[] {

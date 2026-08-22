@@ -1,0 +1,42 @@
+<div class="earning-shell">
+  <section class="earning-shell__content">
+    <app-nav-back
+      [fallbackLink]="financeBackLink"
+      fallbackLabel="Finance">
+    </app-nav-back>
+
+    <na-list-dashboard
+      [config]="config"
+      [refData]="refData"
+      [routeContext]="routeContext"
+      [formContext]="{
+        dashboardId: 'earning-list',
+        refData: refData,
+        data: routeContext
+      }"
+      (notification)="onNotification($event)">
+
+      <ng-template listOverlay let-controller>
+        <app-list-create-sheet
+          [open]="controller.dashboard.createPage.open"
+          title="Create Earning"
+          [hint]="createHint"
+          [definition]="createFormDefinition"
+          [initialValues]="createInitialValues"
+          [saving]="controller.createSaving"
+          saveLabel="Create"
+          idPrefix="create-earning"
+          (dismissed)="onCreateDismissed(controller)"
+          (saved)="onCreateSaved($event, controller)">
+          <section class="earning-create-sheet__documents">
+            <h3>Documents (optional)</h3>
+            <app-file-upload
+              [allowedFileTypes]="createDocumentTypes"
+              (files)="onCreateDocumentsChange($event)">
+            </app-file-upload>
+          </section>
+        </app-list-create-sheet>
+      </ng-template>
+    </na-list-dashboard>
+  </section>
+</div>
