@@ -21,14 +21,17 @@ src/
 │   ├── page.tsx      # Home (/)
 │   └── (site)/       # Inner pages (shared Navbar + Footer layout)
 ├── components/       # Shared UI
+├── data/mock/        # Build-time mock API payloads
 ├── lib/              # API, config, types, validation
 └── hooks/            # UI + reCAPTCHA hooks
 ```
 
 ## Scripts
 
-- `npm run dev` — dev server (Turbopack)
-- `npm run build` — static export to `out/` (then postbuild: prune → sitemap)
+- `npm run dev` — dev server (Turbopack; runs `generate:assets` first)
+- `npm run build` — static export to `out/` (runs `generate:assets` first)
+- `npm run generate:assets` — icons from `public/img/logo.png` + WebPs under `public/img/`
+- `npm run clean:generated` — remove generated icons + WebPs
 - `npm run lint` — ESLint
 
 See `.env.example` for environment variables.

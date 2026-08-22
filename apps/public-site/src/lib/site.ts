@@ -16,7 +16,7 @@ export const IS_NOINDEX = process.env.NEXT_PUBLIC_NOINDEX === 'true'
 export const WEBSITE_ID = `${SITE_URL}/#website`
 export const ORGANIZATION_ID = `${SITE_URL}/#organization`
 
-/** Intrinsic size of `public/img/logo.*` (kept in sync by scripts/generate-icons.mjs). */
+/** Intrinsic size of `public/img/logo.*` (kept in sync by scripts/generate-assets.mjs). */
 const LOGO_DIMENSIONS = { width: 1305, height: 877 }
 
 export function getSiteConstants(site: SiteMetadata) {

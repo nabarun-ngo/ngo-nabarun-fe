@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
-import Carousel2 from '@/components/sections/Carousel2'
+import Carousel from '@/components/sections/Carousel'
 import About from '@/components/sections/About'
 import Services from '@/components/sections/Services'
 import Donate from '@/components/sections/Donate'
@@ -44,7 +44,7 @@ export default async function Home() {
           {searchName} — {site.name}, {site.location}
         </h1>
 
-        <Carousel2 items={carousel} />
+        <Carousel items={carousel} />
         {sections.about?.enabled !== false && (
           <About
             content={pages.about}

@@ -1,0 +1,8 @@
+# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files
+
+# Generated (see scripts/clean-generated.mjs / generate-assets.mjs)
+/public/**/*.webp
+/public/favicon-96x96.png
+/public/apple-touch-icon.png
+/public/icon-192.png
+/public/icon-512.png

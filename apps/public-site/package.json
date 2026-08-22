@@ -3,15 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "next dev --turbopack",
+    "setup": "npm run generate:assets",
+    "generate:assets": "node scripts/generate-assets.mjs",
+    "clean:generated": "node scripts/clean-generated.mjs",
+    "clean": "rimraf .next out .turbo",
+    "clean:all": "npm run clean:generated && npm run clean",
+    "predev": "npm run setup",
+    "dev": "next dev --turbopack",
+    "prebuild": "npm run setup",
     "build": "next build",
-    "optimize:images": "node scripts/optimize-images.mjs",
-    "generate:icons": "node scripts/generate-icons.mjs",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "vitest run"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.7.2",
     "@hookform/resolvers": "^5.2.2",
+    "@nabarun-ngo/list-dashboard-core": "*",
     "@truto/replace-placeholders": "^1.0.8",
     "bootstrap": "^5.0.0",
     "bootstrap-icons": "^1.11.3",
@@ -34,6 +41,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.5.4",
     "sharp": "^0.34.3",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^3.2.4"
   }
 }

@@ -22,7 +22,7 @@ import type {
   TeamMember,
 } from '@/lib/types'
 import type { FormDefinition } from '@nabarun-ngo/forms-core'
-import { fromPublicFormDefinition } from '@nabarun-ngo/forms-core'
+import { resolvePublicFormDefinition } from '@/lib/forms/public-form-source'
 import contentsDynamic from '@/data/mock/contents-dynamic.json'
 import contentStatic from '@/data/mock/content-static.json'
 import formDefinitions from '@/data/mock/form-definitions.json'
@@ -73,16 +73,18 @@ async function loadDynamicContent(): Promise<DynamicContent> {
 }
 
 async function loadFormDefinition(formId: string): Promise<FormDefinition> {
-  if (USE_MOCK_API) {
-    const definitions = formDefinitions as Record<string, unknown>
-    const definition = definitions[formId]
-    if (!definition) {
-      throw new Error(`Unknown form definition: ${formId}`)
+  return resolvePublicFormDefinition(formId, async id => {
+    if (USE_MOCK_API) {
+      const definitions = formDefinitions as Record<string, unknown>
+      const definition = definitions[id]
+      if (!definition) {
+        throw new Error(`Unknown form definition: ${id}`)
+      }
+      return definition
     }
-    return fromPublicFormDefinition(definition)
-  }
 
-  return fromPublicFormDefinition(await apiGet<unknown>(formDefinitionPath(formId)))
+    return apiGet<unknown>(formDefinitionPath(id))
+  })
 }
 
 /** GET /api/public-site/contents/static — deduped once per render pass. */
