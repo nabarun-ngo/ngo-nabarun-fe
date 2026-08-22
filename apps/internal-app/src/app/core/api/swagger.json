@@ -19974,7 +19974,7 @@
           },
           "token": {
             "type": "string",
-            "example": "sk_live_9f1c2d3e4b5a67890abcdef0123456789"
+            "example": "sk_live_xxxxxxxxxx_fake"
           },
           "permissions": {
             "example": [
