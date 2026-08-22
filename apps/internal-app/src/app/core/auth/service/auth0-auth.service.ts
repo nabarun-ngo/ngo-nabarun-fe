@@ -14,7 +14,7 @@ export { PlatformAuthService } from '@nabarun-ngo/auth-angular';
  * should import this class directly.
  */
 @Injectable()
-export class WebAuthService extends PlatformAuthService {
+export class Auth0AuthService extends PlatformAuthService {
   private config = environment.auth_config;
 
   constructor(protected auth: AuthService, private router: Router) {

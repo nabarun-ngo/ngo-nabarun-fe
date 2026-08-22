@@ -6,7 +6,7 @@ import {
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
-import { RbacContext } from '@nabarun-ngo/auth-core';
+import { RbacEntityContext } from '@nabarun-ngo/auth-core';
 import { AuthorizationService } from '../services/authorization.service';
 
 /**
@@ -26,7 +26,7 @@ export class HasPermissionDirective implements OnChanges {
   private readonly authorization = inject(AuthorizationService);
 
   @Input() hasPermission!: string | string[];
-  @Input() hasPermissionContext?: RbacContext;
+  @Input() hasPermissionContext?: RbacEntityContext;
   @Input() hasPermissionRequireAll = false;
 
   ngOnChanges(): void {

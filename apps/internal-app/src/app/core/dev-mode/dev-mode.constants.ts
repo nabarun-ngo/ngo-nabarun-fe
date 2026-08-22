@@ -1,4 +1,4 @@
-import { RbacSnapshotDto } from '@nabarun-ngo/auth-angular';
+import { RbacUserAccessSnapshot } from '@nabarun-ngo/auth-core';
 import { SCOPE } from '../constant/auth-scope.const';
 
 /** Flatten all scope strings from the SCOPE constant tree. */
@@ -12,13 +12,13 @@ export function flattenAllScopes(scopeTree: typeof SCOPE): string[] {
   return values;
 }
 
-export const DEMO_RBAC_SNAPSHOT: RbacSnapshotDto = {
+export const DEMO_RBAC_SNAPSHOT: RbacUserAccessSnapshot = {
   idpSub: 'dev-mode-bypass',
   userId: 'demo-user',
   permissions: flattenAllScopes(SCOPE),
-  userRoles: ['dev-admin'],
+  roles: ['dev-admin'],
   roleGroups: [],
-  scopedRoles: {},
+  scopedAccess: [],
 };
 
 export const DEMO_USER_GIVEN_NAME = 'Demo User';

@@ -5,13 +5,13 @@ import {
   AuthConfig,
   PlatformAuthService,
   RBAC_DATA_SOURCE,
+  UserIdentityService,
 } from '@nabarun-ngo/auth-angular';
 import { BYPASS_AUTH, environment } from '../../../environments/environment';
 import { AppRoute } from '../constant/app-routing.const';
 import { DevModeService } from '../dev-mode/dev-mode.service';
 import { PLATFORM_AUTH_PROVIDER } from './service/platform-auth.factory';
 import { RbacApiService } from './service/rbac-api.service';
-import { UserIdentityService } from './service/user-identity.service';
 import { IUserIdentityService } from './tokens/user-identity.token';
 
 /** Platform auth, RBAC, and identity bindings — reads BYPASS_AUTH once here. */
@@ -45,4 +45,4 @@ function provideAuth(): Provider[] {
     },
   ],
 })
-export class CoreAuthModule {}
+export class CoreAuthModule { }

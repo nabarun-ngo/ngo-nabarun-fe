@@ -31,8 +31,8 @@ export class NotificationService implements INotificationService {
 
   async setup(): Promise<void> {
     try {
-      const profileId = this.identityService.loggedInUserProfile?.id;
-      if (this.identityService.isLoggedIn && profileId) {
+      const profileId = this.identityService.?.id;
+      if (await this.identityService.isUserLoggedIn() && profileId) {
         console.log('[NotificationService] Secure user found, initializing push provider.');
         await this.pushProvider.init(profileId);
 

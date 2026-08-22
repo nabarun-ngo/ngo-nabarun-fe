@@ -17,7 +17,7 @@ export {
 
 // Tokens
 export { AUTH_CONFIG, AuthConfig } from './lib/tokens/auth-config.token';
-export { RBAC_DATA_SOURCE, RbacDataSource, RbacSnapshotDto } from './lib/tokens/rbac-data-source.token';
+export { RBAC_DATA_SOURCE, RbacDataSource } from './lib/tokens/rbac-data-source.token';
 
 // Utils
 export { sanitizeInternalRedirectUrl } from './lib/utils/redirect-url.util';

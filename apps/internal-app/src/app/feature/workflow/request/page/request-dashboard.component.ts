@@ -57,7 +57,7 @@ export class RequestDashboardComponent {
   protected readonly refData = readRouteRefData(this.route) as RequestRefData;
   protected readonly routeContext: RequestListContext = createRequestContext({
     refData: this.refData,
-    currentUserId: this.userIdentity.loggedInUserProfile?.id,
+    currentUserId: await this.userIdentity.getId(),
   });
   protected readonly config: RequestListConfig = createRequestListConfig({
     data: this.data,

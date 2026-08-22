@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { RbacSnapshot } from '@nabarun-ngo/auth-core';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { RbacUserAccessSnapshot } from '@nabarun-ngo/auth-core';
 
 @Injectable({ providedIn: 'root' })
-export class RbacStateService {
-  private readonly snapshotSubject = new BehaviorSubject<RbacSnapshot | null>(null);
+export class RbacStateService<T extends RbacUserAccessSnapshot = RbacUserAccessSnapshot> {
+  private readonly snapshotSubject = new BehaviorSubject<T | null>(null);
   private readonly loadedSubject = new BehaviorSubject<boolean>(false);
 
-  readonly snapshot$ = this.snapshotSubject.asObservable();
+  readonly snapshot$: Observable<T | null> = this.snapshotSubject.asObservable();
   readonly loaded$ = this.loadedSubject.asObservable();
 
-  get snapshot(): RbacSnapshot | null {
+  get snapshot(): T | null {
     return this.snapshotSubject.value;
   }
 
@@ -22,7 +22,7 @@ export class RbacStateService {
     return this.snapshotSubject.value?.idpSub;
   }
 
-  setSnapshot(snapshot: RbacSnapshot): void {
+  setSnapshot(snapshot: T): void {
     this.snapshotSubject.next(snapshot);
     this.loadedSubject.next(true);
   }

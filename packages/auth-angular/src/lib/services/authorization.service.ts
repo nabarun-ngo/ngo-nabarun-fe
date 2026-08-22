@@ -1,37 +1,34 @@
 import { Inject, Injectable } from '@angular/core';
-import { filter, firstValueFrom, take } from 'rxjs';
+import { filter, firstValueFrom, Observable, take } from 'rxjs';
 import {
-  contextFrom,
-  RbacContext,
-  RbacSnapshot,
-  scopedRoleKey,
-  snapshotFromCurrentUser,
+  RbacUserAccessSnapshot,
 } from '@nabarun-ngo/auth-core';
-import { RBAC_DATA_SOURCE, RbacDataSource, RbacSnapshotDto } from '../tokens/rbac-data-source.token';
+import { RBAC_DATA_SOURCE, RbacDataSource } from '../tokens/rbac-data-source.token';
 import { RbacStateService } from './rbac-state.service';
 
+interface EntityContext {
+  entityId: string;
+  entityType: string;
+}
+
 @Injectable({ providedIn: 'root' })
-export class AuthorizationService {
-  get snapshot$() { return this.state.snapshot$; }
+export class AuthorizationService<T extends RbacUserAccessSnapshot = RbacUserAccessSnapshot> {
+  get snapshot$():Observable<T | null> { return this.state.snapshot$; }
   get loaded$() { return this.state.loaded$; }
 
   constructor(
-    @Inject(RBAC_DATA_SOURCE) private dataSource: RbacDataSource,
-    private state: RbacStateService,
-  ) {}
-
-  contextFrom(entityType: string, entityId: string): RbacContext {
-    return contextFrom(entityType, entityId);
-  }
+    @Inject(RBAC_DATA_SOURCE) private dataSource: RbacDataSource<T>,
+    private state: RbacStateService<T>,
+  ) { }
 
   async load(): Promise<void> {
-    const dto = await firstValueFrom(this.dataSource.fetchCurrentUser());
-    this.state.setSnapshot(snapshotFromCurrentUser(dto));
+    const dto = await firstValueFrom(this.dataSource.fetchCurrentUserSnapshot());
+    this.state.setSnapshot(dto);
   }
 
   /** Load RBAC state from a DTO that has already been fetched by the caller. */
-  loadWith(dto: RbacSnapshotDto): void {
-    this.state.setSnapshot(snapshotFromCurrentUser(dto));
+  loadWith(dto: T): void {
+    this.state.setSnapshot(dto);
   }
 
   async refresh(): Promise<void> {
@@ -42,19 +39,19 @@ export class AuthorizationService {
     this.state.clear();
   }
 
-  async waitUntilLoaded(): Promise<RbacSnapshot> {
+  async waitUntilLoaded(): Promise<RbacUserAccessSnapshot> {
     if (this.state.loaded && this.state.snapshot) {
       return this.state.snapshot;
     }
     return firstValueFrom(
       this.state.snapshot$.pipe(
-        filter((snapshot): snapshot is RbacSnapshot => snapshot !== null),
+        filter((snapshot): snapshot is T => snapshot !== null),
         take(1),
       ),
     );
   }
 
-  effectivePermissions(context?: RbacContext): string[] {
+  effectivePermissions(context?: EntityContext): string[] {
     const snapshot = this.state.snapshot;
     if (!snapshot) {
       return [];
@@ -63,20 +60,33 @@ export class AuthorizationService {
     if (!context) {
       return [...global];
     }
-    const scoped = snapshot.scopedRoles[scopedRoleKey(context)]?.permissions ?? [];
+    const scoped = snapshot.scopedAccess.find((scope) => scope.entityId === context.entityId && scope.entityType === context.entityType)?.permissions ?? [];
     return [...new Set([...global, ...scoped])];
   }
 
-  effectiveRoles(context?: RbacContext): string[] {
+  effectiveRoles(context?: EntityContext): string[] {
     const snapshot = this.state.snapshot;
     if (!snapshot) {
       return [];
     }
-    const global = snapshot.userRoles;
+    const global = snapshot.roles;
     if (!context) {
       return [...global];
     }
-    const scoped = snapshot.scopedRoles[scopedRoleKey(context)]?.roles ?? [];
+    const scoped = snapshot.scopedAccess.find((scope) => scope.entityId === context.entityId && scope.entityType === context.entityType)?.roles ?? [];
+    return [...new Set([...global, ...scoped])];
+  }
+
+  effectiveRoleGroups(context?: EntityContext): string[] {
+    const snapshot = this.state.snapshot;
+    if (!snapshot) {
+      return [];
+    }
+    const global = snapshot.roleGroups;
+    if (!context) {
+      return [...global];
+    }
+    const scoped = snapshot.scopedAccess.find((scope) => scope.entityId === context.entityId && scope.entityType === context.entityType)?.roleGroups ?? [];
     return [...new Set([...global, ...scoped])];
   }
 }

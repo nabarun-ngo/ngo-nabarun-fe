@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { AuthService } from '@auth0/auth0-angular';
 import { of, Subject } from 'rxjs';
-import { WebAuthService } from './platform-auth.service';
+import { WebAuthService } from './auth0-auth.service';
 
 describe('WebAuthService', () => {
   let service: WebAuthService;

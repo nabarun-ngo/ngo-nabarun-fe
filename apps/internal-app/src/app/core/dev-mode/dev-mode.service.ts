@@ -1,13 +1,12 @@
 import { inject, Injectable, Injector } from '@angular/core';
 import { BehaviorSubject, firstValueFrom, map, Observable, of } from 'rxjs';
-import { AuthUser } from '@nabarun-ngo/auth-core';
+import { AuthUser, RbacUserAccessSnapshot } from '@nabarun-ngo/auth-core';
 import {
   AuthorizationService,
   LoginType,
   PlatformAuthService,
   RbacDataSource,
 } from '@nabarun-ngo/auth-angular';
-import { AuthUserInfoResponseDto } from '../api/api-client/models/auth-user-info-response-dto';
 import { IUserIdentityService } from '../auth/tokens/user-identity.token';
 import {
   AppNotification,
@@ -24,7 +23,6 @@ import { DEMO_RBAC_SNAPSHOT, DEMO_USER_GIVEN_NAME } from './dev-mode.constants';
 export class DevModeService extends PlatformAuthService implements RbacDataSource, IUserIdentityService, INotificationService {
   isLoggedIn = false;
   loggedInUser!: AuthUser;
-  loggedInUserProfile?: AuthUserInfoResponseDto;
   profileUpdated = false;
 
   private unreadCountSubject = new BehaviorSubject<number>(0);
@@ -37,6 +35,15 @@ export class DevModeService extends PlatformAuthService implements RbacDataSourc
 
   constructor() {
     super();
+  }
+  profileComplete(): Promise<boolean> {
+    throw new Error('Method not implemented.');
+  }
+  getId(): Promise<string | undefined> {
+    throw new Error('Method not implemented.');
+  }
+  fetchCurrentUserSnapshot(): Observable<RbacUserAccessSnapshot> {
+    return of(DEMO_RBAC_SNAPSHOT);
   }
 
   private get authorization(): AuthorizationService {
@@ -74,10 +81,6 @@ export class DevModeService extends PlatformAuthService implements RbacDataSourc
     const currentUserDto = await firstValueFrom(this.fetchCurrentUser());
     this.authorization.loadWith(currentUserDto);
     this.isLoggedIn = true;
-    this.loggedInUserProfile = {
-      id: DEMO_RBAC_SNAPSHOT.userId,
-      attributes: { profile_updated: true },
-    } as AuthUserInfoResponseDto;
     this.profileUpdated = true;
   }
 
@@ -85,7 +88,7 @@ export class DevModeService extends PlatformAuthService implements RbacDataSourc
     return true;
   }
 
-  getDisplayName(): string {
+  async getDisplayName(): Promise<string> {
     return DEMO_USER_GIVEN_NAME;
   }
 

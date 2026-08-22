@@ -1,19 +1,20 @@
 import { Injectable } from '@angular/core';
 import { firstValueFrom, map } from 'rxjs';
-import { AuthUser } from '@nabarun-ngo/auth-core';
+import { AuthUser, RbacUserAccessSnapshot } from '@nabarun-ngo/auth-core';
 import { PlatformAuthService, LoginType } from './platform-auth.service';
 import { AuthorizationService } from './authorization.service';
 
 @Injectable({ providedIn: 'root' })
-export class UserIdentityService {
+export class UserIdentityService<T extends RbacUserAccessSnapshot = RbacUserAccessSnapshot> {
   isLoggedIn!: boolean;
   /** OIDC claims from the Auth0 token — app-domain profile fields are NOT here. */
   loggedInUser!: AuthUser;
+  rbacSnapShot!: T | null;
 
   constructor(
     protected platformAuth: PlatformAuthService,
-    protected authorization: AuthorizationService,
-  ) {}
+    protected authorization: AuthorizationService<T>,
+  ) { }
 
   async configure(): Promise<void> {
     this.platformAuth.initialize();
@@ -21,6 +22,7 @@ export class UserIdentityService {
     if (this.isLoggedIn) {
       this.loggedInUser = await this.getUser();
       await this.authorization.load();
+      this.rbacSnapShot = await this.getRbacSnapShot();
     }
   }
 
@@ -44,6 +46,12 @@ export class UserIdentityService {
   async getUser(): Promise<AuthUser> {
     return await firstValueFrom(
       this.platformAuth.user$.pipe(map((u) => u as AuthUser)),
+    );
+  }
+
+  async getRbacSnapShot(): Promise<T | null> {
+    return await firstValueFrom(
+      this.authorization.snapshot$.pipe(map((snapshot) => snapshot as T)),
     );
   }
 }

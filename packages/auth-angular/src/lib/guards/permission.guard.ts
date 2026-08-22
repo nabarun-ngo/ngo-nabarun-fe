@@ -1,11 +1,11 @@
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { RbacContext } from '@nabarun-ngo/auth-core';
+import { RbacEntityContext } from '@nabarun-ngo/auth-core';
 import { AuthorizationService } from '../services/authorization.service';
 import { AUTH_CONFIG } from '../tokens/auth-config.token';
 
 export interface PermissionGuardOptions {
-  context?: RbacContext;
+  context?: RbacEntityContext;
   requireAll?: boolean;
 }
 

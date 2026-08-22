@@ -3,10 +3,10 @@
 import { Injector, Provider } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '@auth0/auth0-angular';
-import { PlatformAuthService, WebAuthService } from './platform-auth.service';
+import { PlatformAuthService, Auth0AuthService } from './auth0-auth.service';
 
 export function platformAuthFactory(injector: Injector, router: Router): PlatformAuthService {
-  return new WebAuthService(injector.get(AuthService), router);
+  return new Auth0AuthService(injector.get(AuthService), router);
 }
 
 export const PLATFORM_AUTH_PROVIDER: Provider = {

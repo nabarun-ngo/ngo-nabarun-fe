@@ -190,6 +190,9 @@ export function canUpdateProject(
   project: Project,
 ): boolean {
   return authorization
-    .effectivePermissions(authorization.contextFrom('project', project.id))
+    .effectivePermissions({
+      entityId: project.id,
+      entityType: 'project'
+    })
     .includes(SCOPE.update.project);
 }

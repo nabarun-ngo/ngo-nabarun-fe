@@ -1,9 +1,7 @@
 export { AuthUser } from './auth-user.model';
 export {
-  RbacContext,
-  RbacSnapshot,
-  ScopedAccess,
-  scopedRoleKey,
-  contextFrom,
-  snapshotFromCurrentUser,
+  RbacAccessSnapshot,
+  RbacScopedAccessSnapshot,
+  RbacEntityContext,
+  RbacUserAccessSnapshot,
 } from './rbac-context.model';
