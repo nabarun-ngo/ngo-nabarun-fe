@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject, ViewChild, inject } from '@angular/core';
+import { Component, ViewChild, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AuthorizationService } from '@nabarun-ngo/auth-angular';
 import {
@@ -11,7 +11,6 @@ import {
   type ListDashboardNotification,
 } from '@nabarun-ngo/list-dashboard-angular';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
-import { IUserIdentityService } from 'src/app/core/auth/tokens/user-identity.token';
 import { ModalService } from 'src/app/core/shell/service/modal.service';
 import { FileUploadComponent } from 'src/app/shared/components/file-upload/file-upload.component';
 import { NavBackComponent } from 'src/app/shared/components/nav-back/nav-back.component';
@@ -69,13 +68,11 @@ export class AccountDashboardComponent {
     modal: this.modal,
     context: this.routeContext,
     getActiveChip: () => this.activeChip,
-    getCurrentUserId: () => this.userIdentity.loggedInUserProfile?.id,
+    getCurrentUserId: () => this.authorization.snapshot?.userId,
     openTransactions: (account, isSelf) => this.navigateToTransactions(account, isSelf),
   });
 
-  constructor(
-    @Inject(IUserIdentityService) private readonly userIdentity: IUserIdentityService,
-  ) {
+  constructor() {
     this.sharedData.setPageName('Accounts');
   }
 

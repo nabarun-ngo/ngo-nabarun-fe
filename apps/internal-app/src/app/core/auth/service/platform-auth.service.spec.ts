@@ -1,11 +1,11 @@
-import { TestBed } from '@angular/core/testing';
+import { DestroyRef, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { AuthService } from '@auth0/auth0-angular';
 import { of, Subject } from 'rxjs';
-import { WebAuthService } from './platform-auth.service';
+import { Auth0AuthService } from './auth0-auth.service';
 
-describe('WebAuthService', () => {
-  let service: WebAuthService;
+describe('Auth0AuthService', () => {
+  let service: Auth0AuthService;
   let router: jasmine.SpyObj<Router>;
   let auth: {
     handleRedirectCallback: jasmine.Spy;
@@ -23,13 +23,14 @@ describe('WebAuthService', () => {
 
     TestBed.configureTestingModule({
       providers: [
-        WebAuthService,
+        Auth0AuthService,
         { provide: AuthService, useValue: auth },
         { provide: Router, useValue: router },
+        { provide: DestroyRef, useValue: { onDestroy: () => () => {} } },
       ],
     });
 
-    service = TestBed.inject(WebAuthService);
+    service = TestBed.inject(Auth0AuthService);
   });
 
   it('navigates by url with query params after Auth0 callback', () => {

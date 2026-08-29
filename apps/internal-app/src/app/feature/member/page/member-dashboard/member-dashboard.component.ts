@@ -14,7 +14,6 @@ import {
   type ListDashboardNotification,
 } from '@nabarun-ngo/list-dashboard-angular';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
-import { IUserIdentityService } from 'src/app/core/auth/tokens/user-identity.token';
 import { DocumentListComponent } from 'src/app/shared/components/document-list/document-list.component';
 import { FileUploadComponent } from 'src/app/shared/components/file-upload/file-upload.component';
 import { ModalService } from 'src/app/core/shell/service/modal.service';
@@ -63,7 +62,6 @@ export class MemberDashboardComponent {
   private readonly data = inject(MemberDataSource);
   private readonly modal = inject(ModalService);
   private readonly sharedData = inject(SharedDataService);
-  private readonly identity = inject(IUserIdentityService);
 
   @ViewChild(ListDashboardComponent)
   private listDashboard?: ListDashboardComponent<User, MemberListCriteria, MemberListContext>;
@@ -91,7 +89,7 @@ export class MemberDashboardComponent {
   /** A self edit satisfies the profile-completion guard for this session. */
   protected onMemberUpdated(): void {
     if (this.listDashboard?.controller.dashboard.listPage.activeChip === 'me') {
-      this.identity.profileUpdated = true;
+      void this.authorization.refresh();
     }
   }
 

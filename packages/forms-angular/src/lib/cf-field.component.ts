@@ -85,43 +85,56 @@ import {
                 <span class="cf-required-mark" aria-hidden="true"> *</span>
               }
             </label>
-            <mat-form-field
-              appearance="outline"
-              class="cf-field cf-phone-field"
-              [ngClass]="classNames?.field"
-              subscriptSizing="dynamic"
-              [class.cf-field--invalid]="!!error"
-            >
+            <div class="cf-phone-group" [ngClass]="classNames?.phoneGroup">
               @if (phoneCountryOptions.length > 1) {
-                <mat-select
-                  matPrefix
-                  class="cf-phone-country-select"
-                  [ngModel]="phoneParsed.countryCode"
-                  (ngModelChange)="onPhoneCountryCodeChange($event)"
-                  aria-label="Country code"
+                <mat-form-field
+                  appearance="outline"
+                  class="cf-field cf-phone-country-field"
+                  [ngClass]="classNames?.phoneCountry"
+                  subscriptSizing="dynamic"
+                  [class.cf-field--invalid]="!!error"
                 >
-                  @for (opt of phoneCountryOptions; track opt.code) {
-                    <mat-option [value]="opt.code">{{ opt.label ?? opt.code }}</mat-option>
-                  }
-                </mat-select>
-              } @else {
-                <span matTextPrefix class="cf-phone-prefix">{{ phoneParsed.countryCode }}</span>
+                  <mat-select
+                    class="cf-phone-country-select"
+                    [id]="fieldId + '-country'"
+                    [ngModel]="phoneParsed.countryCode"
+                    (ngModelChange)="onPhoneCountryCodeChange($event)"
+                    aria-label="Country code"
+                  >
+                    <mat-select-trigger>{{ phoneParsed.countryCode }}</mat-select-trigger>
+                    @for (opt of phoneCountryOptions; track opt.code) {
+                      <mat-option [value]="opt.code">{{ opt.label ?? opt.code }}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
               }
-              <input
-                matInput
-                type="tel"
-                inputmode="tel"
-                autocomplete="tel-national"
-                [id]="fieldId"
-                [name]="field.definition.key"
-                [ngModel]="phoneParsed.nationalNumber"
-                (ngModelChange)="onPhoneNationalNgModel($event)"
-                [placeholder]="fieldPlaceholder"
-              />
-              @if (fieldHint) {
-                <mat-hint>{{ fieldHint }}</mat-hint>
-              }
-            </mat-form-field>
+              <mat-form-field
+                appearance="outline"
+                class="cf-field cf-phone-field"
+                [ngClass]="classNames?.field"
+                subscriptSizing="dynamic"
+                [class.cf-field--invalid]="!!error"
+              >
+                @if (phoneCountryOptions.length <= 1) {
+                  <span matTextPrefix class="cf-phone-prefix">{{ phoneParsed.countryCode }}</span>
+                }
+                <input
+                  matInput
+                  type="tel"
+                  inputmode="tel"
+                  autocomplete="tel-national"
+                  [id]="fieldId"
+                  [name]="field.definition.key"
+                  [ngClass]="classNames?.phoneNational"
+                  [ngModel]="phoneParsed.nationalNumber"
+                  (ngModelChange)="onPhoneNationalNgModel($event)"
+                  [placeholder]="fieldPlaceholder"
+                />
+                @if (fieldHint) {
+                  <mat-hint>{{ fieldHint }}</mat-hint>
+                }
+              </mat-form-field>
+            </div>
             @if (error) {
               <div class="cf-field-error mat-mdc-form-field-error" role="alert">{{ error }}</div>
             }

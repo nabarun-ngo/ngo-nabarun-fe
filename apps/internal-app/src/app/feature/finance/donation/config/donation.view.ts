@@ -53,7 +53,8 @@ export function buildDonationDetailSections(
     detailTextField('Raised on', date(donation.raisedOn)),
     ...(donation.activityName ? [detailTextField('Donated for', donation.activityName)] : []),
     ...(donation.paidOn ? [detailTextField('Paid on', date(donation.paidOn))] : []),
-    ...(donation.transactionRef ? [detailTextField('Transaction Ref', donation.transactionRef)] : []),
+    ...(donation.invoice?.id ? [detailTextField('Invoice number', donation.invoice.id)] : []),
+    ...(donation.transactionRef ? [detailTextField('Transaction reference number', donation.transactionRef)] : []),
     ...(donation.remarks ? [detailTextField('Remarks', donation.remarks)] : []),
   ];
   return [detailKeyValueSection('donation_detail', 'Donation Details', fields)];

@@ -3,7 +3,6 @@ import { Observable } from 'rxjs';
 import { AuthUser } from '@nabarun-ngo/auth-core';
 
 export type LoginType = 'email' | 'password' | 'sms';
-export type AuthEventType = 'login_success' | 'login_error';
 
 /**
  * The auth contract the rest of the app codes against.

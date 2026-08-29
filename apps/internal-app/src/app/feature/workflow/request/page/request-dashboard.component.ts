@@ -11,7 +11,6 @@ import {
   type ListDashboardNotification,
 } from '@nabarun-ngo/list-dashboard-angular';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
-import { IUserIdentityService } from 'src/app/core/auth/tokens/user-identity.token';
 import { ModalService } from 'src/app/core/shell/service/modal.service';
 import { DocumentListComponent } from 'src/app/shared/components/document-list/document-list.component';
 import { FileUploadComponent } from 'src/app/shared/components/file-upload/file-upload.component';
@@ -51,13 +50,12 @@ export class RequestDashboardComponent {
   private readonly modal = inject(ModalService);
   private readonly follow = inject(CorrespondenceFollowService);
   private readonly sharedData = inject(SharedDataService);
-  private readonly userIdentity = inject(IUserIdentityService);
 
   protected readonly homeBackLink = AppRoute.secured_dashboard_page.url;
   protected readonly refData = readRouteRefData(this.route) as RequestRefData;
   protected readonly routeContext: RequestListContext = createRequestContext({
     refData: this.refData,
-    currentUserId: this.userIdentity.loggedInUserProfile?.id,
+    currentUserId: this.authorization.snapshot?.userId,
   });
   protected readonly config: RequestListConfig = createRequestListConfig({
     data: this.data,

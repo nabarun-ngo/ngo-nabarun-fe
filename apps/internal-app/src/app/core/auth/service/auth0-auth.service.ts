@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
+import { DestroyRef, Injectable } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { AuthService } from '@auth0/auth0-angular';
 import { LoginType, PlatformAuthService, sanitizeInternalRedirectUrl } from '@nabarun-ngo/auth-angular';
 import { environment } from '../../../../environments/environment';
 import { AppRoute } from '../../constant/app-routing.const';
-import { Observable } from 'rxjs';
+import { Observable, take } from 'rxjs';
 
 export { PlatformAuthService } from '@nabarun-ngo/auth-angular';
 
@@ -14,10 +15,14 @@ export { PlatformAuthService } from '@nabarun-ngo/auth-angular';
  * should import this class directly.
  */
 @Injectable()
-export class WebAuthService extends PlatformAuthService {
+export class Auth0AuthService extends PlatformAuthService {
   private config = environment.auth_config;
 
-  constructor(protected auth: AuthService, private router: Router) {
+  constructor(
+    protected auth: AuthService,
+    private router: Router,
+    private destroyRef: DestroyRef,
+  ) {
     super();
   }
 
@@ -36,24 +41,36 @@ export class WebAuthService extends PlatformAuthService {
   initialize(): void {
     const app_url = new URL(window.location.href);
     if (app_url.searchParams.has('state') && app_url.searchParams.has('code')) {
-      this.auth.handleRedirectCallback().subscribe((data) => {
-        const target = sanitizeInternalRedirectUrl(
-          data.appState?.target,
-          AppRoute.secured_dashboard_page.url,
-        );
-        void this.router.navigateByUrl(target);
+      this.auth.handleRedirectCallback().pipe(take(1)).subscribe({
+        next: (data) => {
+          const target = sanitizeInternalRedirectUrl(
+            data.appState?.target,
+            AppRoute.secured_dashboard_page.url,
+          );
+          void this.router.navigateByUrl(target);
+        },
+        error: (error) => {
+          this.router.navigate([AppRoute.login_page.url], {
+            state: {
+              isError: true,
+              description: `${error?.name ?? 'AuthError'} : ${error?.message ?? 'Login callback failed'}`,
+            },
+          });
+        },
       });
     }
 
-    this.auth.error$.subscribe((d) => {
-      this.router.navigate([AppRoute.login_page.url], {
-        state: {
-          isError: true,
-          description: d.name + ' : ' + d.message,
-          state: app_url.searchParams.get('state'),
-        },
+    this.auth.error$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((d) => {
+        this.router.navigate([AppRoute.login_page.url], {
+          state: {
+            isError: true,
+            description: d.name + ' : ' + d.message,
+            state: app_url.searchParams.get('state'),
+          },
+        });
       });
-    });
   }
 
   loginWith(loginType: LoginType, prompt?: string, redirectUrl?: string): void {

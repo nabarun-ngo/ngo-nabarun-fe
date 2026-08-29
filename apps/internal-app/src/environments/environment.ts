@@ -27,6 +27,7 @@ const apiBaseUrl = env.NG_APP_API_BASE_URL.replace(/\/$/, '');
 const auth_config: AuthConfig = {
   domain: env.NG_APP_AUTH0_DOMAIN,
   clientId: env.NG_APP_AUTH0_CLIENT_ID,
+  useRefreshTokens: true,
   authorizationParams: {
     redirect_uri: window.location.origin,
     scope: 'openid profile email offline_access api auth_time family_name given_name email_verified exp phone_number picture sub iss iat aud',

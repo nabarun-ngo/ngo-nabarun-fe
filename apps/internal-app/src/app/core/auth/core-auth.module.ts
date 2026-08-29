@@ -5,6 +5,8 @@ import {
   AuthConfig,
   PlatformAuthService,
   RBAC_DATA_SOURCE,
+  USER_IDENTITY,
+  UserIdentityService as PackageUserIdentityService,
 } from '@nabarun-ngo/auth-angular';
 import { BYPASS_AUTH, environment } from '../../../environments/environment';
 import { AppRoute } from '../constant/app-routing.const';
@@ -22,13 +24,18 @@ function provideAuth(): Provider[] {
       { provide: PlatformAuthService, useExisting: DevModeService },
       { provide: RBAC_DATA_SOURCE, useExisting: DevModeService },
       { provide: IUserIdentityService, useExisting: DevModeService },
+      { provide: PackageUserIdentityService, useExisting: DevModeService },
+      { provide: USER_IDENTITY, useExisting: DevModeService },
     ];
   }
 
   return [
+    UserIdentityService,
     PLATFORM_AUTH_PROVIDER,
     { provide: RBAC_DATA_SOURCE, useExisting: RbacApiService },
     { provide: IUserIdentityService, useExisting: UserIdentityService },
+    { provide: PackageUserIdentityService, useExisting: UserIdentityService },
+    { provide: USER_IDENTITY, useExisting: UserIdentityService },
   ];
 }
 
@@ -45,4 +52,4 @@ function provideAuth(): Provider[] {
     },
   ],
 })
-export class CoreAuthModule {}
+export class CoreAuthModule { }

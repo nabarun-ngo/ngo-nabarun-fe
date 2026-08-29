@@ -5,7 +5,7 @@ import { BYPASS_AUTH } from '../environments/environment';
 import { AppRoute } from './core/constant/app-routing.const';
 import { CommonLayoutComponent } from './core/shell/layout/common-layout/common-layout.component';
 import { SecuredLayoutComponent } from './core/shell/layout/secured-layout/secured-layout.component';
-import { userGuard } from './core/auth/guards/auth.guards';
+import { userGuard } from './core/auth/guards/user-auth.guards';
 
 const route_data = AppRoute;
 const publicRouteGuards = BYPASS_AUTH ? [] : [noAuthGuard];

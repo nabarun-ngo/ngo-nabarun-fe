@@ -1,37 +1,47 @@
 import { Inject, Injectable } from '@angular/core';
-import { filter, firstValueFrom, take } from 'rxjs';
+import { filter, firstValueFrom, map, merge, Observable, take } from 'rxjs';
 import {
   contextFrom,
-  RbacContext,
-  RbacSnapshot,
-  scopedRoleKey,
-  snapshotFromCurrentUser,
+  effectivePermissions as coreEffectivePermissions,
+  effectiveRoleGroups as coreEffectiveRoleGroups,
+  effectiveRoles as coreEffectiveRoles,
+  RbacEntityContext,
+  RbacUserAccessSnapshot,
 } from '@nabarun-ngo/auth-core';
-import { RBAC_DATA_SOURCE, RbacDataSource, RbacSnapshotDto } from '../tokens/rbac-data-source.token';
+import { RbacNotLoadedError } from '../errors/rbac-load.error';
+import { RBAC_DATA_SOURCE, RbacDataSource } from '../tokens/rbac-data-source.token';
 import { RbacStateService } from './rbac-state.service';
 
 @Injectable({ providedIn: 'root' })
-export class AuthorizationService {
-  get snapshot$() { return this.state.snapshot$; }
-  get loaded$() { return this.state.loaded$; }
+export class AuthorizationService<T extends RbacUserAccessSnapshot = RbacUserAccessSnapshot> {
+  get snapshot$(): Observable<T | null> {
+    return this.state.snapshot$;
+  }
+  get snapshot(): T | null {
+    return this.state.snapshot;
+  }
+  get loaded$() {
+    return this.state.loaded$;
+  }
 
   constructor(
-    @Inject(RBAC_DATA_SOURCE) private dataSource: RbacDataSource,
-    private state: RbacStateService,
+    @Inject(RBAC_DATA_SOURCE) private dataSource: RbacDataSource<T>,
+    private state: RbacStateService<T>,
   ) {}
 
-  contextFrom(entityType: string, entityId: string): RbacContext {
+  contextFrom(entityType: string, entityId: string): RbacEntityContext {
     return contextFrom(entityType, entityId);
   }
 
   async load(): Promise<void> {
-    const dto = await firstValueFrom(this.dataSource.fetchCurrentUser());
-    this.state.setSnapshot(snapshotFromCurrentUser(dto));
-  }
-
-  /** Load RBAC state from a DTO that has already been fetched by the caller. */
-  loadWith(dto: RbacSnapshotDto): void {
-    this.state.setSnapshot(snapshotFromCurrentUser(dto));
+    this.state.beginLoad();
+    try {
+      const snapshot = await firstValueFrom(this.dataSource.fetchCurrentUserSnapshot());
+      this.state.setSnapshot(snapshot);
+    } catch (error) {
+      this.state.markFailed();
+      throw error;
+    }
   }
 
   async refresh(): Promise<void> {
@@ -42,41 +52,68 @@ export class AuthorizationService {
     this.state.clear();
   }
 
-  async waitUntilLoaded(): Promise<RbacSnapshot> {
-    if (this.state.loaded && this.state.snapshot) {
+  async waitUntilLoaded(): Promise<T> {
+    if (this.state.loadState === 'loaded' && this.state.snapshot) {
       return this.state.snapshot;
     }
+    if (this.state.loadState === 'failed') {
+      throw new RbacNotLoadedError('failed');
+    }
+    if (this.state.loadState === 'cleared') {
+      throw new RbacNotLoadedError('cleared');
+    }
+
     return firstValueFrom(
-      this.state.snapshot$.pipe(
-        filter((snapshot): snapshot is RbacSnapshot => snapshot !== null),
-        take(1),
+      merge(
+        this.state.snapshot$.pipe(
+          filter((snapshot): snapshot is T => snapshot !== null),
+          take(1),
+        ),
+        this.state.loadState$.pipe(
+          filter((state) => state === 'failed' || state === 'cleared'),
+          take(1),
+          map((state) => {
+            throw new RbacNotLoadedError(state as 'failed' | 'cleared');
+          }),
+        ),
       ),
     );
   }
 
-  effectivePermissions(context?: RbacContext): string[] {
+  effectivePermissions(context?: RbacEntityContext): string[] {
     const snapshot = this.state.snapshot;
     if (!snapshot) {
       return [];
     }
-    const global = snapshot.permissions;
-    if (!context) {
-      return [...global];
-    }
-    const scoped = snapshot.scopedRoles[scopedRoleKey(context)]?.permissions ?? [];
-    return [...new Set([...global, ...scoped])];
+    return coreEffectivePermissions(snapshot, context);
   }
 
-  effectiveRoles(context?: RbacContext): string[] {
+  effectiveRoles(context?: RbacEntityContext): string[] {
     const snapshot = this.state.snapshot;
     if (!snapshot) {
       return [];
     }
-    const global = snapshot.userRoles;
-    if (!context) {
-      return [...global];
+    return coreEffectiveRoles(snapshot, context);
+  }
+
+  effectiveRoleGroups(context?: RbacEntityContext): string[] {
+    const snapshot = this.state.snapshot;
+    if (!snapshot) {
+      return [];
     }
-    const scoped = snapshot.scopedRoles[scopedRoleKey(context)]?.roles ?? [];
-    return [...new Set([...global, ...scoped])];
+    return coreEffectiveRoleGroups(snapshot, context);
+  }
+
+  hasPermission(permission: string): boolean {
+    return this.effectivePermissions().includes(permission);
+  }
+
+  hasPermissionInContext(permission: string, context: RbacEntityContext): boolean {
+    return this.effectivePermissions(context).includes(permission);
+  }
+
+  hasAnyRole(...roles: string[]): boolean {
+    const current = this.effectiveRoles();
+    return roles.some((role) => current.includes(role));
   }
 }

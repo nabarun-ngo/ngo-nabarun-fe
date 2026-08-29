@@ -3,10 +3,13 @@ import {
   inject,
   Input,
   OnChanges,
+  OnDestroy,
+  OnInit,
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
-import { RbacContext } from '@nabarun-ngo/auth-core';
+import { Subscription } from 'rxjs';
+import { RbacEntityContext } from '@nabarun-ngo/auth-core';
 import { AuthorizationService } from '../services/authorization.service';
 
 /**
@@ -20,16 +23,31 @@ import { AuthorizationService } from '../services/authorization.service';
   selector: '[hasPermission]',
   standalone: true,
 })
-export class HasPermissionDirective implements OnChanges {
+export class HasPermissionDirective implements OnChanges, OnInit, OnDestroy {
   private readonly templateRef = inject(TemplateRef<unknown>);
   private readonly viewContainer = inject(ViewContainerRef);
   private readonly authorization = inject(AuthorizationService);
+  private snapshotSubscription?: Subscription;
 
   @Input() hasPermission!: string | string[];
-  @Input() hasPermissionContext?: RbacContext;
+  @Input() hasPermissionContext?: RbacEntityContext;
   @Input() hasPermissionRequireAll = false;
 
+  ngOnInit(): void {
+    this.snapshotSubscription = this.authorization.snapshot$.subscribe(() => {
+      this.updateView();
+    });
+  }
+
   ngOnChanges(): void {
+    this.updateView();
+  }
+
+  ngOnDestroy(): void {
+    this.snapshotSubscription?.unsubscribe();
+  }
+
+  private updateView(): void {
     const permissions = Array.isArray(this.hasPermission)
       ? this.hasPermission
       : [this.hasPermission];

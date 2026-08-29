@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "setup": "npm run env:generate && npm run generate:assets",
+    "setup": "npm run env:generate && npm run generate:assets && npm run sync:api",
     "env:generate": "node --env-file-if-exists=.env scripts/generate-env.mjs",
     "generate:assets": "node scripts/generate-assets.mjs",
     "clean:generated": "node scripts/clean-generated.mjs",

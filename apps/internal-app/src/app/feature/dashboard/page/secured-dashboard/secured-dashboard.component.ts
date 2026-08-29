@@ -57,8 +57,8 @@ export class SecuredDashboardComponent implements OnInit {
     this.quickAccessSearch = '';
   }
 
-  ngOnInit(): void {
-    this.displayName = this.identityService.getDisplayName();
+  async ngOnInit(): Promise<void> {
+    this.displayName = await this.identityService.getDisplayName();
     this.sharedDataService.setPageName('Dashboard');
     this.initDashboardTiles();
     this.initQuickActions();

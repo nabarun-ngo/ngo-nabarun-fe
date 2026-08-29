@@ -127,6 +127,7 @@ export function mapUserDtoToUser(user: unknown, roleLabels?: RoleLabelLookup): U
     permissionCodes: Array.isArray(u['permissionCodes'])
       ? (u['permissionCodes'] as string[])
       : [],
+    uniqueMemberId: u['uniqueMemberId'] as string | undefined,
   };
 }
 

@@ -46,12 +46,13 @@ export class OneSignalProviderService implements PushNotificationProvider {
   async login(userId: string): Promise<void> {
     console.log('[OneSignalProvider] Logging in user:', userId);
     await this.oneSignal.login(userId);
+    const user = await this.uis.getUser();
     this.oneSignal.User.addTags({
-      user_id: this.uis.loggedInUser?.sub ?? '',
-      name: this.uis.loggedInUser?.name,
+      user_id: user?.sub ?? '',
+      name: user?.name,
       roles: this.authorization.effectiveRoles().join(','),
     });
-    this.oneSignal.User.addEmail(this.uis.loggedInUser?.email);
+    this.oneSignal.User.addEmail(user?.email);
 
   }
 

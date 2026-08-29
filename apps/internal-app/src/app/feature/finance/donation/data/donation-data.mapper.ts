@@ -14,6 +14,9 @@ export function mapDonationDto(dto: DonationDto): Donation {
   const paidToAccount = dto.paidToAccount
     ? mapAccountDtoToAccount(dto.paidToAccount)
     : undefined;
+  const invoice = (dto as DonationDto & {
+    invoice?: { id: string; status: string; documentId?: string; issuedOn: string };
+  }).invoice;
   return {
     id: dto.id,
     donorId: dto.donorId,
@@ -50,6 +53,14 @@ export function mapDonationDto(dto: DonationDto): Donation {
     isPending: dto.status === 'PENDING' || dto.status === 'RAISED',
     isCancelled: dto.status === 'CANCELLED',
     nextStatuses: dto.nextStatuses,
+    invoice: invoice
+      ? {
+          id: invoice.id,
+          status: invoice.status,
+          documentId: invoice.documentId,
+          issuedOn: invoice.issuedOn,
+        }
+      : undefined,
   };
 }
 

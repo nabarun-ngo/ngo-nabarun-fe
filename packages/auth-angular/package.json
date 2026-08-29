@@ -23,17 +23,22 @@
   "types": "./dist/types/nabarun-ngo-auth-angular.d.ts",
   "scripts": {
     "build": "ng-packagr -p ng-package.json",
-    "lint": "tsc --noEmit -p tsconfig.lib.json"
+    "lint": "tsc --noEmit -p tsconfig.lib.json",
+    "test": "vitest run"
   },
   "devDependencies": {
     "@angular/common": "^21.2.19",
     "@angular/compiler": "^21.2.19",
     "@angular/compiler-cli": "^21.2.19",
     "@angular/core": "^21.2.19",
+    "@angular/platform-browser-dynamic": "^21.2.19",
     "@angular/router": "^21.2.19",
     "@nabarun-ngo/auth-core": "*",
+    "jsdom": "^26.1.0",
     "ng-packagr": "^21.2.0",
     "rxjs": "^7.4.0",
-    "typescript": "~5.9.3"
+    "typescript": "~5.9.3",
+    "vitest": "^3.2.4",
+    "zone.js": "~0.15.1"
   }
 }

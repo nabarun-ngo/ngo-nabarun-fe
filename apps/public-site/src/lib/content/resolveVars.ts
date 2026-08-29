@@ -54,6 +54,7 @@ export function resolveVars<T extends Record<string, unknown>>(raw: T): Omit<T, 
     context
   )
   const normalized = normalizeImageFields(resolved) as T & { vars: Record<string, string> }
-  const { vars: _stripped, ...withoutVars } = normalized
+  const { vars: _vars, ...withoutVars } = normalized
+  void _vars
   return withoutVars as Omit<T, 'vars'>
 }

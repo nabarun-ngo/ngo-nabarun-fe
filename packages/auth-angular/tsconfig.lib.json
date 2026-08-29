@@ -15,6 +15,7 @@
     "noEmit": true
   },
   "include": ["src/**/*"],
+  "exclude": ["src/**/*.spec.ts"],
   "angularCompilerOptions": {
     "strictTemplates": true
   }

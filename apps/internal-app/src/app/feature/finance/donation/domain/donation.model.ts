@@ -43,6 +43,12 @@ export interface Donation {
   isCancelled: boolean;
   periodDisplay?: string;
   nextStatuses?: string[];
+  invoice?: {
+    id: string;
+    status: string;
+    documentId?: string;
+    issuedOn: string;
+  };
 }
 
 export type PagedDonation = PagedResult<Donation>;

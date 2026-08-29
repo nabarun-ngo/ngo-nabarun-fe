@@ -12,7 +12,6 @@ import {
   type ListDashboardNotification,
 } from '@nabarun-ngo/list-dashboard-angular';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
-import { IUserIdentityService } from 'src/app/core/auth/tokens/user-identity.token';
 import { ModalService } from 'src/app/core/shell/service/modal.service';
 import { DocumentListComponent } from 'src/app/shared/components/document-list/document-list.component';
 import { FileUploadComponent } from 'src/app/shared/components/file-upload/file-upload.component';
@@ -60,7 +59,6 @@ export class ExpenseDashboardComponent implements DoCheck {
   private readonly accounts = inject(AccountDataSource);
   private readonly modal = inject(ModalService);
   private readonly sharedData = inject(SharedDataService);
-  private readonly userIdentity = inject(IUserIdentityService);
 
   @ViewChild(ListDashboardComponent)
   private listDashboard?: ListDashboardComponent<
@@ -76,7 +74,7 @@ export class ExpenseDashboardComponent implements DoCheck {
     this.route.snapshot.queryParamMap.get('activityId') ?? undefined;
   protected readonly routeContext: ExpenseListContext = createExpenseContext({
     refData: this.refData,
-    defaultPayerId: this.userIdentity.loggedInUserProfile?.id,
+    defaultPayerId: this.authorization.snapshot?.userId,
     projectId: this.route.snapshot.queryParamMap.get('projectId') ?? undefined,
     activityId: this.forEventId,
   });

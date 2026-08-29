@@ -1,9 +1,11 @@
 import { TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
-import { snapshotFromCurrentUser } from '@nabarun-ngo/auth-core';
+import { describe, expect, it, beforeEach } from 'vitest';
+import { of, throwError } from 'rxjs';
+import { contextFrom, snapshotFromCurrentUser } from '@nabarun-ngo/auth-core';
 import { AuthorizationService } from './authorization.service';
 import { RbacStateService } from './rbac-state.service';
 import { RBAC_DATA_SOURCE } from '../tokens/rbac-data-source.token';
+import { RbacNotLoadedError } from '../errors/rbac-load.error';
 
 describe('AuthorizationService', () => {
   let service: AuthorizationService;
@@ -14,70 +16,77 @@ describe('AuthorizationService', () => {
     permissions: ['read:projects', 'update:users'],
     userRoles: ['admin'],
     roleGroups: ['field_team'],
-    scopedRoles: {
-      'project:proj-A': {
+    scopedAccess: [
+      {
+        entityId: 'proj-A',
+        entityType: 'project',
         permissions: ['update:project'],
-        roles: ['volunteer_coordinator'],
+        userRoles: ['volunteer_coordinator'],
         roleGroups: [],
       },
-    },
+    ],
   });
 
+  function createService(
+    fetchCurrentUserSnapshot: () => ReturnType<typeof of<typeof globalUser>> = () => of(globalUser),
+  ): void {
+    state = new RbacStateService();
+    service = new AuthorizationService({ fetchCurrentUserSnapshot }, state);
+  }
+
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [
-        AuthorizationService,
-        RbacStateService,
-        {
-          provide: RBAC_DATA_SOURCE,
-          useValue: {
-            fetchCurrentUser: () => of({
-              idpSub: 'auth0|abc',
-              permissions: ['read:projects', 'update:users'],
-              userRoles: ['admin'],
-              roleGroups: ['field_team'],
-              scopedRoles: globalUser.scopedRoles,
-            }),
-          },
-        },
-      ],
-    });
-    service = TestBed.inject(AuthorizationService);
-    state = TestBed.inject(RbacStateService);
+    createService();
   });
 
   it('loads global permissions from /api/auth/me snapshot', async () => {
     await service.load();
-    expect(service.hasPermission('read:projects')).toBeTrue();
-    expect(service.hasPermission('delete:jobs')).toBeFalse();
+    expect(service.hasPermission('read:projects')).toBe(true);
+    expect(service.hasPermission('delete:jobs')).toBe(false);
   });
 
   it('unions global and scoped permissions for context checks', async () => {
-    state.setSnapshot(globalUser);
-    const ctx = service.contextFrom('project', 'proj-A');
-    expect(service.hasPermissionInContext('read:projects', ctx)).toBeTrue();
-    expect(service.hasPermissionInContext('update:project', ctx)).toBeTrue();
+    await service.load();
+    const ctx = contextFrom('project', 'proj-A');
+    expect(service.hasPermissionInContext('read:projects', ctx)).toBe(true);
+    expect(service.hasPermissionInContext('update:project', ctx)).toBe(true);
     expect(service.effectivePermissions(ctx)).toContain('read:projects');
     expect(service.effectivePermissions(ctx)).toContain('update:project');
   });
 
-  it('scoped-only permissions are not visible outside context', () => {
-    state.setSnapshot(globalUser);
-    expect(service.hasPermission('update:project')).toBeFalse();
+  it('scoped-only permissions are not visible outside context', async () => {
+    await service.load();
+    expect(service.hasPermission('update:project')).toBe(false);
     expect(
       service.hasPermissionInContext('update:project', service.contextFrom('project', 'proj-A')),
-    ).toBeTrue();
+    ).toBe(true);
   });
 
-  it('hasAnyRole checks role keys', () => {
-    state.setSnapshot(globalUser);
-    expect(service.hasAnyRole('admin', 'guest')).toBeTrue();
+  it('hasAnyRole checks role keys', async () => {
+    await service.load();
+    expect(service.hasAnyRole('admin', 'guest')).toBe(true);
   });
 
-  it('clear resets loaded state', () => {
-    state.setSnapshot(globalUser);
+  it('clear resets loaded state', async () => {
+    await service.load();
     service.clear();
-    expect(state.loaded).toBeFalse();
-    expect(service.hasPermission('read:projects')).toBeFalse();
+    expect(state.loaded).toBe(false);
+    expect(state.loadState).toBe('cleared');
+    expect(service.hasPermission('read:projects')).toBe(false);
+  });
+
+  it('waitUntilLoaded rejects when RBAC was cleared', async () => {
+    await service.load();
+    service.clear();
+
+    await expect(service.waitUntilLoaded()).rejects.toBeInstanceOf(RbacNotLoadedError);
+  });
+
+  it('load marks state failed and waitUntilLoaded rejects on error', async () => {
+    createService(() => throwError(() => new Error('network')));
+
+    await expect(service.load()).rejects.toThrow('network');
+    expect(state.loadState).toBe('failed');
+
+    await expect(service.waitUntilLoaded()).rejects.toBeInstanceOf(RbacNotLoadedError);
   });
 });

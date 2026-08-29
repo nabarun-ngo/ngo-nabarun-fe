@@ -7,8 +7,8 @@ import {
   PlatformAuthService,
   RbacDataSource,
 } from '@nabarun-ngo/auth-angular';
-import { AuthUserInfoResponseDto } from '../api/api-client/models/auth-user-info-response-dto';
 import { IUserIdentityService } from '../auth/tokens/user-identity.token';
+import { AppRbacUserAccessSnapshot } from '../auth/tokens/user-rbac.token';
 import {
   AppNotification,
   INotificationService,
@@ -21,11 +21,9 @@ import { DEMO_RBAC_SNAPSHOT, DEMO_USER_GIVEN_NAME } from './dev-mode.constants';
  * Implements all auth-bypass contracts — never inject directly; use tokens.
  */
 @Injectable()
-export class DevModeService extends PlatformAuthService implements RbacDataSource, IUserIdentityService, INotificationService {
+export class DevModeService extends PlatformAuthService implements RbacDataSource<AppRbacUserAccessSnapshot>, IUserIdentityService, INotificationService {
   isLoggedIn = false;
   loggedInUser!: AuthUser;
-  loggedInUserProfile?: AuthUserInfoResponseDto;
-  profileUpdated = false;
 
   private unreadCountSubject = new BehaviorSubject<number>(0);
   private notificationsSubject = new BehaviorSubject<AppNotification[]>([]);
@@ -37,6 +35,15 @@ export class DevModeService extends PlatformAuthService implements RbacDataSourc
 
   constructor() {
     super();
+  }
+  async profileComplete(): Promise<boolean> {
+    return DEMO_RBAC_SNAPSHOT.profileComplete;
+  }
+  async getId(): Promise<string | undefined> {
+    return DEMO_RBAC_SNAPSHOT.userId;
+  }
+  fetchCurrentUserSnapshot(): Observable<AppRbacUserAccessSnapshot> {
+    return of(DEMO_RBAC_SNAPSHOT);
   }
 
   private get authorization(): AuthorizationService {
@@ -66,26 +73,13 @@ export class DevModeService extends PlatformAuthService implements RbacDataSourc
     this.authorization.clear();
   }
 
-  fetchCurrentUser(): Observable<typeof DEMO_RBAC_SNAPSHOT> {
-    return of(DEMO_RBAC_SNAPSHOT);
-  }
-
   async configure(): Promise<void> {
-    const currentUserDto = await firstValueFrom(this.fetchCurrentUser());
-    this.authorization.loadWith(currentUserDto);
+    this.loggedInUser = await this.getUser();
+    await this.authorization.load();
     this.isLoggedIn = true;
-    this.loggedInUserProfile = {
-      id: DEMO_RBAC_SNAPSHOT.userId,
-      attributes: { profile_updated: true },
-    } as AuthUserInfoResponseDto;
-    this.profileUpdated = true;
   }
 
-  async isProfileUpdated(): Promise<boolean> {
-    return true;
-  }
-
-  getDisplayName(): string {
+  async getDisplayName(): Promise<string> {
     return DEMO_USER_GIVEN_NAME;
   }
 

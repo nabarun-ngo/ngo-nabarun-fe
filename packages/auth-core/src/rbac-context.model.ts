@@ -1,57 +1,99 @@
-/** Entity scope for permission checks (e.g. project-level access). */
-export interface RbacContext {
-  entityType: string;
+export interface RbacEntityContext {
   entityId: string;
+  entityType: string;
 }
 
-export interface ScopedAccess {
-  permissions: string[];
-  roles: string[];
-  roleGroups: string[];
-}
-
-/** Client-side snapshot of resolved RBAC from GET /api/auth/me. */
-export interface RbacSnapshot {
-  idpSub: string;
-  userId?: string;
+export interface RbacAccessSnapshot {
   permissions: string[];
   userRoles: string[];
   roleGroups: string[];
-  scopedRoles: Record<string, ScopedAccess>;
 }
 
-export function scopedRoleKey(context: RbacContext): string {
-  return `${context.entityType}:${context.entityId}`;
-}
+export interface RbacScopedAccessSnapshot extends RbacAccessSnapshot, RbacEntityContext {}
 
-export function contextFrom(entityType: string, entityId: string): RbacContext {
-  return { entityType, entityId };
-}
-
-export function snapshotFromCurrentUser(dto: {
+/** Client-side snapshot of resolved RBAC */
+export interface RbacUserAccessSnapshot extends RbacAccessSnapshot {
   idpSub: string;
   userId?: string;
+  scopedAccess: RbacScopedAccessSnapshot[];
+}
+
+export type CurrentUserRbacDto = {
+  idpSub: string;
+  userId?: string;
+  id?: string;
   permissions?: string[];
   userRoles?: string[];
   roleGroups?: string[];
-  scopedRoles?: Record<string, Record<string, string[]>>;
-}): RbacSnapshot {
-  const scopedRoles: Record<string, ScopedAccess> = {};
-  if (dto.scopedRoles) {
-    for (const [key, value] of Object.entries(dto.scopedRoles)) {
-      scopedRoles[key] = {
-        permissions: value['permissions'] ?? [],
-        roles: value['roles'] ?? [],
-        roleGroups: value['roleGroups'] ?? [],
-      };
-    }
+  scopedAccess?: Array<{
+    entityId: string;
+    entityType: string;
+    permissions?: string[];
+    userRoles?: string[];
+    roleGroups?: string[];
+  }>;
+};
+
+export function contextFrom(entityType: string, entityId: string): RbacEntityContext {
+  return { entityType, entityId };
+}
+
+export function findScopedAccess(
+  snapshot: RbacUserAccessSnapshot,
+  context: RbacEntityContext,
+): RbacScopedAccessSnapshot | undefined {
+  return snapshot.scopedAccess.find(
+    (scope) => scope.entityId === context.entityId && scope.entityType === context.entityType,
+  );
+}
+
+function union(global: string[], scoped: string[] | undefined): string[] {
+  return [...new Set([...global, ...(scoped ?? [])])];
+}
+
+export function effectivePermissions(
+  snapshot: RbacUserAccessSnapshot,
+  context?: RbacEntityContext,
+): string[] {
+  if (!context) {
+    return [...snapshot.permissions];
   }
+  return union(snapshot.permissions, findScopedAccess(snapshot, context)?.permissions);
+}
+
+export function effectiveRoles(
+  snapshot: RbacUserAccessSnapshot,
+  context?: RbacEntityContext,
+): string[] {
+  if (!context) {
+    return [...snapshot.userRoles];
+  }
+  return union(snapshot.userRoles, findScopedAccess(snapshot, context)?.userRoles);
+}
+
+export function effectiveRoleGroups(
+  snapshot: RbacUserAccessSnapshot,
+  context?: RbacEntityContext,
+): string[] {
+  if (!context) {
+    return [...snapshot.roleGroups];
+  }
+  return union(snapshot.roleGroups, findScopedAccess(snapshot, context)?.roleGroups);
+}
+
+export function snapshotFromCurrentUser(dto: CurrentUserRbacDto): RbacUserAccessSnapshot {
   return {
     idpSub: dto.idpSub,
-    userId: dto.userId,
+    userId: dto.userId ?? dto.id,
     permissions: dto.permissions ?? [],
     userRoles: dto.userRoles ?? [],
     roleGroups: dto.roleGroups ?? [],
-    scopedRoles,
+    scopedAccess: (dto.scopedAccess ?? []).map((scope) => ({
+      entityId: scope.entityId,
+      entityType: scope.entityType,
+      permissions: scope.permissions ?? [],
+      userRoles: scope.userRoles ?? [],
+      roleGroups: scope.roleGroups ?? [],
+    })),
   };
 }

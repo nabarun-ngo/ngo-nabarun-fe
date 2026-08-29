@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback } from 'react'
-import { MOCK_RECAPTCHA, RECAPTCHA_SITE_KEY, RECAPTCHA_ENTERPRISE, USE_MOCK_API } from '@/lib/config/env'
+import { MOCK_RECAPTCHA, RECAPTCHA_SITE_KEY, RECAPTCHA_ENTERPRISE } from '@/lib/config/env'
 
 declare global {
   interface Window {

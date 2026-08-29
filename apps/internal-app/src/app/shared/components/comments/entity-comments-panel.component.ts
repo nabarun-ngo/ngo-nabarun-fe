@@ -6,6 +6,7 @@ import {
   Input,
   OnChanges,
   OnDestroy,
+  OnInit,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
@@ -79,7 +80,7 @@ function createMentionUserSearch(usersApi: UsersService): MentionUserSearchFn {
   templateUrl: './entity-comments-panel.component.html',
   styleUrls: ['./entity-comments-panel.component.scss'],
 })
-export class EntityCommentsPanelComponent implements OnChanges, OnDestroy {
+export class EntityCommentsPanelComponent implements OnChanges, OnDestroy, OnInit {
   @Input({ required: true }) entityType!: string;
   @Input({ required: true }) entityId!: string;
   @Input() title = 'Comments';
@@ -103,8 +104,12 @@ export class EntityCommentsPanelComponent implements OnChanges, OnDestroy {
     private readonly commentsApi: CommentsService,
     private readonly modalService: ModalService,
     @Inject(IUserIdentityService) private readonly userIdentityService: IUserIdentityService,
-  ) {
-    this.currentUserId = this.userIdentityService.loggedInUserProfile?.id ?? '';
+  ) {}
+
+  ngOnInit(): void {
+    void this.userIdentityService.getId().then(id => {
+      this.currentUserId = id ?? '';
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {

@@ -5,7 +5,6 @@ import { AppRoute } from '../../constant/app-routing.const';
 
 /**
  * Guards routes that require a completed user profile.
- * App-specific — reads isProfileUpdated() from AuthUserInfoResponseDto.attributes.
  */
 export async function userGuard(
   _route: ActivatedRouteSnapshot,
@@ -14,8 +13,7 @@ export async function userGuard(
   const identityService = inject(IUserIdentityService);
   const router = inject(Router);
 
-  const isProfileUpdated = await identityService.isProfileUpdated();
-  if (isProfileUpdated) {
+  if (await identityService.profileComplete()) {
     return true;
   }
   if (state.url === AppRoute.secured_member_complete_my_profile_page.url) {

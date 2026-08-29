@@ -1,12 +1,11 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { sanitizeInternalRedirectUrl } from '@nabarun-ngo/auth-angular';
+import { AuthorizationService, sanitizeInternalRedirectUrl } from '@nabarun-ngo/auth-angular';
 import type { FormDefinition, FormValues } from '@nabarun-ngo/forms-core';
 import type { CfFormStepperStep } from '@nabarun-ngo/forms-angular';
 import { Subscription } from 'rxjs';
 import { AppRoute } from 'src/app/core/constant/app-routing.const';
-import { IUserIdentityService } from 'src/app/core/auth/tokens/user-identity.token';
 import { ModalService } from 'src/app/core/shell/service/modal.service';
 import { KeyValue } from 'src/app/shared/models/key-value.model';
 import { SharedDataService } from 'src/app/shared/services/shared-data.service';
@@ -55,7 +54,7 @@ export class MemberCompleteProfilePageComponent implements OnInit, OnDestroy {
     private location: Location,
     private sharedDataService: SharedDataService,
     @Inject(MemberDataSource) private memberData: MemberDataSource,
-    @Inject(IUserIdentityService) private identity: IUserIdentityService,
+    private authorization: AuthorizationService,
     private modalService: ModalService,
   ) {}
 
@@ -121,7 +120,7 @@ export class MemberCompleteProfilePageComponent implements OnInit, OnDestroy {
         next: updated => {
           this.user = updated;
           this.pendingPictureBase64 = undefined;
-          this.identity.profileUpdated = true;
+          void this.authorization.refresh();
           void this.router.navigateByUrl(this.postCompleteRedirectUrl());
         },
         error: error => {

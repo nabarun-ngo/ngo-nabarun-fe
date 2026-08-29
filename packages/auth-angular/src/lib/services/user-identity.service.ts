@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
-import { firstValueFrom, map } from 'rxjs';
-import { AuthUser } from '@nabarun-ngo/auth-core';
+import { filter, firstValueFrom, map } from 'rxjs';
+import { AuthUser, RbacUserAccessSnapshot } from '@nabarun-ngo/auth-core';
 import { PlatformAuthService, LoginType } from './platform-auth.service';
 import { AuthorizationService } from './authorization.service';
 
 @Injectable({ providedIn: 'root' })
-export class UserIdentityService {
+export class UserIdentityService<T extends RbacUserAccessSnapshot = RbacUserAccessSnapshot> {
   isLoggedIn!: boolean;
   /** OIDC claims from the Auth0 token — app-domain profile fields are NOT here. */
   loggedInUser!: AuthUser;
 
   constructor(
     protected platformAuth: PlatformAuthService,
-    protected authorization: AuthorizationService,
+    protected authorization: AuthorizationService<T>,
   ) {}
 
   async configure(): Promise<void> {
@@ -20,7 +20,11 @@ export class UserIdentityService {
     this.isLoggedIn = await this.isUserLoggedIn();
     if (this.isLoggedIn) {
       this.loggedInUser = await this.getUser();
-      await this.authorization.load();
+      try {
+        await this.authorization.load();
+      } catch {
+        // load() marks state as failed; callers use waitUntilLoaded() fail-closed behavior.
+      }
     }
   }
 
@@ -42,8 +46,9 @@ export class UserIdentityService {
   }
 
   async getUser(): Promise<AuthUser> {
-    return await firstValueFrom(
-      this.platformAuth.user$.pipe(map((u) => u as AuthUser)),
+    const user = await firstValueFrom(
+      this.platformAuth.user$.pipe(filter((value): value is AuthUser => !!value)),
     );
+    return user;
   }
 }

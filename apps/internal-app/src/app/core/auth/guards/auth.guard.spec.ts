@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { AUTH_CONFIG, authGuard, UserIdentityService } from '@nabarun-ngo/auth-angular';
+import { AUTH_CONFIG, authGuard, USER_IDENTITY } from '@nabarun-ngo/auth-angular';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
 describe('authGuard', () => {
   let router: jasmine.SpyObj<Router>;
@@ -13,7 +14,7 @@ describe('authGuard', () => {
     TestBed.configureTestingModule({
       providers: [
         { provide: Router, useValue: router },
-        { provide: UserIdentityService, useValue: { isUserLoggedIn } },
+        { provide: USER_IDENTITY, useValue: { isUserLoggedIn } },
         {
           provide: AUTH_CONFIG,
           useValue: { loginUrl: '/login', postLoginUrl: '/secured/dashboard' },
@@ -23,9 +24,10 @@ describe('authGuard', () => {
   });
 
   it('stores full URL with query params in router state when redirecting to login', async () => {
-    history.pushState({}, '', '/secured/finance/accounts?chip=active&accountId=acc-wallet-001');
+    const route = {} as ActivatedRouteSnapshot;
+    const state = { url: '/secured/finance/accounts?chip=active&accountId=acc-wallet-001' } as RouterStateSnapshot;
 
-    const allowed = await TestBed.runInInjectionContext(() => authGuard());
+    const allowed = await TestBed.runInInjectionContext(() => authGuard(route, state));
 
     expect(allowed).toBeFalse();
     expect(router.navigate).toHaveBeenCalledWith(['/login'], {
@@ -35,8 +37,10 @@ describe('authGuard', () => {
 
   it('allows access when the user is authenticated', async () => {
     isUserLoggedIn.and.resolveTo(true);
+    const route = {} as ActivatedRouteSnapshot;
+    const state = { url: '/secured/dashboard' } as RouterStateSnapshot;
 
-    const allowed = await TestBed.runInInjectionContext(() => authGuard());
+    const allowed = await TestBed.runInInjectionContext(() => authGuard(route, state));
 
     expect(allowed).toBeTrue();
     expect(router.navigate).not.toHaveBeenCalled();

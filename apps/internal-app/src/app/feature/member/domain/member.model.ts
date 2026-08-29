@@ -74,6 +74,7 @@ export interface User {
   roleGroupCodes: string[];
   /** Active direct permission keys from RBAC (`listUserPermissions`). */
   permissionCodes: string[];
+  uniqueMemberId?: string;
   /** Linked IdP connection keys (login methods); loaded on admin edit. */
   connectionKeys?: string[];
 }

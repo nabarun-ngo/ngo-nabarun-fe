@@ -65,10 +65,21 @@
   margin-top: 0.25rem;
 }
 
-.cf-phone-field .cf-phone-country-select {
-  min-width: 5.5rem;
-  max-width: 7.5rem;
-  margin-right: 0.25rem;
+.cf-phone-group {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.mat-mdc-form-field.cf-field.cf-phone-country-field {
+  flex: 0 0 6rem;
+  width: 6rem;
+}
+
+.cf-phone-group .cf-field.cf-phone-field {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .cf-phone-field .cf-phone-prefix {

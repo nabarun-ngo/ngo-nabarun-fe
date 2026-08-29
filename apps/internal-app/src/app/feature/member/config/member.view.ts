@@ -146,6 +146,7 @@ export function buildMemberListDetailSections(
   const whatsappTarget = resolveWhatsappTarget(user);
   const personalFields: ListDetailField[] = [
     field('Name', formatMemberDisplayName(user, refData)),
+    ...(user.uniqueMemberId ? [field('Membership number', user.uniqueMemberId)] : []),
     field(
       'Gender',
       labelForRefKey(refData, user.gender, UserConstant.refDataKey.userGenders),

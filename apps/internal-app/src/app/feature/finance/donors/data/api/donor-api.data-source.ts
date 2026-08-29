@@ -5,7 +5,6 @@ import {
   DonorRefDataDto,
   SuccessResponseDonationSummaryDto,
 } from 'src/app/core/api/api-client/models';
-import { UserIdentityService } from 'src/app/core/auth/service/user-identity.service';
 import { DonationDefaultValue } from '../../../finance.const';
 import {
   buildDonorApiFilter,
@@ -30,13 +29,14 @@ import type {
   MergeGuestDonorsRequest,
   PagedDonors,
 } from '../../domain';
+import { AuthorizationService } from '@nabarun-ngo/auth-angular';
 
 @Injectable()
 export class DonorApiDataSource implements DonorDataSource {
   constructor(
     private readonly donorApi: DonorService,
     private readonly donationApi: DonationService,
-    private readonly userIdentity: UserIdentityService,
+    private readonly authorization: AuthorizationService,
   ) {}
 
   loadListPage(query: DonorListPageQuery): Observable<PagedDonors> {
@@ -84,7 +84,7 @@ export class DonorApiDataSource implements DonorDataSource {
   }
 
   fetchMemberSummary(donorId: string, userProfileId?: string): Observable<DonorMemberSummary | undefined> {
-    const currentUserId = this.userIdentity.loggedInUserProfile?.id;
+    const currentUserId = this.authorization.snapshot?.userId;
     if (!!userProfileId && !!currentUserId && userProfileId === currentUserId) {
       return this.fetchOwnSummary();
     }

@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { UserIdentityService } from '../services/user-identity.service';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
+import { USER_IDENTITY } from '../tokens/user-identity.token';
 import { AUTH_CONFIG } from '../tokens/auth-config.token';
 
 export { permissionGuard, PermissionGuardOptions } from './permission.guard';
@@ -10,8 +10,11 @@ export { permissionGuard, PermissionGuardOptions } from './permission.guard';
  * Preserves the originally requested URL in router state as `redirect_to`.
  * No bypass logic — apps that need a dev bypass should wrap this guard.
  */
-export async function authGuard(): Promise<boolean> {
-  const identityService = inject(UserIdentityService);
+export async function authGuard(
+  _route: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot,
+): Promise<boolean> {
+  const identityService = inject(USER_IDENTITY);
   const router = inject(Router);
   const config = inject(AUTH_CONFIG);
 
@@ -19,7 +22,7 @@ export async function authGuard(): Promise<boolean> {
     return true;
   }
 
-  const request_uri = window.location.pathname + window.location.search;
+  const request_uri = state.url;
   const redirect_to = request_uri !== '/' ? request_uri : undefined;
   if (redirect_to) {
     router.navigate([config.loginUrl], { state: { redirect_to } });
@@ -34,7 +37,7 @@ export async function authGuard(): Promise<boolean> {
  * No bypass logic — apps that need a dev bypass should wrap this guard.
  */
 export async function noAuthGuard(): Promise<boolean> {
-  const identityService = inject(UserIdentityService);
+  const identityService = inject(USER_IDENTITY);
   const router = inject(Router);
   const config = inject(AUTH_CONFIG);
 
