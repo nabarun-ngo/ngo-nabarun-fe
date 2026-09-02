@@ -76,8 +76,8 @@ export interface CustomFormField {
   dependentOptions: DependentOptions | null;
   validationRules: FieldValidationRules | null;
   viewPermissions: string[];
-  stepId: string | null;
-  stepName: string | null;
+  stepId: string | null | undefined;
+  stepName: string | null | undefined;
   createdAt: string;
   updatedAt: string | null;
 }

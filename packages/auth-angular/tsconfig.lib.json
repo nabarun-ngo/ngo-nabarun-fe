@@ -1,22 +1,3 @@
 {
-  "compilerOptions": {
-    "target": "ES2022",
-    "module": "ES2022",
-    "moduleResolution": "bundler",
-    "strict": true,
-    "skipLibCheck": true,
-    "experimentalDecorators": true,
-    "importHelpers": true,
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "rootDir": "src",
-    "outDir": "dist",
-    "noEmit": true
-  },
-  "include": ["src/**/*"],
-  "exclude": ["src/**/*.spec.ts"],
-  "angularCompilerOptions": {
-    "strictTemplates": true
-  }
+  "extends": "../tsconfig.angular.json"
 }

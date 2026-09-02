@@ -1,4 +1,4 @@
-export { AuthUser } from './auth-user.model';
+export { AuthUser } from './auth-user.model.js';
 export {
   RbacAccessSnapshot,
   RbacScopedAccessSnapshot,
@@ -11,4 +11,4 @@ export {
   effectiveRoles,
   effectiveRoleGroups,
   snapshotFromCurrentUser,
-} from './rbac-context.model';
+} from './rbac-context.model.js';

@@ -1,0 +1,23 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "bundler",
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "noEmit": true,
+    "rootDir": "${configDir}/src",
+    "outDir": "${configDir}/dist"
+  },
+  "include": [
+    "${configDir}/src/**/*"
+  ],
+  "exclude": [
+    "${configDir}/**/*.spec.ts",
+    "${configDir}/**/*.test.ts"
+  ],
+  "angularCompilerOptions": {
+    "strictTemplates": true
+  }
+}

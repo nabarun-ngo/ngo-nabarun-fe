@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "setup": "npm run env:generate && npm run generate:assets && npm run sync:api",
+    "setup": "npm run env:generate && npm run generate:assets",
     "env:generate": "node --env-file-if-exists=.env scripts/generate-env.mjs",
     "generate:assets": "node scripts/generate-assets.mjs",
     "clean:generated": "node scripts/clean-generated.mjs",
@@ -19,7 +19,7 @@
     "prelint": "npm run env:generate",
     "lint": "tsc --noEmit -p tsconfig.app.json",
     "pretest": "npm run env:generate",
-    "test": "ng test",
+    "test": "ng test --watch=false --browsers=ChromeHeadless",
     "sync:api": "rimraf src/app/core/api/api-client && ng-openapi-gen --input src/app/core/api/swagger.json --output src/app/core/api/api-client"
   },
   "dependencies": {

@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "packageManager": "npm@10.9.8",
+  "engines": {
+    "node": ">=22"
+  },
   "workspaces": [
     "apps/*",
     "packages/*"
@@ -12,13 +15,14 @@
     "clean:generated": "node scripts/clean-generated.mjs --keep-node-modules",
     "clean:reset": "node scripts/clean-generated.mjs",
     "lint": "turbo run lint",
+    "type-check": "turbo run lint",
     "test": "turbo run test",
     "watch:packages": "turbo watch build --filter=./packages/*",
     "changeset": "changeset",
     "changeset:status": "changeset status",
     "version-packages": "changeset version && npm install",
     "release": "turbo run build --filter=./packages/* && changeset publish",
-    "start": "start npm run watch:packages && start npm run dev --workspace=apps/public-site && npm run dev --workspace=apps/internal-app"
+    "start:dev": "start npm run watch:packages && start npm run dev --workspace=apps/public-site && npm run dev --workspace=apps/internal-app"
   },
   "devDependencies": {
     "@angular/cli": "^21.2.19",

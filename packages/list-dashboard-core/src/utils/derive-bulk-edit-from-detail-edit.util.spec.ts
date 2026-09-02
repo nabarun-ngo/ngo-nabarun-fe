@@ -9,7 +9,13 @@ describe('deriveBulkEditHooksFromDetailEdit', () => {
       lockedFields: ['amount'],
       entityToEditValues: entity => ({ id: entity.id }),
       buildEditSummary: () => [],
-      buildEditForm: () => ({ key: 'edit', fields: [] }),
+      buildEditForm: () => ({
+        id: 'edit',
+        key: 'edit',
+        label: 'Edit',
+        description: null,
+        fields: [],
+      }),
       save: () => ({ subscribe: vi.fn() }) as never,
       validateBeforeSave: ({ values }) =>
         values['amount'] ? undefined : 'Amount required',

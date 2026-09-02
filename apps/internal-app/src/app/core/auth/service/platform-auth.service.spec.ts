@@ -1,4 +1,5 @@
-import { DestroyRef, TestBed } from '@angular/core/testing';
+import { DestroyRef } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { AuthService } from '@auth0/auth0-angular';
 import { of, Subject } from 'rxjs';

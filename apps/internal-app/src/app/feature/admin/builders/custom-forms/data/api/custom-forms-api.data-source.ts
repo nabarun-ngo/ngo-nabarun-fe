@@ -72,8 +72,8 @@ function mapField(dto: FormFieldDefinitionResponseDto): CustomFormField {
     dependentOptions: mapDependent(dto.dependentOptions),
     validationRules: mapValidation(dto.validationRules),
     viewPermissions: dto.viewPermissions ?? [],
-    stepId: dto.stepId ?? null,
-    stepName: dto.stepName ?? null,
+    stepId: dto.stepId ,
+    stepName: dto.stepName ?? undefined,
     createdAt: dto.createdAt,
     updatedAt: dto.updatedAt ?? null,
   };
