@@ -1,16 +1,10 @@
-import { AfterViewInit, Component, Inject, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { AfterViewInit, Component, DestroyRef, Inject, OnInit, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IUserIdentityService } from 'src/app/core/auth/tokens/user-identity.token';
+import { PwaInstallService } from 'src/app/core/pwa/pwa-install.service';
 import { SharedDataService } from '../../../shared/services/shared-data.service';
-import { takeWhile } from 'rxjs';
 import { Location } from '@angular/common';
 import { environment } from 'src/environments/environment';
-import { DomSanitizer } from '@angular/platform-browser';
-
-interface BeforeInstallPromptEvent extends Event {
-  prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
-}
 
 @Component({
     selector: 'app-login',
@@ -23,17 +17,22 @@ export class LoginComponent implements OnInit, AfterViewInit {
   isCodeError: boolean = false;
   codeErrorDescription!: string;
   env = environment.name;
-  deferredPrompt: BeforeInstallPromptEvent | null = null;
   showInstallButton: boolean = false;
-  isAndroid: boolean = false;
-  isIOS: boolean = true;
-  showIOSInstructions: boolean = false;
+  showManualInstallSteps: boolean = false;
+
+  private readonly destroyRef = inject(DestroyRef);
+
   constructor(
     @Inject(IUserIdentityService) private identityService: IUserIdentityService,
     private location: Location,
     private sharedDataService: SharedDataService,
+    private pwaInstall: PwaInstallService,
   ) {
 
+  }
+
+  get needsManualInstall(): boolean {
+    return this.pwaInstall.requiresManualSteps;
   }
   ngAfterViewInit(): void {
     let el = document.getElementById('resetpassword');
@@ -54,35 +53,19 @@ export class LoginComponent implements OnInit, AfterViewInit {
       this.codeErrorDescription = stateData.description;
     }
 
-    this.isAndroid = /Android/i.test(window.navigator.userAgent);
-    this.isIOS = /iPad|iPhone|iPod/.test(window.navigator.userAgent) && !(window as any).MSStream;
-
-    // Detect if PWA is already installed (standalone mode)
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone;
-
-    if (this.isIOS && !isStandalone) {
-      this.showInstallButton = true;
-    }
-
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      this.deferredPrompt = e as BeforeInstallPromptEvent;
-      this.showInstallButton = true;
-    });
+    this.pwaInstall.installable$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((installable) => {
+        this.showInstallButton = installable;
+        if (!installable) {
+          this.showManualInstallSteps = false;
+        }
+      });
   }
 
   async installPWA() {
-    if (this.isIOS) {
-      this.showIOSInstructions = !this.showIOSInstructions;
-      return;
-    }
-    if (!this.deferredPrompt) return;
-    this.deferredPrompt.prompt();
-    const { outcome } = await this.deferredPrompt.userChoice;
-    if (outcome === 'accepted') {
-      this.showInstallButton = false;
-    }
-    this.deferredPrompt = null;
+    const outcome = await this.pwaInstall.promptInstall();
+    this.showManualInstallSteps = outcome === 'manual' ? !this.showManualInstallSteps : false;
   }
 
   loginWithPassword() {

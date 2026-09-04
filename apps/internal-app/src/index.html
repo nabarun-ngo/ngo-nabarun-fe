@@ -76,6 +76,25 @@
     })();
   </script>
 
+  <!-- beforeinstallprompt fires once and usually before Angular has bootstrapped,
+       so buffer it here for PwaInstallService to pick up. -->
+  <script>
+    (function () {
+      window.__pwaInstallPrompt = null;
+      window.__pwaInstalled = false;
+
+      window.addEventListener('beforeinstallprompt', function (event) {
+        event.preventDefault();
+        window.__pwaInstallPrompt = event;
+      });
+
+      window.addEventListener('appinstalled', function () {
+        window.__pwaInstallPrompt = null;
+        window.__pwaInstalled = true;
+      });
+    })();
+  </script>
+
   <style>
     html.no-app-splash #app-splash {
       display: none !important;

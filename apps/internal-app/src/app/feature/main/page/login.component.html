@@ -84,10 +84,10 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
             </svg>
-            <span>{{ isIOS ? 'How to Install' : 'Install App' }}</span>
+            <span>{{ needsManualInstall ? 'How to Install' : 'Install App' }}</span>
           </button>
 
-          @if (showIOSInstructions) {
+          @if (showManualInstallSteps) {
             <div class="login-install__steps">
               <p>
                 1. Tap the <strong>Share</strong> icon
