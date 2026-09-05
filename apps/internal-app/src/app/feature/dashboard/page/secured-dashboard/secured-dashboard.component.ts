@@ -80,11 +80,6 @@ export class SecuredDashboardComponent implements OnInit {
 
   private initDashboardTiles(): void {
     const perms = this.authorization.effectivePermissions();
-    const canViewDonations = perms.includes(SCOPE.read.donations)
-      || perms.includes(SCOPE.read.donation_guest)
-      || perms.includes(SCOPE.read.member_donations)
-      || perms.includes(SCOPE.update.donation)
-      || perms.includes(SCOPE.create.donation);
 
     const dashboardBackParams = this.dashboardBackParams;
 
@@ -103,7 +98,6 @@ export class SecuredDashboardComponent implements OnInit {
           loading: true,
           showBadge: false,
         },
-        hidden: !canViewDonations,
       },
       {
         id: 'accountTile',
@@ -119,7 +113,6 @@ export class SecuredDashboardComponent implements OnInit {
           loading: true,
           showBadge: false,
         },
-        hidden: !perms.includes(SCOPE.read.users),
       },
       {
         id: 'expenseTile',
@@ -135,7 +128,6 @@ export class SecuredDashboardComponent implements OnInit {
           loading: true,
           showBadge: false,
         },
-        hidden: !perms.includes(SCOPE.read.expenses),
       },
       {
         id: 'requestTile',
@@ -151,9 +143,8 @@ export class SecuredDashboardComponent implements OnInit {
           loading: true,
           showBadge: false,
         },
-        hidden: !perms.includes(SCOPE.read.requests),
       },
-    ] satisfies NavTileConfig[]).filter(tile => !tile.hidden);
+    ] satisfies NavTileConfig[]);
 
     this.areaTiles = ([
       {

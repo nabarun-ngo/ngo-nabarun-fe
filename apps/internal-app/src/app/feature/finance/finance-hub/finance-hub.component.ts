@@ -26,11 +26,11 @@ export class FinanceHubComponent implements OnInit {
 
   private buildTiles(): void {
     const perms = this.authorization.effectivePermissions();
-    const canViewDonations = perms.includes(SCOPE.read.donations)
-      || perms.includes(SCOPE.read.donation_guest)
-      || perms.includes(SCOPE.read.member_donations)
-      || perms.includes(SCOPE.update.donation)
-      || perms.includes(SCOPE.create.donation);
+    // const canViewDonations = perms.includes(SCOPE.read.donations)
+    //   || perms.includes(SCOPE.read.donation_guest)
+    //   || perms.includes(SCOPE.read.member_donations)
+    //   || perms.includes(SCOPE.update.donation)
+    //   || perms.includes(SCOPE.create.donation);
     const financeBackParams = {
       backTo: AppRoute.secured_finance_hub_page.url,
       backLabel: 'Finance',
@@ -44,7 +44,7 @@ export class FinanceHubComponent implements OnInit {
         link: AppRoute.secured_donation_dashboard_page.url,
         queryParams: financeBackParams,
         icon: 'donations',
-        hidden: !canViewDonations,
+        hidden: !perms.includes(SCOPE.read.donations),
       },
       {
         id: 'donors',

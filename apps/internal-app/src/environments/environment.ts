@@ -28,6 +28,7 @@ const auth_config: AuthConfig = {
   domain: env.NG_APP_AUTH0_DOMAIN,
   clientId: env.NG_APP_AUTH0_CLIENT_ID,
   useRefreshTokens: true,
+  cacheLocation: 'localstorage',
   /** Must stay in sync with AppRoute.login_page.url. */
   errorPath: '/login',
   authorizationParams: {
