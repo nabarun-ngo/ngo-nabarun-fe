@@ -1,0 +1,7 @@
+<app-header></app-header>
+<app-page-title></app-page-title>
+<main class="app-main">
+  <router-outlet></router-outlet>
+</main>
+<app-footer *ngIf="!showMobileBottomNav"></app-footer>
+<app-bottom-nav *ngIf="showMobileBottomNav"></app-bottom-nav>

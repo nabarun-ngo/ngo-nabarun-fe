@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main, stage]
+    types: [opened, synchronize, reopened]
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: read
+  statuses: write
+
+jobs:
+  check:
+    uses: nabarun-ngo/deploy-platform/.github/workflows/reusable-ci-pr-check.yml@main
+    secrets: inherit
+    with:
+      node_version: '22'
+      build_root: '.'
+      # PR CI compiles against committed .env.example (no secrets).
+      # CD injects real values with Doppler (ops-deploy-frontend).
+      install_command: |
+        set -euo pipefail
+        cp apps/internal-app/.env.example apps/internal-app/.env
+        cp apps/public-site/.env.example apps/public-site/.env
+        npm ci
+      build_command: 'npm run build'
+      lint_command: 'npm run lint'
+      type_check_command: 'npm run type-check'
+      enable_tests: true
+      test_command: 'npm test'
+      upload_coverage: false

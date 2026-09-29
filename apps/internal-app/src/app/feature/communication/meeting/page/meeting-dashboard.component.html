@@ -1,0 +1,20 @@
+<div class="meeting-shell">
+  <section class="meeting-shell__content">
+    <app-nav-back
+      [fallbackLink]="homeBackLink"
+      fallbackLabel="Dashboard">
+    </app-nav-back>
+
+    <na-list-dashboard
+      [config]="config"
+      [refData]="refData"
+      [routeContext]="routeContext"
+      [formContext]="{
+        dashboardId: 'meeting-list',
+        refData: refData,
+        data: routeContext
+      }"
+      (notification)="onNotification($event)">
+    </na-list-dashboard>
+  </section>
+</div>

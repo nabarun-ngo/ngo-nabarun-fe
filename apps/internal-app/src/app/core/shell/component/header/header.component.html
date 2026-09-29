@@ -1,0 +1,85 @@
+<nav class="sticky w-full top-0 left-0 z-50 app-header"
+  style="background: var(--nabarun-brand-dark); box-shadow: 0 2px 8px rgba(0,0,0,0.25); border-bottom: 2px solid var(--primary-500);">
+  <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+    <div class="relative flex items-center justify-between h-14 sm:h-16">
+
+      <!-- Brand / logo -->
+      <div class="flex items-center gap-3 flex-shrink-0">
+        <div [routerLink]="[app_route.secured_dashboard_page.url]"
+          class="cursor-pointer flex-shrink-0 rounded-full flex items-center justify-center"
+          style="width:40px; height:40px; background:rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.35); padding:3px;">
+          <img class="logo h-full w-auto" src="/assets/logo.png" alt="Nabarun" width="250" height="500">
+        </div>
+
+        <!-- Brand name — always visible on all screen sizes -->
+        <span
+          [routerLink]="[app_route.secured_dashboard_page.url]"
+          class="cursor-pointer"
+          style="font-family: var(--nabarun-font-heading); font-weight: 800; font-size: 1.05rem;
+                 letter-spacing: 0.12em; text-transform: uppercase;
+                 background: var(--gradient-primary); -webkit-background-clip: text;
+                 -webkit-text-fill-color: transparent; background-clip: text;">
+          NABARUN
+        </span>
+      </div>
+
+      <!-- Desktop main navigation -->
+      <nav
+        class="app-header__nav hidden md:flex"
+        aria-label="Main navigation"
+        (click)="$event.stopPropagation()">
+        <a
+          *ngFor="let item of primaryNavItems"
+          [routerLink]="item.url"
+          class="app-header__nav-link"
+          [class.app-header__nav-link--active]="isNavActive(item)"
+          [attr.aria-current]="isNavActive(item) ? 'page' : null">
+          {{ item.label }}
+        </a>
+
+        <div *ngIf="moreNavItems.length" class="app-header__more">
+          <button
+            type="button"
+            class="app-header__nav-link app-header__nav-link--button"
+            [class.app-header__nav-link--active]="isMoreNavActive()"
+            aria-haspopup="menu"
+            [attr.aria-expanded]="moreMenuOpen"
+            (click)="toggleMoreMenu($event)">
+            More
+            <svg class="app-header__more-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+
+          <div *ngIf="moreMenuOpen" class="app-header__more-menu" role="menu">
+            <ng-container *ngFor="let item of moreNavItems">
+              <button
+                *ngIf="item.action === 'logout'"
+                type="button"
+                class="app-header__more-item app-header__more-item--danger app-header__more-item--button"
+                role="menuitem"
+                id="logout"
+                (click)="onMoreItemClick(item)">
+                {{ item.label }}
+              </button>
+              <a
+                *ngIf="!item.action"
+                [routerLink]="item.url"
+                class="app-header__more-item"
+                [class.app-header__more-item--active]="isMoreItemActive(item)"
+                role="menuitem"
+                (click)="closeMoreMenu()">
+                {{ item.label }}
+              </a>
+            </ng-container>
+          </div>
+        </div>
+      </nav>
+
+      <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 z-40">
+        <app-notification-bell class="ml-3"></app-notification-bell>
+      </div>
+    </div>
+  </div>
+</nav>

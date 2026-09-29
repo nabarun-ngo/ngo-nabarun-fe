@@ -1,0 +1,22 @@
+@use '../../../../../styles/mobile-page-shell' as shell;
+
+@include shell.mobile-page-shell('earning-shell');
+
+.earning-shell {
+  min-height: 100%;
+  position: relative;
+}
+
+.earning-create-sheet__documents {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  h3 {
+    margin: 0;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--secondary-900);
+  }
+}

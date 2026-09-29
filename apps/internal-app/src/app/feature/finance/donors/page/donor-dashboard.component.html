@@ -1,0 +1,29 @@
+<div class="donor-shell">
+  <section class="donor-shell__content">
+    <app-nav-back
+      [fallbackLink]="financeBackLink"
+      fallbackLabel="Finance">
+    </app-nav-back>
+
+    <na-list-dashboard
+      [config]="config"
+      [refData]="refData"
+      [formContext]="{
+        dashboardId: 'finance.donors',
+        refData: refData
+      }"
+      [formEngineOptions]="phoneEngineOptions"
+      (notification)="onNotification($event)">
+
+      <ng-template listOverlay>
+        <app-donor-merge-sheet
+          [open]="mergeSheetOpen"
+          [donors]="mergeDonors"
+          [saving]="mergeSaving"
+          (closed)="onMergeSheetClosed()"
+          (confirmed)="onMergeConfirmed($event)">
+        </app-donor-merge-sheet>
+      </ng-template>
+    </na-list-dashboard>
+  </section>
+</div>

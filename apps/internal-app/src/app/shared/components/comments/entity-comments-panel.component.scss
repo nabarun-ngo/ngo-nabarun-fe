@@ -1,0 +1,269 @@
+.entity-comments {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 1px solid var(--line, #e5e7eb);
+  border-radius: 12px;
+  background: var(--card, #fff);
+  padding: 12px;
+}
+
+.entity-comments__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.entity-comments__title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 650;
+}
+
+.entity-comments__count {
+  min-width: 1.5rem;
+  height: 1.5rem;
+  padding: 0 0.4rem;
+  border-radius: 999px;
+  background: #f3f4f6;
+  color: #4b5563;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.entity-comments__scroll {
+  min-height: 96px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.entity-comments__state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 24px 8px;
+  color: #6b7280;
+  font-size: 0.8rem;
+
+  mat-icon {
+    color: #d1d5db;
+    font-size: 2rem;
+    width: 2rem;
+    height: 2rem;
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+.entity-comments__list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 4px;
+}
+
+.entity-comments__item {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.entity-comments__avatar {
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #0f5c4c;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+
+  &--small {
+    width: 24px;
+    height: 24px;
+    font-size: 0.65rem;
+  }
+}
+
+.entity-comments__body {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.entity-comments__bubble {
+  position: relative;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #fff;
+  padding: 8px 10px 34px;
+
+  &--reply {
+    background: #f9fafb;
+    border-color: transparent;
+    padding-bottom: 10px;
+  }
+}
+
+.entity-comments__meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: flex-start;
+  margin-bottom: 4px;
+}
+
+.entity-comments__author-block {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.entity-comments__author {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.entity-comments__date {
+  font-size: 0.7rem;
+  color: #9ca3af;
+}
+
+.entity-comments__actions {
+  display: flex;
+  gap: 2px;
+  opacity: 0.35;
+  transition: opacity 0.15s ease;
+}
+
+.entity-comments__bubble:hover .entity-comments__actions {
+  opacity: 1;
+}
+
+.entity-comments__icon-btn {
+  border: 0;
+  background: transparent;
+  color: #4b5563;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover {
+    background: #f3f4f6;
+  }
+
+  &--danger:hover {
+    background: #fef2f2;
+    color: #b91c1c;
+  }
+}
+
+.entity-comments__text {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: #1f2937;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.entity-comments__reply-btn {
+  position: absolute;
+  right: 6px;
+  bottom: 4px;
+  border: 0;
+  background: transparent;
+  color: #0f5c4c;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 8px;
+
+  mat-icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+  }
+
+  &:hover {
+    background: #eef6f3;
+  }
+}
+
+.entity-comments__replies {
+  margin-left: 8px;
+  padding-left: 10px;
+  border-left: 2px solid #f3f4f6;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.entity-comments__reply-box,
+.entity-comments__editor {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.entity-comments__editor-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.entity-comments__composer {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  border-top: 1px solid #f3f4f6;
+  padding-top: 10px;
+
+  .app-btn {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+
+    mat-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+    }
+  }
+}
+
+.entity-comments__composer-editor,
+.entity-comments__reply-editor {
+  flex: 1 1 auto;
+  min-width: 0;
+}

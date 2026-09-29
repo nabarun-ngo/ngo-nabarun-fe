@@ -1,0 +1,20 @@
+<div class="risk-shell">
+  <section class="risk-shell__content">
+    <app-nav-back
+      [fallbackLink]="hubBackLink"
+      fallbackLabel="Projects">
+    </app-nav-back>
+
+    <na-list-dashboard
+      [config]="config"
+      [refData]="refData"
+      [routeContext]="routeContext"
+      [formContext]="{
+        dashboardId: 'risk-list',
+        refData: refData,
+        data: routeContext
+      }"
+      (notification)="onNotification($event)">
+    </na-list-dashboard>
+  </section>
+</div>

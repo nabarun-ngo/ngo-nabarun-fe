@@ -1,0 +1,54 @@
+<article
+  *ngIf="view as card"
+  class="account-summary-card"
+  [class.account-summary-card--indigo]="card.accentTone === 'indigo'"
+  [class.account-summary-card--blue]="card.accentTone === 'blue'"
+  [class.account-summary-card--amber]="card.accentTone === 'amber'"
+  [class.account-summary-card--orange]="card.accentTone === 'orange'"
+  [class.account-summary-card--neutral]="card.accentTone === 'neutral'"
+  [attr.aria-label]="card.typeLabel + ' account summary'">
+  <div class="account-summary-card__glow" aria-hidden="true"></div>
+
+  <div class="account-summary-card__top">
+    <span class="account-summary-card__type">{{ card.typeLabel }}</span>
+    <span
+      class="account-summary-card__status"
+      [class.account-summary-card__status--success]="card.statusTone === 'success'"
+      [class.account-summary-card__status--warning]="card.statusTone === 'warning'"
+      [class.account-summary-card__status--neutral]="card.statusTone === 'neutral'">
+      <span class="account-summary-card__status-dot" aria-hidden="true"></span>
+      {{ card.statusLabel }}
+    </span>
+  </div>
+
+  <p class="account-summary-card__balance-label">Available balance</p>
+  <p class="account-summary-card__balance">{{ card.balance }}</p>
+  <p class="account-summary-card__holder" *ngIf="card.holderName">{{ card.holderName }}</p>
+
+  <button
+    type="button"
+    class="account-summary-card__details-toggle"
+    (click)="toggleDetails()"
+    [attr.aria-expanded]="detailsExpanded">
+    <span>Account details</span>
+    <svg
+      class="account-summary-card__chevron"
+      [class.account-summary-card__chevron--expanded]="detailsExpanded"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2.5"
+      aria-hidden="true">
+      <polyline points="6 9 12 15 18 9"></polyline>
+    </svg>
+  </button>
+
+  <div class="account-summary-card__details" *ngIf="detailsExpanded">
+    <div
+      *ngFor="let row of card.details"
+      class="account-summary-card__detail-row">
+      <span class="account-summary-card__detail-label">{{ row.label }}</span>
+      <span class="account-summary-card__detail-value">{{ row.value }}</span>
+    </div>
+  </div>
+</article>

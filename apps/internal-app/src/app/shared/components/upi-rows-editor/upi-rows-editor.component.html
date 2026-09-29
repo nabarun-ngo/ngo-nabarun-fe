@@ -1,0 +1,40 @@
+<section class="upi-rows-editor">
+  <div class="upi-rows-editor__header">
+    <h3 class="upi-rows-editor__title">UPI IDs</h3>
+    <button type="button" class="app-btn app-btn--ghost app-btn--sm" (click)="addRow()">Add UPI</button>
+  </div>
+
+  <div *ngFor="let row of rows; let i = index; trackBy: trackRow" class="upi-rows-editor__row">
+    <div class="upi-rows-editor__row-header">
+      <label>
+        <input type="radio" name="primaryUpi" [checked]="row.isPrimary" (change)="setPrimary(i)" />
+        Primary
+      </label>
+      <button
+        type="button"
+        class="app-btn app-btn--ghost app-btn--sm"
+        (click)="removeRow(i)"
+        [disabled]="rows.length === 1">
+        Remove
+      </button>
+    </div>
+    <div class="upi-rows-editor__fields">
+      <label class="upi-rows-editor__field">
+        <span>UPI Id</span>
+        <input type="text" [(ngModel)]="row.upiId" [ngModelOptions]="{ standalone: true }" (ngModelChange)="onRowChange()" autocomplete="off" />
+      </label>
+      <label class="upi-rows-editor__field">
+        <span>Owner Name</span>
+        <input type="text" [(ngModel)]="row.payeeName" [ngModelOptions]="{ standalone: true }" (ngModelChange)="onRowChange()" autocomplete="name" />
+      </label>
+      <label class="upi-rows-editor__field">
+        <span>Mobile Number</span>
+        <input type="text" [(ngModel)]="row.mobileNumber" [ngModelOptions]="{ standalone: true }" (ngModelChange)="onRowChange()" inputmode="tel" autocomplete="tel" />
+      </label>
+      <label class="upi-rows-editor__field">
+        <span>Label</span>
+        <input type="text" [(ngModel)]="row.label" [ngModelOptions]="{ standalone: true }" (ngModelChange)="onRowChange()" autocomplete="off" />
+      </label>
+    </div>
+  </div>
+</section>

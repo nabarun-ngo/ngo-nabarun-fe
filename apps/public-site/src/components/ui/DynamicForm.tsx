@@ -1,0 +1,52 @@
+'use client'
+
+import { useMemo } from 'react'
+import { CustomForm } from '@ssdev-toolkit/react-forms'
+import {
+  createPublicBootstrapFormComponents,
+  publicFormClassNames,
+  publicFormEngineOptions,
+} from '@ssdev-toolkit/react-forms/bootstrap'
+import { serializeFormSubmitValues } from '@ssdev-toolkit/forms-core'
+import type { FormDefinition } from '@ssdev-toolkit/forms-core'
+import type { FormConfig } from '@/lib/types'
+import { useRecaptcha } from '@/hooks/useRecaptcha'
+import { useNotification } from '@/hooks/useCommonUI'
+import { submitDynamicForm } from '@/lib/api/submit'
+
+interface DynamicFormProps {
+  form: FormConfig
+  /** Normalized definition from `fetchFormDefinition` (forms-core adapter). */
+  definition: FormDefinition
+  hideHeading?: boolean
+}
+
+export default function DynamicForm({ form, definition, hideHeading = false }: DynamicFormProps) {
+  const { execute } = useRecaptcha()
+  const { showNotification } = useNotification()
+  const components = useMemo(() => createPublicBootstrapFormComponents(), [])
+
+  return (
+    <CustomForm
+      definition={definition}
+      engineOptions={publicFormEngineOptions}
+      components={components}
+      classNames={publicFormClassNames}
+      idPrefix={form.formId ?? definition.key}
+      hideHeading={hideHeading}
+      submitLabel={form.submitLabel}
+      onSubmit={async (values) => {
+        try {
+          const token = await execute(form.recaptchaAction ?? '')
+          const payload = serializeFormSubmitValues(definition, values)
+          const result = await submitDynamicForm(form.formId ?? definition.key, payload, token, form.recaptchaAction ?? '')
+          showNotification(result.message || 'Submitted successfully. Thank you!', 'success')
+        } catch(err) {
+          console.error('Submission failed. Please try again.', err)
+          showNotification('Submission failed. Please try again.', 'error')
+          throw err;
+        }
+      }}
+    />
+  )
+}

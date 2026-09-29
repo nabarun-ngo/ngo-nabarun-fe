@@ -1,0 +1,39 @@
+.donor-merge-sheet__options {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.donor-merge-sheet__option {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.donor-merge-sheet__option--selected {
+  border-color: #2563eb;
+  background: #eff6ff;
+}
+
+.donor-merge-sheet__option-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.donor-merge-sheet__option-meta {
+  font-size: 0.8125rem;
+  color: #6b7280;
+}
+
+.donor-merge-sheet__summary {
+  margin-bottom: 16px;
+  padding: 12px;
+  border-radius: 12px;
+  background: #f9fafb;
+  font-size: 0.9375rem;
+}

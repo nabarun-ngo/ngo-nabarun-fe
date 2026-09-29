@@ -1,0 +1,8 @@
+@use '../../../../../styles/mobile-page-shell' as shell;
+
+@include shell.mobile-page-shell('meeting-shell');
+
+.meeting-shell {
+  min-height: 100%;
+  position: relative;
+}

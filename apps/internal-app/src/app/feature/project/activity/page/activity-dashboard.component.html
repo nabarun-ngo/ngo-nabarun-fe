@@ -1,0 +1,27 @@
+<div class="activity-shell">
+  <section class="activity-shell__content">
+    <app-nav-back
+      [fallbackLink]="hubBackLink"
+      fallbackLabel="Projects">
+    </app-nav-back>
+
+    <na-list-dashboard
+      [config]="config"
+      [refData]="refData"
+      [routeContext]="routeContext"
+      [formContext]="{
+        dashboardId: 'activity-list',
+        refData: refData,
+        data: routeContext
+      }"
+      (notification)="onNotification($event)">
+      <ng-template listDetailViewExtras let-activity>
+        <app-entity-comments-panel
+          *ngIf="activity"
+          entityType="ACTIVITY"
+          [entityId]="activity.id">
+        </app-entity-comments-panel>
+      </ng-template>
+    </na-list-dashboard>
+  </section>
+</div>

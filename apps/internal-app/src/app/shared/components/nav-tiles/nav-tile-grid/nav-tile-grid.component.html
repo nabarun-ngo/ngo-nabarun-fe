@@ -1,0 +1,25 @@
+<ng-container [ngSwitch]="layout">
+  <div *ngSwitchCase="'access'" class="qa-panel-scroll">
+    <div class="qa-panel" *ngIf="visibleTiles.length; else emptyState">
+      <app-nav-tile
+        *ngFor="let tile of visibleTiles"
+        [tile]="tile"
+        [variant]="variant">
+      </app-nav-tile>
+    </div>
+  </div>
+
+  <div *ngSwitchDefault [ngClass]="gridClasses">
+    <ng-container *ngIf="visibleTiles.length; else emptyState">
+      <app-nav-tile
+        *ngFor="let tile of visibleTiles"
+        [tile]="tile"
+        [variant]="variant">
+      </app-nav-tile>
+    </ng-container>
+  </div>
+</ng-container>
+
+<ng-template #emptyState>
+  <p *ngIf="emptyMessage" [ngClass]="emptyClass">{{ emptyMessage }}</p>
+</ng-template>

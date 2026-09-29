@@ -1,0 +1,77 @@
+<div class="help-article-shell">
+  <section class="help-article-shell__content">
+    <app-nav-back
+      [fallbackLink]="helpBackLink"
+      fallbackLabel="Help">
+    </app-nav-back>
+
+    <ng-container *ngIf="article as doc; else missing">
+      <article class="help-hero">
+        <div class="help-hero__glow" aria-hidden="true"></div>
+
+        <span class="help-hero__badge" *ngIf="categoryLabel">{{ categoryLabel }}</span>
+        <h1 class="help-hero__title">{{ doc.title }}</h1>
+        <p class="help-hero__summary" *ngIf="doc.summary">{{ doc.summary }}</p>
+        <p class="help-hero__meta" *ngIf="doc.updatedAt">Updated {{ doc.updatedAt }}</p>
+      </article>
+
+      <section class="dash-surface">
+        <div class="dash-section-hdr">
+          <span class="dash-section-hdr__title">Guide</span>
+        </div>
+
+        <div class="dash-surface__body">
+          <app-help-article-blocks [blocks]="doc.blocks"></app-help-article-blocks>
+        </div>
+      </section>
+
+      <section class="dash-surface" *ngIf="related.length">
+        <div class="dash-section-hdr">
+          <span class="dash-section-hdr__title">Related</span>
+        </div>
+
+        <div class="dash-surface__body">
+          <button
+            type="button"
+            class="help-row"
+            *ngFor="let item of related"
+            (click)="openRelated(item.slug)">
+            <span class="help-row__icon help-row__icon--blue" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <path d="M6 3h8l4 4v14H6z"></path>
+                <line x1="9" y1="12" x2="15" y2="12"></line>
+                <line x1="9" y1="16" x2="13" y2="16"></line>
+              </svg>
+            </span>
+            <span class="help-row__content">
+              <span class="help-row__title">{{ item.title }}</span>
+              <span class="help-row__subtitle" *ngIf="item.summary">{{ item.summary }}</span>
+              <span class="help-row__meta">
+                <span class="help-row__time" *ngIf="item.estimatedMinutes">
+                  {{ item.estimatedMinutes }} min read
+                </span>
+              </span>
+            </span>
+            <svg
+              class="help-row__chevron"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              aria-hidden="true">
+              <polyline points="9 6 15 12 9 18"></polyline>
+            </svg>
+          </button>
+        </div>
+      </section>
+    </ng-container>
+
+    <ng-template #missing>
+      <section class="dash-surface">
+        <div class="dash-surface__body">
+          <p class="help-empty">This help article is not available.</p>
+        </div>
+      </section>
+    </ng-template>
+  </section>
+</div>

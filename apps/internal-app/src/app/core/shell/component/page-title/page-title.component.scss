@@ -1,0 +1,139 @@
+/* Modern Page Title Styling */
+.page-title-container {
+  position: relative;
+  overflow: hidden;
+  background: var(--gradient-primary);
+  /* Mobile-first: compact banner */
+  padding: 10px 0 2px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 15% 60%, rgba(255,255,255,0.12) 0%, transparent 50%),
+                radial-gradient(circle at 85% 40%, rgba(255,255,255,0.08) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  @media (min-width: 768px) {
+    padding: var(--space-lg) 0 var(--space-sm);
+  }
+
+  @media (min-width: 1024px) {
+    padding: var(--space-xl) 0 var(--space-md);
+  }
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-lg);
+  padding: 10px 20px;
+  transition: all var(--transition-normal);
+
+  @media (min-width: 768px) {
+    border-radius: var(--radius-xl);
+    padding: 12px var(--space-xl);
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  }
+}
+
+.title-text {
+  margin: 0;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1.2;
+  /* Mobile: readable but compact strip */
+  font-size: 1.125rem;
+
+  @media (min-width: 768px) {
+    font-size: var(--font-size-xl);
+    letter-spacing: 0.05em;
+  }
+
+  @media (min-width: 1024px) {
+    font-size: var(--font-size-2xl);
+  }
+}
+
+.subtitle-text {
+  font-weight: 500;
+  opacity: 0.9;
+  transition: opacity var(--transition-normal);
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.icon-container {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transition: all var(--transition-normal);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+  }
+}
+
+.decorative-dot {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+/* Mobile — thin wave accent only */
+@media (max-width: 767px) {
+  .wave-svg {
+    height: 8px !important;
+  }
+}
+
+/* Desktop — moderate wave, not oversized */
+@media (min-width: 768px) {
+  .wave-svg {
+    height: 32px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .wave-svg {
+    height: 40px !important;
+  }
+}
+
+/* Wave Animation */
+.wave-svg {
+  display: block;
+  height: 8px;
+  animation: wave 3s ease-in-out infinite;
+}
+
+@keyframes wave {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-10px);
+  }
+}

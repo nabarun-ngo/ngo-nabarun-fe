@@ -1,0 +1,46 @@
+<main class="complete-profile">
+  <div class="complete-profile__shell">
+    <header class="complete-profile__header">
+      <span class="complete-profile__eyebrow">Welcome to Nabarun</span>
+      <h1>Complete your profile</h1>
+      <p>
+        Help us keep your member record accurate. You can update these details
+        later from the Me tab.
+      </p>
+    </header>
+
+    <section class="complete-profile__card" aria-label="Complete your profile">
+      <cf-form-stepper
+        class="complete-profile__stepper"
+        [steps]="steps"
+        [buildStepDefinition]="buildStepDefinition"
+        [resolveSteps]="resolveSteps"
+        [initialValues]="initialValues"
+        [engineOptions]="phoneEngineOptions"
+        [allowCancel]="false"
+        [submitting]="saving"
+        completeLabel="Save and continue"
+        submittingLabel="Saving…"
+        idPrefix="complete-profile"
+        (validationError)="onValidationError($event)"
+        (completed)="onCompleted($event)">
+        <ng-template cfFormStepperStep="picture">
+          <div class="complete-profile__photo-intro">
+            <h2>Add a profile photo</h2>
+            <p>This is optional. A clear photo helps other members recognise you.</p>
+          </div>
+          <app-member-profile-picture-upload
+            [currentPictureUrl]="avatarUrl"
+            [initials]="avatarInitials"
+            [alt]="user.fullName || user.email"
+            (pictureChange)="onPictureChange($event)">
+          </app-member-profile-picture-upload>
+        </ng-template>
+      </cf-form-stepper>
+    </section>
+
+    <p class="complete-profile__privacy">
+      Your contact information is used only to manage your membership.
+    </p>
+  </div>
+</main>

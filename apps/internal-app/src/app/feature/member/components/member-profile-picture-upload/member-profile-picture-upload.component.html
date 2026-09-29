@@ -1,0 +1,39 @@
+<section class="member-profile-picture-upload">
+  <label class="member-profile-picture-upload__label">Profile photo</label>
+
+  <div class="member-profile-picture-upload__preview-row">
+    <div class="member-profile-picture-upload__avatar-wrap" aria-hidden="true">
+      <img
+        *ngIf="displayUrl"
+        class="member-profile-picture-upload__avatar"
+        [src]="displayUrl"
+        [alt]="alt">
+      <span
+        *ngIf="showInitials"
+        class="member-profile-picture-upload__avatar member-profile-picture-upload__avatar--initials">
+        {{ initials }}
+      </span>
+      <span
+        *ngIf="!displayUrl && !showInitials"
+        class="member-profile-picture-upload__avatar member-profile-picture-upload__avatar--empty">
+        ?
+      </span>
+    </div>
+
+    <div class="member-profile-picture-upload__controls">
+      <app-file-upload
+        [allowedFileTypes]="['jpg', 'jpeg', 'png', 'webp']"
+        [maxFileSize]="2 * 1024 * 1024"
+        (files)="onFilesSelected($event)">
+      </app-file-upload>
+      <p class="member-profile-picture-upload__hint">JPG, PNG or WEBP up to 2 MB.</p>
+      <button
+        *ngIf="previewUrl"
+        type="button"
+        class="member-profile-picture-upload__clear"
+        (click)="clearSelection()">
+        Remove selected photo
+      </button>
+    </div>
+  </div>
+</section>

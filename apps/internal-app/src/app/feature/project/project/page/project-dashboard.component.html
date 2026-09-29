@@ -1,0 +1,27 @@
+<div class="project-shell">
+  <section class="project-shell__content">
+    <app-nav-back
+      [fallbackLink]="hubBackLink"
+      fallbackLabel="Projects">
+    </app-nav-back>
+
+    <na-list-dashboard
+      [config]="config"
+      [refData]="refData"
+      [routeContext]="routeContext"
+      [formContext]="{
+        dashboardId: 'project-list',
+        refData: refData,
+        data: routeContext
+      }"
+      (notification)="onNotification($event)">
+      <ng-template listDetailViewExtras let-project>
+        <app-entity-comments-panel
+          *ngIf="project"
+          entityType="PROJECT"
+          [entityId]="project.id">
+        </app-entity-comments-panel>
+      </ng-template>
+    </na-list-dashboard>
+  </section>
+</div>

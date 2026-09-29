@@ -1,0 +1,28 @@
+{
+  "name": "fe-app",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "npm@10.9.8",
+  "engines": {
+    "node": ">=22"
+  },
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "type-check": "npm run lint --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "ci": "npm run type-check && npm run build && npm run test",
+    "start:app": "npm run start:dev --workspace=apps/internal-app",
+    "start:site": "npm run start:dev --workspace=apps/public-site"
+  },
+  "devDependencies": {
+    "@angular/cli": "^21.2.19",
+    "rimraf": "^6.1.3"
+  },
+  "overrides": {
+    "rxjs": "7.8.2"
+  }
+}

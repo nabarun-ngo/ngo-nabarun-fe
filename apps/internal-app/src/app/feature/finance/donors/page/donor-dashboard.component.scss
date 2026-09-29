@@ -1,0 +1,8 @@
+@use '../../../../../styles/mobile-page-shell' as shell;
+
+@include shell.mobile-page-shell('donor-shell');
+
+.donor-shell {
+  min-height: 100%;
+  position: relative;
+}

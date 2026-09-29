@@ -1,0 +1,89 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.line-items-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.line-items-editor__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.line-items-editor__title {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.line-items-editor__row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e2e8f0;
+  min-width: 0;
+}
+
+.line-items-editor__row:first-of-type {
+  border-top: none;
+  padding-top: 0;
+}
+
+.line-items-editor__row-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.line-items-editor__row-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--secondary-700, #334155);
+}
+
+.line-items-editor__remove-btn {
+  color: var(--danger-700, #b91c1c);
+}
+
+.line-items-editor__fields {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.75rem;
+}
+
+.line-items-editor__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+  font-size: 0.875rem;
+}
+
+.line-items-editor__field input {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 0.625rem 0.75rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  // 16px keeps mobile browsers from zooming the sheet on focus.
+  font-size: 1rem;
+}
+
+@media (min-width: 30rem) {
+  .line-items-editor__fields {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 9rem);
+    align-items: end;
+  }
+}

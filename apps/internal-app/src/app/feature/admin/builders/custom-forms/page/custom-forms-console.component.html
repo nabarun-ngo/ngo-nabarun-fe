@@ -1,0 +1,516 @@
+<app-admin-console-shell pageTitle="Custom Forms">
+  <div class="cf" [class.cf--modal-open]="showCreate || showFieldDrawer">
+    <div class="cf__header">
+      <div>
+        <h2 class="cf__title">Custom Forms</h2>
+        <p class="cf__subtitle">Define field schemas for donations, workflows, and public site.</p>
+      </div>
+      <button
+        type="button"
+        class="btn btn--primary"
+        *ngIf="perms.canCreate"
+        (click)="openCreate()">
+        + Create form
+      </button>
+    </div>
+
+    <div class="cf__toolbar">
+      <label class="field">
+        Entity type
+        <select [(ngModel)]="entityType" (ngModelChange)="onEntityChange()">
+          <option *ngFor="let e of entityTypes" [value]="e.value">{{ e.label }}</option>
+        </select>
+      </label>
+      <label class="field">
+        Status
+        <select [(ngModel)]="statusFilter" (ngModelChange)="onStatusChange()">
+          <option value="">Any</option>
+          <option value="draft">Draft</option>
+          <option value="published">Published</option>
+          <option value="disabled">Disabled</option>
+        </select>
+      </label>
+      <label class="field field--wide">
+        Search
+        <input type="search" [(ngModel)]="search" placeholder="Filter by label or key…" />
+      </label>
+      <button type="button" class="btn" (click)="reload()" [disabled]="loading">Refresh</button>
+    </div>
+
+    <div class="cf__layout" *ngIf="!loading || forms.length; else loadingTpl">
+      <aside class="pane">
+        <div class="pane__hdr">
+          <span>Forms · {{ entityType }}</span>
+          <span class="pill">{{ filteredForms.length }}</span>
+        </div>
+        <div class="pane__body">
+          <button
+            type="button"
+            class="list-item"
+            *ngFor="let f of filteredForms"
+            [class.list-item--active]="selected?.id === f.id"
+            (click)="select(f)">
+            <span class="list-item__title">{{ f.label }}</span>
+            <span class="list-item__meta">
+              {{ f.key }} ·
+              <span [class]="statusBadge(f.status)">{{ f.status }}</span>
+              · {{ f.fields.length || 0 }} fields
+            </span>
+          </button>
+          <p class="hint" *ngIf="!filteredForms.length">
+            No forms for this entity{{ statusFilter ? ' / status' : '' }}.
+          </p>
+        </div>
+      </aside>
+
+      <section class="editor" *ngIf="selected as form; else pickTpl">
+        <div class="editor__hdr" *ngIf="!detailLoading">
+          <div>
+            <h3>
+              {{ form.label }}
+              <span [class]="statusBadge(form.status)">{{ form.status }}</span>
+            </h3>
+            <p class="meta">
+              Key <code>{{ form.key }}</code>
+              · Entity <code>{{ form.entityType }}</code>
+              <span *ngIf="form.createdBy"> · Created by {{ form.createdBy }}</span>
+              <span *ngIf="form.publishedBy"> · Published by {{ form.publishedBy }}</span>
+            </p>
+          </div>
+          <div class="btn-row">
+            <button type="button" class="btn" (click)="setTab('preview')">Preview</button>
+            <button
+              type="button"
+              class="btn"
+              *ngIf="canSaveMeta"
+              [disabled]="saving"
+              (click)="saveMeta()">
+              Save
+            </button>
+            <button
+              type="button"
+              class="btn btn--primary"
+              *ngIf="perms.canUpdate"
+              [disabled]="form.status !== 'draft' || saving"
+              (click)="publish()">
+              Publish
+            </button>
+            <button
+              type="button"
+              class="btn btn--danger"
+              *ngIf="perms.canDisable"
+              [disabled]="form.status === 'disabled' || saving"
+              (click)="disableForm()">
+              Disable
+            </button>
+          </div>
+        </div>
+
+        <p class="hint" *ngIf="detailLoading">Loading form…</p>
+
+        <ng-container *ngIf="!detailLoading">
+          <div class="tabs">
+            <button type="button" class="tab" [class.tab--active]="tab === 'details'" (click)="setTab('details')">Details</button>
+            <button type="button" class="tab" [class.tab--active]="tab === 'fields'" (click)="setTab('fields')">
+              Fields <span class="pill">{{ sortedFields.length }}</span>
+            </button>
+            <button type="button" class="tab" [class.tab--active]="tab === 'preview'" (click)="setTab('preview')">Preview</button>
+          </div>
+
+          <!-- DETAILS -->
+          <div class="tab-panel" *ngIf="tab === 'details'">
+            <div class="grid-2">
+              <label class="field">
+                Label *
+                <input [(ngModel)]="metaDraft.label" [disabled]="!canSaveMeta" />
+              </label>
+              <label class="field">
+                Key
+                <input [ngModel]="form.key" disabled />
+              </label>
+              <label class="field field--wide" style="grid-column: 1 / -1">
+                Description
+                <textarea rows="3" [(ngModel)]="metaDraft.description" [disabled]="!canSaveMeta"></textarea>
+              </label>
+              <label class="field">
+                Manage permissions
+                <input [(ngModel)]="metaDraft.managePermissions" [disabled]="!canSaveMeta" placeholder="comma-separated scopes" />
+              </label>
+              <label class="field">
+                Read permissions
+                <input [(ngModel)]="metaDraft.readPermissions" [disabled]="!canSaveMeta" placeholder="comma-separated scopes" />
+              </label>
+              <label class="field">
+                Write permissions
+                <input [(ngModel)]="metaDraft.writePermissions" [disabled]="!canSaveMeta" placeholder="comma-separated scopes" />
+              </label>
+              <label class="field">
+                Entity type
+                <input [ngModel]="form.entityType" disabled />
+              </label>
+            </div>
+            <p class="hint" style="margin-top: 10px">
+              Metadata can be saved on draft and published forms. Structural field changes stay draft-only.
+            </p>
+          </div>
+
+          <!-- FIELDS -->
+          <div class="tab-panel" *ngIf="tab === 'fields'">
+            <div class="callout callout--ok" *ngIf="isDraft">
+              Draft — you can add, edit, reorder, and disable fields. Publish when the schema is ready (one-way).
+            </div>
+            <div class="callout" *ngIf="form.status === 'published'">
+              Published — field structure is locked. You may still update details, disable individual fields, or disable the form.
+            </div>
+            <div class="callout callout--danger" *ngIf="form.status === 'disabled'">
+              Disabled — this form is inactive. Structural edits are not available.
+            </div>
+
+            <div class="btn-row" style="margin-bottom: 10px">
+              <button
+                type="button"
+                class="btn btn--primary"
+                [disabled]="!canEditStructure"
+                (click)="openAddField()">
+                + Add field
+              </button>
+              <span class="hint" style="margin-left: auto" *ngIf="canEditStructure">Use ↑ ↓ to change sort order</span>
+            </div>
+
+            <div class="field-row field-row--head" *ngIf="sortedFields.length">
+              <span></span>
+              <span>Field</span>
+              <span>Type</span>
+              <span>Req</span>
+              <span>Flags</span>
+              <span></span>
+            </div>
+
+            <div
+              class="field-row"
+              *ngFor="let field of sortedFields; let i = index"
+              [class.field-row--disabled]="!field.enabled">
+              <div class="reorder" *ngIf="canEditStructure; else noReorder">
+                <button type="button" class="icon-btn" [disabled]="i === 0 || saving" (click)="moveField(field, -1)" title="Move up">↑</button>
+                <button type="button" class="icon-btn" [disabled]="i === sortedFields.length - 1 || saving" (click)="moveField(field, 1)" title="Move down">↓</button>
+              </div>
+              <ng-template #noReorder><span></span></ng-template>
+              <div>
+                <div class="field-row__label">
+                  {{ field.label }}
+                  <span class="badge badge--disabled" *ngIf="!field.enabled">disabled</span>
+                </div>
+                <div class="field-row__key">{{ field.key }}</div>
+              </div>
+              <span class="pill">{{ field.fieldType }}</span>
+              <span>{{ field.mandatory ? 'Yes' : 'No' }}</span>
+              <span class="flags">
+                <span class="pill" *ngIf="field.isHidden">hidden</span>
+                <span class="pill" *ngIf="field.isEncrypted">encrypted</span>
+                <span class="pill" *ngIf="field.fieldOptions.length">options</span>
+                <span class="pill" *ngIf="field.condition">depends</span>
+                <span class="pill" *ngIf="field.stepId">step:{{ field.stepId }}</span>
+              </span>
+              <div class="btn-row">
+                <button
+                  type="button"
+                  class="btn btn--ghost btn--sm"
+                  (click)="openEditField(field, !canEditStructure)">
+                  {{ canEditStructure ? 'Edit' : 'View' }}
+                </button>
+                <button
+                  type="button"
+                  class="btn btn--danger btn--sm"
+                  *ngIf="perms.canDisable && field.enabled && form.status !== 'disabled'"
+                  [disabled]="saving"
+                  (click)="disableField(field)">
+                  Disable
+                </button>
+              </div>
+            </div>
+
+            <p class="hint" *ngIf="!sortedFields.length">No fields defined yet.</p>
+          </div>
+
+          <!-- PREVIEW -->
+          <div class="tab-panel" *ngIf="tab === 'preview'">
+            <p class="hint" style="margin-bottom: 12px">
+              Preview uses the same field types as runtime. Values are not saved.
+            </p>
+            <div class="preview-grid">
+              <div>
+                <div class="preview-card" *ngFor="let field of previewFields">
+                  <label>
+                    {{ field.label }}
+                    <span class="req" *ngIf="field.mandatory">*</span>
+                    <span class="pill" *ngIf="field.isEncrypted">encrypted</span>
+                  </label>
+
+                  <ng-container [ngSwitch]="field.fieldType">
+                    <textarea
+                      *ngSwitchCase="'textarea'"
+                      rows="3"
+                      [ngModel]="previewValues[field.key]"
+                      (ngModelChange)="setPreviewValue(field.key, $event)"></textarea>
+
+                    <select
+                      *ngSwitchCase="'select'"
+                      [ngModel]="previewValues[field.key]"
+                      (change)="onPreviewSelect(field.key, $event)">
+                      <option value="">— select —</option>
+                      <option *ngFor="let o of previewOptions(field)" [value]="o.key">{{ o.label }}</option>
+                    </select>
+
+                    <select
+                      *ngSwitchCase="'multiselect'"
+                      multiple
+                      (change)="onPreviewMulti(field.key, $event)">
+                      <option *ngFor="let o of previewOptions(field)" [value]="o.key">{{ o.label }}</option>
+                    </select>
+
+                    <label class="chk" *ngSwitchCase="'boolean'">
+                      <input
+                        type="checkbox"
+                        [checked]="!!previewValues[field.key]"
+                        (change)="onPreviewCheckbox(field.key, $event)" />
+                      Yes
+                    </label>
+
+                    <input
+                      *ngSwitchCase="'number'"
+                      type="number"
+                      [ngModel]="previewValues[field.key]"
+                      (ngModelChange)="setPreviewValue(field.key, $event)" />
+
+                    <input
+                      *ngSwitchCase="'date'"
+                      type="date"
+                      [ngModel]="previewValues[field.key]"
+                      (ngModelChange)="setPreviewValue(field.key, $event)" />
+
+                    <input
+                      *ngSwitchCase="'email'"
+                      type="email"
+                      [ngModel]="previewValues[field.key]"
+                      (ngModelChange)="setPreviewValue(field.key, $event)" />
+
+                    <input
+                      *ngSwitchDefault
+                      type="text"
+                      [ngModel]="previewValues[field.key]"
+                      (ngModelChange)="setPreviewValue(field.key, $event)" />
+                  </ng-container>
+
+                  <div class="hint" *ngIf="field.stepName">Step: {{ field.stepName }}</div>
+                </div>
+                <p class="hint" *ngIf="!previewFields.length">No visible fields to preview.</p>
+                <button type="button" class="btn" disabled>Submit (disabled in preview)</button>
+              </div>
+              <aside class="pane">
+                <div class="pane__hdr">Preview notes</div>
+                <div class="pane__body hint">
+                  <ul>
+                    <li>Hidden and disabled fields are omitted</li>
+                    <li>Conditions use the sample values you enter</li>
+                    <li>Dependent options follow the parent field</li>
+                    <li>Does not call submission APIs</li>
+                  </ul>
+                </div>
+              </aside>
+            </div>
+          </div>
+        </ng-container>
+      </section>
+    </div>
+
+    <ng-template #pickTpl>
+      <div class="pane editor editor--empty">
+        <p class="hint">Select a form to edit details, fields, and preview.</p>
+      </div>
+    </ng-template>
+
+    <ng-template #loadingTpl>
+      <p class="hint">Loading forms…</p>
+    </ng-template>
+
+    <!-- CREATE MODAL -->
+    <div class="overlay" *ngIf="showCreate" (click)="closeCreate()"></div>
+    <div class="modal" *ngIf="showCreate" role="dialog" aria-label="Create form">
+      <h4>Create form</h4>
+      <p class="hint">Starts as draft. Key is immutable after create.</p>
+      <div class="grid-2">
+        <label class="field">
+          Entity type *
+          <select [(ngModel)]="createDraft.entityType">
+            <option *ngFor="let e of entityTypes" [value]="e.value">{{ e.label }}</option>
+          </select>
+        </label>
+        <label class="field">
+          Key *
+          <input [(ngModel)]="createDraft.key" placeholder="e.g. membership_request" />
+        </label>
+        <label class="field field--wide" style="grid-column: 1 / -1">
+          Label *
+          <input [(ngModel)]="createDraft.label" />
+        </label>
+        <label class="field field--wide" style="grid-column: 1 / -1">
+          Description
+          <textarea rows="2" [(ngModel)]="createDraft.description"></textarea>
+        </label>
+        <label class="field">
+          Manage permissions
+          <input [(ngModel)]="createDraft.managePermissions" placeholder="comma-separated" />
+        </label>
+        <label class="field">
+          Read permissions
+          <input [(ngModel)]="createDraft.readPermissions" placeholder="comma-separated" />
+        </label>
+        <label class="field">
+          Write permissions
+          <input [(ngModel)]="createDraft.writePermissions" placeholder="comma-separated" />
+        </label>
+      </div>
+      <div class="modal__actions">
+        <button type="button" class="btn btn--ghost" (click)="closeCreate()">Cancel</button>
+        <button type="button" class="btn btn--primary" [disabled]="saving" (click)="submitCreate()">Create</button>
+      </div>
+    </div>
+
+    <!-- FIELD DRAWER -->
+    <div class="overlay" *ngIf="showFieldDrawer" (click)="closeFieldDrawer()"></div>
+    <aside class="drawer" *ngIf="showFieldDrawer" role="dialog" [attr.aria-label]="fieldDraft.id ? 'Edit field' : 'Add field'">
+      <div class="drawer__hdr">
+        <h4>
+          {{ fieldDraft.id ? (fieldDrawerReadOnly ? 'View field' : 'Edit field') : 'Add field' }}
+          <code *ngIf="fieldDraft.key">{{ fieldDraft.key }}</code>
+        </h4>
+        <button type="button" class="btn btn--ghost btn--sm" (click)="closeFieldDrawer()">✕</button>
+      </div>
+      <div class="drawer__body">
+        <label class="field">
+          Key *
+          <input [(ngModel)]="fieldDraft.key" [disabled]="!!fieldDraft.id || fieldDrawerReadOnly" />
+        </label>
+        <label class="field">
+          Label *
+          <input [(ngModel)]="fieldDraft.label" [disabled]="fieldDrawerReadOnly" />
+        </label>
+        <div class="grid-2">
+          <label class="field">
+            Type *
+            <select [(ngModel)]="fieldDraft.fieldType" [disabled]="fieldDrawerReadOnly">
+              <option *ngFor="let t of fieldTypes" [value]="t">{{ t }}</option>
+            </select>
+          </label>
+          <label class="field">
+            Sort order
+            <input type="number" [(ngModel)]="fieldDraft.sortOrder" [disabled]="fieldDrawerReadOnly" />
+          </label>
+        </div>
+
+        <div class="chk-row">
+          <label class="chk"><input type="checkbox" [(ngModel)]="fieldDraft.mandatory" [disabled]="fieldDrawerReadOnly" /> Mandatory</label>
+          <label class="chk"><input type="checkbox" [(ngModel)]="fieldDraft.isHidden" [disabled]="fieldDrawerReadOnly" /> Hidden</label>
+          <label class="chk"><input type="checkbox" [(ngModel)]="fieldDraft.isEncrypted" [disabled]="fieldDrawerReadOnly" /> Encrypted</label>
+        </div>
+
+        <ng-container *ngIf="supportsOptions">
+          <h5 class="section-label">Options</h5>
+          <label class="field">
+            Inline options (one per line: value|label)
+            <textarea rows="4" [(ngModel)]="fieldDraft.optionsText" [disabled]="fieldDrawerReadOnly"></textarea>
+          </label>
+          <p class="hint" *ngIf="fieldDraft.id">
+            Shared catalogs live in JSON Store under <code>custom-forms.field-options</code>.
+            <button type="button" class="btn btn--ghost btn--sm" (click)="openOptionsCatalog()">
+              Open catalog
+            </button>
+          </p>
+
+          <label class="chk" style="margin: 8px 0">
+            <input type="checkbox" [(ngModel)]="fieldDraft.dependentEnabled" [disabled]="fieldDrawerReadOnly" />
+            Dependent options
+          </label>
+          <ng-container *ngIf="fieldDraft.dependentEnabled">
+            <label class="field">
+              Depends on key
+              <input [(ngModel)]="fieldDraft.dependentDependsOnKey" [disabled]="fieldDrawerReadOnly" />
+            </label>
+            <label class="field">
+              Map (parentValue: then option lines)
+              <textarea rows="5" [(ngModel)]="fieldDraft.dependentText" [disabled]="fieldDrawerReadOnly"></textarea>
+            </label>
+          </ng-container>
+        </ng-container>
+
+        <h5 class="section-label">Visibility condition</h5>
+        <label class="chk" style="margin-bottom: 8px">
+          <input type="checkbox" [(ngModel)]="fieldDraft.conditionEnabled" [disabled]="fieldDrawerReadOnly" />
+          Show only when condition matches
+        </label>
+        <div class="grid-3" *ngIf="fieldDraft.conditionEnabled">
+          <label class="field">
+            Depends on
+            <input [(ngModel)]="fieldDraft.condition.dependsOnKey" [disabled]="fieldDrawerReadOnly" />
+          </label>
+          <label class="field">
+            Operator
+            <select [(ngModel)]="fieldDraft.condition.operator" [disabled]="fieldDrawerReadOnly">
+              <option *ngFor="let op of conditionOperators" [value]="op">{{ op }}</option>
+            </select>
+          </label>
+          <label class="field">
+            Value
+            <input [(ngModel)]="fieldDraft.conditionValueText" [disabled]="fieldDrawerReadOnly" />
+          </label>
+        </div>
+
+        <h5 class="section-label">Validation &amp; step</h5>
+        <div class="grid-2">
+          <label class="field" *ngIf="supportsValidation">
+            Validation pattern
+            <input [(ngModel)]="fieldDraft.validationPattern" [disabled]="fieldDrawerReadOnly" placeholder="regex" />
+          </label>
+          <label class="field" *ngIf="supportsValidation">
+            Error message
+            <input [(ngModel)]="fieldDraft.validationMessage" [disabled]="fieldDrawerReadOnly" />
+          </label>
+          <label class="field">
+            View permissions
+            <input [(ngModel)]="fieldDraft.viewPermissionsText" [disabled]="fieldDrawerReadOnly" />
+          </label>
+          <label class="field">
+            Step id
+            <input [(ngModel)]="fieldDraft.stepId" [disabled]="fieldDrawerReadOnly" />
+          </label>
+          <label class="field">
+            Step name
+            <input [(ngModel)]="fieldDraft.stepName" [disabled]="fieldDrawerReadOnly" />
+          </label>
+        </div>
+      </div>
+      <div class="drawer__ftr">
+        <button
+          type="button"
+          class="btn btn--danger"
+          *ngIf="fieldDraft.id && perms.canDisable && selected?.status !== 'disabled'"
+          [disabled]="saving"
+          (click)="disableFieldFromDrawer()">
+          Disable field
+        </button>
+        <span *ngIf="!(fieldDraft.id && perms.canDisable)"></span>
+        <div class="btn-row">
+          <button type="button" class="btn btn--ghost" (click)="closeFieldDrawer()">Cancel</button>
+          <button
+            type="button"
+            class="btn btn--primary"
+            *ngIf="!fieldDrawerReadOnly"
+            [disabled]="saving"
+            (click)="saveField()">
+            Save field
+          </button>
+        </div>
+      </div>
+    </aside>
+  </div>
+</app-admin-console-shell>
