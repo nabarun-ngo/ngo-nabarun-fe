@@ -15,7 +15,7 @@ const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..')
 
 const TARGETS = [
   path.join(root, 'src', 'environments', 'env.generated.ts'),
-  path.join(root, 'src', 'app', 'core', 'api', 'api-client'),
+  // path.join(root, 'src', 'app', 'core', 'api', 'api-client'),
   path.join(root, 'src', 'assets', 'splash'),
   path.join(root, 'src', 'assets', 'icons'),
 ]
