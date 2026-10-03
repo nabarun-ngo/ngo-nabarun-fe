@@ -16,7 +16,7 @@ permissions:
 
 jobs:
   check:
-    uses: nabarun-ngo/deploy-platform/.github/workflows/reusable-ci-pr-check.yml@main
+    uses: nabarun-ngo/ngo-nabarun-deploy/.github/workflows/reusable-ci-pr-check.yml@main
     secrets: inherit
     with:
       node_version: '22'
