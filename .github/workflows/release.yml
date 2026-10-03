@@ -3,10 +3,11 @@ name: Release
 on:
   push:
     branches:
+      - develop
       - main
 
 concurrency:
-  group: release-${{ github.ref }}
+  group: tag-release-${{ github.ref }}
   cancel-in-progress: false
 
 permissions:
@@ -14,8 +15,15 @@ permissions:
   pull-requests: write
 
 jobs:
-  create_release:
-    name: Create Tag and Release
-    uses: nabarun-ngo/ngo-nabarun-templates/.github/workflows/Create-Tag-Release.yml@main
+  tag_release:
+    name: Create tag and GitHub Release
+    uses: nabarun-ngo/ngo-nabarun-deploy/.github/workflows/reusable-ci-tag-release.yml@main
     with:
-      source_branch: ${{ github.base_ref }}
+      templates_repository: nabarun-ngo/ngo-nabarun-deploy
+      version_file: package.json
+      stable_branch: main
+      prerelease_branch: develop
+      prerelease_tag: beta
+    secrets:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      TEMPLATES_TOKEN: ${{ secrets.GITHUB_TOKEN }}

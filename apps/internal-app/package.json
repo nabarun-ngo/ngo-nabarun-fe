@@ -3,16 +3,17 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "setup": "npm run generate:env && npm run generate:assets",
+    "setup": "npm run generate:code && npm run generate:assets",
+    "generate:code": "npm run generate:env && npm run generate:api",
     "generate:env": "node --env-file-if-exists=.env scripts/generate-env.mjs",
+    "generate:api": "node scripts/generate-api.mjs",
     "generate:assets": "node scripts/generate-assets.mjs",
     "clean": "rimraf dist .angular .turbo && node scripts/clean-generated.mjs",
     "start:dev": "npm run setup && ng serve --port 4200",
     "build": "npm run clean && npm run setup && ng build",
-    "build:beta": "ng build --configuration beta",
-    "lint": "npm run generate:env && tsc --noEmit -p tsconfig.app.json",
-    "test": "npm run generate:env && ng test --watch=false --browsers=ChromeHeadless",
-    "generate:api": "rimraf src/app/core/api/api-client && ng-openapi-gen --input src/app/core/api/swagger.json --output src/app/core/api/api-client"
+    "build:beta": "npm run setup && ng build --configuration beta",
+    "lint": "npm run generate:code && tsc --noEmit -p tsconfig.app.json",
+    "test": "npm run generate:code && ng test --watch=false --browsers=ChromeHeadless"
   },
   "dependencies": {
     "@angular/animations": "^21.2.19",
