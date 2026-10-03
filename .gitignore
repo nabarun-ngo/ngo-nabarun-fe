@@ -69,6 +69,8 @@ apps/public-site/out/sitemap-0.xml
 **/.next/**
 **/out/**
 **/.angular/**
+**/api-client$/**
+
 
 # Cursor hook runtime (workspace hooks live at integrated/.cursor/hooks; never commit state)
 .cursor/hooks/
